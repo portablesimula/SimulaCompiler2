@@ -33,7 +33,6 @@ import java.util.jar.Manifest;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
-import simula.compiler.byteCodeEngineering.ByteCodeEngineering;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
@@ -398,7 +397,7 @@ public final class SimulaCompiler {
 						if(Option.USE_FILE_CLASS_API == 1){
 							ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
 						} else {
-							new ByteCodeEngineering().doRepairSingleByteCode(classFileName);
+//							new ByteCodeEngineering().doRepairSingleByteCode(classFileName);
 						}
 					}
 				}
