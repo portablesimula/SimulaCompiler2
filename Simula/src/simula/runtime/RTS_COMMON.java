@@ -126,7 +126,7 @@ public final class RTS_COMMON {
 		/**
 		 * S-PORT: Source directory name
 		 */
-		private static String SourceDirName = "C:/GitHub/SimulaCompiler/Simula/src/sport/rts";
+		private static String SourceDirName = "C:/GitHub/SimulaCompiler2/Simula/src/sport/rts";
 
 		/**
 		 * S-PORT: Source file name
