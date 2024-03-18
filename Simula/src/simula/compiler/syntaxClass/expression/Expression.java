@@ -7,6 +7,8 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+//import java.lang.classfile.CodeBuilder;
+
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -86,7 +88,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  * @author Stein Krogdahl
  */
-public abstract sealed class Expression extends SyntaxClass permits VariableExpression, ArithmeticExpression, AssignmentOperation, BooleanExpression, ConditionalExpression, Constant, LocalObject, ObjectGenerator, ObjectRelation, QualifiedObject, RelationalOperation, RemoteVariable, TextExpression, TypeConversion, UnaryOperation {
+public abstract class Expression extends SyntaxClass {
 
 	/**
 	 * The type

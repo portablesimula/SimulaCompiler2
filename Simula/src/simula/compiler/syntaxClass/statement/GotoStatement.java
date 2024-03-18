@@ -7,6 +7,10 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -44,7 +48,7 @@ public final class GotoStatement extends Statement {
 	/**
 	 * The target label.
 	 */
-	private final Expression label;
+	private Expression label;
 
 	/**
 	 * Create a new GotoStatement.
@@ -60,7 +64,7 @@ public final class GotoStatement extends Statement {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		label.doChecking();
-		if (label.type != Type.Label)
+		if (!label.type.equals(Type.Label))
 			Util.error("Goto " + label + ", " + label + " is not a Label");
 		label.backLink = this; // To ensure _RESULT from functions
 		SET_SEMANTICS_CHECKED();
@@ -71,7 +75,7 @@ public final class GotoStatement extends Statement {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
   		Type type = label.type;
-		Util.ASSERT(type == Type.Label, "Invariant");
+		Util.ASSERT(type.equals(Type.Label), "Invariant");
 		GeneratedJavaClass.code("_GOTO(" + label.toJavaCode() + ");","GOTO EVALUATED LABEL");
 	}
 
@@ -85,5 +89,32 @@ public final class GotoStatement extends Statement {
 	public String toString() {
 		return ("GOTO " + label);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public GotoStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(label);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		label = (Expression) inpt.readObject();
+	}
+	
 
 }

@@ -7,6 +7,10 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Vector;
 
 import simula.compiler.CodeLine;
@@ -31,7 +35,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public final class InnerStatement extends Statement {
+public final class InnerStatement extends Statement implements Externalizable {
 
 	/**
 	 * Create a new InnerStatement.
@@ -40,6 +44,15 @@ public final class InnerStatement extends Statement {
 	 public InnerStatement(final int line) {
 		super(line);
 		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": InnerStatement: "+this);
+		if(Option.NEW_INNER_IMPL) {
+			ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
+			cls.statements1 = cls.statements;
+			cls.statements = new Vector<Statement>();
+//			System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENTS BEFORE INNER: "+cls.statements1);
+//			for(Statement stm:cls.statements1) {
+//				System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENT BEFORE INNER: "+stm);
+//			}
+		}
 	}
 
 	@Override
@@ -53,8 +66,10 @@ public final class InnerStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
-		if(cls.code2==null) cls.code2=new Vector<CodeLine>();
-		Global.currentJavaModule.saveCode=cls.code2;
+		if(!Option.NEW_INNER_IMPL) {
+			if(cls.code2==null) cls.code2=new Vector<CodeLine>();   // TODO: NOT  NEW_INNER_IMPL
+			Global.currentJavaModule.saveCode=cls.code2;            // TODO: NOT  NEW_INNER_IMPL
+		}
 	}
 
 	@Override
@@ -72,5 +87,30 @@ public final class InnerStatement extends Statement {
 	public String toString() {
 		return ("INNER");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public InnerStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+	}
+	
 
 }

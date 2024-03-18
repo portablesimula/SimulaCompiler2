@@ -7,6 +7,10 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -69,7 +73,7 @@ public final class ActivationStatement extends Statement {
 	/**
 	 * Indicates reactivation when true, otherwise activation.
 	 */
-	private final boolean REAC;
+	private boolean REAC;
 	
 	/**
 	 * First object-expression in activation statement.
@@ -244,5 +248,40 @@ public final class ActivationStatement extends Statement {
 		    default: return (activator);
 		}
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ActivationStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(REAC);
+		oupt.writeObject(object1);
+		oupt.writeObject(object2);
+		oupt.writeObject(time);
+		oupt.writeObject(prior);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		REAC = (boolean) inpt.readObject();
+		object1 = (Expression) inpt.readObject();
+		object2 = (Expression) inpt.readObject();
+		time = (Expression) inpt.readObject();
+		prior = (Boolean) inpt.readObject();
+	}
+	
 
 }

@@ -52,7 +52,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public sealed class SimpleVariableDeclaration extends Declaration implements Externalizable permits LabelDeclaration {
+public class SimpleVariableDeclaration extends Declaration implements Externalizable {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
 	// Type type; // Inherited
@@ -153,12 +153,23 @@ public sealed class SimpleVariableDeclaration extends Declaration implements Ext
 			constantElement.type = type;
 			constantElement.backLink = this;
 		}
+		
+		if(identifier.equalsIgnoreCase("XXXX")) { // TODO: TESTING4
+			Option.TESTING4 = true;
+//			Util.IERR("SimpleVariableDeclaration.doChecking: "+identifier);
+		}
+		
 		if (Global.getCurrentScope() instanceof ClassDeclaration cls) {
 			if (cls.prefixLevel() > 0)
 				externalIdent = identifier + '_' + cls.prefixLevel();
 			else
 				externalIdent = identifier;
 		}
+		
+		if(identifier.equalsIgnoreCase("XXXX")) { // TODO: TESTING4
+//			Util.IERR("SimpleVariableDeclaration.doChecking: "+identifier);
+		}
+		
 		SET_SEMANTICS_CHECKED();
 	}
 

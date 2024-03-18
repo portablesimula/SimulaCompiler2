@@ -7,8 +7,6 @@
  */
 package simula.runtime;
 
-import simula.runtime.RTS_RTObject.RTS_NAME;
-
 /**
  * Utility class RandomDrawing.
  * <p>

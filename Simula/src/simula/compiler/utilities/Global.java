@@ -19,6 +19,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.byteCodeEngineering.JavaClassInfo;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 
@@ -201,6 +202,7 @@ public final class Global {
 	 * Initiate Global variables.
 	 */
 	public static void initiate() {
+		JavaClassInfo.init();
 		duringParsing = true;
 		duringChecking = false;
 		duringSTM_Coding = false;

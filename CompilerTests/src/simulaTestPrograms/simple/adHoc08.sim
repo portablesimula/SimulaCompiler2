@@ -1,0 +1,18 @@
+begin
+    boolean verbose,b,c;
+    integer i;
+%	call(none);
+%	sysout.outtext("OK " & edit(3.14));
+    verbose := true;
+	sysout.outtext(edit(3.14));
+%	if verbose then begin
+%   		outtext ("--- START Simula a.s. TEST");
+%   		verbose := not verbose;
+%   		verbose := b imp c;
+%   		verbose := b and then c;
+   		verbose := b or else c;
+%   		verbose := b eqv c;
+%   		i := - i;
+%   		i := + i;
+%    end;
+end;

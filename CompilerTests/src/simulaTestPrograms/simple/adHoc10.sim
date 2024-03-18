@@ -1,0 +1,18 @@
+begin
+    class A(i); integer i; begin
+	    outtext("HELLO !!! ");
+	    outint(i,0);
+	end;
+
+	A class B(j); integer j; begin
+	    outtext("HALLA !!! ");
+	    outint(i,0);
+	    outint(j,5);
+	end;
+
+%	new A(789);
+%	new B(789,456);
+	A(987) begin
+		outtext(" INSIDE");
+	end;
+end;

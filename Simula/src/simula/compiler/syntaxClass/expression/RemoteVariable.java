@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -56,12 +61,12 @@ public final class RemoteVariable extends Expression {
 	/**
 	 * The object expression
 	 */
-	final Expression obj;
+	Expression obj;
 	
 	/**
 	 * The variable
 	 */
-	final VariableExpression var;
+	VariableExpression var;
 
 	/**
 	 * Used to indicate access remote array. Set by doChecking.
@@ -106,7 +111,7 @@ public final class RemoteVariable extends Expression {
 		Type result;
 		obj.doChecking();
 		Type objType = obj.type;
-		if (objType == Type.Text)
+		if (objType.equals(Type.Text))
 			return (doRemoteTextChecking(obj, attr));
 
 		objType.doChecking(Global.getCurrentScope()); // Nødvendig hvis TypeDeclaration er nedenfor
@@ -220,5 +225,45 @@ public final class RemoteVariable extends Expression {
 	public String toString() {
 		return ("(" + obj + " DOT " + var + ")");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public RemoteVariable() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(remoteAttribute);
+		oupt.writeObject(callRemoteProcedure);
+		oupt.writeObject(callRemoteVirtual);
+		oupt.writeObject(obj);
+		oupt.writeObject(var);
+		oupt.writeObject(accessRemoteArray);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		remoteAttribute = (Meaning) inpt.readObject();
+		callRemoteProcedure = (ProcedureDeclaration) inpt.readObject();
+		callRemoteVirtual = (VirtualSpecification) inpt.readObject();
+		obj = (Expression) inpt.readObject();
+		var = (VariableExpression) inpt.readObject();
+		accessRemoteArray = (boolean) inpt.readObject();
+	}
+	
 
 }

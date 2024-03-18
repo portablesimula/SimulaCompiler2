@@ -7,7 +7,12 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
@@ -53,7 +58,7 @@ public final class LocalObject extends Expression {
 	/**
 	 * The class identifier.
 	 */
-	private final String classIdentifier;
+	private String classIdentifier;
 	
 	/**
 	 * The class declaration. Set by doChecking.
@@ -161,5 +166,35 @@ public final class LocalObject extends Expression {
 	public String toString() {
 		return ("THIS " + classIdentifier);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public LocalObject() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(classIdentifier);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		classIdentifier = (String) inpt.readObject();
+	}
+	
 
 }

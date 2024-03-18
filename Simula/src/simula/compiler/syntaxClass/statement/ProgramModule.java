@@ -7,6 +7,8 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -114,7 +116,8 @@ public final class ProgramModule extends Statement {
 			     .setClassDeclaration(StandardClass.Printfile);
 			Global.getCurrentScope().sourceBlockLevel=0;
 			while(Parse.accept(KeyWord.EXTERNAL)) {
-				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT.declarationList);
+//				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT.declarationList);
+				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT); // TODO: TESTING3
 				Parse.expect(KeyWord.SEMICOLON);
 			}
 			String ident=Parse.acceptIdentifier();
@@ -152,6 +155,15 @@ public final class ProgramModule extends Statement {
   
 	@Override
 	public void doJavaCoding() { module.doJavaCoding(); }
+
+	/**
+	 * Create Java ClassFile.
+	 * @throws IOException 
+	 */
+	public void createJavaClassFile() throws IOException {
+		Global.sourceLineNumber = lineNumber;
+		module.createJavaClassFile();
+	}
 
 	@Override
 	public void print(final int indent) { module.print(0); }

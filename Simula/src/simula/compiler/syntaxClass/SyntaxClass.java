@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -85,13 +90,13 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 
-public abstract sealed class SyntaxClass permits Declaration, Statement, Expression, HiddenSpecification, ProtectedSpecification, Type {
+public abstract class SyntaxClass implements Externalizable {
 	/**
 	 * Controls semantic checking.
 	 * <p>
 	 * Set true when the method doChecking() has been completed.
 	 */
-	private boolean CHECKED = false;
+	protected boolean CHECKED = false;
 
 	/**
 	 * The source line number
@@ -217,5 +222,24 @@ public abstract sealed class SyntaxClass permits Declaration, Statement, Express
 			s = s + "    ";
 		return (s);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+	}
+	
 
 }

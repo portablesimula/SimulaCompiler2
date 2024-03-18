@@ -7,6 +7,12 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -79,7 +85,7 @@ import simula.compiler.utilities.Util;
  * @author Simula Standard
  * @author Øystein Myhre Andersen
  */
-public final class TextExpression extends Expression {
+public final class TextExpression extends Expression implements Externalizable {
 	
 	/**
 	 * The left hand side of &amp;
@@ -119,7 +125,6 @@ public final class TextExpression extends Expression {
 		// TEXT & TEXT
 		lhs.doChecking();
 		rhs.doChecking();
-//		if (lhs.type != Type.Text || rhs.type != Type.Text) {
 		if (!(lhs.type.equals(Type.Text) && rhs.type.equals(Type.Text))) {
 			Util.error("Operand Type to Text Concatenation(&) is not Text: "+lhs.type+" & "+rhs.type);
 		}
@@ -146,5 +151,37 @@ public final class TextExpression extends Expression {
 	public String toString() {
 		return ("(" + lhs + " & " + rhs + ")");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public TextExpression() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(lhs);
+		oupt.writeObject(rhs);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		lhs = (Expression) inpt.readObject();
+		rhs = (Expression) inpt.readObject();
+	}
+	
 
 }

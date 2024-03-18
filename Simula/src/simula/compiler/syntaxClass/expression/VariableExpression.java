@@ -7,11 +7,16 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.OverLoad;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -95,7 +100,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class VariableExpression extends Expression {
+public final class VariableExpression extends Expression implements Externalizable {
 
 	/**
 	 * The variable's identifier.
@@ -291,7 +296,8 @@ public final class VariableExpression extends Expression {
 							overloadedType = formalType;
 						}
 						if (formalParameter.kind == Parameter.Kind.Array) {
-							if (formalType != null && formalType != actualParameter.type
+//							if (formalType != null && formalType != actualParameter.type
+							if (formalType != null && (!formalType.equals(actualParameter.type))
 									&& formalType.isArithmeticType())
 								Util.error("Parameter Array " + actualParameter + " must be of Type " + formalType);
 						}
@@ -468,7 +474,7 @@ public final class VariableExpression extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		Expression inspectedVariable = meaning.getInspectedExpression();
 		StringBuilder s;
-		// System.out.println("Variable.editVariable: "+decl);
+//		System.out.println("Variable.editVariable: "+decl.declarationKind);
 		switch (decl.declarationKind) {
 
 		case ArrayDeclaration:
@@ -688,5 +694,44 @@ public final class VariableExpression extends Expression {
 		else
 			return (("" + identifier + params).replace('[', '(').replace(']', ')'));
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public VariableExpression() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write ConditionalStatement: ");
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(identifier);
+		oupt.writeObject(meaning);
+		oupt.writeObject(remotelyAccessed);
+		oupt.writeObject(params);
+		oupt.writeObject(checkedParams);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: ");
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		identifier = (String) inpt.readObject();
+		meaning = (Meaning) inpt.readObject();
+		remotelyAccessed = (boolean) inpt.readObject();
+		params = (Vector<Expression>) inpt.readObject();
+		checkedParams = (Vector<Expression>) inpt.readObject();
+	}
+		
 
 }

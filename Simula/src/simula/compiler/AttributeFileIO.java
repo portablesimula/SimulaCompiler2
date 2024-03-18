@@ -84,8 +84,41 @@ public final class AttributeFileIO {
 	 * @throws IOException if an input operation fail
 	 * @throws ClassNotFoundException if a class cast fail
 	 */
+//	public static Type readAttributeFile(final InputStream inputStream,final File file,
+//            final DeclarationList declarationList) throws IOException, ClassNotFoundException {
+//		AttributeFileIO attributeFile = new AttributeFileIO(file);
+//		if (Option.verbose)	Util.TRACE("*** BEGIN Read SimulaAttributeFile: " + file);
+//		ObjectInputStream inpt = new ObjectInputStream(inputStream);
+//		String vers=(String)inpt.readObject();
+//		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + attributeFile);
+//		Type moduleType=null;
+//		LOOP: while (true) {
+//			BlockDeclaration module=null;
+//			try { module=(BlockDeclaration) inpt.readObject();}
+//			catch (EOFException e1) { break LOOP; }
+//			module.isPreCompiled = true;
+//			Declaration d=declarationList.find(module.identifier);
+//			if(d!=null) {
+//				Util.warning("Multiple declarations with the same name: "+module+" and "+d);
+//			} else {
+//				declarationList.add(module);
+//				moduleType=module.type;
+//				if (Option.verbose)
+//					Util.TRACE("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
+//							+"  ==>  "+declarationList.identifier);
+//				if (Option.TRACE_ATTRIBUTE_INPUT) module.print(0);
+//			}
+//		}
+//		inpt.close();
+//		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + file);
+//		return(moduleType);
+//	}	
 	public static Type readAttributeFile(final InputStream inputStream,final File file,
-            final DeclarationList declarationList) throws IOException, ClassNotFoundException {
+            final BlockDeclaration enclosure) throws IOException, ClassNotFoundException {
+//		System.out.println("AttributeFileIO.readAttributeFile: enclosure="+enclosure.getClass().getSimpleName()+"  "+enclosure);
+//		DeclarationScope.printScopeChain(Global.getCurrentScope());  // TODO: TESTING3
+//		Util.IERR("");;
+		DeclarationList declarationList=enclosure.declarationList;
 		AttributeFileIO attributeFile = new AttributeFileIO(file);
 		if (Option.verbose)	Util.TRACE("*** BEGIN Read SimulaAttributeFile: " + file);
 		ObjectInputStream inpt = new ObjectInputStream(inputStream);
@@ -101,16 +134,23 @@ public final class AttributeFileIO {
 			if(d!=null) {
 				Util.warning("Multiple declarations with the same name: "+module+" and "+d);
 			} else {
+//				System.out.println("AttributeFileIO.readAttributeFile: Add Module: "+module.getClass().getSimpleName()+"  "+module);
 				declarationList.add(module);
 				moduleType=module.type;
 				if (Option.verbose)
-					Util.TRACE("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
+					System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
 							+"  ==>  "+declarationList.identifier);
 				if (Option.TRACE_ATTRIBUTE_INPUT) module.print(0);
 			}
+			
+			if(Option.TESTING4) module.printStaticChain("readAttributeFile"); // TODO: TESTING4
 		}
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + file);
+		
+		
+//		DeclarationScope.printScopeChain(Global.getCurrentScope());  // TODO: TESTING3
+//		Util.IERR("");;
 		return(moduleType);
 	}	
 

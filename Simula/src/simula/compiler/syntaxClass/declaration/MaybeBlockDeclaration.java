@@ -7,6 +7,10 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -42,7 +46,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class MaybeBlockDeclaration extends BlockDeclaration {
+public final class MaybeBlockDeclaration extends BlockDeclaration implements Externalizable {
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
@@ -98,7 +102,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public BlockStatement expectMaybeBlock(int line) {
 		this.lineNumber=line;
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse MayBeBlock");
-		while (Declaration.acceptDeclaration(declarationList))
+//		while (Declaration.acceptDeclaration(declarationList))
+		while (Declaration.acceptDeclaration(this))
 			Parse.expect(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
 			Statement stm = Statement.expectStatement();
@@ -322,5 +327,27 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public String toString() {
 		return (identifier + '[' + externalIdent + "] Kind=" + declarationKind);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public MaybeBlockDeclaration() { super(null); }
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		super.writeExternal(oupt);
+	}
+
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		super.readExternal(inpt);
+		Global.setScope(this.declaredIn);
+	}
+
 
 }

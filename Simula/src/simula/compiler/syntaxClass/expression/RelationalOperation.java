@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -50,7 +55,7 @@ public final class RelationalOperation extends Expression {
 	/**
 	 * The relational operation
 	 */
-	private final KeyWord opr;
+	private KeyWord opr;
 
 	/**
 	 * The right hand side
@@ -90,15 +95,15 @@ public final class RelationalOperation extends Expression {
 			rhs.doChecking();
 			Type type1 = lhs.type;
 			Type type2 = rhs.type;
-			if (type1 == Type.Text && type2 == Type.Text) {
+			if (type1.equals(Type.Text) && type2.equals(Type.Text)) {
 				this.type = Type.Boolean;
 				break;
 			}
-			if (type1 == Type.Character && type2 == Type.Character) {
+			if (type1.equals(Type.Character) && type2.equals(Type.Character)) {
 				this.type = Type.Boolean;
 				break;
 			}
-			if (type1 == Type.Boolean && type2 == Type.Boolean) {
+			if (type1.equals(Type.Boolean) && type2.equals(Type.Boolean)) {
 				this.type = Type.Boolean;
 				break;
 			}
@@ -146,13 +151,13 @@ public final class RelationalOperation extends Expression {
 			case LT: case LE: case EQ: case NE: case GE: case GT: {
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-				if ((type1 == Type.Text) && (type2 == Type.Text))
+				if (type1.equals(Type.Text) && type2.equals(Type.Text))
 					return (doCodeTextValueRelation());
 			}
 			case EQR: case NER: {
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-				if ((type1 == Type.Text) && (type2 == Type.Text))
+				if (type1.equals(Type.Text) && type2.equals(Type.Text))
 					return (doCodeTextRefRelation());
 			}
 			default: {
@@ -209,5 +214,39 @@ public final class RelationalOperation extends Expression {
 	public String toString() {
 		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public RelationalOperation() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(lhs);
+		oupt.writeObject(opr);
+		oupt.writeObject(rhs);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		lhs = (Expression) inpt.readObject();
+		opr = (KeyWord) inpt.readObject();
+		rhs = (Expression) inpt.readObject();
+	}
+	
 
 }

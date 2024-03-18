@@ -7,6 +7,11 @@
  */
 package simula.compiler.utilities;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
@@ -24,16 +29,16 @@ import simula.compiler.syntaxClass.expression.Expression;
  * @author Øystein Myhre Andersen
  *
  */
-public final class Meaning {
+public final class Meaning implements Externalizable {
 	/**
 	 * True if it was found behind invisible
 	 */
-	public final boolean foundBehindInvisible; // Behind hidden/protected
+	public boolean foundBehindInvisible; // Behind hidden/protected
 	
 	/**
 	 * The corresponding declaration
 	 */
-	public final Declaration declaredAs;
+	public Declaration declaredAs;
 	
 	/**
 	 * Where it was declared
@@ -43,7 +48,7 @@ public final class Meaning {
 	/**
 	 * Where it was found
 	 */
-	public final DeclarationScope foundIn; // Search ended here
+	public DeclarationScope foundIn; // Search ended here
 
 	/**
 	 * Create a new Meaning.
@@ -144,5 +149,33 @@ public final class Meaning {
 				+ "  (ctBlockLevel="+ declaredIn.ctBlockLevel + ", rtBlockLevel="+ declaredIn.rtBlockLevel
 				+ ",declaredIn=" + declaredIn + ",foundIn=" + foundIn + ')');
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public Meaning() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write ConditionalStatement: ");
+		oupt.writeObject(declaredAs);
+		oupt.writeObject(declaredIn);
+		oupt.writeObject(foundIn);
+		oupt.writeObject(foundBehindInvisible);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: ");
+		declaredAs = (Declaration) inpt.readObject();
+		declaredIn = (DeclarationScope) inpt.readObject();
+		foundIn = (DeclarationScope) inpt.readObject();
+		foundBehindInvisible = (boolean) inpt.readObject();
+	}
+	
 
 }

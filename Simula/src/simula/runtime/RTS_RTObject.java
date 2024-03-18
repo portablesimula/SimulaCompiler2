@@ -100,7 +100,8 @@ public abstract class RTS_RTObject {
 	/**
 	 * Outmost Block Instance
 	 */
-	public static final RTS_BASICIO _CTX = new RTS_BASICIO(null);
+//	public static final RTS_BASICIO _CTX = new RTS_BASICIO(null);
+	public static final RTS_CLASS _CTX = new RTS_CLASS(null) {}; // NEW_INNER_IMPL
 	
 	/**
 	 * Current Block Instance
@@ -241,34 +242,34 @@ public abstract class RTS_RTObject {
 	 *
 	 * @param <T> the type of the parameter
 	 */
-	public abstract class RTS_NAME<T> {
-		/**
-		 * The environment in which evaluations of get'parameters will take place.
-		 */
-		public RTS_RTObject _CUR; // Thunk Environment
-
-		/**
-		 * Construct a RTS_NAME object
-		 */
-		public RTS_NAME() {
-			_CUR = RTS_RTObject._CUR;
-		}
-
-		/**
-		 * Evaluate and get the value of a name parameter
-		 * @return the value 
-		 */
-		public abstract T get();
-
-		/**
-		 * Write back into a name parameter
-		 * @param x the value to be written
-		 * @return the value written
-		 */
-		public T put(final T x) {
-			throw new RTS_SimulaRuntimeError("Illegal assignment. Name parameter is not a variable");
-		}
-	}
+//	public abstract class RTS_NAME<T> {
+//		/**
+//		 * The environment in which evaluations of get'parameters will take place.
+//		 */
+//		public RTS_RTObject _CUR; // Thunk Environment
+//
+//		/**
+//		 * Construct a RTS_NAME object
+//		 */
+//		public RTS_NAME() {
+//			_CUR = RTS_RTObject._CUR;
+//		}
+//
+//		/**
+//		 * Evaluate and get the value of a name parameter
+//		 * @return the value 
+//		 */
+//		public abstract T get();
+//
+//		/**
+//		 * Write back into a name parameter
+//		 * @param x the value to be written
+//		 * @return the value written
+//		 */
+//		public T put(final T x) {
+//			throw new RTS_SimulaRuntimeError("Illegal assignment. Name parameter is not a variable");
+//		}
+//	}
 
 	// ************************************************************
 	// *** ARRAY OBJECTS
@@ -1627,16 +1628,56 @@ public abstract class RTS_RTObject {
 	 *
 	 */
 	@SuppressWarnings("serial")
+//	public final class RTS_LABEL extends RuntimeException { // RuntimeError {
+////		static final long serialVersionUID = 42L;
+//		/**
+//		 * Static link, i.e. the block in which the label is defined.
+//		 */
+//		public final RTS_RTObject _SL;
+//		/**
+//		 * Index, I.e. ordinal number of the Label within its Scope(staticLink).
+//		 */
+//		public final int index;
+//		/**
+//		 * Label identifier. To improve error and trace messages.
+//		 */
+//		public final String identifier; // To improve error and trace messages.
+//
+//		// Constructor
+//		/**
+//		 * Create a label quantity
+//		 * @param _SL static link
+//		 * @param index label index
+//		 * @param identifier label identifier
+//		 */
+//		public RTS_LABEL(final RTS_RTObject _SL, final int index, final String identifier) {
+//			this._SL = _SL;
+//			this.index = index;
+//			this.identifier = identifier;
+//		}
+//
+//		@Override
+//		public String toString() {
+//			return ("RTS_LABEL(" + _SL + ", LABEL#" + index + ", identifier=" + identifier + ')');
+//		}
+//	}
 	public final class RTS_LABEL extends RuntimeException { // RuntimeError {
 //		static final long serialVersionUID = 42L;
 		/**
 		 * Static link, i.e. the block in which the label is defined.
 		 */
 		public final RTS_RTObject _SL;
+		
+		/**
+		 * Prefix level.
+		 */
+		public final int _PRFX;
+		
 		/**
 		 * Index, I.e. ordinal number of the Label within its Scope(staticLink).
 		 */
 		public final int index;
+		
 		/**
 		 * Label identifier. To improve error and trace messages.
 		 */
@@ -1649,15 +1690,16 @@ public abstract class RTS_RTObject {
 		 * @param index label index
 		 * @param identifier label identifier
 		 */
-		public RTS_LABEL(final RTS_RTObject _SL, final int index, final String identifier) {
+		public RTS_LABEL(final RTS_RTObject _SL, final int _PRFX, final int index, final String identifier) {
 			this._SL = _SL;
+			this._PRFX = _PRFX;
 			this.index = index;
 			this.identifier = identifier;
 		}
 
 		@Override
 		public String toString() {
-			return ("RTS_LABEL(" + _SL + ", LABEL#" + index + ", identifier=" + identifier + ')');
+			return ("RTS_LABEL(" + _SL + ", PRFX=" + _PRFX + ", LABEL#" + index + ", identifier=" + identifier + ')');
 		}
 	}
 

@@ -7,10 +7,14 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
@@ -51,7 +55,7 @@ public final class ObjectGenerator extends Expression {
 	/**
 	 * The class-identifier
 	 */
-	private final String classIdentifier;
+	private String classIdentifier;
 	
 	/**
 	 * The semantic meaning 
@@ -61,12 +65,12 @@ public final class ObjectGenerator extends Expression {
 	/**
 	 * The actual parameters before checking
 	 */
-	private final Vector<Expression> params;
+	private Vector<Expression> params;
 	
 	/**
 	 * The actual parameters after checking
 	 */
-	private final Vector<Expression> checkedParams = new Vector<Expression>();
+	private Vector<Expression> checkedParams = new Vector<Expression>();
 
 	/**
 	 * Create a new ObjectGenerator
@@ -172,7 +176,7 @@ public final class ObjectGenerator extends Expression {
 		for (Expression par : checkedParams) {
 			Parameter formalParameter = formalIterator.next();
 			if (formalParameter.mode == Parameter.Mode.value) {
-				if (par.type == Type.Text)
+				if (par.type.equals(Type.Text))
 					s.append(",copy(").append(par.toJavaCode()).append(')');
 				else if (formalParameter.kind == Parameter.Kind.Array) {
 					String cast=par.type.toJavaArrayType();
@@ -199,5 +203,42 @@ public final class ObjectGenerator extends Expression {
 	public String toString() {
 		return (("NEW " + classIdentifier + params).replace('[', '(').replace(']', ')'));
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ObjectGenerator() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(classIdentifier);
+		oupt.writeObject(meaning);
+		oupt.writeObject(checkedParams);
+		oupt.writeObject(params);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		classIdentifier = (String) inpt.readObject();
+		meaning = (Meaning) inpt.readObject();
+		checkedParams = (Vector<Expression>) inpt.readObject();
+		params = (Vector<Expression>) inpt.readObject();
+	}
+	
 
 }

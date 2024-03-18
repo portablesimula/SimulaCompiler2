@@ -55,9 +55,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public abstract sealed class Statement extends SyntaxClass permits InnerStatement, ActivationStatement, BlockStatement,
-		ConditionalStatement, ConnectionStatement, DummyStatement, ForStatement, GotoStatement, LabeledStatement,
-		StandaloneExpression, SwitchStatement, WhileStatement, ProgramModule {
+public abstract class Statement extends SyntaxClass {
 
 	/**
 	 * Create a new Statement.
@@ -71,17 +69,39 @@ public abstract sealed class Statement extends SyntaxClass permits InnerStatemen
 	 * Parse a statement.
 	 * @return the statement
 	 */
+//	public static Statement expectStatement() {
+//		Vector<String> labels = null;
+//		int lineNumber=Parse.currentToken.lineNumber;
+//		if (Option.TRACE_PARSE)
+//			Util.TRACE("Statement.doParse: LabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
+//		String ident = Parse.acceptIdentifier();
+//		while (Parse.accept(KeyWord.COLON)) {
+//			if (ident != null) {
+//				if (labels == null)	labels = new Vector<String>();
+//				labels.add(ident);
+//				LabelDeclaration label = new LabelDeclaration(ident);
+//				Global.getCurrentScope().labelList.add(label);
+//			} else Util.error("Missplaced ':'");
+//			ident = Parse.acceptIdentifier();
+//		}
+//		if(ident!=null) Parse.saveCurrentToken(); // Not Label: Pushback
+//		Statement statement = expectUnlabeledStatement();
+//		if (labels != null && statement != null)
+//			statement = new LabeledStatement(lineNumber,labels, statement);
+//		return (statement);
+//	}
 	public static Statement expectStatement() {
-		Vector<String> labels = null;
+		Vector<LabelDeclaration> labels = null;
 		int lineNumber=Parse.currentToken.lineNumber;
 		if (Option.TRACE_PARSE)
 			Util.TRACE("Statement.doParse: LabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
 		String ident = Parse.acceptIdentifier();
 		while (Parse.accept(KeyWord.COLON)) {
 			if (ident != null) {
-				if (labels == null)	labels = new Vector<String>();
-				labels.add(ident);
+				if (labels == null)	labels = new Vector<LabelDeclaration>();
+//				labels.add(ident);
 				LabelDeclaration label = new LabelDeclaration(ident);
+				labels.add(label);
 				Global.getCurrentScope().labelList.add(label);
 			} else Util.error("Missplaced ':'");
 			ident = Parse.acceptIdentifier();

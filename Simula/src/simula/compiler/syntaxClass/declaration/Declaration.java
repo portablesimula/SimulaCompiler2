@@ -7,6 +7,9 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
@@ -43,9 +46,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public abstract sealed class Declaration extends SyntaxClass
-permits DeclarationScope, ExternalDeclaration, Parameter, SimpleVariableDeclaration,
-        VirtualSpecification, VirtualMatch, ArrayDeclaration {
+public abstract class Declaration extends SyntaxClass {
 
 	/**
 	 * The type
@@ -197,6 +198,8 @@ permits DeclarationScope, ExternalDeclaration, Parameter, SimpleVariableDeclarat
 		boolean warning = false;
 		if (identifier == null)
 			return;
+		if (identifier == "_RESULT") // TESTING6
+			return;
 		if (declaredIn == null)
 			return;
 		if (declaredIn instanceof StandardClass)
@@ -240,9 +243,10 @@ permits DeclarationScope, ExternalDeclaration, Parameter, SimpleVariableDeclarat
 	 * @param declarationList the given declaration list
 	 * @return true if a declaration was found, false otherwise
 	 */
-	protected static boolean acceptDeclaration(final DeclarationList declarationList) {
+	protected static boolean acceptDeclaration(final BlockDeclaration enclosure) {
 		if (Option.TRACE_PARSE)
 			Parse.TRACE("Parse Declaration");
+		DeclarationList declarationList=enclosure.declarationList;
 		String prefix = Parse.acceptIdentifier();
 		if (prefix != null) {
 			if (Parse.accept(KeyWord.CLASS))
@@ -271,7 +275,7 @@ permits DeclarationScope, ExternalDeclaration, Parameter, SimpleVariableDeclarat
 			}
 			declarationList.add(new SwitchDeclaration(ident));
 		} else if (Parse.accept(KeyWord.EXTERNAL))
-			ExternalDeclaration.expectExternalHead(declarationList);
+			ExternalDeclaration.expectExternalHead(enclosure);
 		else {
 			Type type = Parse.acceptType();
 			if (type == null)
@@ -307,6 +311,36 @@ permits DeclarationScope, ExternalDeclaration, Parameter, SimpleVariableDeclarat
 		if (((ClassDeclaration) this).isSubClassOf((ClassDeclaration) other))
 			return (true);
 		return (((ClassDeclaration) other).isSubClassOf((ClassDeclaration) this));
+	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		super.writeExternal(oupt);
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeObject(type);
+		oupt.writeObject(isProtected);
+		oupt.writeObject(identifier);
+		oupt.writeObject(externalIdent);
+		oupt.writeObject(declaredIn);
+		oupt.writeObject(declarationKind);
+//		oupt.writeInt(slot);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		super.readExternal(inpt);
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		type = (Type) inpt.readObject();
+		isProtected = (ProtectedSpecification) inpt.readObject();
+		identifier = (String) inpt.readObject();
+		externalIdent = (String) inpt.readObject();
+		declaredIn = (DeclarationScope) inpt.readObject();
+		declarationKind = (Kind) inpt.readObject();
+//		slot = inpt.readInt();
 	}
 
 }

@@ -101,7 +101,7 @@ public class SimulaEditor extends JFrame {
      */
     public static void main(String[] args) {
 		Global.packetName="simprog";
-		String userDir="C:/GitHub/SimulaCompiler2/Simula";
+		String userDir="C:/GitHub/SimulaCompiler/Simula";
 		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime  Download
 		RTOption.InitRuntimeOptions();
     	Option.InitCompilerOptions();

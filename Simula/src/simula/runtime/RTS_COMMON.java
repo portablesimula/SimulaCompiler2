@@ -61,7 +61,9 @@ public final class RTS_COMMON {
 		 * Default constructor.
 		 */
 		private Option() {}
-		
+
+		public static boolean NEW_INNER_IMPL = false;
+
 		/**
 		 * Output messages about what the RTS is doing.
 		 * Default: false.
@@ -126,7 +128,7 @@ public final class RTS_COMMON {
 		/**
 		 * S-PORT: Source directory name
 		 */
-		private static String SourceDirName = "C:/GitHub/SimulaCompiler2/Simula/src/sport/rts";
+		private static String SourceDirName = "C:/GitHub/SimulaCompiler/Simula/src/sport/rts";
 
 		/**
 		 * S-PORT: Source file name
@@ -325,6 +327,10 @@ public final class RTS_COMMON {
 					RTS_COMMON.SPORT_Option.ListingFileName = args[++i];
 				else if (arg.equalsIgnoreCase("-trace"))
 					RTS_COMMON.SPORT_Option.TraceLevel = Integer.decode(args[++i]);
+				
+				else if (arg.equalsIgnoreCase("-newInnerImpl"))
+					RTS_COMMON.Option.NEW_INNER_IMPL = true;
+				
 				else
 					error("Unknown option " + arg);
 			} else {

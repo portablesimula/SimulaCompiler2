@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -84,19 +85,19 @@ public final class Constant extends Expression implements Externalizable {
     static Constant evaluate(final KeyWord opr,final Number rhn) { 
     	Type type=getType(rhn);
 		Number result=null;
-		if(type==Type.Integer) {
+		if(type.equals(Type.Integer)) {
 			switch(opr) {
 	        	case PLUS: result=rhn.intValue();
 	        	case MINUS: result= - rhn.intValue(); break;
 	        	default:
 			}
-		} else if(type==Type.Real) {
+		} else if(type.equals(Type.Real)) {
 			switch(opr) {
         		case PLUS: result=rhn.floatValue(); break;
         		case MINUS: result= - rhn.floatValue(); break;
         		default:
 			}
-		} else if(type==Type.LongReal) {
+		} else if(type.equals(Type.LongReal)) {
 			switch(opr) {
 				case PLUS: result=rhn.doubleValue(); break;
 				case MINUS: result= - rhn.doubleValue(); break;
@@ -116,9 +117,9 @@ public final class Constant extends Expression implements Externalizable {
      */
     static Constant evaluate(final Number lhn,final KeyWord opr,final Number rhn) { 
     	Type type=Type.arithmeticTypeConversion(getType(lhn),getType(rhn));
-		if(opr==KeyWord.DIV && type==Type.Integer) type=Type.Real;
+		if(opr==KeyWord.DIV && type.equals(Type.Integer)) type=Type.Real;
 		Number result=null;
-		if(type==Type.Integer) {
+		if(type.equals(Type.Integer)) {
 			switch(opr) {
         		case PLUS   -> result=lhn.longValue() + rhn.longValue();
         		case MINUS  -> result=lhn.longValue() - rhn.longValue();
@@ -130,7 +131,7 @@ public final class Constant extends Expression implements Externalizable {
 			if(result.longValue() > Integer.MAX_VALUE || result.longValue() < Integer.MIN_VALUE)
 				Util.error("Arithmetic overflow: "+lhn+' '+opr+' '+rhn);
 			result=(int) result.longValue();
-		} else if(type==Type.Real) {
+		} else if(type.equals(Type.Real)) {
 			switch(opr) {
         		case PLUS  -> result=lhn.floatValue() + rhn.floatValue();
         		case MINUS -> result=lhn.floatValue() - rhn.floatValue();
@@ -139,7 +140,7 @@ public final class Constant extends Expression implements Externalizable {
         		case EXP   -> result=Math.pow(lhn.floatValue(),rhn.floatValue());
         		default    -> Util.IERR("Unexpected value: " + opr);
 			}
-		} else if(type==Type.LongReal) {
+		} else if(type.equals(Type.LongReal)) {
 			switch(opr) {
 				case PLUS  -> result=lhn.doubleValue() + rhn.doubleValue();
 				case MINUS -> result=lhn.doubleValue() - rhn.doubleValue();
@@ -171,22 +172,22 @@ public final class Constant extends Expression implements Externalizable {
 	@Override
 	public String toJavaCode() {
 		//ASSERT_SEMANTICS_CHECKED(); // ØM: Ad'Hoc
-		if(type==Type.Text)
+		if(type.equals(Type.Text))
 		{ if(value==null) return("null");
 		  String val=value.toString();
           val=encode(val);
 		  return("new RTS_TXT(\""+val+"\")");
 		}
-		if(type==Type.Character) {
+		if(type.equals(Type.Character)) {
 			char charValue=((Character)value).charValue();
 			if(charValue=='\\') return("'\\\\'");
 			int intValue=(int)charValue;
 			if(intValue!='\'' && intValue>32 && intValue<127) return("'"+value+"'");
 			return("((char)"+intValue+')');
 		}
-		if(type==Type.Integer)	return (""+((Number)value).intValue());
-		if(type==Type.Real)     return (""+((Number)value).floatValue()+'f');
-		if(type==Type.LongReal) return (""+((Number)value).doubleValue()+'d');
+		if(type.equals(Type.Integer))  return (""+((Number)value).intValue());
+		if(type.equals(Type.Real))     return (""+((Number)value).floatValue()+'f');
+		if(type.equals(Type.LongReal)) return (""+((Number)value).doubleValue()+'d');
 		return (""+value);
 	}
 	
@@ -237,10 +238,32 @@ public final class Constant extends Expression implements Externalizable {
 	public String toString() {
 //		String val=value==null?"null":(value.getClass().getSimpleName()+'(' + value+')');
 //		return("CONSTANT("+type+','+val+')');
-		if(type==Type.Text) return("\""+value+'"');
+		if(type.equals(Type.Text)) return("\""+value+'"');
 		return(""+value);
 	}
 
+	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public Constant() {}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
+//		oupt.writeObject(type);
+//		oupt.writeObject(value);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+//		type=Type.inType(inpt);
+//		value=inpt.readObject();
+//		Util.TRACE_INPUT("Constant: "+type+' '+value);
+//	}
 	
 	// ***********************************************************************************************
 	// *** Externalization
@@ -253,15 +276,22 @@ public final class Constant extends Expression implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
 		oupt.writeObject(type);
+		oupt.writeObject(backLink);
 		oupt.writeObject(value);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		type=Type.inType(inpt);
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
 		value=inpt.readObject();
 		Util.TRACE_INPUT("Constant: "+type+' '+value);
 	}
+
 
 }

@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Enumeration;
+import java.util.Vector;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -128,7 +129,41 @@ public final class ExternalDeclaration extends Declaration {
 	 * Precondition: EXTERNAL  is already read.
 	 * @param declarationList the declaration list which is updated
 	 */
-	public static void expectExternalHead(final DeclarationList declarationList) {
+//	public static void expectExternalHead(final DeclarationList declarationList) {
+//		String kind = Parse.acceptIdentifier();
+//		if (kind != null)
+//			Util.IERR("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
+//		Type expectedType = Parse.acceptType();
+//		if (!(Parse.accept(KeyWord.CLASS) || Parse.accept(KeyWord.PROCEDURE)))
+//			Util.error("parseExternalDeclaration: Expecting CLASS or PROCEDURE");
+//
+//		String identifier = Parse.expectIdentifier();
+//		LOOP: while (true) {
+//			Token externalIdentifier = null;
+//			if (Parse.accept(KeyWord.EQ)) {
+//				externalIdentifier = Parse.currentToken;
+//				Parse.expect(KeyWord.TEXTKONST);
+//			}
+//			File jarFile = findJarFile(identifier, externalIdentifier);
+//			if (jarFile != null) {
+//				Type moduleType = readAttributeFile(identifier, jarFile, declarationList);
+//				if (moduleType != expectedType) {
+//					if (expectedType != null)
+//						Util.error("Wrong external type");
+//				}
+//			}
+//
+//			if (Parse.accept(KeyWord.IS)) {
+//				// ...
+//				Util.IERR("*** NOT IMPLEMENTED: " + "External non-Simula Procedure");
+//				break LOOP;
+//			}
+//			if (!Parse.accept(KeyWord.COMMA))
+//				break LOOP;
+//			identifier = Parse.expectIdentifier();
+//		}
+//	}
+	public static void expectExternalHead(final BlockDeclaration enclosure) {
 		String kind = Parse.acceptIdentifier();
 		if (kind != null)
 			Util.IERR("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
@@ -143,12 +178,24 @@ public final class ExternalDeclaration extends Declaration {
 				externalIdentifier = Parse.currentToken;
 				Parse.expect(KeyWord.TEXTKONST);
 			}
+//			System.out.println("expectExternalHead: "+identifier+"  "+externalIdentifier); // TODO: TESTING3
+//			Util.IERR("");
+			
 			File jarFile = findJarFile(identifier, externalIdentifier);
 			if (jarFile != null) {
-				Type moduleType = readAttributeFile(identifier, jarFile, declarationList);
-				if (moduleType != expectedType) {
-					if (expectedType != null)
-						Util.error("Wrong external type");
+				if(checkJarFiles(jarFile)) {
+					Type moduleType = readAttributeFile(identifier, jarFile, enclosure);
+//					if (moduleType != expectedType) {
+					if(moduleType == null) {
+						if (expectedType != null) Util.error("Missing external type: "+expectedType);
+					}
+					else if(expectedType == null) {
+//						Util.error("Wrong external type: "+moduleType+". No Type Expected"); // TODO: TESTING3		
+					}
+					else if (!moduleType.equals(expectedType)) {
+						if (expectedType != null)
+							Util.error("Wrong external type: "+moduleType+". Expected type: "+expectedType);
+					}
 				}
 			}
 
@@ -163,6 +210,15 @@ public final class ExternalDeclaration extends Declaration {
 		}
 	}
 
+	private static boolean checkJarFiles(File file) {
+		for(File f:Global.externalJarFiles) if(f.equals(file)) {
+			Util.error("External already included: "+file.getName());
+			return(false);
+		}
+		return(true);
+	}
+
+	
 	/**
 	 * Find the .jar file containing an external class or procedure.
 	 * @param identifier class or procedure identifier
@@ -198,11 +254,10 @@ public final class ExternalDeclaration extends Declaration {
 	 * Read an attribute file.
 	 * @param identifier class or procedure identifier
 	 * @param file the file to read
-	 * @param declarationList the declaration list to update
+	 * @param enclosure the declaration list to update
 	 * @return the module type
 	 */
-	private static Type readAttributeFile(final String identifier, final File file,
-			final DeclarationList declarationList) {
+	private static Type readAttributeFile(final String identifier, final File file, final BlockDeclaration enclosure) {
 		Type moduleType = null;
 		Util.warning("Separate Compiled Module is read from: \"" + file + "\"");
 		if (!(file.exists() && file.canRead())) {
@@ -216,7 +271,7 @@ public final class ExternalDeclaration extends Declaration {
 			String simulaInfo = mainAttributes.getValue("SIMULA-INFO");
 			ZipEntry zipEntry = jarFile.getEntry(simulaInfo);
 			InputStream inputStream = jarFile.getInputStream(zipEntry);
-			moduleType = AttributeFileIO.readAttributeFile(inputStream, new File(simulaInfo), declarationList);
+			moduleType = AttributeFileIO.readAttributeFile(inputStream, new File(simulaInfo), enclosure);
 			inputStream.close();
 
 			File destDir = Global.tempClassFileDir;

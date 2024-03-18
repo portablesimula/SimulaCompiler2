@@ -11,13 +11,16 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
@@ -48,7 +51,7 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 	/**
 	 * When clause class identifier.
 	 */
-	private final String whenClassIdentifier;
+	private String whenClassIdentifier;
 	/**
 	 * When clause class Declaration. Set during checking.
 	 */
@@ -57,7 +60,7 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 	/**
 	 * The inspected variable.
 	 */
-	public final VariableExpression inspectedVariable;
+	public VariableExpression inspectedVariable;
 
 	/**
 	 * The when class identifier
@@ -207,6 +210,10 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		return ("Inspect(" + inspectedVariable + ") do " + statement);
 	}
 
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+
 	/**
 	 * Create a new ConnectionBlock.
 	 */
@@ -217,15 +224,75 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput out) throws IOException {
-		// TODO Auto-generated method stub
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		super.writeExternal(oupt);
 
+		// SyntaxClass
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		
+		// Declaration
+		oupt.writeObject(type);
+		oupt.writeObject(isProtected);
+		oupt.writeObject(identifier);
+		oupt.writeObject(externalIdent);
+//		oupt.writeObject(declaredIn);
+//		oupt.writeObject(declarationKind);
+//		oupt.writeInt(slot);
+		
+		// DeclarationScope
+		oupt.writeInt(sourceBlockLevel);
+		oupt.writeInt(ctBlockLevel);
+		oupt.writeInt(rtBlockLevel);
+		oupt.writeBoolean(hasLocalClasses);
+		oupt.writeObject(declarationList);
+		oupt.writeObject(labelList);
+		
+		// ConnectionBlock
+		oupt.writeObject(statement);
+		oupt.writeObject(whenClassIdentifier);
+		oupt.writeObject(whenClassDeclaration);
+		oupt.writeObject(inspectedVariable);
+		oupt.writeObject(classDeclaration);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException {
-		// TODO Auto-generated method stub
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		declarationKind = Declaration.Kind.ConnectionBlock;
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		super.readExternal(inpt);
+
+		// SyntaxClass
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+
+		// Declaration
+		type = (Type) inpt.readObject();
+		isProtected = (ProtectedSpecification) inpt.readObject();
+		identifier = (String) inpt.readObject();
+		externalIdent = (String) inpt.readObject();
+//		declaredIn = (DeclarationScope) inpt.readObject();
+//		declarationKind = (Kind) inpt.readObject();
+//		slot = inpt.readInt();
+
+		// DeclarationScope
+		sourceBlockLevel = inpt.readInt();
+		ctBlockLevel = inpt.readInt();
+		rtBlockLevel = inpt.readInt();
+		hasLocalClasses = inpt.readBoolean();
+		declarationList = (DeclarationList) inpt.readObject();
+		labelList = (Vector<LabelDeclaration>) inpt.readObject();
+		
+		// ConnectionBlock
+		statement = (Statement) inpt.readObject();
+		whenClassIdentifier = (String) inpt.readObject();
+		whenClassDeclaration = (Declaration) inpt.readObject();
+		inspectedVariable = (VariableExpression) inpt.readObject();
+		classDeclaration = (ClassDeclaration) inpt.readObject();
 
 	}
+
 
 }

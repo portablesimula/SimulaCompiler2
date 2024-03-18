@@ -7,11 +7,13 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
 import java.util.Vector;
 
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -26,8 +28,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public abstract sealed class DeclarationScope extends Declaration
-permits BlockDeclaration, ConnectionBlock  {
+public abstract class DeclarationScope extends Declaration  {
 	
 	/**
 	 * Current Runtime Block level - Used during doChecking
@@ -121,8 +122,10 @@ permits BlockDeclaration, ConnectionBlock  {
 	 */
 	public Meaning findMeaning(final String identifier) {
 		Meaning meaning = findVisibleAttributeMeaning(identifier);
-		if (meaning == null && declaredIn != null)
+		if (meaning == null && declaredIn != null) {
+			if(Option.TESTING4) System.out.println("TESTING4: LookFor "+identifier+" IN "+declaredIn);
 			meaning = declaredIn.findMeaning(identifier);
+		}
 		if (meaning == null) {
 			if (!Global.duringParsing)
 				Util.error("Undefined variable: " + identifier);
@@ -140,10 +143,29 @@ permits BlockDeclaration, ConnectionBlock  {
 	 * @param identifier declared label identifier
 	 * @return the resulting Meaning
 	 */
+//	public Meaning findLabelMeaning(final String identifier) {
+//		for (LabelDeclaration dcl : labelList) {
+//			if (Util.equals(dcl.identifier, identifier)) {
+//				return (new Meaning(dcl, this, this, false));
+//			}
+//		}
+//		if (declaredIn != null)
+//			return (declaredIn.findLabelMeaning(identifier));
+//		return (null);
+//	}
 	public Meaning findLabelMeaning(final String identifier) {
+//		System.out.println("\nDeclarationScope.findLabelMeaning: "+identifier+" IN "+this);
 		for (LabelDeclaration dcl : labelList) {
+//			System.out.println("DeclarationScope.findLabelMeaning: Checking "+dcl);
 			if (Util.equals(dcl.identifier, identifier)) {
 				return (new Meaning(dcl, this, this, false));
+			}
+		}
+		if(Option.NEW_INNER_IMPL) {
+			if(this instanceof ClassDeclaration cls) {
+				if(!cls.hasNoRealPrefix()) {
+					return(cls.getPrefixClass().findLabelMeaning(identifier));
+				}
 			}
 		}
 		if (declaredIn != null)
@@ -246,9 +268,28 @@ permits BlockDeclaration, ConnectionBlock  {
 		return (id);
 	}
 	
+	public void printStaticChain(String title) {
+		System.out.println("\nDeclarationScope.printStaticChain: **************** "+title+" ****************");
+		DeclarationScope scope=this.declaredIn;
+		int lim = 5;//7;
+		for(int i=1;i<lim;i++) {
+//		while(scope != null) {
+//			System.out.println("DeclarationScope.printStaticChain: scope="+scope);
+			System.out.println("DeclarationScope.printStaticChain: " + scope.declarationKind + ' ' + scope.identifier + '[' + scope.externalIdent + ']');
+			for(Declaration decl:scope.declarationList) {
+				System.out.println("DeclarationScope.printStaticChain:                  "+decl);			
+			} scope=scope.declaredIn;
+		}
+	}
+	
 	protected void printDeclarationList(int indent) {
 		for(Declaration d:declarationList) d.printTree(indent);
 		for(LabelDeclaration d:labelList) d.printTree(indent);
+	}
+
+	public void createJavaClassFile() throws IOException {
+		// TODO Auto-generated method stub
+		Util.IERR("");
 	}
 
 }

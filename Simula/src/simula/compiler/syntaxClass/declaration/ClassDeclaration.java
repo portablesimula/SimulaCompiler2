@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.byteCodeEngineering.JavaClassInfo;
 import simula.compiler.CodeLine;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -94,8 +95,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public sealed class ClassDeclaration extends BlockDeclaration implements Externalizable
-permits StandardClass, PrefixedBlockDeclaration {
+public class ClassDeclaration extends BlockDeclaration implements Externalizable {
 	/**
 	 * The external prefix'identifier.
 	 */
@@ -129,12 +129,18 @@ permits StandardClass, PrefixedBlockDeclaration {
 	/**
 	 * Statement code before inner.
 	 */
-	protected Vector<CodeLine> code1; // Statement code before inner
+	protected Vector<CodeLine> code1; // Statement code before inner  TODO: NOT  NEW_INNER_IMPL
 
 	/**
 	 * Statement code after inner.
 	 */
-	public Vector<CodeLine> code2;
+	public Vector<CodeLine> code2;  // TODO: NOT  NEW_INNER_IMPL
+
+	/**
+	 * Possible statements before inner.
+	 * If this is non-null then 'statements' contains the statements after inner
+	 */
+	public Vector<Statement> statements1; // Statement code before inner  TODO: NEW_INNER_IMPL
 
 	/**
 	 * Class Prefix in case of a SubClass or Prefixed Block.
@@ -381,30 +387,60 @@ permits StandardClass, PrefixedBlockDeclaration {
 	 * 
 	 * @param cls the ClassDeclaration
 	 */
+//	private static void expectClassBody(ClassDeclaration cls) {
+//		if (Parse.accept(KeyWord.BEGIN)) {
+//			Statement stm;
+//			if (Option.TRACE_PARSE)
+//				Parse.TRACE("Parse Block");
+//			while (Declaration.acceptDeclaration(cls.declarationList)) {
+//				Parse.accept(KeyWord.SEMICOLON);
+//			}
+//			boolean seen = false;
+//			Vector<Statement> stmList = cls.statements;
+//			while (!Parse.accept(KeyWord.END)) {
+//				stm = Statement.expectStatement();
+//				if (stm != null)
+//					stmList.add(stm);
+//				if (Parse.accept(KeyWord.INNER)) {
+//					if (seen)
+//						Util.error("Max one INNER per Block");
+//					else
+//						stmList.add(new InnerStatement(Parse.currentToken.lineNumber));
+//					seen = true;
+//				}
+//			}
+//			if (!seen)
+//				stmList.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
+//		}
+//		else {
+//			cls.statements.add(Statement.expectStatement());
+//			cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
+//		}
+//	}
 	private static void expectClassBody(ClassDeclaration cls) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
 			if (Option.TRACE_PARSE)
 				Parse.TRACE("Parse Block");
-			while (Declaration.acceptDeclaration(cls.declarationList)) {
+			while (Declaration.acceptDeclaration(cls)) {
 				Parse.accept(KeyWord.SEMICOLON);
 			}
 			boolean seen = false;
-			Vector<Statement> stmList = cls.statements;
+//			Vector<Statement> stmList = cls.statements;  // TODO: NEW_INNER_IMPL
 			while (!Parse.accept(KeyWord.END)) {
 				stm = Statement.expectStatement();
 				if (stm != null)
-					stmList.add(stm);
+					cls.statements.add(stm);
 				if (Parse.accept(KeyWord.INNER)) {
 					if (seen)
 						Util.error("Max one INNER per Block");
 					else
-						stmList.add(new InnerStatement(Parse.currentToken.lineNumber));
+						cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber));
 					seen = true;
 				}
 			}
 			if (!seen)
-				stmList.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
+				cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
 		}
 		else {
 			cls.statements.add(Statement.expectStatement());
@@ -458,6 +494,10 @@ permits StandardClass, PrefixedBlockDeclaration {
 		currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
+		
+//		System.out.println("ClassDeclaration.doChecking: "+this);
+//		if(Option.TESTING4)	printStaticChain("ClassDeclaration.doChecking:");
+		
 		ClassDeclaration prefixClass = null;
 		if (!hasNoRealPrefix()) {
 			prefixClass = getPrefixClass();
@@ -475,6 +515,10 @@ permits StandardClass, PrefixedBlockDeclaration {
 			vrt.doChecking();
 		for (Declaration dcl : declarationList)
 			dcl.doChecking();
+		if(statements1 != null) {              // TODO: NOT  NEW_INNER_IMPL
+			for (Statement stm : statements1)  // TODO: NOT  NEW_INNER_IMPL
+				stm.doChecking();	           // TODO: NOT  NEW_INNER_IMPL  		
+		}
 		for (Statement stm : statements)
 			stm.doChecking();
 		checkProtectedList();
@@ -484,12 +528,12 @@ permits StandardClass, PrefixedBlockDeclaration {
 		currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
 
-//		JavaClassInfo info = new JavaClassInfo();
-//		info.externalIdent = this.getJavaIdentifier();
-//		if (prefixClass != null) {
-//			info.prefixIdent = externalPrefixIdent = prefixClass.getJavaIdentifier();
-//		}
-//		JavaClassInfo.put(info.externalIdent, info);
+		JavaClassInfo info = new JavaClassInfo();
+		info.externalIdent = this.getJavaIdentifier();
+		if (prefixClass != null) {
+			info.prefixIdent = externalPrefixIdent = prefixClass.getJavaIdentifier();
+		}
+		JavaClassInfo.put(info.externalIdent, info);
 	}
 
 	// ***********************************************************************************************
@@ -776,9 +820,16 @@ permits StandardClass, PrefixedBlockDeclaration {
 	 * 
 	 * @return the prefix ClassDeclaration or null
 	 */
+//	private static int SEQU=0;  // TODO: TESTING4
 	public ClassDeclaration getPrefixClass() {
 		if (prefix == null)
 			return (null);
+//		if((SEQU++) > 70) {
+//			System.out.println("ClassDeclaration.getPrefixClass: TERMINATED SEARCH FOR "+prefix);
+//			Util.IERR(""); // TODO: TESTING4
+//		}
+		if(Option.TESTING4) System.out.println("ClassDeclaration.getPrefixClass: TESTING4: LookFor "+prefix+" IN "+declaredIn);
+		
 		Meaning meaning = declaredIn.findMeaning(prefix);
 		if (meaning == null)
 			Util.error("Undefined prefix: " + prefix);
@@ -801,7 +852,7 @@ permits StandardClass, PrefixedBlockDeclaration {
 	 * Check if this class has a real prefix.
 	 * @return true if this class has a real prefix, otherwise false.
 	 */
-	private boolean hasNoRealPrefix() {
+	boolean hasNoRealPrefix() {
 		ClassDeclaration prfx = getPrefixClass();
 		boolean noPrefix = true;
 		if (prfx != null) {
@@ -1037,9 +1088,44 @@ permits StandardClass, PrefixedBlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void codeStatements() {
-		writeCode1(); // Write code before inner
-		writeCode2(); // Write code after inner
-		// listSavedCode();
+		if(Option.NEW_INNER_IMPL) {
+			codeStatementsBeforeInner();
+			codeStatementsAfterInner();
+		} else {
+			writeCode1(); // Write code before inner
+			writeCode2(); // Write code after inner
+			// listSavedCode();
+		}
+	}
+
+	// ***********************************************************************************************
+	// *** Coding Utility: codeStatementsBeforeInner
+	// ***********************************************************************************************
+	/**
+	 * Coding utility: codeStatementsBeforeInner
+	 */
+	private void codeStatementsBeforeInner() { // TODO: NEW_INNER_IMPL
+		if (!this.hasNoRealPrefix()) {
+			ClassDeclaration prfx = this.getPrefixClass();
+			if (prfx != null) prfx.codeStatementsBeforeInner();
+		}
+		if(statements1 != null) for (Statement stm : statements1) stm.doJavaCoding();
+		GeneratedJavaClass.code("// BEGIN INNER PART");
+	}
+
+	// ***********************************************************************************************
+	// *** Coding Utility: codeStatementsAfterInner
+	// ***********************************************************************************************
+	/**
+	 * Coding utility: codeStatementsAfterInner
+	 */
+	private void codeStatementsAfterInner() { // TODO: NEW_INNER_IMPL
+		GeneratedJavaClass.code("// ENDOF INNER PART");
+		for (Statement stm : statements) stm.doJavaCoding();
+		if (!this.hasNoRealPrefix()) {
+			ClassDeclaration prfx = this.getPrefixClass();
+			if (prfx != null) prfx.codeStatementsAfterInner();
+		}
 	}
 
 	// ***********************************************************************************************
@@ -1223,9 +1309,19 @@ permits StandardClass, PrefixedBlockDeclaration {
 		oupt.writeObject(labelList);
 		oupt.writeObject(declarationList);
 //		oupt.writeObject(virtualMatchList);
-		oupt.writeObject(code1);
-		oupt.writeObject(code2);
+//		oupt.writeObject(code1);
+//		oupt.writeObject(code2);
 		oupt.writeObject(externalPrefixIdent);
+
+		if(Option.NEW_INNER_IMPL) {
+//			System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
+//			System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
+			oupt.writeObject(statements1);
+			oupt.writeObject(statements);
+		} else {
+			oupt.writeObject(code1);
+			oupt.writeObject(code2);
+		}
 
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
@@ -1250,16 +1346,27 @@ permits StandardClass, PrefixedBlockDeclaration {
 		labelList = (Vector<LabelDeclaration>) inpt.readObject();
 		declarationList = (DeclarationList) inpt.readObject();
 //		virtualMatchList=(Vector<VirtualMatch>) inpt.readObject();
-		code1 = (Vector<CodeLine>) inpt.readObject();
-		code2 = (Vector<CodeLine>) inpt.readObject();
+//		code1 = (Vector<CodeLine>) inpt.readObject();
+//		code2 = (Vector<CodeLine>) inpt.readObject();
 		externalPrefixIdent = (String) inpt.readObject();
+
+		if(Option.NEW_INNER_IMPL) {
+			statements1 = (Vector<Statement>) inpt.readObject();
+			statements = (Vector<Statement>) inpt.readObject();			
+//			System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
+//			System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
+		} else {
+			code1 = (Vector<CodeLine>) inpt.readObject();
+			code2 = (Vector<CodeLine>) inpt.readObject();
+		}
+
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		Global.setScope(this.declaredIn);
 
-//		JavaClassInfo info = new JavaClassInfo();
-//		info.externalIdent = this.getJavaIdentifier();
-//		info.prefixIdent = externalPrefixIdent;
-//		JavaClassInfo.put(info.externalIdent, info);
+		JavaClassInfo info = new JavaClassInfo();
+		info.externalIdent = this.getJavaIdentifier();
+		info.prefixIdent = externalPrefixIdent;
+		JavaClassInfo.put(info.externalIdent, info);
 	}
 
 }

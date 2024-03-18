@@ -1,7 +1,4 @@
-begin
-	integer i;
-	outtext("HelloWorld: ");
-	i:=444;
-	outint(i,0);
-	outimage;
+Simset begin
+	ref(Head) set;
+
 end;

@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -98,7 +103,7 @@ public final class ArithmeticExpression extends Expression {
 	/**
 	 * The arithmetic operation
 	 */
-	private final KeyWord opr;
+	private KeyWord opr;
 
 	/**
 	 * The right hand side
@@ -196,7 +201,7 @@ public final class ArithmeticExpression extends Expression {
 			Type type1 = lhs.type;
 			Type type2 = rhs.type;
 			this.type = Type.arithmeticTypeConversion(type1, type2);
-			if (this.type == Type.Integer)
+			if (this.type.equals(Type.Integer))
 				this.type = Type.Real;
 			lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
 			rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
@@ -207,7 +212,7 @@ public final class ArithmeticExpression extends Expression {
 		case INTDIV: { // Integer Division
 			lhs.doChecking();
 			rhs.doChecking();
-			if (lhs.type != Type.Integer || rhs.type != Type.Integer)
+			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer)))
 				Util.error("Incompatible types in binary operation: " + toString());
 			this.type = Type.Integer;
 			lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
@@ -217,7 +222,7 @@ public final class ArithmeticExpression extends Expression {
 		case EXP: {
 			lhs.doChecking();
 			rhs.doChecking();
-			if (lhs.type != Type.Integer || rhs.type != Type.Integer) {
+			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer))) {
 				this.type = Type.LongReal; // Deviation from Simula Standard
 				lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
 				rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
@@ -245,7 +250,7 @@ public final class ArithmeticExpression extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		switch (opr) {
 		case EXP: {
-			if (this.type == Type.Integer)
+			if (this.type.equals(Type.Integer))
 				return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
 			else
 				return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
@@ -263,5 +268,39 @@ public final class ArithmeticExpression extends Expression {
 	public String toString() {
 		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ArithmeticExpression() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(lhs);
+		oupt.writeObject(opr);
+		oupt.writeObject(rhs);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		lhs = (Expression) inpt.readObject();
+		opr = (KeyWord) inpt.readObject();
+		rhs = (Expression) inpt.readObject();
+	}
+	
 
 }

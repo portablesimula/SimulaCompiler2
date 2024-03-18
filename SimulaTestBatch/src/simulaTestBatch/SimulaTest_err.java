@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 10
 package simulaTestBatch;
-// Simula-2.0 Compiled at Thu Sep 07 13:06:05 CEST 2023
+// Simula-2.0 Compiled at Sun Feb 04 11:29:47 CET 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SimulaTest_err extends RTS_PROCEDURE {
@@ -37,14 +37,14 @@ public final class SimulaTest_err extends RTS_PROCEDURE {
     @Override
     public SimulaTest_err _STM() {
         RTS_COMMON._LINE("Procedure SimulaTest.err",11); // JavaLine 39 <== SourceLine 11
-        sysout().setpos(1);
+        RTS_BASICIO.sysout().setpos(1);
         ;
         RTS_COMMON._LINE("Procedure SimulaTest.err",12); // JavaLine 42 <== SourceLine 12
-        sysout().outtext(new RTS_TXT("*** error: in test "));
+        RTS_BASICIO.sysout().outtext(new RTS_TXT("*** error: in test "));
         ;
-        sysout().outtext(p_t);
+        RTS_BASICIO.sysout().outtext(p_t);
         ;
-        sysout().outimage();
+        RTS_BASICIO.sysout().outimage();
         ;
         RTS_COMMON._LINE("Procedure SimulaTest.err",13); // JavaLine 49 <== SourceLine 13
         ((SimulaTest)(_CUR._SL)).found_error=true;

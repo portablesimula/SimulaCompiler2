@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
 import simula.compiler.utilities.Global;
@@ -26,7 +31,7 @@ public final class TypeConversion extends Expression {
 	/**
 	 * The expression.
 	 */
-	final Expression expression;
+	Expression expression;
 
 	/**
 	 * Create a new TypeConversion.
@@ -47,8 +52,8 @@ public final class TypeConversion extends Expression {
 	 * @return piece of Java source code
 	 */
 	public static String mayBeConvert(final Type fromType,final Type toType,final String expr) {
-		if(fromType==Type.Real || fromType==Type.LongReal)
-		{ if(toType==Type.Integer)
+		if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal))
+		{ if(toType.equals(Type.Integer))
               return("=(int)Math.round("+expr+");");
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
@@ -72,12 +77,12 @@ public final class TypeConversion extends Expression {
 		if (testCastNeccessary(toType, expression)) {
 			if(expression instanceof Constant constant) {
 				Number val=(Number)constant.value;
-				if(toType==Type.Integer) {
-					if(fromType==Type.Real) val=(int)Math.round(val.floatValue());
-					else if(fromType==Type.LongReal) val=(int)Math.round(val.doubleValue());
+				if(toType.equals(Type.Integer)) {
+					if(fromType.equals(Type.Real)) val=(int)Math.round(val.floatValue());
+					else if(fromType.equals(Type.LongReal)) val=(int)Math.round(val.doubleValue());
 				}
-				else if(toType==Type.Real) val=val.floatValue();
-				else if(toType==Type.LongReal) val=val.doubleValue();
+				else if(toType.equals(Type.Real)) val=val.floatValue();
+				else if(toType.equals(Type.LongReal)) val=val.doubleValue();
 				else Util.IERR("IMPOSSIBLE - TypeConversion.testAndCreate: "+expression);
 				Constant c=new Constant(toType,val); c.doChecking();
 				return(c);
@@ -123,7 +128,7 @@ public final class TypeConversion extends Expression {
 		type.doChecking(Global.getCurrentScope());
 		expression.doChecking();
 		Type type = expression.type;
-		if (type.isConvertableTo(this.type) == Type.ConversionKind.Illegal)
+		if (type.isConvertableTo(this.type).equals(Type.ConversionKind.Illegal))
 			Util.error("Illegal Type Conversion " + type + " ==> " + this.type);
 		SET_SEMANTICS_CHECKED();
 	}
@@ -139,9 +144,9 @@ public final class TypeConversion extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		String evaluated = expression.toJavaCode();
-		if (type == Type.Integer) {
+		if (type.equals(Type.Integer)) {
 			Type fromType = expression.type;
-			if (fromType == Type.Real || fromType == Type.LongReal)
+			if (fromType.equals(Type.Real) || fromType.equals(Type.LongReal))
 				return("(int)Math.round(" + evaluated + ")");
 		}
 		return ("((" + type.toJavaType() + ")(" + evaluated + "))");
@@ -152,5 +157,35 @@ public final class TypeConversion extends Expression {
 		return ("((" + type + ")(" + expression + "))");
 	}
 
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public TypeConversion() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(expression);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		expression = (Expression) inpt.readObject();
+	}
+	
 
 }

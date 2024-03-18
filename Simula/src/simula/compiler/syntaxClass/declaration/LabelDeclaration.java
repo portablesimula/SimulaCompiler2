@@ -30,6 +30,18 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	public int index;
 
 	/**
+	 * Special case: Labels in a CompoundStatement or ConnectionBlock are moved to
+	 * nearest enclosing Block which is not a CompoundStatement or ConnectionBlock.
+	 */
+	public DeclarationScope movedTo;
+	
+	/**
+	 * Indicates that codeBuilder.labelBinding is called.
+	 */
+	public boolean isBinded;
+	
+
+	/**
 	 * Create a new Label Declaration.
 	 * 
 	 * @param identifier label identifier
@@ -63,18 +75,38 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	}
 
 	@Override
+//	public void doJavaCoding() {
+//		Global.sourceLineNumber = lineNumber;
+//		String ident = getJavaIdentifier();
+//		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
+//		if (virtSpec != null)
+//			GeneratedJavaClass.code("public RTS_LABEL " + virtSpec.getVirtualIdentifier()
+//					+ " { return(new RTS_LABEL(this," + index + ",\"" + identifier + "\")); }",
+//					" // Virtual Label #" + index + '=' + identifier);
+//		else
+//			GeneratedJavaClass.code(
+//					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," + index + ",\"" + identifier + "\");",
+//					"Local Label #" + index + '=' + identifier);
+//	}
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
 		String ident = getJavaIdentifier();
+		int prefixLevel=0;
+		if(movedTo != null) {
+			if(movedTo instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();
+		} else {
+			if(declaredIn instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();			
+		}
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
-		if (virtSpec != null)
+		if (virtSpec != null) {
 			GeneratedJavaClass.code("public RTS_LABEL " + virtSpec.getVirtualIdentifier()
-					+ " { return(new RTS_LABEL(this," + index + ",\"" + identifier + "\")); }",
-					" // Virtual Label #" + index + '=' + identifier);
-		else
+					+ " { return(new RTS_LABEL(this," + prefixLevel + ',' + index + ",\"" + identifier + "\")); }",
+					" // Virtual Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
+		} else {
 			GeneratedJavaClass.code(
-					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," + index + ",\"" + identifier + "\");",
-					"Local Label #" + index + '=' + identifier);
+					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," +prefixLevel + ',' + index + ",\"" + identifier + "\");",
+					"Local Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
+		}
 	}
 
 	@Override

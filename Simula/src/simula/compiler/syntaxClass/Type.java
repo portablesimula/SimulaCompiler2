@@ -53,7 +53,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public sealed class Type extends SyntaxClass implements Externalizable permits OverLoad {
+public class Type extends SyntaxClass implements Externalizable {
 	/**
 	 * Simula's Integer type
 	 */
@@ -222,7 +222,7 @@ public sealed class Type extends SyntaxClass implements Externalizable permits O
 	 * @return true if this type is an arithmetic type.
 	 */
 	public boolean isArithmeticType() {
-		return(this==Type.Integer||this==Type.Real||this==Type.LongReal); }
+		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal)); }
   
 	/**
 	 * Returns true if this type is ref() type.
@@ -355,20 +355,20 @@ public sealed class Type extends SyntaxClass implements Externalizable permits O
 	 * @return the most dominant type
 	 */
 	public static Type arithmeticTypeConversion(final Type type1,final Type type2) {
-		if(type1==Type.Integer)	{
-			if(type2==Type.Integer) return(Type.Integer); 
-			else if(type2==Type.Real) return(Type.Real);
-			else if(type2==Type.LongReal) return(Type.LongReal);
+		if(type1.equals(Type.Integer)) {
+			if(type2.equals(Type.Integer)) return(Type.Integer); 
+			else if(type2.equals(Type.Real)) return(Type.Real);
+			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
 		}
-		else if(type1==Type.Real) {
-			if(type2==Type.Integer) return(Type.Real); 
-			else if(type2==Type.Real) return(Type.Real);
-			else if(type2==Type.LongReal) return(Type.LongReal);
+		else if(type1.equals(Type.Real)) {
+			if(type2.equals(Type.Integer)) return(Type.Real); 
+			else if(type2.equals(Type.Real)) return(Type.Real);
+			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
 		}
-		else if(type1==Type.LongReal) {
-			if(type2==Type.Integer) return(Type.LongReal); 
-			else if(type2==Type.Real) return(Type.LongReal);
-			else if(type2==Type.LongReal) return(Type.LongReal);
+		else if(type1.equals(Type.LongReal)) {
+			if(type2.equals(Type.Integer)) return(Type.LongReal); 
+			else if(type2.equals(Type.Real)) return(Type.LongReal);
+			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
 		}
 		return(null);  
 	}
@@ -446,8 +446,9 @@ public sealed class Type extends SyntaxClass implements Externalizable permits O
 		Util.IERR("");
 		return(this.toString());
 	}
+
 	
-	public String getArrayType() {
+	public String getArrayType() {   // TESTING_ARRAY
 		if(this==Type.Integer)     return("RTS_INTEGER_ARRAY");
 		if(this==Type.Character)   return("RTS_CHARACTER_ARRAY");
 		if(this==Type.Boolean)     return("RTS_BOOLEAN_ARRAY");
@@ -457,7 +458,7 @@ public sealed class Type extends SyntaxClass implements Externalizable permits O
 		if(this.isReferenceType()) return("RTS_REF_ARRAY");
 		Util.IERR("IMPOSSIBLE");   return(null);
 	}
-	  
+
 	@Override
 	public String toString() {
 		if(key==null) return("null");
@@ -481,18 +482,18 @@ public sealed class Type extends SyntaxClass implements Externalizable permits O
 	 */
 	public static Type inType(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		Type tp=(Type)inpt.readObject();
-		if(tp==null) return(null);
-		KeyWord key=tp.key.getKeyWord();
-		if(key==KeyWord.INTEGER) return(Type.Integer);
-		if(key==KeyWord.REAL) {
-			if(tp.key.getValue()==KeyWord.LONG) return(Type.LongReal);
-			return(Type.Real);
-		}
-		if(key==KeyWord.BOOLEAN) return(Type.Boolean);
-		if(key==KeyWord.CHARACTER) return(Type.Character);
-		if(key==KeyWord.TEXT) return(Type.Text);
-		if(key==KeyWord.PROCEDURE) return(Type.Procedure);
-		if(key==KeyWord.LABEL) return(Type.Label);
+//		if(tp==null) return(null);
+//		KeyWord key=tp.key.getKeyWord();
+//		if(key==KeyWord.INTEGER) return(Type.Integer);
+//		if(key==KeyWord.REAL) {
+//			if(tp.key.getValue()==KeyWord.LONG) return(Type.LongReal);
+//			return(Type.Real);
+//		}
+//		if(key==KeyWord.BOOLEAN) return(Type.Boolean);
+//		if(key==KeyWord.CHARACTER) return(Type.Character);
+//		if(key==KeyWord.TEXT) return(Type.Text);
+//		if(key==KeyWord.PROCEDURE) return(Type.Procedure);
+//		if(key==KeyWord.LABEL) return(Type.Label);
 		return(tp);
 
 	}

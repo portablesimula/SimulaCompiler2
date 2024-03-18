@@ -1,0 +1,23 @@
+SIMSET begin
+
+    class AAA(ARR); boolean array ARR;
+    begin
+    	boolean array BRR(0:30);
+    end;
+
+   	boolean array BR(0:30);
+    ref(AAA) xxx;
+    boolean b;
+    
+    xxx :- new AAA(BR);
+
+	xxx.ARR(5) := true; -- Feiler - OK MEN IKKE SJEKKET
+%	b := xxx.ARR(5);    -- feiler - OK NÅ
+
+%	xxx.BRR(5) := true; -- OK
+%	b := xxx.BRR(5);    -- OK
+	
+%	if xxx.ARR(0) then outtext("  true  "); -- Feiler -- OK NÅ
+%    if xxx.BRR(0) then outtext("  true  "); -- OK
+ 
+end;

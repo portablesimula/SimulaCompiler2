@@ -1,0 +1,14 @@
+begin
+%	integer array A(1:4,4:6,6:12);
+%	integer iii;
+    text array facit(0:9);
+
+%    A(2,5,9) := 666;
+%	iii := A(2,5,9);
+%   facit(0):-"At START";
+   facit(1):-"At START-2";
+   
+    outtext(facit(1));
+%    outint(iii,6);
+
+end;

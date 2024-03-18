@@ -15,6 +15,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.editor.RTOption;
 
 /**
  * Run inline compiler tests.
@@ -59,7 +60,7 @@ public final class RunCompilerTest {
 		// *** SIMULA PROGRAMMER TIL RELEASE TESTING
 		// String name="/samples/AnimationTest.sim";
 		// String name="/samples/Atkins.sim";
-		 String name="/samples/Dates.sim";
+		// String name="/samples/Dates.sim";
 		// String name="/samples/DatesTest.sim";
 		// String name="/samples/Docking.sim";
 		// String name="/samples/FittingRoom.sim";
@@ -203,6 +204,8 @@ public final class RunCompilerTest {
 //		String name="/FECTest/fecTest.sim";
 
 		// *** SMÅ ENKLE SIMULA TEST PROGRAMMER
+		// String name="/simple/adErr09.sim";
+		 String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
@@ -210,12 +213,31 @@ public final class RunCompilerTest {
 		// String name="/simple/adHoc04.sim";
 		// String name="/simple/adHoc05.sim";
 		// String name="/simple/adHoc06.sim";
+		// String name="/simple/adHoc07.sim";
+		// String name="/simple/adHoc08.sim";
+		// String name="/simple/adHoc09.sim";
+		// String name="/simple/adHoc10.sim";
+		// String name="/simple/adHoc11.sim";
+		// String name="/simple/adHoc12.sim";
+		
+		// String name="/simple/adHocX01.sim";
+		// String name="/simple/adHocX02.sim";
+		 
 		// String name="/simple/adHoc26.sim";
+		// String name="/simple/adHoc31.sim";
 		// String name="/simple/adHoc51.sim";
 		// String name="/simple/adHoc54.sim";
+		// String name="/simple/adHoc58.sim";
 		// String name="/simple/adHoc66.sim";
 		// String name="/simple/adHoc67.sim";
 		// String name="/simple/adHoc68.sim";
+//		 String name="/simple/adHoc85.sim";
+//		 String name="/simple/adHocSeparat.sim";
+//		 String name="/simple/adHoc86.sim";
+//		 String name="/simple/adHoc98.sim";
+//		String name="/simple/adHoc102.sim";
+//		 String name="/simple/adHoc122.sim";
+//		 String name="/simple/adHoc131.sim";
 	    // String name="/simple/ArrayAsParameter.sim";
 		// String name="/simple/Assignments.sim";
 		// String name="/simple/Blocks.sim";
@@ -252,6 +274,8 @@ public final class RunCompilerTest {
 
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
+			Option.NEW_INNER_IMPL=true;  // Using Statments1 and Statements2
+//			Option.GENERATE_BYTEFILE=true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
@@ -260,6 +284,7 @@ public final class RunCompilerTest {
 
 			// Overall TRACING Options
 //			Option.TRACING=true;
+//			Option.DEBUGGING=true;
 //
 //			// Scanner Trace Options
 //			Option.TRACE_SCAN=true;
@@ -274,7 +299,7 @@ public final class RunCompilerTest {
 //			// Checker Trace Options
 //			Option.TRACE_CHECKER=true;
 //			Option.TRACE_CHECKER_OUTPUT=true;
-//			Option.TRACE_FIND_MEANING=2;
+//			Option.TRACE_FIND_MEANING=1;
 //			
 //			// Coder Trace Options
 //			Option.TRACE_CODING=true;
@@ -283,11 +308,13 @@ public final class RunCompilerTest {
 //			Option.USE_FILE_CLASS_API=1;
 //			Option.USE_FILE_CLASS_API=2;
 			
-			Option.USE_FILE_CLASS_API=1;
+//			Option.USE_FILE_CLASS_API=1;
 //			Option.TRACE_REPAIRING=true;
 //			Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
 //			Option.TRACE_BYTECODE_OUTPUT=true;
 //			Option.DEBUGGING=true;
+			
+			Option.LIST_GENERATED_CLASS_FILES=true;
 
 //			File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 			File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
@@ -305,9 +332,9 @@ public final class RunCompilerTest {
 			// Set RunTime Options and tracing.
 //			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
-//			RTOption.BLOCK_TRACING = true;
+			RTOption.BLOCK_TRACING = true;
 //			RTOption.GOTO_TRACING = false;
-//			RTOption.QPS_TRACING = false;
+			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;
 
 			String fileName=userDir+"/src/"+Global.packetName + name;

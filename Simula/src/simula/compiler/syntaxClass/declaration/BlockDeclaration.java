@@ -7,14 +7,31 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+//import java.lang.classfile.CodeBuilder;
+//import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
+//import java.lang.classfile.Label;
+//import java.lang.classfile.constantpool.ConstantPoolBuilder;
+//import java.lang.classfile.constantpool.FieldRefEntry;
+//import java.lang.classfile.instruction.SwitchCase;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
+import java.lang.constant.MethodTypeDesc;
+import java.util.List;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.Util;
 
 /**
  * Block Declaration.
@@ -29,8 +46,7 @@ import simula.compiler.utilities.Option;
  * 
  * @author Øystein Myhre Andersen
  */
-public abstract sealed class BlockDeclaration extends DeclarationScope
-permits ClassDeclaration, ProcedureDeclaration, MaybeBlockDeclaration {
+public abstract class BlockDeclaration extends DeclarationScope {
 	
 	/**
 	 * If true; this is the outermost Subblock or Prefixed Block.
@@ -40,7 +56,7 @@ permits ClassDeclaration, ProcedureDeclaration, MaybeBlockDeclaration {
 	/**
 	 * The statements belonging to this block.
 	 */
-	protected final Vector<Statement> statements = new Vector<Statement>();
+	public Vector<Statement> statements = new Vector<Statement>();
 
 	/**
 	 * Last source line number
@@ -62,6 +78,9 @@ permits ClassDeclaration, ProcedureDeclaration, MaybeBlockDeclaration {
 	 * This is done in the doChecking method of the Class/Procedure
 	 */
 	public boolean isBlockLevelUpdated; // TODO: NEW_EXTERNAL_IMPL
+
+	public static ClassDesc currentClassDesc;
+	private ClassDesc prevClassDesc;
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
@@ -131,6 +150,11 @@ permits ClassDeclaration, ProcedureDeclaration, MaybeBlockDeclaration {
 	 * @param prefixClass possible prefix or null
 	 */
 	protected void doCheckLabelList(final ClassDeclaration prefixClass) {
+		if(prefixClass != null) { // TESTING5
+			currentRTBlockLevel--;
+			prefixClass.doChecking();
+			currentRTBlockLevel++;
+		}
 		int labelIndex = (prefixClass == null)?(1) : prefixClass.getNlabels() + 1;
 		for (LabelDeclaration label : labelList) label.index = labelIndex++;
 	}
@@ -273,10 +297,40 @@ permits ClassDeclaration, ProcedureDeclaration, MaybeBlockDeclaration {
 	protected void printStatementList(int indent) {
 		for(Statement s:statements) s.printTree(indent);
 	}
+	
+
 
 	@Override
 	public String toString() {
 		return ("" + identifier + '[' + externalIdent + "] Declaration.Kind=" + declarationKind);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		super.writeExternal(oupt);
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(isMainModule);
+		oupt.writeObject(statements);
+		oupt.writeInt(lastLineNumber);
+		oupt.writeBoolean(isContextFree);
+		oupt.writeBoolean(isPreCompiled);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		super.readExternal(inpt);
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		isMainModule = inpt.readBoolean();
+		statements = (Vector<Statement>) inpt.readObject();
+		lastLineNumber = inpt.readInt();
+		isContextFree = inpt.readBoolean();
+		isPreCompiled = inpt.readBoolean();
+	}
+
 
 }

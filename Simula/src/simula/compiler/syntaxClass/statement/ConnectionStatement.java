@@ -7,6 +7,9 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -86,32 +89,32 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * The inspected object.
 	 */
-	private final Expression objectExpression;
+	private Expression objectExpression;
 	
 	/**
 	 * Utility Variable to hold the evaluated object-expression.
 	 */
-	private final VariableExpression inspectedVariable;
+	private VariableExpression inspectedVariable;
 	
 	/**
 	 * The inspected variable's declaration.
 	 */
-	private final SimpleVariableDeclaration inspectVariableDeclaration;
+	private SimpleVariableDeclaration inspectVariableDeclaration;
 	
 	/**
 	 * The connection parts. A DoPart or a list of WhenParts.
 	 */
-	private final Vector<DoPart> connectionPart = new Vector<DoPart>();
+	private Vector<DoPart> connectionPart = new Vector<DoPart>();
 	
 	/**
 	 * The otherwise statement.
 	 */
-	private final Statement otherwise;
+	private Statement otherwise;
 	
 	/**
 	 * True if this connection statement contains WhenPart(s).
 	 */
-	private final boolean hasWhenPart;
+	private boolean hasWhenPart;
 	
 	/**
 	 * Utility to help generate unique identifiers to the inspected variable.
@@ -128,6 +131,7 @@ public final class ConnectionStatement extends Statement {
 		super(line);
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
 		objectExpression = Expression.expectExpression();
+		objectExpression.backLink = this; // TESTING6
 		String ident = "_inspect_" + lineNumber + '_' + (SEQU++);
 		inspectedVariable = new VariableExpression(ident);
 		inspectVariableDeclaration = new SimpleVariableDeclaration(Type.Ref("RTObject"), ident);
@@ -382,5 +386,43 @@ public final class ConnectionStatement extends Statement {
 		String otherwisePart = (otherwise == null)?"":" OTHERWISE " + otherwise;
 		return ("INSPECT " + inspectedVariable + " " + connectionPart + otherwisePart);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ConnectionStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(objectExpression);
+		oupt.writeObject(inspectedVariable);
+		oupt.writeObject(inspectVariableDeclaration);
+		oupt.writeObject(connectionPart);
+		oupt.writeObject(otherwise);
+		oupt.writeObject(hasWhenPart);
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		objectExpression = (Expression) inpt.readObject();
+		inspectedVariable = (VariableExpression) inpt.readObject();
+		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObject();
+		connectionPart = (Vector<DoPart>) inpt.readObject();
+		otherwise = (Statement) inpt.readObject();
+		hasWhenPart = (Boolean) inpt.readObject();
+	}
+	
 
 }

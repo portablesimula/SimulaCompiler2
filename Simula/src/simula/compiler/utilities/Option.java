@@ -30,6 +30,22 @@ import javax.swing.JPanel;
  */
 public final class Option {
 
+	// Innført for å teste 'simtst119' som går i 'stack overflow'.
+	// Inntil videre blir ikke 'simtst119' tatt med i 'FullTestBatch'
+	public static boolean TESTING4 = false;
+
+	public static boolean NEW_INNER_IMPL = false; 
+	
+	/**
+	 * Experimental direct generation of Java byteCode
+	 */
+	public static boolean GENERATE_BYTEFILE = false;
+
+	/**
+	 * List generated .class files
+	 */
+	public static boolean LIST_GENERATED_CLASS_FILES = false;
+
 	/**
 	 * INLINE_TESTING on/off
 	 */

@@ -1,0 +1,10 @@
+Simulation begin
+	ref(A) x;
+	
+	Process class A; begin
+		outtext("A: HELLO "); outimage;
+	end;
+	
+	x:-new A;
+	call(x);
+end;

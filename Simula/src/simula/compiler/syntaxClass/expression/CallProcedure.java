@@ -177,7 +177,8 @@ public final class CallProcedure {
 	static String asStaticMethod(final VariableExpression variable,final boolean isContextFree) { 
 		Meaning meaning=variable.meaning;
 		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
-		BlockDeclaration staticLink=(BlockDeclaration)meaning.declaredAs.declaredIn;
+//		BlockDeclaration staticLink=(BlockDeclaration)meaning.declaredAs.declaredIn;
+		DeclarationScope staticLink=procedure.declaredIn; // TODO: TESTING3
 		String staticLinkString=null;
 		if(!isContextFree)staticLinkString=staticLink.edCTX();
 		String params=edProcedureParameters(variable,staticLinkString,procedure);
@@ -458,13 +459,14 @@ public final class CallProcedure {
 	 * @param apar actual parameter
 	 */
 	private static void doSimpleParameter(final StringBuilder s,final Type formalType,final Parameter.Mode mode,final Expression apar) {
+//		System.out.println("CallProcedure.doSimpleParameter: "+apar.getClass().getSimpleName()+"  "+apar);
 		if(mode==null) // Simple Type/Ref/Text by Default
 		  	s.append(apar.toJavaCode());
 		else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value
-		        if(formalType==Type.Text)
+		        if(formalType.equals(Type.Text))
 		    	     s.append("copy(").append(apar.toJavaCode()).append(')');
 		        else s.append(apar.toJavaCode());
-		} else if(formalType==Type.Label) {
+		} else if(formalType.equals(Type.Label)) {
 		    	String labQuant=apar.toJavaCode();
 		    	if(mode==Parameter.Mode.name) {
 			    	  s.append("new RTS_NAME<RTS_LABEL>()");

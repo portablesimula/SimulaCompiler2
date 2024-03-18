@@ -16,6 +16,8 @@ import simula.compiler.CodeLine;
 import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.syntaxClass.statement.InlineStatement;
+import simula.compiler.syntaxClass.statement.Statement;
 
 /**
  * Standard Class.
@@ -159,8 +161,7 @@ public final class StandardClass extends ClassDeclaration {
 		RTObject.isContextFree = true;
 		RTObject.addStandardProcedure(Declaration.Kind.MemberMethod, Type.Text, "objectTraceIdentifier");
 		RTObject.addStandardProcedure(Declaration.Kind.MemberMethod, Type.Text, "waitSomeTime",	parameter("millies", Type.Integer));
-		RTObject.addStandardProcedure(Declaration.Kind.MemberMethod, null, "detach"); // Nødvendig for å kompilere
-																						// Simuletta
+		RTObject.addStandardProcedure(Declaration.Kind.MemberMethod, null, "detach"); // Nødvendig for å kompilere Simuletta
 	}
 	  
 	// ******************************************************************
@@ -714,7 +715,7 @@ public final class StandardClass extends ClassDeclaration {
 		Inbytefile.addStandardAttribute(Type.Boolean,"ENDFILE_");  
 		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"endfile");  
 //		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
-		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");  // TODO: TESTING
+		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");  // TESTING
 		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"close");  
 		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"inbyte");  
 		Inbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Text,"intext",parameter("t",Type.Text));
@@ -744,7 +745,7 @@ public final class StandardClass extends ClassDeclaration {
 		StandardClass Outbytefile=new StandardClass("Bytefile","Outbytefile");
 		BASICIO.addStandardClass(Outbytefile);
 //		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
-		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");   // TODO: TESTING
+		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open"); // TESTING  
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"close");  
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outbyte",parameter("x",Type.Integer));   
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outtext",parameter("t",Type.Text));  
@@ -792,7 +793,7 @@ public final class StandardClass extends ClassDeclaration {
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"maxloc");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"locked");  
 //		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
-		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");   // TODO: TESTING
+		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"close");      
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"lastloc");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"locate",parameter("i",Type.Integer));  
@@ -960,12 +961,37 @@ public final class StandardClass extends ClassDeclaration {
 	/**
 	 * Initiate the Standard Class Process
 	 */
+//	private static void initProcess() { 
+//		Process=new StandardClass("Link","Process");
+//		Simulation.addStandardClass(Process);  // Declared in Simulation
+//		Process.detachUsed=true;
+//		Process.code1=codeSet(new CodeLine("Process",1,"detach();"));    // Statements before inner 
+//		Process.code2=codeSet(new CodeLine("Process",3,"terminate();")); // Statements after inner 
+//		//	    ref(EVENT_NOTICE) EVENT;
+//		//	    Boolean TERMINATED_;
+//		//	    Boolean procedure idle;
+//		//	    Boolean procedure terminated;
+//		//	    real procedure evtime;
+//		//	    ref(Process) procedure nextev;
+//		Process.addStandardAttribute(Type.Ref("EVENT_NOTICE"),"EVENT");  
+//		Process.addStandardAttribute(Type.Boolean,"TERMINATED_");  
+//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"idle");  
+//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"terminated");  
+//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.LongReal,"evtime");  
+//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Ref("Process"),"nextev");  
+//	}  
 	private static void initProcess() { 
 		Process=new StandardClass("Link","Process");
 		Simulation.addStandardClass(Process);  // Declared in Simulation
 		Process.detachUsed=true;
-		Process.code1=codeSet(new CodeLine("Process",1,"detach();"));    // Statements before inner 
-		Process.code2=codeSet(new CodeLine("Process",3,"terminate();")); // Statements after inner 
+		if(Option.NEW_INNER_IMPL) {
+			Process.statements1=new Vector<Statement>();
+			Process.statements1.add(new InlineStatement("detach")); // Statements before inner 
+			Process.statements.add(new InlineStatement("terminate")); // Statements after inner 				
+		} else {
+			Process.code1=codeSet(new CodeLine("Process",1,"detach();"));    // Statements before inner 
+			Process.code2=codeSet(new CodeLine("Process",3,"terminate();")); // Statements after inner 
+		}
 		//	    ref(EVENT_NOTICE) EVENT;
 		//	    Boolean TERMINATED_;
 		//	    Boolean procedure idle;
@@ -979,6 +1005,7 @@ public final class StandardClass extends ClassDeclaration {
 		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.LongReal,"evtime");  
 		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Ref("Process"),"nextev");  
 	}  
+
 
 	// ******************************************************************
 	// *** The Standard Process Class MAIN_PROGRAM
@@ -1002,14 +1029,29 @@ public final class StandardClass extends ClassDeclaration {
 	/**
 	 * Initiate the Standard Class CatchingErrors
 	 */
+//	private static void initCatchingErrors() { 
+//		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
+//		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
+//		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,null));
+//		CatchingErrors.code1=codeSet( // Statements before inner 
+//				new CodeLine("CatchingErrors",1,"try {"));      
+//		CatchingErrors.code2=codeSet( // Statements after inner 
+//				new CodeLine("CatchingErrors",3,"} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }"));
+//	}  
 	private static void initCatchingErrors() { 
 		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
 		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
 		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,null));
-		CatchingErrors.code1=codeSet( // Statements before inner 
-				new CodeLine("CatchingErrors",1,"try {"));      
-		CatchingErrors.code2=codeSet( // Statements after inner 
-				new CodeLine("CatchingErrors",3,"} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }"));
+		if(Option.NEW_INNER_IMPL) {
+			CatchingErrors.statements1=new Vector<Statement>();
+			CatchingErrors.statements1.add(new InlineStatement("try")); // Statements before inner 
+			CatchingErrors.statements.add(new InlineStatement("catch")); // Statements after inner 				
+		} else {
+			CatchingErrors.code1=codeSet( // Statements before inner 
+					new CodeLine("CatchingErrors",1,"try {"));      
+			CatchingErrors.code2=codeSet( // Statements after inner 
+					new CodeLine("CatchingErrors",3,"} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }"));
+		}
 	}  
 
 	
@@ -1224,6 +1266,7 @@ public final class StandardClass extends ClassDeclaration {
 
 	@Override
 	public Meaning findVisibleAttributeMeaning(String ident) {
+		if(Option.TESTING4) System.out.println("TESTING4: LookFor "+ident+" IN "+this);
 		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
 		for(Declaration declaration:declarationList) {
 			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration.identifier);
@@ -1232,8 +1275,11 @@ public final class StandardClass extends ClassDeclaration {
 			}
 		}
 		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
-		ClassDeclaration prfx=getPrefixClass();
-		if(prfx!=null) return(prfx.findVisibleAttributeMeaning(ident));
+		if(prefix != null) {
+			if(Option.TESTING4) System.out.println("TESTING4: LookFor "+ident+" IN PREFIX CLASS "+prefix);
+			ClassDeclaration prfx=getPrefixClass();
+			if(prfx!=null) return(prfx.findVisibleAttributeMeaning(ident));
+		}
 		return(null);
 	}
 

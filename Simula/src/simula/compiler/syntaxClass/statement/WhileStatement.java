@@ -1,5 +1,9 @@
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -31,12 +35,12 @@ public final class WhileStatement extends Statement {
 	/**
 	 * The WHILE condition
 	 */
-	private final Expression condition;
+	private Expression condition;
 	
 	/**
 	 * The statement after DO
 	 */
-	private final Statement doStatement;
+	private Statement doStatement;
 
 	/**
 	 * Create a new WhileStatement.
@@ -56,7 +60,7 @@ public final class WhileStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber=lineNumber;
 		condition.doChecking(); condition.backLink=this;
-		if (condition.type != Type.Boolean) Util.error("While condition is not Boolean");
+		if (!condition.type.equals(Type.Boolean)) Util.error("While condition is not Boolean");
 		doStatement.doChecking();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -92,4 +96,34 @@ public final class WhileStatement extends Statement {
 	public String toString() {
 		return ("WHILE " + condition + " DO " + doStatement);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public WhileStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(condition);
+		oupt.writeObject(doStatement);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		condition = (Expression) inpt.readObject();
+		doStatement = (Statement) inpt.readObject();
+	}
+	
+	
 }

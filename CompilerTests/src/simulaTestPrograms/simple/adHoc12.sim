@@ -1,0 +1,14 @@
+
+begin
+    integer isum;
+   
+    begin
+        integer intr;
+
+%       intr := 1;
+
+        isum := 444;
+%        isum + intr;
+    end;
+
+end of program;

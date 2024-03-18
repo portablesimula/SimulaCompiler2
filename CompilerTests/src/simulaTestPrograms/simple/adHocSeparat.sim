@@ -1,0 +1,14 @@
+
+class Separat(i); integer i;
+
+begin
+   integer eventValue;
+
+   procedure Event (n,val); integer n,val; begin
+      eventValue:=val;
+   end;
+   
+
+   Event(1,9163876) ;
+
+end;

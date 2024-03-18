@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 2
 package simulaTestBatch;
-// Simula-2.0 Compiled at Thu Sep 07 13:06:05 CEST 2023
+// Simula-2.0 Compiled at Sun Feb 04 11:29:46 CET 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SimulaTest extends RTS_CLASS {
@@ -29,79 +29,76 @@ public class SimulaTest extends RTS_CLASS {
     // Class Statements
     @Override
     public SimulaTest _STM() {
-        // Class SimulaTest: Code before inner
-        RTS_COMMON._LINE("Class SimulaTest",16); // JavaLine 33 <== SourceLine 16
+        RTS_COMMON._LINE("Class SimulaTest",16); // JavaLine 32 <== SourceLine 16
         if(_VALUE(false)) {
             {
-                RTS_COMMON._LINE("Class SimulaTest",17); // JavaLine 36 <== SourceLine 17
-                sysout().outtext(new RTS_TXT("--- START Simula a.s. TEST"));
+                RTS_COMMON._LINE("Class SimulaTest",17); // JavaLine 35 <== SourceLine 17
+                RTS_BASICIO.sysout().outtext(new RTS_TXT("--- START Simula a.s. TEST"));
                 ;
-                sysout().outint(p_n,4);
+                RTS_BASICIO.sysout().outint(p_n,4);
                 ;
-                sysout().outimage();
+                RTS_BASICIO.sysout().outimage();
                 ;
-                RTS_COMMON._LINE("Class SimulaTest",18); // JavaLine 43 <== SourceLine 18
-                sysout().outtext(p_title);
+                RTS_COMMON._LINE("Class SimulaTest",18); // JavaLine 42 <== SourceLine 18
+                RTS_BASICIO.sysout().outtext(p_title);
                 ;
-                RTS_COMMON._LINE("Class SimulaTest",19); // JavaLine 46 <== SourceLine 19
-                sysout().outimage();
+                RTS_COMMON._LINE("Class SimulaTest",19); // JavaLine 45 <== SourceLine 19
+                RTS_BASICIO.sysout().outimage();
                 ;
-                sysout().outimage();
+                RTS_BASICIO.sysout().outimage();
                 ;
             }
         }
         ;
-        RTS_COMMON._LINE("Class SimulaTest",33); // JavaLine 54 <== SourceLine 33
-        // Class SimulaTest: Code after inner
-        RTS_COMMON._LINE("Class SimulaTest",22); // JavaLine 56 <== SourceLine 22
+        RTS_COMMON._LINE("Class SimulaTest",22); // JavaLine 53 <== SourceLine 22
         ;
-        RTS_COMMON._LINE("Class SimulaTest",24); // JavaLine 58 <== SourceLine 24
+        RTS_COMMON._LINE("Class SimulaTest",24); // JavaLine 55 <== SourceLine 24
         if(_VALUE(noMessage)) {
             ;
         } else {
             {
-                RTS_COMMON._LINE("Class SimulaTest",25); // JavaLine 63 <== SourceLine 25
+                RTS_COMMON._LINE("Class SimulaTest",25); // JavaLine 60 <== SourceLine 25
                 if(_VALUE(found_error)) {
                     {
-                        RTS_COMMON._LINE("Class SimulaTest",26); // JavaLine 66 <== SourceLine 26
-                        sysout().outtext(CONC(CONC(new RTS_TXT("--- "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" ERROR(S) FOUND IN TEST")));
+                        RTS_COMMON._LINE("Class SimulaTest",26); // JavaLine 63 <== SourceLine 26
+                        RTS_BASICIO.sysout().outtext(CONC(CONC(new RTS_TXT("--- "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" ERROR(S) FOUND IN TEST")));
                         ;
-                        sysout().outint(p_n,4);
+                        RTS_BASICIO.sysout().outint(p_n,4);
                         ;
-                        sysout().outtext(new RTS_TXT("  "));
+                        RTS_BASICIO.sysout().outtext(new RTS_TXT("  "));
                         ;
-                        sysout().outtext(p_title);
+                        RTS_BASICIO.sysout().outtext(p_title);
                         ;
-                        sysout().outimage();
+                        RTS_BASICIO.sysout().outimage();
                         ;
-                        RTS_COMMON._LINE("Class SimulaTest",27); // JavaLine 77 <== SourceLine 27
+                        RTS_COMMON._LINE("Class SimulaTest",27); // JavaLine 74 <== SourceLine 27
                         RTS_ENVIRONMENT.error(CONC(CONC(new RTS_TXT("Test sample has "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" error(s)")));
                         ;
                     }
                 } else {
-                    RTS_COMMON._LINE("Class SimulaTest",28); // JavaLine 82 <== SourceLine 28
+                    RTS_COMMON._LINE("Class SimulaTest",28); // JavaLine 79 <== SourceLine 28
                     {
-                        RTS_COMMON._LINE("Class SimulaTest",29); // JavaLine 84 <== SourceLine 29
-                        sysout().outtext(new RTS_TXT("--- NO ERRORS FOUND IN TEST"));
+                        RTS_COMMON._LINE("Class SimulaTest",29); // JavaLine 81 <== SourceLine 29
+                        RTS_BASICIO.sysout().outtext(new RTS_TXT("--- NO ERRORS FOUND IN TEST"));
                         ;
-                        sysout().outint(p_n,4);
+                        RTS_BASICIO.sysout().outint(p_n,4);
                         ;
-                        sysout().outtext(new RTS_TXT("  "));
+                        RTS_BASICIO.sysout().outtext(new RTS_TXT("  "));
                         ;
-                        sysout().outtext(p_title);
+                        RTS_BASICIO.sysout().outtext(p_title);
                         ;
                     }
                 }
                 ;
-                RTS_COMMON._LINE("Class SimulaTest",32); // JavaLine 96 <== SourceLine 32
+                RTS_COMMON._LINE("Class SimulaTest",32); // JavaLine 93 <== SourceLine 32
                 if(_VALUE(false)) {
                     {
-                        RTS_COMMON._LINE("Class SimulaTest",33); // JavaLine 99 <== SourceLine 33
-                        sysout().outtext(new RTS_TXT("--- END Simula a.s. TEST"));
+                        RTS_COMMON._LINE("Class SimulaTest",33); // JavaLine 96 <== SourceLine 33
+                        RTS_BASICIO.sysout().outtext(new RTS_TXT("--- END Simula a.s. TEST"));
                         ;
-                        sysout().outint(p_n,4);
+                        RTS_BASICIO.sysout().outint(p_n,4);
                         ;
-                        sysout().outimage();
+                        RTS_BASICIO.sysout().outimage();
                         ;
                     }
                 }
@@ -112,5 +109,5 @@ public class SimulaTest extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","Class SimulaTest",1,2,12,5,14,6,16,7,18,8,33,16,36,17,43,18,46,19,54,33,56,22,58,24,63,25,66,26,77,27,82,28,84,29,96,32,99,33,114,37);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","Class SimulaTest",1,2,12,5,14,6,16,7,18,8,32,16,35,17,42,18,45,19,53,22,55,24,60,25,63,26,74,27,79,28,81,29,93,32,96,33,111,37);
 } // End of Class

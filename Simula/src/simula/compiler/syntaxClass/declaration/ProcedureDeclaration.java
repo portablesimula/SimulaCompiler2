@@ -69,9 +69,13 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public sealed class ProcedureDeclaration extends BlockDeclaration implements Externalizable
-permits StandardProcedure, SwitchDeclaration {
-	
+public class ProcedureDeclaration extends BlockDeclaration implements Externalizable {
+
+	/**
+	 * Result in case of Type Procedure 
+	 */
+	SimpleVariableDeclaration result;  // TESTING6
+
 	/**
 	 * Parameter list.
 	 */
@@ -265,7 +269,7 @@ permits StandardProcedure, SwitchDeclaration {
 			// BEGIN declaration { ; declaration } statement { ; statement } END
 			Statement stm;
 			if (Option.TRACE_PARSE)	Parse.TRACE("Parse Procedure Block");
-			while (Declaration.acceptDeclaration(proc.declarationList)) {
+			while (Declaration.acceptDeclaration(proc)) {
 				Parse.accept(KeyWord.SEMICOLON);
 			}
 			Vector<Statement> stmList = proc.statements;
@@ -294,6 +298,11 @@ permits StandardProcedure, SwitchDeclaration {
 		currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
+			if(type != null) {
+//				type.doChecking(declaredIn); // TODO: TESTING
+				this.result = new SimpleVariableDeclaration(type, "_RESULT"); // TESTING6
+				declarationList.add(result); // TESTING6
+			}
 			int prfx = 0;// prefixLevel();
 			if (declarationKind == Declaration.Kind.Procedure)
 				for (Parameter par : this.parameterList) par.setExternalIdentifier(prfx);
@@ -363,6 +372,7 @@ permits StandardProcedure, SwitchDeclaration {
 	 * @param addStaticLink add static link as 0'th parameter
 	 */
 	private void doMethodJavaCoding(final String modifier,final boolean addStaticLink) {
+		Util.IERR("MAY BE DEAD CODE _ SJEKKES NØYE");
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
@@ -431,8 +441,8 @@ permits StandardProcedure, SwitchDeclaration {
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
 		if (declarationKind == Declaration.Kind.Procedure && type != null) {
-			GeneratedJavaClass.debug("// Declare return value as attribute");
-			GeneratedJavaClass.code("public " + type.toJavaType() + ' ' + "_RESULT;");
+//			GeneratedJavaClass.debug("// Declare return value as attribute");           // TESTING6
+//			GeneratedJavaClass.code("public " + type.toJavaType() + ' ' + "_RESULT;");  // TESTING6
 			GeneratedJavaClass.code("@Override");
 			GeneratedJavaClass.code("public Object _RESULT() { return(_RESULT); }");
 		}
@@ -593,6 +603,7 @@ permits StandardProcedure, SwitchDeclaration {
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
 		oupt.writeObject(type);
+//		oupt.writeObject(declaredIn);  // TESTING5
 		oupt.writeObject(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
@@ -610,6 +621,7 @@ permits StandardProcedure, SwitchDeclaration {
 		identifier=(String)inpt.readObject();
 		externalIdent=(String)inpt.readObject();
 		type=Type.inType(inpt);
+//		declaredIn = (DeclarationScope) inpt.readObject();  // TESTING5
 		declarationKind=(Kind) inpt.readObject();
 		rtBlockLevel=inpt.readInt();
 		hasLocalClasses=inpt.readBoolean();

@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -34,7 +39,7 @@ public final class ConditionalExpression extends Expression {
 	/**
 	 * The condition.
 	 */
-	final Expression condition;
+	Expression condition;
 	
 	/**
 	 * The then branch expression
@@ -68,7 +73,7 @@ public final class ConditionalExpression extends Expression {
 		condition.doChecking();
 		condition.backLink=this; // To ensure _RESULT from functions
 		Type cType = condition.type;
-		if (cType != Type.Boolean)
+		if (!cType.equals(Type.Boolean))
 			Util.error("ConditionalExpression: Condition is not a boolean (rather " + cType + ")");
 		thenExpression.doChecking();
 		elseExpression.doChecking();
@@ -102,5 +107,39 @@ public final class ConditionalExpression extends Expression {
 				+ elseExpression + ')');
 	}
 
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ConditionalExpression() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(condition);
+		oupt.writeObject(thenExpression);
+		oupt.writeObject(elseExpression);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		condition = (Expression) inpt.readObject();
+		thenExpression = (Expression) inpt.readObject();
+		elseExpression = (Expression) inpt.readObject();
+	}
+	
 
 }

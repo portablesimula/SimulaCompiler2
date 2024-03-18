@@ -33,6 +33,7 @@ import java.util.jar.Manifest;
 import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
+import simula.compiler.byteCodeEngineering.ByteCodeEngineering;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
@@ -291,15 +292,23 @@ public final class SimulaCompiler {
 				throw new RuntimeException(msg);
 			}
 			// ***************************************************************
-			// *** Generate .java intermediate code
+			// *** Generate .java or .class files
 			// ***************************************************************
-			if (Option.TRACING)
-				Util.println("BEGIN Generate .java Output Code");
-			programModule.doJavaCoding();
-			if (Option.TRACING) {
-				Util.println("END Generate .java Output Code");
-				for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
-					Util.println(javaClass.javaOutputFile.toString());
+			if (Option.GENERATE_BYTEFILE) {
+				if (Option.TRACING)
+					Util.println("BEGIN Generate .class Output Code");
+				// *** Generate .class files
+				programModule.createJavaClassFile();
+			} else {
+				if (Option.TRACING)
+					Util.println("BEGIN Generate .java Output Code");
+				// *** Generate .java intermediate code
+				programModule.doJavaCoding();
+				if (Option.TRACING) {
+					Util.println("END Generate .java Output Code");
+					for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+						Util.println(javaClass.javaOutputFile.toString());
+				}
 			}
 			if (Util.nError > 0) {
 				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError
@@ -315,102 +324,18 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** CALL JAVA COMPILER
 			// ***************************************************************
-			String classPath = Global.simulaRtsLib.toString();
-
-			if (Option.verbose)
-				fileSummary();
-			if (Option.DEBUGGING) {
-				Util.println("------------  CLASSPATH DETAILS  ------------");
-				Util.println("Java PathSeparator " + System.getProperty("path.separator"));
-				Util.println("Java ClassPath     " + System.getProperty("java.class.path"));
-			}
-
-			File rtsLib = new File(Global.simulaRtsLib, "simula/runtime");
-			boolean rtsExist = rtsLib.exists();
-			boolean rtsCread = rtsLib.canRead();
-			if (!(rtsExist && rtsCread)) {
-				Util.popUpError("Unable to access the Runtime System at:" + "\n" + rtsLib
-						+ "\nCheck the installation and consider" + "\nto Download it again.\n");
-			}
-			if (Option.DEBUGGING) {
-				Util.println(
-						"Simula Runtime System:    \"" + rtsLib + "\", exists=" + rtsExist + ", canRead=" + rtsCread);
-				String[] list = rtsLib.list();
-				if (list != null) {
-					Util.println("Simula Runtime System:    \"" + rtsLib + "\", exists=" + rtsExist + ", canRead="
-							+ rtsCread + ", size=" + list.length);
-					for (int i = 0; i < list.length; i++) {
-						Util.println("       " + i + ": \"" + list[i] + "\"");
-					}
-				}
-			}
-			String pathSeparator = System.getProperty("path.separator");
-			for (File jarFile : Global.externalJarFiles) {
-				if (Option.DEBUGGING) {
-					boolean exist = jarFile.exists();
-					boolean cread = jarFile.canRead();
-					Util.println(
-							"Precompiled Library:      \"" + jarFile + "\", exists=" + exist + ", canRead=" + cread);
-					listJarFile(jarFile);
-				}
-				classPath = classPath + pathSeparator + (jarFile.toString().trim());
-			}
-			int exitValue = -1;
-			String msg = "Commandline";
-			JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
-			if (compiler != null) {
-				exitValue = callJavaSystemCompiler(compiler, classPath);
-				msg = "System";
-				if (exitValue != 0) {
-					Util.error("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
-					msg = "Commandline"; // Try use CommandLine Compiler
-					exitValue = callJavacCompiler(classPath);
-				}
-			} else
-				exitValue = callJavacCompiler(classPath);
-			if (Option.DEBUGGING) {
-				Util.println("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
-				for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
-					Util.println(javaClass.getClassOutputFileName());
-				list(Global.tempClassFileDir);
-			}
-			if (exitValue != 0) {
-				Util.error("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
-				Util.println("\nCompiler terminated after error(s) during Java Compilation");
-				return;
-			}
+			if(!Option.GENERATE_BYTEFILE) doCallJavaCompiler();
 
 			// ***************************************************************
 			// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
 			// ***************************************************************
-			if (Option.keepJava == null) {
-				if (Option.TRACE_BYTECODE_OUTPUT) {
-					Util.println("------------  LIST ByteCode Before Engineering  ------------");
-					for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
-						String classFile = javaClass.getClassOutputFileName();
-						Util.doListClassFile(classFile);
-					}
-				}
-				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
-					if (javaClass.mustDoByteCodeEngineering) {
-						String classFileName = javaClass.getClassOutputFileName();
-						if(Option.USE_FILE_CLASS_API == 1){
-							ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
-						} else {
-//							new ByteCodeEngineering().doRepairSingleByteCode(classFileName);
-						}
-					}
-				}
-				if (Option.TRACE_BYTECODE_OUTPUT) {
-					Util.println("------------  LIST ByteCode After Engineering  ------------");
-					for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
-						String classFile = javaClass.getClassOutputFileName();
-						Util.doListClassFile(classFile);
-					}
-				}
-			} else {
-				Util.warning("Option.keepJava set: No ByteCode Engineering is performed");
-			}
+			if(!Option.GENERATE_BYTEFILE) doByteCodeEngineering();
+
+			// ***************************************************************
+			// *** POSSIBLE - LIST GENERATED .class FILES
+			// ***************************************************************
+			if(Option.LIST_GENERATED_CLASS_FILES && !Option.GENERATE_BYTEFILE)
+				listGeneratedClassFiles();
 
 			// ***************************************************************
 			// *** CRERATE .jar FILE INLINE
@@ -437,6 +362,9 @@ public final class SimulaCompiler {
 				cmds.add("java");
 //				cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
 				cmds.add("-jar");
+//				cmds.add("-verbose:class");
+//				cmds.add("-Xdiag");
+//				cmds.add("-verbose:class");
 				cmds.add(jarFile);
 				if (Option.RUNTIME_USER_DIR.length() > 0) {
 					cmds.add("-userDir");
@@ -467,6 +395,76 @@ public final class SimulaCompiler {
 	}
 
 	// ***************************************************************
+	// *** CALL JAVA COMPILER
+	// ***************************************************************
+	private void doCallJavaCompiler() throws IOException {
+		String classPath = Global.simulaRtsLib.toString();
+
+		if (Option.verbose)
+			fileSummary();
+		if (Option.DEBUGGING) {
+			Util.println("------------  CLASSPATH DETAILS  ------------");
+			Util.println("Java PathSeparator " + System.getProperty("path.separator"));
+			Util.println("Java ClassPath     " + System.getProperty("java.class.path"));
+		}
+
+		File rtsLib = new File(Global.simulaRtsLib, "simula/runtime");
+		boolean rtsExist = rtsLib.exists();
+		boolean rtsCread = rtsLib.canRead();
+		if (!(rtsExist && rtsCread)) {
+			Util.popUpError("Unable to access the Runtime System at:" + "\n" + rtsLib
+					+ "\nCheck the installation and consider" + "\nto Download it again.\n");
+		}
+		if (Option.DEBUGGING) {
+			Util.println(
+					"Simula Runtime System:    \"" + rtsLib + "\", exists=" + rtsExist + ", canRead=" + rtsCread);
+			String[] list = rtsLib.list();
+			if (list != null) {
+				Util.println("Simula Runtime System:    \"" + rtsLib + "\", exists=" + rtsExist + ", canRead="
+						+ rtsCread + ", size=" + list.length);
+				for (int i = 0; i < list.length; i++) {
+					Util.println("       " + i + ": \"" + list[i] + "\"");
+				}
+			}
+		}
+		String pathSeparator = System.getProperty("path.separator");
+		for (File jarFile : Global.externalJarFiles) {
+			if (Option.DEBUGGING) {
+				boolean exist = jarFile.exists();
+				boolean cread = jarFile.canRead();
+				Util.println(
+						"Precompiled Library:      \"" + jarFile + "\", exists=" + exist + ", canRead=" + cread);
+				listJarFile(jarFile);
+			}
+			classPath = classPath + pathSeparator + (jarFile.toString().trim());
+		}
+		int exitValue = -1;
+		String msg = "Commandline";
+		JavaCompiler compiler = ToolProvider.getSystemJavaCompiler();
+		if (compiler != null) {
+			exitValue = callJavaSystemCompiler(compiler, classPath);
+			msg = "System";
+			if (exitValue != 0) {
+				Util.error("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
+				msg = "Commandline"; // Try use CommandLine Compiler
+				exitValue = callJavacCompiler(classPath);
+			}
+		} else
+			exitValue = callJavacCompiler(classPath);
+		if (Option.DEBUGGING) {
+			Util.println("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
+			for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+				Util.println(javaClass.getClassOutputFileName());
+			list(Global.tempClassFileDir);
+		}
+		if (exitValue != 0) {
+			Util.error("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
+			Util.println("\nCompiler terminated after error(s) during Java Compilation");
+			return;
+		}
+	}
+
+	// ***************************************************************
 	// *** CALL JAVA SYSTEM COMPILER
 	// ***************************************************************
 	/**
@@ -479,8 +477,8 @@ public final class SimulaCompiler {
 	private int callJavaSystemCompiler(final JavaCompiler compiler, final String classPath) throws IOException {
 		Vector<String> arguments = new Vector<String>();
 //		arguments.add("-source"); arguments.add("21"); // TODO: Change when ClassFile API is released
-		arguments.add("-target");
-		arguments.add("21");
+//		arguments.add("-target");
+//		arguments.add("21");
 //		arguments.add("-release"); arguments.add("21"); // TODO: Change when ClassFile API is released
 		if (Option.DEBUGGING) {
 			arguments.add("-version");
@@ -557,6 +555,51 @@ public final class SimulaCompiler {
 		}
 		return (exitValue);
 	}
+	
+	// ***************************************************************
+	// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
+	// ***************************************************************
+	private void doByteCodeEngineering() throws IOException {
+		if (Option.keepJava == null) {
+			if (Option.TRACE_BYTECODE_OUTPUT) {
+				Util.println("------------  LIST ByteCode Before Engineering  ------------");
+				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+					String classFile = javaClass.getClassOutputFileName();
+					Util.doListClassFile(classFile);
+				}
+			}
+			for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+				if (javaClass.mustDoByteCodeEngineering) {
+					String classFileName = javaClass.getClassOutputFileName();
+					if(Option.USE_FILE_CLASS_API == 1){
+						ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
+					} else {
+						new ByteCodeEngineering().doRepairSingleByteCode(classFileName);
+					}
+				}
+			}
+			if (Option.TRACE_BYTECODE_OUTPUT) {
+				Util.println("------------  LIST ByteCode After Engineering  ------------");
+				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+					String classFile = javaClass.getClassOutputFileName();
+					Util.doListClassFile(classFile);
+				}
+			}
+		} else {
+			Util.warning("Option.keepJava set: No ByteCode Engineering is performed");
+		}
+	}
+
+	// ***************************************************************
+	// *** LIST GENERATED .class FILES
+	// ***************************************************************
+	private void listGeneratedClassFiles() {
+		File classFiles = new File(Global.tempClassFileDir, Global.packetName);
+		for (File classFile : classFiles.listFiles()) {
+			Util.doListClassFile("" + classFile); // List generated .class file
+//			UUtil.analyse("" + classFile);
+		}
+	}
 
 	// ***************************************************************
 	// *** CREATE .jar FILE
@@ -621,6 +664,9 @@ public final class SimulaCompiler {
 	 * @throws IOException if something went wrong
 	 */
 	private void add(final JarOutputStream target, final File source, final int pathSize) throws IOException {
+		if(!source.exists()) {
+			Util.IERR("SimulaCompiler.add: source="+source+", exists="+source.exists());
+		}
 		BufferedInputStream inpt = null;
 		try {
 			if (source.isDirectory()) {
@@ -645,6 +691,8 @@ public final class SimulaCompiler {
 				entryName = entryName.substring(pathSize);
 				if (entryName.startsWith("/"))
 					entryName = entryName.substring(1);
+				if (Option.TRACING && (!entryName.startsWith("simula/runtime")))
+					Util.println("ADD-TO-JAR: "+entryName);
 				JarEntry entry = new JarEntry(entryName);
 				entry.setTime(source.lastModified());
 				target.putNextEntry(entry);

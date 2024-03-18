@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -28,7 +33,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class DummyStatement extends Statement {
+public final class DummyStatement extends Statement implements Externalizable {
 	
 	/**
 	 * Create a new DummyStatement.
@@ -65,5 +70,31 @@ public final class DummyStatement extends Statement {
 	public String toString() {
 		return ("DUMMY");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public DummyStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+//		oupt.writeObject(lineNumber);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+	}
+	
 
 }

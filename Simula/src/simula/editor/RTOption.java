@@ -17,6 +17,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -36,6 +37,10 @@ public final class RTOption {
 	/** Runtime Option */ public static boolean QPS_TRACING = false; // true;
 	/** Runtime Option */ public static boolean SML_TRACING = false; // true;
 	/** Runtime Option */ public static String SPORT_SOURCE_FILE;
+
+	// Code Experimental Options
+	/** Runtime Option */ public static boolean NEW_INNER_IMPL = false;//true;
+
 
 	/**
 	 * The default constructor
@@ -70,6 +75,8 @@ public final class RTOption {
 			args.add("-SPORT_SOURCE_FILE");
 			args.add(SPORT_SOURCE_FILE);
 		}
+		
+		if(Option.NEW_INNER_IMPL) args.add("-newInnerImpl"); 
 	}
     
 	/**

@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -36,22 +41,22 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class ConditionalStatement extends Statement {
+public final class ConditionalStatement extends Statement implements Externalizable {
 	
 	/**
 	 * The if-clause condition
 	 */
-	private final Expression condition;
+	private Expression condition;
 	
 	/**
 	 * The then-statement
 	 */
-	private final Statement thenStatement;
+	private Statement thenStatement;
 	
 	/**
 	 * The else-statement
 	 */
-	private final Statement elseStatement;
+	private Statement elseStatement;
 
 	/**
 	 * Create a new ConditionalStatement.
@@ -133,4 +138,36 @@ public final class ConditionalStatement extends Statement {
 		return ("IF " + condition + " THEN " + thenStatement + " ELSE "
 				+ elseStatement + ';');
 	}
+	
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ConditionalStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(condition);
+		oupt.writeObject(thenStatement);
+		oupt.writeObject(elseStatement);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		condition = (Expression) inpt.readObject();
+		thenStatement = (Statement) inpt.readObject();
+		elseStatement = (Statement) inpt.readObject();
+	}
+
 }

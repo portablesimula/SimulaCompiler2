@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -48,12 +53,12 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class BlockStatement extends Statement {
+public final class BlockStatement extends Statement implements Externalizable {
 	
 	/**
 	 * The associated block declaration.
 	 */
-	private final BlockDeclaration blockDeclaration;
+	private BlockDeclaration blockDeclaration;
 
 	/**
 	 * Create a new BlockStatement.
@@ -127,5 +132,32 @@ public final class BlockStatement extends Statement {
 	public String toString() {
 		return ("BLOCK " + blockDeclaration);
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public BlockStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(blockDeclaration);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		blockDeclaration = (BlockDeclaration) inpt.readObject();
+	}
+	
 
 }

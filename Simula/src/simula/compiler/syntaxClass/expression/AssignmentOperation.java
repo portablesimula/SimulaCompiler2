@@ -7,6 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
@@ -47,7 +52,7 @@ public final class AssignmentOperation extends Expression {
 	/**
 	 * The arithmetic operation
 	 */
-	private final KeyWord opr;
+	private KeyWord opr;
 
 	/**
 	 * The right hand side
@@ -103,7 +108,7 @@ public final class AssignmentOperation extends Expression {
 		rhs.doChecking();
 		Type fromType = rhs.type;
 		if (opr == KeyWord.ASSIGNVALUE)
-			this.textValueAssignment = (toType == Type.Text);
+			this.textValueAssignment = toType.equals(Type.Text);
 		rhs = (Expression) TypeConversion.testAndCreate(toType, rhs);
 		this.type = toType;
 		if (this.type == null)
@@ -195,7 +200,7 @@ public final class AssignmentOperation extends Expression {
 		String obj = beforeDot.toJavaCode();
 		String remoteIdent = obj + '.' + array.edIdentifierAccess(true);
 		Declaration decl = array.meaning.declaredAs;
-		System.out.println("AssignmentOperation.doAccessRemoteArray: decl="+decl.getClass().getSimpleName()+"  "+decl);
+//		System.out.println("AssignmentOperation.doAccessRemoteArray: decl="+decl.getClass().getSimpleName()+"  "+decl);
 		if(decl instanceof Parameter par) { // TESTING_ARRAY
 			String arrayType = par.type.getArrayType();
 			remoteIdent = "(("+arrayType+")"+remoteIdent+")";
@@ -207,5 +212,39 @@ public final class AssignmentOperation extends Expression {
 	public String toString() {
 		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
 	}
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public AssignmentOperation() {
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(type);
+		oupt.writeObject(backLink);
+		oupt.writeObject(lhs);
+		oupt.writeObject(opr);
+		oupt.writeObject(rhs);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		type = (Type) inpt.readObject();
+		backLink = (SyntaxClass) inpt.readObject();
+		lhs = (Expression) inpt.readObject();
+		opr = (KeyWord) inpt.readObject();
+		rhs = (Expression) inpt.readObject();
+	}
+	
 
 }

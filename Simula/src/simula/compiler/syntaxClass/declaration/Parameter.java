@@ -229,7 +229,7 @@ public final class Parameter extends Declaration implements Externalizable {
 		boolean illegal = false;
 		switch (kind) {
 		case Simple:
-			if (type == Type.Text)
+			if (type.equals(Type.Text))
 				break; // Simple Text
 			else if (type.isReferenceType()) {
 				if (mode == Parameter.Mode.value)
@@ -261,7 +261,7 @@ public final class Parameter extends Declaration implements Externalizable {
 		if (mode == Parameter.Mode.name) {
 			switch (kind) {
 			case Simple:
-				if (type == Type.Label)
+				if (type.equals(Type.Label))
 					return ("RTS_NAME<RTS_LABEL>");
 				return ("RTS_NAME<" + type.toJavaTypeClass() + ">");
 			case Procedure:

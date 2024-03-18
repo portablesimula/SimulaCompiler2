@@ -7,6 +7,9 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -78,12 +81,12 @@ public final class SwitchStatement extends Statement {
 	/**
 	 * The low key.
 	 */
-	private final Expression lowKey;
+	private Expression lowKey;
 	
 	/**
 	 * The high key
 	 */
-	private final Expression hiKey;
+	private Expression hiKey;
 	
 	/**
 	 * The switchKey
@@ -260,7 +263,7 @@ public final class SwitchStatement extends Statement {
     	if(Option.TRACE_CHECKER) Util.TRACE("BEGIN SwitchStatement("+toString()+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());    
     	lowKey.doChecking(); hiKey.doChecking();
     	switchKey.doChecking();
-		if(switchKey.type==Type.Character) {
+		if(switchKey.type.equals(Type.Character)) {
 			switchKey=TypeConversion.testAndCreate(Type.Character,switchKey);
 		} else
 			switchKey=TypeConversion.testAndCreate(Type.Integer,switchKey);
@@ -312,5 +315,36 @@ public final class SwitchStatement extends Statement {
     public String toString() {
     	return("SWITCH("+lowKey+':'+hiKey+") "+switchKey+" ...");
     }
-  
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public SwitchStatement() {
+		super(0);
+	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeObject(lowKey);
+		oupt.writeObject(hiKey);
+		oupt.writeObject(switchKey);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		lowKey = (Expression) inpt.readObject();
+		hiKey = (Expression) inpt.readObject();
+		switchKey = (Expression) inpt.readObject();
+	}
+	
+ 
 }

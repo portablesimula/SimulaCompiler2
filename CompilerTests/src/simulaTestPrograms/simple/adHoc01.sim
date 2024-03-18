@@ -1,3 +1,12 @@
- begin
- 	outreal(4563.14 * 1000,0,15);
- end;
+begin
+ 	integer i,j;
+ 	i := 333;
+ 	j := 444;
+% 	if i < j then begin
+ 		outtext("Brance: i < j");
+% 	end else begin
+% 		outtext("Brance: i >= j");
+% 	end;
+
+	j := if i < j then 666 else 888;
+end;

@@ -1,0 +1,12 @@
+begin
+    text    t1;      -- Texts to take on the
+    text    t2;      -- various values for the test.
+    integer iii;
+
+    if t1 <> t2 then iii := 5555;
+
+%    t1 :- blanks (10); t1 := "abcdefghij";
+
+%    t2 :- blanks (10); t2 := t1;
+
+end;
