@@ -495,9 +495,6 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 		
-//		System.out.println("ClassDeclaration.doChecking: "+this);
-//		if(Option.TESTING4)	printStaticChain("ClassDeclaration.doChecking:");
-		
 		ClassDeclaration prefixClass = null;
 		if (!hasNoRealPrefix()) {
 			prefixClass = getPrefixClass();
@@ -506,6 +503,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 					Util.warning("Subclass on a deeper block level not allowed.");
 			}
 		}
+		type.doChecking(declaredIn); // TODO: TESTING
 		int prfx = prefixLevel();
 		for (Parameter par : this.parameterList)
 			par.setExternalIdentifier(prfx);
@@ -820,16 +818,9 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	 * 
 	 * @return the prefix ClassDeclaration or null
 	 */
-//	private static int SEQU=0;  // TODO: TESTING4
 	public ClassDeclaration getPrefixClass() {
 		if (prefix == null)
 			return (null);
-//		if((SEQU++) > 70) {
-//			System.out.println("ClassDeclaration.getPrefixClass: TERMINATED SEARCH FOR "+prefix);
-//			Util.IERR(""); // TODO: TESTING4
-//		}
-		if(Option.TESTING4) System.out.println("ClassDeclaration.getPrefixClass: TESTING4: LookFor "+prefix+" IN "+declaredIn);
-		
 		Meaning meaning = declaredIn.findMeaning(prefix);
 		if (meaning == null)
 			Util.error("Undefined prefix: " + prefix);

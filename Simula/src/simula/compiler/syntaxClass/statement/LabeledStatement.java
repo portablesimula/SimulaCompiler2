@@ -74,20 +74,6 @@ public final class LabeledStatement extends Statement {
 		}
 		SET_SEMANTICS_CHECKED();
 	}
-//	public void doChecking() {
-//		if (IS_SEMANTICS_CHECKED())	return;
-//		statement.doChecking();
-//		for (String label:labels) {
-//			Meaning meaning = Global.getCurrentScope().findMeaning(label);
-//			Declaration decl=meaning.declaredAs;
-//			if(!(decl instanceof LabelDeclaration)) {
-//				Util.warning("Label "+label+" can be confused with "
-//						+decl.getClass().getSimpleName()+" "+decl.identifier+" at line "+decl.lineNumber+')');
-//			}
-//			decl.doChecking();
-//		}
-//		SET_SEMANTICS_CHECKED();
-//	}
 
 	@Override
 	public void doJavaCoding() {
@@ -98,58 +84,24 @@ public final class LabeledStatement extends Statement {
 			String comment = "DeclaredIn: "+decl.declaredIn.identifier;
 			if(decl.movedTo != null) comment = comment+" -> "+decl.movedTo;
 			String labelcode;
-			if(Option.USE_FILE_CLASS_API > 0) {
-				labelcode="_SIM_LABEL("+decl.index+");";
-				System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
-			}
-			else labelcode="_LABEL("+decl.index+",\""+decl.identifier+"\");";
+			labelcode="_SIM_LABEL("+decl.index+");";
+//			System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
+			
 			if(statement instanceof BlockStatement stat) {
 				BlockStatement blockStatement=stat;
 				if(blockStatement.isCompoundStatement())
 				    blockStatement.addLeadingLabel(labelcode);
 				else {
-					if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL()");
 					GeneratedJavaClass.code(labelcode,comment);
 				}
 			}
 			else {
-				if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL();");
 				GeneratedJavaClass.code(labelcode,comment);
 			}
 		}
 		statement.doJavaCoding();
 		GeneratedJavaClass.code("}");
 	}
-//	public void doJavaCoding() {
-//		Global.sourceLineNumber=lineNumber;
-//		ASSERT_SEMANTICS_CHECKED();
-//		GeneratedJavaClass.code("{");
-//		for (String label:labels) {
-//			Meaning meaning=Global.getCurrentScope().findLabelMeaning(label);
-//			LabelDeclaration decl=(LabelDeclaration)meaning.declaredAs;
-//			String labelcode;
-//			if(Option.USE_FILE_CLASS_API > 0) {
-//				labelcode="_SIM_LABEL("+decl.index+");";
-//				System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
-//			}
-//			else labelcode="_LABEL("+decl.index+",\""+decl.identifier+"\");";
-//			if(statement instanceof BlockStatement stat) {
-//				BlockStatement blockStatement=stat;
-//				if(blockStatement.isCompoundStatement())
-//				    blockStatement.addLeadingLabel(labelcode);
-//				else {
-//					if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL()");
-//					GeneratedJavaClass.code(labelcode);
-//				}
-//			}
-//			else {
-//				if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL();");
-//				GeneratedJavaClass.code(labelcode);
-//			}
-//		}
-//		statement.doJavaCoding();
-//		GeneratedJavaClass.code("}");
-//	}
 
 	@Override
 	public void printTree(final int indent) {
@@ -159,13 +111,6 @@ public final class LabeledStatement extends Statement {
 		System.out.println("");
 		statement.printTree(indent+1);
 	}
-//	public void printTree(final int indent) {
-//		System.out.print(edTreeIndent(indent)+"LABELED_STATEMENT ");
-//		for(String lab:labels)
-//			System.out.print(" "+lab+":");
-//		System.out.println("");
-//		statement.printTree(indent+1);
-//	}
 
 	@Override
 	public String toString() {

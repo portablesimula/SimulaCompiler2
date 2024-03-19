@@ -142,8 +142,6 @@ public final class AttributeFileIO {
 							+"  ==>  "+declarationList.identifier);
 				if (Option.TRACE_ATTRIBUTE_INPUT) module.print(0);
 			}
-			
-			if(Option.TESTING4) module.printStaticChain("readAttributeFile"); // TODO: TESTING4
 		}
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + file);

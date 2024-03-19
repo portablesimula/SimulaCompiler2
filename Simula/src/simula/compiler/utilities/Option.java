@@ -29,10 +29,7 @@ import javax.swing.JPanel;
  *
  */
 public final class Option {
-
-	// Innført for å teste 'simtst119' som går i 'stack overflow'.
-	// Inntil videre blir ikke 'simtst119' tatt med i 'FullTestBatch'
-	public static boolean TESTING4 = false;
+	public static boolean TESTING_STACK_SIZE = false;
 
 	public static boolean NEW_INNER_IMPL = false; 
 	
@@ -112,7 +109,6 @@ public final class Option {
 	/** Debug option */	public static boolean GNERATE_LINE_CALLS=false;
 
 	// Byte code engineering Options
-	/** Debug option */	public static int USE_FILE_CLASS_API=0;
 	/** Debug option */	public static boolean TRACE_BYTECODE_OUTPUT=false;
 	/** Debug option */	public static boolean LIST_REPAIRED_INSTRUCTION_LIST=false;
 	/** Debug option */	public static boolean TRACE_REPAIRING=false;

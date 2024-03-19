@@ -212,7 +212,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		GeneratedJavaClass.code("{");
 		if(labelcodeList!=null) {
 			for(String labCode:labelcodeList) {
-				if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL();");
 				GeneratedJavaClass.code(labCode);
 			}
 		}

@@ -123,7 +123,6 @@ public abstract class DeclarationScope extends Declaration  {
 	public Meaning findMeaning(final String identifier) {
 		Meaning meaning = findVisibleAttributeMeaning(identifier);
 		if (meaning == null && declaredIn != null) {
-			if(Option.TESTING4) System.out.println("TESTING4: LookFor "+identifier+" IN "+declaredIn);
 			meaning = declaredIn.findMeaning(identifier);
 		}
 		if (meaning == null) {

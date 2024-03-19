@@ -38,7 +38,7 @@ public class ClassFileTransform {
 		inpt.close();
 		if (Option.TRACE_REPAIRING_INPUT)
 			Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Input=" + inputFileName);
-		Util.IERR("UN-COMMENT FOLLOWING LINES ...");
+//		Util.IERR("UN-COMMENT FOLLOWING LINES ...");
 //		ClassModel classModel = ClassFile.parse(bytes);
 		ClassFile cf = ClassFile.of();
 		ClassModel classModel = cf.parse(bytes);

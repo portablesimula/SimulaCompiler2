@@ -517,15 +517,7 @@ public abstract class Expression extends SyntaxClass {
     		}
     	} else if(this instanceof Constant cnst) {
 		    if(cnst.value instanceof Number num) return(num);
-	    } else if(this instanceof VariableExpression var) {
-		    Meaning meaning=Global.getCurrentScope().findMeaning(var.identifier);
-		    if(meaning==null) return(null);
-		    Declaration declaredAs=meaning.declaredAs;
-		    if(declaredAs instanceof SimpleVariableDeclaration tp) {
-			    Expression constElt=tp.constantElement;
-			    if(constElt!=null && constElt instanceof Constant cnst)
-			    	if(cnst.value instanceof Number num) return(num);
-		    }
+	    } else if(this instanceof VariableExpression) {
 		    return(null);
 	    } else if(this instanceof TypeConversion conv) {
 	    	return(conv.expression.getNumber()); // Hva hvis   (int)3.14  som real

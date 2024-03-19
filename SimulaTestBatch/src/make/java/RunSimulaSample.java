@@ -74,10 +74,6 @@ public final class RunSimulaSample {
 //			Option.TRACE_CODING=true;
 //			Option.GNERATE_LINE_CALLS=true;
 //			
-//			Option.USE_FILE_CLASS_API=1;
-//			Option.USE_FILE_CLASS_API=2;
-			
-//			Option.USE_FILE_CLASS_API=1;
 //			Option.TRACE_REPAIRING=true;
 //			Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
 //			Option.TRACE_BYTECODE_OUTPUT=true;

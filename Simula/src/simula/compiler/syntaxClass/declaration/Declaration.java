@@ -198,7 +198,7 @@ public abstract class Declaration extends SyntaxClass {
 		boolean warning = false;
 		if (identifier == null)
 			return;
-		if (identifier == "_RESULT") // TESTING6
+		if (identifier.equals("_RESULT"))
 			return;
 		if (declaredIn == null)
 			return;

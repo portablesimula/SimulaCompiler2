@@ -154,20 +154,11 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 			constantElement.backLink = this;
 		}
 		
-		if(identifier.equalsIgnoreCase("XXXX")) { // TODO: TESTING4
-			Option.TESTING4 = true;
-//			Util.IERR("SimpleVariableDeclaration.doChecking: "+identifier);
-		}
-		
 		if (Global.getCurrentScope() instanceof ClassDeclaration cls) {
 			if (cls.prefixLevel() > 0)
 				externalIdent = identifier + '_' + cls.prefixLevel();
 			else
 				externalIdent = identifier;
-		}
-		
-		if(identifier.equalsIgnoreCase("XXXX")) { // TODO: TESTING4
-//			Util.IERR("SimpleVariableDeclaration.doChecking: "+identifier);
 		}
 		
 		SET_SEMANTICS_CHECKED();

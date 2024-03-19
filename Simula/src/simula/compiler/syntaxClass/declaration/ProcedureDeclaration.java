@@ -74,7 +74,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	/**
 	 * Result in case of Type Procedure 
 	 */
-	SimpleVariableDeclaration result;  // TESTING6
+	SimpleVariableDeclaration result;
 
 	/**
 	 * Parameter list.
@@ -300,8 +300,8 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		Global.enterScope(this);
 			if(type != null) {
 //				type.doChecking(declaredIn); // TODO: TESTING
-				this.result = new SimpleVariableDeclaration(type, "_RESULT"); // TESTING6
-				declarationList.add(result); // TESTING6
+				this.result = new SimpleVariableDeclaration(type, "_RESULT");
+				declarationList.add(result);
 			}
 			int prfx = 0;// prefixLevel();
 			if (declarationKind == Declaration.Kind.Procedure)
@@ -372,7 +372,9 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	 * @param addStaticLink add static link as 0'th parameter
 	 */
 	private void doMethodJavaCoding(final String modifier,final boolean addStaticLink) {
-		Util.IERR("MAY BE DEAD CODE _ SJEKKES NØYE");
+
+		Util.IERR("DEAD CODE ? NOT BELEAVED TO BE IN USE");
+		
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
@@ -441,10 +443,8 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
 		if (declarationKind == Declaration.Kind.Procedure && type != null) {
-//			GeneratedJavaClass.debug("// Declare return value as attribute");           // TESTING6
-//			GeneratedJavaClass.code("public " + type.toJavaType() + ' ' + "_RESULT;");  // TESTING6
 			GeneratedJavaClass.code("@Override");
-			GeneratedJavaClass.code("public Object _RESULT() { return(_RESULT); }");
+			GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
 		}
 		GeneratedJavaClass.debug("// Declare parameters as attributes");
 		boolean hasParameter = false;
@@ -603,7 +603,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
 		oupt.writeObject(type);
-//		oupt.writeObject(declaredIn);  // TESTING5
+//		oupt.writeObject(declaredIn);
 		oupt.writeObject(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
@@ -621,7 +621,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		identifier=(String)inpt.readObject();
 		externalIdent=(String)inpt.readObject();
 		type=Type.inType(inpt);
-//		declaredIn = (DeclarationScope) inpt.readObject();  // TESTING5
+//		declaredIn = (DeclarationScope) inpt.readObject();
 		declarationKind=(Kind) inpt.readObject();
 		rtBlockLevel=inpt.readInt();
 		hasLocalClasses=inpt.readBoolean();

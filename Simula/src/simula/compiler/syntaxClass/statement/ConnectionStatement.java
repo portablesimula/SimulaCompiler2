@@ -131,7 +131,7 @@ public final class ConnectionStatement extends Statement {
 		super(line);
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
 		objectExpression = Expression.expectExpression();
-		objectExpression.backLink = this; // TESTING6
+		objectExpression.backLink = this;
 		String ident = "_inspect_" + lineNumber + '_' + (SEQU++);
 		inspectedVariable = new VariableExpression(ident);
 		inspectVariableDeclaration = new SimpleVariableDeclaration(Type.Ref("RTObject"), ident);

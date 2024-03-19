@@ -744,8 +744,7 @@ public final class StandardClass extends ClassDeclaration {
 	private static void initOutbytefile() { 
 		StandardClass Outbytefile=new StandardClass("Bytefile","Outbytefile");
 		BASICIO.addStandardClass(Outbytefile);
-//		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
-		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open"); // TESTING  
+		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"close");  
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outbyte",parameter("x",Type.Integer));   
 		Outbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outtext",parameter("t",Type.Text));  
@@ -792,7 +791,6 @@ public final class StandardClass extends ClassDeclaration {
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"location");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"maxloc");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"locked");  
-//		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open");  
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"close");      
 		Directbytefile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"lastloc");  
@@ -1266,7 +1264,6 @@ public final class StandardClass extends ClassDeclaration {
 
 	@Override
 	public Meaning findVisibleAttributeMeaning(String ident) {
-		if(Option.TESTING4) System.out.println("TESTING4: LookFor "+ident+" IN "+this);
 		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
 		for(Declaration declaration:declarationList) {
 			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration.identifier);
@@ -1276,7 +1273,6 @@ public final class StandardClass extends ClassDeclaration {
 		}
 		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
 		if(prefix != null) {
-			if(Option.TESTING4) System.out.println("TESTING4: LookFor "+ident+" IN PREFIX CLASS "+prefix);
 			ClassDeclaration prfx=getPrefixClass();
 			if(prfx!=null) return(prfx.findVisibleAttributeMeaning(ident));
 		}

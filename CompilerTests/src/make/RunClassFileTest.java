@@ -22,7 +22,7 @@ import simula.editor.RTOption;
  * @author Øystein Myhre Andersen
  *
  */
-public final class RunCompilerTest {
+public final class RunClassFileTest {
 
 	public static void main(String[] args) {
     	//System.setProperty("file.encoding","UTF-8");
@@ -205,11 +205,12 @@ public final class RunCompilerTest {
 
 		// *** SMÅ ENKLE SIMULA TEST PROGRAMMER
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
-		// String name="/simple/adHoc00.sim";
+		// String name="/simple/adHoc000.sim";
+		 String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
+		// String name="/simple/adHoc30a.sim";
 		// String name="/simple/adHoc04.sim";
 		// String name="/simple/adHoc05.sim";
 		// String name="/simple/adHoc06.sim";
@@ -219,7 +220,10 @@ public final class RunCompilerTest {
 		// String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
 		// String name="/simple/adHoc12.sim";
+		// String name="/simple/adHoc13.sim";
+		// String name="/simple/adHoc14.sim";
 		
+		// String name="/simple/adHocX01-NEW.sim";
 		// String name="/simple/adHocX01.sim";
 		// String name="/simple/adHocX02.sim";
 		 
@@ -275,7 +279,9 @@ public final class RunCompilerTest {
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
 			Option.NEW_INNER_IMPL=true;  // Using Statments1 and Statements2
-//			Option.GENERATE_BYTEFILE=true;
+			Option.GENERATE_BYTEFILE=true;
+			Option.TESTING_STACK_SIZE = true;
+			Option.LIST_GENERATED_CLASS_FILES=true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
@@ -304,13 +310,12 @@ public final class RunCompilerTest {
 //			// Coder Trace Options
 //			Option.TRACE_CODING=true;
 //			Option.GNERATE_LINE_CALLS=true;
+//			Option.GNERATE_SNAPSHOTS=true;
 //			
 //			Option.TRACE_REPAIRING=true;
 //			Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
 //			Option.TRACE_BYTECODE_OUTPUT=true;
 //			Option.DEBUGGING=true;
-			
-			Option.LIST_GENERATED_CLASS_FILES=true;
 
 //			File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 			File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
@@ -318,7 +323,7 @@ public final class RunCompilerTest {
 			
 			
 			Global.packetName="simulaTestPrograms";
-			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+//			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 			Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //			Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //			Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");
@@ -328,9 +333,9 @@ public final class RunCompilerTest {
 			// Set RunTime Options and tracing.
 //			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
-			RTOption.BLOCK_TRACING = true;
-//			RTOption.GOTO_TRACING = false;
-			RTOption.QPS_TRACING = false;
+//			RTOption.BLOCK_TRACING = true;
+			RTOption.GOTO_TRACING = true;
+//			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;
 
 			String fileName=userDir+"/src/"+Global.packetName + name;

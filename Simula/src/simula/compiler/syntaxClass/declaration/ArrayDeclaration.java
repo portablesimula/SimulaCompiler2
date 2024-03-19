@@ -223,6 +223,7 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 		Global.sourceLineNumber = lineNumber;
 		if (type == null)
 			type = Type.Real;
+		type.doChecking(declaredIn); // TODO: TESTING
 		if (boundPairList != null)
 			for (BoundPair it : boundPairList)
 				it.doChecking();

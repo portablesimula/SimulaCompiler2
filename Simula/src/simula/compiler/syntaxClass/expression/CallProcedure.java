@@ -177,10 +177,11 @@ public final class CallProcedure {
 	static String asStaticMethod(final VariableExpression variable,final boolean isContextFree) { 
 		Meaning meaning=variable.meaning;
 		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
-//		BlockDeclaration staticLink=(BlockDeclaration)meaning.declaredAs.declaredIn;
-		DeclarationScope staticLink=procedure.declaredIn; // TODO: TESTING3
 		String staticLinkString=null;
-		if(!isContextFree)staticLinkString=staticLink.edCTX();
+		if(!isContextFree) {
+			DeclarationScope staticLink=procedure.declaredIn;
+			staticLinkString=staticLink.edCTX();
+		}
 		String params=edProcedureParameters(variable,staticLinkString,procedure);
 
 		String methodCall=meaning.declaredAs.getJavaIdentifier()+params;

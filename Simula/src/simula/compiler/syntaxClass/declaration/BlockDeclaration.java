@@ -150,7 +150,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * @param prefixClass possible prefix or null
 	 */
 	protected void doCheckLabelList(final ClassDeclaration prefixClass) {
-		if(prefixClass != null) { // TESTING5
+		if(prefixClass != null) {
 			currentRTBlockLevel--;
 			prefixClass.doChecking();
 			currentRTBlockLevel++;
@@ -252,14 +252,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			GeneratedJavaClass.code(externalIdent + " _THIS=(" + externalIdent + ")_CUR;");
 			GeneratedJavaClass.code("_LOOP:while(_JTX>=0) {");
 			GeneratedJavaClass.code("try {");
-			if(Option.USE_FILE_CLASS_API==1) {
-				GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
-			} else if(Option.USE_FILE_CLASS_API==2) {
-					GeneratedJavaClass.code("_PRE_TABLE();","For ByteCode Engineering");
-					GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+labelList.size()+");","For ByteCode Engineering");			
-			} else{
-				GeneratedJavaClass.code("_JUMPTABLE(_JTX);","For ByteCode Engineering");
-			}
+			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
 			Global.currentJavaModule.mustDoByteCodeEngineering=true;
 		}
 		codeStatements();
