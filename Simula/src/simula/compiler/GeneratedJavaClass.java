@@ -15,7 +15,6 @@ import java.io.Writer;
 import java.util.Date;
 import java.util.Vector;
 
-import simula.compiler.byteCodeEngineering.JavaClassInfo;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
@@ -89,12 +88,6 @@ public final class GeneratedJavaClass {
 		} catch (IOException e) {
 			throw new RuntimeException("Writing .java output failed", e);
 		}
-
-		JavaClassInfo info = new JavaClassInfo();
-		info.externalIdent = blockDeclaration.getJavaIdentifier();
-		if (blockDeclaration instanceof ClassDeclaration cls)
-			info.prefixIdent = cls.prefix;
-		JavaClassInfo.put(info.externalIdent, info);
 	}
 
 	/**

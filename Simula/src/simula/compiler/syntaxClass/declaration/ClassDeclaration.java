@@ -15,7 +15,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.byteCodeEngineering.JavaClassInfo;
 import simula.compiler.CodeLine;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -525,13 +524,6 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 		Global.exitScope();
 		currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
-
-		JavaClassInfo info = new JavaClassInfo();
-		info.externalIdent = this.getJavaIdentifier();
-		if (prefixClass != null) {
-			info.prefixIdent = externalPrefixIdent = prefixClass.getJavaIdentifier();
-		}
-		JavaClassInfo.put(info.externalIdent, info);
 	}
 
 	// ***********************************************************************************************
@@ -1353,11 +1345,6 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		Global.setScope(this.declaredIn);
-
-		JavaClassInfo info = new JavaClassInfo();
-		info.externalIdent = this.getJavaIdentifier();
-		info.prefixIdent = externalPrefixIdent;
-		JavaClassInfo.put(info.externalIdent, info);
 	}
 
 }
