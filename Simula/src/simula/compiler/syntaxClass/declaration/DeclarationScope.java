@@ -142,16 +142,6 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @param identifier declared label identifier
 	 * @return the resulting Meaning
 	 */
-//	public Meaning findLabelMeaning(final String identifier) {
-//		for (LabelDeclaration dcl : labelList) {
-//			if (Util.equals(dcl.identifier, identifier)) {
-//				return (new Meaning(dcl, this, this, false));
-//			}
-//		}
-//		if (declaredIn != null)
-//			return (declaredIn.findLabelMeaning(identifier));
-//		return (null);
-//	}
 	public Meaning findLabelMeaning(final String identifier) {
 //		System.out.println("\nDeclarationScope.findLabelMeaning: "+identifier+" IN "+this);
 		for (LabelDeclaration dcl : labelList) {
@@ -160,11 +150,9 @@ public abstract class DeclarationScope extends Declaration  {
 				return (new Meaning(dcl, this, this, false));
 			}
 		}
-		if(Option.NEW_INNER_IMPL) {
-			if(this instanceof ClassDeclaration cls) {
-				if(!cls.hasNoRealPrefix()) {
-					return(cls.getPrefixClass().findLabelMeaning(identifier));
-				}
+		if(this instanceof ClassDeclaration cls) {
+			if(!cls.hasNoRealPrefix()) {
+				return(cls.getPrefixClass().findLabelMeaning(identifier));
 			}
 		}
 		if (declaredIn != null)
@@ -173,8 +161,7 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
-	// *** Utility: findProcedure -- Follow Static Chain Looking for a Procedure
-	// named 'identifier'
+	// *** Utility: findProcedure -- Follow Static Chain Looking for a Procedure named 'identifier'
 	// ***********************************************************************************************
 	/**
 	 * Follow Static Chain Looking for a Procedure named 'identifier'

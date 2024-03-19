@@ -126,20 +126,10 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	public Vector<HiddenSpecification> hiddenList = new Vector<HiddenSpecification>();
 
 	/**
-	 * Statement code before inner.
-	 */
-	protected Vector<CodeLine> code1; // Statement code before inner  TODO: NOT  NEW_INNER_IMPL
-
-	/**
-	 * Statement code after inner.
-	 */
-	public Vector<CodeLine> code2;  // TODO: NOT  NEW_INNER_IMPL
-
-	/**
 	 * Possible statements before inner.
 	 * If this is non-null then 'statements' contains the statements after inner
 	 */
-	public Vector<Statement> statements1; // Statement code before inner  TODO: NEW_INNER_IMPL
+	public Vector<Statement> statements1; // Statement code before inner
 
 	/**
 	 * Class Prefix in case of a SubClass or Prefixed Block.
@@ -425,7 +415,6 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 				Parse.accept(KeyWord.SEMICOLON);
 			}
 			boolean seen = false;
-//			Vector<Statement> stmList = cls.statements;  // TODO: NEW_INNER_IMPL
 			while (!Parse.accept(KeyWord.END)) {
 				stm = Statement.expectStatement();
 				if (stm != null)
@@ -512,9 +501,9 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 			vrt.doChecking();
 		for (Declaration dcl : declarationList)
 			dcl.doChecking();
-		if(statements1 != null) {              // TODO: NOT  NEW_INNER_IMPL
-			for (Statement stm : statements1)  // TODO: NOT  NEW_INNER_IMPL
-				stm.doChecking();	           // TODO: NOT  NEW_INNER_IMPL  		
+		if(statements1 != null) {
+			for (Statement stm : statements1)
+				stm.doChecking();  		
 		}
 		for (Statement stm : statements)
 			stm.doChecking();
@@ -1071,14 +1060,8 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	// ***********************************************************************************************
 	@Override
 	public void codeStatements() {
-		if(Option.NEW_INNER_IMPL) {
-			codeStatementsBeforeInner();
-			codeStatementsAfterInner();
-		} else {
-			writeCode1(); // Write code before inner
-			writeCode2(); // Write code after inner
-			// listSavedCode();
-		}
+		codeStatementsBeforeInner();
+		codeStatementsAfterInner();
 	}
 
 	// ***********************************************************************************************
@@ -1087,7 +1070,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	/**
 	 * Coding utility: codeStatementsBeforeInner
 	 */
-	private void codeStatementsBeforeInner() { // TODO: NEW_INNER_IMPL
+	private void codeStatementsBeforeInner() {
 		if (!this.hasNoRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.codeStatementsBeforeInner();
@@ -1102,7 +1085,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	/**
 	 * Coding utility: codeStatementsAfterInner
 	 */
-	private void codeStatementsAfterInner() { // TODO: NEW_INNER_IMPL
+	private void codeStatementsAfterInner() {
 		GeneratedJavaClass.code("// ENDOF INNER PART");
 		for (Statement stm : statements) stm.doJavaCoding();
 		if (!this.hasNoRealPrefix()) {
@@ -1110,71 +1093,6 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 			if (prfx != null) prfx.codeStatementsAfterInner();
 		}
 	}
-
-	// ***********************************************************************************************
-	// *** Coding Utility: writeCode1 -- Write code before inner
-	// ***********************************************************************************************
-	/**
-	 * Coding utility: writeCode1 -- Write code before inner
-	 */
-	protected void writeCode1() {
-		if (!this.hasNoRealPrefix()) {
-			ClassDeclaration prfx = this.getPrefixClass();
-			if (prfx != null)
-				prfx.writeCode1();
-		}
-		//saveClassStms();
-		if (code1 == null) {
-			code1 = new Vector<CodeLine>();
-			Global.currentJavaModule.saveCode = code1;
-			for (Statement stm : statements)
-				stm.doJavaCoding();
-			Global.currentJavaModule.saveCode = null;
-		}
-		
-		
-		String comment = (code2 != null && code2.size() > 0) ? "Code before inner" : "Code";
-		GeneratedJavaClass.debug("// Class " + this.identifier + ": " + comment);
-		for (CodeLine c : code1)
-			GeneratedJavaClass.code(c);
-	}
-
-	// ***********************************************************************************************
-	// *** Coding Utility: writeCode2 -- Write code after inner
-	// ***********************************************************************************************
-	/**
-	 * Coding utility: writeCode2 -- Write code after inner
-	 */
-	protected void writeCode2() {
-		if (code2 != null && code2.size() > 0) {
-			GeneratedJavaClass.debug("// Class " + this.identifier + ": Code after inner");
-			for (CodeLine c : code2)
-				GeneratedJavaClass.code(c);
-		}
-		if (!this.hasNoRealPrefix()) {
-			ClassDeclaration prfx = this.getPrefixClass();
-			if (prfx != null)
-				prfx.writeCode2();
-		}
-	}
-
-	// ***********************************************************************************************
-	// *** Coding Utility: listSavedCode
-	// ***********************************************************************************************
-//	protected void listSavedCode() {
-//		System.out.println("ClassDeclaration.listSavedCode: Class " + identifier);
-//		for (CodeLine c : code1) {
-//			System.out.println("Line: " + c.sourceLineNumber + " " + c.codeLine);
-//		}
-//		if (code2 == null)
-//			System.out.println("ClassDeclaration.listSavedCode: Class " + identifier + " NO CODE After inner");
-//		else {
-//			System.out.println("ClassDeclaration.listSavedCode: Class " + identifier + " After inner");
-//			for (CodeLine c : code2) {
-//				System.out.println("Line: " + c.sourceLineNumber + " " + c.codeLine);
-//			}
-//		}
-//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: codeClassStatements
@@ -1296,15 +1214,10 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 //		oupt.writeObject(code2);
 		oupt.writeObject(externalPrefixIdent);
 
-		if(Option.NEW_INNER_IMPL) {
-//			System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
-//			System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
-			oupt.writeObject(statements1);
-			oupt.writeObject(statements);
-		} else {
-			oupt.writeObject(code1);
-			oupt.writeObject(code2);
-		}
+//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
+//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
+		oupt.writeObject(statements1);
+		oupt.writeObject(statements);
 
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
@@ -1333,15 +1246,10 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 //		code2 = (Vector<CodeLine>) inpt.readObject();
 		externalPrefixIdent = (String) inpt.readObject();
 
-		if(Option.NEW_INNER_IMPL) {
-			statements1 = (Vector<Statement>) inpt.readObject();
-			statements = (Vector<Statement>) inpt.readObject();			
-//			System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
-//			System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
-		} else {
-			code1 = (Vector<CodeLine>) inpt.readObject();
-			code2 = (Vector<CodeLine>) inpt.readObject();
-		}
+		statements1 = (Vector<Statement>) inpt.readObject();
+		statements = (Vector<Statement>) inpt.readObject();			
+//		System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
+//		System.out.println("ClassDeclaration.readExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
 
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		Global.setScope(this.declaredIn);

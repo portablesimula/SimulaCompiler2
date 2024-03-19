@@ -30,8 +30,6 @@ import javax.swing.JPanel;
  */
 public final class Option {
 	public static boolean TESTING_STACK_SIZE = false;
-
-	public static boolean NEW_INNER_IMPL = false; 
 	
 	/**
 	 * Experimental direct generation of Java byteCode

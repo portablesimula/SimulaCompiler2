@@ -38,9 +38,6 @@ public final class RTOption {
 	/** Runtime Option */ public static boolean SML_TRACING = false; // true;
 	/** Runtime Option */ public static String SPORT_SOURCE_FILE;
 
-	// Code Experimental Options
-	/** Runtime Option */ public static boolean NEW_INNER_IMPL = false;//true;
-
 
 	/**
 	 * The default constructor
@@ -75,8 +72,6 @@ public final class RTOption {
 			args.add("-SPORT_SOURCE_FILE");
 			args.add(SPORT_SOURCE_FILE);
 		}
-		
-		if(Option.NEW_INNER_IMPL) args.add("-newInnerImpl"); 
 	}
     
 	/**

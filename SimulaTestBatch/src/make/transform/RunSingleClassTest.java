@@ -32,7 +32,6 @@ public final class RunSingleClassTest {
 	public static void main(String[] args) {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
-		Option.NEW_INNER_IMPL=true;  // Using Statments1 and Statements2
 //		Option.GENERATE_BYTEFILE=true;
 		Option.TESTING_STACK_SIZE = true;
 //		Option.LIST_GENERATED_CLASS_FILES=true;

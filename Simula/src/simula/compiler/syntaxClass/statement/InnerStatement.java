@@ -44,15 +44,13 @@ public final class InnerStatement extends Statement implements Externalizable {
 	 public InnerStatement(final int line) {
 		super(line);
 		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": InnerStatement: "+this);
-		if(Option.NEW_INNER_IMPL) {
-			ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
-			cls.statements1 = cls.statements;
-			cls.statements = new Vector<Statement>();
-//			System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENTS BEFORE INNER: "+cls.statements1);
-//			for(Statement stm:cls.statements1) {
-//				System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENT BEFORE INNER: "+stm);
-//			}
-		}
+		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
+		cls.statements1 = cls.statements;
+		cls.statements = new Vector<Statement>();
+//		System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENTS BEFORE INNER: "+cls.statements1);
+//		for(Statement stm:cls.statements1) {
+//			System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENT BEFORE INNER: "+stm);
+//		}
 	}
 
 	@Override
@@ -66,10 +64,6 @@ public final class InnerStatement extends Statement implements Externalizable {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
-		if(!Option.NEW_INNER_IMPL) {
-			if(cls.code2==null) cls.code2=new Vector<CodeLine>();   // TODO: NOT  NEW_INNER_IMPL
-			Global.currentJavaModule.saveCode=cls.code2;            // TODO: NOT  NEW_INNER_IMPL
-		}
 	}
 
 	@Override

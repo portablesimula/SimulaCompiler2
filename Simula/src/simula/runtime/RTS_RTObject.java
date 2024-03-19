@@ -101,7 +101,7 @@ public abstract class RTS_RTObject {
 	 * Outmost Block Instance
 	 */
 //	public static final RTS_BASICIO _CTX = new RTS_BASICIO(null);
-	public static final RTS_CLASS _CTX = new RTS_CLASS(null) {}; // NEW_INNER_IMPL
+	public static final RTS_CLASS _CTX = new RTS_CLASS(null) {};
 	
 	/**
 	 * Current Block Instance

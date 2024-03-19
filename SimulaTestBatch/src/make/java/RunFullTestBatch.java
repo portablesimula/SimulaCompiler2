@@ -39,7 +39,6 @@ public final class RunFullTestBatch {
 
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
-		Option.NEW_INNER_IMPL=true;  // Using Statments1 and Statements2
 //		Option.GENERATE_BYTEFILE=true;
 		Option.SPORT=true;
 		Option.TRACING=false;

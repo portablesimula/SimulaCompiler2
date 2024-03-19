@@ -959,37 +959,13 @@ public final class StandardClass extends ClassDeclaration {
 	/**
 	 * Initiate the Standard Class Process
 	 */
-//	private static void initProcess() { 
-//		Process=new StandardClass("Link","Process");
-//		Simulation.addStandardClass(Process);  // Declared in Simulation
-//		Process.detachUsed=true;
-//		Process.code1=codeSet(new CodeLine("Process",1,"detach();"));    // Statements before inner 
-//		Process.code2=codeSet(new CodeLine("Process",3,"terminate();")); // Statements after inner 
-//		//	    ref(EVENT_NOTICE) EVENT;
-//		//	    Boolean TERMINATED_;
-//		//	    Boolean procedure idle;
-//		//	    Boolean procedure terminated;
-//		//	    real procedure evtime;
-//		//	    ref(Process) procedure nextev;
-//		Process.addStandardAttribute(Type.Ref("EVENT_NOTICE"),"EVENT");  
-//		Process.addStandardAttribute(Type.Boolean,"TERMINATED_");  
-//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"idle");  
-//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"terminated");  
-//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.LongReal,"evtime");  
-//		Process.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Ref("Process"),"nextev");  
-//	}  
 	private static void initProcess() { 
 		Process=new StandardClass("Link","Process");
 		Simulation.addStandardClass(Process);  // Declared in Simulation
 		Process.detachUsed=true;
-		if(Option.NEW_INNER_IMPL) {
-			Process.statements1=new Vector<Statement>();
-			Process.statements1.add(new InlineStatement("detach")); // Statements before inner 
-			Process.statements.add(new InlineStatement("terminate")); // Statements after inner 				
-		} else {
-			Process.code1=codeSet(new CodeLine("Process",1,"detach();"));    // Statements before inner 
-			Process.code2=codeSet(new CodeLine("Process",3,"terminate();")); // Statements after inner 
-		}
+		Process.statements1=new Vector<Statement>();
+		Process.statements1.add(new InlineStatement("detach")); // Statements before inner 
+		Process.statements.add(new InlineStatement("terminate")); // Statements after inner 				
 		//	    ref(EVENT_NOTICE) EVENT;
 		//	    Boolean TERMINATED_;
 		//	    Boolean procedure idle;
@@ -1027,29 +1003,13 @@ public final class StandardClass extends ClassDeclaration {
 	/**
 	 * Initiate the Standard Class CatchingErrors
 	 */
-//	private static void initCatchingErrors() { 
-//		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
-//		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
-//		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,null));
-//		CatchingErrors.code1=codeSet( // Statements before inner 
-//				new CodeLine("CatchingErrors",1,"try {"));      
-//		CatchingErrors.code2=codeSet( // Statements after inner 
-//				new CodeLine("CatchingErrors",3,"} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }"));
-//	}  
 	private static void initCatchingErrors() { 
 		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
 		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
 		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,null));
-		if(Option.NEW_INNER_IMPL) {
-			CatchingErrors.statements1=new Vector<Statement>();
-			CatchingErrors.statements1.add(new InlineStatement("try")); // Statements before inner 
-			CatchingErrors.statements.add(new InlineStatement("catch")); // Statements after inner 				
-		} else {
-			CatchingErrors.code1=codeSet( // Statements before inner 
-					new CodeLine("CatchingErrors",1,"try {"));      
-			CatchingErrors.code2=codeSet( // Statements after inner 
-					new CodeLine("CatchingErrors",3,"} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }"));
-		}
+		CatchingErrors.statements1=new Vector<Statement>();
+		CatchingErrors.statements1.add(new InlineStatement("try")); // Statements before inner 
+		CatchingErrors.statements.add(new InlineStatement("catch")); // Statements after inner 				
 	}  
 
 	

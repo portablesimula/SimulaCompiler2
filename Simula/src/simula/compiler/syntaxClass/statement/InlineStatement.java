@@ -8,7 +8,7 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
-public final class InlineStatement extends Statement implements Externalizable { // TODO: NEW_INNER_IMPL
+public final class InlineStatement extends Statement implements Externalizable {
 	String kind;
 	
 	public InlineStatement(String kind) {
