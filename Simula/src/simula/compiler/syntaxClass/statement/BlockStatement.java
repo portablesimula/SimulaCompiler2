@@ -11,6 +11,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -116,6 +117,13 @@ public final class BlockStatement extends Statement implements Externalizable {
 			GeneratedJavaClass.code(s.toString());
 		}
 		blockDeclaration.doJavaCoding();
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber=lineNumber;
+		ASSERT_SEMANTICS_CHECKED();
+		blockDeclaration.buildByteCode(codeBuilder);
 	}
 
 	@Override

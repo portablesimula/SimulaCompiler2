@@ -11,12 +11,31 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.classfile.MethodBuilder;
+import java.lang.classfile.MethodSignature;
+import java.lang.classfile.attribute.SignatureAttribute;
+import java.lang.classfile.attribute.SourceFileAttribute;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.instruction.SwitchCase;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
+import java.lang.constant.MethodTypeDesc;
+import java.util.List;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -546,6 +565,470 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		GeneratedJavaClass.code("}", "End of Procedure BODY");
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
+
+
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildClassFile
+	// ***********************************************************************************************
+	@Override
+	public byte[] buildClassFile() {
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
+		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+				classBuilder -> {
+					classBuilder
+						.with(SourceFileAttribute.of(Global.sourceFileName))
+						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_FINAL + ClassFile.ACC_SUPER)
+						.withSuperclass(CD.RTS_PROCEDURE);
+					// Add Fields (Return, attributes and parameters)
+					if(type != null) {
+						classBuilder
+							.withMethodBody("_RESULT", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildMethod_RESULT(codeBuilder));
+					}
+					for (Parameter par:parameterList) par.buildField(classBuilder,this);
+					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
+
+					classBuilder
+						.withMethod("<init>", MTD_Constructor(true), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildConstructor(codeBuilder));
+					
+					if(parameterList.size() > 0) {
+					classBuilder
+						.withMethod("<init>", MTD_Constructor(false), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildConstructor2(codeBuilder))
+						.withMethod("setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;"), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildSetPar(codeBuilder));
+					}
+					
+					classBuilder
+						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildMethod_STM(codeBuilder));
+				}
+		);
+		return(bytes);
+	}
+
+	private MethodTypeDesc MTD_Constructor(boolean withParams) {
+//		System.out.println("ProcedureDeclaration.MTD_Constructor: "+this);
+		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
+		if(withParams) for(Parameter par:parameterList) {
+//			System.out.println("ProcedureDeclaration.MTD_Constructor: "+par+" "+par.kind);
+			sb.append(par.type_toClassDesc().descriptorString());
+		}
+		sb.append(")V");
+//		System.out.println("ProcedureDeclaration.MTD_Constructor: "+sb);
+		return(MethodTypeDesc.ofDescriptor(sb.toString()));
+	}
+
+	public FieldRefEntry getResultFieldRefEntry(ConstantPoolBuilder pool) {
+		String className=Global.packetName+"."+this.getJavaIdentifier();
+		return(pool.fieldRefEntry(ClassDesc.of(className), "_RESULT", type.toClassDesc()));
+	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: edConstructorSignature
+	// ***********************************************************************************************
+	@Override
+	public String edConstructorSignature() {
+		// MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V");
+		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
+		for(Parameter par:parameterList) {
+			if(par.mode==Parameter.Mode.name) sb.append("Lsimula/runtime/RTS_NAME;");
+			else switch(par.kind) {
+				case Array:			  sb.append("Lsimula/runtime/RTS_ARRAY;"); break;
+				case Label:           sb.append("Lsimula/runtime/RTS_LABEL;"); break;
+				case Procedure:       sb.append("Lsimula/runtime/RTS_PRCQNT;");  break;
+				case Simple: default: sb.append(par.type.toJVMType(par.kind, par.mode));
+			}
+		}
+		sb.append(")V");
+		return(sb.toString());
+	}
+
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: buildConstructor
+	// ***********************************************************************************************
+	private void buildConstructor(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom(edConstructorSignature())))
+			.withCode(codeBuilder -> buildConstructorCode(codeBuilder));		
+	}
+	/**
+	 * Generate byteCode for the Constructor.
+	 * <pre>
+	 *     public Program'name(RTS_RTObject staticLink, par, par ...) {
+	 *         super(staticLink);
+	 *		   // Parameter assignment to locals
+	 *		   BBLK();
+	 *		   // Declaration Code
+	 *		   _STM();
+	 *	   }
+	 * </pre>
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private void buildConstructorCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Global.enterScope(this);
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+			Label begScope = codeBuilder.newLabel();
+			Label endScope = codeBuilder.newLabel();
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+
+			// Declare local parameters
+			for(Parameter par:parameterList) {
+				ClassDesc TD=par.type_toClassDesc();
+				codeBuilder.localVariable(1,par.getJavaIdentifier(),TD,begScope,endScope);
+			}
+
+			// super(staticLink);
+			codeBuilder
+				.aload(0)
+				.aload(1)
+				.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
+						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
+
+			if (!labelList.isEmpty()) {
+				// Declare local labels
+				for (LabelDeclaration lab : labelList)
+					lab.buildInitAttribute(codeBuilder);
+			}
+			// Add and Initialize attributes
+			for (Declaration decl : declarationList) {
+				decl.buildInitAttribute(codeBuilder);
+			}
+
+
+			// Parameter assignment to locals
+			int parOfst=2;
+			for(Parameter par:parameterList) {
+				codeBuilder.aload(0);
+				par.loadParameter(codeBuilder, parOfst++);
+				if(par.type!=null && par.type.equals(Type.LongReal) && (par.mode != Parameter.Mode.name)) parOfst++;
+				codeBuilder.putfield(par.getFieldRefEntry(pool));
+			}
+
+			// BBLK();
+			codeBuilder
+				.aload(0)
+				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
+
+			// Add Declaration Code to Constructor
+			for (Declaration decl : declarationList) {
+				decl.buildDeclarationCode(codeBuilder);
+			}
+
+			// _STM();
+			codeBuilder
+				.aload(0)
+				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
+				.pop();
+
+			codeBuilder
+				.return_()
+				.labelBinding(endScope);
+		Global.exitScope();
+	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: buildConstructor
+	// ***********************************************************************************************
+	private void buildConstructor2(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
+			.withCode(codeBuilder -> buildConstructorCode2(codeBuilder));		
+	}
+	/**
+	 * Generate byteCode for the Constructor.
+	 * <pre>
+	 *     public Program'name(RTS_RTObject staticLink, par, par ...) {
+	 *         super(staticLink);
+	 *		   // Parameter assignment to locals
+	 *		   BBLK();
+	 *		   // Declaration Code
+	 *		   _STM();
+	 *	   }
+	 *
+	 *    // Constructor in case of Formal/Virtual Procedure Call
+	 *    public adHoc000_PPP(RTS_RTObject _SL) {
+	 *        super(_SL,n); // Expecting n parameters
+	 *    }
+	 * </pre>
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private void buildConstructorCode2(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Global.enterScope(this);
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+			Label begScope = codeBuilder.newLabel();
+			Label endScope = codeBuilder.newLabel();
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+
+			// super(staticLink);
+			codeBuilder
+				.aload(0)
+				.aload(1);
+				
+			Constant.buildIntConst(codeBuilder,parameterList.size());
+			
+			codeBuilder
+				.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
+						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V")));
+
+			codeBuilder
+				.return_()
+				.labelBinding(endScope);
+		Global.exitScope();
+	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: buildSetPar
+	// ***********************************************************************************************
+	private void buildSetPar(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
+			.withCode(codeBuilder -> buildSetParCode(codeBuilder));		
+	}
+	/**
+	 * Generate byteCode for the Constructor.
+	 * <pre>
+	 *     public adHoc000_R setPar(Object param) {
+	 *        try {
+	 *           switch(_nParLeft--) {
+	 *              case 1: p_SFD=procValue(param); break;
+	 *              case 2: ... ...
+	 *              default: throw new RTS_SimulaRuntimeError("Too many parameters");
+	 *           }
+	 *        } catch(ClassCastException e) {
+	 *            throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
+	 *        }
+	 *        return(this);
+	 *     }
+	 * </pre>
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private void buildSetParCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Global.enterScope(this);
+			Label begScope = codeBuilder.newLabel();
+			Label endScope = codeBuilder.newLabel();
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
+
+			codeBuilder.trying(
+					blockCodeBuilder -> {
+						build_SWITCH(blockCodeBuilder);
+					},
+					catchBuilder -> catchBuilder.catching(ClassDesc.of("java.lang.ClassCastException"),
+							blockCodeBuilder -> buildCatchBlock(blockCodeBuilder)));
+
+			codeBuilder
+				.aload(0)
+				.areturn()
+				.labelBinding(endScope);
+		Global.exitScope();
+	}
+	
+	private void buildCatchBlock(BlockCodeBuilder codeBuilder) {
+		// throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
+		codeBuilder.astore(2);
+		Util.buildSimulaRuntimeError("Wrong type of parameter: ", codeBuilder);
+	}
+	
+	private void build_SWITCH(BlockCodeBuilder codeBuilder) {
+		//  switch(_nParLeft--) {
+		//     case 1: p_SFD=procValue(param); break;
+		//     case 2: ... ...
+		//     default: throw new RTS_SimulaRuntimeError("Too many parameters");
+		//  }
+		int tableSize = parameterList.size();
+		List<SwitchCase> tableSwitchCases = new Vector<SwitchCase>();
+		for (int i = 1; i <= tableSize; i++) {
+			tableSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
+		}
+		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+		Label breakLabel = codeBuilder.newLabel(); // beginning of the default handler block.
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		
+		FieldRefEntry FRE_nParLeft=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_nParLeft",ConstantDescs.CD_int);
+		codeBuilder
+			.aload(0)
+			.dup()
+			.getfield(FRE_nParLeft)
+			.dup_x1()
+			.iconst_1()
+			.isub()
+			.putfield(FRE_nParLeft)
+			
+			.lookupSwitchInstruction(defaultTarget, tableSwitchCases);
+		
+		codeBuilder.labelBinding(defaultTarget);
+		Util.buildSimulaRuntimeError("Too many parameters", codeBuilder);
+		
+		for(int i=0;i<tableSize;i++) {
+			Label lab = tableSwitchCases.get(i).target();
+			codeBuilder
+				.labelBinding(lab)
+				.aload(0);
+			Parameter par = parameterList.get(tableSize-i-1);
+			if (par.mode == Parameter.Mode.name) {
+				codeBuilder
+					.aload(1) // param
+					.checkcast(CD.RTS_NAME)
+					.putfield(par.getFieldRefEntry(pool))
+					.goto_(breakLabel);
+			}
+			else if (par.kind == Parameter.Kind.Array) {
+				codeBuilder
+					.aload(0)
+					.aload(1) // param
+					.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+							"arrayValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_ARRAY;")));
+				if(par.mode == Parameter.Mode.value) {
+					codeBuilder.invokevirtual(CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
+				}
+				codeBuilder
+					.putfield(par.getFieldRefEntry(pool))
+					.goto_(breakLabel);
+			} else if (par.kind == Parameter.Kind.Procedure) {
+				codeBuilder
+					.aload(0)
+					.aload(1) // param
+					.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+							"procValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PRCQNT;"))) // TODO: MÅ RETTES
+					.putfield(par.getFieldRefEntry(pool))
+					.goto_(breakLabel);
+			}
+			else if (par.kind != Parameter.Kind.Simple) {
+//				typeValue = ("(" + tp + ")param");
+				Util.IERR("");
+			}
+			else if (par.type.isArithmeticType()) {
+				codeBuilder
+					.aload(0)
+					.aload(1); // param
+				buildGetArithmeticValue(par.type,codeBuilder);
+				codeBuilder
+					.putfield(par.getFieldRefEntry(pool))
+					.goto_(breakLabel);
+			}
+			else {
+//				typeValue = ("(" + tp + ")objectValue(param)");
+				codeBuilder
+					.aload(0)
+					.aload(1); // param
+					buildCastObject(par,codeBuilder);
+				codeBuilder
+					.putfield(par.getFieldRefEntry(pool))
+					.goto_(breakLabel);
+			}
+		}
+		codeBuilder.labelBinding(breakLabel);
+	}
+	
+	private void buildCastObject(Parameter par,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(par.type.equals(Type.Integer)) {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
+		}
+		else if(par.type.equals(Type.Real)) {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
+		}
+		else if(par.type.equals(Type.LongReal)) {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
+		}
+		else if(par.type.equals(Type.Boolean)) {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
+		}
+		else if(par.type.equals(Type.Character)) {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
+		}
+		else {
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+			codeBuilder.checkcast(par.type_toClassDesc());
+		}
+	}
+	
+	public void buildGetArithmeticValue(Type type,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(type.equals(Type.Integer)) 
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
+		else if(type.equals(Type.Real)) 
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
+		else if(type.equals(Type.LongReal)) 
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
+		else if(type.equals(Type.Boolean))
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
+		else if(type.equals(Type.Character))
+			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
+		else Util.IERR("ProcedureDeclaration.buildGetArithmeticValue: FYLL PÅ TYPE: "+type);
+	}
+
+	@Override
+	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
+		Global.sourceLineNumber = lineNumber;
+		try {
+			this.createJavaClassFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		Util.IERR("STOP: "+this.getClass().getSimpleName());
+	}
+
+	@Override
+	public void buildInitAttribute(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber = lineNumber;
+//		Util.IERR("Method buildInitAttribute need a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_STM_BODY
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the '_STM' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	@Override
+	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+		for (Statement stm : statements) {
+			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+			stm.buildByteCode(codeBuilder);
+		}
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_STM_BODY
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the '_RESULT' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private void buildMethod_RESULT(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		ClassDesc DC_RESULT = type.toClassDesc(declaredIn);
+		FieldRefEntry FDE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_RESULT", DC_RESULT);
+		codeBuilder
+			.aload(0)
+			.getfield(FDE);
+    	type.buildObjectValueOf(codeBuilder);
+		codeBuilder.areturn();
+	}
+
 
 	// ***********************************************************************************************
 	// *** Printing Utility: print

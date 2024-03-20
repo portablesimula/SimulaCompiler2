@@ -10,9 +10,14 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -209,6 +214,85 @@ public final class RelationalOperation extends Expression {
 		s.append(rhs.get()).append(')');
 		return (s.toString());
 	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+//		System.out.println("RelationalOperation.buildByteCode: "+this+", lhs.type="+lhs.type+", rhs.type="+rhs.type);
+		if(lhs.type.equals(Type.Text)) {
+			buildTextRelation(codeBuilder);
+			return;
+		}
+		lhs.buildEvaluation(null,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		Label target = codeBuilder.newLabel();
+		Label lab2 = codeBuilder.newLabel();
+		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)) {
+			switch (opr) {
+				case GE -> codeBuilder.if_icmplt(target);
+				case NE -> codeBuilder.if_icmpeq(target);
+				case GT -> codeBuilder.if_icmple(target);
+				case LE -> codeBuilder.if_icmpgt(target);
+				case EQ -> codeBuilder.if_icmpne(target);
+				case LT -> codeBuilder.if_icmpge(target);
+				default -> Util.IERR("Unexpected value: " + opr);
+			}
+		} else if(lhs.type.equals(Type.Real)) {
+			codeBuilder.fcmpl();
+				switch (opr) {
+					case GE -> codeBuilder.iflt(target);
+					case NE -> codeBuilder.ifeq(target);
+					case GT -> codeBuilder.ifle(target);
+					case LE -> codeBuilder.ifgt(target);
+					case EQ -> codeBuilder.ifne(target);
+					case LT -> codeBuilder.ifge(target);
+					default -> Util.IERR("Unexpected value: " + opr);
+				}
+		} else if(lhs.type.equals(Type.LongReal)) {
+			codeBuilder.dcmpl();
+			switch (opr) {
+				case GE -> codeBuilder.iflt(target);
+				case NE -> codeBuilder.ifeq(target);
+				case GT -> codeBuilder.ifle(target);
+				case LE -> codeBuilder.ifgt(target);
+				case EQ -> codeBuilder.ifne(target);
+				case LT -> codeBuilder.ifge(target);
+				default -> Util.IERR("Unexpected value: " + opr);
+			}
+		} else if(lhs.type.isReferenceType()) {
+			switch (opr) {
+				case EQR -> codeBuilder.if_acmpne(target);
+				case NER -> codeBuilder.if_acmpeq(target);
+				default -> Util.IERR("Unexpected value: " + opr);
+			}
+		} else Util.IERR("STOP IN "+this.getClass().getSimpleName()+"  Type="+lhs.type+"  "+this);
+		codeBuilder.iconst_1();
+		codeBuilder.goto_(lab2);
+		codeBuilder.labelBinding(target);
+		codeBuilder.iconst_0();
+		codeBuilder.labelBinding(lab2);
+	}
+
+	private void buildTextRelation(CodeBuilder codeBuilder) {
+		lhs.buildEvaluation(null,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+
+		String textRelMethod=null;
+		switch (opr) {
+			case GE -> textRelMethod="_TXTREL_GE";
+			case NE -> textRelMethod="_TXTREL_NE";
+			case GT -> textRelMethod="_TXTREL_GT";
+			case LE -> textRelMethod="_TXTREL_LE";
+			case EQ -> textRelMethod="_TXTREL_EQ";
+			case LT -> textRelMethod="_TXTREL_LT";
+			case EQR -> textRelMethod="TRF_EQ";
+			case NER -> textRelMethod="TRF_NE";
+			default -> Util.IERR("Unexpected value: " + lhs + " " + opr + " "+ rhs);
+		}
+		ClassDesc CD = BlockDeclaration.currentClassDesc();
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
+		codeBuilder.invokestatic(CD, textRelMethod, MTD);
+	}
+
 
 	@Override
 	public String toString() {

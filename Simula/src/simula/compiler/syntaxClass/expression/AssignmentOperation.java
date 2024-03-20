@@ -10,13 +10,22 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
@@ -207,6 +216,221 @@ public final class AssignmentOperation extends Expression {
 		}
 		return (array.doPutELEMENT(remoteIdent, rightPart));
 	}
+
+	
+	
+	/*******************************************************************************************************************
+	/**
+	 * Build Java ByteCode.
+	 */
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		if (this.textValueAssignment)
+			buildTextValueAssignment(codeBuilder);
+		else
+			buildAssignment(codeBuilder);
+	}
+
+
+	public void buildTextValueAssignment(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if (rhs instanceof Constant cnst) {
+			Object value = cnst.value;
+			if (value != null) {
+				lhs.buildEvaluation(null,codeBuilder);
+				codeBuilder.ldc(pool.stringEntry(value.toString()));
+
+				ClassDesc CD = BlockDeclaration.currentClassDesc();
+				MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
+				codeBuilder.invokestatic(CD, "_ASGSTR", MTD);
+				if(this.backLink == null) codeBuilder.pop();
+				return;
+			}
+		}
+		lhs.buildEvaluation(null,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		ClassDesc CD = BlockDeclaration.currentClassDesc();
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
+		codeBuilder.invokestatic(CD, "_ASGTXT", MTD);
+		if(this.backLink == null) codeBuilder.pop();
+	}
+
+
+	public void buildAssignment(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(lhs instanceof VariableExpression var) {
+			Declaration decl = var.meaning.declaredAs;
+//			System.out.println("AssignmentOperation.buildAssignment: decl="+decl.getClass().getSimpleName()+"  "+decl+"  "+this);
+
+			if(decl instanceof SimpleVariableDeclaration simplevar) {
+				buildSimple(simplevar,var,opr==KeyWord.ASSIGNREF,codeBuilder);
+			} else if(decl instanceof Parameter par) {
+				buildParameter(par,var,opr==KeyWord.ASSIGNREF,codeBuilder);
+			} else if(decl.getClass() == ProcedureDeclaration.class) {
+				buildProc((ProcedureDeclaration)decl,opr==KeyWord.ASSIGNREF,codeBuilder);
+			} else if(decl instanceof ArrayDeclaration arr) {
+				var.meaning.buildIdentifierAccess(false,codeBuilder);
+				arr.arrayPutElement(var,false,rhs,codeBuilder);
+				if(this.backLink == null) {
+					if(this.type.equals(Type.LongReal))
+						codeBuilder.pop2();
+					else codeBuilder.pop();
+				}
+			}
+			else Util.IERR("NOT IMPL: "+decl.getClass().getSimpleName()+"  "+decl);
+		} else if(lhs instanceof RemoteVariable var) {
+			if(!tryRemoteArray(var, codeBuilder)) {
+				var.obj.buildEvaluation(null,codeBuilder);
+				rhs.buildEvaluation(null,codeBuilder);
+				// Prepare for multiple assignment
+				if(this.backLink != null) {
+					if(this.type.equals(Type.LongReal))
+						 codeBuilder.dup2_x1();
+					else codeBuilder.dup_x1();
+				}
+				codeBuilder.putfield(var.getFieldRefEntry(pool));
+			}
+		}
+		else Util.IERR("NOT IMPL: "+lhs.getClass().getSimpleName()+"  "+lhs);
+	}
+	
+	private boolean tryRemoteArray(RemoteVariable remvar, CodeBuilder codeBuilder) {
+		if(remvar.var instanceof VariableExpression) {
+			Declaration decl = remvar.var.meaning.declaredAs;
+			if(decl instanceof ArrayDeclaration arr) {
+				remvar.obj.buildEvaluation(null,codeBuilder);
+				arr.arrayPutElement(remvar.var,false,rhs,codeBuilder);
+			} else if(decl instanceof Parameter par) {
+				if(par.kind != Parameter.Kind.Array) return(false);
+				remvar.obj.buildEvaluation(null,codeBuilder);
+				ArrayDeclaration.arrayPutElement(remvar.var.meaning,par.getFieldIdentifier(),true,remvar.var.checkedParams, rhs, codeBuilder);
+			} else return(false);
+			
+			// Prepare for multiple assignment
+			if(this.backLink == null) {
+				if(this.type.equals(Type.LongReal))
+					codeBuilder.pop2();
+				else codeBuilder.pop();
+			}
+			return(true);
+		}
+		return(false);
+	}
+
+	private void buildSimple(SimpleVariableDeclaration simplevar,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		var.buildIdentifierAccess(true,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		
+		// Prepare for multiple assignment
+		if(this.backLink != null) {
+			if(this.type.equals(Type.LongReal))
+				 codeBuilder.dup2_x1();
+			else codeBuilder.dup_x1();
+		}
+		codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
+	}
+	
+	private void buildProc(ProcedureDeclaration proc,boolean assignRef,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		VariableExpression var = (VariableExpression)lhs;
+		var.buildIdentifierAccess(true,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		codeBuilder.putfield(pool.fieldRefEntry(proc.getClassDesc(), "_RESULT", type.toClassDesc()));
+	}
+	
+	private void buildParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
+//		System.out.println("AssignmentOperation.buildParameter: "+par+", kind="+par.kind);
+		switch(par.kind) {
+			case Simple:    buildSimpleParameter(par,var,assignRef,codeBuilder); break;
+			case Array:     buildArrayParameter(par,var,assignRef,codeBuilder); break;
+			case Label:     Util.IERR(""); break;
+			case Procedure: Util.IERR(""); break;
+			default: Util.IERR("IMPOSSIBLE");
+		}
+	}
+	
+	private void buildSimpleParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		FieldRefEntry FDE=par.getFieldRefEntry(pool);
+		if(par.mode == Parameter.Mode.name) {
+			codeBuilder
+				.aload(0)
+				.getfield(FDE);
+			rhs.buildEvaluation(null,codeBuilder); // Result may be int,float, ...		
+        	par.type.buildObjectValueOf(codeBuilder);
+
+			codeBuilder
+				.invokevirtual(pool.methodRefEntry(CD.RTS_NAME
+					, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+			// Prepare for multiple assignment
+			if(this.backLink == null) {
+				codeBuilder.pop();
+			} else {
+				if(par.type.equals(Type.Integer))
+					codeBuilder
+						.checkcast(ConstantDescs.CD_Integer)
+						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
+				else if(par.type.equals(Type.Real))
+					codeBuilder
+						.checkcast(ConstantDescs.CD_Float)
+						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
+				else if(par.type.equals(Type.LongReal))
+					codeBuilder
+						.checkcast(ConstantDescs.CD_Double)
+						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+				else if(par.type.equals(Type.Boolean))
+					codeBuilder
+						.checkcast(ConstantDescs.CD_Boolean)
+						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
+				else if(par.type.equals(Type.Character))
+					codeBuilder
+						.checkcast(ConstantDescs.CD_Character)
+						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
+				else Util.IERR("FYLL PÅ TYPE: "+type);
+			}
+			return; // DONE !
+		} else {
+			// Simple Parameter by value/default
+			codeBuilder.aload(0);
+			rhs.buildEvaluation(null,codeBuilder);
+
+			// Prepare for multiple assignment
+			if(this.backLink != null) {
+				if(this.type.equals(Type.LongReal))
+					 codeBuilder.dup2_x1();
+				else codeBuilder.dup_x1();
+			}
+			codeBuilder.putfield(FDE);
+		}
+	}
+	
+	private void buildArrayParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(par.mode == Parameter.Mode.name) {
+			//    	 0: aload_0
+			//    	 1: getfield      #9                  // Field p_ia:Lsimula/runtime/RTS_NAME;
+			//    	 4: invokevirtual #55                 // Method simula/runtime/RTS_NAME.get:()Ljava/lang/Object;
+			//    	 7: checkcast     #59                 // class simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY
+			//    	10: aload_0
+			//    	11: getfield      #9                  // Field p_ia:Lsimula/runtime/RTS_NAME;
+			//    	14: invokevirtual #55                 // Method simula/runtime/RTS_NAME.get:()Ljava/lang/Object;
+			//    	17: checkcast     #59                 // class simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY
+
+			codeBuilder
+				.aload(0)
+				.getfield(par.getFieldRefEntry(pool))
+				.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
+				.checkcast(CD.RTS_ARRAY(par.type))
+				.dup();
+			ArrayDeclaration.arrayPutElement2(var.meaning,var.checkedParams,rhs,codeBuilder);
+		} else {
+			lhs.buildEvaluation(rhs,codeBuilder);
+		}
+		if(this.backLink == null) codeBuilder.pop();
+	}
+
 
 	@Override
 	public String toString() {

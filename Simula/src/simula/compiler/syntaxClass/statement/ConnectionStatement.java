@@ -10,11 +10,17 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
@@ -122,6 +128,11 @@ public final class ConnectionStatement extends Statement {
 	private static int SEQU = 0;
 
 	/**
+	 * 
+	 */	
+	private Label endLabel;
+
+	/**
 	 * Create a new ConnectionStatement.
 	 * <p>
 	 * Pre-Condition: INSPECT  is already read.
@@ -213,6 +224,12 @@ public final class ConnectionStatement extends Statement {
 		public void doCoding(final boolean first) {
 			ASSERT_SEMANTICS_CHECKED();
 			connectionBlock.doJavaCoding();
+		}
+
+		public void buildByteCode(CodeBuilder codeBuilder) {
+			ASSERT_SEMANTICS_CHECKED();
+			connectionBlock.buildByteCode(codeBuilder);
+			codeBuilder.goto_(endLabel);
 		}
 
 //		/**
@@ -307,6 +324,25 @@ public final class ConnectionStatement extends Statement {
 				GeneratedJavaClass.code(prfx,"WHEN " + cid + " DO -- IMPOSSIBLE REMOVED");
 		}
 
+		@Override
+		public void buildByteCode(CodeBuilder codeBuilder) {
+			ASSERT_SEMANTICS_CHECKED();
+			if (!impossibleWhenPart) {
+				inspectedVariable.buildEvaluation(null, codeBuilder);
+				classDeclaration.getClassDesc();
+				Label elseLabel = codeBuilder.newLabel();
+				codeBuilder
+					.instanceof_(classDeclaration.getClassDesc())
+					.ifeq(elseLabel);
+				
+				connectionBlock.buildByteCode(codeBuilder);
+				
+				codeBuilder
+					.goto_(endLabel)
+					.labelBinding(elseLabel);
+			}
+		}
+
 //		@Override
 //		public void print(final int indent) {
 //	    	String spc=edIndent(indent);
@@ -358,6 +394,34 @@ public final class ConnectionStatement extends Statement {
 		// JavaModule.debug("// END INSPECTION ");
 		GeneratedJavaClass.code("}","END INSPECTION");
 	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+//		System.out.println("inspectedVariable="+inspectedVariable.getClass().getSimpleName()+"  "+inspectedVariable);
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+
+		codeBuilder.aload(0);
+		objectExpression.buildEvaluation(null,codeBuilder);
+		ClassDesc CD=inspectedVariable.type.toClassDesc();
+		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD);
+		codeBuilder.putfield(FRE);
+
+		endLabel = codeBuilder.newLabel();
+		if (!hasWhenPart) {
+			codeBuilder.aload(0);
+			codeBuilder.getfield(FRE);
+			codeBuilder.if_null(endLabel);
+		}
+		for(DoPart part:connectionPart) {
+			part.buildByteCode(codeBuilder);
+		}
+		if (otherwise != null) {
+			otherwise.buildByteCode(codeBuilder);
+		}
+		codeBuilder.labelBinding(endLabel);
+	}
+
 	
 	@Override
 	public void printTree(final int indent) {

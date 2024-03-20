@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -112,6 +114,38 @@ final class UnaryOperation extends Expression {
 	public boolean maybeStatement() {
 		ASSERT_SEMANTICS_CHECKED();
 		return (false);
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		operand.buildEvaluation(null,codeBuilder);
+		if (oprator == KeyWord.PLUS) ; // NOTHING
+		else if (oprator == KeyWord.NOT) {
+			buildNOT(codeBuilder);
+		} else if (oprator == KeyWord.MINUS) {
+			if(type.equals(Type.Integer)) codeBuilder.ineg();
+			else if(type.equals(Type.Real)) codeBuilder.fneg();
+			else if(type.equals(Type.LongReal)) codeBuilder.dneg();
+			else Util.IERR("IMPOSSIBLE");
+		}
+	}
+
+	public static void buildNOT(CodeBuilder codeBuilder) {
+		//    ifne  L1
+		//    iconst_1
+		//    goto  L2
+		//L1: iconst_0
+		//L2:
+		Label L1 = codeBuilder.newLabel();
+		Label L2 = codeBuilder.newLabel();
+		codeBuilder
+			.ifne(L1)
+			.iconst_1()
+			.goto_(L2)
+			.labelBinding(L1)
+			.iconst_0()
+			.labelBinding(L2);
 	}
 
 	@Override

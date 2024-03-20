@@ -11,6 +11,8 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -174,6 +176,18 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		if (when == null)
 			return (connID);
 		return ("((" + when.getJavaIdentifier() + ')' + connID + ')');
+	}
+	
+	@Override
+	public ClassDesc getClassDesc() {
+		return(inspectedVariable.type.toClassDesc());
+	}
+
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Global.enterScope(this);
+		statement.buildByteCode(codeBuilder);
+		Global.exitScope();
 	}
 
 	// ***********************************************************************************************

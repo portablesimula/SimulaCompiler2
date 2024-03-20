@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.declaration;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
@@ -142,6 +144,10 @@ public abstract class Declaration extends SyntaxClass {
 		 * Parameter.
 		 */
 		Parameter,
+		/**
+		 * Thunk.
+		 */
+		Thunk,
 		/**
 		 * Label Declaration
 		 */
@@ -312,6 +318,38 @@ public abstract class Declaration extends SyntaxClass {
 			return (true);
 		return (((ClassDeclaration) other).isSubClassOf((ClassDeclaration) this));
 	}
+
+	/**
+	 * Output Java ByteCode. Treat Declaration.
+	 */
+	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+		Util.IERR("Method buildField need a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	/**
+	 * 
+	 */
+	public String getFieldIdentifier() {
+		Util.IERR("Method getFieldIdentifier need a redefinition in "+this.getClass().getSimpleName());
+		return(null);
+	}
+
+	/**
+	 * Output Java ByteCode. Build init code for an Attribute.
+	 */
+	public void buildInitAttribute(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber = lineNumber;
+		Util.IERR("Method buildInitAttribute need a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	/**
+	 * Output Java ByteCode. Build declaration code for an Attribute.
+	 */
+	public void buildDeclarationCode(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber = lineNumber;
+//		Util.IERR("Method buildDeclarationCode need a redefinition in "+this.getClass().getSimpleName());
+	}
+
 
 	// ***********************************************************************************************
 	// *** Externalization

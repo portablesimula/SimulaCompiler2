@@ -12,6 +12,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.instruction.SwitchCase;
 //import java.lang.classfile.CodeBuilder;
 //import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
 //import java.lang.classfile.Label;
@@ -28,6 +34,7 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -79,8 +86,32 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	public boolean isBlockLevelUpdated; // TODO: NEW_EXTERNAL_IMPL
 
-	public static ClassDesc currentClassDesc;
-	private ClassDesc prevClassDesc;
+	public static ClassDesc currentClassDesc; // REMOVE ???
+	private ClassDesc prevClassDesc; // REMOVE ???
+
+	
+	/**
+	 * The Block Declaration that currently is being built
+	 */
+	public static BlockDeclaration currentBlock;
+	
+	/**
+	 * The previous value of 'currentBlock'
+	 */
+	private BlockDeclaration prevBlock;
+	
+	/**
+	 * Number of Local Variables allocated so far.
+	 */
+	public int nLocalVariables;
+	
+	public static ClassDesc currentClassDesc() {
+		return(currentBlock.getClassDesc());
+	}
+	
+	public int getLocalVariableIndex() {
+		return(++nLocalVariables);
+	}
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
@@ -286,6 +317,365 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		for (Statement stm : statements) stm.doJavaCoding();
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
+
+	// ***********************************************************************************************
+	// *** createJavaClassFile
+	// ***********************************************************************************************
+	/**
+	 * Create Java ClassFile.
+	 * @throws IOException 
+	 */
+    public void createJavaClassFile() throws IOException {
+		prevBlock = currentBlock;
+		currentBlock = this;
+
+        byte[] bytes = buildClassFile();
+        currentBlock = prevBlock;
+
+        if(bytes != null) {
+            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
+            outputFile.getParentFile().mkdirs();
+            FileOutputStream oupt = new FileOutputStream(outputFile);
+            oupt.write(bytes); oupt.flush(); oupt.close();
+            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
+
+			if(Option.LIST_GENERATED_CLASS_FILES) {
+				Util.doListClassFile("" + outputFile); // List generated .class file
+			}
+        }
+    }
+
+    
+    // ***********************************************************************************************
+    // *** ByteCoding: buildClassFile
+    // ***********************************************************************************************
+    public byte[] buildClassFile() {
+        Util.IERR("Method buildClassFile need a redefinition in "+this.getClass().getSimpleName());
+        return(null);
+    }
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildIsQPSystemBlock
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the 'isQPSystemBlock' method.
+	 * <p>
+	 * public boolean isQPSystemBlock() { return(true); }
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	protected void buildIsQPSystemBlock(CodeBuilder codeBuilder) {
+		Label begScope = codeBuilder.newLabel();
+		Label endScope = codeBuilder.newLabel();
+		codeBuilder
+			.labelBinding(begScope)
+			.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+			.iconst_1()
+			.ireturn()
+			.labelBinding(endScope);
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildIsMethodDetachUsed
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the 'buildIsMethodDetachUsed' method.
+	 * <p>
+	 * public boolean isDetachUsed() { return(true); }
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	void buildIsMethodDetachUsed(CodeBuilder codeBuilder) {
+		Label begScope = codeBuilder.newLabel();
+		Label endScope = codeBuilder.newLabel();
+		codeBuilder
+			.labelBinding(begScope)
+			.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+			.iconst_1()
+			.ireturn()
+			.labelBinding(endScope);
+	}
+
+    // ***********************************************************************************************
+    // *** ByteCoding: edConstructorSignature
+    // ***********************************************************************************************
+    public String edConstructorSignature() {
+        Util.IERR("Method edConstructorSignature need a redefinition in "+this.getClass().getSimpleName());
+        return(null);
+    }
+    
+    public MethodTypeDesc getConstructorMethodTypeDesc() {
+    	return(MethodTypeDesc.ofDescriptor(this.edConstructorSignature()));
+    }
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_STM
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the '_STM' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	protected void buildMethod_STM(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Global.enterScope(this);
+			ConstantPoolBuilder pool = codeBuilder.constantPool();
+			Label begScope = codeBuilder.newLabel();
+			Label endScope = codeBuilder.newLabel();
+			Label checkStackSize = null; // TESTING_STACK_SIZE
+			codeBuilder.labelBinding(begScope);
+			
+				if(Option.TESTING_STACK_SIZE) {
+					checkStackSize = codeBuilder.newLabel();
+					codeBuilder
+						.aconst_null()                 // TESTING_STACK_SIZE
+						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
+				}
+				if (hasLabel())	
+					build_TRY_CATCH(codeBuilder);
+				else build_STM_BODY(codeBuilder);
+				codeBuilder
+					.aload(0)
+					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")));
+					
+				if(Option.TESTING_STACK_SIZE) {
+					codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
+				}
+				
+				codeBuilder
+					.aload(0)
+					.areturn()
+					
+			.labelBinding(endScope);
+		Global.exitScope();
+	}
+	
+	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+		Util.IERR("Missing Override");
+	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: build_TRY_CATCH
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the try-catch part of the '_STM' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	// ==================================================================================
+    //    adHoc000 _THIS=(adHoc000)_CUR;
+    //    _LOOP:while(_JTX>=0) {
+    //        try {
+    //            _JUMPTABLE(_JTX); // For ByteCode Engineering
+    //            // ... Simple Statement code
+    //            break _LOOP;
+    //        }
+    //        catch(RTS_LABEL q) {
+    //            _CUR=_THIS;
+    //            if(q._SL!=_CUR) {
+    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
+    //                _CUR._STATE=OperationalState.terminated;
+    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
+    //                throw(q);
+    //            }
+    //            if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+    //        }
+    //    }
+	// ==================================================================================
+	private void build_TRY_CATCH(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
+		Label loopWhile = codeBuilder.newLabel();
+		Label loopEnd = codeBuilder.newLabel();
+	    // adHoc000 _THIS=(adHoc000)_CUR;
+		codeBuilder
+			.aload(0)
+			.astore(1);  // THIS
+		
+	    // _LOOP:while(_JTX>=0) {
+		codeBuilder
+			.labelBinding(loopWhile)
+			.aload(0)
+			.getfield(FDE_JTX)
+			.iflt(loopEnd);
+		
+		codeBuilder.trying(
+				blockCodeBuilder -> {
+					build_JUMPTABLE(blockCodeBuilder);
+					build_STM_BODY(blockCodeBuilder);  // Virtual
+					// break _LOOP;
+					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
+				},
+				catchBuilder -> catchBuilder.catching(CD.RTS_LABEL,
+						blockCodeBuilder -> buildCatchBlock(blockCodeBuilder,loopWhile)));
+		codeBuilder.labelBinding(loopEnd);
+	}
+	
+	public List<SwitchCase> tableSwitchCases;
+
+	private void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
+		// *******************************************************************************
+		// *** JUMPTABLE Case
+		// *******************************************************************************
+		// iconst_n // Number of cases (tableSize)
+		// invokestatic _JUMPTABLE
+		//
+		// Output:
+		//
+		// tableswitch ...
+		//
+		int tableSize = labelList.size();
+//		System.out.println("BlockDeclaration.build_JUMPTABLE: Define TableSwitch " + tableSize);
+		tableSwitchCases = new Vector<SwitchCase>();
+		for (int i = 1; i <= tableSize; i++) {
+			tableSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
+		}
+		// Build the TableSwitch Instruction
+		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+		int lowValue = 1;          // the minimum key value.
+		int highValue = tableSize; // the maximum key value.
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
+		codeBuilder
+			.aload(0)
+			.getfield(FDE_JTX)
+			.tableswitch(lowValue, highValue, defaultTarget, tableSwitchCases)
+			.labelBinding(defaultTarget);
+	}
+
+	// ==================================================================================
+    //        catch(RTS_LABEL q) {
+    //            _CUR=_THIS;
+    //            if(q._SL!=_CUR) {
+    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
+    //                _CUR._STATE=OperationalState.terminated;
+    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
+    //                throw(q);
+    //            }
+    //            if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+    //        }
+	// ==================================================================================
+	private void buildCatchBlock(CodeBuilder  codeBuilder,Label contLabel) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		ClassDesc CD_RTObject = CD.RTS_RTObject;
+		FieldRefEntry FRE_CUR = pool.fieldRefEntry(currentClassDesc(), "_CUR", CD_RTObject);
+		// _CUR=_THIS;
+		codeBuilder
+			.astore(2)
+			.aload(1)
+			.putstatic(FRE_CUR);
+		
+		// if(q._SL!=_CUR) {
+		Label endIfLabel = codeBuilder.newLabel();
+		FieldRefEntry FRE_SL=pool.fieldRefEntry(CD.RTS_LABEL, "_SL", CD_RTObject);
+		codeBuilder
+			.aload(2)
+			.getfield(FRE_SL)
+			.getstatic(FRE_CUR)
+			.if_acmpeq(endIfLabel);
+		
+		buildTraceGOTO(codeBuilder,"NON-LOCAL");
+		
+		// _CUR._STATE=OperationalState.terminated;
+		ClassDesc CD_OPR=CD.RTS_RTObject("OperationalState");
+		FieldRefEntry FRE_TERM = pool.fieldRefEntry(currentClassDesc(), "terminated", CD_OPR);
+		FieldRefEntry FRE_STATE = pool.fieldRefEntry(CD_RTObject, "_STATE", CD_OPR);
+		codeBuilder
+			.getstatic(FRE_CUR)
+			.getstatic(FRE_TERM)
+			.putfield(FRE_STATE);
+		
+		buildTraceGOTO(codeBuilder,"RE-THROW");
+		
+		// throw(q);
+		codeBuilder
+			.aload(2)
+			.athrow()
+			.labelBinding(endIfLabel);
+		
+		buildTraceGOTO(codeBuilder,"LOCAL");
+
+		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+		FieldRefEntry FDE_INDEX=pool.fieldRefEntry(CD.RTS_LABEL,"index", ConstantDescs.CD_int);
+		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
+		codeBuilder
+			.aload(0)
+			.aload(2)
+			.getfield(FDE_INDEX)
+			.putfield(FDE_JTX)
+			.goto_(contLabel);
+	}
+
+	private void buildTraceGOTO(CodeBuilder  codeBuilder,String mss) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Label endLabel = codeBuilder.newLabel();
+		codeBuilder
+			.getstatic(ClassDesc.of("simula.runtime.RTS_COMMON$Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
+			.ifeq(endLabel)
+			.ldc(pool.stringEntry(mss))
+			.aload(2)  // Label quant
+			.invokestatic(CD.RTS_RTObject,
+					"TRACE_GOTO", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V"))
+			.labelBinding(endLabel);
+	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethodMain
+	// ***********************************************************************************************
+    /**
+     * Generate byteCode for the 'main' method.
+     * <pre>
+     *     public static void main(String[] args) {
+     *         RTS_COMMON.setRuntimeOptions(args);
+     *         new adHoc06(_CTX)._STM();
+     *     }
+     * </pre>
+     * @param codeBuilder the CodeBuilder
+     * @param pool the ConstantPoolBuilder
+     */
+	void buildMethodMain(CodeBuilder codeBuilder) {
+		Label begScope = codeBuilder.newLabel();
+		Label endScope = codeBuilder.newLabel();
+
+		codeBuilder
+				.localVariable(0,"argv",ConstantDescs.CD_String.arrayType(),begScope,endScope)
+				.labelBinding(begScope)
+
+				// RTS_COMMON.setRuntimeOptions(args);
+				.aload(0) // argv
+				.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON")
+						, "setRuntimeOptions", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"));
+		codeBuilder
+			// new adHoc06(_CTX)._STM();
+			.new_(currentClassDesc())
+			.dup()
+			.getstatic(currentClassDesc(),"_CTX",CD.RTS_CLASS);
+
+		if(this instanceof PrefixedBlockDeclaration pblk) {
+			//  new adHoc05_PBLK14(_CUR,p1,...)._STM();
+			// Push parameters
+			if(pblk.blockPrefix.checkedParams != null)
+				for(Expression expr:pblk.blockPrefix.checkedParams)
+					expr.buildEvaluation(null,codeBuilder);
+
+			codeBuilder.invokespecial(currentClassDesc(), "<init>", this.getConstructorMethodTypeDesc());
+		} else {
+			codeBuilder.invokespecial(currentClassDesc()
+							, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"));
+		}
+
+		// _STM();
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.invokevirtual(pool.methodRefEntry(currentClassDesc()
+						, "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
+			.pop()
+			.return_()
+			.labelBinding(endScope);
+	}
+    
 	
 	protected void printStatementList(int indent) {
 		for(Statement s:statements) s.printTree(indent);

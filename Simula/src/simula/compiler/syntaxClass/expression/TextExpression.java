@@ -11,9 +11,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -145,6 +149,17 @@ public final class TextExpression extends Expression implements Externalizable {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		return ("CONC(" + lhs.get() + ',' + rhs.get() + ')');
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder.aload(0);
+		lhs.buildEvaluation(null,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_RTObject,
+				"CONC", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;")));
 	}
 
 	@Override

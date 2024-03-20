@@ -11,9 +11,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Util;
@@ -232,6 +236,67 @@ public final class Constant extends Expression implements Externalizable {
 		case 3-> hex="0"+hex;
 		}
 		sb.append("\\u"+hex);	
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(this.value==null) {
+			codeBuilder.aconst_null();
+		} else if(type.equals(Type.Text)) {
+			codeBuilder
+					.new_(CD.RTS_TXT)
+					.dup()
+					.ldc(pool.stringEntry((String) value))
+					.invokespecial(pool.methodRefEntry(CD.RTS_TXT, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
+		} else if(type.equals(Type.Integer)) {
+			if(value instanceof Long){
+				Long i=(Long)value;
+				buildIntConst(codeBuilder, i.intValue());
+			} else {
+				Integer i = (Integer) value;
+				buildIntConst(codeBuilder, i);
+			}
+		} else if(type.equals(Type.Character)) {
+			int i = (int)((char)value);
+			buildIntConst(codeBuilder, i);
+		} else if(type.equals(Type.LongReal)) {
+			double d=(double) value;
+			if(d==0) codeBuilder.dconst_0();
+			else if(d==1) codeBuilder.dconst_1();
+			else codeBuilder.ldc(pool.doubleEntry(d));
+		} else if(type.equals(Type.Real)) {
+			float f=(float) value;
+			if(f==0) codeBuilder.fconst_0();
+			else if(f==1) codeBuilder.fconst_1();
+			else if(f==2) codeBuilder.fconst_2();
+			else codeBuilder.ldc(pool.floatEntry(f));
+		} else if(type.equals(Type.Boolean)) {
+			boolean b=(boolean) value;
+			if(b) codeBuilder.iconst_1(); else codeBuilder.iconst_0();
+		}
+		else {
+			Util.IERR("NOT IMPL: Constant.buildByteCode: "+this.type+"  "+this);
+		}
+	}
+
+	public static void buildIntConst(CodeBuilder codeBuilder, boolean b) {
+		if(b) codeBuilder.iconst_1(); else codeBuilder.iconst_0();
+	}
+	
+	public static void buildIntConst(CodeBuilder codeBuilder, int i) {
+		switch(i) {
+			case 0: codeBuilder.iconst_0(); break;
+			case 1: codeBuilder.iconst_1(); break;
+			case 2: codeBuilder.iconst_2(); break;
+			case 3: codeBuilder.iconst_3(); break;
+			case 4: codeBuilder.iconst_4(); break;
+			case 5: codeBuilder.iconst_5(); break;
+			default: // bipush, sipush or ldc
+				if(i<Byte.MAX_VALUE && i>Byte.MIN_VALUE) codeBuilder.bipush(i);
+				else if(i<Short.MAX_VALUE && i>Short.MIN_VALUE) codeBuilder.sipush(i);
+				else codeBuilder.ldc(codeBuilder.constantPool().intEntry(i));
+		}
 	}
 
 	@Override

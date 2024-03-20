@@ -10,11 +10,21 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
+import simula.compiler.syntaxClass.declaration.Parameter;
+import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
+import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -77,6 +87,58 @@ public final class GotoStatement extends Statement {
   		Type type = label.type;
 		Util.ASSERT(type.equals(Type.Label), "Invariant");
 		GeneratedJavaClass.code("_GOTO(" + label.toJavaCode() + ");","GOTO EVALUATED LABEL");
+	}
+	
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+//		public void _GOTO(final RTS_LABEL q) {
+//			if (RTS_COMMON.Option.GOTO_TRACING)
+//				RTS_COMMON.TRACE("_RTObject.GOTO: " + q);
+//			throw (q);
+//		}
+//        32: aload_0
+//        33: aload_0
+//        34: getfield      #14                 // Field _LABEL_L1:Lsimula/runtime/RTS_RTObject$RTS_LABEL;
+//        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V
+//		ClassDesc CD_Lab=CD.RTS_LABEL;
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		FieldRefEntry FRE_Arr=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), arrayIdent, CD_Lab);
+		
+//		Util.buildSNAPSHOT(codeBuilder,"GOTO "+label); // TODO: SNAPSHOT
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		
+//		System.out.println("GotoStatement.buildByteCode: "+label.getClass().getSimpleName()+"  "+label);
+		if(label instanceof VariableExpression var) {
+			Meaning meaning = var.meaning;
+//			System.out.println("GotoStatement.buildByteCode: "+meaning.declaredAs.getClass().getSimpleName()+"  "+meaning.declaredAs);
+//			System.out.println("GotoStatement.buildByteCode: label="+label.getClass().getSimpleName()+"  "+label);
+			if(meaning.declaredAs instanceof LabelDeclaration lab) {
+//				lab.buildLabelQuant(codeBuilder);
+					codeBuilder.aload(0);
+				label.buildEvaluation(null,codeBuilder);
+				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+			} else if(meaning.declaredAs instanceof Parameter par) {
+//				System.out.println("GotoStatement.buildByteCode: par.kind="+par.kind);
+				if(par.kind != Parameter.Kind.Procedure)
+					codeBuilder.aload(0);
+				label.buildEvaluation(null,codeBuilder);
+				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+			} else if(meaning.declaredAs instanceof SwitchDeclaration swtch) {
+//				swtch.buildByteCode(codeBuilder);
+				codeBuilder.aload(0);
+				label.buildEvaluation(null,codeBuilder);
+				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+			} else if(meaning.declaredAs instanceof VirtualSpecification virt) {
+				codeBuilder.aload(0);
+				label.buildEvaluation(null,codeBuilder);
+				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+//				Util.IERR(null);
+			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName()+"  "+label);
+		} else Util.IERR("");
 	}
 
 	@Override

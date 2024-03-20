@@ -293,7 +293,8 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Generate .java or .class files
 			// ***************************************************************
-			if (Option.GENERATE_BYTEFILE) {
+//			if (Option.GENERATE_BYTEFILE) {
+			if (!Option.CREATE_JAVA_SOURCE) {
 				if (Option.TRACING)
 					Util.println("BEGIN Generate .class Output Code");
 				// *** Generate .class files
@@ -323,17 +324,20 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** CALL JAVA COMPILER
 			// ***************************************************************
-			if(!Option.GENERATE_BYTEFILE) doCallJavaCompiler();
+//			if(!Option.GENERATE_BYTEFILE) doCallJavaCompiler();
+			if(Option.CREATE_JAVA_SOURCE) doCallJavaCompiler();
 
 			// ***************************************************************
 			// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
 			// ***************************************************************
-			if(!Option.GENERATE_BYTEFILE) doByteCodeEngineering();
+//			if(!Option.GENERATE_BYTEFILE) doByteCodeEngineering();
+			if(Option.CREATE_JAVA_SOURCE) doByteCodeEngineering();
 
 			// ***************************************************************
 			// *** POSSIBLE - LIST GENERATED .class FILES
 			// ***************************************************************
-			if(Option.LIST_GENERATED_CLASS_FILES && !Option.GENERATE_BYTEFILE)
+//			if(Option.LIST_GENERATED_CLASS_FILES && !Option.GENERATE_BYTEFILE)
+			if(Option.LIST_GENERATED_CLASS_FILES && Option.CREATE_JAVA_SOURCE)
 				listGeneratedClassFiles();
 
 			// ***************************************************************

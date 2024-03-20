@@ -11,6 +11,8 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
@@ -121,6 +123,22 @@ public final class ConditionalStatement extends Statement implements Externaliza
 			GeneratedJavaClass.code("}");
 		} else
 			GeneratedJavaClass.code("}");
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		condition.buildEvaluation(null,codeBuilder);
+		Label elseLabel = codeBuilder.newLabel();
+		codeBuilder.ifeq(elseLabel);
+		thenStatement.buildByteCode(codeBuilder);
+		if(elseStatement != null) {
+			Label endLabel = codeBuilder.newLabel();
+			codeBuilder.goto_(endLabel);
+			codeBuilder.labelBinding(elseLabel);
+			elseStatement.buildByteCode(codeBuilder);
+			codeBuilder.labelBinding(endLabel);
+		} else codeBuilder.labelBinding(elseLabel);
 	}
 	
 	@Override

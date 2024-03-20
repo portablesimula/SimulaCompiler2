@@ -11,10 +11,23 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.attribute.SignatureAttribute;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.expression.RemoteVariable;
+import simula.compiler.syntaxClass.expression.VariableExpression;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Util;
 	
 /**
@@ -288,6 +301,174 @@ public final class Parameter extends Declaration implements Externalizable {
 	public String toJavaCode() {
 		return (toJavaType() + ' ' + externalIdent);
 	}
+	
+	public void buildParamCode(CodeBuilder codeBuilder,Expression expr) {
+//		ASSERT_SEMANTICS_CHECKED();
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if (mode == Parameter.Mode.name) {
+			buildNameParam(codeBuilder,this,expr);
+		} else {
+		switch (kind) {
+			case Array:
+//				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
+				expr.buildEvaluation(null,codeBuilder);
+				if(mode == Parameter.Mode.value) {
+					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(type),
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$"+type.getArrayType()+';'));
+				}
+				break;
+			case Label:
+				Util.IERR("LABEL");
+//				return ("RTS_LABEL");
+				break;
+			case Procedure:
+//				return ("RTS_PRCQNT");
+//				new RTS_PRCQNT(((adHoc000)(_CUR))
+//		         4: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+//		         7: new           #25                 // class simula/runtime/RTS_PRCQNT
+//		        10: dup
+//		        11: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+//		        14: checkcast     #8                  // class simulaTestPrograms/adHoc000
+//		        17: ldc           #27                 // class simulaTestPrograms/adHoc000_PPP
+//		        19: invokespecial #29                 // Method simula/runtime/RTS_PRCQNT."<init>":(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V
+
+//				System.out.println("Parameter.buildParamCode: par="+this);
+//				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
+				Expression beforeDot = null;
+				if(expr instanceof RemoteVariable rem) {
+					beforeDot = rem.obj;
+					expr = rem.var;
+				}
+				VariableExpression var=(VariableExpression)expr;
+//				System.out.println("Parameter.buildParamCode: var.identifier="+var.identifier);
+//				System.out.println("Parameter.buildParamCode: var.meaning="+var.meaning);
+//				System.out.println("Parameter.buildParamCode: var.meaning.declaredAs="+var.meaning.declaredAs.getClass().getSimpleName());
+				
+				Declaration decl = var.meaning.declaredAs;
+				if(decl instanceof ProcedureDeclaration proc) {
+//					System.out.println("Parameter.buildParamCode: par="+proc.externalIdent);
+					codeBuilder
+						.new_(CD.RTS_PRCQNT)
+						.dup();
+
+					if(beforeDot == null) {
+						codeBuilder
+							.aload(0)
+							.checkcast(BlockDeclaration.currentClassDesc());
+					} else {
+						beforeDot.buildEvaluation(null, codeBuilder);
+					}
+
+					MethodTypeDesc MTD_THIS=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V");
+					codeBuilder
+						.ldc(pool.loadableConstantEntry(proc.getClassDesc()))
+						.invokespecial(CD.RTS_PRCQNT, "<init>", MTD_THIS);
+				} else if(decl instanceof Parameter par) {
+//				        10: aload_0
+//				        11: getfield      #9                  // Field p_FFF:Lsimula/runtime/RTS_NAME;
+//				        14: invokevirtual #63                 // Method simula/runtime/RTS_NAME.get:()Ljava/lang/Object;
+//				        17: checkcast     #67                 // class simula/runtime/RTS_PRCQNT
+					MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;");
+					codeBuilder
+						.aload(0)
+						.getfield(par.getFieldRefEntry(pool))
+						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MTD))
+						.checkcast(CD.RTS_PRCQNT);
+				} else {
+					Util.IERR("PROC: "+decl.getClass().getSimpleName());
+				}
+				break;
+			case Simple: // Fall through
+				expr.buildEvaluation(null,codeBuilder);
+				if(mode == Parameter.Mode.value && type.equals(Type.Text)) {
+					codeBuilder.invokestatic(CD.RTS_ENVIRONMENT,
+							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+				}
+			}
+		}
+	}
+	
+	public static void buildNameParam(CodeBuilder codeBuilder,Expression expr) {
+		buildNameParam(codeBuilder,null,expr);
+	}	
+	
+	public static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
+//		System.out.println("Parameter.buildNameParam: par="+par);
+//		System.out.println("Parameter.buildNameParam: expr="+expr+"  type="+expr.type);
+		Thunk.buildInvoke((par==null)?null:par.kind, expr, codeBuilder);
+	}
+	
+
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+//		System.out.println("Parameter.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
+		ClassDesc CD_cls=declaredIn.getClassDesc();
+		ClassDesc CD_type=null; //type.toClassDesc2(kind,mode);
+		if(kind==Kind.Procedure)
+			 CD_type=Type.Procedure.toClassDesc2(kind,mode);
+		else CD_type=type.toClassDesc2(kind,mode);
+		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
+	}
+	
+	@Override
+	public String getFieldIdentifier() {
+		if(declaredIn instanceof ClassDeclaration cls)
+			return("p"+cls.prefixLevel()+'_'+identifier);
+		else return("p_"+identifier);
+	}
+
+	@Override
+	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+		String ident = getFieldIdentifier();
+		if (mode == Parameter.Mode.name) {
+//			System.out.println("Parameter.buildField: "+this);
+			if (kind == Parameter.Kind.Procedure) {
+				classBuilder.withField(ident, CD.RTS_NAME, ClassFile.ACC_PUBLIC);
+			} else {			
+				classBuilder.withField(ident, CD.RTS_NAME, fieldBuilder -> {
+					fieldBuilder
+					.withFlags(ClassFile.ACC_PUBLIC)
+					.with(SignatureAttribute.of(type.toClassSignature(mode)));
+				});
+			}
+		} else if (kind == Parameter.Kind.Array) {
+			classBuilder.withField(ident, CD.RTS_ARRAY, ClassFile.ACC_PUBLIC);
+		} else if (kind == Parameter.Kind.Procedure) {
+			classBuilder.withField(ident, CD.RTS_PRCQNT, ClassFile.ACC_PUBLIC);
+		} else {
+//			System.out.println("Parameter.buildField: "+this);
+			ClassDesc CD=type.toClassDesc(kind,mode);
+			classBuilder.withField(ident, CD, ClassFile.ACC_PUBLIC);
+		}
+	}
+	
+	public ClassDesc type_toClassDesc() {
+		switch(this.kind) {
+		case Array: return(this.type.toClassDesc(this.kind,this.mode));
+		case Label:
+			Util.IERR("");
+			return(null);
+		case Procedure:		  return(Type.Procedure.toClassDesc(this.kind,this.mode));
+		case Simple: default: return(this.type.toClassDesc(this.kind,this.mode));
+		}
+	}
+
+	public void loadParameter(CodeBuilder codeBuilder,int ofst) {
+//		System.out.println("CUtil.loadParameter: codeBuilder.<"+type+">load("+ofst+")");
+		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
+		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
+		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
+		else if(type.getKeyWord()==KeyWord.REF) codeBuilder.aload(ofst);
+		else if(type.equals(Type.Integer)) codeBuilder.iload(ofst);
+		else if(type.equals(Type.LongReal)) codeBuilder.dload(ofst);
+		else if(type.equals(Type.Real)) codeBuilder.fload(ofst);
+		else if(type.equals(Type.Boolean)) codeBuilder.iload(ofst);
+		else if(type.equals(Type.Character)) codeBuilder.iload(ofst);
+		else if(type.equals(Type.Text)) codeBuilder.aload(ofst);
+		else if(type.equals(Type.Procedure)) codeBuilder.aload(ofst);
+		else if(type.equals(Type.Label)) codeBuilder.aload(ofst);
+		else Util.IERR("NOT IMPLEMENTED: loadParameter "+type);
+	}
+	
 
 	// ***********************************************************************************************
 	// *** Printing Utility: editParameterList

@@ -28,7 +28,7 @@ public final class OverLoad extends Type {
 	/**
 	 * The overloaded types.
 	 */
-	private Type[] type;
+	public Type[] type;
 	
 	/**
 	 * Create a new OverLoad type list.

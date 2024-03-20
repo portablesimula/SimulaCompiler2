@@ -10,9 +10,13 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.utilities.Global;
@@ -228,6 +232,115 @@ public final class ActivationStatement extends Statement {
 		String staticLink = activate3.edQualifiedStaticLink();
 		return (staticLink + ".ActivateAfter(" + REAC + ',' + obj1 + ',' + obj2 + ')');
 	}
+	
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+//		Util.buildSNAPSHOT(codeBuilder, "ACTIVATION: "+this);
+		Type refProcess = Type.Ref("Process");
+		if (object1 != null) object1 = TypeConversion.testAndCreate(refProcess, object1);
+		if (object2 != null) object2 = TypeConversion.testAndCreate(refProcess, object2);
+		if(time != null) 	 time = TypeConversion.testAndCreate(Type.LongReal, time);
+
+		switch (code) {
+		    case at:     buildActivateAt(codeBuilder); break;
+		    case delay:	 buildActivateDelay(codeBuilder); break;
+		    case before: buildActivateBefore(codeBuilder); break;
+		    case after:  buildActivateAfter(codeBuilder); break;
+		    case direct:
+			default: buildActivateDirect(codeBuilder);
+		}
+	}
+
+	/**
+	 * Edit direct (re)activation
+	 * @return the resulting Java source code
+	 */
+	private void buildActivateDirect(CodeBuilder codeBuilder) {
+//        0: getstatic     #47                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+//        3: checkcast     #8                  // class simulaTestPrograms/adHoc000
+//        6: iconst_0  or  iconst_1   Avhengig av  REAC
+//        7: aload_0
+//        8: getfield      #7                  // Field bil1_2:LsimulaTestPrograms/adHoc000_Car;
+//       11: invokevirtual #51                 // Method ActivateDirect:(ZLsimula/runtime/RTS_Process;)V
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateDirect");
+		activate1.buildQualifiedStaticLink(codeBuilder);
+		Constant.buildIntConst(codeBuilder, REAC);
+		object1.buildEvaluation(null, codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
+				"ActivateDirect", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;)V")));
+	}
+
+	/**
+	 * Edit (Re)Activate Process AT ...
+	 * @return the resulting Java source code
+	 */
+	private void buildActivateAt(CodeBuilder codeBuilder) {
+//        29: getstatic     #49                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+//        32: checkcast     #8                  // class simulaTestPrograms/adHoc000
+//        35: iconst_0
+//        36: aload_0
+//        37: getfield      #13                 // Field bil2_2:LsimulaTestPrograms/adHoc000_Car;
+//        40: ldc2_w        #66                 // double 7.449999809265137d
+//        43: iconst_0
+//        44: invokevirtual #68                 // Method ActivateAt:(ZLsimula/runtime/RTS_Process;DZ)V
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateAt");
+		activate1.buildQualifiedStaticLink(codeBuilder);
+		Constant.buildIntConst(codeBuilder, REAC);
+		object1.buildEvaluation(null, codeBuilder);
+		time.buildEvaluation(null, codeBuilder);
+		Constant.buildIntConst(codeBuilder, prior);
+		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
+				"ActivateAt", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V")));
+	}
+
+	/**
+	 * Edit (Re)Activate Process DELAY ...
+	 * @return the resulting Java source code
+	 */
+	private void buildActivateDelay(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateDelay");
+		activate1.buildQualifiedStaticLink(codeBuilder);
+		Constant.buildIntConst(codeBuilder, REAC);
+		object1.buildEvaluation(null, codeBuilder);
+		time.buildEvaluation(null, codeBuilder);
+		Constant.buildIntConst(codeBuilder, prior);
+		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
+				"ActivateDelay", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V")));
+	}
+
+	/**
+	 * Edit (Re)Activate Process BEFORE ...
+	 * @return the resulting Java source code
+	 */
+	private void buildActivateBefore(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateBefore");
+		activate1.buildQualifiedStaticLink(codeBuilder);
+		Constant.buildIntConst(codeBuilder, REAC);
+		object1.buildEvaluation(null, codeBuilder);
+		object2.buildEvaluation(null, codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
+				"ActivateBefore", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V")));
+	}
+
+	/**
+	 * Edit (Re)Activate Process AFTER ...
+	 * @return the resulting Java source code
+	 */
+	private void buildActivateAfter(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateAfter");
+		activate1.buildQualifiedStaticLink(codeBuilder);
+		Constant.buildIntConst(codeBuilder, REAC);
+		object1.buildEvaluation(null, codeBuilder);
+		object2.buildEvaluation(null, codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
+				"ActivateAfter", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V")));
+	}
+
 
 	@Override
 	public void printTree(final int indent) {

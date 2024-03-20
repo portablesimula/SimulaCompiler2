@@ -7,6 +7,7 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -160,6 +161,14 @@ public abstract class Statement extends SyntaxClass {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		GeneratedJavaClass.code(toJavaCode() + ';');
+	}
+
+	/**
+	 * Build Java ByteCode.
+	 */
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName());
 	}
 
 }

@@ -4,7 +4,12 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
+
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
@@ -32,6 +37,35 @@ public final class InlineStatement extends Statement implements Externalizable {
 		else if(kind.equals("catch")) GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
 		else
 			Util.IERR("");
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber=lineNumber;
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		ASSERT_SEMANTICS_CHECKED();
+		if(kind.equals("detach")) {
+			// GeneratedJavaClass.code("detach();","Process'detach");
+			codeBuilder
+					.aload(0)
+					.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),"detach", MethodTypeDesc.ofDescriptor("()V")));
+		}
+		else if(kind.equals("terminate")) {
+			// GeneratedJavaClass.code("terminate();","Process'terminate");
+			codeBuilder
+					.aload(0)
+					.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),"terminate", MethodTypeDesc.ofDescriptor("()V")));
+		}
+		else if(kind.equals("try")) {
+			// GeneratedJavaClass.code("try {");
+			Util.IERR("NOT IMPL");
+		}
+		else if(kind.equals("catch")) {
+			// GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
+			Util.IERR("NOT IMPL");
+		}
+		else
+			Util.IERR("IMPOSSIBLE");
 	}
 
 	@Override

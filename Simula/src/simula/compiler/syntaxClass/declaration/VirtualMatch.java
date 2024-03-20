@@ -11,9 +11,15 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.SyntaxClass;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Util;
 
 /**
@@ -57,6 +63,31 @@ public final class VirtualMatch extends Declaration implements Externalizable {
 		if (match != null)
 			matchCode = "{ return(new RTS_PRCQNT(this," + match.getJavaIdentifier() + ".class)); }";
 		GeneratedJavaClass.code("public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
+	}
+
+	public void buildMethod(ClassBuilder classBuilder) {
+	    String ident=virtualSpec.getSimpleVirtualIdentifier();
+//	    System.out.println("VirtualMatch.buildMethod: "+this);
+		MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;");
+		classBuilder
+			.withMethodBody(ident, MTD_STM, ClassFile.ACC_PUBLIC,
+					codeBuilder -> buildMethodBody(codeBuilder));
+	}
+	
+	private void buildMethodBody(CodeBuilder codeBuilder) {
+		if (match == null) {
+			Util.IERR("TROR IKKE AT DETTE FOREKOMMER");
+			Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder);
+		} else {
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+			codeBuilder
+				.new_(CD.RTS_PRCQNT)
+				.dup()
+				.aload(0)
+				.ldc(pool.classEntry(match.getClassDesc()))
+				.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"))
+				.areturn();	
+		}
 	}
 
 	public void printTree(int indent) {

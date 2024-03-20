@@ -8,8 +8,11 @@
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
@@ -216,6 +219,98 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
+	// *** Byte Coding Utility: buildCTX
+	// ***********************************************************************************************
+	/**
+	 * Coding utility: Build current context chain.
+	 */
+	public boolean buildCTX(CodeBuilder codeBuilder) {
+		return(buildCTX(0, codeBuilder));
+	}
+	
+	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
+		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
+		DeclarationScope endScope=this;                     // The scope of the attribute to access.
+		if (rtBlockLevel == 0) {
+			codeBuilder.getstatic(BlockDeclaration.currentClassDesc(),"_CTX",CD.RTS_CLASS);		
+			return(false);
+		}
+		int curLevel = curScope.rtBlockLevel;
+		int ctxDiff = curLevel - endScope.rtBlockLevel - corr;
+		codeBuilder.aload(0); // Current Object
+		boolean withFollowSL = false;
+		if(Global.getCurrentScope() instanceof Thunk thunk) {
+//			System.out.println("================== BEGIN: Build Scope Chain === From THUNK ===");
+//			printScopeChain(curScope);
+			curScope=thunk.declaredIn;
+			DeclarationScope encl = curScope;
+			while(encl instanceof ConnectionBlock) encl = encl.declaredIn;
+			codeBuilder
+				.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
+//				.checkcast(thunk.declaredIn.getClassDesc());
+				.checkcast(encl.getClassDesc());
+//			withFollowSL = true;			
+//			System.out.println("DeclarationScope.buildCTX: CD_ENC="+CD_ENC);
+//			System.out.println("DeclarationScope.buildCTX: CD_Qual="+this.getJavaIdentifier());
+//			System.out.println("DeclarationScope.buildCTX: thunk.declaredIn="+thunk.declaredIn.getClass().getSimpleName()+"  "+thunk.declaredIn);
+//			System.out.println("DeclarationScope.buildCTX: thunk.declaredIn.rtBlockLevel="+thunk.declaredIn.rtBlockLevel);
+
+			ctxDiff = curScope.rtBlockLevel - rtBlockLevel;
+		}
+
+//		System.out.println("================== BEGIN: Build Scope Chain ==================");
+//		System.out.println("   DeclarationScope.buildCTX: Cur Scope: "+curScope.externalIdent+"  rtBlockLevel="+curLevel);
+//		System.out.println("   DeclarationScope.buildCTX: End Scope: "+this.externalIdent+"  rtBlockLevel="+rtBlockLevel);
+//		System.out.println("   DeclarationScope.buildCTX: ctxDiff:   "+curLevel+"  "+rtBlockLevel+" ==> "+ctxDiff);
+//		printScopeChain(curScope);
+//		Util.IERR("");
+
+		while ((ctxDiff--) > 0) {
+			curScope=curScope.declaredIn;
+//			System.out.println("   DeclarationScope.buildCTX: GETFIELD SL of type "+cast);
+			withFollowSL = true;			
+			codeBuilder.getfield(CD.RTS_RTObject,"_SL",CD.RTS_RTObject);
+		}
+//		System.out.println("================== ENDOF: Build Scope Chain ==================");
+//		Util.IERR("");
+		return(withFollowSL);
+	}
+
+	
+
+	// ***********************************************************************************************
+	// *** Coding Utility: buildCTX
+	// ***********************************************************************************************
+	/**
+	 * Coding utility: Build context chain.
+	 *
+	 * @param ctxDiff block level difference.
+	 * @return edited context chain
+	 */
+	public static boolean buildCTX2(int ctxDiff,CodeBuilder codeBuilder) {
+		DeclarationScope curScope=Global.getCurrentScope();
+		boolean withFollowSL = false;
+		ClassDesc CD_RTObject=CD.RTS_RTObject;
+		codeBuilder.aload(0);
+		while ((ctxDiff--) > 0) {
+			curScope=curScope.declaredIn;
+			withFollowSL = true;			
+			codeBuilder.getfield(CD_RTObject,"_SL",CD_RTObject);
+		}
+		return(withFollowSL);
+	}
+	
+	public static void printScopeChain(DeclarationScope scope,String title) {
+		System.out.println("\n   ================== Current Scope Chain: "+title+" ==================");
+		while(scope != null) {
+			System.out.println("   DeclarationScope.buildCTX: Scope: "+scope.externalIdent+"  rtBlockLevel="+scope.rtBlockLevel);
+			scope=scope.declaredIn;
+		}
+		System.out.println("   =========================================================");
+	}
+
+
+	// ***********************************************************************************************
 	// *** Print Utility: edScopeChain
 	// ***********************************************************************************************
 	/**
@@ -252,6 +347,13 @@ public abstract class DeclarationScope extends Declaration  {
 			scope = scope.declaredIn;
 		}
 		return (id);
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding Utility: getClassDesc   -- Redefined in StandardClass and ConnectionBlock
+	// ***********************************************************************************************
+	public ClassDesc getClassDesc() {
+		return(ClassDesc.of(Global.packetName + '.' + externalIdent));
 	}
 	
 	public void printStaticChain(String title) {

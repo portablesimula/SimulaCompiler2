@@ -11,6 +11,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.utilities.Option;
@@ -55,6 +56,10 @@ public final class DummyStatement extends Statement implements Externalizable {
 	public void doJavaCoding() { /* No Coding */
 		ASSERT_SEMANTICS_CHECKED();
 		GeneratedJavaClass.code(";");
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
 	}
 
 	@Override

@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -186,6 +188,72 @@ public final class BooleanExpression extends Expression {
 				 	 return (lhs.get() + opr.toJavaCode() + '(' + rhs.get() + ')');
 				else return ("(" + lhs.get() + opr.toJavaCode() + '(' + rhs.get() + "))");
 			}
+		}
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		switch(opr) {
+			case AND:
+				lhs.buildEvaluation(null,codeBuilder);
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder.iand(); break;
+			case OR:
+				lhs.buildEvaluation(null,codeBuilder);
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder.ior(); break;
+			case IMP:
+				lhs.buildEvaluation(null,codeBuilder);
+				UnaryOperation.buildNOT(codeBuilder);
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder.ior(); break;
+			case EQV:
+				lhs.buildEvaluation(null,codeBuilder);
+				rhs.buildEvaluation(null,codeBuilder);
+				Label L1 = codeBuilder.newLabel();
+				Label L2 = codeBuilder.newLabel();
+				codeBuilder
+						.if_icmpne(L1)
+						.iconst_1()
+						.goto_(L2)
+						.labelBinding(L1)
+						.iconst_0()
+						.labelBinding(L2);
+				break;
+			case AND_THEN:
+				Label AL1 = codeBuilder.newLabel();
+				Label AL2 = codeBuilder.newLabel();
+				lhs.buildEvaluation(null,codeBuilder);
+				codeBuilder
+						.ifeq(AL1);
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder
+						.ifeq(AL1)
+						.iconst_1()
+						.goto_(AL2)
+						.labelBinding(AL1)
+						.iconst_0()
+						.labelBinding(AL2);
+				break;
+			case OR_ELSE:
+				Label OL1 = codeBuilder.newLabel();
+				Label OL2 = codeBuilder.newLabel();
+				Label OL3 = codeBuilder.newLabel();
+				lhs.buildEvaluation(null,codeBuilder);
+				codeBuilder
+						.ifne(OL1);
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder
+						.ifeq(OL2)
+						.labelBinding(OL1)
+						.iconst_1()
+						.goto_(OL3)
+						.labelBinding(OL2)
+						.iconst_0()
+						.labelBinding(OL3);
+				break;
+			default: Util.IERR("IMPOSSIBLE: "+opr);
 		}
 	}
 

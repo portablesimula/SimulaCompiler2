@@ -8,11 +8,22 @@
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.Externalizable;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.instruction.SwitchCase;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Util;
 
 /**
  * Label Declaration.
@@ -108,6 +119,146 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 					"Local Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
 		}
 	}
+
+//	@Override
+//	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+//		String ident = getFieldIdentifier();
+////		System.out.println("LabelDeclaration.buildField: "+externalIdent+", ident="+ident);
+//		ClassDesc CD.RTS_LABEL = CD.RTS_LABEL;
+//		classBuilder.withField(ident, CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
+//	}
+
+	@Override
+	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+		String ident = getFieldIdentifier();
+		int prefixLevel = getPrefixLevel();
+		
+		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
+		if (virtSpec != null) {
+			MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$RTS_LABEL;");
+			classBuilder
+				.withMethodBody(virtSpec.getSimpleVirtualIdentifier(), MTD_STM, ClassFile.ACC_PUBLIC,
+						codeBuilder -> buildVirtualMatchMethodBody(prefixLevel,codeBuilder));
+		} else {
+			classBuilder.withField(ident, CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
+		}
+	}
+	
+	private int getPrefixLevel() {
+		int prefixLevel=0;
+		if(movedTo != null) {
+			if(movedTo instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();
+		} else {
+			if(declaredIn instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();			
+		}
+		return(prefixLevel);
+	}
+	
+	private void buildVirtualMatchMethodBody(int prefixLevel,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		// Build virtual match method:
+		// public RTS_LABEL " + virtSpec.getVirtualIdentifier()
+		// { return(new RTS_LABEL(this, prefixLevel, index, "identifier")); }
+//        0: new           #1                  // class simula/runtime/RTS_RTObject$RTS_LABEL
+//        3: dup
+//        4: aload_0
+//        5: aload_0
+//        6: iconst_1			// prefixLevel
+//        7: iconst_1			// index
+//        8: ldc           #3	// String L
+//       10: invokespecial #5   // Method simula/runtime/RTS_RTObject$RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
+//       13: areturn
+		codeBuilder
+			.new_(CD.RTS_LABEL)
+			.dup()
+			.aload(0)
+			.aload(0);
+		Constant.buildIntConst(codeBuilder, prefixLevel);
+		Constant.buildIntConst(codeBuilder, index);
+		codeBuilder.ldc(pool.stringEntry(this.identifier));
+		codeBuilder
+			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
+			.areturn();
+	}
+
+
+	@Override
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+//		System.out.println("LabelDeclaration.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
+		DeclarationScope encl = (movedTo != null)? movedTo : declaredIn;
+		ClassDesc CD_cls=encl.getClassDesc();
+		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD.RTS_LABEL));
+	}
+	
+	@Override
+	public String getFieldIdentifier() {
+//		System.out.println("LabelDeclaration.getFieldIdentifier: "+externalIdent);
+		return(this.externalIdent);
+	}
+
+	public void buildInitAttribute(CodeBuilder codeBuilder) {
+		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
+		if (virtSpec == null) {
+			buildLabelQuant(codeBuilder);
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+//			ClassDesc CD.RTS_LABEL = CD.RTS_LABEL;
+//			// 19: putfield #14  // Field _LABEL_L1:Lsimula/runtime/RTS_RTObject$RTS_LABEL;
+//			codeBuilder.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),getFieldIdentifier(), CD.RTS_LABEL));
+			codeBuilder.putfield(getFieldRefEntry(pool));
+		}
+	}
+	
+	public void doBind(CodeBuilder codeBuilder) {
+		BlockDeclaration blk=(BlockDeclaration) this.declaredIn;
+//		System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
+		
+		while(!blk.hasLabel()) {
+			blk = (BlockDeclaration)blk.declaredIn;			
+		}
+		
+		SwitchCase switchCase=blk.tableSwitchCases.get(index-1);
+//		System.out.println("LabelDeclaration.doBind: "+this+"   SwitchCase="+switchCase);
+		if(isBinded) {
+			System.out.println("LabelDeclaration.doBind: "+this+"   SwitchCase="+switchCase);
+			System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
+			Util.IERR("IMPOSSIBLE: "+switchCase);
+		}
+		codeBuilder.labelBinding(switchCase.target());
+		isBinded = true;
+	}
+	
+	public void buildLabelQuant(CodeBuilder codeBuilder) {
+		// new RTS_LABEL(this,0,1,"L1"); // Local Label #1=L1 At PrefixLevel 0
+//        5: aload_0
+//        6: new           #7                  // class simula/runtime/RTS_RTObject$RTS_LABEL
+//        9: dup
+//       10: aload_0
+//       11: aload_0
+//       12: iconst_0
+//       13: iconst_1
+//       14: ldc           #9                  // String L1
+//       16: invokespecial #11                 // Method simula/runtime/RTS_RTObject$RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
+		codeBuilder
+			.aload(0)
+			.new_(CD.RTS_LABEL)
+			.dup()
+			.aload(0)
+			.aload(0);
+		
+		int prefixLevel=0;
+		if(movedTo != null) {
+			if(movedTo instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();
+		} else {
+			if(declaredIn instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();			
+		}
+		Constant.buildIntConst(codeBuilder, prefixLevel);
+		Constant.buildIntConst(codeBuilder, index);
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V");
+		codeBuilder
+			.ldc(codeBuilder.constantPool().stringEntry(identifier))
+			.invokespecial(CD.RTS_LABEL, "<init>", MTD);
+	}
+
 
 	@Override
 	public String toString() {

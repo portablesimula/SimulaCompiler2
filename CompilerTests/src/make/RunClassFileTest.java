@@ -278,7 +278,7 @@ public final class RunClassFileTest {
 
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
-			Option.GENERATE_BYTEFILE=true;
+//			Option.CREATE_JAVA_SOURCE = true;
 			Option.TESTING_STACK_SIZE = true;
 			Option.LIST_GENERATED_CLASS_FILES=true;
 		    Option.verbose = true;

@@ -7,6 +7,8 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.lang.classfile.CodeBuilder;
+
 //import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.parsing.Parse;
@@ -550,6 +552,14 @@ public abstract class Expression extends SyntaxClass {
 		}
 		Util.error("Expression: "+this+" is not a Constant");
 		return(0);
+	}
+
+
+	/**
+	 * Build Evaluation Code.
+	 */
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		Util.IERR("Method buildEvaluation need a redefinition in "+this.getClass().getSimpleName());
 	}
 
 

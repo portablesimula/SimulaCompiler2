@@ -11,6 +11,10 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
@@ -201,6 +205,15 @@ public final class VirtualSpecification extends Declaration implements Externali
 		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "()");
 	}
 
+	/**
+	 * Returns the virtual identifier used in JVM code.
+	 * @return the virtual identifier used in JVM code
+	 */
+	public String getSimpleVirtualIdentifier() {
+		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
+		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel());
+	}
+
 	// ***********************************************************************************************
 	// *** Utility: getVirtualSpecification
 	// ***********************************************************************************************
@@ -239,6 +252,26 @@ public final class VirtualSpecification extends Declaration implements Externali
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL " : "RTS_PRCQNT ";
 		GeneratedJavaClass.code("public " + qnt + getVirtualIdentifier() + matchCode);
 	}
+
+	public String getFieldIdentifier() {
+		ClassDeclaration cls = (ClassDeclaration) this.declaredIn;
+		return(externalIdent+"_"+cls.prefixLevel()+"()");
+	}
+
+	public void buildMethod(ClassBuilder classBuilder) {
+//	    System.out.println("VirtualSpecification.buildMethod: "+this);
+	    String ident=getSimpleVirtualIdentifier();
+		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+qnt);
+		classBuilder
+			.withMethodBody(ident, MTD, ClassFile.ACC_PUBLIC,
+					codeBuilder -> buildMethodBody(codeBuilder));
+	}
+	
+	private void buildMethodBody(CodeBuilder codeBuilder) {
+		Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder);
+	}
+
 
 	public void printTree(int indent) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);

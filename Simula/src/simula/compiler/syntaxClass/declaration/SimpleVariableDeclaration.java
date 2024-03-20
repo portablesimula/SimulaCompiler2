@@ -11,6 +11,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -193,6 +200,50 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 		String value = type.edDefaultValue();
 		return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + '=' + value + ';');
 	}
+
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+//		System.out.println("SimpleVariableDeclaration.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
+		ClassDesc CD_cls=declaredIn.getClassDesc();
+		ClassDesc CD_type=type.toClassDesc();
+//		System.out.println("SimpleVariableDeclaration.getFieldRefEntry: RETURN: fieldRefEntry("+CD_cls+','+identifier+','+ CD_type+")");
+		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
+	}
+	
+	@Override
+	public String getFieldIdentifier() {
+		return(this.externalIdent);
+	}
+
+	@Override
+	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+		ClassDesc CD=type.toClassDesc();
+		classBuilder.withField(getFieldIdentifier(), CD, ClassFile.ACC_PUBLIC);
+	}
+
+	@Override
+	public void buildInitAttribute(CodeBuilder codeBuilder) {
+//      // Field i = 0
+//      codeBuilder
+//              .aload(0)
+//              .iconst_0()
+//              .putfield(pool.fieldRefEntry(ClassDesc.of("simulaTestPrograms.adHoc06"),"iii", ConstantDescs.CD_int));
+		codeBuilder.aload(0);
+		if(type.getKeyWord()==KeyWord.REF)   codeBuilder.aconst_null();
+		else if(type.equals(Type.Integer))   codeBuilder.iconst_0();
+		else if(type.equals(Type.LongReal))  codeBuilder.dconst_0();
+		else if(type.equals(Type.Real))      codeBuilder.fconst_0();
+		else if(type.equals(Type.Boolean))   codeBuilder.iconst_0();
+		else if(type.equals(Type.Character)) codeBuilder.iconst_0();
+		else if(type.equals(Type.Text))      codeBuilder.aconst_null();
+		else if(type.equals(Type.Procedure)) codeBuilder.aconst_null();
+		else if(type.equals(Type.Label))     codeBuilder.aconst_null();
+		else Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
+		
+		ClassDesc CD=type.toClassDesc();
+		codeBuilder
+			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),this.getFieldIdentifier(), CD));
+	}
+
 	
 	@Override
 	public void printTree(final int indent) {

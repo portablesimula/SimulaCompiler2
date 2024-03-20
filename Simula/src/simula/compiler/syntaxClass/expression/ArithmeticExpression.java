@@ -10,9 +10,13 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -243,6 +247,58 @@ public final class ArithmeticExpression extends Expression {
 	public boolean maybeStatement() {
 		ASSERT_SEMANTICS_CHECKED();
 		return (false);
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		if(opr == KeyWord.EXP) {
+			// Real:     r2=((float)(Math.pow(((double)(r1)),((double)(e)))));
+			// LongReal: r2=Math.pow(r1,e);
+			// Integer:  k=_IPOW(i,j);
+			lhs.buildEvaluation(null,codeBuilder);
+			if(type.equals(Type.Integer)) {
+				rhs.buildEvaluation(null,codeBuilder);
+				codeBuilder.invokestatic(BlockDeclaration.currentClassDesc(), "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
+			} else {
+				if(type.equals(Type.Real)) codeBuilder.f2d();
+				rhs.buildEvaluation(null,codeBuilder);
+				if(type.equals(Type.Real)) codeBuilder.f2d();
+				codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "pow", MethodTypeDesc.ofDescriptor("(DD)D"));
+				if(type.equals(Type.Real)) codeBuilder.d2f();
+			}
+			return;
+		}
+		lhs.buildEvaluation(null,codeBuilder);
+		rhs.buildEvaluation(null,codeBuilder);
+		if(type.equals(Type.Integer)) {
+			switch (opr) {
+				case PLUS:   codeBuilder.iadd(); break;
+				case MINUS:  codeBuilder.isub(); break;
+				case MUL:    codeBuilder.imul(); break;
+				case DIV:    codeBuilder.idiv(); break;
+				case INTDIV: codeBuilder.idiv(); break;
+//			case EXP:
+				default:
+					Util.IERR("STOP: "+opr);
+			}
+		} else if(type.equals(Type.Real)) {
+			switch(opr) {
+				case PLUS:  codeBuilder.fadd(); break;
+				case MINUS: codeBuilder.fsub(); break;
+				case MUL:   codeBuilder.fmul(); break;
+				case DIV:   codeBuilder.fdiv(); break;
+				default: Util.IERR("IMPOSSIBLE: "+opr);
+			}
+		} else if(type.equals(Type.LongReal)) {
+			switch(opr) {
+				case PLUS:  codeBuilder.dadd(); break;
+				case MINUS: codeBuilder.dsub(); break;
+				case MUL:   codeBuilder.dmul(); break;
+				case DIV:   codeBuilder.ddiv(); break;
+				default: Util.IERR("IMPOSSIBLE: "+opr);
+			}
+		} else Util.IERR("NOT IMPL: "+type);
 	}
 
 	@Override

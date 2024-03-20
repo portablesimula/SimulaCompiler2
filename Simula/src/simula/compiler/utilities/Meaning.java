@@ -11,12 +11,22 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
 
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
+import simula.compiler.syntaxClass.declaration.Thunk;
+import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.expression.TypeConversion;
+import simula.compiler.syntaxClass.expression.VariableExpression;
 
 /**
  * Utility class Meaning.
@@ -102,6 +112,13 @@ public final class Meaning implements Externalizable {
 		else return (null);
 	}
 
+	public VariableExpression getInspectedVariable() {
+		Expression inspected = getInspectedExpression();
+		if(inspected instanceof TypeConversion tc) inspected = tc.expression;
+		VariableExpression inspectedVariable = (VariableExpression)inspected;
+		return(inspectedVariable);
+	}
+
 	// ***************************************************************************************
 	// *** CODING: edUnqualifiedStaticLink
 	// ***************************************************************************************
@@ -140,6 +157,148 @@ public final class Meaning implements Externalizable {
 			staticLink = "((" + cast + ")" + staticLink + ')';
 		}
 		return (staticLink);
+	}
+
+	// ***************************************************************************************
+	// *** CODING: buildQualifiedStaticLink
+	// ***************************************************************************************
+	/**
+	 * Coding utility: Build qualified static link chain.
+	 */
+	public void buildQualifiedStaticLink(CodeBuilder codeBuilder) {
+		// Edit staticLink reference
+		if(this.isConnected()) {
+	    	VariableExpression inspectedVariable = getInspectedVariable();
+			String id = inspectedVariable.getJavaIdentifier();
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+			FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),id, inspectedVariable.type.toClassDesc());
+			codeBuilder
+				.aload(0)
+				.getfield(FRE);
+		}
+		else {
+			String cast = declaredIn.getJavaIdentifier();
+			boolean withFollowSL = declaredIn.buildCTX(codeBuilder);
+			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+		}
+	}
+
+	// ***************************************************************************************
+	// *** JVM CODING: getFieldRefEntry
+	// ***************************************************************************************
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+		ClassDesc CD_type=declaredAs.type.toClassDesc();
+		ClassDesc CD_cls=ClassDesc.of(declaredIn.getJavaIdentifier());
+		return(pool.fieldRefEntry(CD_cls, declaredIn.getJavaIdentifier(), CD_type));
+	}
+
+	/**
+	 * Returns the inspected variable FieldRefEntry or null.
+	 * @return the inspected variable FieldRefEntry or null
+	 */
+	public FieldRefEntry getInspectedFieldRefEntry(ConstantPoolBuilder pool) {
+		if (isConnected()) {
+//			 return (((ConnectionBlock) declaredIn).getInspectedExpression());
+			ConnectionBlock connectionBlock=(ConnectionBlock)declaredIn;
+			VariableExpression inspectedVariable=connectionBlock.inspectedVariable;
+			VariableExpression inspVar=(VariableExpression)inspectedVariable;
+			SimpleVariableDeclaration inspVarDecl=(SimpleVariableDeclaration)inspVar.meaning.declaredAs;
+			System.out.println("Meaning.getInspectedFieldRefEntry: inspVarDecl: "+inspVarDecl.getClass().getSimpleName()+"  "+inspVarDecl);
+			FieldRefEntry FRE1 = inspVarDecl.getFieldRefEntry(pool);
+			System.out.println("Meaning.getInspectedFieldRefEntry: FRE1=" + inspVarDecl + "  ===>  " + FRE1);
+
+			Util.IERR("");
+			return(FRE1);
+		}
+		else return (null);
+	}
+
+	/**
+	 * Coding Utility: Edit identifier access.
+	 * @param id the identifier
+	 * @param destination true if destination
+	 * @return a suitable java code
+	 */
+	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
+//		System.out.println("Meaning.buildIdentifierAccess: "+this);
+//		Util.IERR("");
+		Meaning meaning=this;
+		Expression constantElement = meaning.getConstant();
+		if (constantElement != null) {
+			if (constantElement instanceof Constant constant) {
+				Util.IERR("");
+				//return (constant.toJavaCode());
+			}
+		}
+		
+		
+		
+		if (meaning.isConnected()) {
+			Expression inspectedExpression = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
+			if (meaning.foundBehindInvisible) {
+//				String remoteCast = meaning.foundIn.getJavaIdentifier();
+				//id = "((" + remoteCast + ")(" + inspectedVariable.toJavaCode() + "))." + id;
+				inspectedExpression.buildEvaluation(null, codeBuilder);
+			} else {
+				//id = inspectedVariable.toJavaCode() + "." + id;
+		        // 0: aload_0
+		        // 1: getfield      #1    IF WITHIN THUNK    // Field this$0:LsimulaTestPrograms/adHoc00;
+		        // 4: getfield      #13   // Field simulaTestPrograms/adHoc00._inspect_17_0:LsimulaTestPrograms/adHoc00_A;
+//				Util.buildSNAPSHOT(codeBuilder, "BEFORE ");
+		 		
+//	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable="+inspectedVariable.getClass().getSimpleName()+"  "+inspectedVariable);
+//	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable.type="+inspectedVariable.type);
+//	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable.identifier="+inspectedVariable.identifier);
+//				Util.IERR("");
+				
+				inspectedExpression.buildEvaluation(null, codeBuilder);
+			}
+		} else if(declaredAs instanceof ProcedureDeclaration) {			
+//			System.out.println("VarablerExpression.buildIdentifierAccess: ****************** "+this+" ******************");
+//			System.out.println("VarablerExpression.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
+//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredAs: "+declaredAs);
+//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredIn: "+declaredIn);
+//			Util.IERR("");
+
+			String cast = meaning.declaredAs.getJavaIdentifier();
+			if (meaning.foundBehindInvisible) {
+				cast = meaning.foundIn.getJavaIdentifier();
+				Util.IERR("");
+			}
+	        // 0: getstatic     #17                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+	        // 3: getfield      #21                 // Field simula/runtime/RTS_RTObject._SL:Lsimula/runtime/RTS_RTObject;
+	        // 6: checkcast     #26                 // class simulaTestPrograms/adHoc000_PPP
+	 		int corr = 1;
+	 		
+	 		if(Global.getCurrentScope() instanceof Thunk) {
+				cast = meaning.declaredIn.getJavaIdentifier();
+	 		}
+	 		
+			boolean withFollowSL = meaning.declaredIn.buildCTX(corr,codeBuilder);
+			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+			
+		} else if (!(meaning.declaredIn.declarationKind == Declaration.Kind.ContextFreeMethod
+				|| meaning.declaredIn.declarationKind == Declaration.Kind.MemberMethod)) {
+			
+//			int n = meaning.declaredIn.rtBlockLevel;
+//			System.out.println("VarablerExpression.buildIdentifierAccess: ****************** "+this+" ******************");
+//			System.out.println("VarablerExpression.buildIdentifierAccess: declaredAs="+this.declaredAs.getClass().getSimpleName()+"  "+this.declaredAs);
+//			System.out.println("VarablerExpression.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
+//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredIn Scope: "+meaning.declaredIn.externalIdent+"  rtBlockLevel="+n);
+//			Util.IERR("");
+
+			// id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id; // ØM
+			if (meaning.foundBehindInvisible) {
+				meaning.declaredIn.buildCTX(codeBuilder);
+				codeBuilder.checkcast(meaning.foundIn.getClassDesc());
+			} else {
+				boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
+				if(withFollowSL) {
+					String cast = meaning.declaredIn.getJavaIdentifier();
+					codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+				}
+			}
+		}
 	}
 
 	@Override

@@ -11,6 +11,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
@@ -102,6 +103,11 @@ public final class StandaloneExpression extends Statement implements Externaliza
 		ASSERT_SEMANTICS_CHECKED();
 		String result=expression.toJavaCode();
 		return (result);
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		expression.buildEvaluation(null,codeBuilder);
 	}
 
 	@Override

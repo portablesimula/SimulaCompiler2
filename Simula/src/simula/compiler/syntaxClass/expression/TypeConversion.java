@@ -10,10 +10,13 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -31,7 +34,7 @@ public final class TypeConversion extends Expression {
 	/**
 	 * The expression.
 	 */
-	Expression expression;
+	public Expression expression;
 
 	/**
 	 * Create a new TypeConversion.
@@ -57,6 +60,34 @@ public final class TypeConversion extends Expression {
               return("=(int)Math.round("+expr+");");
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
+	}
+	public static void buildMayBeConvert(final Type fromType,final Type toType,CodeBuilder codeBuilder) {
+		// NOTE: 'expr' is top of operand stack
+//		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
+		if(fromType.equals(Type.Integer)) {
+			if(toType.equals(Type.Real)) codeBuilder.i2f();
+			else if(toType.equals(Type.LongReal)) codeBuilder.i2d();
+			
+		} else if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal)) {
+			if(toType.equals(Type.Integer)) {
+				// return("=(int)Math.round("+expr+");");
+				if (fromType.equals(Type.Real)) {
+					codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
+				}
+				else if (fromType.equals(Type.LongReal)) {
+					codeBuilder
+						.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+						.l2i();
+				}
+			}
+			else if(toType.equals(Type.Real)) {
+				if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
+			}
+			else if(toType.equals(Type.LongReal)) {
+				if (fromType.equals(Type.Real)) codeBuilder.f2d();
+			}
+		} else Util.IERR("fromType="+fromType+", toType="+toType);
+        // return("=("+toType.toJavaType()+")("+expr+");");
 	}
 
 	/**
@@ -151,6 +182,35 @@ public final class TypeConversion extends Expression {
 		}
 		return ("((" + type.toJavaType() + ")(" + evaluated + "))");
 	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		expression.buildEvaluation(null,codeBuilder);
+		if (type.equals(Type.Integer)) {
+			Type fromType = expression.type;
+			if (fromType.equals(Type.Real)) {
+				codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
+			}
+			else if (fromType.equals(Type.LongReal)) {
+				codeBuilder
+					.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+					.l2i();
+			}
+		} else if (type.equals(Type.Real)) {
+			Type fromType = expression.type;
+			if (fromType.equals(Type.Integer)) codeBuilder.i2f();
+			else if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
+			else if (!fromType .equals(Type.Real)) Util.IERR("");
+		} else if (type.equals(Type.LongReal)) {
+			Type fromType = expression.type;
+			if (fromType.equals(Type.Integer)) codeBuilder.i2d();
+			else if (fromType.equals(Type.Real)) codeBuilder.f2d();
+			else if (!fromType .equals(Type.LongReal)) Util.IERR("");
+		} else {
+			codeBuilder.checkcast(type.toClassDesc());
+		}
+	}
+
 
 	@Override
 	public String toString() {

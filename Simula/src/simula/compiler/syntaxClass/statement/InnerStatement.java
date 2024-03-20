@@ -11,6 +11,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
 import simula.compiler.CodeLine;
@@ -64,6 +65,12 @@ public final class InnerStatement extends Statement implements Externalizable {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		// TODO: IMPLEMENT CODE AFTER INNER
+//		Util.IERR("");
 	}
 
 	@Override

@@ -7,6 +7,13 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.instruction.SwitchCase;
+import java.lang.constant.ConstantDescs;
+import java.util.List;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -14,6 +21,7 @@ import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -99,6 +107,58 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 		GeneratedJavaClass.code("return(this);");
 		GeneratedJavaClass.code("}","End of Switch BODY");
 		Global.duringSTM_Coding=duringSTM_Coding;
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_STM_BODY
+	// ***********************************************************************************************
+	/**
+	 * Generate byteCode for the '_STM' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	@Override
+	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		List<SwitchCase> tableSwitchCases;
+		int tableSize = switchList.size();
+//		System.out.println("SwitchDeclaration.build_STM_BODY: Define TableSwitch " + tableSize);
+		tableSwitchCases = new Vector<SwitchCase>();
+		for (int i = 1; i <= tableSize; i++) {
+			tableSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
+		}
+		// Build the TableSwitch Instruction
+		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+		Label endLabel = codeBuilder.newLabel();
+		int lowValue = 1;          // the minimum key value.
+		int highValue = tableSize; // the maximum key value.
+		codeBuilder
+			.aload(0)
+			.getfield(currentClassDesc(), "p__SW", ConstantDescs.CD_int)
+			.tableswitch(lowValue, highValue, defaultTarget, tableSwitchCases);
+		
+		int n = 0;
+		for (Expression expr : ((SwitchDeclaration) this).switchList) {
+			//GeneratedJavaClass.code("case " + (n++) + ": _RESULT=" + expr.toJavaCode() + "; break;");
+			Label lab = tableSwitchCases.get(n++).target();
+			codeBuilder
+				.labelBinding(lab)
+				.aload(0);
+			
+//			System.out.println("SwitchDeclaration.build_STM_BODY: exp:"+expr.getClass().getSimpleName()+"  "+expr);
+			expr.buildEvaluation(null,codeBuilder);
+			
+			FieldRefEntry FRE_RESULT=pool.fieldRefEntry(currentClassDesc(), "_RESULT", CD.RTS_LABEL);
+			codeBuilder
+				.putfield(FRE_RESULT) // _RESULT
+				.goto_(endLabel);
+			
+		}
+		codeBuilder.labelBinding(defaultTarget);
+		Util.buildSimulaRuntimeError("Illegal switch index: ", codeBuilder);
+
+		codeBuilder.labelBinding(endLabel);
+
 	}
 
 	@Override

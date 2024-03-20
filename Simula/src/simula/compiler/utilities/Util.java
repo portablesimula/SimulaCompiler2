@@ -10,10 +10,16 @@ package simula.compiler.utilities;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
+
+import simula.compiler.syntaxClass.SyntaxClass;
 
 /**
  * A set of all static Utility Methods
@@ -363,5 +369,62 @@ public final class Util {
 		return (process.exitValue());
 	}
   
+	
+	public static void buildSimulaRuntimeError(String mss,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		ClassDesc CD = ClassDesc.of("simula.runtime.RTS_SimulaRuntimeError");
+		codeBuilder
+			.new_(CD)
+			.dup()
+			.ldc(pool.stringEntry(mss))
+			.invokespecial(CD, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"))
+			.athrow();		
+	}
+
+//	public static void buildSNAPSHOT(CodeBuilder codeBuilder, SyntaxClass stx) {
+	public static void buildLineNumber(CodeBuilder codeBuilder, SyntaxClass stx) {
+		if(!Option.GNERATE_LINE_CALLS) return;
+		codeBuilder.lineNumber(stx.lineNumber);
+		if(!Option.GNERATE_SNAPSHOTS) return;
+		// SnapShot
+		codeBuilder
+			.sipush(stx.lineNumber)
+			.ldc(codeBuilder.constantPool().stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
+	}
+
+	public static void buildSNAPSHOT(CodeBuilder codeBuilder, String stx) {
+//		if(!Option.GNERATE_LINE_CALLS) return;
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
+	}
+
+	public static void buildSNAPSHOT2(CodeBuilder codeBuilder, String stx) {
+//		if(!Option.GNERATE_LINE_CALLS) return;
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.dup()
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;ILjava/lang/String;)V"));
+	}
+
+
+	public static void buildSNAPSHOT2F(CodeBuilder codeBuilder, String stx) {
+//		if(!Option.GNERATE_LINE_CALLS) return;
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.dup()
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(FILjava/lang/String;)V"));
+	}
+
   
 }

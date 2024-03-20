@@ -32,6 +32,11 @@ public final class Option {
 	public static boolean TESTING_STACK_SIZE = false;
 	
 	/**
+	 * Create Java source intermediate files
+	 */
+	public static boolean CREATE_JAVA_SOURCE = false;
+	
+	/**
 	 * Experimental direct generation of Java byteCode
 	 */
 	public static boolean GENERATE_BYTEFILE = false;
@@ -105,6 +110,7 @@ public final class Option {
 	// Java Coder Options
 	/** Debug option */	public static boolean TRACE_CODING=false;
 	/** Debug option */	public static boolean GNERATE_LINE_CALLS=false;
+	/** Debug option */	public static boolean GNERATE_SNAPSHOTS=false;
 
 	// Byte code engineering Options
 	/** Debug option */	public static boolean TRACE_BYTECODE_OUTPUT=false;

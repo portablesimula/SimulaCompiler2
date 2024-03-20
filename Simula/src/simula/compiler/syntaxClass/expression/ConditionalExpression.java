@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -99,6 +101,22 @@ public final class ConditionalExpression extends Expression {
 		return ("((" + condition.get() + ")?("
 				+ thenExpression.get() + "):("
 				+ elseExpression.get() + "))");
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		condition.buildEvaluation(null,codeBuilder);
+		Label elseLabel = codeBuilder.newLabel();
+		codeBuilder.ifeq(elseLabel);
+		thenExpression.buildEvaluation(null,codeBuilder);
+		if(elseExpression != null) {
+			Label endLabel = codeBuilder.newLabel();
+			codeBuilder.goto_(endLabel);
+			codeBuilder.labelBinding(elseLabel);
+			elseExpression.buildEvaluation(null,codeBuilder);
+			codeBuilder.labelBinding(endLabel);
+		} else codeBuilder.labelBinding(elseLabel);
 	}
 
 	@Override

@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ClassDesc;
 
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -63,7 +65,7 @@ public final class LocalObject extends Expression {
 	/**
 	 * The class declaration. Set by doChecking.
 	 */
-	private ClassDeclaration classDeclaration; // Set by doChecking
+	ClassDeclaration classDeclaration; // Set by doChecking
 	
 	/**
 	 * THIS scope. Set by doChecking.
@@ -160,6 +162,20 @@ public final class LocalObject extends Expression {
 			return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
 		}
 		return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		String cast = classDeclaration.getJavaIdentifier();
+		if (thisScope instanceof ConnectionBlock connectionBlock) {
+			//return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
+			Util.IERR("");
+		} else {
+			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
+			DeclarationScope.buildCTX2(ctxDiff,codeBuilder);
+			codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+		}
 	}
 
 	@Override

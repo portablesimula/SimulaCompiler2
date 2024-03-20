@@ -7,11 +7,20 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.attribute.SourceFileAttribute;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
+
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -222,6 +231,102 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
 		GeneratedJavaClass.code("}");
 	}
+
+
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		Global.sourceLineNumber=lineNumber;
+		ASSERT_SEMANTICS_CHECKED();
+		if (this.isPreCompiled)	return;
+
+		try {
+			createJavaClassFile();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		//  new adHoc05_PBLK14((_CUR))._STM();
+		//
+		//   0: new           #19                 // class simulaTestPrograms/adHoc05_PBLK14
+		//   3: dup
+		//   4: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+		//   7: invokespecial #25                 // Method simulaTestPrograms/adHoc05_PBLK14."<init>":(Lsimula/runtime/RTS_RTObject;)V
+		//  10: invokevirtual #26                 // Method simulaTestPrograms/adHoc05_PBLK14._STM:()LsimulaTestPrograms/adHoc05_PBLK14;
+		//  13: pop
+
+		ClassDesc CD_pblk=this.getClassDesc();
+//		System.out.println("BEGIN PREFIXED BLOCK "+Global.packetName+"."+blockIdent+" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+		codeBuilder
+			.new_(CD_pblk)
+			.dup()
+			.getstatic(BlockDeclaration.currentClassDesc(),"_CUR",CD.RTS_RTObject);
+
+		// Push parameters
+		if(blockPrefix.checkedParams != null)
+			for(Expression expr:blockPrefix.checkedParams)
+				expr.buildEvaluation(null,codeBuilder);
+
+		codeBuilder.invokespecial(CD_pblk, "<init>", this.getConstructorMethodTypeDesc());
+
+		// _STM();
+		String resultType="Lsimula/runtime/RTS_RTObject;";
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.invokevirtual(pool.methodRefEntry(CD_pblk,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType)))
+			.pop()
+		;
+	}
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildClassFile
+	// ***********************************************************************************************
+	@Override
+	public byte[] buildClassFile() {
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
+		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+				classBuilder -> {
+					classBuilder
+						.with(SourceFileAttribute.of(Global.sourceFileName))
+						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
+						.withSuperclass(this.superClassDesc());
+
+					// Add Fields (Attributes and parameters)
+					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
+					for(Parameter par:parameterList) par.buildField(classBuilder,this);
+
+					classBuilder
+						.withMethodBody("<init>", MTD_Constructor(), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildConstructor(codeBuilder))
+						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
+							codeBuilder -> buildMethod_STM(codeBuilder));
+					
+					if (isQPSystemBlock()) {
+						//GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+						classBuilder
+							.withMethodBody("isQPSystemBlock", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildIsQPSystemBlock(codeBuilder));
+					}
+					
+					if (isDetachUsed()) {
+						//GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
+						classBuilder
+							.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
+					}
+					
+					if (this.isMainModule) {
+						classBuilder
+							.withMethodBody("main", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"), ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC + ClassFile.ACC_VARARGS,
+								codeBuilder -> buildMethodMain(codeBuilder));
+					}
+				}
+		);
+		return(bytes);
+	}
+
 
 	// ***********************************************************************************************
 	// *** Printing Utility: print

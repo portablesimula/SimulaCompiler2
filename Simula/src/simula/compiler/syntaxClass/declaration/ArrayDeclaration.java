@@ -11,6 +11,15 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.ClassBuilder;
+import java.lang.classfile.ClassFile;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.TypeKind;
+import java.lang.classfile.attribute.SignatureAttribute;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Enumeration;
 import java.util.Vector;
 
@@ -18,11 +27,15 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
+import simula.compiler.syntaxClass.expression.VariableExpression;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -265,6 +278,262 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 		sb.append(");");
 		GeneratedJavaClass.code(sb.toString());
 	}
+
+
+	
+	@Override
+	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
+		Global.sourceLineNumber = lineNumber;
+		ASSERT_SEMANTICS_CHECKED();
+		classBuilder.withField(identifier, CD.RTS_ARRAY(type), fieldBuilder -> {
+			fieldBuilder
+				.withFlags(ClassFile.ACC_PUBLIC)
+				.with(SignatureAttribute.of(type.toArrayClassSignature()));
+		});
+
+	}
+
+	@Override
+	public void buildInitAttribute(CodeBuilder codeBuilder) {
+		String arrayIdent = this.getJavaIdentifier();
+		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
+		codeBuilder
+			.aload(0)
+			.aconst_null()
+			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),arrayIdent, CD_ArrayType));
+	}
+
+	public String getFieldIdentifier() {
+		return(this.getJavaIdentifier());
+	}
+
+	public static ClassDesc getClassDesc(Type type) {
+		return(CD.RTS_ARRAY(type));
+	}
+
+	@Override
+	public void buildDeclarationCode(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		// --------------------------------------------------------------------
+		// integer array A(1:4,4:6,6:12);
+		// --------------------------------------------------------------------
+		// A = new RTS_INTEGER_ARRAY(new _BOUNDS(1,4),new _BOUNDS(4,6),new _BOUNDS(6,7));
+		// --------------------------------------------------------------------
+
+		// 20: aload_0
+
+		// 21: new           #23                 // class simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY
+		// 24: dup
+		// 25: aload_0
+		// 26: iconst_3
+		// 27: anewarray     #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+
+		// 30: dup
+		// 31: iconst_0
+		// 32: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 35: dup
+		// 36: aload_0
+		// 37: iconst_1
+		// 38: iconst_4
+		// 39: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 42: aastore
+
+		// 43: dup
+		// 44: iconst_1
+		// 45: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 48: dup
+		// 49: aload_0
+		// 50: iconst_4
+		// 51: bipush        6
+		// 53: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 56: aastore
+
+		// 57: dup
+		// 58: iconst_2
+		// 59: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 62: dup
+		// 63: aload_0
+		// 64: bipush        6
+		// 66: bipush        12
+		// 68: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 71: aastore
+
+		// 72: invokespecial #30                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY."<init>":(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_RTObject$RTS_BOUNDS;)V
+		// 75: putfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+
+//		System.out.println("ArrayDeclaration.buildDeclarationCode: "+arrType+" "+arrayIdent+" ++++++++++++++++++++++++++++++++++++++++++++++++++");
+		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
+
+		codeBuilder
+				.aload(0)
+				.new_(CD_ArrayType)
+				.dup()
+				.aload(0);
+		Constant.buildIntConst(codeBuilder, boundPairList.size());
+		codeBuilder.anewarray(CD.RTS_BOUNDS);
+
+		for(int i=0;i<boundPairList.size();i++) {
+			BoundPair bp = boundPairList.get(i);
+			codeBuilder.dup();
+			Constant.buildIntConst(codeBuilder, i);
+			codeBuilder
+				.new_(CD.RTS_BOUNDS)
+				.dup()
+				.aload(0);
+			bp.LB.buildEvaluation(null,codeBuilder);
+			bp.UB.buildEvaluation(null,codeBuilder);
+			codeBuilder
+				.invokespecial(CD.RTS_BOUNDS, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;II)V"))
+				.aastore();
+		}
+		codeBuilder
+			.invokespecial(CD_ArrayType, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_RTObject$RTS_BOUNDS;)V"))
+			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),identifier, CD_ArrayType));
+	}
+
+	// ********************************************************************************************
+	// **************************************** buildGetArrayField ****************************************
+	// ********************************************************************************************
+	
+	private static void buildGetArrayField(Type type,Meaning meaning,DeclarationScope declaredIn,String arrayIdent,boolean isParameter,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		System.out.println("ArrayDeclaration.buildGetArrayField: type="+type+", isParameter="+isParameter);
+		ClassDesc CD_Type=CD.RTS_ARRAY(type);
+		if(isParameter) {
+			FieldRefEntry FRE_Arr1=pool.fieldRefEntry(declaredIn.getClassDesc(), arrayIdent, CD.RTS_ARRAY);
+			codeBuilder
+				.getfield(FRE_Arr1)
+				.checkcast(CD_Type);					
+		} else {
+			ClassDesc owner = declaredIn.getClassDesc();
+			if(meaning != null && meaning.foundBehindInvisible) {
+				owner = meaning.foundIn.getClassDesc();
+			}
+			FieldRefEntry FRE_Arr=pool.fieldRefEntry(owner, arrayIdent, CD_Type);
+			codeBuilder.getfield(FRE_Arr);	
+		}
+	}
+	
+	
+	private static void prepIndexing(Vector<Expression> checkedParams, CodeBuilder codeBuilder) {
+		Constant.buildIntConst(codeBuilder, checkedParams.size());
+		codeBuilder.newarray(TypeKind.IntType);
+		for(int i=0;i<checkedParams.size();i++) {
+			codeBuilder.dup();
+			Constant.buildIntConst(codeBuilder, i);
+			checkedParams.get(i).buildEvaluation(null,codeBuilder);
+			codeBuilder.iastore();
+		}
+	}
+
+
+	// ********************************************************************************************
+	// **************************************** putELEMENT ****************************************
+	// ********************************************************************************************
+	// A.putELEMENT(A.index(2,5,9),666);
+	//
+	//  aload_0
+	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+	//
+	//  dup
+	
+	//  *** prepIndexing ***
+	//  iconst_3						  // boundPairList.size()
+	//  newarray       int
+	//  dup
+	//  iconst_0
+	//  iconst_2
+	//  iastore
+	//  dup
+	//  iconst_1
+	//  iconst_5
+	//  iastore
+	//  dup
+	//  iconst_2
+	//  bipush        9
+	//  iastore
+	
+	//  invokevirtual #33                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.index:([I)I
+	//
+	//  sipush        666
+	//
+	//  invokevirtual #37                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.putELEMENT:(II)I
+
+	public void arrayPutElement(VariableExpression var, boolean isParameter, Expression rhs, CodeBuilder codeBuilder) {
+		String arrayIdent = this.getJavaIdentifier();
+		arrayPutElement(var.meaning,arrayIdent,isParameter,var.checkedParams,rhs,codeBuilder);
+	}
+	
+	public static void arrayPutElement(Meaning meaning,String arrayIdent,boolean isParameter,Vector<Expression> checkedParams, Expression rhs, CodeBuilder codeBuilder) {
+		Type type=meaning.declaredAs.type;
+		buildGetArrayField(type,meaning,meaning.declaredIn,arrayIdent,isParameter,codeBuilder);
+		codeBuilder.dup();
+		arrayPutElement2(meaning,checkedParams,rhs,codeBuilder);
+	}
+
+	public static void arrayPutElement2(Meaning meaning,Vector<Expression> checkedParams, Expression rhs, CodeBuilder codeBuilder) {
+		Type type=meaning.declaredAs.type;
+		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		
+		prepIndexing(checkedParams,codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(CD_ArrayType, "index", MethodTypeDesc.ofDescriptor("([I)I")));
+		
+		rhs.buildEvaluation(null,codeBuilder);
+		String eltType = (type.isRefClassType())?"Ljava/lang/Object;":type.toJVMType();
+		codeBuilder.invokevirtual(pool.methodRefEntry(CD_ArrayType, "putELEMENT", MethodTypeDesc.ofDescriptor("(I"+eltType+")"+eltType)));
+	}
+	
+	
+	// ********************************************************************************************
+	// **************************************** getELEMENT ****************************************
+	// ********************************************************************************************
+	// A.putELEMENT(A.index(2,5,9),666);
+	//
+	//  aload_0
+	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+	
+	//  *** prepIndexing ***
+	//  iconst_3						  // boundPairList.size()
+	//  newarray       int
+	//  dup
+	//  iconst_0
+	//  iconst_2
+	//  iastore
+	//  dup
+	//  iconst_1
+	//  iconst_5
+	//  iastore
+	//  dup
+	//  iconst_2
+	//  bipush        9
+	//  iastore
+
+	//  invokevirtual #37                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.getELEMENT:([I)I
+
+	public void arrayGetElement(VariableExpression var, boolean isParameter, CodeBuilder codeBuilder) {
+		String arrayIdent = this.getJavaIdentifier();
+		arrayGetElement(type,arrayIdent,isParameter,var.checkedParams,var.meaning,var.meaning.declaredIn,codeBuilder);
+	}
+
+	public static void arrayGetElement(Type type,String arrayIdent,boolean isParameter,Vector<Expression> checkedParams,
+			Meaning meaning,DeclarationScope declaredIn, CodeBuilder codeBuilder) {
+		buildGetArrayField(type,meaning,declaredIn,arrayIdent,isParameter,codeBuilder);
+		arrayGetElement2(type,arrayIdent,checkedParams,codeBuilder);
+	}
+	
+	public static void arrayGetElement2(Type type,String arrayIdent,Vector<Expression> checkedParams, CodeBuilder codeBuilder) {
+		String eltType = type.toJVMType();
+		MethodTypeDesc MTD=(type.isRefClassType())?MethodTypeDesc.ofDescriptor("([I)Ljava/lang/Object;")
+		                                          :MethodTypeDesc.ofDescriptor("([I)"+eltType);
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		prepIndexing(checkedParams,codeBuilder);
+		codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_ARRAY(type), "getELEMENT", MTD));
+		if(type.isReferenceType())
+			codeBuilder.checkcast(type.toClassDesc());
+	}
+
+
 
 	public void printTree(int indent) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);

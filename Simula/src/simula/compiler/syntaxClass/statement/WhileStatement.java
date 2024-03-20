@@ -3,6 +3,8 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
@@ -84,6 +86,19 @@ public final class WhileStatement extends Statement {
 		// Check for:  while(true) do {}
 		if(condition instanceof Constant cnst) return((boolean)cnst.value);
 		else return(false);
+	}
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		Label whlLabel = codeBuilder.newLabel();
+		Label endLabel = codeBuilder.newLabel();
+		codeBuilder.labelBinding(whlLabel);
+		condition.buildEvaluation(null,codeBuilder);
+		codeBuilder.ifeq(endLabel);
+		doStatement.buildByteCode(codeBuilder);
+		codeBuilder.goto_(whlLabel);
+		codeBuilder.labelBinding(endLabel);
 	}
 
 	@Override

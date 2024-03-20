@@ -10,14 +10,19 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
+import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
+import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -61,12 +66,12 @@ public final class RemoteVariable extends Expression {
 	/**
 	 * The object expression
 	 */
-	Expression obj;
+	public Expression obj;
 	
 	/**
 	 * The variable
 	 */
-	VariableExpression var;
+	public VariableExpression var;
 
 	/**
 	 * Used to indicate access remote array. Set by doChecking.
@@ -219,6 +224,52 @@ public final class RemoteVariable extends Expression {
 		String cast=array.type.toJavaArrayType();
 		String var="(("+cast+')'+obj+'.'+array.edIdentifierAccess(false)+')';
 		return(array.doGetELEMENT(var));
+	}
+	private void doAccessRemoteArray(final Expression beforeDot, final VariableExpression array,CodeBuilder codeBuilder) {
+		beforeDot.buildEvaluation(null, codeBuilder);
+		Declaration declaredAs=array.meaning.declaredAs;
+		if(declaredAs instanceof Parameter par) {
+			ArrayDeclaration.arrayGetElement(type,par.getFieldIdentifier(),true,array.checkedParams,null,par.declaredIn,codeBuilder);
+		} else if(declaredAs instanceof ArrayDeclaration) {
+			array.buildEvaluation(null, codeBuilder);
+		} else Util.IERR("IMPOSSIBLE");;
+	}
+
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+		ClassDeclaration cls=obj.type.getQual();
+		String ident=var.meaning.declaredAs.getFieldIdentifier();
+		return(pool.fieldRefEntry(cls.getClassDesc(), ident, type.toClassDesc()));
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		if(obj.type.equals(Type.Text)) {
+			BuildProcedureCall.callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
+		} else if (callRemoteProcedure != null) {
+			BuildProcedureCall.remote(obj, callRemoteProcedure, var, backLink,codeBuilder);
+		} else if (callRemoteVirtual != null) {
+			BuildProcedureCall.remoteVirtual(obj, var, callRemoteVirtual, codeBuilder);
+		} else if (accessRemoteArray) {
+			doAccessRemoteArray(obj, var,codeBuilder);
+		} else {
+			Expression constantElement = remoteAttribute.getConstant();
+			if (constantElement != null) {
+				if(constantElement instanceof Constant constant) {
+					constant.buildEvaluation(null, codeBuilder);
+					return;
+				}
+			}
+			if (remoteAttribute.foundBehindInvisible) {
+//				String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
+//				result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();
+				Util.IERR("");
+			} else {
+//				result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
+				obj.buildEvaluation(null,codeBuilder);
+				var.buildEvaluation(null,codeBuilder);
+			}
+		}
 	}
 
 	@Override

@@ -13,6 +13,7 @@ import java.util.Vector;
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
+import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -29,6 +30,62 @@ public final class RunSingleTest {
 	private static final String testBatchJarDir = userDir+"/src/simulaTestBatch/bin/";
 
 	public static void main(String[] args) {
+		// Set options and tracing.
+		Option.INLINE_TESTING=true;
+		Option.CREATE_JAVA_SOURCE = true;
+//		Option.GENERATE_BYTEFILE=true;
+		Option.TESTING_STACK_SIZE = true;
+//		Option.LIST_GENERATED_CLASS_FILES=true;
+		Option.SPORT=true;
+//		Option.verbose = true;
+		Option.WARNINGS=true;
+//		Option.DEBUGGING=true;
+//		Option.EXTENSIONS=false;
+//		Option.CaseSensitive=true;
+
+		// Overall TRACING Options
+//		Option.TRACING=true;
+
+		// Scanner Trace Options
+//		Option.TRACE_SCAN=true;
+//		Option.TRACE_COMMENTS=true;
+
+		// Parser Trace Options
+//		Option.TRACE_PARSE=true;
+		Option.PRINT_SYNTAX_TREE=true;
+//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.TRACE_ATTRIBUTE_INPUT=true;
+
+		// Checker Trace Options
+//		Option.TRACE_FIND_MEANING=4;
+//		Option.TRACE_CHECKER=true;
+//		Option.TRACE_CHECKER_OUTPUT=true;
+
+		// Coder Trace Options
+//		Option.TRACE_CODING=true;
+		Option.GNERATE_LINE_CALLS=true;
+//		Option.GNERATE_SNAPSHOTS=true;
+
+		// Byte code engineering Options
+//		Option.LIST_INPUT_INSTRUCTION_LIST=true;
+//		Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
+//		Option.TRACE_REPAIRING_INPUT=true;
+//		Option.TRACE_REPAIRING=true;
+//		Option.TRACE_REPAIRING_OUTPUT=true;
+
+		Global.packetName="simulaTestBatch";
+//		Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
+//		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
+		
+		// Set RunTime Options and tracing.
+//		RTOption.VERBOSE = true;
+//		RTOption.USE_CONSOLE=true;
+//		RTOption.BLOCK_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
+//		RTOption.QPS_TRACING = true;
+//		RTOption.SML_TRACING = true;
+//		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
 //		names.add("adHoc00.sim"); // For ad'hoc testing
@@ -36,17 +93,14 @@ public final class RunSingleTest {
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
-		
-//		names.add("adHoc00.sim"); // For ad'hoc testing
-//		names.add("adHoc01.sim"); // For ad'hoc testing
-//		names.add("adHoc02.sim"); // For ad'hoc testing
-
+//		names.add("adHoc00.sim");
+//		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
-//			names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
+//		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
 //		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
@@ -56,7 +110,7 @@ public final class RunSingleTest {
 //		names.add("simtst11.sim"); // OK:  Text Attributes constant, start, length, pos and main
 //		names.add("simtst12.sim"); // OK:  Text value and reference relations.
 //		names.add("simtst13.sim"); // OK:  Text value assignment and text reference assigment.
-//		names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
+//			names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
 //		names.add("simtst15.sim"); // OK:  Text generation procedures copy and blanks.
 //		names.add("simtst16.sim"); // OK:  Standard Text procedures sub and strip.
 //		names.add("simtst17.sim"); // OK:  Editing and De-editing
@@ -73,6 +127,7 @@ public final class RunSingleTest {
 //		names.add("simtst27.sim"); // OK:  Test while-loops.
 //		names.add("simtst28.sim"); // OK:  Paramenter transmission to procedures by value.
 //		names.add("simtst29.sim"); // OK:  Procedure parameters by value
+//		names.add("simtst30a.sim"); // OK:  Simple test of Arrays.
 //		names.add("simtst30.sim"); // OK:  Name parameters (Modified: 2-dim arrays removed)
 //
 //		names.add("simtst31.sim"); // OK:  Labels and switches as parameters to procedures
@@ -85,7 +140,7 @@ public final class RunSingleTest {
 //		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 //		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
 //		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+//			names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 //
@@ -104,12 +159,12 @@ public final class RunSingleTest {
 //		names.add("simtst51.sim"); // OK:  Test 'inner'.
 //		names.add("simtst52.sim"); // OK:  Test 'inner'         Scanning past END-OF-FILE
 //		names.add("simtst53.sim"); // OK:  Syntax check on virtual part
-//		names.add("simtst54.sim"); // OK: A VERY Simple Simulation
+//		names.add("simtst54.sim"); // OK:  A VERY Simple Simulation
 //		names.add("simtst55.sim"); // OK:  Test virtual procedures.
 //		names.add("simtst56.sim"); // OK:  Test virtual procedures.
 //		names.add("simtst57.sim"); // OK:  Virtual procedure - different number of parameters
-//		names.add("simtst58.sim"); // OK: Goto from within a connection into otherwise
-//		names.add("simtst59.sim"); // OK: Test 2-dim Array by value.
+//		names.add("simtst58.sim"); // OK:  Goto from within a connection into otherwise
+//		names.add("simtst59.sim"); // OK:  Test 2-dim Array by value.
 //		names.add("simtst60.sim"); // OK:  Visibility of protected attributes.
 //
 //		names.add("simtst61.sim"); // OK:  Remote access to attributes which are protected.
@@ -139,8 +194,8 @@ public final class RunSingleTest {
 //		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 //		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
-//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-//		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
+//			names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+//			names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
 //		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -153,7 +208,7 @@ public final class RunSingleTest {
 //		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 //		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 //		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+//			names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 //		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 //		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.  Uses GOTO/LABEL
 //
@@ -169,24 +224,24 @@ public final class RunSingleTest {
 //		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 //
 //		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
-//		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
-//		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
-//		names.add("simtst114.sim"); // OK: Switch Statement
+//			names.add("simtst112.sim"); // OK: Virtual Label Sample 2    AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//			names.add("simtst113.sim"); // OK: Virtual Switch Sample 1   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//			names.add("simtst114.sim"); // OK: Switch Statement          AVSLUTTES MED 'UMULIG' FEIL
 //		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
 //		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 //		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
-//			names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
-//			names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
-//			names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
+//		names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
+//		names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
+//		names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //
 //		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
-//		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
-//		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
-//		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
+//			names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//			names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//			names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
-//		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
+//			names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
 //		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
@@ -202,7 +257,7 @@ public final class RunSingleTest {
 //		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND, SYNCHRONOUS and PURGE.
 //		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 //		names.add("simtst139.sim"); // OK: Test remote Array access.
-		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
@@ -217,58 +272,6 @@ public final class RunSingleTest {
 //		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 //		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
 
-		// Set options and tracing.
-		Option.INLINE_TESTING=true;
-//		Option.GENERATE_BYTEFILE=true;
-		Option.SPORT=true;
-		Option.verbose = true;
-		Option.WARNINGS=true;
-//		Option.DEBUGGING=true;
-//		Option.EXTENSIONS=false;
-		Option.CaseSensitive=true;
-
-		// Overall TRACING Options
-//		Option.TRACING=true;
-
-		// Scanner Trace Options
-//		Option.TRACE_SCAN=true;
-//		Option.TRACE_COMMENTS=true;
-
-		// Parser Trace Options
-//		Option.TRACE_PARSE=true;
-		Option.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
-
-		// Checker Trace Options
-//		Option.TRACE_FIND_MEANING=1;
-//		Option.TRACE_CHECKER=true;
-//		Option.TRACE_CHECKER_OUTPUT=true;
-
-		// Coder Trace Options
-//		Option.TRACE_CODING=true;
-		Option.GNERATE_LINE_CALLS=true;
-
-		// Byte code engineering Options
-//		Option.LIST_INPUT_INSTRUCTION_LIST=true;
-//		Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
-//		Option.TRACE_REPAIRING_INPUT=true;
-//		Option.TRACE_REPAIRING=true;
-//		Option.TRACE_REPAIRING_OUTPUT=true;
-
-		Global.packetName="simulaTestBatch";
-//		Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
-		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
-//		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
-		
-		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
-//		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
-//		RTOption.GOTO_TRACING = true;
-//		RTOption.QPS_TRACING = true;
-//		RTOption.SML_TRACING = true;
-//		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
 		
 		
 		for(String name:names) {

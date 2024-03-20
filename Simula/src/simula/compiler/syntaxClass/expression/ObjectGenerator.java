@@ -10,15 +10,21 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.constant.ClassDesc;
+import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
@@ -60,7 +66,7 @@ public final class ObjectGenerator extends Expression {
 	/**
 	 * The semantic meaning 
 	 */
-	private Meaning meaning;
+	Meaning meaning;
 	
 	/**
 	 * The actual parameters before checking
@@ -198,6 +204,67 @@ public final class ObjectGenerator extends Expression {
 			s.append("._STM()");
 		return (s.toString());
 	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		//  new adHoc03_A((_CUR))._STM();
+		//
+		//   0: new           #44                 // class simulaTestPrograms/adHoc03_A
+		//   3: dup
+		//   4: getstatic     #46                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+		//   7: invokespecial #49                 // Method simulaTestPrograms/adHoc03_A."<init>":(Lsimula/runtime/RTS_RTObject;)V
+		//  10: invokevirtual #50                 // Method simulaTestPrograms/adHoc03_A._STM:()LsimulaTestPrograms/adHoc03_A;
+		//  13: pop
+		//
+		// 	x:-new A;
+		//   1: new           #19                 // class simulaTestPrograms/adHoc07_A
+		//   4: dup
+		//   5: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+		//   8: invokespecial #25                 // Method simulaTestPrograms/adHoc07_A."<init>":(Lsimula/runtime/RTS_RTObject;)V
+		//  11: invokevirtual #26                 // Method simulaTestPrograms/adHoc07_A._START:()Lsimula/runtime/RTS_RTObject;
+		//  14: checkcast     #19                 // class simulaTestPrograms/adHoc07_A
+		//  17: putfield      #7                  // Field x_2:LsimulaTestPrograms/adHoc07_A;
+
+		ClassDeclaration cls = (ClassDeclaration) meaning.declaredAs;
+		ClassDesc CD_cls=cls.getClassDesc();
+		codeBuilder
+			.new_(CD_cls)
+			.dup();
+		meaning.buildQualifiedStaticLink(codeBuilder);
+
+		// Push parameters
+		Iterator<Parameter> formalIterator = cls.parameterIterator();
+		for (Expression par : checkedParams) {
+			par.buildEvaluation(null,codeBuilder);
+			Parameter formalParameter = formalIterator.next();
+			if (formalParameter.mode == Parameter.Mode.value) {
+				if (par.type.equals(Type.Text)) {
+					codeBuilder.invokestatic(CD.RTS_RTObject,
+								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+				}
+				else if (formalParameter.kind == Parameter.Kind.Array) {
+					String cast=par.type.toJavaArrayType();
+					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(par.type),
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$"+cast+';'));
+				}
+			}
+		}
+
+		codeBuilder.invokespecial(CD_cls, "<init>", cls.getConstructorMethodTypeDesc());
+
+		// _STM(); or _START
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		if(cls.isDetachUsed()) {
+			String resultType="Lsimula/runtime/RTS_RTObject;";
+			codeBuilder.invokevirtual(pool.methodRefEntry(CD_cls, "_START", MethodTypeDesc.ofDescriptor("()" + resultType)));
+		} else {
+			String resultType="Lsimula/runtime/RTS_RTObject;";
+			codeBuilder.invokevirtual(pool.methodRefEntry(CD_cls, "_STM", MethodTypeDesc.ofDescriptor("()" + resultType)));
+		}
+		if(backLink == null) codeBuilder.pop();
+		else codeBuilder.checkcast(CD_cls);
+	}
+
 
 	@Override
 	public String toString() {

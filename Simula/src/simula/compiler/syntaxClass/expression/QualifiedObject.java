@@ -10,6 +10,7 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -116,6 +117,13 @@ public final class QualifiedObject extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		return("((" + classDeclaration.getJavaIdentifier() + ")(" + lhs.get() + "))");
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		lhs.buildEvaluation(null,codeBuilder);
+		codeBuilder.checkcast(classDeclaration.getClassDesc());
 	}
 
 	@Override

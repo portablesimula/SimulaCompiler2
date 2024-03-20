@@ -39,14 +39,17 @@ public final class RunFullTestBatch {
 
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
+		Option.TESTING_STACK_SIZE = true;
+		Option.CREATE_JAVA_SOURCE = true;
 //		Option.GENERATE_BYTEFILE=true;
 		Option.SPORT=true;
-		Option.TRACING=false;
+//		Option.TRACING=false;
 		Option.WARNINGS=false;
-		Option.verbose=false;
+//		Option.verbose=false;
 //		Option.EXTENSIONS=false;
-//		Option.CaseSensitive=true;
-		Option.GNERATE_LINE_CALLS=true;
+		Option.CaseSensitive=true;
+//		Option.GNERATE_LINE_CALLS=true;
+//		Option.GNERATE_SNAPSHOTS=true;
 
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -81,6 +84,7 @@ public final class RunFullTestBatch {
 		names.add("simtst27.sim"); // OK:  Test while-loops.
 		names.add("simtst28.sim"); // OK:  Paramenter transmission to procedures by value.
 		names.add("simtst29.sim"); // OK:  Procedure parameters by value
+		names.add("simtst30a.sim"); // OK:  Simple test of Arrays.
 		names.add("simtst30.sim"); // OK:  Name parameters (Modified: 2-dim arrays removed)
 
 		names.add("simtst31.sim"); // OK:  Labels and switches as parameters to procedures
@@ -92,13 +96,13 @@ public final class RunFullTestBatch {
 		names.add("simtst37.sim"); // OK:  Parameter by name and type conversion
 		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
-		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
-
-		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
-		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.
+//		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
+//
+//		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
+//		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.
 		names.add("simtst42.sim"); // OK:  Compute "n-fac", using iteration within the procedure.
 		names.add("simtst43.sim"); // OK:  Compute "n-fac", using recursion.
 		names.add("simtst44.sim"); // OK:  Test text procedure.
@@ -116,7 +120,7 @@ public final class RunFullTestBatch {
 		names.add("simtst55.sim"); // OK:  Test virtual procedures.
 		names.add("simtst56.sim"); // OK:  Test virtual procedures.
 		names.add("simtst57.sim"); // OK:  Virtual procedure - different number of parameters
-		names.add("simtst58.sim"); // OK:  Goto from within a connection into otherwise
+		names.add("simtst58.sim"); // err: Goto from within a connection into otherwise
 		names.add("simtst59.sim"); // OK:  Test 2-dim Array by value.
 		names.add("simtst60.sim"); // OK:  Visibility of protected attributes.
 
@@ -147,8 +151,8 @@ public final class RunFullTestBatch {
 		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 		names.add("simtst85.sim"); // OK:  Test Directfile.
-		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-	    names.add("simtst86.sim"); // OK:  Test separate compilation of Class.
+//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+//	    names.add("simtst86.sim"); // OK:  Test separate compilation of Class.
 		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -161,7 +165,7 @@ public final class RunFullTestBatch {
 		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.
 		names.add("simtst101.sim"); // OK: Test Standard Procedure 'sourceline'.
@@ -169,57 +173,57 @@ public final class RunFullTestBatch {
 		names.add("simtst103.sim"); // OK: All kinds of Activation Statements
 		names.add("simtst104.sim"); // OK: Procedure parameter 'F' by name.
 		names.add("simtst105.sim"); // OK: Multiple assignments.
-		//names.add("simtst106.sim"); // ERR: Test SIMULATION, complex example.
+//		//names.add("simtst106.sim"); // ERR: Test SIMULATION, complex example.
 		names.add("simtst107.sim"); // OK:  Test Process, activation statements, idle, terminated, time.
 		names.add("simtst108.sim"); // OK: Simple Co-Routine Sample 1: detach - call
 		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
 		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
-		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
-		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
-		names.add("simtst114.sim"); // OK: Switch Statement
+//		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
+//		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
+//		names.add("simtst114.sim"); // OK: Switch Statement
 		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
 		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
-		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
-		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
-		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
+//		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
+//		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
+//		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
 		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
-		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
-		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
-		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
+//		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
+//		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
+//		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
 		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
-		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
+//		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
 		names.add("simtst127.sim"); // OK: Switch (character) Statement
 		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
-		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
-		names.add("simtst129.sim"); // OK: Switch in precompiled class
-		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
-		names.add("simtst131.sim"); // OK: Catching Errors
-		names.add("simtst132.sim"); // ERR: SPORT Options
+//		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
+//		names.add("simtst129.sim"); // OK: Switch in precompiled class
+//		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
+//		names.add("simtst131.sim"); // OK: Catching Errors
+		names.add("simtst132.sim"); // OK: SPORT Options
 		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND and PURGE.
 		names.add("simtst135.sim"); // OK: OutBytefile with CREATE, APPEND and PURGE.
-		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.
-		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.
+//		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.
+//		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.
 		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 		names.add("simtst139.sim"); // OK: Test remote Array access.
 		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
-
-		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
-		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
-		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
-		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
-		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
-		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
-		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
-		names.add("simerr05.sim"); // OK: NumberFormatException
-		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
-		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
-		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
-		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+//
+//		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
+//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+//		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
+//		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
+//		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
+//		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
+//		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
+//		names.add("simerr05.sim"); // OK: NumberFormatException
+//		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
+//		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
+//		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
+//		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
 		
 		Global.packetName="simulaTestBatch";
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime

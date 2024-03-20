@@ -10,10 +10,13 @@ package simula.compiler.syntaxClass.expression;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
@@ -154,6 +157,20 @@ public final class ObjectRelation extends Expression {
 			Util.IERR("Impossible");
 			return ("");
 		}
+	}
+
+	@Override
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
+		if(opr == KeyWord.IS) {
+			lhs.buildEvaluation(null,codeBuilder);
+			codeBuilder
+				.ldc(classDeclaration.getClassDesc())
+				.invokestatic(CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
+		} else if(opr == KeyWord.IN) {
+			lhs.buildEvaluation(null,codeBuilder);
+			codeBuilder.instanceof_(classDeclaration.getClassDesc());
+		} else Util.IERR(""+opr);
 	}
 
 	@Override

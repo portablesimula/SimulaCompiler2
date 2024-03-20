@@ -10,6 +10,10 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
+import java.lang.classfile.instruction.SwitchCase;
+import java.util.List;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -98,6 +102,15 @@ public final class SwitchStatement extends Statement {
 	 */
 	private final Vector<WhenPart> switchCases=new Vector<WhenPart>();
 
+	
+	private	List<SwitchCase> lookupSwitchCases;
+
+	private boolean has_NONE_case;
+	
+	private Label defaultTarget; // beginning of the default handler block.
+	
+	private Label endLabel;
+
 	/**
 	 * Create a new SwitchStatement.
 	 * @param line the source line number
@@ -113,13 +126,16 @@ public final class SwitchStatement extends Statement {
 		switchKey = Expression.expectExpression();
 		switchKey.backLink=this;
 		Parse.expect(KeyWord.BEGIN);
-    	boolean noneCaseUsed=false;
+//    	boolean noneCaseUsed=false;
+		has_NONE_case=false;
 		while (Parse.accept(KeyWord.WHEN)) {
 			Vector<SwitchInterval> caseKeyList=new Vector<SwitchInterval>();
 			if (Parse.accept(KeyWord.NONE)) {
 				caseKeyList.add(null);
-				if(noneCaseUsed) Util.error("NONE Case is already used");
-				noneCaseUsed=true;
+//				if(noneCaseUsed) Util.error("NONE Case is already used");
+//				noneCaseUsed=true;
+				if(has_NONE_case) Util.error("NONE Case is already used");
+				has_NONE_case=true;
 			}
 			else {
 				caseKeyList.add(expectCasePair());
@@ -158,6 +174,12 @@ public final class SwitchStatement extends Statement {
     	 * The high case key
     	 */
     	Expression hiCase;
+    	
+    	/**
+    	 * 
+    	 */
+    	int firstTableIndex;
+
     	
     	/**
     	 * Utility class: SwitchInterval
@@ -221,6 +243,56 @@ public final class SwitchStatement extends Statement {
     		statement.doJavaCoding();
     		GeneratedJavaClass.code("break;");
     	}
+       	
+    	private int initTableSwitchCases(int index,CodeBuilder codeBuilder) {
+    		for(SwitchInterval casePair:this.caseKeyList) {
+//				System.out.println("SwitchStatement'WhenPart.INIT_JUMPTABLE: casePair="+casePair);
+    			if(casePair != null) {
+        			casePair.firstTableIndex = index;
+    				int low=casePair.lowCase.getInt();
+    				if(casePair.hiCase!=null) {
+    					int hi=casePair.hiCase.getInt();
+    					for(int i=low;i<=hi;i++) {
+    						lookupSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
+    						index++;
+    					}
+    				} else{
+    					lookupSwitchCases.add(SwitchCase.of(low, codeBuilder.newLabel()));
+    					index++;
+    				}
+    			}
+    		}
+    		return(index);
+    	}
+	
+    	private void buildByteCode(CodeBuilder codeBuilder) {
+        	for(SwitchInterval casePair:this.caseKeyList) {
+        		if(casePair==null) {
+        			//GeneratedJavaClass.code("default:");
+    				codeBuilder.labelBinding(defaultTarget);
+        		}
+        		else {
+                	int tableIndex = casePair.firstTableIndex;
+        			int low=casePair.lowCase.getInt();
+        			if(casePair.hiCase!=null) {
+        				int hi=casePair.hiCase.getInt();
+        				for(int i=low;i<=hi;i++) {
+        					//GeneratedJavaClass.code("case "+i+": ");
+            				SwitchCase switchCase=lookupSwitchCases.get(tableIndex-1);
+            				codeBuilder.labelBinding(switchCase.target());
+            				tableIndex++;
+        				}
+        			} else{
+        				//GeneratedJavaClass.code("case "+low+": ");
+        				SwitchCase switchCase=lookupSwitchCases.get(tableIndex-1);
+        				codeBuilder.labelBinding(switchCase.target());
+        			}
+        		}
+        	}
+        	this.statement.buildByteCode(codeBuilder);
+        	codeBuilder.goto_(endLabel);
+    	}
+    	
 	
     	/**
     	 * Utility method print.
@@ -292,6 +364,45 @@ public final class SwitchStatement extends Statement {
         for(WhenPart when:switchCases) when.doCoding(false);
         GeneratedJavaClass.code("} // END SWITCH STATEMENT");
     }
+
+	@Override
+	public void buildByteCode(CodeBuilder codeBuilder) {
+		buildSwitchKeyTest(codeBuilder);
+		lookupSwitchCases = new Vector<SwitchCase>();
+		int index = 1;
+		for(WhenPart when:switchCases) {
+			 index = when.initTableSwitchCases(index,codeBuilder);
+		}
+
+		// Build the LookupSwitch Instruction
+		defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+		endLabel = codeBuilder.newLabel();
+		switchKey.buildEvaluation(null, codeBuilder);
+		codeBuilder
+			.lookupswitch(defaultTarget, lookupSwitchCases);
+        for(WhenPart when:switchCases) {
+        	when.buildByteCode(codeBuilder);
+        }
+        if(!has_NONE_case) {
+			codeBuilder.labelBinding(defaultTarget);
+        }
+		codeBuilder.labelBinding(endLabel);
+	}
+	
+	private void buildSwitchKeyTest(CodeBuilder codeBuilder) {
+		Label L1 = codeBuilder.newLabel();
+		Label L2 = codeBuilder.newLabel();
+		switchKey.buildEvaluation(null, codeBuilder);
+		lowKey.buildEvaluation(null, codeBuilder);
+		codeBuilder.if_icmplt(L1);
+		switchKey.buildEvaluation(null, codeBuilder);
+		hiKey.buildEvaluation(null, codeBuilder);
+		codeBuilder.if_icmple(L2);
+		codeBuilder.labelBinding(L1);
+		Util.buildSimulaRuntimeError("Switch key outside key interval", codeBuilder);
+		codeBuilder.labelBinding(L2);
+	}
+
   
     // ***********************************************************************************************
     // *** Printing Utility: print
