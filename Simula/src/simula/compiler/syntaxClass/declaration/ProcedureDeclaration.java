@@ -1082,11 +1082,15 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
+		
+//		if(identifier.equals("outtext"))
+//		System.out.println("BEGIN Write ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+		
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
 		oupt.writeObject(type);
-//		oupt.writeObject(declaredIn);
+		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 		oupt.writeObject(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
@@ -1104,7 +1108,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		identifier=(String)inpt.readObject();
 		externalIdent=(String)inpt.readObject();
 		type=Type.inType(inpt);
-//		declaredIn = (DeclarationScope) inpt.readObject();
+		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 		declarationKind=(Kind) inpt.readObject();
 		rtBlockLevel=inpt.readInt();
 		hasLocalClasses=inpt.readBoolean();
@@ -1113,6 +1117,10 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		labelList=(Vector<LabelDeclaration>) inpt.readObject();
 		declarationList=(DeclarationList) inpt.readObject();
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+		
+//		if(identifier.equals("outtext"))
+//		System.out.println("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+		
 		Global.setScope(this.declaredIn);
 	}
 

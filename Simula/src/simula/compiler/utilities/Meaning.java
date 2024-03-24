@@ -235,6 +235,7 @@ public final class Meaning implements Externalizable {
 		
 		if (meaning.isConnected()) {
 			Expression inspectedExpression = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
+//			System.out.println("Meaning.buildIdentifierAccess: inspectedExpression="+inspectedExpression);
 			if (meaning.foundBehindInvisible) {
 //				String remoteCast = meaning.foundIn.getJavaIdentifier();
 				//id = "((" + remoteCast + ")(" + inspectedVariable.toJavaCode() + "))." + id;
@@ -254,10 +255,10 @@ public final class Meaning implements Externalizable {
 				inspectedExpression.buildEvaluation(null, codeBuilder);
 			}
 		} else if(declaredAs instanceof ProcedureDeclaration) {			
-//			System.out.println("VarablerExpression.buildIdentifierAccess: ****************** "+this+" ******************");
-//			System.out.println("VarablerExpression.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
-//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredAs: "+declaredAs);
-//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredIn: "+declaredIn);
+//			System.out.println("Meaning.buildIdentifierAccess: ****************** "+this+" ******************");
+//			System.out.println("Meaning.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
+//			System.out.println("Meaning.buildIdentifierAccess: DeclaredAs: "+declaredAs);
+//			System.out.println("Meaning.buildIdentifierAccess: DeclaredIn: "+declaredIn);
 //			Util.IERR("");
 
 			String cast = meaning.declaredAs.getJavaIdentifier();
@@ -281,10 +282,10 @@ public final class Meaning implements Externalizable {
 				|| meaning.declaredIn.declarationKind == Declaration.Kind.MemberMethod)) {
 			
 //			int n = meaning.declaredIn.rtBlockLevel;
-//			System.out.println("VarablerExpression.buildIdentifierAccess: ****************** "+this+" ******************");
-//			System.out.println("VarablerExpression.buildIdentifierAccess: declaredAs="+this.declaredAs.getClass().getSimpleName()+"  "+this.declaredAs);
-//			System.out.println("VarablerExpression.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
-//			System.out.println("VarablerExpression.buildIdentifierAccess: DeclaredIn Scope: "+meaning.declaredIn.externalIdent+"  rtBlockLevel="+n);
+//			System.out.println("Meaning.buildIdentifierAccess: ****************** "+this+" ******************");
+//			System.out.println("Meaning.buildIdentifierAccess: declaredAs="+this.declaredAs.getClass().getSimpleName()+"  "+this.declaredAs);
+//			System.out.println("Meaning.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
+//			System.out.println("Meaning.buildIdentifierAccess: DeclaredIn Scope: "+meaning.declaredIn.externalIdent+"  rtBlockLevel="+n);
 //			Util.IERR("");
 
 			// id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id; // ØM

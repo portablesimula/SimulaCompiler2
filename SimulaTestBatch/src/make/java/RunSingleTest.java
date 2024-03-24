@@ -35,7 +35,7 @@ public final class RunSingleTest {
 		Option.CREATE_JAVA_SOURCE = true;
 //		Option.GENERATE_BYTEFILE=true;
 		Option.TESTING_STACK_SIZE = true;
-//		Option.LIST_GENERATED_CLASS_FILES=true;
+		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 //		Option.verbose = true;
 		Option.WARNINGS=true;
@@ -88,13 +88,12 @@ public final class RunSingleTest {
 //		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
-//		names.add("adHoc00.sim"); // For ad'hoc testing
+		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("adHoc00.sim"); // For ad'hoc testing
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
-//		names.add("adHoc00.sim");
-//		names.add("adHoc01.sim");
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -257,7 +256,7 @@ public final class RunSingleTest {
 //		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND, SYNCHRONOUS and PURGE.
 //		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 //		names.add("simtst139.sim"); // OK: Test remote Array access.
-			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+//			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

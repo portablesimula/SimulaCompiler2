@@ -13,6 +13,7 @@ import java.io.ObjectOutput;
 
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Token;
+import simula.compiler.utilities.Util;
 
 /**
  * Utility class OverLoad.
@@ -37,6 +38,13 @@ public final class OverLoad extends Type {
 	public OverLoad(final Type... type)
 	{  super("OverLoad");
 	   this.type=type;
+	}
+	
+	public boolean contains(Type type) {
+		for(Type tp:this.type) {
+			if(tp.equals(type)) return(true);
+		}
+		return(false);
 	}
 	
 	@Override

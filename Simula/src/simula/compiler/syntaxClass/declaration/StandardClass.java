@@ -10,6 +10,8 @@ package simula.compiler.syntaxClass.declaration;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+
+import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
 import simula.compiler.CodeLine;
@@ -110,6 +112,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * Initiate the The Type Text
 	 */
 	private static void initTypeText() {
+		String[] mtd = { "(Lsimula/runtime/RTS_TXT;FI)V", "(Lsimula/runtime/RTS_TXT;DI)V" };
 		typeText=new StandardClass("TXT");
 		typeText.isContextFree=true;
 		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"constant");  
@@ -128,8 +131,8 @@ public final class StandardClass extends ClassDeclaration {
 		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Integer,"getfrac");  
 		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,null,"putint",parameter("i",Type.Integer));  
 		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,null,"putfrac",parameter("i",Type.Integer),parameter("n",Type.Integer));  
-		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,null,"putfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer)); 
-		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,null,"putreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer)); 
+		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"putfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer)); 
+		typeText.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"putreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer)); 
 	}
 
 	// ******************************************************************
@@ -201,13 +204,15 @@ public final class StandardClass extends ClassDeclaration {
 		//	    Procedures mod, rem, abs, sign, entier,
 		//	      addepsilon, subepsilon.
 
+		String[] mtd = { "(F)F", "(D)D" };
+
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"mod",parameter("i",Type.Integer),parameter("j",Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"rem",parameter("i",Type.Integer),parameter("j",Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.LongReal,"abs",parameter("e",Type.LongReal));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"sign",parameter("e",Type.LongReal));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"entier",parameter("e",Type.LongReal));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,new OverLoad(Type.Real,Type.LongReal),"addepsilon",parameter("e",new OverLoad(Type.Real,Type.LongReal)));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,new OverLoad(Type.Real,Type.LongReal),"subepsilon",parameter("e",new OverLoad(Type.Real,Type.LongReal)));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd,new OverLoad(Type.Real,Type.LongReal),"addepsilon",parameter("e",new OverLoad(Type.Real,Type.LongReal)));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd,new OverLoad(Type.Real,Type.LongReal),"subepsilon",parameter("e",new OverLoad(Type.Real,Type.LongReal)));
 
 		//	    Text utilities .......................................... 9.2
 		//	    Procedures copy, blanks, char, isochar, rank, isorank,
@@ -253,8 +258,15 @@ public final class StandardClass extends ClassDeclaration {
 		//	    Extremum functions ...................................... 9.5
 		//	    Procedures max, min.
 
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,new OverLoad(Type.Real,Type.LongReal),"min",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,new OverLoad(Type.Real,Type.LongReal),"max",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
+		String[] mtd2 = { "(II)I", "(IF)F", "(ID)D", "(FI)F", "(FF)F", "(FD)D", "(DI)D", "(DF)D", "(DD)D",
+				          "(CC)C", "(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;" };
+
+//		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd2,new OverLoad(Type.Real,Type.LongReal),"min",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
+//		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd2,new OverLoad(Type.Real,Type.LongReal),"max",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
+
+		OverLoad types = new OverLoad(Type.Integer,Type.Real,Type.LongReal,Type.Character,Type.Text);
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd2,types,"min",parameter("x",types),parameter("y",types));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd2,types,"max",parameter("x",types),parameter("y",types));
 
 		//	    Error control ........................................... 9.7
 		//	    Procedure error.
@@ -271,6 +283,8 @@ public final class StandardClass extends ClassDeclaration {
 		//	    Procedures draw, randint, uniform, normal, negexp,
 		//	      Poisson, Erlang, discrete, linear, histd.
 
+		String[] mtd3 = { "(FI)V", "(DI)V" }; // TESING  - MÅ RETTES
+
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Boolean,"draw",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"randint",parameter("a",Type.Integer),parameter("b",Type.Integer),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.LongReal,"uniform",parameter("a",Type.LongReal),parameter("b",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
@@ -278,9 +292,9 @@ public final class StandardClass extends ClassDeclaration {
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.LongReal,"negexp",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"Poisson",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.LongReal,"Erlang",parameter("a",Type.LongReal),parameter("b",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"discrete",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.LongReal,"linear",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("B",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Integer,"histd",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd3,Type.Integer,"discrete",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd3,Type.LongReal,"linear",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("B",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd3,Type.Integer,"histd",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
 
 		//	    Calendar and timing utilities ........................... 9.10
 		//	    Procedures datetime, cputime, clocktime.
@@ -300,16 +314,21 @@ public final class StandardClass extends ClassDeclaration {
 		// *** Additional Standard Procedures ***
 		// **************************************
 		if(Option.EXTENSIONS) {
+			
+			String[] mtd4 = { "(I)Lsimula/runtime/RTS_TXT;", "(F)Lsimula/runtime/RTS_TXT;","(D)Lsimula/runtime/RTS_TXT;","(Z)Lsimula/runtime/RTS_TXT;","(C)Lsimula/runtime/RTS_TXT;" };
+			String[] mtd5 = { "(FI)Lsimula/runtime/RTS_TXT;", "(DI)Lsimula/runtime/RTS_TXT;" };
+			String[] mtd6 = { "(F)Lsimula/runtime/RTS_TXT;", "(D)Lsimula/runtime/RTS_TXT;" };
+
 			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,null,"waitSomeTime"
 				,parameter("millies",Type.Integer)); 
 			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,null,"printThreadList"
 				,parameter("withStackTrace",Type.Boolean));
 			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,null,"printStaticChain");
-			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Text,"edit"
+			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd4,Type.Text,"edit"
 				,parameter("x",new OverLoad(Type.Integer,Type.Real,Type.LongReal,Type.Boolean,Type.Character)));
-			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Text,"edfix"
+			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd5,Type.Text,"edfix"
 				,parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer));
-			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,Type.Text,"edtime"
+			ENVIRONMENT.addStandardProcedure(Declaration.Kind.ContextFreeMethod,mtd6,Type.Text,"edtime"
 				,parameter("x",new OverLoad(Type.Real,Type.LongReal)));
 		}
 		
@@ -529,6 +548,8 @@ public final class StandardClass extends ClassDeclaration {
 	 * </pre>
 	 */
 	private static void initOutfile() { 
+		String[] mtd = { "(FII)V", "(DII)V" };
+
 		StandardClass Outfile=new StandardClass("Imagefile","Outfile");
 		BASICIO.addStandardClass(Outfile);  // Declared in BASICIO
 		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
@@ -542,8 +563,8 @@ public final class StandardClass extends ClassDeclaration {
 		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Text,"FIELD_",parameter("w",Type.Integer));  
 		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outint",parameter("i",Type.Integer),parameter("w",Type.Integer));  
 		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outfrac",parameter("i",Type.Integer),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
-		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
-		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
+		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"outfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
+		Outfile.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"outreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
 	}  
 
 	// ******************************************************************
@@ -588,6 +609,8 @@ public final class StandardClass extends ClassDeclaration {
 	 * </pre>
 	 */
 	private static void initDirectfile() {
+		String[] mtd = { "(FII)V", "(DII)V" };
+
 		StandardClass Directfile=new StandardClass("Imagefile","Directfile");
 		BASICIO.addStandardClass(Directfile);  // Declared in BASICIO
 		Directfile.addStandardAttribute(Type.Integer,"LOC_");  
@@ -619,8 +642,8 @@ public final class StandardClass extends ClassDeclaration {
 		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,Type.Text,"FIELD_",parameter("w",Type.Integer));  
 		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outint",parameter("i",Type.Integer),parameter("w",Type.Integer));  
 		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outfrac",parameter("i",Type.Integer),parameter("n",Type.Integer),parameter("w",Type.Integer));  
-		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
-		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,null,"outreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
+		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"outfix", parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
+		Directfile.addStandardProcedure(Declaration.Kind.MemberMethod,mtd,null,"outreal",parameter("r",new OverLoad(Type.Real,Type.LongReal)),parameter("n",Type.Integer),parameter("w",Type.Integer)); 
 	}  
 
 	// ******************************************************************
@@ -1373,6 +1396,25 @@ public final class StandardClass extends ClassDeclaration {
 	 */
 	private void addStandardProcedure(Declaration.Kind kind,Type type,String ident,Parameter... param) {
 		declarationList.add(new StandardProcedure(this,kind,type,ident,param)); }
+
+	/**
+	 * Create and add a new StandardProcedure
+	 * @param kind the declaration kind
+	 * @param mtdSet the set of Method Type Descriptors
+	 * @param type the procedure's type
+	 * @param ident the procedure identifier
+	 * @param param the parameters
+	 */
+	private void addStandardProcedure(Declaration.Kind kind,String[] mtdSet,Type type,String ident,Parameter... param) {
+		declarationList.add(new StandardProcedure(this,kind,mtdSet,type,ident,param)); }
+
+	// ***********************************************************************************************
+	// *** ByteCoding Utility: getClassDesc   -- Defined in DeclarationScope
+	// ***********************************************************************************************
+	@Override
+	public ClassDesc getClassDesc() {
+		return(ClassDesc.of("simula.runtime." + this.externalIdent));
+	}
 
 	// ***********************************************************************************************
 	// *** Externalization

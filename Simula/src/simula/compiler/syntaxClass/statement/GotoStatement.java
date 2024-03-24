@@ -111,6 +111,7 @@ public final class GotoStatement extends Statement {
 		if(label instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
 //			System.out.println("GotoStatement.buildByteCode: "+meaning.declaredAs.getClass().getSimpleName()+"  "+meaning.declaredAs);
+//			System.out.println("GotoStatement.buildByteCode: currentClassDesc="+BlockDeclaration.currentClassDesc());
 //			System.out.println("GotoStatement.buildByteCode: label="+label.getClass().getSimpleName()+"  "+label);
 			if(meaning.declaredAs instanceof LabelDeclaration lab) {
 //				lab.buildLabelQuant(codeBuilder);

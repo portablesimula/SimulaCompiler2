@@ -720,6 +720,19 @@ public final class RTS_TXT {
 		output = output.replace((char) UNICODE_MINUS_SIGN, '-');
 		putRealResult(T, output);
 	}
+	
+	/**
+	 * Procedure putfix.
+	 * <p>
+	 * See <b>{@link RTS_TXT#putfix(RTS_TXT,double,int)}</b>
+	 * 
+	 * @param T the text reference
+	 * @param r the real value to be edited
+	 * @param n the number of digits after decimal sign
+	 */
+	public static void putfix(final RTS_TXT T, float r, int n) {
+		putfix(T, (double) r, n);
+	}
 
 	/**
 	 * Procedure putreal.

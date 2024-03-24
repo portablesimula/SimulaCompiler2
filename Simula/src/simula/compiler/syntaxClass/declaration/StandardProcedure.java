@@ -27,6 +27,9 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 public final class StandardProcedure extends ProcedureDeclaration {
+	private String[] mtdSet;
+	private ProcedureSpecification overLoadMatch;
+	private String mtdPicked;
 	
 	/**
 	 * Create a new StandardProcedure without parameters.
@@ -50,6 +53,25 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		this(declaredIn,kind,type,ident);
 		for(int i=0;i<param.length;i++) param[i].into(parameterList); }
 
+	/**
+	 * Create a new StandardProcedure with parameters.
+	 * @param declaredIn the enclosing scope
+	 * @param kind the declaration kind
+	 * @param mtdSet the set of Method Type Descriptors
+	 * @param type the procuedre's type
+	 * @param ident the procedure identifier
+	 * @param param the parameters
+	 */
+	StandardProcedure(DeclarationScope declaredIn,Declaration.Kind kind,String[] mtdSet,Type type, String ident,Parameter... param) {
+		this(declaredIn,kind,type,ident);
+		this.mtdSet = mtdSet;
+		for(int i=0;i<param.length;i++) param[i].into(parameterList); 
+		
+//		for(String mtd:mtdSet) {
+//			System.out.println("NEW StandardProcedure: "+mtd+"  ==>  "+getProcedureSpecification(mtd));
+//		}
+	}
+
 	@Override
 	public void doChecking() {
 		if(IS_SEMANTICS_CHECKED()) return;
@@ -62,8 +84,94 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		SET_SEMANTICS_CHECKED();
 	}
 	
+	public ProcedureSpecification getOverLoadMatch(Vector<Expression> params) {
+		if(mtdSet != null) for(String mtd:mtdSet) {
+			ProcedureSpecification legal = getLegalMatch(mtd,params);
+			if(legal != null) {
+				this.overLoadMatch = legal;
+				return(legal);
+			}
+		}
+		return null;
+	}
+	
+	private ProcedureSpecification getLegalMatch(String mtd,Vector<Expression> params) {
+//		System.out.println("StandardProcedure.getLegalMatch: mtd="+mtd);
+		ProcedureSpecification spec = getProcedureSpecification(mtd);
+//		System.out.println("StandardProcedure.getLegalMatch: spec="+spec);
+		for(int i=0;i<params.size();i++) {
+			Expression expr = params.get(i);
+			expr.doChecking();
+			Parameter par = spec.parameterList.get(i);
+			if(!expr.type.equals(par.type)) return(null);
+		}
+//		System.out.println("StandardProcedure.getLegalMatch: "+this+"  ==>  "+spec);
+		this.mtdPicked = mtd;
+		return(spec);
+	}
+	
+	public ProcedureSpecification getProcedureSpecification(String mtd) {
+		Type type = null;
+		Vector<Parameter> pList = new Vector<Parameter>();
+		
+		boolean more = true;
+		int pos=0;
+		Type pType=null;
+		
+		if(mtd.charAt(pos++) != '(') Util.IERR("");
+		LOOP:while(more) {
+			char c = mtd.charAt(pos++);
+			switch(c) {
+				case ')': break LOOP;
+				case 'Z': pType = Type.Boolean; break;
+				case 'C': pType = Type.Character; break;
+				case 'I': pType = Type.Integer; break;
+				case 'F': pType = Type.Real; break;
+				case 'D': pType = Type.LongReal; break;
+				case 'L': {
+					StringBuilder sb = new StringBuilder();
+					while(c != ';') {
+						c = mtd.charAt(pos++);
+						sb.append(c);
+					}
+					if(sb.toString().equals("simula/runtime/RTS_TXT;")) pType = Type.Text;
+					else Util.IERR(""+sb);
+					break;
+				}
+				default: Util.IERR(""+c);
+			}
+			Parameter par = new Parameter("_p"+(pos-1), pType, Parameter.Kind.Simple);
+			pList.add(par);
+		}
+		char c = mtd.charAt(pos++);
+		switch(c) {
+			case 'V': type = null; break;
+			case 'Z': type = Type.Boolean; break;
+			case 'C': type = Type.Character; break;
+			case 'I': type = Type.Integer; break;
+			case 'F': type = Type.Real; break;
+			case 'D': type = Type.LongReal; break;
+			case 'L': {
+				StringBuilder sb = new StringBuilder();
+				while(c != ';') {
+					c = mtd.charAt(pos++);
+					sb.append(c);
+				}
+				if(sb.toString().equals("simula/runtime/RTS_TXT;")) type = Type.Text;
+				else Util.IERR(""+sb);
+				break;
+			}
+			default: Util.IERR(""+c);
+		}
+		
+		return(new ProcedureSpecification(identifier, type, pList)); 
+	}
+	
 	public MethodTypeDesc getMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
-		return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
+		if(overLoadMatch !=null) {
+			getOverLoadMatch(params);
+			return(MethodTypeDesc.ofDescriptor(mtdPicked));
+		} else return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
 	}
 	private String edMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
 		// MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_Printfile;");
@@ -88,6 +196,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 			} else if(par.kind == Parameter.Kind.Array) {
 				sb.append("Lsimula/runtime/RTS_ARRAY;");				
 			} else if(par.type instanceof OverLoad ovl) {
+//				System.out.println("StandardProcedure.edMethodTypeDesc: "+this);
 				boolean found=false;
 				for(Type alt:ovl.type) {
 					if(params.get(i).type.equals(alt)) {

@@ -781,6 +781,28 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param y the parameter y
 	 * @return the greater of the two parameter values
 	 */
+	public static double max(final double x, final float y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
+	public static double max(final double x, final int y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
 	public static float max(final float x, final float y) {
 		return (Math.max(x, y));
 	}
@@ -792,7 +814,51 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param y the parameter y
 	 * @return the greater of the two parameter values
 	 */
+	public static float max(final float x, final int y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
+	public static double max(final float x, final double y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
 	public static int max(final int x, final int y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
+	public static float max(final int x, final float y) {
+		return (Math.max(x, y));
+	}
+
+	/**
+	 * Standard Procedure max.
+	 * See {@link RTS_ENVIRONMENT#max(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the greater of the two parameter values
+	 */
+	public static double max(final int x, final double y) {
 		return (Math.max(x, y));
 	}
 
@@ -844,6 +910,28 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param y the parameter y
 	 * @return the lesser of the two parameter values
 	 */
+	public static double min(final double x, final float y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
+	public static double min(final double x, final int y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
 	public static float min(final float x, final float y) {
 		return (Math.min(x, y));
 	}
@@ -855,7 +943,51 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param y the parameter y
 	 * @return the lesser of the two parameter values
 	 */
+	public static double min(final float x, final double y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
+	public static float min(final float x, final int y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
 	public static int min(final int x, final int y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
+	public static float min(final int x, final float y) {
+		return (Math.min(x, y));
+	}
+
+	/**
+	 * Standard Procedure min.
+	 * See {@link RTS_ENVIRONMENT#min(double,double)}
+	 * @param x the parameter x
+	 * @param y the parameter y
+	 * @return the lesser of the two parameter values
+	 */
+	public static double min(final int x, final double y) {
 		return (Math.min(x, y));
 	}
 
@@ -1498,6 +1630,15 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param n the argument
 	 * @return the edited text
 	 */
+	public static RTS_TXT edit(final int n) {
+		return (new RTS_TXT(("" + n)));
+	}
+
+	/**
+	 * Extended Standard procedure edit.
+	 * @param n the argument
+	 * @return the edited text
+	 */
 	public static RTS_TXT edit(final float n) {
 		return (new RTS_TXT(("" + n).replace('E', '&')));
 	}
@@ -1518,6 +1659,19 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return the edited text
 	 */
 	public static RTS_TXT edfix(final double r, final int n) {
+		RTS_TXT T = blanks(n + 10);
+		RTS_TXT.putfix(T, r, n);
+		String S = T.edText().trim();
+		return (new RTS_TXT(S));
+	}
+
+	/**
+	 * Extended Standard procedure edit.
+	 * @param r the real argument
+	 * @param n number of digits after decimal sign
+	 * @return the edited text
+	 */
+	public static RTS_TXT edfix(final float r, final int n) {
 		RTS_TXT T = blanks(n + 10);
 		RTS_TXT.putfix(T, r, n);
 		String S = T.edText().trim();

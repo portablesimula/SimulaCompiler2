@@ -143,6 +143,17 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	 * a CompoundStatement or ConnectionBlock.
 	 * @param block the block containing labels to be moved
 	 */
+//	static void moveLabelsFrom(DeclarationScope block) {
+//		DeclarationScope declaredIn = block.declaredIn;
+//		Vector<LabelDeclaration> labelList = block.labelList;
+//		DeclarationScope enc = declaredIn;
+//		while (enc.declarationKind == Declaration.Kind.CompoundStatement
+//				&& enc.declarationKind == Declaration.Kind.ConnectionBlock
+//				&& enc.declarationList.isEmpty())
+//			enc = enc.declaredIn;
+//		for (LabelDeclaration lab : labelList) enc.labelList.add(lab);
+//		labelList.clear();
+//	}
 	static void moveLabelsFrom(DeclarationScope block) {
 		DeclarationScope declaredIn = block.declaredIn;
 		Vector<LabelDeclaration> labelList = block.labelList;
@@ -151,7 +162,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 				&& enc.declarationKind == Declaration.Kind.ConnectionBlock
 				&& enc.declarationList.isEmpty())
 			enc = enc.declaredIn;
-		for (LabelDeclaration lab : labelList) enc.labelList.add(lab);
+		for (LabelDeclaration lab : labelList) {
+			lab.movedTo=enc;
+			enc.labelList.add(lab);
+		}
 		labelList.clear();
 	}
 

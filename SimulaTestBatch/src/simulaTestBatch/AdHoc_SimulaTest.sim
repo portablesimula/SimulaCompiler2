@@ -1,0 +1,8 @@
+ 
+class AdHoc_SimulaTest(n,title); integer n; text title;
+%	hidden protected found_error;
+begin
+
+	outtext ("--- START Simula a.s. TEST"); outimage;
+	
+end;

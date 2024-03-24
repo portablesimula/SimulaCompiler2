@@ -33,6 +33,7 @@ import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
+import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
@@ -288,8 +289,17 @@ public final class VariableExpression extends Expression implements Externalizab
 				Iterator<Parameter> formalIterator;
 				if (decl instanceof ClassDeclaration cdecl)
 					formalIterator = cdecl.new ClassParameterIterator();
-				else
+				else {
 					formalIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
+					if(!Option.CREATE_JAVA_SOURCE) {
+						if(decl instanceof StandardProcedure prc) {
+//							System.out.println("VariableExpression.doChecking: StandardProcedure="+prc);
+							ProcedureSpecification overLoadMatch = prc.getOverLoadMatch(params);
+							if(overLoadMatch != null)
+								overloadedType = overLoadMatch.type;
+						}
+					}
+				}
 				if (params != null) {
 					// Check parameters
 					Iterator<Expression> actualIterator = params.iterator();
@@ -302,10 +312,30 @@ public final class VariableExpression extends Expression implements Externalizab
 						Type formalType = formalParameter.type;
 						Expression actualParameter = actualIterator.next();
 						actualParameter.doChecking();
-						if (formalType instanceof OverLoad) {
-							formalType = actualParameter.type; // AD'HOC for add/subepsilon
-							overloadedType = formalType;
+						
+//						if (formalType instanceof OverLoad) {
+//							formalType = actualParameter.type; // AD'HOC for add/subepsilon
+//							overloadedType = formalType;
+//						}
+						
+						if (formalType instanceof OverLoad otp) {
+							if(identifier.equalsIgnoreCase("addepsilon") || identifier.equalsIgnoreCase("subepsilon")) {
+								formalType = actualParameter.type; // AD'HOC for add/subepsilon
+								overloadedType = formalType;
+							} else {
+//								System.out.println("VariableExpression.doChecking: identifier="+this.identifier);
+//								System.out.println("VariableExpression.doChecking: formalParameter="+formalParameter);
+//								System.out.println("VariableExpression.doChecking: actualParameter="+actualParameter.type);
+								
+//								formalType = otp.type[0];
+//								LOOP2: for(Type tp:otp.type) {
+//									if(tp.equals(actualParameter.type)) {
+//										formalType = tp; break LOOP2;
+//									}
+//								}
+							}
 						}
+						
 						if (formalParameter.kind == Parameter.Kind.Array) {
 //							if (formalType != null && formalType != actualParameter.type
 							if (formalType != null && (!formalType.equals(actualParameter.type))
@@ -766,6 +796,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			case LabelDeclaration:
 				if (destination)
 					Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration:"); // rightPart=" + rightPart);
+//				System.out.println("VariableExpression.buildByteCode: LabelDeclaration");
 				buildIdentifierAccess(destination,codeBuilder);
 				LabelDeclaration lab=(LabelDeclaration)decl;
 				VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);

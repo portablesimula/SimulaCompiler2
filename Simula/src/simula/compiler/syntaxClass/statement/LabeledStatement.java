@@ -109,12 +109,7 @@ public final class LabeledStatement extends Statement {
 		for (LabelDeclaration lab:labels) {
 			String comment = "DeclaredIn: "+lab.declaredIn.identifier;
 			if(lab.movedTo != null) comment = comment+" -> "+lab.movedTo;
-			String labelcode;
-//			if(Option.USE_FILE_CLASS_API > 0) {
-				labelcode="_SIM_LABEL("+lab.index+");";
-				System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
-//			}
-//			else labelcode="_LABEL("+lab.index+",\""+lab.identifier+"\");";
+			String labelcode="_SIM_LABEL("+lab.index+");";
 			if(statement instanceof BlockStatement stat) {
 				BlockStatement blockStatement=stat;
 				if(blockStatement.isCompoundStatement())
@@ -126,12 +121,8 @@ public final class LabeledStatement extends Statement {
 				Util.IERR("");
 			}
 			else {
-//				if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL();");
-//				GeneratedJavaClass.code(labelcode,comment);
-				
 				// Bind Label
 				lab.doBind(codeBuilder);
-//				Util.IERR("");
 			}
 		}
 		statement.buildByteCode(codeBuilder);

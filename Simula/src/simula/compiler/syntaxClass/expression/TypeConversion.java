@@ -13,6 +13,7 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
@@ -98,6 +99,7 @@ public final class TypeConversion extends Expression {
 	 */
 	public static Expression testAndCreate(final Type toType,final Expression expression) {
 		Type fromType=expression.type;
+//		System.out.println("TypeConversion.testAndCreate: "+fromType+"  ==>  "+toType);
 		String qual=(fromType==null)?null:fromType.getRefIdent();
 		if(!Option.SPORT && qual != null) {
 			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.ctBlockLevel : 0;
@@ -118,6 +120,11 @@ public final class TypeConversion extends Expression {
 				Constant c=new Constant(toType,val); c.doChecking();
 				return(c);
 			}
+			if(!Option.CREATE_JAVA_SOURCE) {
+				if(toType instanceof OverLoad otp) {
+					return (new TypeConversion(otp.type[0], expression));
+				}				
+			}
 			return (new TypeConversion(toType, expression));
 		}
 		return (expression);
@@ -129,8 +136,16 @@ public final class TypeConversion extends Expression {
 	 * @param expression the expression
 	 * @return piece of Java source code
 	 */
-	private static boolean testCastNeccessary(final Type toType,final Expression expression) {
+	private static boolean testCastNeccessary(Type toType,final Expression expression) {
 		if (toType == null)	return (false);
+		if(!Option.CREATE_JAVA_SOURCE) {
+			if(toType instanceof OverLoad otp) {
+				if(!otp.contains(expression.type)) {
+//					System.out.println("TypeConversion.testCastNeccessary: "+expression.type+"  ==>  "+toType+"  RETURNS TRUE");
+					return(true); // Ad'Hoc
+				}
+			}
+		}
 		Type fromType = expression.type;
 		if(fromType==null) {
 			Util.error("Expression "+expression+" has no type - can't be converted to "+toType);
@@ -200,11 +215,21 @@ public final class TypeConversion extends Expression {
 			Type fromType = expression.type;
 			if (fromType.equals(Type.Integer)) codeBuilder.i2f();
 			else if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
-			else if (!fromType .equals(Type.Real)) Util.IERR("");
+			else if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
+				System.out.println("TypeConvesion.buildEvaluation: backLink="+this.backLink);
+				System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
+				if(!otp.contains(Type.Real)) Util.IERR(""+fromType+"  ==>  "+type);
+			}
+			else if (!fromType .equals(Type.Real)) Util.IERR(""+fromType+"  ==>  "+type);
 		} else if (type.equals(Type.LongReal)) {
 			Type fromType = expression.type;
 			if (fromType.equals(Type.Integer)) codeBuilder.i2d();
 			else if (fromType.equals(Type.Real)) codeBuilder.f2d();
+			else if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
+				System.out.println("TypeConvesion.buildEvaluation: backLink="+backLink);
+				System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
+				if(!otp.contains(Type.LongReal)) Util.IERR(""+fromType+"  ==>  "+type);
+			}
 			else if (!fromType .equals(Type.LongReal)) Util.IERR("");
 		} else {
 			codeBuilder.checkcast(type.toClassDesc());

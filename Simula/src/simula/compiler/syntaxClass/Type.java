@@ -178,6 +178,11 @@ public class Type extends SyntaxClass implements Externalizable {
 		this.declaredIn=declaredIn;
 	}
 	
+	public static boolean equals(Type type1,Type type2) {
+		if(type1 == null) return(type2 == null);
+		return(type1.equals(type2));
+	}
+	
 	/**
 	 * Returns the ref-identifier or null.
 	 * @return the ref-identifier or null

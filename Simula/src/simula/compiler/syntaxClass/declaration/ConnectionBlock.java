@@ -146,7 +146,8 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 			return;
 		Global.sourceLineNumber = lineNumber;
 		// Set External Identifier
-		externalIdent = inspectedVariable.identifier + '_' + lineNumber;
+//		externalIdent = inspectedVariable.identifier + '_' + lineNumber;
+		externalIdent = inspectedVariable.identifier;
 		Global.enterScope(this);
 		rtBlockLevel = currentRTBlockLevel;
 		if (whenClassIdentifier != null) {

@@ -8,6 +8,9 @@
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -185,9 +188,9 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	@Override
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 //		System.out.println("LabelDeclaration.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
-		DeclarationScope encl = (movedTo != null)? movedTo : declaredIn;
-		ClassDesc CD_cls=encl.getClassDesc();
-		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD.RTS_LABEL));
+		DeclarationScope declaredIn = (movedTo != null)? movedTo : this.declaredIn;
+		ClassDesc owner=declaredIn.getClassDesc();
+		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD.RTS_LABEL));
 	}
 	
 	@Override
@@ -262,7 +265,9 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 
 	@Override
 	public String toString() {
-		return ("LABEL " + identifier + ", index=" + index);
+		String comment = "DeclaredIn: "+declaredIn.identifier;
+		if(movedTo != null) comment = comment+" -> "+movedTo;
+		return ("LABEL " + identifier + ", index=" + index + " IN " + comment);
 	}
 
 	// ***********************************************************************************************
@@ -273,5 +278,26 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	 */
 	public LabelDeclaration() {
 	}
+
+	@Override
+	public void writeExternal(ObjectOutput oupt) throws IOException {
+		super.writeExternal(oupt);
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeBoolean(CHECKED);
+		oupt.writeInt(lineNumber);
+		oupt.writeInt(index);
+		oupt.writeObject(movedTo);
+	}
+	
+	@Override
+	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		super.readExternal(inpt);
+		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+		CHECKED=inpt.readBoolean();
+		lineNumber = inpt.readInt();
+		index = inpt.readInt();
+		movedTo = (DeclarationScope) inpt.readObject();
+	}
+	
 
 }

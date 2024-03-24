@@ -34,9 +34,9 @@ public final class RunSingleClassTest {
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.TESTING_STACK_SIZE = true;
-//		Option.LIST_GENERATED_CLASS_FILES=true;
+		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
-//		Option.verbose = true;
+		Option.verbose = true;
 		Option.WARNINGS=true;
 //		Option.DEBUGGING=true;
 //		Option.EXTENSIONS=false;
@@ -78,7 +78,7 @@ public final class RunSingleClassTest {
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -87,6 +87,7 @@ public final class RunSingleClassTest {
 //		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
+//		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
@@ -99,7 +100,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
-//		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
+//			names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
 //		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
@@ -242,7 +243,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //			names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
-//		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
+		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
@@ -256,7 +257,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND, SYNCHRONOUS and PURGE.
 //		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 //		names.add("simtst139.sim"); // OK: Test remote Array access.
-			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+//			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

@@ -86,9 +86,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	public boolean isBlockLevelUpdated; // TODO: NEW_EXTERNAL_IMPL
 
-	public static ClassDesc currentClassDesc; // REMOVE ???
-	private ClassDesc prevClassDesc; // REMOVE ???
-
 	
 	/**
 	 * The Block Declaration that currently is being built

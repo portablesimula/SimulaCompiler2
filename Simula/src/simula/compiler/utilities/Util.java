@@ -310,11 +310,13 @@ public final class Util {
 	 * @param classFileName the .class file name
 	 */
 	public static void doListClassFile(final String classFileName) {
+		System.out.println("\n\n******** BEGIN List ClassFile: "+classFileName + " *****************************************************");
 		try {
 			execute("javap", "-c", "-l", "-p", "-s", "-verbose", classFileName);
 		} catch (IOException e) {
 			Util.IERR("Impossible", e);
 		}
+		System.out.println("******** ENDOF List ClassFile: "+classFileName + " *****************************************************\n\n");
 	}
 
 	// ***************************************************************

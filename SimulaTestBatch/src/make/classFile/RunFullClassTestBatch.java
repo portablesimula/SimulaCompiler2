@@ -19,6 +19,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -46,7 +47,7 @@ public final class RunFullClassTestBatch {
 		Option.WARNINGS=false;
 //		Option.verbose=false;
 //		Option.EXTENSIONS=false;
-		Option.CaseSensitive=true;
+//		Option.CaseSensitive=true;
 //		Option.GNERATE_LINE_CALLS=true;
 //		Option.GNERATE_SNAPSHOTS=true;
 

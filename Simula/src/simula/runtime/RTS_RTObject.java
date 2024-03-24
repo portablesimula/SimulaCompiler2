@@ -856,6 +856,56 @@ public abstract class RTS_RTObject {
 		throw new ClassCastException("Incompatible Types: double," + par.getClass().getSimpleName());
 	}
 
+	/**
+	 * Utility method to support Parameter Transmission in case of Formal/Virtual Procedure Call.
+	 * <p>
+	 * If the parameter is 'by name' the parameter is evaluated.
+	 * <p>
+	 * If the parameter is a _PRCQNT that procedure is called 
+	 * <p>
+	 * See {@link simula.compiler.syntaxClass.declaration.ProcedureDeclaration#doCodePrepareFormal() simula.compiler.declaration.ProcedureDeclaration#doCodePrepareFormal}
+	 * @param par an Object
+	 * @return a boolean value
+	 */
+	public boolean booleanValue(Object par) {
+		if (par instanceof RTS_NAME<?> npar)
+			par = npar.get();
+		if (par instanceof RTS_PRCQNT proc)
+			par = proc.CPF()._RESULT();
+//		if (par instanceof Float f)
+//			return (f.doubleValue());
+//		if (par instanceof Double d)
+//			return (d);
+		if (par instanceof Boolean b)
+			return (b.booleanValue());
+		throw new ClassCastException("Incompatible Types: boolean," + par.getClass().getSimpleName());
+	}
+
+	/**
+	 * Utility method to support Parameter Transmission in case of Formal/Virtual Procedure Call.
+	 * <p>
+	 * If the parameter is 'by name' the parameter is evaluated.
+	 * <p>
+	 * If the parameter is a _PRCQNT that procedure is called 
+	 * <p>
+	 * See {@link simula.compiler.syntaxClass.declaration.ProcedureDeclaration#doCodePrepareFormal() simula.compiler.declaration.ProcedureDeclaration#doCodePrepareFormal}
+	 * @param par an Object
+	 * @return a boolean value
+	 */
+	public char charValue(Object par) {
+		if (par instanceof RTS_NAME<?> npar)
+			par = npar.get();
+		if (par instanceof RTS_PRCQNT proc)
+			par = proc.CPF()._RESULT();
+//		if (par instanceof Float f)
+//			return (f.doubleValue());
+//		if (par instanceof Double d)
+//			return (d);
+		if (par instanceof Character c)
+			return (c.charValue());
+		throw new ClassCastException("Incompatible Types: character," + par.getClass().getSimpleName());
+	}
+
 	// *******************************************************
 	// *** FRAMEWORK for for-list iteration
 	// *******************************************************
@@ -1493,7 +1543,7 @@ public abstract class RTS_RTObject {
 	 * @param right right hand side
 	 * @return true if relation holds
 	 */
-	public boolean TRF_EQ(RTS_TXT left, RTS_TXT right) {
+	public static boolean TRF_EQ(RTS_TXT left, RTS_TXT right) {
 		if (left == null)
 			left = NOTEXT;
 		if (right == null)
@@ -1513,7 +1563,7 @@ public abstract class RTS_RTObject {
 	 * @param right right hand side
 	 * @return true if relation holds
 	 */
-	public boolean TRF_NE(final RTS_TXT left, final RTS_TXT right) {
+	public static boolean TRF_NE(final RTS_TXT left, final RTS_TXT right) {
 		return (!TRF_EQ(left, right));
 	}
 

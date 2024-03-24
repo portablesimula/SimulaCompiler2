@@ -1,21 +1,48 @@
 begin
-	integer kkk; text t;
 
-    integer procedure P(iii,ttt,c,r,lr,b); integer iii; text ttt;
-    character c;
-    real r;
-    long real lr;
-    boolean b;
-    begin
- 	    outtext("Hello World, iii=");
- 	    outint(iii,5);
- 	    outtext(ttt);
-   	    P:=666;
- 	end;
+%       real x,y; integer i; text t;
+%       t:-blanks(20); t.putreal(min(x,y),10);
+%       outreal(i,10,5);
 
- 	P(777,t,'c',3.14,4.41,true);
-% 	P(777,"END");
-% 	kkk := 111 + P(444,333);
-% 	kkk := P(444,333) + 111;
-    outint(kkk,5);
+
+
+       integer i,j; real x,y; character c;
+       long real lx,ly; text t;
+
+       t:-blanks(20);
+%       t.putreal(min(lx,ly),10);
+       x := min(i,j);
+       x := min(i,y);
+       x := min(i,ly);
+
+       x := min(x,j);
+       x := min(x,y);
+       x := min(x,ly);
+
+       x := min(lx,j);
+       x := min(lx,y);
+       x := min(lx,ly);
+       
+       c := min('A','B');
+	   t := min("AAA","BBB");
+
+       x := max(i,j);
+       x := max(i,y);
+       x := max(i,ly);
+
+       x := max(x,j);
+       x := max(x,y);
+       x := max(x,ly);
+
+       x := max(lx,j);
+       x := max(lx,y);
+       x := max(lx,ly);
+      
+       c := max('A','B');
+	   t := max("AAA","BBB");
+	   
+	   t :- edfix(x,4);
+
+
 end;
+

@@ -125,7 +125,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * Utility to help generate unique identifiers to the inspected variable.
 	 */
-	private static int SEQU = 0;
+	private static int SEQU = 4444; //0;
 
 	/**
 	 * 
@@ -329,7 +329,7 @@ public final class ConnectionStatement extends Statement {
 			ASSERT_SEMANTICS_CHECKED();
 			if (!impossibleWhenPart) {
 				inspectedVariable.buildEvaluation(null, codeBuilder);
-				classDeclaration.getClassDesc();
+//				classDeclaration.getClassDesc(); // TESTING
 				Label elseLabel = codeBuilder.newLabel();
 				codeBuilder
 					.instanceof_(classDeclaration.getClassDesc())
@@ -370,6 +370,7 @@ public final class ConnectionStatement extends Statement {
 		inspectedVariable.doChecking();
 		for(DoPart part:connectionPart) part.doChecking();
 		if (otherwise != null) otherwise.doChecking();
+		inspectedVariable.identifier = inspectVariableDeclaration.getFieldIdentifier();
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -400,11 +401,10 @@ public final class ConnectionStatement extends Statement {
 		ASSERT_SEMANTICS_CHECKED();
 //		System.out.println("inspectedVariable="+inspectedVariable.getClass().getSimpleName()+"  "+inspectedVariable);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
-		ClassDesc CD=inspectedVariable.type.toClassDesc();
-		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD);
+		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
+		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
 
 		endLabel = codeBuilder.newLabel();

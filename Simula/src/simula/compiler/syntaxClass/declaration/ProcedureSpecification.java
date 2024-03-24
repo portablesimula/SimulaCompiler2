@@ -87,7 +87,7 @@ public final class ProcedureSpecification implements Externalizable {
 	 * @param type procedure's type or null
 	 * @param pList the parameter lList
 	 */
-	private ProcedureSpecification(final String identifier, final Type type, final Vector<Parameter> pList) {
+	public ProcedureSpecification(final String identifier, final Type type, final Vector<Parameter> pList) {
 		this.identifier = identifier;
 		this.type = type;
 		this.parameterList = pList;
