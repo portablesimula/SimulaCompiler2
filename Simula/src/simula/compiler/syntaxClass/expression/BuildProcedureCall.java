@@ -139,7 +139,7 @@ public final class BuildProcedureCall {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	private static void asRemoteMethod(final Expression obj, final ProcedureDeclaration pro, final VariableExpression func,CodeBuilder codeBuilder) {
-		BlockDeclaration declaredIn=(BlockDeclaration)pro.declaredIn;
+		BlockDeclaration declaredIn = (BlockDeclaration)pro.declaredIn;
 //		System.out.println("BuildProcedureCall: obj="+obj+", procedure="+pro+", func="+func);
 		if(declaredIn.declarationKind == Declaration.Kind.StandardClass) {
 			// Call Standard Member Method

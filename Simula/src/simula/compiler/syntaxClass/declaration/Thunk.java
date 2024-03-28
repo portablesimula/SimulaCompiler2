@@ -109,6 +109,11 @@ public final class Thunk extends DeclarationScope {
 					
 				    VariableExpression writeableVariable=expr.getWriteableVariable();
 				    if(writeableVariable!=null) {
+				    Declaration declaredAs = writeableVariable.meaning.declaredAs;
+//				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+declaredAs.declarationKind);
+				    	if(declaredAs.declarationKind == Kind.Procedure) writeableVariable = null;
+				    }
+				    if(writeableVariable!=null) {
 				    	MethodTypeDesc MTD_put=null;
 				    	if(expr.type != null) {
 				    		if(expr.type.equals(Type.Integer)) {
@@ -130,9 +135,9 @@ public final class Thunk extends DeclarationScope {
 				    		else Util.IERR("FYLL PÅ FLERE TYPER: "+expr.type);
 				    		Expression beforeDot=(expr instanceof RemoteVariable rem)?rem.obj:null;
 				    		classBuilder
-				    		.withMethodBody("put", MTD_put, ClassFile.ACC_PUBLIC,
+				    			.withMethodBody("put", MTD_put, ClassFile.ACC_PUBLIC,
 				    				codeBuilder -> buildMethod_put(codeBuilder,beforeDot,expr))
-				    		.withMethodBody("put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;"),
+				    			.withMethodBody("put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;"),
 				    				ClassFile.ACC_PUBLIC + ClassFile.ACC_BRIDGE + ClassFile.ACC_SYNTHETIC,
 				    				codeBuilder -> buildMethod_put2(codeBuilder));
 				    	}
@@ -192,7 +197,9 @@ public final class Thunk extends DeclarationScope {
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			codeBuilder.labelBinding(begScope);
-				
+
+//			Util.buildSNAPSHOT(codeBuilder, "THUNK: get "+expr);
+
 			if(kind==null) {
 				expr.buildEvaluation(null,codeBuilder);
 	        	expr.type.buildObjectValueOf(codeBuilder);
@@ -213,6 +220,7 @@ public final class Thunk extends DeclarationScope {
 					break;
 					}
 			}
+//			Util.buildSNAPSHOT2(codeBuilder, "THUNK: get RESULT "+expr);
 			codeBuilder
 				.areturn()
 				.labelBinding(endScope);
@@ -237,7 +245,25 @@ public final class Thunk extends DeclarationScope {
 		Global.enterScope(this);
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
+			Label checkStackSize = null; // TESTING_STACK_SIZE
 			codeBuilder.labelBinding(begScope);
+			
+			if(Option.TESTING_STACK_SIZE) {
+				checkStackSize = codeBuilder.newLabel();
+				codeBuilder
+					.aconst_null()                 // TESTING_STACK_SIZE
+					.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE				
+			}
+			
+			//	public Integer put(Integer x_) {
+			//		return (p_n = (int) x_);
+			//	}
+			// ENDRES TIL:
+			//	public Integer put(Integer x_) {
+			//		p_n = (int) x_;
+			//		return (x);
+			//	}
+
 			writeableVariable.buildIdentifierAccess(true,codeBuilder);
 				
 			if(beforeDot != null) beforeDot.buildEvaluation(null,codeBuilder);
@@ -263,22 +289,7 @@ public final class Thunk extends DeclarationScope {
 				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
 			else if(expr.type.equals(Type.Character))
 				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-				
-//			String objType = expr.type.toJavaTypeClass();
-//			String valType = expr.type.toJavaType() + "Value()";
-//			System.out.println("Thunk.buildMethod_put: public "+objType+" put("+objType+" X) { "+expr+" = x."+valType+"; return(X); };");
-			
-			if(!expr.type.isValueType()) ; // Nothing
-			else if(expr.type.equals(Type.LongReal))
-				 codeBuilder.dup2_x1();
-			else codeBuilder.dup_x1();
 
-// EXAMPLE:				
-//			public Float put(Float x_) {
-//				float y = x_;
-//				i = (int) Math.round(y);
-//				return (y);
-//			}
 			if(expr instanceof TypeConversion) {
 				Type fromType = expr.type;
 				Type toType = writeableVariable.type;
@@ -297,15 +308,20 @@ public final class Thunk extends DeclarationScope {
 				expr.type.buildObjectValueOf(codeBuilder);
 				codeBuilder
 					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
-					.checkcast(ClassDesc.of("java.lang."+expr.type.toJavaTypeClass()));
+//					.checkcast(expr.type.toObjectClassDesc());
+					.pop();
 			} else {
 				ClassDesc CD_ownr=writeableVariable.meaning.declaredIn.getClassDesc();
 				ClassDesc CD_type=writeableVariable.type.toClassDesc();
 				codeBuilder.putfield(pool.fieldRefEntry(CD_ownr, ident, CD_type));
 			}
-				
+			
+			if(Option.TESTING_STACK_SIZE) {
+				codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
+			}
+
 			codeBuilder
-				.aload(1) // Parameter x				
+				.aload(1) // Parameter x
 				.areturn()
 				.labelBinding(endScope);
 					

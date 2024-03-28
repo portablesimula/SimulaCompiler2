@@ -1,22 +1,3 @@
-% external class AdHoc_SimulaTest;
 
-% AdHoc_SimulaTest(1,"--- Simple test of conditional statements")
-begin
-
-
-   boolean failed;
-
-   class A; begin end;
-
-   failed := true;
-
-   inspect new A do begin
-      goto LAB;
-   end
-   otherwise begin
-      LAB: failed := false;
-   end;   
-
-%   if failed then err("goto test failed.");
-   
-end;
+class adHoc00(i); integer i; virtual: procedure checkEvent; begin
+	checkEvent(val); end;

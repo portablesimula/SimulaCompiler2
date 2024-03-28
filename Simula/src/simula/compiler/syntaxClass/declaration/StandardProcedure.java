@@ -39,7 +39,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	 * @param ident the procedure identifier
 	 */
 	StandardProcedure(DeclarationScope declaredIn,Declaration.Kind kind,Type type, String ident) {
-		super(ident,kind); this.declaredIn=declaredIn; this.type=type; }
+		super(ident,kind); this.declaredIn = declaredIn; this.type = type; }
 
 	/**
 	 * Create a new StandardProcedure with parameters.

@@ -204,9 +204,10 @@ public final class RunCompilerTest {
 //		String name="/FECTest/fecTest.sim";
 
 		// *** SMÅ ENKLE SIMULA TEST PROGRAMMER
+		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		// String name="/simple/adHoc000.sim";
-		 String name="/simple/adHoc00.sim";
+		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
@@ -274,6 +275,7 @@ public final class RunCompilerTest {
 
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
+			Option.NEW_ATTR_FILE=true;
 			Option.CREATE_JAVA_SOURCE = true;
 //			Option.GENERATE_BYTEFILE=true;
 		    Option.verbose = true;

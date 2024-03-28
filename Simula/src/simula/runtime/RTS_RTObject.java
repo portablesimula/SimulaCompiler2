@@ -337,6 +337,7 @@ public abstract class RTS_RTObject {
 		 * @return the value stored
 		 */
 		public int putELEMENT(int ix, int val) {
+//			System.out.println("RTS_RTObject.putELEMENT: ELTS["+ix+"] = "+val);
 			ELTS[ix] = val;
 			return (val);
 		}

@@ -595,7 +595,8 @@ public final class SimulaCompiler {
 	private void listGeneratedClassFiles() {
 		File classFiles = new File(Global.tempClassFileDir, Global.packetName);
 		for (File classFile : classFiles.listFiles()) {
-			Util.doListClassFile("" + classFile); // List generated .class file
+			if(classFile.getName().endsWith(".class"))
+				Util.doListClassFile("" + classFile); // List generated .class file
 //			UUtil.analyse("" + classFile);
 		}
 	}

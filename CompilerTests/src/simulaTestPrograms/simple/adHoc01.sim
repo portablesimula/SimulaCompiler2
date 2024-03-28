@@ -1,12 +1,11 @@
-begin
- 	integer i,j;
- 	i := 333;
- 	j := 444;
-% 	if i < j then begin
- 		outtext("Brance: i < j");
-% 	end else begin
-% 		outtext("Brance: i >= j");
-% 	end;
 
-	j := if i < j then 666 else 888;
+class Separat(i); integer i; virtual: procedure checkEvent;
+
+begin
+
+   procedure Event (n,val); integer n,val; begin
+   		checkEvent(n,val);
+   end;
+
+
 end;

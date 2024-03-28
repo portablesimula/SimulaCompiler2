@@ -147,9 +147,9 @@ public final class StandardClass extends ClassDeclaration {
 	 * Initiate the Standard Class UNIVERSE
 	 */
 	private static void initUNIVERSE() {
-		UNIVERSE=new StandardClass("UNIVERSE");
-		UNIVERSE.isContextFree=true;
-		UNIVERSE.declaredIn=null;
+		UNIVERSE = new StandardClass("UNIVERSE");
+		UNIVERSE.isContextFree = true;
+		UNIVERSE.declaredIn = null;
 	}
 	  
 	// ******************************************************************
@@ -1356,7 +1356,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * @param standardClass the StandardClass
 	 */
 	private void addStandardClass(StandardClass standardClass) {
-		standardClass.declaredIn=this;
+		standardClass.declaredIn = this;
 		((ClassDeclaration)standardClass.declaredIn).hasLocalClasses=true;
 		declarationList.add(standardClass);
 	}

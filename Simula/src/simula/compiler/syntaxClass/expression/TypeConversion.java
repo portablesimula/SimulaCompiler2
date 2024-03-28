@@ -200,6 +200,7 @@ public final class TypeConversion extends Expression {
 
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
 		expression.buildEvaluation(null,codeBuilder);
 		if (type.equals(Type.Integer)) {
 			Type fromType = expression.type;
@@ -255,9 +256,10 @@ public final class TypeConversion extends Expression {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(expression);
 	}
@@ -265,9 +267,10 @@ public final class TypeConversion extends Expression {
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
-		type = (Type) inpt.readObject();
+		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		expression = (Expression) inpt.readObject();
 	}

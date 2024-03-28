@@ -18,6 +18,7 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -239,14 +240,16 @@ public abstract class SyntaxClass implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
 	}
 	
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
 	}
 	

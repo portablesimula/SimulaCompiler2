@@ -20,6 +20,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -240,6 +241,7 @@ public final class Constant extends Expression implements Externalizable {
 
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		//ASSERT_SEMANTICS_CHECKED(); // ØM: Ad'Hoc
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(this.value==null) {
 			codeBuilder.aconst_null();
@@ -319,7 +321,7 @@ public final class Constant extends Expression implements Externalizable {
 //	@Override
 //	public void writeExternal(ObjectOutput oupt) throws IOException {
 //		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
-//		oupt.writeObject(type);
+//		Type.outType(type,oupt);
 //		oupt.writeObject(value);
 //	}
 //
@@ -341,18 +343,20 @@ public final class Constant extends Expression implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(value);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
-		type = (Type) inpt.readObject();
+		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		value=inpt.readObject();
 		Util.TRACE_INPUT("Constant: "+type+' '+value);

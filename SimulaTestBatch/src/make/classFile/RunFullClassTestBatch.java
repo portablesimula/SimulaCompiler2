@@ -41,6 +41,7 @@ public final class RunFullClassTestBatch {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 		Option.TESTING_STACK_SIZE = true;
+		Option.NEW_ATTR_FILE=true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.SPORT=true;
 //		Option.TRACING=false;
@@ -50,6 +51,14 @@ public final class RunFullClassTestBatch {
 //		Option.CaseSensitive=true;
 //		Option.GNERATE_LINE_CALLS=true;
 //		Option.GNERATE_SNAPSHOTS=true;
+		
+		// Set RunTime Options and tracing.
+//		RTOption.VERBOSE = true;
+//		RTOption.USE_CONSOLE=false;
+//		RTOption.BLOCK_TRACING = false;
+//		RTOption.GOTO_TRACING = false;
+//		RTOption.QPS_TRACING = false;
+//		RTOption.SML_TRACING = false;
 
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -100,9 +109,9 @@ public final class RunFullClassTestBatch {
 //		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
-//
-//		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
-//		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.
+
+		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
+		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.
 		names.add("simtst42.sim"); // OK:  Compute "n-fac", using iteration within the procedure.
 		names.add("simtst43.sim"); // OK:  Compute "n-fac", using recursion.
 		names.add("simtst44.sim"); // OK:  Test text procedure.
@@ -151,8 +160,8 @@ public final class RunFullClassTestBatch {
 		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 		names.add("simtst85.sim"); // OK:  Test Directfile.
-//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-//	    names.add("simtst86.sim"); // OK:  Test separate compilation of Class.
+		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+	    names.add("simtst86.sim"); // OK:  Test separate compilation of Class.
 		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -228,14 +237,6 @@ public final class RunFullClassTestBatch {
 		Global.packetName="simulaTestBatch";
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
-		
-		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
-//		RTOption.USE_CONSOLE=false;
-//		RTOption.BLOCK_TRACING = false;
-//		RTOption.GOTO_TRACING = false;
-//		RTOption.QPS_TRACING = false;
-//		RTOption.SML_TRACING = false;
 
 		for(String name:names) {
 //			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;

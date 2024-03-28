@@ -296,6 +296,18 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
 					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
 					for(Parameter par:parameterList) par.buildField(classBuilder,this);
+					
+					for (VirtualSpecification virtual : virtualSpecList) {
+						if (!virtual.hasDefaultMatch) {
+							//virtual.doJavaCoding();
+							virtual.buildMethod(classBuilder);
+						}
+					}
+					
+					for (VirtualMatch match : virtualMatchList) {
+						match.buildMethod(classBuilder);
+					}
+
 
 					classBuilder
 						.withMethodBody("<init>", MTD_Constructor(), ClassFile.ACC_PUBLIC,

@@ -35,9 +35,9 @@ public final class OverLoad extends Type {
 	 * Create a new OverLoad type list.
 	 * @param type the types
 	 */
-	public OverLoad(final Type... type)
-	{  super("OverLoad");
-	   this.type=type;
+	public OverLoad(final Type... type)	{
+		super("OverLoad");
+		this.type=type;
 	}
 	
 	public boolean contains(Type type) {
@@ -72,14 +72,18 @@ public final class OverLoad extends Type {
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		oupt.writeObject(key);
 		oupt.writeObject(qual);
-		oupt.writeObject(type);
+		int lng = type.length;
+		oupt.writeByte(lng);
+		for(int i=0;i<lng;i++) Type.outType(type[i],oupt);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		key=(Token)inpt.readObject();
 		qual=(ClassDeclaration) inpt.readObject();
-		type=(Type[])inpt.readObject();
+		int lng = inpt.readByte();
+		type = new Type[lng];
+		for(int i=0;i<lng;i++) type[i] = Type.inType(inpt);
 	}
 
 }

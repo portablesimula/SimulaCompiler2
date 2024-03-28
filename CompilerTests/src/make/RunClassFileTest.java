@@ -204,9 +204,10 @@ public final class RunClassFileTest {
 //		String name="/FECTest/fecTest.sim";
 
 		// *** SMÅ ENKLE SIMULA TEST PROGRAMMER
+		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		// String name="/simple/adHoc000.sim";
-		 String name="/simple/adHoc00.sim";
+		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
@@ -309,7 +310,7 @@ public final class RunClassFileTest {
 //			// Coder Trace Options
 //			Option.TRACE_CODING=true;
 //			Option.GNERATE_LINE_CALLS=true;
-//			Option.GNERATE_SNAPSHOTS=true;
+			Option.GNERATE_SNAPSHOTS=true;
 //			
 //			Option.TRACE_REPAIRING=true;
 //			Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
@@ -332,7 +333,7 @@ public final class RunClassFileTest {
 			// Set RunTime Options and tracing.
 //			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
-//			RTOption.BLOCK_TRACING = true;
+			RTOption.BLOCK_TRACING = true;
 			RTOption.GOTO_TRACING = true;
 //			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;

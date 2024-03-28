@@ -531,7 +531,8 @@ public final class Parameter extends Declaration implements Externalizable {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
+//		Type.outType(type,oupt);
+		Type.outType(type,oupt);
 		oupt.writeObject(kind);
 		oupt.writeObject(mode);
 	}

@@ -171,7 +171,8 @@ public final class ConditionalStatement extends Statement implements Externaliza
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
 		oupt.writeObject(condition);
 		oupt.writeObject(thenStatement);
@@ -181,7 +182,8 @@ public final class ConditionalStatement extends Statement implements Externaliza
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
 		condition = (Expression) inpt.readObject();
 		thenStatement = (Statement) inpt.readObject();

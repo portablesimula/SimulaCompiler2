@@ -33,7 +33,9 @@ public final class RunSingleClassTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
-		Option.TESTING_STACK_SIZE = true;
+		Option.NEW_ATTR_FILE=true;
+//		Option.TESTING_STACK_SIZE = true;
+//		Option.TESTING_THUNK=true;
 		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 		Option.verbose = true;
@@ -52,7 +54,7 @@ public final class RunSingleClassTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
@@ -80,7 +82,7 @@ public final class RunSingleClassTest {
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
@@ -194,8 +196,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 //		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
-//			names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-//			names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
+//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+//		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
 //		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -232,7 +234,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 //		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
 //		names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
-//		names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
+		names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
 //		names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //
@@ -243,7 +245,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //			names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
-		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
+//		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.

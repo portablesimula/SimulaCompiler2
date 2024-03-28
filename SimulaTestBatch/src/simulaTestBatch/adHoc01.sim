@@ -1,21 +1,16 @@
-external class AdHoc00; 
-   
-AdHoc00 class AdHoc01;
-begin 
-    integer ICHR=IINT+4;
+% external class AdHoc_SimulaTest;
 
-    procedure PP;
-    begin integer i;
-        ref(SubSep2) xx;
-        external class AdHoc00; 
-        AdHoc00 class SubSep2;
-        begin 
-           trace("--- Start Statements of class SubSep2") ; 
-           noMessage:=true;
-        end;
-%        xx:-new SubSep2(99,"Title",15);
-    end;
-    
-    trace("--- Start Statements of class SubSep") ; 
-    x :- new B;  
+% AdHoc_SimulaTest(86,"--- Simple Test of Separately Compiled Class.")
+begin
+
+%  external class adHoc00;
+  class adHoc00(i); integer i; virtual: procedure checkEvent; begin checkEvent(444); end;  
+
+  adHoc00(5) begin
+  
+     procedure checkEvent(val); integer val; begin
+     end;
+ 
+  end;
+  
 end;

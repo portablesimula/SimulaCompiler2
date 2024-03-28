@@ -149,7 +149,7 @@ public final class CallProcedure {
 		}
 		String methodCall=meaning.declaredAs.getJavaIdentifier()+params;
 		if(meaning.isConnected()) {
-			DeclarationScope declaredIn=meaning.declaredIn;
+			DeclarationScope declaredIn = meaning.declaredIn;
 			String connID=declaredIn.toJavaCode();
 			return(connID+'.'+methodCall);
 		}

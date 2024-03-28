@@ -244,11 +244,12 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 //		super.writeExternal(oupt);
 
 		// SyntaxClass
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
 		
 		// Declaration
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeObject(isProtected);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
@@ -280,11 +281,12 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 //		super.readExternal(inpt);
 
 		// SyntaxClass
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
 
 		// Declaration
-		type = (Type) inpt.readObject();
+		type = Type.inType(inpt);
 		isProtected = (ProtectedSpecification) inpt.readObject();
 		identifier = (String) inpt.readObject();
 		externalIdent = (String) inpt.readObject();

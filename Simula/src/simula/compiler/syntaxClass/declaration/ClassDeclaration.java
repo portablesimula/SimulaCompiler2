@@ -38,6 +38,7 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
 /**
@@ -513,8 +514,10 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 		for (Declaration dcl : declarationList)
 			dcl.doChecking();
 		if(statements1 != null) {
-			for (Statement stm : statements1)
+			for (Statement stm : statements1) {
+//				System.out.println("ClassDeclaration.doChecking: stm="+stm.getClass().getSimpleName()+"  "+stm);
 				stm.doChecking();  		
+			}
 		}
 		for (Statement stm : statements)
 			stm.doChecking();
@@ -1504,6 +1507,88 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void writeAttr(ObjectOutput oupt) throws IOException {
+//		this.print(10);
+		oupt.writeBoolean(true); // Mark: This is a ClassDeclaration
+		oupt.writeObject(identifier);
+		oupt.writeObject(externalIdent);
+//		Type.outType(type,oupt);
+		Type.outType(type,oupt);
+		oupt.writeInt(rtBlockLevel);
+		oupt.writeObject(prefix);
+		oupt.writeBoolean(hasLocalClasses);
+		oupt.writeBoolean(detachUsed);
+		oupt.writeObject(externalPrefixIdent);
+
+		oupt.writeObject(parameterList);
+		oupt.writeObject(virtualSpecList);
+		oupt.writeObject(hiddenList);
+		oupt.writeObject(protectedList);
+		oupt.writeObject(labelList);
+		
+//		oupt.writeObject(declarationList);
+		oupt.writeObject(prep(declarationList));
+
+//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
+//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
+		oupt.writeObject(statements1);
+		oupt.writeObject(statements);
+
+		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
+	}
+	
+	private DeclarationList prep(DeclarationList declarationList) {
+		DeclarationList res = new DeclarationList("");
+		for(Declaration decl:declarationList) {
+			if(decl instanceof ArrayDeclaration) res.add(decl);
+			else if(decl instanceof ClassDeclaration && !(decl instanceof StandardClass)) res.add(decl);
+			else if(decl instanceof ExternalDeclaration) res.add(decl);
+			else if(decl instanceof LabelDeclaration) res.add(decl);
+			else if(decl instanceof ProcedureDeclaration) res.add(decl);
+			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
+			else if(decl instanceof SwitchDeclaration) res.add(decl);
+		}
+		return(res);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ClassDeclaration readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		String identifier = (String) inpt.readObject();
+		ClassDeclaration cls = new ClassDeclaration(identifier);
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+		cls.declarationKind = Declaration.Kind.Class;
+		cls.externalIdent = (String) inpt.readObject();
+		cls.type = Type.inType(inpt);
+		cls.rtBlockLevel = inpt.readInt();
+		cls.prefix = (String) inpt.readObject();
+		cls.hasLocalClasses = inpt.readBoolean();
+		cls.detachUsed = inpt.readBoolean();
+		cls.externalPrefixIdent = (String) inpt.readObject();
+
+		cls.parameterList = (Vector<Parameter>) inpt.readObject();
+		cls.virtualSpecList = (Vector<VirtualSpecification>) inpt.readObject();
+		cls.hiddenList = (Vector<HiddenSpecification>) inpt.readObject();
+		cls.protectedList = (Vector<ProtectedSpecification>) inpt.readObject();
+		cls.labelList = (Vector<LabelDeclaration>) inpt.readObject();
+		cls.declarationList = (DeclarationList) inpt.readObject();
+//		Util.IERR("");
+
+		cls.statements1 = (Vector<Statement>) inpt.readObject();
+		cls.statements = (Vector<Statement>) inpt.readObject();			
+
+//		System.out.println("ClassDeclaration.readAttr: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+//		cls.print(2);
+//		Util.IERR("");
+		
+		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+		Global.setScope(cls.declaredIn);
+		return(cls);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -1516,9 +1601,10 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ClassDeclaration: " + identifier);
+		if(Option.NEW_ATTR_FILE && this instanceof StandardClass) Util.IERR(""+this+"  Declared in "+this.declaredIn);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeObject(prefix);
 		oupt.writeBoolean(hasLocalClasses);
@@ -1547,8 +1633,8 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	@SuppressWarnings("unchecked")
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		declarationKind = Declaration.Kind.Class;
-		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		identifier = (String) inpt.readObject();
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		externalIdent = (String) inpt.readObject();
 		type = Type.inType(inpt);
 		rtBlockLevel = inpt.readInt();

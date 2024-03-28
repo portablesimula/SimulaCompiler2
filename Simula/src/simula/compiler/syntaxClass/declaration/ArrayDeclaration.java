@@ -563,7 +563,7 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeInt(nDim);
 	}
 

@@ -319,6 +319,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited scope chain
 	 */
 	public String edScopeChain() {
+//		if(Option.NEW_ATTR_FILE) return("UMULIG");
 		if (declaredIn == null)
 			return (identifier);
 		String encName = declaredIn.edScopeChain();

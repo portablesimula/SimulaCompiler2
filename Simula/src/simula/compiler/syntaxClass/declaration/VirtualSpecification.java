@@ -307,7 +307,7 @@ public final class VirtualSpecification extends Declaration implements Externali
 		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeObject(kind);
 		oupt.writeObject(procedureSpec);
 	}

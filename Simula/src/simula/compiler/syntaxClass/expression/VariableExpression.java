@@ -233,6 +233,7 @@ public final class VariableExpression extends Expression implements Externalizab
 
 	@Override
 	public void doChecking() {
+//		System.out.println("VariableExpression.doChecking: "+this+"  "+IS_SEMANTICS_CHECKED());
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
@@ -750,11 +751,11 @@ public final class VariableExpression extends Expression implements Externalizab
 	 */
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		ASSERT_SEMANTICS_CHECKED();
 		Declaration decl=meaning.declaredAs;
 //		System.out.println("VariableExpression.buildByteCode: "+identifier+", kind="+decl.declarationKind);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
-		ASSERT_SEMANTICS_CHECKED();
 		
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
 
@@ -1072,31 +1073,55 @@ public final class VariableExpression extends Expression implements Externalizab
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write ConditionalStatement: ");
-		oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-		oupt.writeObject(type);
-		oupt.writeObject(backLink);
-		oupt.writeObject(identifier);
-		oupt.writeObject(meaning);
-		oupt.writeObject(remotelyAccessed);
-		oupt.writeObject(params);
-		oupt.writeObject(checkedParams);
+		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
+		if(Option.NEW_ATTR_FILE) {
+//			oupt.writeBoolean(CHECKED);
+			oupt.writeInt(lineNumber);
+			Type.outType(type,oupt);
+			oupt.writeObject(backLink);
+			oupt.writeObject(identifier);
+//			oupt.writeObject(meaning);
+			oupt.writeObject(remotelyAccessed);
+			oupt.writeObject(params);
+//			oupt.writeObject(checkedParams);			
+		} else {
+			oupt.writeBoolean(CHECKED);
+			oupt.writeInt(lineNumber);
+			Type.outType(type,oupt);
+			oupt.writeObject(backLink);
+			oupt.writeObject(identifier);
+			oupt.writeObject(meaning);
+			oupt.writeObject(remotelyAccessed);
+			oupt.writeObject(params);
+			oupt.writeObject(checkedParams);
+		}
 	}
 	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: ");
-		CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = (Type) inpt.readObject();
-		backLink = (SyntaxClass) inpt.readObject();
-		identifier = (String) inpt.readObject();
-		meaning = (Meaning) inpt.readObject();
-		remotelyAccessed = (boolean) inpt.readObject();
-		params = (Vector<Expression>) inpt.readObject();
-		checkedParams = (Vector<Expression>) inpt.readObject();
+		Util.TRACE_INPUT("BEGIN Read VariableExpression: ");
+		if(Option.NEW_ATTR_FILE) {
+//			CHECKED=inpt.readBoolean();
+			lineNumber = inpt.readInt();
+			type = Type.inType(inpt);
+			backLink = (SyntaxClass) inpt.readObject();
+			identifier = (String) inpt.readObject();
+//			meaning = (Meaning) inpt.readObject();
+			remotelyAccessed = (boolean) inpt.readObject();
+			params = (Vector<Expression>) inpt.readObject();
+//			checkedParams = (Vector<Expression>) inpt.readObject();			
+		} else {
+			CHECKED=inpt.readBoolean();
+			lineNumber = inpt.readInt();
+			type = Type.inType(inpt);
+			backLink = (SyntaxClass) inpt.readObject();
+			identifier = (String) inpt.readObject();
+			meaning = (Meaning) inpt.readObject();
+			remotelyAccessed = (boolean) inpt.readObject();
+			params = (Vector<Expression>) inpt.readObject();
+			checkedParams = (Vector<Expression>) inpt.readObject();
+		}
 	}
 		
 

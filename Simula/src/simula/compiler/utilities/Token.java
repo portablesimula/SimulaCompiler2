@@ -29,11 +29,11 @@ public final class Token implements Externalizable {
 	/**
 	 * The Token's keyWord attribute
 	 */
-	private KeyWord keyWord;
+	public KeyWord keyWord;
 	/**
 	 * The Token's value attribute
 	 */
-	private Object value;
+	public Object value;
 	/**
 	 * The Token's line number
 	 */
@@ -254,19 +254,32 @@ public final class Token implements Externalizable {
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void writeATTR(ObjectOutput oupt) throws IOException {
+		oupt.writeObject(keyWord);
+		oupt.writeObject(value);
+	}
+
+	public static Token readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+		KeyWord keyWord = (KeyWord) inpt.readObject();
+		Object value = inpt.readObject();
+		return(new Token("",keyWord,value));
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		if(AttributeOutput.USE_ATTRIBUTE_IO) Util.IERR("");
 		oupt.writeObject(keyWord);
 		oupt.writeObject(value);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-//		if(AttributeOutput.USE_ATTRIBUTE_IO) Util.IERR("");
 		keyWord = (KeyWord) inpt.readObject();
 		value = inpt.readObject();
 	}

@@ -30,6 +30,7 @@ import javax.swing.JPanel;
  */
 public final class Option {
 	public static boolean TESTING_STACK_SIZE = false;
+	public static boolean NEW_ATTR_FILE = false;
 	
 	/**
 	 * Create Java source intermediate files

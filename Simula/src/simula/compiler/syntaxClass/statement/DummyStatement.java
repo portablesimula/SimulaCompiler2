@@ -89,7 +89,8 @@ public final class DummyStatement extends Statement implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
 //		oupt.writeObject(lineNumber);
 	}
@@ -97,7 +98,8 @@ public final class DummyStatement extends Statement implements Externalizable {
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
 	}
 	

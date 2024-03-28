@@ -359,11 +359,12 @@ public abstract class Declaration extends SyntaxClass {
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		super.writeExternal(oupt);
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeObject(isProtected);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(declaredIn);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeObject(declaredIn);
 		oupt.writeObject(declarationKind);
 //		oupt.writeInt(slot);
 	}
@@ -372,11 +373,12 @@ public abstract class Declaration extends SyntaxClass {
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		super.readExternal(inpt);
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		type = (Type) inpt.readObject();
+		type = Type.inType(inpt);
 		isProtected = (ProtectedSpecification) inpt.readObject();
 		identifier = (String) inpt.readObject();
 		externalIdent = (String) inpt.readObject();
-		declaredIn = (DeclarationScope) inpt.readObject();
+		if(!Option.NEW_ATTR_FILE)
+			declaredIn = (DeclarationScope) inpt.readObject();
 		declarationKind = (Kind) inpt.readObject();
 //		slot = inpt.readInt();
 	}

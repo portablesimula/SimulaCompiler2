@@ -13,12 +13,15 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
+import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.utilities.DeclarationList;
@@ -38,7 +41,7 @@ public final class AttributeFileIO {
 	/**
 	 * The Simula version.
 	 */
-	private final static String version="SimulaAttributeFile: Version 1.0";
+	private final static String version="SimulaAttributeFile: Version 2.0";
 
 	/**
 	 * The attribute file.
@@ -66,12 +69,12 @@ public final class AttributeFileIO {
 			Util.println("*** BEGIN Generate SimulaAttributeFile: \"" + file+"\"");
 		AttributeFileIO attributeFile = new AttributeFileIO(file);
 		attributeFile.write((BlockDeclaration) program.module);
-		if (Option.TRACE_ATTRIBUTE_OUTPUT) {
-			try { attributeFile.listAttributeFile(file);
-			} catch (ClassNotFoundException e) {
-				Util.IERR("Unable to list Attribute File: "+file, e);
-			}
-		}
+//		if (Option.TRACE_ATTRIBUTE_OUTPUT) {
+//			try { attributeFile.listAttributeFile(file);
+//			} catch (ClassNotFoundException e) {
+//				Util.IERR("Unable to list Attribute File: "+file, e);
+//			}
+//		}
 		if (Option.verbose)	Util.TRACE("*** ENDOF Generate SimulaAttributeFile: " + file);
 	}
 
@@ -125,22 +128,46 @@ public final class AttributeFileIO {
 		String vers=(String)inpt.readObject();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + attributeFile);
 		Type moduleType=null;
-		LOOP: while (true) {
+		if(Option.NEW_ATTR_FILE) {
+//			System.out.println("AttributeFileIO.read: ");
 			BlockDeclaration module=null;
-			try { module=(BlockDeclaration) inpt.readObject();}
-			catch (EOFException e1) { break LOOP; }
+			Boolean isClass = inpt.readBoolean();
+			if(isClass)
+				 module = ClassDeclaration.readAttr(inpt);
+			else module = ProcedureDeclaration.readAttr(inpt);
+			
 			module.isPreCompiled = true;
 			Declaration d=declarationList.find(module.identifier);
 			if(d!=null) {
 				Util.warning("Multiple declarations with the same name: "+module+" and "+d);
 			} else {
-//				System.out.println("AttributeFileIO.readAttributeFile: Add Module: "+module.getClass().getSimpleName()+"  "+module);
+				//				System.out.println("AttributeFileIO.readAttributeFile: Add Module: "+module.getClass().getSimpleName()+"  "+module);
 				declarationList.add(module);
 				moduleType=module.type;
 				if (Option.verbose)
 					System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
 							+"  ==>  "+declarationList.identifier);
 				if (Option.TRACE_ATTRIBUTE_INPUT) module.print(0);
+			}
+//			Util.IERR("");
+		} else {
+		LOOP: while (true) {
+				BlockDeclaration module=null;
+				try { module=(BlockDeclaration) inpt.readObject();}
+				catch (EOFException e1) { break LOOP; }
+				module.isPreCompiled = true;
+				Declaration d=declarationList.find(module.identifier);
+				if(d!=null) {
+					Util.warning("Multiple declarations with the same name: "+module+" and "+d);
+				} else {
+					//				System.out.println("AttributeFileIO.readAttributeFile: Add Module: "+module.getClass().getSimpleName()+"  "+module);
+					declarationList.add(module);
+					moduleType=module.type;
+					if (Option.verbose)
+						System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
+								+"  ==>  "+declarationList.identifier);
+					if (Option.TRACE_ATTRIBUTE_INPUT) module.print(0);
+				}
 			}
 		}
 		inpt.close();
@@ -165,18 +192,26 @@ public final class AttributeFileIO {
 		ObjectOutputStream oupt = new ObjectOutputStream(fileOutputStream);
 		// writeVersion:
 		oupt.writeObject(version);
-		// writeDependencies:
-		for(Declaration dcl:StandardClass.ENVIRONMENT.declarationList) {
-			if(dcl instanceof BlockDeclaration ext) {
-				if(ext.isPreCompiled) {
-					if (Option.verbose) Util.TRACE("***       Write External "+ext.declarationKind+' '+ext.identifier+'['+ext.externalIdent+']');
-					oupt.writeObject(ext);
+		System.out.println("AttributeFileIO.write: Option.NEW_ATTR_FILE="+Option.NEW_ATTR_FILE);
+		if(Option.NEW_ATTR_FILE) {
+			System.out.println("AttributeFileIO.write: "+module);
+			if(module instanceof ProcedureDeclaration cls)  cls.writeAttr(oupt);
+			else if(module instanceof ClassDeclaration pro) pro.writeAttr(oupt);
+			else Util.IERR("");
+		} else {
+			// writeDependencies:
+			for(Declaration dcl:StandardClass.ENVIRONMENT.declarationList) {
+				if(dcl instanceof BlockDeclaration ext) {
+					if(ext.isPreCompiled) {
+						if (Option.verbose) Util.TRACE("***       Write External "+ext.declarationKind+' '+ext.identifier+'['+ext.externalIdent+']');
+						oupt.writeObject(ext);
+					}
 				}
 			}
-		}
-		if (Option.verbose)
+			if (Option.verbose)
 			Util.TRACE("***       Write External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']');
 		oupt.writeObject(module);
+		}
 		oupt.flush(); oupt.close();	oupt = null;
 	}
 	  

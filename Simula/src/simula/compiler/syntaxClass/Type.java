@@ -62,6 +62,25 @@ import simula.compiler.utilities.Util;
  *
  */
 public class Type extends SyntaxClass implements Externalizable {
+
+	/**
+	 * KeyWord or ref(classIdentifier)
+	 */
+	Token key;
+	
+	/**
+	 * Qual in case of ref(Qual) type. Set by doChecking
+	 */
+	protected ClassDeclaration qual;   // Qual in case of ref(Qual) type; Set by doChecking below
+	
+	/**
+	 * Qual's scope in case of ref(Qual) type. Set by doChecking
+	 */
+	public ConnectionBlock declaredIn; // Qual'scope in case of ref(Qual) type; Set by special constructor
+
+	// **************************************************************************************************
+	// *** BASIC TYPES
+	// **************************************************************************************************
 	/**
 	 * Simula's Integer type
 	 */
@@ -114,36 +133,10 @@ public class Type extends SyntaxClass implements Externalizable {
 	 */
 	public static final Type Label = new Type(new Token(KeyWord.LABEL));
 	
-	/**
-	 * Qual in case of ref(Qual) type. Set by doChecking
-	 */
-	protected ClassDeclaration qual;   // Qual in case of ref(Qual) type; Set by doChecking below
-	
-	/**
-	 * Qual's scope in case of ref(Qual) type. Set by doChecking
-	 */
-	public ConnectionBlock declaredIn; // Qual'scope in case of ref(Qual) type; Set by Variable'doChecking
 
-	/**
-	 * Returns the qualifying ClassDeclaration or null.
-	 * @return the qualifying ClassDeclaration or null
-	 */
-	public ClassDeclaration getQual() {
-		ASSERT_SEMANTICS_CHECKED();
-		return (qual);
-	}
-
-	/**
-	 * KeyWord or ref(classIdentifier)
-	 */
-	Token key;
-	
-	/**
-	 * Returns the keyWord or the ref-identifier.
-	 * @return the keyWord or the ref-identifier
-	 */
-	public KeyWord getKeyWord() { return(key.getKeyWord()); }
-	
+	// **************************************************************************************************
+	// *** TYPE CREATION - CONSTRUCTORES 
+	// **************************************************************************************************
 
 	/**
 	 * Default constructor used by Externalization.
@@ -162,9 +155,8 @@ public class Type extends SyntaxClass implements Externalizable {
 	 */
 	public Type(String className) {
 		if(className==null) className="UNKNOWN"; // Error recovery
-		if(Option.CaseSensitive)
-			 this.key=new Token(KeyWord.REF,className);
-		else this.key=new Token(KeyWord.REF,className.toUpperCase());
+		if(!Option.CaseSensitive) className = className.toUpperCase();
+		this.key=new Token(KeyWord.REF,className);
 	}
 	
 	/**
@@ -173,10 +165,31 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @param declaredIn the ConnectionBlock
 	 */
 	public Type(Type tp,ConnectionBlock declaredIn) {
-		this.key=tp.key;
-		this.qual=tp.qual;
-		this.declaredIn=declaredIn;
+		this.key = tp.key;
+		this.qual = tp.qual;
+		this.declaredIn = declaredIn;
 	}
+	
+	
+	// **************************************************************************************************
+	// *** UTILITIES
+	// **************************************************************************************************
+
+	/**
+	 * Returns the qualifying ClassDeclaration or null.
+	 * @return the qualifying ClassDeclaration or null
+	 */
+	public ClassDeclaration getQual() {
+		ASSERT_SEMANTICS_CHECKED();
+		return (qual);
+	}
+	
+	/**
+	 * Returns the keyWord or the ref-identifier.
+	 * @return the keyWord or the ref-identifier
+	 */
+	public KeyWord getKeyWord() { return(key.getKeyWord()); }
+	
 	
 	public static boolean equals(Type type1,Type type2) {
 		if(type1 == null) return(type2 == null);
@@ -216,6 +229,7 @@ public class Type extends SyntaxClass implements Externalizable {
 	public void doChecking(final DeclarationScope scope) {
 		if(qual!=null) SET_SEMANTICS_CHECKED(); // This Ref-Type is read from attribute file
 		if(IS_SEMANTICS_CHECKED()) return;
+//		System.out.println("Type.doChecking: "+this+" in "+scope);
 		Global.enterScope(scope);
 		String refIdent=getRefIdent();
 		if(refIdent!=null) {
@@ -622,6 +636,21 @@ public class Type extends SyntaxClass implements Externalizable {
 			case Simple: default: return(this.toClassDesc(declaredIn));
 		}
 	}
+	public ClassDesc toObjectClassDesc() {
+		if(key==null) return(ConstantDescs.CD_void);
+//		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
+		if(this.equals(LongReal))  return(ConstantDescs.CD_Double);
+		if(this.equals(Real))      return(ConstantDescs.CD_Float);
+		if(this.equals(Integer))   return(ConstantDescs.CD_Integer);
+		if(this.equals(Boolean))   return(ConstantDescs.CD_Boolean);
+		if(this.equals(Character)) return(ConstantDescs.CD_Character);
+		if(this.equals(Text))      return(CD.RTS_TXT);
+		if(this.equals(Procedure)) return(CD.RTS_PRCQNT);
+		if(this.equals(Label))     return(CD.RTS_LABEL);
+		if(this.isReferenceType()) return(this.getQual().getClassDesc());
+		Util.IERR("NOT IMPLEMENTED: "+this);
+		return(null);
+	}
 	
 	public String toJVMType(Parameter.Kind kind,Parameter.Mode mode) {
 	String jvmType=toClassDesc(kind,mode).descriptorString();
@@ -755,6 +784,26 @@ public class Type extends SyntaxClass implements Externalizable {
 		if(this.equals(LongReal)) return("LONG REAL"); 
 		return(key.toString().toUpperCase());
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public static void outType(Type type,ObjectOutput oupt) throws IOException {
+		if(Option.NEW_ATTR_FILE) {
+			if(type == null) {
+				oupt.writeObject(KeyWord.NONE);
+			} else {
+//				type.key.writeATTR(oupt);
+				oupt.writeObject(type.key.keyWord);
+				oupt.writeObject(type.key.value);
+			}
+//			oupt.writeObject(qual);
+//			oupt.writeObject(declaredIn);
+		} else {
+			oupt.writeObject(type);			
+		}
+	}
 	
 	/**
 	 * Read a type from an ObjectInput file.
@@ -764,22 +813,29 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @throws ClassNotFoundException if the operation failed
 	 */
 	public static Type inType(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Type tp=(Type)inpt.readObject();
-//		if(tp==null) return(null);
-//		KeyWord key=tp.key.getKeyWord();
-//		if(key==KeyWord.INTEGER) return(Type.Integer);
-//		if(key==KeyWord.REAL) {
-//			if(tp.key.getValue()==KeyWord.LONG) return(Type.LongReal);
-//			return(Type.Real);
-//		}
-//		if(key==KeyWord.BOOLEAN) return(Type.Boolean);
-//		if(key==KeyWord.CHARACTER) return(Type.Character);
-//		if(key==KeyWord.TEXT) return(Type.Text);
-//		if(key==KeyWord.PROCEDURE) return(Type.Procedure);
-//		if(key==KeyWord.LABEL) return(Type.Label);
-		return(tp);
+		if(Option.NEW_ATTR_FILE) {
+//			Token key=Token.readAttr(inpt);
+			KeyWord keyWord = (KeyWord) inpt.readObject();
+			if(keyWord == KeyWord.NONE) return(null);
+			Object value = inpt.readObject();
+			Token key = new Token("",keyWord,value);
 
+			
+//			qual=(ClassDeclaration) inpt.readObject();
+//			declaredIn=(ConnectionBlock) inpt.readObject();
+			return(new Type(key));			
+		} else {
+			Type tp=(Type)inpt.readObject();
+			return(tp);
+		}
 	}
+
+//	public static Type readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+//		Token key=Token.readAttr(inpt);
+////		qual=(ClassDeclaration) inpt.readObject();
+////		declaredIn=(ConnectionBlock) inpt.readObject();
+//		return(new Type(key));
+//	}
 
 	// ***********************************************************************************************
 	// *** Externalization
@@ -787,7 +843,7 @@ public class Type extends SyntaxClass implements Externalizable {
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		if(AttributeOutput.USE_ATTRIBUTE_IO) Util.IERR("");
+		if(Option.NEW_ATTR_FILE) Util.IERR("");
 		oupt.writeObject(key);
 		oupt.writeObject(qual);
 		oupt.writeObject(declaredIn);
@@ -795,10 +851,10 @@ public class Type extends SyntaxClass implements Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-//		if(AttributeOutput.USE_ATTRIBUTE_IO) Util.IERR("");
-		key=(Token)inpt.readObject();
-		qual=(ClassDeclaration) inpt.readObject();
-		declaredIn=(ConnectionBlock) inpt.readObject();
+		if(Option.NEW_ATTR_FILE) Util.IERR("");
+		key = (Token)inpt.readObject();
+		qual = (ClassDeclaration) inpt.readObject();
+		declaredIn = (ConnectionBlock) inpt.readObject();
 	}
 	
 }

@@ -165,7 +165,7 @@ public final class ProcedureSpecification implements Externalizable {
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureSpecification: " + identifier);
 		oupt.writeObject(identifier);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 
 		oupt.writeObject(parameterList);
 	}

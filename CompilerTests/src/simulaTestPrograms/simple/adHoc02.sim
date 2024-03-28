@@ -1,8 +1,28 @@
 begin
-	long real procedure LRP(lr); long real lr; begin
-		outtext("Hello World, lr=");
-		outreal(lr,4,14);
-	end; 
-	
-	LRP(4.14);
+
+   class A;
+   begin
+      integer aa;
+   end;
+
+
+   ref(A) Z;
+   integer i;
+
+   procedure P(Q, x);
+      name x;
+      procedure Q; ref(A) x;
+   begin
+      Q(x);
+   end;
+
+   procedure Q(y);
+      name y;
+      ref(A) y;
+   begin
+   end;
+
+   P(Q, Z);
+
+
 end;

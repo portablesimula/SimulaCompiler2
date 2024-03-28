@@ -31,6 +31,8 @@ import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.HiddenSpecification;
+import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.statement.DummyStatement;
@@ -1073,6 +1075,68 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void writeAttr(ObjectOutput oupt) throws IOException {
+//		this.print(10);
+		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
+		oupt.writeBoolean(false); // Mark: This is a ProcedureDeclaration
+		oupt.writeObject(identifier);
+		oupt.writeObject(externalIdent);
+//		Type.outType(type,oupt);
+		Type.outType(type,oupt);
+//		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+		oupt.writeObject(declarationKind);
+		oupt.writeInt(rtBlockLevel);
+		oupt.writeBoolean(hasLocalClasses);
+
+		oupt.writeObject(parameterList);
+//		oupt.writeObject(labelList);
+//		oupt.writeObject(declarationList);
+		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
+	}
+	
+	private DeclarationList prep(DeclarationList declarationList) {
+		DeclarationList res = new DeclarationList("");
+		for(Declaration decl:declarationList) {
+			if(decl instanceof ArrayDeclaration) res.add(decl);
+			else if(decl instanceof ClassDeclaration) res.add(decl);
+			else if(decl instanceof ExternalDeclaration) res.add(decl);
+			else if(decl instanceof LabelDeclaration) res.add(decl);
+			else if(decl instanceof ProcedureDeclaration) res.add(decl);
+			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
+			else if(decl instanceof SwitchDeclaration) res.add(decl);
+		}
+		return(res);
+	}
+
+	@SuppressWarnings("unchecked")
+	public static ProcedureDeclaration readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+//		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
+		String identifier = (String) inpt.readObject();
+		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, Declaration.Kind.Procedure);
+
+		System.out.println("ProcedureDeclaration.readAttr: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
+		pro.print(2);
+//		Util.IERR("");
+
+		pro.externalIdent=(String)inpt.readObject();
+		pro.type=Type.inType(inpt);
+//		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+		pro.declarationKind=(Kind) inpt.readObject();
+		pro.rtBlockLevel=inpt.readInt();
+		pro.hasLocalClasses=inpt.readBoolean();
+		
+		pro.parameterList=(Vector<Parameter>) inpt.readObject();
+//		pro.labelList=(Vector<LabelDeclaration>) inpt.readObject();
+//		pro.declarationList=(DeclarationList) inpt.readObject();
+		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
+		Global.setScope(pro.declaredIn);
+		return(pro);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -1082,40 +1146,39 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
-		
-//		if(identifier.equals("outtext"))
-//		System.out.println("BEGIN Write ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-		
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
+		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR(""+this+"  Declared in "+this.declaredIn);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
-		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+//		Type.outType(type,oupt);
+		Type.outType(type,oupt);
+//		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 		oupt.writeObject(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
 
 		oupt.writeObject(parameterList);
 		oupt.writeObject(labelList);
-		oupt.writeObject(declarationList);
+//		oupt.writeObject(declarationList);
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
 		identifier=(String)inpt.readObject();
+		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR("");
 		externalIdent=(String)inpt.readObject();
 		type=Type.inType(inpt);
-		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+//		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 		declarationKind=(Kind) inpt.readObject();
 		rtBlockLevel=inpt.readInt();
 		hasLocalClasses=inpt.readBoolean();
 		
 		parameterList=(Vector<Parameter>) inpt.readObject();
 		labelList=(Vector<LabelDeclaration>) inpt.readObject();
-		declarationList=(DeclarationList) inpt.readObject();
+//		declarationList=(DeclarationList) inpt.readObject();
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
 		
 //		if(identifier.equals("outtext"))

@@ -275,7 +275,7 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 				"Variable: " + type + ' ' + identifier + ", constant=" + isConstant() + ", const=" + constantElement);
 		oupt.writeObject(identifier);
 		oupt.writeObject(externalIdent);
-		oupt.writeObject(type);
+		Type.outType(type,oupt);
 		oupt.writeBoolean(isConstant());
 		if (constantElement instanceof Constant)
 			oupt.writeObject(constantElement);
@@ -290,7 +290,6 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 		type = Type.inType(inpt);
 		constant = inpt.readBoolean();
 		constantElement = (Constant) inpt.readObject();
-		Util.TRACE_INPUT("Variable: " + type + ' ' + identifier + ", constant=" + constant + ", constantElement="
-				+ constantElement);
+		Util.TRACE_INPUT("Variable: " + type + ' ' + identifier + ", constant=" + constant + ", constantElement=" + constantElement);
 	}
 }

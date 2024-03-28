@@ -321,7 +321,7 @@ public final class Meaning implements Externalizable {
 
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write ConditionalStatement: ");
+		Util.TRACE_OUTPUT("BEGIN Write Meaning: "+this);
 		oupt.writeObject(declaredAs);
 		oupt.writeObject(declaredIn);
 		oupt.writeObject(foundIn);
@@ -330,7 +330,7 @@ public final class Meaning implements Externalizable {
 	
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: ");
+		Util.TRACE_INPUT("BEGIN Read Meaning: ");
 		declaredAs = (Declaration) inpt.readObject();
 		declaredIn = (DeclarationScope) inpt.readObject();
 		foundIn = (DeclarationScope) inpt.readObject();

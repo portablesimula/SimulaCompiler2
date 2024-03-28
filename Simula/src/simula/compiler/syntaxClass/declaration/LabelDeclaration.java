@@ -26,6 +26,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -283,7 +284,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		super.writeExternal(oupt);
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(CHECKED);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
 		oupt.writeInt(index);
 		oupt.writeObject(movedTo);
@@ -293,7 +295,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		super.readExternal(inpt);
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		CHECKED=inpt.readBoolean();
+		if(!Option.NEW_ATTR_FILE)
+			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
 		index = inpt.readInt();
 		movedTo = (DeclarationScope) inpt.readObject();

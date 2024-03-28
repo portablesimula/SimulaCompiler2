@@ -476,6 +476,32 @@ public final class RTS_COMMON {
 	// *** TRACING AND DEBUGGING UTILITIES
 	// *********************************************************************
 
+	public static void _SNAPSHOT(int sequ,String msg) {
+//		RTS_RTObject cur=RTS_RTObject._CUR;
+//		String id=""+cur;
+		String id=RTS_COMMON.progamIdent;
+		println("*** SNAPSHOT-"+id+"["+sequ+"]: "+msg);
+//		Thread.dumpStack();
+		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
+		int n = stackTraceElement.length;
+		for (int i = 0; i < n; i++) {
+			println("*** stackTraceElement["+i+"] = "+stackTraceElement[i]);
+		}
+	}
+
+	public static void _SNAPSHOT(Object TOS,int sequ,String msg) {
+//		RTS_RTObject cur=RTS_RTObject._CUR;
+//		String id=""+cur;
+		String id=RTS_COMMON.progamIdent;
+		println("*** SNAPSHOT-"+id+"["+sequ+"]: "+msg+", TOS="+TOS.getClass().getSimpleName()+"  "+TOS);
+//		Thread.dumpStack();
+		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
+		int n = stackTraceElement.length;
+		for (int i = 0; i < n; i++) {
+			println("*** stackTraceElement["+i+"] = "+stackTraceElement[i]);
+		}
+	}
+
 	/**
 	 * Print static chain starting with the current instance.
 	 */

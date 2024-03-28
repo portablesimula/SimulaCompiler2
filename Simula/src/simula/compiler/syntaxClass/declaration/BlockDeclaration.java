@@ -323,6 +323,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * @throws IOException 
 	 */
     public void createJavaClassFile() throws IOException {
+		if (this.isPreCompiled)	return;
 		prevBlock = currentBlock;
 		currentBlock = this;
 
