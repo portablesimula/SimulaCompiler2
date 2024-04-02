@@ -7,6 +7,7 @@
  */
 package simula.compiler.syntaxClass;
 
+import java.io.DataOutput;
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
@@ -188,7 +189,7 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * Returns the keyWord or the ref-identifier.
 	 * @return the keyWord or the ref-identifier
 	 */
-	public KeyWord getKeyWord() { return(key.getKeyWord()); }
+	public int getKeyWord() { return(key.getKeyWord()); }
 	
 	
 	public static boolean equals(Type type1,Type type2) {
@@ -544,8 +545,8 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
 
 	// Used by: Thunk.buildClassFile
-	public static String toJVMClassType(Type type,Parameter.Kind kind) {
-		if(kind!=null && kind.equals(Parameter.Kind.Procedure)) return("Lsimula/runtime/RTS_PRCQNT;");
+	public static String toJVMClassType(Type type,int kind) {
+		if(kind == Parameter.Kind.Procedure) return("Lsimula/runtime/RTS_PRCQNT;");
 //		if(key==null) return("V");
 //		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
 		if(type.equals(LongReal)) return("Ljava/lang/Double;");
@@ -617,23 +618,23 @@ public class Type extends SyntaxClass implements Externalizable {
 		return(null);
 	}
 
-	public ClassDesc toClassDesc(Parameter.Kind kind,Parameter.Mode mode) {
+	public ClassDesc toClassDesc(int kind,int mode) {
 		if (mode == Parameter.Mode.name) return(CD.RTS_NAME);
 		else switch(kind) { // Parameter.Kind
-			case Array:			  return(CD.RTS_ARRAY);
-			case Label:           return(CD.RTS_LABEL);
-			case Procedure:       return(CD.RTS_PRCQNT);
-			case Simple: default: return(this.toClassDesc(declaredIn));
+			case Parameter.Kind.Array:			 return(CD.RTS_ARRAY);
+			case Parameter.Kind.Label:           return(CD.RTS_LABEL);
+			case Parameter.Kind.Procedure:       return(CD.RTS_PRCQNT);
+			case Parameter.Kind.Simple: default: return(this.toClassDesc(declaredIn));
 		}
 	}
 
-	public ClassDesc toClassDesc2(Parameter.Kind kind,Parameter.Mode mode) {
+	public ClassDesc toClassDesc2(int kind,int mode) {
 		if (mode == Parameter.Mode.name) return(CD.RTS_NAME);
 		else switch(kind) {
-			case Array:     return(CD.RTS_ARRAY);
-			case Label:     return(CD.RTS_LABEL);
-			case Procedure: return(CD.RTS_PRCQNT);
-			case Simple: default: return(this.toClassDesc(declaredIn));
+			case Parameter.Kind.Array:     return(CD.RTS_ARRAY);
+			case Parameter.Kind.Label:     return(CD.RTS_LABEL);
+			case Parameter.Kind.Procedure: return(CD.RTS_PRCQNT);
+			case Parameter.Kind.Simple: default: return(this.toClassDesc(declaredIn));
 		}
 	}
 	public ClassDesc toObjectClassDesc() {
@@ -652,10 +653,8 @@ public class Type extends SyntaxClass implements Externalizable {
 		return(null);
 	}
 	
-	public String toJVMType(Parameter.Kind kind,Parameter.Mode mode) {
+	public String toJVMType(int kind,int mode) {
 	String jvmType=toClassDesc(kind,mode).descriptorString();
-//	System.out.println("Parameter.toJVMType: "+ this +"  ==>  "+jvmType+" ##########################################################");
-//	Util.IERR("");
 	return(jvmType);
 }
 
@@ -664,9 +663,9 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the resulting Class Signature.
 	 */
 	public String toClassSignatureString() {
-		return(toClassSignatureString(null));
+		return(toClassSignatureString(0));
 	}
-	public String toClassSignatureString(Parameter.Mode mode) {
+	public String toClassSignatureString(int mode) {
 		String CS=null;
 		if (mode == Parameter.Mode.name) {
 			if(this.equals(Type.Integer)) CS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;";
@@ -689,9 +688,9 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the resulting Class Signature.
 	 */
 	public ClassSignature toClassSignature() {
-		return(toClassSignature(null));
+		return(toClassSignature(0));
 	}
-	public ClassSignature toClassSignature(Parameter.Mode mode) {
+	public ClassSignature toClassSignature(int mode) {
 		ClassSignature CS=null;
 		if (mode == Parameter.Mode.name) {
 			if(this.equals(Type.Integer)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;");
@@ -789,13 +788,14 @@ public class Type extends SyntaxClass implements Externalizable {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
+//	public static void outType(Type type,DataOutput oupt) throws IOException {
 	public static void outType(Type type,ObjectOutput oupt) throws IOException {
 		if(Option.NEW_ATTR_FILE) {
 			if(type == null) {
-				oupt.writeObject(KeyWord.NONE);
+				oupt.writeInt(KeyWord.NONE);
 			} else {
 //				type.key.writeATTR(oupt);
-				oupt.writeObject(type.key.keyWord);
+				oupt.writeInt(type.key.keyWord);
 				oupt.writeObject(type.key.value);
 			}
 //			oupt.writeObject(qual);
@@ -815,7 +815,7 @@ public class Type extends SyntaxClass implements Externalizable {
 	public static Type inType(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		if(Option.NEW_ATTR_FILE) {
 //			Token key=Token.readAttr(inpt);
-			KeyWord keyWord = (KeyWord) inpt.readObject();
+			int keyWord = inpt.readInt();
 			if(keyWord == KeyWord.NONE) return(null);
 			Object value = inpt.readObject();
 			Token key = new Token("",keyWord,value);

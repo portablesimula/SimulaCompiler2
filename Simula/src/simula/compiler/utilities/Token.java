@@ -29,7 +29,7 @@ public final class Token implements Externalizable {
 	/**
 	 * The Token's keyWord attribute
 	 */
-	public KeyWord keyWord;
+	public int keyWord;
 	/**
 	 * The Token's value attribute
 	 */
@@ -65,7 +65,7 @@ public final class Token implements Externalizable {
 	 * @param keyWord the Token's keyword attribute
 	 * @param value   the Token's value attribute
 	 */
-	public Token(final String text, final KeyWord keyWord, final Object value) {
+	public Token(final String text, final int keyWord, final Object value) {
 		this.text = text;
 		this.keyWord = keyWord;
 		this.value = value;
@@ -78,7 +78,7 @@ public final class Token implements Externalizable {
 	 * @param text    the Token's text attribute
 	 * @param keyWord the Token's keyword attribute
 	 */
-	public Token(final String text, final KeyWord keyWord) {
+	public Token(final String text, final int keyWord) {
 		this(text, keyWord, null);
 	}
 
@@ -88,7 +88,7 @@ public final class Token implements Externalizable {
 	 * @param keyWord the Token's keyword attribute
 	 * @param value   the Token's value attribute
 	 */
-	public Token(final KeyWord keyWord, final Object value) {
+	public Token(final int keyWord, final Object value) {
 		this(null, keyWord, value);
 	}
 
@@ -97,7 +97,7 @@ public final class Token implements Externalizable {
 	 * 
 	 * @param keyWord the Token's keyword attribute
 	 */
-	public Token(final KeyWord keyWord) {
+	public Token(final int keyWord) {
 		this(keyWord, null);
 	}
 
@@ -134,18 +134,18 @@ public final class Token implements Externalizable {
 	 */
 	public StyleCode getStyleCode() {
 		switch(keyWord) {
-		    case ASSIGNVALUE: case ASSIGNREF: case COMMA: case COLON: case SEMICOLON:
-		    case BEGPAR: case ENDPAR: case BEGBRACKET: case ENDBRACKET: case EQR: case NER:
-		    case EQ: case GE: case GT: case LE: case LT: case NE:
-		    case PLUS: case MINUS: case MUL: case DIV: case INTDIV: case EXP:
-		    case IDENTIFIER: case DOT:
+		    case KeyWord.ASSIGNVALUE: case KeyWord.ASSIGNREF: case KeyWord.COMMA: case KeyWord.COLON: case KeyWord.SEMICOLON:
+		    case KeyWord.BEGPAR: case KeyWord.ENDPAR: case KeyWord.BEGBRACKET: case KeyWord.ENDBRACKET: case KeyWord.EQR: case KeyWord.NER:
+		    case KeyWord.EQ: case KeyWord.GE: case KeyWord.GT: case KeyWord.LE: case KeyWord.LT: case KeyWord.NE:
+		    case KeyWord.PLUS: case KeyWord.MINUS: case KeyWord.MUL: case KeyWord.DIV: case KeyWord.INTDIV: case KeyWord.EXP:
+		    case KeyWord.IDENTIFIER: case KeyWord.DOT:
 		    	 return(Token.StyleCode.regular);
 		    	 
-		    case BOOLEANKONST: case INTEGERKONST: case CHARACTERKONST:
-		    case REALKONST: case TEXTKONST: case STRING:
+		    case KeyWord.BOOLEANKONST: case KeyWord.INTEGERKONST: case KeyWord.CHARACTERKONST:
+		    case KeyWord.REALKONST: case KeyWord.TEXTKONST: case KeyWord.STRING:
 		    	 return(Token.StyleCode.constant);
 		    	 
-		    case COMMENT:
+		    case KeyWord.COMMENT:
 		    	 return(Token.StyleCode.comment);
 		    	 
 		    default: return(Token.StyleCode.keyword);
@@ -157,7 +157,7 @@ public final class Token implements Externalizable {
 	 * 
 	 * @return this Token's keyword attribute
 	 */
-	public KeyWord getKeyWord() {
+	public int getKeyWord() {
 		return (keyWord);
 	}
 
@@ -167,7 +167,7 @@ public final class Token implements Externalizable {
 	 * @return this Token's keyword code
 	 */
 	public int getKeyWordCode() {
-		return (keyWord.ordinal());
+		return (keyWord);
 	}
 
 	/**
@@ -190,7 +190,8 @@ public final class Token implements Externalizable {
 
 	public boolean equals(final Object other) {
 		Token othr = (Token) other;
-		if (!this.keyWord.equals(othr.keyWord))
+//		if (!this.keyWord.equals(othr.keyWord))
+		if (this.keyWord != othr.keyWord)
 			return (false);
 		if (this.value == othr.value)
 			return (true);
@@ -205,51 +206,51 @@ public final class Token implements Externalizable {
 
 	public String toString() {
 		switch (keyWord) {
-		case COMMA:			return (",");
-		case COLON:			return (":");
-		case SEMICOLON:		return (";");
-		case BEGPAR:		return ("(");
-		case ENDPAR:		return (")");
-		case BEGBRACKET:	return ("[");
-		case ENDBRACKET:	return ("]");
-		case EXP:			return ("**");
-		case DOT:			return (".");
-		case CONC:			return ("&");
+		case KeyWord.COMMA:			return (",");
+		case KeyWord.COLON:			return (":");
+		case KeyWord.SEMICOLON:		return (";");
+		case KeyWord.BEGPAR:		return ("(");
+		case KeyWord.ENDPAR:		return (")");
+		case KeyWord.BEGBRACKET:	return ("[");
+		case KeyWord.ENDBRACKET:	return ("]");
+		case KeyWord.EXP:			return ("**");
+		case KeyWord.DOT:			return (".");
+		case KeyWord.CONC:			return ("&");
 
-		case EQ:			return ("=");
-		case GE:			return (">=");
-		case GT:			return (">");
-		case LE:			return ("<=");
-		case LT:			return ("<");
-		case NE:			return ("<>");
-		case EQR:			return ("==");
-		case NER:			return ("=/=");
-		case IN:			return ("IN");
-		case IS:			return ("IS");
-		case PLUS:			return ("+");
-		case MINUS:			return ("-");
-		case MUL:			return ("*");
-		case DIV:			return ("/");
-		case INTDIV:		return ("//");
-		case ASSIGNVALUE:	return (":=");
-		case ASSIGNREF:		return (":-");
+		case KeyWord.EQ:			return ("=");
+		case KeyWord.GE:			return (">=");
+		case KeyWord.GT:			return (">");
+		case KeyWord.LE:			return ("<=");
+		case KeyWord.LT:			return ("<");
+		case KeyWord.NE:			return ("<>");
+		case KeyWord.EQR:			return ("==");
+		case KeyWord.NER:			return ("=/=");
+		case KeyWord.IN:			return ("IN");
+		case KeyWord.IS:			return ("IS");
+		case KeyWord.PLUS:			return ("+");
+		case KeyWord.MINUS:			return ("-");
+		case KeyWord.MUL:			return ("*");
+		case KeyWord.DIV:			return ("/");
+		case KeyWord.INTDIV:		return ("//");
+		case KeyWord.ASSIGNVALUE:	return (":=");
+		case KeyWord.ASSIGNREF:		return (":-");
 
-		case INTEGERKONST:	return ("INTEGERKONST(" + (Long) value + ")");
-		case REALKONST:		return ("REALKONST(" + (Number) value + ")");
-		case CHARACTERKONST:return ("CHARACTERKONST(" + (Character) value + ")");
-		case TEXTKONST:		return ("TEXTKONST(" + (String) value + ")");
-		case BOOLEANKONST:	return ("BOOLEANKONST(" + (Boolean) value + ")");
-		case IDENTIFIER:	return ("" + value);
+		case KeyWord.INTEGERKONST:	return ("INTEGERKONST(" + (Long) value + ")");
+		case KeyWord.REALKONST:		return ("REALKONST(" + (Number) value + ")");
+		case KeyWord.CHARACTERKONST:return ("CHARACTERKONST(" + (Character) value + ")");
+		case KeyWord.TEXTKONST:		return ("TEXTKONST(" + (String) value + ")");
+		case KeyWord.BOOLEANKONST:	return ("BOOLEANKONST(" + (Boolean) value + ")");
+		case KeyWord.IDENTIFIER:	return ("" + value);
 
-		case INTEGER: case REAL: {
+		case KeyWord.INTEGER: case KeyWord.REAL: {
 			// Possible SHORT or LONG in value part
-			String res = keyWord.toString();
+			String res = KeyWord.edit(keyWord);
 			if (value != null)
 				res = value.toString() + ' ' + res;
 			return (res);
 		}
 		default:
-			return (keyWord.toLowerCase());
+			return (KeyWord.edit(keyWord).toLowerCase());
 		}
 	}
 
@@ -263,7 +264,7 @@ public final class Token implements Externalizable {
 	}
 
 	public static Token readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		KeyWord keyWord = (KeyWord) inpt.readObject();
+		int keyWord = inpt.readInt();
 		Object value = inpt.readObject();
 		return(new Token("",keyWord,value));
 	}
@@ -280,7 +281,7 @@ public final class Token implements Externalizable {
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		keyWord = (KeyWord) inpt.readObject();
+		keyWord = inpt.readInt();
 		value = inpt.readObject();
 	}
 

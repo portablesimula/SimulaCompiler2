@@ -20,6 +20,7 @@ import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
+import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -116,8 +117,10 @@ public final class ProgramModule extends Statement {
 			     .setClassDeclaration(StandardClass.Printfile);
 			Global.getCurrentScope().sourceBlockLevel=0;
 			while(Parse.accept(KeyWord.EXTERNAL)) {
-//				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT.declarationList);
-				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT); // TODO: TESTING3
+				if(Option.TESTING_SEPARATE) {
+					ExternalDeclaration.expectExternalHead(StandardClass.BASICIO);					
+				} else
+				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT);
 				Parse.expect(KeyWord.SEMICOLON);
 			}
 			String ident=Parse.acceptIdentifier();
@@ -170,8 +173,16 @@ public final class ProgramModule extends Statement {
 
 	@Override
 	public void printTree(int indent) {
-		System.out.println("=========== Resulting Syntax Tree after Checking ================");
-		module.printTree(0);
+//		Thread.dumpStack();
+//		System.out.println("=========== Resulting Syntax Tree after Checking ================");
+		System.out.println("BASICIO");
+		System.out.println("    ... Standard Classes and Procedures");
+		for(Declaration decl:StandardClass.BASICIO.declarationList) {
+			if(decl instanceof StandardProcedure) ; // Nothing
+			else if(decl instanceof StandardClass) ; // Nothing
+			else decl.printTree(1);
+		}
+//		module.printTree(1);
 		System.out.println("=================================================================");
 	}
 	

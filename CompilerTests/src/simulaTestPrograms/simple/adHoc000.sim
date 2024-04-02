@@ -1,12 +1,22 @@
 begin
 
-  class A(i); integer i; virtual: procedure checkEvent; begin checkEvent(444); end;  
+   real               gr ;
 
-  A(5) begin
-  
-     procedure checkEvent(val); integer val; begin
-     end;
- 
-  end;
-  
-end;
+   procedure AP (t) ;
+                       text        t ;
+   begin
+   end of procedure AP ;
+
+   procedure P (F) ;  procedure F ;
+   begin
+
+      if  abs(gr-1.2)<0.0001 then ;
+
+      F (copy ("abc")) ;
+
+
+   end of procedure P ;
+
+   P (AP) ;
+
+end of program;

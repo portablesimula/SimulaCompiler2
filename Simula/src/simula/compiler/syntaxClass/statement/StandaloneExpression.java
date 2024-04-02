@@ -75,7 +75,7 @@ public final class StandaloneExpression extends Statement implements Externaliza
 	private static Expression expectStandaloneExpression() { 
 		Expression retExpr=Expression.expectExpression();
 		while (Parse.accept(KeyWord.ASSIGNVALUE,KeyWord.ASSIGNREF)) {
-			KeyWord opr=Parse.prevToken.getKeyWord();
+			int opr=Parse.prevToken.getKeyWord();
 			retExpr=new AssignmentOperation(retExpr,opr,expectStandaloneExpression());
 		}
 		return retExpr;

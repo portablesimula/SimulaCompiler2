@@ -84,7 +84,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * Used for precompiled Class/Procedure to indicate whether the rtBlock level has been updated.
 	 * This is done in the doChecking method of the Class/Procedure
 	 */
-	public boolean isBlockLevelUpdated; // TODO: NEW_EXTERNAL_IMPL
+	public boolean isBlockLevelUpdated;
 
 	
 	/**
@@ -160,7 +160,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * Checking utility: updateBlockLevels in precompiles class or procedure.
 	 * @param enclRTBlockLevel enclosing block's rtBlock level
 	 */
-	protected void updateBlockLevels(int enclRTBlockLevel) { // TODO: NEW_EXTERNAL_IMPL
+	protected void updateBlockLevels(int enclRTBlockLevel) {
 		this.rtBlockLevel = this.rtBlockLevel + enclRTBlockLevel;
 		this.isBlockLevelUpdated = true;
 		for(Declaration decl:declarationList) {
@@ -253,6 +253,22 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	protected boolean hasLabel() {
 		// Needs redefinition for ClassDeclaration
 		return (!labelList.isEmpty());
+	}
+
+	// ***********************************************************************************************
+	// *** Utility: nearestEnclosingBlock
+	// ***********************************************************************************************
+	/**
+	 * Returns the nearest Enclosing Block or null.
+	 * @return the nearest Enclosing Block or null.
+	 */
+	protected BlockDeclaration nearestEnclosingBlock() {
+		DeclarationScope scope = declaredIn;
+		while(scope != null) {
+			if(scope instanceof BlockDeclaration blk) return(blk);
+			scope = scope.declaredIn;
+		}
+		return (null);
 	}
 
 	// ***********************************************************************************************

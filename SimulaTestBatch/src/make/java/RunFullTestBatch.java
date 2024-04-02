@@ -98,7 +98,7 @@ public final class RunFullTestBatch {
 		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
 //		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+////		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 
 //		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.

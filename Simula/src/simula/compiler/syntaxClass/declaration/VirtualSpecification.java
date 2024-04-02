@@ -305,8 +305,8 @@ public final class VirtualSpecification extends Declaration implements Externali
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 		Type.outType(type,oupt);
 		oupt.writeObject(kind);
 		oupt.writeObject(procedureSpec);
@@ -314,8 +314,8 @@ public final class VirtualSpecification extends Declaration implements Externali
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		type = Type.inType(inpt);
 		kind = (Kind) inpt.readObject();
 		procedureSpec = (ProcedureSpecification) inpt.readObject();

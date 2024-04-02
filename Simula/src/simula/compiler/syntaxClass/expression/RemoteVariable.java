@@ -206,7 +206,8 @@ public final class RemoteVariable extends Expression {
 		if (remoteAttribute.foundBehindInvisible) {
 			String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
 			result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();
-		} else result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
+//		} else result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
+		} else result = obj.get() + '.' + var.get();
 		return (result);
 	}
 

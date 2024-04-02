@@ -116,7 +116,7 @@ public final class BooleanExpression extends Expression {
 	/**
 	 * The Boolean operation
 	 */
-	private KeyWord opr;
+	private int opr;
 
 	/**
 	 * The right hand side
@@ -129,7 +129,7 @@ public final class BooleanExpression extends Expression {
 	 * @param opr Boolean operation
 	 * @param rhs right hand side
 	 */
-	BooleanExpression(Expression lhs, KeyWord opr, Expression rhs) {
+	BooleanExpression(Expression lhs, int opr, Expression rhs) {
 		this.lhs = lhs;
 		this.opr = opr;
 		this.rhs = rhs;
@@ -151,7 +151,7 @@ public final class BooleanExpression extends Expression {
 		if (Option.TRACE_CHECKER)
 			Util.TRACE("BEGIN BooleanOperation" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		switch (opr) {
-		    case AND:case OR:case IMP:case EQV:case AND_THEN:case OR_ELSE: {
+		    case KeyWord.AND:case KeyWord.OR:case KeyWord.IMP:case KeyWord.EQV:case KeyWord.AND_THEN:case KeyWord.OR_ELSE: {
 		    	// Boolean operation
 				lhs.doChecking();
 				rhs.doChecking();
@@ -181,12 +181,12 @@ public final class BooleanExpression extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		switch (opr) {
-			case IMP: return ("((!" + lhs.get() + ") | " + rhs.get() + ')');
-			case EQV: return ("((" + lhs.get() + ") == (" + rhs.get() + "))");
+			case KeyWord.IMP: return ("((!" + lhs.get() + ") | " + rhs.get() + ')');
+			case KeyWord.EQV: return ("((" + lhs.get() + ") == (" + rhs.get() + "))");
 			default: {
 				if (this.backLink == null)
-				 	 return (lhs.get() + opr.toJavaCode() + '(' + rhs.get() + ')');
-				else return ("(" + lhs.get() + opr.toJavaCode() + '(' + rhs.get() + "))");
+				 	 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
+				else return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
 			}
 		}
 	}
@@ -195,20 +195,20 @@ public final class BooleanExpression extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		switch(opr) {
-			case AND:
+			case KeyWord.AND:
 				lhs.buildEvaluation(null,codeBuilder);
 				rhs.buildEvaluation(null,codeBuilder);
 				codeBuilder.iand(); break;
-			case OR:
+			case KeyWord.OR:
 				lhs.buildEvaluation(null,codeBuilder);
 				rhs.buildEvaluation(null,codeBuilder);
 				codeBuilder.ior(); break;
-			case IMP:
+			case KeyWord.IMP:
 				lhs.buildEvaluation(null,codeBuilder);
 				UnaryOperation.buildNOT(codeBuilder);
 				rhs.buildEvaluation(null,codeBuilder);
 				codeBuilder.ior(); break;
-			case EQV:
+			case KeyWord.EQV:
 				lhs.buildEvaluation(null,codeBuilder);
 				rhs.buildEvaluation(null,codeBuilder);
 				Label L1 = codeBuilder.newLabel();
@@ -221,7 +221,7 @@ public final class BooleanExpression extends Expression {
 						.iconst_0()
 						.labelBinding(L2);
 				break;
-			case AND_THEN:
+			case KeyWord.AND_THEN:
 				Label AL1 = codeBuilder.newLabel();
 				Label AL2 = codeBuilder.newLabel();
 				lhs.buildEvaluation(null,codeBuilder);
@@ -236,7 +236,7 @@ public final class BooleanExpression extends Expression {
 						.iconst_0()
 						.labelBinding(AL2);
 				break;
-			case OR_ELSE:
+			case KeyWord.OR_ELSE:
 				Label OL1 = codeBuilder.newLabel();
 				Label OL2 = codeBuilder.newLabel();
 				Label OL3 = codeBuilder.newLabel();
@@ -280,7 +280,7 @@ public final class BooleanExpression extends Expression {
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(lhs);
-		oupt.writeObject(opr);
+		oupt.writeInt(opr);
 		oupt.writeObject(rhs);
 	}
 	
@@ -293,7 +293,7 @@ public final class BooleanExpression extends Expression {
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		lhs = (Expression) inpt.readObject();
-		opr = (KeyWord) inpt.readObject();
+		opr = inpt.readInt();
 		rhs = (Expression) inpt.readObject();
 	}
 	

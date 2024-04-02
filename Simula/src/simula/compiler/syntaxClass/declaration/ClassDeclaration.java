@@ -7,7 +7,9 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.DataOutput;
 import java.io.Externalizable;
+import java.io.File;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
@@ -24,7 +26,6 @@ import java.util.Iterator;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.CodeLine;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -110,7 +111,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	/**
 	 * The external prefix'identifier.
 	 */
-	private String externalPrefixIdent;
+//	private String externalPrefixIdent;
 
 	/**
 	 * The parameter list.
@@ -147,6 +148,13 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	 * Class Prefix in case of a SubClass or Prefixed Block.
 	 */
 	public String prefix;
+
+	/**
+	 * Class Prefix in case of a SubClass or Prefixed Block.
+	 * <p>
+	 * Set by coChecking
+	 */
+	public ClassDeclaration prefixClass;
 
 	/**
 	 * Set true when attribute procedure 'detach' is used in/on this class.
@@ -274,7 +282,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 			Parse.TRACE("Parse ParameterSpecifications");
 		while (true) {
 			Type type;
-			Parameter.Kind kind = Parameter.Kind.Simple;
+			int kind = Parameter.Kind.Simple;
 			type = Parse.acceptType();
 			if (Parse.accept(KeyWord.ARRAY)) {
 				if (type == null) {
@@ -495,9 +503,19 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 		
-		ClassDeclaration prefixClass = null;
+//		ClassDeclaration prefixClass = null;
 		if (!hasNoRealPrefix()) {
+			
+//			DeclarationScope scope = this.declaredIn;
+//			for(int i=0;i<3;i++) {
+//				System.out.println("ClassDeclaration.doChecking: "+this.prefix+"  "+identifier +" Before 'getPrefixClass'  scope="+scope);
+//				for(Declaration decl:scope.declarationList)
+//					System.out.println("ClassDeclaration.doChecking:     "+decl);
+//				scope = scope.declaredIn;
+//			}
+			
 			prefixClass = getPrefixClass();
+			System.out.println("ClassDeclaration.doChecking:     GOT IT: "+prefixClass);
 			if (prefixClass.declarationKind != Declaration.Kind.StandardClass) {
 				if (sourceBlockLevel != prefixClass.sourceBlockLevel)
 					Util.warning("Subclass on a deeper block level not allowed.");
@@ -816,6 +834,14 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	public ClassDeclaration getPrefixClass() {
 		if (prefix == null)
 			return (null);
+		if(prefixClass != null) return(prefixClass);
+		
+//		if(!(this instanceof StandardClass)) {
+//			System.out.println("ClassDeclaration.getPrefixClass: "+prefix+" class "+this.identifier+" -- Called from: "+edCallChain());
+//			if(prefix.equalsIgnoreCase("CLASS")) Util.IERR("");
+//		}
+
+		
 		Meaning meaning = declaredIn.findMeaning(prefix);
 		if (meaning == null)
 			Util.error("Undefined prefix: " + prefix);
@@ -823,12 +849,32 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 		if (decl == this) {
 			Util.error("Class prefix chain loops: " + identifier);
 		}
-		if (decl instanceof ClassDeclaration cls)
+		if (decl instanceof ClassDeclaration cls) {
+//			System.out.println("ClassDeclaration.getPrefixClass: "+prefix+"  ==>  "+cls);
+			prefixClass = cls;
 			return (cls);
-		if (decl instanceof StandardClass scl)
-			return (scl);
+		}
+//		if (decl instanceof StandardClass scl)
+//			return (scl);
 		Util.error("Prefix " + prefix + " is not a Class");
 		return (null);
+	}
+	
+	public String edCallChain() {
+		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
+		StringBuilder sb = new StringBuilder();
+		int n = stackTraceElement.length;
+		if(n > 6) n = 6;
+		for (int i = 3; i < n; i++) {
+			String methodName =stackTraceElement[i].getMethodName();
+			String className = stackTraceElement[i].getClassName();
+			int lno = stackTraceElement[i].getLineNumber();
+			int p = className.lastIndexOf('.');
+			className = className.substring(p+1);
+			if(i > 3) sb.append(", ");
+			sb.append(className+'.'+methodName+'('+lno+')');
+		}
+		return(sb.toString());
 	}
 
 	// ***********************************************************************************************
@@ -838,13 +884,23 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	 * Check if this class has a real prefix.
 	 * @return true if this class has a real prefix, otherwise false.
 	 */
+//	boolean hasNoRealPrefix() {
+//		ClassDeclaration prfx = getPrefixClass();
+//		boolean noPrefix = true;
+//		if (prfx != null) {
+//			noPrefix = false;
+//			String prfxString = prfx.identifier;
+//			if (Util.equals(prfxString, "CLASS"))
+//				noPrefix = true;
+//		}
+//		return (noPrefix);
+//	}
 	boolean hasNoRealPrefix() {
-		ClassDeclaration prfx = getPrefixClass();
+		String prfx = prefix;
 		boolean noPrefix = true;
 		if (prfx != null) {
 			noPrefix = false;
-			String prfxString = prfx.identifier;
-			if (Util.equals(prfxString, "CLASS"))
+			if (Util.equals(prfx, "CLASS"))
 				noPrefix = true;
 		}
 		return (noPrefix);
@@ -1487,7 +1543,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"CLASS "+identifier);
+		System.out.println(edTreeIndent(indent)+"CLASS "+identifier+"  BL="+this.rtBlockLevel);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		if (!virtualSpecList.isEmpty())
 			for( VirtualSpecification v:virtualSpecList) v.printTree(indent+1);
@@ -1511,17 +1567,19 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	// ***********************************************************************************************
 
 	public void writeAttr(ObjectOutput oupt) throws IOException {
+//	public void writeAttr(DataOutput oupt) throws IOException {
 //		this.print(10);
 		oupt.writeBoolean(true); // Mark: This is a ClassDeclaration
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 //		Type.outType(type,oupt);
 		Type.outType(type,oupt);
+		
 		oupt.writeInt(rtBlockLevel);
-		oupt.writeObject(prefix);
+		oupt.writeUTF(prefix);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
-		oupt.writeObject(externalPrefixIdent);
+//		oupt.writeUTF(externalPrefixIdent);
 
 		oupt.writeObject(parameterList);
 		oupt.writeObject(virtualSpecList);
@@ -1556,17 +1614,17 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 
 	@SuppressWarnings("unchecked")
 	public static ClassDeclaration readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		String identifier = (String) inpt.readObject();
+		String identifier = (String) inpt.readUTF();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
 		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		cls.declarationKind = Declaration.Kind.Class;
-		cls.externalIdent = (String) inpt.readObject();
+		cls.externalIdent = inpt.readUTF();
 		cls.type = Type.inType(inpt);
 		cls.rtBlockLevel = inpt.readInt();
-		cls.prefix = (String) inpt.readObject();
+		cls.prefix = inpt.readUTF();
 		cls.hasLocalClasses = inpt.readBoolean();
 		cls.detachUsed = inpt.readBoolean();
-		cls.externalPrefixIdent = (String) inpt.readObject();
+//		cls.externalPrefixIdent = inpt.readUTF();
 
 		cls.parameterList = (Vector<Parameter>) inpt.readObject();
 		cls.virtualSpecList = (Vector<VirtualSpecification>) inpt.readObject();
@@ -1582,10 +1640,50 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 //		System.out.println("ClassDeclaration.readAttr: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 //		cls.print(2);
 //		Util.IERR("");
+		if(cls.prefix != null && !cls.prefix.equalsIgnoreCase("CLASS")) {
+			cls.readPrefixClass();
+		}
+		
+//		BlockDeclaration enclosure = cls.nearestEnclosingBlock();
+//		enclosure.printTree(1);
+//		StandardClass.BASICIO.printTree(1);
+//		Util.IERR("");
 		
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		Global.setScope(cls.declaredIn);
+//		Thread.dumpStack();
 		return(cls);
+	}
+	
+	private void readPrefixClass() {
+		System.out.println("ClassDeclaration.readPrefixClass: "+prefix);
+//		Util.IERR("");
+		Token externalIdentifier = null; // MÅ SKRIVES/LESES VIA ATTR-FILE
+		
+		File jarFile = ExternalDeclaration.findJarFile(prefix, externalIdentifier);
+		if (jarFile != null) {
+			if(ExternalDeclaration.checkJarFiles(jarFile)) {
+				System.out.println("ClassDeclaration.readAttr: declaredIn="+declaredIn);
+//				BlockDeclaration enclosure = StandardClass.BASICIO; //null; // Implies BASICIO
+				BlockDeclaration enclosure = nearestEnclosingBlock();
+				System.out.println("ClassDeclaration.readAttr: nearestEnclosingBlock="+enclosure);
+				Type moduleType = ExternalDeclaration.readAttributeFile(prefix, jarFile, enclosure);
+				
+//				System.out.println("\nClassDeclaration.readAttr: ");
+//				System.out.println(enclosure.identifier);
+//				Boolean seenStandardClasses = false;
+//				for(Declaration decl:enclosure.declarationList) {
+//					if(decl instanceof StandardProcedure) ; // Nothing
+//					else if(decl instanceof StandardClass) {
+//						if(!seenStandardClasses) System.out.println("    ... Standard Classes and Procedures");
+//						seenStandardClasses = true;
+//					}
+//					else decl.printTree(1);
+//				}
+//				enclosure.printTree(1);
+//				Util.IERR("");
+			}
+		}		
 	}
 
 	// ***********************************************************************************************
@@ -1602,11 +1700,11 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ClassDeclaration: " + identifier);
 		if(Option.NEW_ATTR_FILE && this instanceof StandardClass) Util.IERR(""+this+"  Declared in "+this.declaredIn);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 		Type.outType(type,oupt);
 		oupt.writeInt(rtBlockLevel);
-		oupt.writeObject(prefix);
+		oupt.writeUTF(prefix);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
 
@@ -1619,7 +1717,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 //		oupt.writeObject(virtualMatchList);
 //		oupt.writeObject(code1);
 //		oupt.writeObject(code2);
-		oupt.writeObject(externalPrefixIdent);
+//		oupt.writeUTF(externalPrefixIdent);
 
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
@@ -1633,12 +1731,12 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 	@SuppressWarnings("unchecked")
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
 		declarationKind = Declaration.Kind.Class;
-		identifier = (String) inpt.readObject();
+		identifier = inpt.readUTF();
 		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
-		externalIdent = (String) inpt.readObject();
+		externalIdent = inpt.readUTF();
 		type = Type.inType(inpt);
 		rtBlockLevel = inpt.readInt();
-		prefix = (String) inpt.readObject();
+		prefix = inpt.readUTF();
 		hasLocalClasses = inpt.readBoolean();
 		detachUsed = inpt.readBoolean();
 
@@ -1651,7 +1749,7 @@ public class ClassDeclaration extends BlockDeclaration implements Externalizable
 //		virtualMatchList=(Vector<VirtualMatch>) inpt.readObject();
 //		code1 = (Vector<CodeLine>) inpt.readObject();
 //		code2 = (Vector<CodeLine>) inpt.readObject();
-		externalPrefixIdent = (String) inpt.readObject();
+//		externalPrefixIdent = inpt.readUTF();
 
 		statements1 = (Vector<Statement>) inpt.readObject();
 		statements = (Vector<Statement>) inpt.readObject();			

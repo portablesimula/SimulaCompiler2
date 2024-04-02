@@ -97,7 +97,7 @@ public final class InlineStatement extends Statement implements Externalizable {
 		if(!Option.NEW_ATTR_FILE)
 			oupt.writeBoolean(CHECKED);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(kind);
+		oupt.writeUTF(kind);
 	}
 	
 	@Override
@@ -106,7 +106,7 @@ public final class InlineStatement extends Statement implements Externalizable {
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();
 		lineNumber = inpt.readInt();
-		kind = (String) inpt.readObject();
+		kind = inpt.readUTF();
 	}
 	
 

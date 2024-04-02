@@ -149,8 +149,9 @@ public final class QualifiedObject extends Expression {
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(lhs);
-		oupt.writeObject(classIdentifier);
-		oupt.writeObject(classDeclaration);
+		oupt.writeUTF(classIdentifier);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeObject(classDeclaration);
 	}
 	
 	@Override
@@ -162,8 +163,9 @@ public final class QualifiedObject extends Expression {
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		lhs = (Expression) inpt.readObject();
-		classIdentifier = (String) inpt.readObject();
-		classDeclaration = (ClassDeclaration) inpt.readObject();
+		classIdentifier = inpt.readUTF();
+		if(!Option.NEW_ATTR_FILE)
+			classDeclaration = (ClassDeclaration) inpt.readObject();
 	}
 	
 

@@ -164,7 +164,7 @@ public final class ProcedureSpecification implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureSpecification: " + identifier);
-		oupt.writeObject(identifier);
+		oupt.writeUTF(identifier);
 		Type.outType(type,oupt);
 
 		oupt.writeObject(parameterList);
@@ -173,7 +173,7 @@ public final class ProcedureSpecification implements Externalizable {
 	@Override
 	@SuppressWarnings("unchecked")
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
+		identifier = inpt.readUTF();
 		type = Type.inType(inpt);
 
 		parameterList = (Vector<Parameter>) inpt.readObject();

@@ -362,7 +362,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+blockPrefix+" begin");
+		System.out.println(edTreeIndent(indent)+blockPrefix+" begin  BL="+this.rtBlockLevel);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);

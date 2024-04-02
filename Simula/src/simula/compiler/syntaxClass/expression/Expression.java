@@ -283,7 +283,7 @@ public abstract class Expression extends SyntaxClass {
 	private static Expression acceptRelation() {   // Metode-form      
 		Expression expr = acceptAdditiveOperation();
 		if(Parse.acceptRelationalOperator())   { 
-			KeyWord opr=Parse.prevToken.getKeyWord();
+			int opr=Parse.prevToken.getKeyWord();
 			expr=new RelationalOperation(expr,opr,acceptAdditiveOperation());
 		}
 		return(expr);
@@ -300,7 +300,7 @@ public abstract class Expression extends SyntaxClass {
 	private static Expression acceptAdditiveOperation() {
 		Expression expr=acceptUNIMULDIV();
 		while(Parse.accept(KeyWord.PLUS,KeyWord.MINUS)) { 
-			KeyWord opr=Parse.prevToken.getKeyWord();
+			int opr=Parse.prevToken.getKeyWord();
 			expr=ArithmeticExpression.create(expr,opr,acceptMULDIV());
 		}
 		return(expr);
@@ -316,7 +316,7 @@ public abstract class Expression extends SyntaxClass {
 	private static Expression acceptUNIMULDIV() {
 		Expression expr;
 		if(Parse.accept(KeyWord.PLUS,KeyWord.MINUS)) {
-			KeyWord opr=Parse.prevToken.getKeyWord();
+			int opr=Parse.prevToken.getKeyWord();
 			if(opr==KeyWord.PLUS) expr=acceptMULDIV();
 			else expr=UnaryOperation.create(opr,acceptMULDIV());
 		} else expr = acceptMULDIV();
@@ -333,7 +333,7 @@ public abstract class Expression extends SyntaxClass {
 	private static Expression acceptMULDIV() {
 		Expression expr=acceptEXPON();
 		while(Parse.accept(KeyWord.MUL,KeyWord.DIV,KeyWord.INTDIV)) {
-			KeyWord opr=Parse.prevToken.getKeyWord();
+			int opr=Parse.prevToken.getKeyWord();
 			expr=ArithmeticExpression.create(expr,opr,acceptEXPON());
 		}
 		return(expr);
@@ -399,7 +399,7 @@ public abstract class Expression extends SyntaxClass {
 		}
 		// Så kan det komme en sekvens av postfikser, som bygger tre “oppover mot høyre”
 		while (Parse.acceptPostfixOprator()) {
-			KeyWord opr=Parse.prevToken.getKeyWord(); // opr == DOT || opr== IS || opr == IN || opr == QUA
+			int opr=Parse.prevToken.getKeyWord(); // opr == DOT || opr== IS || opr == IN || opr == QUA
 			if (opr == KeyWord.DOT ) 
 				expr=new RemoteVariable(expr,expectVariable());
 			else {  // Vet at opr == IS or opr == IN or opr == QUA.  Alle skal ha et klassenavn etter seg

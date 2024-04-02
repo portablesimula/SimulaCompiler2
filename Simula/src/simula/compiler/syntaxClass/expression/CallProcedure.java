@@ -281,7 +281,7 @@ public final class CallProcedure {
 					actualParameter.backLink=actualParameter;  // To ensure _RESULT from functions
 					s.append(".setPar(");
 					Type formalType=actualParameter.type;
-					Parameter.Kind kind=Parameter.Kind.Simple;  // Default, see below
+					int kind=Parameter.Kind.Simple;  // Default, see below
 					if((actualParameter instanceof VariableExpression var) && !var.hasArguments()) {
 						Declaration decl=var.meaning.declaredAs;
 						if(decl instanceof StandardProcedure) {
@@ -298,7 +298,7 @@ public final class CallProcedure {
 						else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
 						else Util.IERR("Flere sånne tilfeller ???");
 					}
-					Parameter.Mode mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
+					int mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
 					s.append(doParameterTransmition(formalType,kind,mode,actualParameter));
 					s.append(')');
 				}
@@ -346,8 +346,8 @@ public final class CallProcedure {
 				Parameter formalParameter = (Parameter) formalIterator.next();
 				s.append(".setPar(");
 				Type formalType = formalParameter.type;
-				Parameter.Kind kind = formalParameter.kind;
-				Parameter.Mode mode = formalParameter.mode;
+				int kind = formalParameter.kind;
+				int mode = formalParameter.mode;
 				s.append(doParameterTransmition(formalType, kind, mode, actualParameter));
 				s.append(')');
 			}
@@ -392,8 +392,8 @@ public final class CallProcedure {
 					s.append(',');
 				prevPar = true;
 				Type formalType = formalParameter.type;
-				Parameter.Kind kind = formalParameter.kind;
-				Parameter.Mode mode = formalParameter.mode;
+				int kind = formalParameter.kind;
+				int mode = formalParameter.mode;
 				s.append(doParameterTransmition(formalType, kind, mode, actualParameter));
 			}
 		}
@@ -428,13 +428,13 @@ public final class CallProcedure {
      * @param apar the actual parameter
      * @return the resulting Java source code
      */
-	private static String doParameterTransmition(final Type formalType,final Parameter.Kind kind,final Parameter.Mode mode,final Expression apar) {
+	private static String doParameterTransmition(final Type formalType,final int kind,final int mode,final Expression apar) {
 		StringBuilder s = new StringBuilder();
 		switch(kind) {
-		    case Simple -> doSimpleParameter(s,formalType,mode,apar);
-		    case Procedure -> doProcedureParameter(s,formalType,mode,apar);
-		    case Array -> doArrayParameter(s,formalType,mode,apar);
-		    case Label -> {
+		    case Parameter.Kind.Simple -> doSimpleParameter(s,formalType,mode,apar);
+		    case Parameter.Kind.Procedure -> doProcedureParameter(s,formalType,mode,apar);
+		    case Parameter.Kind.Array -> doArrayParameter(s,formalType,mode,apar);
+		    case Parameter.Kind.Label -> {
 		    		String labQuant=apar.toJavaCode();
 		    		if(mode==Parameter.Mode.name) {
 		    			s.append("new RTS_NAME<RTS_LABEL>()");
@@ -459,9 +459,9 @@ public final class CallProcedure {
 	 * @param mode the parameter's mode
 	 * @param apar actual parameter
 	 */
-	private static void doSimpleParameter(final StringBuilder s,final Type formalType,final Parameter.Mode mode,final Expression apar) {
+	private static void doSimpleParameter(final StringBuilder s,final Type formalType,final int mode,final Expression apar) {
 //		System.out.println("CallProcedure.doSimpleParameter: "+apar.getClass().getSimpleName()+"  "+apar);
-		if(mode==null) // Simple Type/Ref/Text by Default
+		if(mode==0) // Simple Type/Ref/Text by Default
 		  	s.append(apar.toJavaCode());
 		else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value
 		        if(formalType.equals(Type.Text))
@@ -531,7 +531,7 @@ public final class CallProcedure {
 	 * @param mode the parameter mode
 	 * @param apar actual parameter
 	 */
-	private static void doArrayParameter(final StringBuilder s,final Type formalType,final Parameter.Mode mode,final Expression apar) {
+	private static void doArrayParameter(final StringBuilder s,final Type formalType,final int mode,final Expression apar) {
 		if(mode==Parameter.Mode.value) {
 			s.append(apar.toJavaCode()).append(".COPY()");
 		}
@@ -553,7 +553,7 @@ public final class CallProcedure {
 	 * @param mode the parameter mode
 	 * @param apar actual parameter
 	 */
-	private static void doProcedureParameter(final StringBuilder s, final Type formalType, final Parameter.Mode mode, final Expression apar) {
+	private static void doProcedureParameter(final StringBuilder s, final Type formalType, final int mode, final Expression apar) {
 		String procQuant = edProcedureQuant(apar);
 		if (mode == Parameter.Mode.name) {
 			// --- EXAMPLE -------------------------------------------------------------------------

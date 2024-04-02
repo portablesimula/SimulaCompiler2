@@ -1,15 +1,16 @@
+
 begin
-    class A(i); integer i; begin
-	    outtext("HELLO !!! ");
-	    outint(i,0);
-	end;
 
-	A class B(j); integer j; begin
-	    outtext("HALLA !!! ");
-	    outint(i,0);
-	    outint(j,5);
-	end;
+inspect new Directfile("direct85") do begin
 
-	new A(789);
-	new B(789,456);
-end;
+   procedure check; begin
+		image := notext; 
+   end of procedure check;
+
+
+	check;
+
+end of inspect Directfile;
+
+
+end of program;

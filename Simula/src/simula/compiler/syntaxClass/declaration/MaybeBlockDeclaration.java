@@ -502,7 +502,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"BLOCK "+identifier);
+		System.out.println(edTreeIndent(indent)+"BLOCK "+identifier+"  BL="+this.rtBlockLevel);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
 	}

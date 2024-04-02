@@ -1,19 +1,11 @@
+external class AdHoc_SimulaTest;
+
+AdHoc_SimulaTest class MainSeparat(i); integer i; virtual: switch EXIT;
 begin
-	class A; begin
-		outtext("A: Before INNER"); outimage;
-		INNER;
-		outtext("A: After INNER"); outimage;
-	end;
-	
-%	A class B; begin
-%		outtext("B: UTEN INNER"); outimage;
-%	end;
-	
-%	new B;
-	
-	A begin
-		outtext("PREFIXED BLOCK: UTEN INNER"); outimage;
-	end;
-	
-end;	
+   boolean TESTING=true;
+   integer traceCase;
+   text array facit(0:14);
+
+ 
+end;
 		

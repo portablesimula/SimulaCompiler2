@@ -177,12 +177,12 @@ public final class HiddenSpecification extends SyntaxClass implements Externaliz
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("ProtectedSpecification: " + identifier);
-		oupt.writeObject(identifier);
+		oupt.writeUTF(identifier);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
+		identifier = inpt.readUTF();
 		this.definedIn = (ClassDeclaration) Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: " + identifier);
 	}

@@ -15,6 +15,8 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.StandardClass;
+import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;

@@ -131,13 +131,13 @@ public final class ProtectedSpecification extends SyntaxClass implements Externa
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("ProtectedSpecification: "+identifier);
-		oupt.writeObject(identifier);
+		oupt.writeUTF(identifier);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier=(String)inpt.readObject();
-		this.definedIn=(ClassDeclaration)Global.getCurrentScope();
+		identifier = inpt.readUTF();
+		this.definedIn = (ClassDeclaration)Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: "+identifier);
 	}
 

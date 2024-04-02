@@ -50,12 +50,12 @@ public final class Parameter extends Declaration implements Externalizable {
 	/**
 	 * Parameter transfer Mode.
 	 */
-	public Parameter.Mode mode;
+	public int mode;
 	
 	/**
 	 * Parameter Kind.
 	 */
-	public Parameter.Kind kind;
+	public int kind;
 	
 	/**
 	 * Parameter's number of dimension in case of array kind.
@@ -66,38 +66,75 @@ public final class Parameter extends Declaration implements Externalizable {
 	/**
 	 * Procedure parameter transfer Mode.
 	 */
-	public enum Mode {
-		/**
-		 * Parameter transfered by value
-		 */
-		value,
-		/**
-		 * Parameter transfered by name
-		 */
-		name
+	public class Mode {
+		/** Parameter transfered by value */ public static final int value = 1;
+		/** Parameter transfered by name */  public static final int name = 2;
 	}
+	
+	public String edMode(int mode) {
+		switch(mode) {
+			case 1: return("value");
+			case 2: return("name");
+		}
+		return("default");
+	}
+	
 
 	/**
 	 * Procedure parameter Kind.
 	 */
-	public enum Kind {
-		/**
-		 * Simple parameter.
-		 */
-		Simple,
-		/**
-		 * Procedure parameter.
-		 */
-		Procedure,
-		/**
-		 * Array parameter.
-		 */
-		Array,
-		/**
-		 * Label parameter.
-		 */
-		Label
+	public class Kind {
+		/** Simple parameter */    public static final int Simple = 1;
+		/** Procedure parameter */ public static final int Procedure = 2;
+		/** Array parameter */     public static final int Array = 3;
+		/** Label parameter */     public static final int Label = 4;
 	}
+	
+	public String edKind(int kind) {
+		switch(mode) {
+			case 1: return("Simple");
+			case 2: return("Procedure");
+			case 3: return("Array");
+			case 4: return("Label");
+		}
+		return("Default");
+	}
+
+//	/**
+//	 * Procedure parameter transfer Mode.
+//	 */
+//	public enum Mode {
+//		/**
+//		 * Parameter transfered by value
+//		 */
+//		value,
+//		/**
+//		 * Parameter transfered by name
+//		 */
+//		name
+//	}
+//
+//	/**
+//	 * Procedure parameter Kind.
+//	 */
+//	public enum Kind {
+//		/**
+//		 * Simple parameter.
+//		 */
+//		Simple,
+//		/**
+//		 * Procedure parameter.
+//		 */
+//		Procedure,
+//		/**
+//		 * Array parameter.
+//		 */
+//		Array,
+//		/**
+//		 * Label parameter.
+//		 */
+//		Label
+//	}
 
 	/**
 	 * Create a new Parameter.
@@ -114,7 +151,7 @@ public final class Parameter extends Declaration implements Externalizable {
 	 * @param type parameter type
 	 * @param kind parameter kind
 	 */
-	Parameter(final String identifier, final Type type, final Parameter.Kind kind) {
+	Parameter(final String identifier, final Type type, final int kind) {
 		this(identifier);
 		this.type = type;
 		this.kind = kind;
@@ -127,7 +164,7 @@ public final class Parameter extends Declaration implements Externalizable {
 	 * @param kind parameter kind
 	 * @param nDim parameter's number of dimension in case of array kind.
 	 */
-	public Parameter(final String identifier, final Type type, final Parameter.Kind kind, final int nDim) {
+	public Parameter(final String identifier, final Type type, final int kind, final int nDim) {
 		this(identifier, type, kind);
 		this.nDim = nDim;
 	}
@@ -166,8 +203,8 @@ public final class Parameter extends Declaration implements Externalizable {
 	 * Utility: Set new parameter mode.
 	 * @param mode the new mode
 	 */
-	void setMode(final Parameter.Mode mode) {
-		if (this.mode != null)
+	void setMode(final int mode) {
+		if (this.mode != 0)
 			Util.error("Parameter " + identifier + " is already specified by " + this.mode);
 		this.mode = mode;
 	}
@@ -177,7 +214,7 @@ public final class Parameter extends Declaration implements Externalizable {
 	 * @param type the new type
 	 * @param kind the new kind
 	 */
-	void setTypeAndKind(final Type type, final Parameter.Kind kind) {
+	void setTypeAndKind(final Type type, final int kind) {
 		this.type = type;
 		this.kind = kind;
 	}
@@ -198,7 +235,7 @@ public final class Parameter extends Declaration implements Externalizable {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (kind == null) {
+		if (kind == 0) {
 			Util.error("Parameter " + identifier + " is not specified -- assumed Simple Integer");
 			kind = Kind.Simple;
 			type = Type.Integer;
@@ -207,7 +244,7 @@ public final class Parameter extends Declaration implements Externalizable {
 			type.doChecking(Global.getCurrentScope().declaredIn);
 		if (!legalTransmitionMode())
 			Util.error("Illegal transmission mode: " + mode + ' ' + kind + ' ' + identifier + " by "
-					+ ((mode != null) ? mode : "default") + " is not allowed");
+					+ edMode(mode) + " is not allowed");
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -241,22 +278,22 @@ public final class Parameter extends Declaration implements Externalizable {
 	private boolean legalTransmitionMode() {
 		boolean illegal = false;
 		switch (kind) {
-		case Simple:
+		case Kind.Simple:
 			if (type.equals(Type.Text))
 				break; // Simple Text
 			else if (type.isReferenceType()) {
 				if (mode == Parameter.Mode.value)
 					illegal = true;
 			} // Simple ref(ClassIdentifier)
-			else if (mode == null)
+			else if (mode == 0)
 				mode = Parameter.Mode.value; // Simple Type Integer, Real, Character
 			break;
-		case Array:
+		case Kind.Array:
 			if (type.isReferenceType() && mode == Parameter.Mode.value)
 				illegal = true;
 			break;
-		case Procedure:
-		case Label:
+		case Kind.Procedure:
+		case Kind.Label:
 			if (mode == Parameter.Mode.value)
 				illegal = true;
 			break;
@@ -273,26 +310,26 @@ public final class Parameter extends Declaration implements Externalizable {
 		ASSERT_SEMANTICS_CHECKED();
 		if (mode == Parameter.Mode.name) {
 			switch (kind) {
-			case Simple:
+			case Kind.Simple:
 				if (type.equals(Type.Label))
 					return ("RTS_NAME<RTS_LABEL>");
 				return ("RTS_NAME<" + type.toJavaTypeClass() + ">");
-			case Procedure:
+			case Kind.Procedure:
 				return ("RTS_NAME<RTS_PRCQNT>");
-			case Label:
+			case Kind.Label:
 				return ("RTS_NAME<RTS_LABEL>");
-			case Array:
+			case Kind.Array:
 				return ("RTS_NAME<RTS_ARRAY>");
 			}
 		}
 		switch (kind) {
-		case Array:
+		case Kind.Array:
 			return ("RTS_ARRAY");
-		case Label:
+		case Kind.Label:
 			return ("RTS_LABEL");
-		case Procedure:
+		case Kind.Procedure:
 			return ("RTS_PRCQNT");
-		case Simple: // Fall through
+		case Kind.Simple: // Fall through
 		}
 		return (type.toJavaType());
 	}
@@ -309,7 +346,7 @@ public final class Parameter extends Declaration implements Externalizable {
 			buildNameParam(codeBuilder,this,expr);
 		} else {
 		switch (kind) {
-			case Array:
+			case Kind.Array:
 //				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value) {
@@ -317,11 +354,11 @@ public final class Parameter extends Declaration implements Externalizable {
 							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$"+type.getArrayType()+';'));
 				}
 				break;
-			case Label:
+			case Kind.Label:
 				Util.IERR("LABEL");
 //				return ("RTS_LABEL");
 				break;
-			case Procedure:
+			case Kind.Procedure:
 //				return ("RTS_PRCQNT");
 //				new RTS_PRCQNT(((adHoc000)(_CUR))
 //		         4: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
@@ -378,7 +415,7 @@ public final class Parameter extends Declaration implements Externalizable {
 					Util.IERR("PROC: "+decl.getClass().getSimpleName());
 				}
 				break;
-			case Simple: // Fall through
+			case Kind.Simple: // Fall through
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value && type.equals(Type.Text)) {
 					codeBuilder.invokestatic(CD.RTS_ENVIRONMENT,
@@ -395,7 +432,8 @@ public final class Parameter extends Declaration implements Externalizable {
 	public static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
 //		System.out.println("Parameter.buildNameParam: par="+par);
 //		System.out.println("Parameter.buildNameParam: expr="+expr+"  type="+expr.type);
-		Thunk.buildInvoke((par==null)?null:par.kind, expr, codeBuilder);
+//		Thunk.buildInvoke((par==null)?null:par.kind, expr, codeBuilder);
+		Thunk.buildInvoke((par==null)?0:par.kind, expr, codeBuilder);
 	}
 	
 
@@ -443,12 +481,12 @@ public final class Parameter extends Declaration implements Externalizable {
 	
 	public ClassDesc type_toClassDesc() {
 		switch(this.kind) {
-		case Array: return(this.type.toClassDesc(this.kind,this.mode));
-		case Label:
+		case Kind.Array: return(this.type.toClassDesc(this.kind,this.mode));
+		case Kind.Label:
 			Util.IERR("");
 			return(null);
-		case Procedure:		  return(Type.Procedure.toClassDesc(this.kind,this.mode));
-		case Simple: default: return(this.type.toClassDesc(this.kind,this.mode));
+		case Kind.Procedure:		  return(Type.Procedure.toClassDesc(this.kind,this.mode));
+		case Kind.Simple: default: return(this.type.toClassDesc(this.kind,this.mode));
 		}
 	}
 
@@ -504,9 +542,9 @@ public final class Parameter extends Declaration implements Externalizable {
 			s = s + type;
 		else
 			s = "NOTYPE";
-		if (mode != null)
+		if (mode != 0)
 			s = "" + mode + " " + type;
-		if (kind == null)
+		if (kind == 0)
 			s = s + " NOKIND";
 		if (nDim > 0)
 			s = s + " " + nDim + "-Dimentional";
@@ -529,21 +567,21 @@ public final class Parameter extends Declaration implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 //		Type.outType(type,oupt);
 		Type.outType(type,oupt);
-		oupt.writeObject(kind);
-		oupt.writeObject(mode);
+		oupt.writeInt(kind);
+		oupt.writeInt(mode);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		type = Type.inType(inpt);
-		kind = (Parameter.Kind) inpt.readObject();
-		mode = (Parameter.Mode) inpt.readObject();
+		kind = inpt.readInt();
+		mode = inpt.readInt();
 		Util.TRACE_INPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
 	}
 

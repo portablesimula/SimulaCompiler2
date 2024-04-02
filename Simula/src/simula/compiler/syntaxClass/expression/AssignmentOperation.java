@@ -61,7 +61,7 @@ public final class AssignmentOperation extends Expression {
 	/**
 	 * The arithmetic operation
 	 */
-	private KeyWord opr;
+	private int opr;
 
 	/**
 	 * The right hand side
@@ -79,7 +79,7 @@ public final class AssignmentOperation extends Expression {
 	 * @param opr the operation
 	 * @param rhs the right hand side
 	 */
-	public AssignmentOperation(final Expression lhs, final KeyWord opr, final Expression rhs) {
+	public AssignmentOperation(final Expression lhs, final int opr, final Expression rhs) {
 		this.lhs = lhs;
 		this.opr = opr;
 		this.rhs = rhs;
@@ -248,6 +248,8 @@ public final class AssignmentOperation extends Expression {
 				return;
 			}
 		}
+//		System.out.println("AssignmentOperation.buildTextValueAssignment: "+this);
+//		System.out.println("AssignmentOperation.buildTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 		ClassDesc CD = BlockDeclaration.currentClassDesc();
@@ -268,7 +270,7 @@ public final class AssignmentOperation extends Expression {
 			} else if(decl instanceof Parameter par) {
 				buildParameter(par,var,opr==KeyWord.ASSIGNREF,codeBuilder);
 			} else if(decl.getClass() == ProcedureDeclaration.class) {
-				buildProc((ProcedureDeclaration)decl,opr==KeyWord.ASSIGNREF,codeBuilder);
+				buildProc((ProcedureDeclaration)decl,codeBuilder);
 			} else if(decl instanceof ArrayDeclaration arr) {
 				var.meaning.buildIdentifierAccess(false,codeBuilder);
 				arr.arrayPutElement(var,false,rhs,codeBuilder);
@@ -332,10 +334,22 @@ public final class AssignmentOperation extends Expression {
 		codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
 	}
 	
-	private void buildProc(ProcedureDeclaration proc,boolean assignRef,CodeBuilder codeBuilder) {
+	private void buildProc(ProcedureDeclaration proc,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		VariableExpression var = (VariableExpression)lhs;
-		var.buildIdentifierAccess(true,codeBuilder);
+//		System.out.println("AssignmentOperation.buildProc: "+this);
+//		System.out.println("AssignmentOperation.buildProc: "+proc.identifier+":  "+lhs+" = "+rhs);
+//		System.out.println("AssignmentOperation.buildProc: lhs="+lhs.getClass().getSimpleName()+"   "+lhs);
+//		System.out.println("AssignmentOperation.buildProc: lhs.type="+lhs.type);
+//		System.out.println("AssignmentOperation.buildProc: rhs="+rhs.getClass().getSimpleName()+"   "+rhs);
+//		System.out.println("AssignmentOperation.buildProc: rhs.type="+rhs.type);
+		
+		Meaning result=Global.getCurrentScope().findMeaning("_RESULT");
+//		System.out.println("AssignmentOperation.buildProc: result="+result.getClass().getSimpleName()+"  "+result);
+//		System.out.println("AssignmentOperation.buildProc: result.declaredAs="+result.declaredAs.getClass().getSimpleName()+"  "+result.declaredAs);
+		result.buildIdentifierAccess(false, codeBuilder);
+		
+//		VariableExpression var = (VariableExpression)lhs;
+//		var.buildIdentifierAccess(true,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 		codeBuilder.putfield(pool.fieldRefEntry(proc.getClassDesc(), "_RESULT", type.toClassDesc()));
 	}
@@ -343,10 +357,10 @@ public final class AssignmentOperation extends Expression {
 	private void buildParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 //		System.out.println("AssignmentOperation.buildParameter: "+par+", kind="+par.kind);
 		switch(par.kind) {
-			case Simple:    buildSimpleParameter(par,var,assignRef,codeBuilder); break;
-			case Array:     buildArrayParameter(par,var,assignRef,codeBuilder); break;
-			case Label:     Util.IERR(""); break;
-			case Procedure: Util.IERR(""); break;
+			case Parameter.Kind.Simple:    buildSimpleParameter(par,var,assignRef,codeBuilder); break;
+			case Parameter.Kind.Array:     buildArrayParameter(par,var,assignRef,codeBuilder); break;
+			case Parameter.Kind.Label:     Util.IERR(""); break;
+			case Parameter.Kind.Procedure: Util.IERR(""); break;
 			default: Util.IERR("IMPOSSIBLE");
 		}
 	}
@@ -455,7 +469,7 @@ public final class AssignmentOperation extends Expression {
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(lhs);
-		oupt.writeObject(opr);
+		oupt.writeInt(opr);
 		oupt.writeObject(rhs);
 	}
 	
@@ -468,7 +482,7 @@ public final class AssignmentOperation extends Expression {
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		lhs = (Expression) inpt.readObject();
-		opr = (KeyWord) inpt.readObject();
+		opr = inpt.readInt();
 		rhs = (Expression) inpt.readObject();
 	}
 	

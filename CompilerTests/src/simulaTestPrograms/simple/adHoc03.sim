@@ -1,22 +1,14 @@
 begin
-    class A(i); integer i; begin
-        integer a1;
-	    outtext("HELLO !!! ");
-	    outint(a1,0);
-	    outint(i,5);
-	    outimage;
-	    a1:=4444;
-	end;
 
-	A class B(j); integer j; begin
-	    integer a2;
-	    outtext("HALLA !!! ");
-	    outint(i,0);
-	    outint(j,5);
-	    outint(a1,5);
-	    outint(a2,5);
-	end;
+   text               t1, t2;
 
-	new A(789);
-	new B(789,456);
-end;
+   text procedure PPP(i1); integer i1;
+   if i1 > 0 then
+   begin
+      text th;
+      PPP :- th
+   end;
+
+   t2 :- PPP(8);
+
+end of program;

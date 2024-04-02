@@ -265,6 +265,10 @@ public final class SimulaCompiler {
 			}
 			Parse.close();
 			Global.duringParsing = false;
+			if(Option.PRINT_SYNTAX_TREE) {
+				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Parsing ================");
+				programModule.printTree(1);
+			}
 			if (Util.nError > 0) {
 				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during parsing";
 				Util.println(msg);
@@ -283,7 +287,10 @@ public final class SimulaCompiler {
 					programModule.print(0);
 			}
 			Global.duringChecking = false;
-			if(Option.PRINT_SYNTAX_TREE) programModule.printTree(0);
+			if(Option.PRINT_SYNTAX_TREE) {
+				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
+				programModule.printTree(1);
+			}
 			if (Util.nError > 0) {
 				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError
 						+ " errors during semantic checking";

@@ -356,7 +356,7 @@ public final class VariableExpression extends Expression implements Externalizab
 
 			case Parameter:
 				Parameter spec = (Parameter) decl;
-				Parameter.Kind kind = spec.kind;
+				int kind = spec.kind;
 				Util.ASSERT(kind == Parameter.Kind.Array || kind == Parameter.Kind.Procedure, "Invariant ?");
 				this.type = spec.type;
 				if (kind == Parameter.Kind.Array)
@@ -552,7 +552,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			s = new StringBuilder();
 			Parameter par = (Parameter) decl;
 			switch (par.kind) {
-			case Array: // Parameter Array
+			case Parameter.Kind.Array: // Parameter Array
 				String var = edIdentifierAccess(false);
 				if (inspectedVariable != null)
 					var = inspectedVariable.toJavaCode() + '.' + var;
@@ -573,7 +573,7 @@ public final class VariableExpression extends Expression implements Externalizab
 					}
 				}
 				break;
-			case Procedure: // Parameter Procedure
+			case Parameter.Kind.Procedure: // Parameter Procedure
 				if (destination)
 					Util.IERR("TEST DETTE -- Variable.editVariable: Parameter Procedure: rightPart=" + rightPart);
 				if (inspectedVariable != null)
@@ -586,8 +586,8 @@ public final class VariableExpression extends Expression implements Externalizab
 					s.append('=').append(rightPart);
 				}
 				break;
-			case Simple:
-			case Label:
+			case Parameter.Kind.Simple:
+			case Parameter.Kind.Label:
 				var = edIdentifierAccess(destination); // Kind: Simple/Label
 				if (!destination && par.mode == Parameter.Mode.name) {
 					s.append(var).append(".get()");
@@ -753,7 +753,7 @@ public final class VariableExpression extends Expression implements Externalizab
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		Declaration decl=meaning.declaredAs;
-//		System.out.println("VariableExpression.buildByteCode: "+identifier+", kind="+decl.declarationKind);
+//		System.out.println("VariableExpression.buildEvaluation: "+identifier+", kind="+decl.declarationKind);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 		
@@ -797,7 +797,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			case LabelDeclaration:
 				if (destination)
 					Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration:"); // rightPart=" + rightPart);
-//				System.out.println("VariableExpression.buildByteCode: LabelDeclaration");
+//				System.out.println("VariableExpression.buildEvaluation: LabelDeclaration");
 				buildIdentifierAccess(destination,codeBuilder);
 				LabelDeclaration lab=(LabelDeclaration)decl;
 				VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
@@ -886,9 +886,11 @@ public final class VariableExpression extends Expression implements Externalizab
 					ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 					FieldRefEntry FRE_inspvar=pool.fieldRefEntry(CD_blck,inspectedVariableIdentifier, CD_type );
 					
-					String cast = encl.externalIdent;
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-					if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+					if(withFollowSL) {
+						String cast = encl.externalIdent;
+						codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+					}
 					
 					codeBuilder
 						.getfield(FRE_inspvar)
@@ -926,7 +928,7 @@ public final class VariableExpression extends Expression implements Externalizab
 		boolean destination = (rightPart != null);
 				
 		switch (par.kind) {
-		case Array: // Parameter Array
+		case Parameter.Kind.Array: // Parameter Array
 //			System.out.println("VariableExpression.buildParameter'Array: "+par);
 //			String var = edIdentifierAccess(false);
 			if (inspectedVariable != null) {
@@ -973,7 +975,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			}
 			break;
 
-		case Procedure: // Parameter Procedure
+		case Parameter.Kind.Procedure: // Parameter Procedure
 			if (destination)
 				Util.IERR("TEST DETTE -- Variable.editVariable: Parameter Procedure: rightPart=" + rightPart);
 			if (inspectedVariable != null) {
@@ -988,8 +990,8 @@ public final class VariableExpression extends Expression implements Externalizab
 			}
 			break;
 
-		case Simple:
-		case Label:
+		case Parameter.Kind.Simple:
+		case Parameter.Kind.Label:
 //			var = edIdentifierAccess(destination); // Kind: Simple/Label
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
 //			if (!destination && par.mode == Parameter.Mode.name) {
@@ -1038,7 +1040,7 @@ public final class VariableExpression extends Expression implements Externalizab
 					codeBuilder
 						.checkcast(par.type.toClassDesc(par));
 				} else {
-					System.out.println("VarableExpression.buildByteCode: Simple: "+this+"  "+this.meaning);
+					System.out.println("VarableExpression.buildEvaluation: Simple: "+this+"  "+this.meaning);
 					Util.IERR("FYLL PÅ FLERE TYPER: "+par.type);
 				}
 			}
@@ -1079,7 +1081,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			oupt.writeInt(lineNumber);
 			Type.outType(type,oupt);
 			oupt.writeObject(backLink);
-			oupt.writeObject(identifier);
+			oupt.writeUTF(identifier);
 //			oupt.writeObject(meaning);
 			oupt.writeObject(remotelyAccessed);
 			oupt.writeObject(params);
@@ -1089,7 +1091,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			oupt.writeInt(lineNumber);
 			Type.outType(type,oupt);
 			oupt.writeObject(backLink);
-			oupt.writeObject(identifier);
+			oupt.writeUTF(identifier);
 			oupt.writeObject(meaning);
 			oupt.writeObject(remotelyAccessed);
 			oupt.writeObject(params);
@@ -1106,7 +1108,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			lineNumber = inpt.readInt();
 			type = Type.inType(inpt);
 			backLink = (SyntaxClass) inpt.readObject();
-			identifier = (String) inpt.readObject();
+			identifier = inpt.readUTF();
 //			meaning = (Meaning) inpt.readObject();
 			remotelyAccessed = (boolean) inpt.readObject();
 			params = (Vector<Expression>) inpt.readObject();
@@ -1116,7 +1118,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			lineNumber = inpt.readInt();
 			type = Type.inType(inpt);
 			backLink = (SyntaxClass) inpt.readObject();
-			identifier = (String) inpt.readObject();
+			identifier = inpt.readUTF();
 			meaning = (Meaning) inpt.readObject();
 			remotelyAccessed = (boolean) inpt.readObject();
 			params = (Vector<Expression>) inpt.readObject();

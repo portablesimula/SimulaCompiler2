@@ -86,7 +86,7 @@ public final class ObjectRelation extends Expression {
 	/**
 	 * The operation: IN, IS or QUA
 	 */
-	private KeyWord opr;
+	private int opr; 
 	
 	/**
 	 * The right hand class identifier.
@@ -104,7 +104,7 @@ public final class ObjectRelation extends Expression {
 	 * @param opr the operation: IN, IS or QUA
 	 * @param classIdentifier the right hand class identifier
 	 */
-	ObjectRelation(final Expression lhs, final KeyWord opr, final String classIdentifier) {
+	ObjectRelation(final Expression lhs, final int opr, final String classIdentifier) {
 		this.lhs = lhs;
 		this.opr = opr;
 		this.classIdentifier = classIdentifier;
@@ -149,7 +149,8 @@ public final class ObjectRelation extends Expression {
 		if (refIdent == null) return ("false"); // NONE IS/IN Any is always FALSE
 		if (opr == KeyWord.IN) {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IN is always FALSE
-			return (lhs.get() + opr.toJavaCode() + classDeclaration.getJavaIdentifier());
+//			return (lhs.get() + opr.toJavaCode() + classDeclaration.getJavaIdentifier());
+			return (lhs.get() + KeyWord.toJavaCode(opr) + classDeclaration.getJavaIdentifier());
 		} else if (opr == KeyWord.IS) {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IS is always FALSE
 			return ("_IS(" + lhs.get() + "," + classDeclaration.getJavaIdentifier() + ".class)");
@@ -196,9 +197,10 @@ public final class ObjectRelation extends Expression {
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(lhs);
-		oupt.writeObject(opr);
-		oupt.writeObject(classIdentifier);
-		oupt.writeObject(classDeclaration);
+		oupt.writeInt(opr);
+		oupt.writeUTF(classIdentifier);
+		if(!Option.NEW_ATTR_FILE)
+			oupt.writeObject(classDeclaration);
 	}
 	
 	@Override
@@ -210,9 +212,10 @@ public final class ObjectRelation extends Expression {
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		lhs = (Expression) inpt.readObject();
-		opr = (KeyWord) inpt.readObject();
-		classIdentifier = (String) inpt.readObject();
-		classDeclaration = (ClassDeclaration) inpt.readObject();
+		opr = inpt.readInt();
+		classIdentifier = inpt.readUTF();
+		if(!Option.NEW_ATTR_FILE)
+			classDeclaration = (ClassDeclaration) inpt.readObject();
 	}
 	
 

@@ -41,7 +41,7 @@ final class UnaryOperation extends Expression {
 	/**
 	 * The unary operator.
 	 */
-	KeyWord oprator;
+	int oprator;
 	
 	/**
 	 * The operand Expression.
@@ -53,7 +53,7 @@ final class UnaryOperation extends Expression {
 	 * @param oprator the unary operator.
 	 * @param operand the operand Expression
 	 */
-	private UnaryOperation(final KeyWord oprator,final Expression operand) {
+	private UnaryOperation(final int oprator,final Expression operand) {
 		this.oprator = oprator;
 		this.operand = operand;
 		if(this.operand==null)
@@ -69,7 +69,7 @@ final class UnaryOperation extends Expression {
 	 * @param operand the operand Expression
 	 * @return the newly created UnaryOperation
 	 */
-	static Expression create(final KeyWord oprator,final Expression operand) {
+	static Expression create(final int oprator,final Expression operand) {
 		if (oprator == KeyWord.PLUS || oprator == KeyWord.MINUS) {
 			try { // Try to Compile-time Evaluate this expression
 				Number rhn=operand.getNumber();
@@ -151,7 +151,7 @@ final class UnaryOperation extends Expression {
 	@Override
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
-		return ("(" + oprator.toJavaCode() + "(" + operand.toJavaCode() + "))");
+		return ("(" + KeyWord.toJavaCode(oprator) + "(" + operand.toJavaCode() + "))");
 	}
 
 	@Override
@@ -176,7 +176,7 @@ final class UnaryOperation extends Expression {
 		oupt.writeInt(lineNumber);
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
-		oupt.writeObject(oprator);
+		oupt.writeInt(oprator);
 		oupt.writeObject(operand);
 	}
 	
@@ -188,7 +188,7 @@ final class UnaryOperation extends Expression {
 		lineNumber = inpt.readInt();
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
-		oprator = (KeyWord) inpt.readObject();
+		oprator = inpt.readInt();
 		operand = (Expression) inpt.readObject();
 	}
 	

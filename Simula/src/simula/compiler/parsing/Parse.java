@@ -161,7 +161,7 @@ public final class Parse {
 	 * @param key t the given keywords
 	 * @return true if a keyword is accepted, false otherwise.
 	 */
-	public static boolean accept(final KeyWord... key) {
+	public static boolean accept(final int... key) {
 		for (int i = 0; i < key.length; i++)
 			if (Parse.currentToken.getKeyWord() == key[i]) {
 				nextToken();
@@ -177,9 +177,9 @@ public final class Parse {
 	 * @param key a keyword
 	 * @return true if the keyword was accepted, otherwise false
 	 */
-	public static boolean expect(final KeyWord key) {
+	public static boolean expect(final int key) {
 		if (accept(key)) return (true);
-		Util.error("Got symbol '" + Parse.currentToken + "' while expecting KeyWord " + key.toLowerCase());
+		Util.error("Got symbol '" + Parse.currentToken + "' while expecting KeyWord " + KeyWord.edit(key).toLowerCase());
 		return (false);
 	}
 

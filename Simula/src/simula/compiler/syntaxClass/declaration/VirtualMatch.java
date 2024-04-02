@@ -119,14 +119,14 @@ public final class VirtualMatch extends Declaration implements Externalizable {
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("VirtualMatch: " + identifier);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		Util.TRACE_INPUT("VirtualMatch: " + identifier);
 		match = ((ClassDeclaration) this.declaredIn).findLocalProcedure(identifier);
 		if (match != null) {

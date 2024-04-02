@@ -200,7 +200,7 @@ public final class LocalObject extends Expression {
 		oupt.writeInt(lineNumber);
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
-		oupt.writeObject(classIdentifier);
+		oupt.writeUTF(classIdentifier);
 	}
 	
 	@Override
@@ -211,7 +211,7 @@ public final class LocalObject extends Expression {
 		lineNumber = inpt.readInt();
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
-		classIdentifier = (String) inpt.readObject();
+		classIdentifier = inpt.readUTF();
 	}
 	
 

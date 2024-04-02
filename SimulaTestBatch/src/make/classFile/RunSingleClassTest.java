@@ -33,10 +33,11 @@ public final class RunSingleClassTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
+		Option.TESTING_SEPARATE = true;
 		Option.NEW_ATTR_FILE=true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
-		Option.LIST_GENERATED_CLASS_FILES=true;
+//		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 		Option.verbose = true;
 		Option.WARNINGS=true;
@@ -55,7 +56,7 @@ public final class RunSingleClassTest {
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
 		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;
@@ -233,9 +234,9 @@ public final class RunSingleClassTest {
 //		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 //		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
-//		names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
-		names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
-//		names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
+//			names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
+			names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
+//			names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //
 //		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.

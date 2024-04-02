@@ -1174,7 +1174,7 @@ public final class SimulaScanner extends DefaultScanner {
      * @param value the value
      * @return the newly created Token
      */
-	private Token newToken(final KeyWord keyWord, final Object value) {
+	private Token newToken(final int keyWord, final Object value) {
 		String text=null;
 		if(editorMode) {
 	        text=(accum==null)?"":accum.toString();
@@ -1188,7 +1188,7 @@ public final class SimulaScanner extends DefaultScanner {
      * @param keyWord the KeyWord
      * @return the newly created Token
      */
-	private Token newToken(final KeyWord keyWord) {
+	private Token newToken(final int keyWord) {
 		return (newToken(keyWord, null));
 	}
 

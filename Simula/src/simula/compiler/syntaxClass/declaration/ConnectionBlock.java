@@ -251,8 +251,8 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		// Declaration
 		Type.outType(type,oupt);
 		oupt.writeObject(isProtected);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 //		oupt.writeObject(declaredIn);
 //		oupt.writeObject(declarationKind);
 //		oupt.writeInt(slot);
@@ -267,7 +267,7 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		
 		// ConnectionBlock
 		oupt.writeObject(statement);
-		oupt.writeObject(whenClassIdentifier);
+		oupt.writeUTF(whenClassIdentifier);
 		oupt.writeObject(whenClassDeclaration);
 		oupt.writeObject(inspectedVariable);
 		oupt.writeObject(classDeclaration);
@@ -288,8 +288,8 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		// Declaration
 		type = Type.inType(inpt);
 		isProtected = (ProtectedSpecification) inpt.readObject();
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 //		declaredIn = (DeclarationScope) inpt.readObject();
 //		declarationKind = (Kind) inpt.readObject();
 //		slot = inpt.readInt();
@@ -304,7 +304,7 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		
 		// ConnectionBlock
 		statement = (Statement) inpt.readObject();
-		whenClassIdentifier = (String) inpt.readObject();
+		whenClassIdentifier = inpt.readUTF();
 		whenClassDeclaration = (Declaration) inpt.readObject();
 		inspectedVariable = (VariableExpression) inpt.readObject();
 		classDeclaration = (ClassDeclaration) inpt.readObject();

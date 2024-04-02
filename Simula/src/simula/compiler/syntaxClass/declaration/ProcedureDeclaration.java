@@ -185,7 +185,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	 */
 	private static boolean acceptModePart(Vector<Parameter> pList) {
 		if (Parse.accept(KeyWord.VALUE, KeyWord.NAME)) {
-			Parameter.Mode mode = (Parse.prevToken.getKeyWord() == KeyWord.VALUE)
+			int mode = (Parse.prevToken.getKeyWord() == KeyWord.VALUE)
 					? Parameter.Mode.value
 					: Parameter.Mode.name;
 			do {
@@ -224,7 +224,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ParameterSpecifications");
 		LOOP: while(true) {
 			Type type;
-			Parameter.Kind kind = Parameter.Kind.Simple;
+			int kind = Parameter.Kind.Simple;
 			if (Parse.accept(KeyWord.SWITCH)) {
 				type = Type.Label;
 				kind = Parameter.Kind.Procedure;
@@ -259,13 +259,13 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 			continue LOOP;
 		}
 		for (Parameter par : proc.parameterList) {
-			if (par.kind != null)
+			if (par.kind != 0)
 				switch (par.kind) {
-				case Array:
-				case Label:
-				case Procedure:
+				case Parameter.Kind.Array:
+				case Parameter.Kind.Label:
+				case Parameter.Kind.Procedure:
 					break; // OK
-				case Simple:
+				case Parameter.Kind.Simple:
 				default:
 					if (par.type == null)
 						Util.error("Missing specification of parameter: " + par.identifier);
@@ -639,10 +639,10 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		for(Parameter par:parameterList) {
 			if(par.mode==Parameter.Mode.name) sb.append("Lsimula/runtime/RTS_NAME;");
 			else switch(par.kind) {
-				case Array:			  sb.append("Lsimula/runtime/RTS_ARRAY;"); break;
-				case Label:           sb.append("Lsimula/runtime/RTS_LABEL;"); break;
-				case Procedure:       sb.append("Lsimula/runtime/RTS_PRCQNT;");  break;
-				case Simple: default: sb.append(par.type.toJVMType(par.kind, par.mode));
+				case Parameter.Kind.Array:			  sb.append("Lsimula/runtime/RTS_ARRAY;"); break;
+				case Parameter.Kind.Label:           sb.append("Lsimula/runtime/RTS_LABEL;"); break;
+				case Parameter.Kind.Procedure:       sb.append("Lsimula/runtime/RTS_PRCQNT;");  break;
+				case Parameter.Kind.Simple: default: sb.append(par.type.toJVMType(par.kind, par.mode));
 			}
 		}
 		sb.append(")V");
@@ -1055,7 +1055,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	@Override
 	public void printTree(final int indent) {
 		String typeID=(type==null)?"":type.toString()+" ";
-		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier);
+		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier+"  BL="+this.rtBlockLevel);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
@@ -1082,8 +1082,8 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 //		this.print(10);
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeBoolean(false); // Mark: This is a ProcedureDeclaration
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 //		Type.outType(type,oupt);
 		Type.outType(type,oupt);
 //		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
@@ -1114,19 +1114,19 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	@SuppressWarnings("unchecked")
 	public static ProcedureDeclaration readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
 //		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
-		String identifier = (String) inpt.readObject();
+		String identifier = inpt.readUTF();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, Declaration.Kind.Procedure);
 
 		System.out.println("ProcedureDeclaration.readAttr: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
 		pro.print(2);
 //		Util.IERR("");
 
-		pro.externalIdent=(String)inpt.readObject();
+		pro.externalIdent = inpt.readUTF();
 		pro.type=Type.inType(inpt);
 //		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		pro.declarationKind=(Kind) inpt.readObject();
-		pro.rtBlockLevel=inpt.readInt();
-		pro.hasLocalClasses=inpt.readBoolean();
+		pro.declarationKind = (Kind) inpt.readObject();
+		pro.rtBlockLevel = inpt.readInt();
+		pro.hasLocalClasses = inpt.readBoolean();
 		
 		pro.parameterList=(Vector<Parameter>) inpt.readObject();
 //		pro.labelList=(Vector<LabelDeclaration>) inpt.readObject();
@@ -1148,8 +1148,8 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR(""+this+"  Declared in "+this.declaredIn);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 //		Type.outType(type,oupt);
 		Type.outType(type,oupt);
 //		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
@@ -1166,10 +1166,10 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	@Override
 	@SuppressWarnings("unchecked")
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier=(String)inpt.readObject();
+		identifier = inpt.readUTF();
 		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
 		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR("");
-		externalIdent=(String)inpt.readObject();
+		externalIdent = inpt.readUTF();
 		type=Type.inType(inpt);
 //		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 		declarationKind=(Kind) inpt.readObject();

@@ -204,17 +204,27 @@ public final class RunClassFileTest {
 //		String name="/FECTest/fecTest.sim";
 
 		// *** SMÅ ENKLE SIMULA TEST PROGRAMMER
+	// String name="/simple/adHoc40b.sim";
+	// String name="/simple/adHoc40a.sim";
+//	// String name="/simple/adHoc40c.sim";
+	// String name="/simple/adHoc40.sim";
+
+		
+		//String name="/simple/AdHoc_SimulaTest.sim";
+
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
 		// String name="/simple/adHoc30a.sim";
 		// String name="/simple/adHoc04.sim";
-		// String name="/simple/adHoc05.sim";
+		
+		 String name="/simple/adHoc05.sim";
 		// String name="/simple/adHoc06.sim";
+		 
 		// String name="/simple/adHoc07.sim";
 		// String name="/simple/adHoc08.sim";
 		// String name="/simple/adHoc09.sim";
@@ -281,7 +291,9 @@ public final class RunClassFileTest {
 			Option.INLINE_TESTING=true;
 //			Option.CREATE_JAVA_SOURCE = true;
 			Option.TESTING_STACK_SIZE = true;
-			Option.LIST_GENERATED_CLASS_FILES=true;
+			Option.TESTING_SEPARATE = true;
+			Option.NEW_ATTR_FILE=true;
+//			Option.LIST_GENERATED_CLASS_FILES=true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
@@ -299,8 +311,8 @@ public final class RunClassFileTest {
 //			// Parser Trace Options
 //			Option.TRACE_PARSE=true;
 			Option.PRINT_SYNTAX_TREE=true;
-//			Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//			Option.TRACE_ATTRIBUTE_INPUT=true;
+			Option.TRACE_ATTRIBUTE_OUTPUT=true;
+			Option.TRACE_ATTRIBUTE_INPUT=true;
 //
 //			// Checker Trace Options
 //			Option.TRACE_CHECKER=true;

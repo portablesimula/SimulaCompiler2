@@ -30,10 +30,10 @@ public final class Thunk extends DeclarationScope {
 
 	private static int SEQU = 0;
 	private ClassDesc CD_ThisClass;
-	private Parameter.Kind kind;
+	private int kind; //Parameter.Kind kind;
 	private Expression expr;
 	
-	private Thunk(Parameter.Kind kind,Expression expr) {
+	private Thunk(int kind,Expression expr) {
 		super(Global.sourceName + "$THUNK$" + (++SEQU));
 		this.declarationKind = Declaration.Kind.Thunk;
 		this.rtBlockLevel = this.declaredIn.rtBlockLevel + 1;		this.kind = kind;
@@ -49,7 +49,7 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** buildInvoke
 	// ***********************************************************************************************
-	public static void buildInvoke(Parameter.Kind kind,Expression expr,CodeBuilder codeBuilder) {
+	public static void buildInvoke(int kind,Expression expr,CodeBuilder codeBuilder) {
 		//  new RTS_NAME< TYPE >() {
 		//     public TYPE get() {
 		//        return("+apar.toJavaCode()+");
@@ -200,18 +200,18 @@ public final class Thunk extends DeclarationScope {
 
 //			Util.buildSNAPSHOT(codeBuilder, "THUNK: get "+expr);
 
-			if(kind==null) {
+			if(kind==0) {
 				expr.buildEvaluation(null,codeBuilder);
 	        	expr.type.buildObjectValueOf(codeBuilder);
 			} else {
 				switch(kind) { // Parameter.Kind
-				case Array:		expr.buildEvaluation(null,codeBuilder);
+				case Parameter.Kind.Array:		expr.buildEvaluation(null,codeBuilder);
 								break;
-				case Label:		Util.IERR("kind="+kind);
+				case Parameter.Kind.Label:		Util.IERR("kind="+kind);
 								break;
-				case Procedure:	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
+				case Parameter.Kind.Procedure:	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
 								break;
-				case Simple:	expr.buildEvaluation(null,codeBuilder);
+				case Parameter.Kind.Simple:	expr.buildEvaluation(null,codeBuilder);
 		        				expr.type.buildObjectValueOf(codeBuilder);
 		        				break;
 				default:

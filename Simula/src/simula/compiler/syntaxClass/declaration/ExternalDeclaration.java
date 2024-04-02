@@ -208,11 +208,12 @@ public final class ExternalDeclaration extends Declaration {
 				break LOOP;
 			identifier = Parse.expectIdentifier();
 		}
+		System.out.println("ExternalDeclaration.expectExternalHead: END "+identifier);
 	}
 
-	private static boolean checkJarFiles(File file) {
+	static boolean checkJarFiles(File file) {
 		for(File f:Global.externalJarFiles) if(f.equals(file)) {
-			Util.error("External already included: "+file.getName());
+			Util.warning("External already included: "+file.getName());
 			return(false);
 		}
 		return(true);
@@ -225,7 +226,7 @@ public final class ExternalDeclaration extends Declaration {
 	 * @param externalIdentifier the external identifier if any
 	 * @return the resulting File
 	 */
-	private static File findJarFile(final String identifier, final Token externalIdentifier) {
+	static File findJarFile(final String identifier, final Token externalIdentifier) {
 		File jarFile = null;
 		try {
 			if (externalIdentifier == null) {
@@ -257,7 +258,7 @@ public final class ExternalDeclaration extends Declaration {
 	 * @param enclosure the declaration list to update
 	 * @return the module type
 	 */
-	private static Type readAttributeFile(final String identifier, final File file, final BlockDeclaration enclosure) {
+	static Type readAttributeFile(final String identifier, final File file, final BlockDeclaration enclosure) {
 		Type moduleType = null;
 		Util.warning("Separate Compiled Module is read from: \"" + file + "\"");
 		if (!(file.exists() && file.canRead())) {
@@ -284,6 +285,7 @@ public final class ExternalDeclaration extends Declaration {
 			Util.warning("It may be necessary to recompile '" + identifier + "'");
 			Util.IERR("Caused by:", e);
 		}
+		System.out.println("ExternalDeclaration.readAttributeFile: END "+moduleType);
 		return (moduleType);
 	}
 

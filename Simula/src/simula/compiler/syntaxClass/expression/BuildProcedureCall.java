@@ -291,7 +291,8 @@ public final class BuildProcedureCall {
 				checkForExtraParameter(variable);
 				String cast = meaning.declaredIn.getJavaIdentifier();
 				boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-				if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+//				if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+				if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 				if (variable.checkedParams != null)
 					for (Expression par : variable.checkedParams)
 						par.buildEvaluation(null,codeBuilder);
@@ -504,7 +505,8 @@ public final class BuildProcedureCall {
 		
 		String cast = meaning.declaredIn.getJavaIdentifier();
 		boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-		if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+//		if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+		if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 		codeBuilder
 //			.aload(0)
 //			.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
@@ -605,7 +607,7 @@ public final class BuildProcedureCall {
 					Expression actualParameter = variable.checkedParams.get(i);
 					actualParameter.backLink=actualParameter;  // To ensure _RESULT from functions
 					Type formalType=actualParameter.type;
-					Parameter.Kind kind=Parameter.Kind.Simple;  // Default, see below
+					int kind=Parameter.Kind.Simple;  // Default, see below
 					if((actualParameter instanceof VariableExpression var) && !var.hasArguments()) {
 						Declaration decl=var.meaning.declaredAs;
 						if(decl instanceof StandardProcedure) {
@@ -625,7 +627,7 @@ public final class BuildProcedureCall {
 						else Util.IERR("Flere sånne tilfeller ???");
 					}
 					
-					Parameter.Mode mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
+					int mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
 					if(procedureSpec!=null) {
 						Parameter p = procedureSpec.parameterList.get(i);
 						mode = p.mode;
@@ -800,13 +802,13 @@ public final class BuildProcedureCall {
      * @param apar the actual parameter
      * @param codeBuilder the CodeBuilder
      */
-	private static void buildParameterTransmition(final Type formalType,final Parameter.Kind kind,final Parameter.Mode mode,final Expression apar,CodeBuilder codeBuilder) {
+	private static void buildParameterTransmition(final Type formalType,final int kind,final int mode,final Expression apar,CodeBuilder codeBuilder) {
 //		StringBuilder s = new StringBuilder();
 		switch(kind) {
-		    case Simple -> buildSimpleParameter(formalType,kind,mode,apar,codeBuilder);
-		    case Procedure -> buildProcedureParameter(formalType,mode,apar,codeBuilder);
-		    case Array -> doArrayParameter(formalType,mode,apar,codeBuilder);
-//		    case Label -> {
+		    case Parameter.Kind.Simple -> buildSimpleParameter(formalType,kind,mode,apar,codeBuilder);
+		    case Parameter.Kind.Procedure -> buildProcedureParameter(formalType,mode,apar,codeBuilder);
+		    case Parameter.Kind.Array -> doArrayParameter(formalType,mode,apar,codeBuilder);
+//		    case Parameter.Kind.Label -> {
 //		    		String labQuant=apar.toJavaCode();
 //		    		if(mode==Parameter.Mode.name) {
 //		    			s.append("new RTS_NAME<RTS_LABEL>()");
@@ -832,10 +834,10 @@ public final class BuildProcedureCall {
 	 * @param apar actual parameter
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private static void buildSimpleParameter(final Type formalType,final Parameter.Kind kind,final Parameter.Mode mode,final Expression apar,CodeBuilder codeBuilder) {
+	private static void buildSimpleParameter(final Type formalType,final int kind,final int mode,final Expression apar,CodeBuilder codeBuilder) {
 //		System.out.println("BuildProcedureCall.buildSimpleParameter: formalType="+formalType+", kind="+kind+", mode="+mode+", apar="+apar);
 //	    p_SFD.CPF().setPar(new RTS_NAME<Integer>(){ public Integer get() { return(1); } })._ENT();
-		if(mode==null) { // Simple Type/Ref/Text by Default
+		if(mode==0) { // Simple Type/Ref/Text by Default
 //		  	s.append(apar.toJavaCode());
 			Util.IERR("");
 		} else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value
@@ -873,7 +875,7 @@ public final class BuildProcedureCall {
 	 * @param apar actual parameter
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private static void doArrayParameter(final Type formalType,final Parameter.Mode mode,final Expression apar,CodeBuilder codeBuilder) {
+	private static void doArrayParameter(final Type formalType,final int mode,final Expression apar,CodeBuilder codeBuilder) {
 		if(mode==Parameter.Mode.value) {
 //			s.append(apar.toJavaCode()).append(".COPY()");
 			Util.IERR("");
@@ -902,7 +904,7 @@ public final class BuildProcedureCall {
 	 * @param apar actual parameter
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private static void buildProcedureParameter(final Type formalType, final Parameter.Mode mode, final Expression apar,CodeBuilder codeBuilder) {
+	private static void buildProcedureParameter(final Type formalType, final int mode, final Expression apar,CodeBuilder codeBuilder) {
 //		String procQuant = edProcedureQuant(apar, codeBuilder);
 		if (mode == Parameter.Mode.name) {
 			// --- EXAMPLE -------------------------------------------------------------------------
@@ -916,7 +918,7 @@ public final class BuildProcedureCall {
 //			s.append("{ public RTS_PRCQNT get() { return(" + procQuant + "); }");
 //			s.append(" }");
 			
-			Thunk.buildInvoke(null, apar, codeBuilder);
+			Thunk.buildInvoke(0, apar, codeBuilder);
 			
 		} else {
 			buildProcedureQuant(apar, codeBuilder);

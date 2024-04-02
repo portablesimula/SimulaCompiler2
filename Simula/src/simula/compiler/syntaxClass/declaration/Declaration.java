@@ -361,8 +361,8 @@ public abstract class Declaration extends SyntaxClass {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		Type.outType(type,oupt);
 		oupt.writeObject(isProtected);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 		if(!Option.NEW_ATTR_FILE)
 			oupt.writeObject(declaredIn);
 		oupt.writeObject(declarationKind);
@@ -375,8 +375,8 @@ public abstract class Declaration extends SyntaxClass {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		type = Type.inType(inpt);
 		isProtected = (ProtectedSpecification) inpt.readObject();
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		if(!Option.NEW_ATTR_FILE)
 			declaredIn = (DeclarationScope) inpt.readObject();
 		declarationKind = (Kind) inpt.readObject();

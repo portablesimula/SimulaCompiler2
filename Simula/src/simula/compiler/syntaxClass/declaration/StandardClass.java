@@ -1307,7 +1307,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * @param kind  the parameter kind
 	 * @return the newly created Parameter
 	 */
-	private static Parameter parameter(String ident,Type type,Parameter.Kind kind)	{
+	private static Parameter parameter(String ident,Type type,int kind)	{
 		return(new Parameter(ident,type,kind)); }
 
 	/**
@@ -1318,7 +1318,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * @param nDim  number of dimensions for arrays
 	 * @return the newly created Parameter
 	 */
-	private static Parameter parameter(String ident,Type type,Parameter.Kind kind,int nDim)	{
+	private static Parameter parameter(String ident,Type type,int kind,int nDim)	{
 		return(new Parameter(ident,type,kind,nDim)); }
 
 	/**
@@ -1328,7 +1328,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * @param type  the type
 	 * @return the newly created Parameter
 	 */
-	private static Parameter parameter(String ident,Parameter.Mode mode,Type type) {
+	private static Parameter parameter(String ident,int mode,Type type) {
 		Parameter spec=new Parameter(ident,type,Parameter.Kind.Simple);
 		spec.setMode(mode); return(spec);
 	}
@@ -1341,7 +1341,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * @param type  the type
 	 * @return the newly created Parameter
 	 */
-	private static Parameter parameter(String ident,Parameter.Kind kind,Parameter.Mode mode,Type type) {
+	private static Parameter parameter(String ident,int kind, int mode,Type type) {
 		Parameter spec=new Parameter(ident,type,kind);
 		spec.setMode(mode); return(spec);
 	}

@@ -231,13 +231,19 @@ public abstract class DeclarationScope extends Declaration  {
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
 		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
-		if (rtBlockLevel == 0) {
-			codeBuilder.getstatic(BlockDeclaration.currentClassDesc(),"_CTX",CD.RTS_CLASS);		
-			return(false);
+		
+		if(!Option.TESTING_SEPARATE) {
+			if (rtBlockLevel == 0) {
+				codeBuilder.getstatic(BlockDeclaration.currentClassDesc(),"_CTX",CD.RTS_CLASS);	
+				System.out.println("DeclarationScope.buildCTX: "+this);
+				return(false);
+			}
 		}
 		int curLevel = curScope.rtBlockLevel;
 		int ctxDiff = curLevel - endScope.rtBlockLevel - corr;
+		
 		codeBuilder.aload(0); // Current Object
+		
 		boolean withFollowSL = false;
 		if(Global.getCurrentScope() instanceof Thunk thunk) {
 //			System.out.println("================== BEGIN: Build Scope Chain === From THUNK ===");

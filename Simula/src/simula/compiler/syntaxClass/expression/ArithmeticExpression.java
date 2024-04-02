@@ -107,7 +107,7 @@ public final class ArithmeticExpression extends Expression {
 	/**
 	 * The arithmetic operation
 	 */
-	private KeyWord opr;
+	private int opr;
 
 	/**
 	 * The right hand side
@@ -121,7 +121,7 @@ public final class ArithmeticExpression extends Expression {
 	 * @param opr arithmetic operation
 	 * @param rhs right hand side
 	 */
-	private ArithmeticExpression(final Expression lhs, final KeyWord opr, final Expression rhs) {
+	private ArithmeticExpression(final Expression lhs, final int opr, final Expression rhs) {
 		this.opr = opr;
 		if (lhs == null) {
 			Util.error("Missing operand before " + opr);
@@ -144,7 +144,7 @@ public final class ArithmeticExpression extends Expression {
 	 * @param rhs the right hand side
 	 * @return the newly created ArithmeticExpression
 	 */
-	static Expression create(final Expression lhs, final KeyWord opr, final Expression rhs) {
+	static Expression create(final Expression lhs, final int opr, final Expression rhs) {
 		try { // Try to Compile-time Evaluate this expression
 			Number lhn = lhs.getNumber();
 			if (lhn != null) {
@@ -180,9 +180,9 @@ public final class ArithmeticExpression extends Expression {
 			Util.TRACE("BEGIN ArithmeticOperation" + toString() + ".doChecking - Current Scope Chain: "
 					+ Global.getCurrentScope().edScopeChain());
 		switch (opr) {
-		case PLUS:
-		case MINUS:
-		case MUL: {
+		case KeyWord.PLUS:
+		case KeyWord.MINUS:
+		case KeyWord.MUL: {
 			// ArithmeticExpression
 			lhs.doChecking();
 			rhs.doChecking();
@@ -195,7 +195,7 @@ public final class ArithmeticExpression extends Expression {
 				Util.error("Incompatible types in binary operation: " + toString());
 			break;
 		}
-		case DIV: {
+		case KeyWord.DIV: {
 			// Real Division
 			// The operator / denotes real division.
 			// Any operand of integer type is converted before the operation.
@@ -213,7 +213,7 @@ public final class ArithmeticExpression extends Expression {
 				Util.error("Incompatible types in binary operation: " + toString());
 			break;
 		}
-		case INTDIV: { // Integer Division
+		case KeyWord.INTDIV: { // Integer Division
 			lhs.doChecking();
 			rhs.doChecking();
 			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer)))
@@ -223,7 +223,7 @@ public final class ArithmeticExpression extends Expression {
 			rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
 			break;
 		}
-		case EXP: {
+		case KeyWord.EXP: {
 			lhs.doChecking();
 			rhs.doChecking();
 			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer))) {
@@ -273,29 +273,29 @@ public final class ArithmeticExpression extends Expression {
 		rhs.buildEvaluation(null,codeBuilder);
 		if(type.equals(Type.Integer)) {
 			switch (opr) {
-				case PLUS:   codeBuilder.iadd(); break;
-				case MINUS:  codeBuilder.isub(); break;
-				case MUL:    codeBuilder.imul(); break;
-				case DIV:    codeBuilder.idiv(); break;
-				case INTDIV: codeBuilder.idiv(); break;
-//			case EXP:
+				case KeyWord.PLUS:   codeBuilder.iadd(); break;
+				case KeyWord.MINUS:  codeBuilder.isub(); break;
+				case KeyWord.MUL:    codeBuilder.imul(); break;
+				case KeyWord.DIV:    codeBuilder.idiv(); break;
+				case KeyWord.INTDIV: codeBuilder.idiv(); break;
+//			case KeyWord.EXP:
 				default:
 					Util.IERR("STOP: "+opr);
 			}
 		} else if(type.equals(Type.Real)) {
 			switch(opr) {
-				case PLUS:  codeBuilder.fadd(); break;
-				case MINUS: codeBuilder.fsub(); break;
-				case MUL:   codeBuilder.fmul(); break;
-				case DIV:   codeBuilder.fdiv(); break;
+				case KeyWord.PLUS:  codeBuilder.fadd(); break;
+				case KeyWord.MINUS: codeBuilder.fsub(); break;
+				case KeyWord.MUL:   codeBuilder.fmul(); break;
+				case KeyWord.DIV:   codeBuilder.fdiv(); break;
 				default: Util.IERR("IMPOSSIBLE: "+opr);
 			}
 		} else if(type.equals(Type.LongReal)) {
 			switch(opr) {
-				case PLUS:  codeBuilder.dadd(); break;
-				case MINUS: codeBuilder.dsub(); break;
-				case MUL:   codeBuilder.dmul(); break;
-				case DIV:   codeBuilder.ddiv(); break;
+				case KeyWord.PLUS:  codeBuilder.dadd(); break;
+				case KeyWord.MINUS: codeBuilder.dsub(); break;
+				case KeyWord.MUL:   codeBuilder.dmul(); break;
+				case KeyWord.DIV:   codeBuilder.ddiv(); break;
 				default: Util.IERR("IMPOSSIBLE: "+opr);
 			}
 		} else Util.IERR("NOT IMPL: "+type);
@@ -305,7 +305,7 @@ public final class ArithmeticExpression extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		switch (opr) {
-		case EXP: {
+		case KeyWord.EXP: {
 			if (this.type.equals(Type.Integer))
 				return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
 			else
@@ -313,9 +313,9 @@ public final class ArithmeticExpression extends Expression {
 		}
 		default: {
 			if (this.backLink == null)
-				return (lhs.get() + opr.toJavaCode() + '(' + rhs.get() + ')');
+				return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
 			else
-				return ("(" + lhs.get() + opr.toJavaCode() + '(' + rhs.get() + "))");
+				return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
 		}
 		}
 	}
@@ -343,7 +343,7 @@ public final class ArithmeticExpression extends Expression {
 		Type.outType(type,oupt);
 		oupt.writeObject(backLink);
 		oupt.writeObject(lhs);
-		oupt.writeObject(opr);
+		oupt.writeInt(opr);
 		oupt.writeObject(rhs);
 	}
 	
@@ -356,7 +356,7 @@ public final class ArithmeticExpression extends Expression {
 		type = Type.inType(inpt);
 		backLink = (SyntaxClass) inpt.readObject();
 		lhs = (Expression) inpt.readObject();
-		opr = (KeyWord) inpt.readObject();
+		opr = inpt.readInt();
 		rhs = (Expression) inpt.readObject();
 	}
 	

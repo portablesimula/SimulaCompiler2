@@ -561,16 +561,16 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 	@Override
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 		Type.outType(type,oupt);
 		oupt.writeInt(nDim);
 	}
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		type = Type.inType(inpt);
 		nDim = inpt.readInt();
 		Util.TRACE_INPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);

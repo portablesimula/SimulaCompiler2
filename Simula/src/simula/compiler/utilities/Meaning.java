@@ -179,7 +179,8 @@ public final class Meaning implements Externalizable {
 		else {
 			String cast = declaredIn.getJavaIdentifier();
 			boolean withFollowSL = declaredIn.buildCTX(codeBuilder);
-			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+//			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+			if(withFollowSL) codeBuilder.checkcast(declaredIn.getClassDesc());
 		}
 	}
 
@@ -276,7 +277,19 @@ public final class Meaning implements Externalizable {
 	 		}
 	 		
 			boolean withFollowSL = meaning.declaredIn.buildCTX(corr,codeBuilder);
-			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+			if(withFollowSL) {
+//				System.out.println("Meaning.buildIdentifierAccess(1): meaning.declaredAs="+meaning.declaredAs);
+//				System.out.println("Meaning.buildIdentifierAccess(1): meaning.declaredIn="+meaning.declaredIn);
+				if(Option.TESTING_SEPARATE) {
+					codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
+					
+				} else {
+					codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+				}
+//				System.out.println(meaning.declaredAs);
+//				System.out.println(meaning.declaredIn);
+//				if(cast.equalsIgnoreCase("RTS_ENVIRONMENT")) Util.IERR("");
+			}
 			
 		} else if (!(meaning.declaredIn.declarationKind == Declaration.Kind.ContextFreeMethod
 				|| meaning.declaredIn.declarationKind == Declaration.Kind.MemberMethod)) {
@@ -295,8 +308,11 @@ public final class Meaning implements Externalizable {
 			} else {
 				boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
 				if(withFollowSL) {
-					String cast = meaning.declaredIn.getJavaIdentifier();
-					codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+//					System.out.println("Meaning.buildIdentifierAccess(2): meaning.declaredAs="+meaning.declaredAs);
+//					System.out.println("Meaning.buildIdentifierAccess(2): meaning.declaredIn="+meaning.declaredIn);
+//					String cast = meaning.declaredIn.getJavaIdentifier();
+//					codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+					codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 				}
 			}
 		}

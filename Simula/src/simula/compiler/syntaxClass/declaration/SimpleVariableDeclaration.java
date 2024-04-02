@@ -273,8 +273,8 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 	public void writeExternal(ObjectOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT(
 				"Variable: " + type + ' ' + identifier + ", constant=" + isConstant() + ", const=" + constantElement);
-		oupt.writeObject(identifier);
-		oupt.writeObject(externalIdent);
+		oupt.writeUTF(identifier);
+		oupt.writeUTF(externalIdent);
 		Type.outType(type,oupt);
 		oupt.writeBoolean(isConstant());
 		if (constantElement instanceof Constant)
@@ -285,8 +285,8 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 
 	@Override
 	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = (String) inpt.readObject();
-		externalIdent = (String) inpt.readObject();
+		identifier = inpt.readUTF();
+		externalIdent = inpt.readUTF();
 		type = Type.inType(inpt);
 		constant = inpt.readBoolean();
 		constantElement = (Constant) inpt.readObject();

@@ -41,6 +41,7 @@ public final class RunFullClassTestBatch {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 		Option.TESTING_STACK_SIZE = true;
+		Option.TESTING_SEPARATE = true;
 		Option.NEW_ATTR_FILE=true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.SPORT=true;
@@ -105,10 +106,10 @@ public final class RunFullClassTestBatch {
 		names.add("simtst37.sim"); // OK:  Parameter by name and type conversion
 		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
-//		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
+		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 
 		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
 		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.

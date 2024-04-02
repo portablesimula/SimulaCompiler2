@@ -124,25 +124,25 @@ public abstract class Statement extends SyntaxClass {
 		if (Option.TRACE_PARSE)
 			Util.TRACE("Statement.doUnlabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
 		switch(Parse.currentToken.getKeyWord()) {
-		    case BEGIN: Parse.nextToken(); return (new MaybeBlockDeclaration(null).expectMaybeBlock(lineNumber));
-		    case IF:    Parse.nextToken(); return (new ConditionalStatement(lineNumber));
-		    case GOTO:  Parse.nextToken(); return (new GotoStatement(lineNumber));
-		    case GO:    Parse.nextToken(); 
+		    case KeyWord.BEGIN: Parse.nextToken(); return (new MaybeBlockDeclaration(null).expectMaybeBlock(lineNumber));
+		    case KeyWord.IF:    Parse.nextToken(); return (new ConditionalStatement(lineNumber));
+		    case KeyWord.GOTO:  Parse.nextToken(); return (new GotoStatement(lineNumber));
+		    case KeyWord.GO:    Parse.nextToken(); 
 				        if (!Parse.accept(KeyWord.TO))	Util.error("Missing 'TO' after 'GO'");
 				        return (new GotoStatement(lineNumber));
-		    case FOR:        Parse.nextToken(); return (new ForStatement(lineNumber));
-		    case WHILE:      Parse.nextToken(); return (new WhileStatement(lineNumber));
-		    case INSPECT:    Parse.nextToken(); return (new ConnectionStatement(lineNumber));
-		    case SWITCH:	 if(Option.EXTENSIONS) {
-		    					Parse.nextToken(); return (new SwitchStatement(lineNumber));
-		    				 }
-		    case ACTIVATE:   Parse.nextToken(); return (new ActivationStatement(lineNumber));
-		    case REACTIVATE: Parse.nextToken(); return (new ActivationStatement(lineNumber));
-		    case INNER:      Parse.nextToken(); return (new InnerStatement(lineNumber));
-		    case SEMICOLON:  Parse.nextToken(); return (new DummyStatement(lineNumber)); // Dummy Statement
-		    case END:        return (new DummyStatement(lineNumber)); // Dummy Statement, keep END
+		    case KeyWord.FOR:        Parse.nextToken(); return (new ForStatement(lineNumber));
+		    case KeyWord.WHILE:      Parse.nextToken(); return (new WhileStatement(lineNumber));
+		    case KeyWord.INSPECT:    Parse.nextToken(); return (new ConnectionStatement(lineNumber));
+		    case KeyWord.SWITCH:	 if(Option.EXTENSIONS) {
+		    							 Parse.nextToken(); return (new SwitchStatement(lineNumber));
+		    						 }
+		    case KeyWord.ACTIVATE:   Parse.nextToken(); return (new ActivationStatement(lineNumber));
+		    case KeyWord.REACTIVATE: Parse.nextToken(); return (new ActivationStatement(lineNumber));
+		    case KeyWord.INNER:      Parse.nextToken(); return (new InnerStatement(lineNumber));
+		    case KeyWord.SEMICOLON:  Parse.nextToken(); return (new DummyStatement(lineNumber)); // Dummy Statement
+		    case KeyWord.END:        return (new DummyStatement(lineNumber)); // Dummy Statement, keep END
 		
-		    case IDENTIFIER: case NEW: case THIS: case BEGPAR:
+		    case KeyWord.IDENTIFIER: case KeyWord.NEW: case KeyWord.THIS: case KeyWord.BEGPAR:
 		         Expression expr = Expression.acceptExpression();
 		         if(expr!=null) {
 		        	 if(expr instanceof VariableExpression var) {
