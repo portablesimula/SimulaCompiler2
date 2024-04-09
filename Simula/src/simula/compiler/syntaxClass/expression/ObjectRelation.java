@@ -188,35 +188,35 @@ public final class ObjectRelation extends Expression {
 	public ObjectRelation() {
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
-		oupt.writeObject(lhs);
-		oupt.writeInt(opr);
-		oupt.writeUTF(classIdentifier);
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeObject(classDeclaration);
-	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		lhs = (Expression) inpt.readObject();
-		opr = inpt.readInt();
-		classIdentifier = inpt.readUTF();
-		if(!Option.NEW_ATTR_FILE)
-			classDeclaration = (ClassDeclaration) inpt.readObject();
-	}
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
+//		oupt.writeObject(lhs);
+//		oupt.writeInt(opr);
+//		oupt.writeString(classIdentifier);
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeObject(classDeclaration);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
+//		lhs = (Expression) inpt.readObject();
+//		opr = inpt.readInt();
+//		classIdentifier = inpt.readString();
+//		if(!Option.NEW_ATTR_FILE)
+//			classDeclaration = (ClassDeclaration) inpt.readObject();
+//	}
 	
 
 }

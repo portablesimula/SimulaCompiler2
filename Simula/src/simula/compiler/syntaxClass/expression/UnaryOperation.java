@@ -13,10 +13,13 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -36,7 +39,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-final class UnaryOperation extends Expression {
+public final class UnaryOperation extends Expression {
 	
 	/**
 	 * The unary operator.
@@ -160,37 +163,66 @@ final class UnaryOperation extends Expression {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
-	public UnaryOperation() {
-	}
+	private UnaryOperation() {}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
+		oupt.writeKind(ObjectKind.UnaryOperation);
 		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
 		oupt.writeInt(oprator);
-		oupt.writeObject(operand);
+		oupt.writeObj(operand);
 	}
 	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		oprator = inpt.readInt();
-		operand = (Expression) inpt.readObject();
+	public static UnaryOperation readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
+		UnaryOperation expr = new UnaryOperation();
+		expr.lineNumber = inpt.readInt();
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		expr.oprator = inpt.readInt();
+		expr.operand = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("readUnaryOperation: " + expr);
+		return(expr);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
+//		oupt.writeInt(oprator);
+//		oupt.writeObject(operand);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
+//		oprator = inpt.readInt();
+//		operand = (Expression) inpt.readObject();
+//	}
 	
 
 }

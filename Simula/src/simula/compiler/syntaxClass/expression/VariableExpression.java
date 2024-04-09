@@ -20,6 +20,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -41,6 +43,7 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -266,7 +269,7 @@ public final class VariableExpression extends Expression implements Externalizab
 
 		if (decl != null)
 			switch (decl.declarationKind) {
-			case ArrayDeclaration:
+			case ObjectKind.ArrayDeclaration:
 				ArrayDeclaration array = (ArrayDeclaration) decl;
 				this.type = array.type;
 				// Check parameters
@@ -280,11 +283,11 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				break;
 
-			case Class:
-			case StandardClass:
-			case Procedure:
-			case ContextFreeMethod:
-			case MemberMethod:
+			case ObjectKind.Class:
+			case ObjectKind.StandardClass:
+			case ObjectKind.Procedure:
+			case ObjectKind.ContextFreeMethod:
+			case ObjectKind.MemberMethod:
 				this.type = decl.type;
 				Type overloadedType = this.type;
 				Iterator<Parameter> formalIterator;
@@ -354,7 +357,7 @@ public final class VariableExpression extends Expression implements Externalizab
 					this.type = overloadedType;
 				break;
 
-			case Parameter:
+			case ObjectKind.Parameter:
 				Parameter spec = (Parameter) decl;
 				int kind = spec.kind;
 				Util.ASSERT(kind == Parameter.Kind.Array || kind == Parameter.Kind.Procedure, "Invariant ?");
@@ -375,7 +378,7 @@ public final class VariableExpression extends Expression implements Externalizab
 						checkedParams.add(actualParameter);
 				}
 				break;
-			case VirtualSpecification:
+			case ObjectKind.VirtualSpecification:
 				VirtualSpecification vspec = (VirtualSpecification) decl;
 				this.type = vspec.type;
 				Iterator<Expression> pactualIterator = params.iterator();
@@ -405,17 +408,17 @@ public final class VariableExpression extends Expression implements Externalizab
 		if (declaredAs == null)
 			return (false); // Error Recovery
 		switch (declaredAs.declarationKind) {
-		case Procedure:
+		case ObjectKind.Procedure:
 			return (true);
-//			case ExternalProcedure: return(true);
-		case ContextFreeMethod:
+//			case ObjectKind.ExternalProcedure: return(true);
+		case ObjectKind.ContextFreeMethod:
 			return (true);
-		case MemberMethod:
+		case ObjectKind.MemberMethod:
 			return (true);
-		case Parameter:
+		case ObjectKind.Parameter:
 			Parameter par = (Parameter) declaredAs;
 			return (par.kind == Parameter.Kind.Procedure);
-		case VirtualSpecification:
+		case ObjectKind.VirtualSpecification:
 			VirtualSpecification vir = (VirtualSpecification) declaredAs;
 			return (vir.kind == VirtualSpecification.Kind.Procedure);
 		default:
@@ -519,7 +522,7 @@ public final class VariableExpression extends Expression implements Externalizab
 //		System.out.println("Variable.editVariable: "+decl.declarationKind);
 		switch (decl.declarationKind) {
 
-		case ArrayDeclaration:
+		case ObjectKind.ArrayDeclaration:
 			s = new StringBuilder();
 			if (this.hasArguments()) { // Array Element Access
 				String var = edIdentifierAccess(false);
@@ -535,12 +538,12 @@ public final class VariableExpression extends Expression implements Externalizab
 			}
 			return (s.toString());
 
-		case Class:
-		case StandardClass:
+		case ObjectKind.Class:
+		case ObjectKind.StandardClass:
 			Util.error("Illegal use of class identifier: " + decl.identifier);
 			return (edIdentifierAccess(destination));
 
-		case LabelDeclaration:
+		case ObjectKind.LabelDeclaration:
 			if (rightPart != null)
 				Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration: rightPart=" + rightPart);
 			VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
@@ -548,7 +551,7 @@ public final class VariableExpression extends Expression implements Externalizab
 				return (edIdentifierAccess(virtSpec.getVirtualIdentifier(), destination));
 			return (edIdentifierAccess(destination));
 
-		case Parameter:
+		case ObjectKind.Parameter:
 			s = new StringBuilder();
 			Parameter par = (Parameter) decl;
 			switch (par.kind) {
@@ -602,7 +605,7 @@ public final class VariableExpression extends Expression implements Externalizab
 			}
 			return (s.toString());
 
-		case ContextFreeMethod:
+		case ObjectKind.ContextFreeMethod:
 			// Standard Library Procedure
 			if (Util.equals(identifier, "sourceline"))
 				return ("" + Global.sourceLineNumber);
@@ -611,14 +614,14 @@ public final class VariableExpression extends Expression implements Externalizab
 			}
 			return (CallProcedure.asStaticMethod(this, true));
 
-		case MemberMethod:
+		case ObjectKind.MemberMethod:
 			if (destination) {
 				return ("_RESULT=" + rightPart);
 			}
 			return (CallProcedure.asNormalMethod(this));
 
-		case Procedure:
-//     		case ExternalProcedure:
+		case ObjectKind.Procedure:
+//     		case ObjectKind.ExternalProcedure:
 			// This Variable is a Procedure-Identifier.
 			// When 'destination' it is a variable used to carry the resulting value until
 			// the final return.
@@ -649,13 +652,13 @@ public final class VariableExpression extends Expression implements Externalizab
 					return (CallProcedure.normal(this));
 			}
 
-		case SimpleVariableDeclaration:
+		case ObjectKind.SimpleVariableDeclaration:
 			if (rightPart != null)
 				return (edIdentifierAccess(destination) + '=' + rightPart);
 			else
 				return (edIdentifierAccess(destination));
 
-		case VirtualSpecification:
+		case ObjectKind.VirtualSpecification:
 			if (rightPart != null)
 				Util.IERR("TEST DETTE -- Variable.editVariable: VirtualSpecification: rightPart=" + rightPart);
 			VirtualSpecification virtual = (VirtualSpecification) decl;
@@ -708,8 +711,8 @@ public final class VariableExpression extends Expression implements Externalizab
 			} else {
 				id = inspectedVariable.toJavaCode() + "." + id;
 			}
-		} else if (!(meaning.declaredIn.declarationKind == Declaration.Kind.ContextFreeMethod
-				|| meaning.declaredIn.declarationKind == Declaration.Kind.MemberMethod)) {
+		} else if (!(meaning.declaredIn.declarationKind == ObjectKind.ContextFreeMethod
+				|| meaning.declaredIn.declarationKind == ObjectKind.MemberMethod)) {
 			String cast = meaning.declaredIn.getJavaIdentifier();
 			int n = meaning.declaredIn.rtBlockLevel;
 			if (meaning.foundBehindInvisible)
@@ -761,7 +764,7 @@ public final class VariableExpression extends Expression implements Externalizab
 
 		switch (decl.declarationKind) {
 
-			case ArrayDeclaration:
+			case ObjectKind.ArrayDeclaration:
 				if (this.hasArguments()) { // Array Element Access
 					if (destination) {
 //						return (doPutELEMENT(var, rightPart));
@@ -787,14 +790,14 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				break;
 
-			case Class:
-			case StandardClass:
+			case ObjectKind.Class:
+			case ObjectKind.StandardClass:
 				Util.error("Illegal use of class identifier: " + decl.identifier);
 //				return (edIdentifierAccess(destination));
 				Util.IERR("NOT IMPL");
 				break;
 
-			case LabelDeclaration:
+			case ObjectKind.LabelDeclaration:
 				if (destination)
 					Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration:"); // rightPart=" + rightPart);
 //				System.out.println("VariableExpression.buildEvaluation: LabelDeclaration");
@@ -810,11 +813,11 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				break;
 
-			case Parameter:
+			case ObjectKind.Parameter:
 				buildParameter((Parameter) decl,inspectedVariable,rightPart,codeBuilder);
 				break;
 
-			case ContextFreeMethod:
+			case ObjectKind.ContextFreeMethod:
 				// Standard Library Procedure
 
 				if (Util.equals(identifier, "sourceline")) {
@@ -830,15 +833,15 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				Util.IERR("NOT IMPL: "+identifier);
 
-			case MemberMethod:
+			case ObjectKind.MemberMethod:
 //				if (destination) {
 //					return ("_RESULT=" + rightPart);
 //				}
 				BuildProcedureCall.asNormalMethod(this, codeBuilder);
 				break;
 
-			case Procedure:
-//     		case ExternalProcedure:
+			case ObjectKind.Procedure:
+//     		case ObjectKind.ExternalProcedure:
 				// This Variable is a Procedure-Identifier.
 				// When 'destination' it is a variable used to carry the resulting value until the final return.
 				// otherwise; it is a ordinary procedure-call.
@@ -872,7 +875,7 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				break;
 
-			case SimpleVariableDeclaration:
+			case ObjectKind.SimpleVariableDeclaration:
 				SimpleVariableDeclaration var=(SimpleVariableDeclaration)decl;
 				if(var.constantElement != null) {
 					var.constantElement.buildEvaluation(null,codeBuilder);
@@ -901,7 +904,7 @@ public final class VariableExpression extends Expression implements Externalizab
 				}
 				break;
 
-			case VirtualSpecification:
+			case ObjectKind.VirtualSpecification:
 				VirtualSpecification virtual = (VirtualSpecification) decl;
 				BuildProcedureCall.virtual(this, virtual, remotelyAccessed,codeBuilder);
 				break;
@@ -1065,66 +1068,99 @@ public final class VariableExpression extends Expression implements Externalizab
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O.
 	 */
 	public VariableExpression() {
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
+	public void writeAttr(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
-		if(Option.NEW_ATTR_FILE) {
-//			oupt.writeBoolean(CHECKED);
-			oupt.writeInt(lineNumber);
-			Type.outType(type,oupt);
-			oupt.writeObject(backLink);
-			oupt.writeUTF(identifier);
-//			oupt.writeObject(meaning);
-			oupt.writeObject(remotelyAccessed);
-			oupt.writeObject(params);
-//			oupt.writeObject(checkedParams);			
+//		oupt.writeBoolean(CHECKED);
+		oupt.writeKind(ObjectKind.VariableExpression);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeString(identifier);
+//		oupt.writeObject(meaning);
+		oupt.writeBoolean(remotelyAccessed);
+		
+		//oupt.writeObj(params);
+		if(params == null) {
+			oupt.writeInt(0);			
 		} else {
-			oupt.writeBoolean(CHECKED);
-			oupt.writeInt(lineNumber);
-			Type.outType(type,oupt);
-			oupt.writeObject(backLink);
-			oupt.writeUTF(identifier);
-			oupt.writeObject(meaning);
-			oupt.writeObject(remotelyAccessed);
-			oupt.writeObject(params);
-			oupt.writeObject(checkedParams);
+			oupt.writeInt(params.size());
+			for(Expression par:params) oupt.writeObj(par);
 		}
+//		oupt.writeObject(checkedParams);			
 	}
 	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read VariableExpression: ");
-		if(Option.NEW_ATTR_FILE) {
-//			CHECKED=inpt.readBoolean();
-			lineNumber = inpt.readInt();
-			type = Type.inType(inpt);
-			backLink = (SyntaxClass) inpt.readObject();
-			identifier = inpt.readUTF();
-//			meaning = (Meaning) inpt.readObject();
-			remotelyAccessed = (boolean) inpt.readObject();
-			params = (Vector<Expression>) inpt.readObject();
-//			checkedParams = (Vector<Expression>) inpt.readObject();			
-		} else {
-			CHECKED=inpt.readBoolean();
-			lineNumber = inpt.readInt();
-			type = Type.inType(inpt);
-			backLink = (SyntaxClass) inpt.readObject();
-			identifier = inpt.readUTF();
-			meaning = (Meaning) inpt.readObject();
-			remotelyAccessed = (boolean) inpt.readObject();
-			params = (Vector<Expression>) inpt.readObject();
-			checkedParams = (Vector<Expression>) inpt.readObject();
-		}
-	}
+	public static VariableExpression readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readVariableExpression: ");
+		VariableExpression var = new VariableExpression();
+//		CHECKED=inpt.readBoolean();
 		
+		var.lineNumber = inpt.readInt();
+		System.out.println("VariableExpression.readAttr: lineNumber="+var.lineNumber);
+		var.type = inpt.readType();
+		System.out.println("VariableExpression.readAttr: type="+var.type);
+		var.backLink = (SyntaxClass) inpt.readObj();
+		var.identifier = inpt.readString();
+//		meaning = (Meaning) inpt.readObject();
+		var.remotelyAccessed = inpt.readBoolean();
+		
+		//params = (Vector<Expression>) inpt.readObject();
+		int n = inpt.readInt();
+		if(n > 0) {
+			for(int i=0;i<n;i++)
+				var.params.add((Expression) inpt.readObj());
+		}
+		
+//		checkedParams = (Vector<Expression>) inpt.readObject();			
+		Util.TRACE_INPUT("readVariableExpression: " + var);
+		return(var);
+	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public VariableExpression() {
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
+////		oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
+//		oupt.writeString(identifier);
+////		oupt.writeObject(meaning);
+//		oupt.writeObject(remotelyAccessed);
+//		oupt.writeObject(params);
+////		oupt.writeObject(checkedParams);			
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read VariableExpression: ");
+////		CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
+//		identifier = inpt.readString();
+////		meaning = (Meaning) inpt.readObject();
+//		remotelyAccessed = (boolean) inpt.readObject();
+//		params = (Vector<Expression>) inpt.readObject();
+////		checkedParams = (Vector<Expression>) inpt.readObject();			
+//	}
+//		
 
 }

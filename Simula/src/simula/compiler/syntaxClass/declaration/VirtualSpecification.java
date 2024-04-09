@@ -16,6 +16,8 @@ import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -24,6 +26,7 @@ import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
@@ -51,34 +54,24 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class VirtualSpecification extends Declaration implements Externalizable {
+public final class VirtualSpecification extends Declaration {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
 	// Type type; // Inherited: Procedure's type if any
 
 	/**
 	 * Virtual Kind.
-	 *
 	 */
-	public enum Kind {
-		/**
-		 * Virtual procedure.
-		 */
-		Procedure,
-		/**
-		 * Virtual label.
-		 */
-		Label,
-		/**
-		 * Virtual switch.
-		 */
-		Switch
+	public class Kind {
+		/** Virtual procedure */ public static final int Procedure = 1;
+		/** Virtual label */	 public static final int Label     = 2;
+		/** Virtual switch */	 public static final int Switch    = 3;
 	}
 
 	/**
 	 * Virtual kind.
 	 */
-	public Kind kind;
+	public int kind;
 	
 	/**
 	 * The procedure specification if present.
@@ -99,10 +92,10 @@ public final class VirtualSpecification extends Declaration implements Externali
 	 * @param kind the vitual Kind
 	 * @param procedureSpec the ProcedureSpecification
 	 */
-	VirtualSpecification(final String identifier, final Type type, final Kind kind,
+	VirtualSpecification(final String identifier, final Type type, final int kind,
 			final ProcedureSpecification procedureSpec) {
 		super(identifier);
-		this.declarationKind = Declaration.Kind.VirtualSpecification;
+		this.declarationKind = ObjectKind.VirtualSpecification;
 		this.externalIdent = identifier;
 		this.type = type;
 		this.kind = kind;
@@ -174,7 +167,7 @@ public final class VirtualSpecification extends Declaration implements Externali
 	 * @param type the specifiers type
 	 * @param kind the specifiers kind
 	 */
-	private static void expectIdentifierList(final ClassDeclaration cls, final Type type, final Kind kind) {
+	private static void expectIdentifierList(final ClassDeclaration cls, final Type type, final int kind) {
 		do {
 			String identifier = Parse.expectIdentifier();
 			cls.virtualSpecList.add(new VirtualSpecification(identifier, type, kind, null));
@@ -292,34 +285,70 @@ public final class VirtualSpecification extends Declaration implements Externali
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
 	 */
 	public VirtualSpecification() {
 		super(null);
-		this.declarationKind = Declaration.Kind.VirtualSpecification;
+		this.declarationKind = ObjectKind.VirtualSpecification;
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-		Type.outType(type,oupt);
-		oupt.writeObject(kind);
-		oupt.writeObject(procedureSpec);
+	public static void writeVirtSpec(VirtualSpecification virt,AttrOutput oupt) throws IOException {
+		if(virt == null) {
+			oupt.writeBoolean(false);
+		} else {
+			oupt.writeBoolean(true);
+			Util.TRACE_OUTPUT("VirtualSpec: " + virt.type + ' ' + virt.identifier + ' ' + virt.kind);
+			oupt.writeString(virt.identifier);
+			oupt.writeString(virt.externalIdent);
+			oupt.writeType(virt.type);
+			oupt.writeInt(virt.kind);
+//			oupt.writeObject(procedureSpec);
+			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
+		}
 	}
 
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-		type = Type.inType(inpt);
-		kind = (Kind) inpt.readObject();
-		procedureSpec = (ProcedureSpecification) inpt.readObject();
-		Util.TRACE_INPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
+	public static VirtualSpecification readVirtSpec(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readVirtSpec: ");
+		boolean present = inpt.readBoolean();
+		VirtualSpecification virt = null;
+		if(present) {
+			virt = new VirtualSpecification();
+			virt.identifier = inpt.readString();
+			virt.externalIdent = inpt.readString();
+			virt.type = inpt.readType();
+			virt.kind = inpt.readInt();
+//			virt.procedureSpec = (ProcedureSpecification) inpt.readObject();
+			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
+		}
+		Util.TRACE_INPUT("VirtualSpec: " + virt);
+		return(virt);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeByte(kind);
+//		oupt.writeObject(procedureSpec);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+//		kind = inpt.readByte();
+//		procedureSpec = (ProcedureSpecification) inpt.readObject();
+//		Util.TRACE_INPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
+//	}
 
 }

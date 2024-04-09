@@ -281,36 +281,36 @@ public final class ObjectGenerator extends Expression {
 	public ObjectGenerator() {
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE) {
-			oupt.writeBoolean(CHECKED);
-			oupt.writeObject(checkedParams);
-			oupt.writeObject(meaning);
-		}
-		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
-		oupt.writeUTF(classIdentifier);
-		oupt.writeObject(params);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE) {
-			CHECKED=inpt.readBoolean();
-			checkedParams = (Vector<Expression>) inpt.readObject();
-			meaning = (Meaning) inpt.readObject();
-		}
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		classIdentifier = inpt.readUTF();
-		params = (Vector<Expression>) inpt.readObject();
-	}
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE) {
+//			oupt.writeBoolean(CHECKED);
+//			oupt.writeObject(checkedParams);
+//			oupt.writeObject(meaning);
+//		}
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
+//		oupt.writeString(classIdentifier);
+//		oupt.writeObject(params);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE) {
+//			CHECKED=inpt.readBoolean();
+//			checkedParams = (Vector<Expression>) inpt.readObject();
+//			meaning = (Meaning) inpt.readObject();
+//		}
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
+//		classIdentifier = inpt.readString();
+//		params = (Vector<Expression>) inpt.readObject();
+//	}
 	
 
 }

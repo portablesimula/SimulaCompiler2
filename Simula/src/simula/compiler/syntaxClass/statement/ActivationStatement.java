@@ -386,7 +386,7 @@ public final class ActivationStatement extends Statement {
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();

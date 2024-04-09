@@ -12,6 +12,8 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayDeque;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.Vector;
@@ -169,6 +171,11 @@ public final class Global {
 	 * Temp directory for generated .class files
 	 */
 	public static File tempClassFileDir;
+	
+	/**
+	 * Next available Object Sequence Number.
+	 */
+	public static int Object_SEQU;
 
 	/**
 	 * Packet name used in generated .java files.
@@ -201,6 +208,7 @@ public final class Global {
 	 * Initiate Global variables.
 	 */
 	public static void initiate() {
+		Object_SEQU = 8001;
 		duringParsing = true;
 		duringChecking = false;
 		duringSTM_Coding = false;

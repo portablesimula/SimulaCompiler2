@@ -16,6 +16,8 @@ import java.lang.classfile.instruction.SwitchCase;
 import java.util.List;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -23,6 +25,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -428,36 +431,67 @@ public final class SwitchStatement extends Statement {
     }
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public SwitchStatement() {
 		super(0);
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeSwitchStatement: " + this);
+		oupt.writeKind(ObjectKind.SwitchStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(lowKey);
-		oupt.writeObject(hiKey);
-		oupt.writeObject(switchKey);
+		oupt.writeObj(lowKey);
+		oupt.writeObj(hiKey);
+		oupt.writeObj(switchKey);
 	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		lowKey = (Expression) inpt.readObject();
-		hiKey = (Expression) inpt.readObject();
-		switchKey = (Expression) inpt.readObject();
+
+	public static SwitchStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readSwitchStatement: ");
+		SwitchStatement stm = new SwitchStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.lowKey = (Expression) inpt.readObj();
+		stm.hiKey = (Expression) inpt.readObj();
+		stm.switchKey = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("SwitchStatement: " + stm);
+		return(stm);
 	}
-	
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public SwitchStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(lowKey);
+//		oupt.writeObject(hiKey);
+//		oupt.writeObject(switchKey);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		lowKey = (Expression) inpt.readObject();
+//		hiKey = (Expression) inpt.readObject();
+//		switchKey = (Expression) inpt.readObject();
+//	}
+//	
  
 }

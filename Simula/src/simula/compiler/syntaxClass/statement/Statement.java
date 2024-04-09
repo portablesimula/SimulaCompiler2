@@ -57,7 +57,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 public abstract class Statement extends SyntaxClass {
-
+	
 	/**
 	 * Create a new Statement.
 	 * @param line the source line number
@@ -170,5 +170,6 @@ public abstract class Statement extends SyntaxClass {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName());
 	}
+
 
 }

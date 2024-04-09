@@ -20,12 +20,16 @@ import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -64,7 +68,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	public LabelDeclaration(final String identifier) {
 		super(Type.Label, identifier);
 		this.externalIdent = "_LABEL_" + identifier;
-		this.declarationKind = Declaration.Kind.LabelDeclaration;
+		this.declarationKind = ObjectKind.LabelDeclaration;
 	}
 
 	@Override
@@ -77,7 +81,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
 		if (virtSpec == null) {
 			// Label attributes are implicit specified 'protected'
-			if (declaredIn.declarationKind == Declaration.Kind.Class)
+			if (declaredIn.declarationKind == ObjectKind.Class)
 				((ClassDeclaration) declaredIn).protectedList
 						.add(new ProtectedSpecification((ClassDeclaration) declaredIn, identifier));
 		} else {
@@ -272,6 +276,31 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeLabelDeclaration: " + identifier);
+		oupt.writeKind(declarationKind);
+		oupt.writeString(identifier);
+		oupt.writeInt(lineNumber);
+		oupt.writeInt(index);
+		oupt.writeObj(movedTo);
+	}
+	
+	public static LabelDeclaration readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readLabelDeclaration: ");
+		LabelDeclaration lab = new LabelDeclaration();
+		lab.identifier = inpt.readString();
+		lab.lineNumber = inpt.readInt();
+		lab.index = inpt.readInt();
+		lab.movedTo = (DeclarationScope) inpt.readObj();
+		Util.TRACE_INPUT("readLabelDeclaration: " + lab.identifier);
+		return(lab);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -292,7 +321,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		super.readExternal(inpt);
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)

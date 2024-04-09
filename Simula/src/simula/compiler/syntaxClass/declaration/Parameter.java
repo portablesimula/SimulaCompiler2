@@ -21,6 +21,8 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
@@ -28,6 +30,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 	
 /**
@@ -142,7 +145,7 @@ public final class Parameter extends Declaration implements Externalizable {
 	 */
 	Parameter(final String identifier) {
 		super(identifier);
-		this.declarationKind = Declaration.Kind.Parameter;
+		this.declarationKind = ObjectKind.Parameter;
 	}
 
 	/**
@@ -554,35 +557,69 @@ public final class Parameter extends Declaration implements Externalizable {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
 	 */
 	public Parameter() {
 		super(null);
-		this.declarationKind = Declaration.Kind.Parameter;
+		this.declarationKind = ObjectKind.Parameter;
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
+	public void writeParameter(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-//		Type.outType(type,oupt);
-		Type.outType(type,oupt);
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+		oupt.writeType(type);
 		oupt.writeInt(kind);
 		oupt.writeInt(mode);
 	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-		type = Type.inType(inpt);
-		kind = inpt.readInt();
-		mode = inpt.readInt();
-		Util.TRACE_INPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
+	
+	public static Parameter readParameter(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readParameter: ");
+		Parameter par = new Parameter();
+		par.identifier = inpt.readString();
+		par.externalIdent = inpt.readString();
+		par.type = inpt.readType();
+		par.kind = inpt.readInt();
+		par.mode = inpt.readInt();
+		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
+		return(par);
 	}
+
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public Parameter() {
+//		super(null);
+//		this.declarationKind = ObjectKind.Parameter;
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+////		oupt.writeType(type);
+//		oupt.writeType(type);
+//		oupt.writeInt(kind);
+//		oupt.writeInt(mode);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+//		kind = inpt.readInt();
+//		mode = inpt.readInt();
+//		Util.TRACE_INPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
+//	}
 
 }

@@ -24,6 +24,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -58,7 +59,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	 * @param ident switch identifier
 	 */
 	public SwitchDeclaration(final String ident) {
-		super(ident,Declaration.Kind.Procedure);
+		super(ident,ObjectKind.Procedure);
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration");
 		this.type = Type.Label;
 		Parse.expect(KeyWord.ASSIGNVALUE);
@@ -81,7 +82,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 		VirtualSpecification virtSpec=VirtualSpecification.getVirtualSpecification(this);
 		if(virtSpec==null) {
 			// Switch attributes are implicit specified 'protected'
-			if(declaredIn.declarationKind==Declaration.Kind.Class)
+			if(declaredIn.declarationKind==ObjectKind.Class)
 				((ClassDeclaration)declaredIn).protectedList.add(new ProtectedSpecification((ClassDeclaration)Global.getCurrentScope(),identifier));
 		}
 	}
@@ -173,11 +174,11 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	/**
 	 * Default constructor used by Externalization.
 	 */
-	public SwitchDeclaration() { super(null, Declaration.Kind.Procedure); }
+	public SwitchDeclaration() { super(null, ObjectKind.Procedure); }
 
 	// Inherited from ProcedureDeclaration:
 	//	public void writeExternal(ObjectOutput oupt) throws IOException {
-	//	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	//	public void readExternal(ObjectInput inpt) throws IOException {
 
 
 }

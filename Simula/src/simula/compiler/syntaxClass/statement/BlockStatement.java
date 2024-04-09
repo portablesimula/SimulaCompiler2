@@ -13,14 +13,18 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -76,7 +80,7 @@ public final class BlockStatement extends Statement implements Externalizable {
 	 * @return true if this BlockStatement is a CompoundStatement
 	 */
 	boolean isCompoundStatement() {
-		return(blockDeclaration.declarationKind == Declaration.Kind.CompoundStatement);
+		return(blockDeclaration.declarationKind == ObjectKind.CompoundStatement);
 	}
 
 	@Override
@@ -98,7 +102,7 @@ public final class BlockStatement extends Statement implements Externalizable {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if(blockDeclaration.declarationKind!=Declaration.Kind.CompoundStatement) {
+		if(blockDeclaration.declarationKind!=ObjectKind.CompoundStatement) {
 			String staticLink=blockDeclaration.declaredIn.edCTX();
 			StringBuilder s = new StringBuilder();
 			s.append("new ").append(blockDeclaration.getJavaIdentifier()).append('(');
@@ -111,7 +115,7 @@ public final class BlockStatement extends Statement implements Externalizable {
 					}
 			}
 			s.append(')');
-			if(blockDeclaration.declarationKind==Declaration.Kind.PrefixedBlock && ((ClassDeclaration)blockDeclaration).isDetachUsed())
+			if(blockDeclaration.declarationKind==ObjectKind.PrefixedBlock && ((ClassDeclaration)blockDeclaration).isDetachUsed())
 				s.append("._START();");
 			else s.append("._STM();");
 			GeneratedJavaClass.code(s.toString());
@@ -142,6 +146,27 @@ public final class BlockStatement extends Statement implements Externalizable {
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeBlockStatement: " + this);
+		oupt.writeKind(ObjectKind.BlockStatement);
+		oupt.writeInt(lineNumber);
+		oupt.writeObj(blockDeclaration);
+	}
+
+	public static BlockStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readBlockStatement: ");
+		BlockStatement stm = new BlockStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
+		Util.TRACE_INPUT("BlockStatement: " + stm);
+		return(stm);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -161,7 +186,7 @@ public final class BlockStatement extends Statement implements Externalizable {
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();

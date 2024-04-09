@@ -37,6 +37,7 @@ import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -130,7 +131,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * @param identifier the block identifier
 	 * @param declarationKind the declaration kind
 	 */
-	private BlockDeclaration(final String identifier,final Declaration.Kind declarationKind) {
+	private BlockDeclaration(final String identifier,final int declarationKind) {
 		super(identifier);
 		this.declarationKind = declarationKind;
 	}
@@ -216,9 +217,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	protected boolean isQPSystemBlock() {
 		switch (declarationKind) {
-		case SimulaProgram:
-		case SubBlock:
-		case PrefixedBlock:
+		case ObjectKind.SimulaProgram:
+		case ObjectKind.SubBlock:
+		case ObjectKind.PrefixedBlock:
 			return (isBlockWithLocalClasses());
 		default:
 			return (false);
@@ -699,7 +700,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 
 	@Override
 	public String toString() {
-		return ("" + identifier + '[' + externalIdent + "] Declaration.Kind=" + declarationKind);
+		return ("" + identifier + '[' + externalIdent + "] ObjectKind=" + declarationKind);
 	}
 
 	// ***********************************************************************************************
@@ -719,7 +720,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		super.readExternal(inpt);
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		isMainModule = inpt.readBoolean();

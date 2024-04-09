@@ -7,11 +7,7 @@
  */
 package simula.compiler.syntaxClass;
 
-import java.io.DataOutput;
 import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
@@ -26,9 +22,8 @@ import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
-import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
 /**
@@ -64,10 +59,19 @@ import simula.compiler.utilities.Util;
  */
 public class Type extends SyntaxClass implements Externalizable {
 
+//	/**
+//	 * KeyWord or ref(classIdentifier)
+//	 */
+//	Token key;
 	/**
-	 * KeyWord or ref(classIdentifier)
+	 * The keyWord attribute
 	 */
-	Token key;
+	public int keyWord;
+	
+	/**
+	 * The Class Identifier in case of ref(classIdent)
+	 */
+	public String classIdent;
 	
 	/**
 	 * Qual in case of ref(Qual) type. Set by doChecking
@@ -82,82 +86,119 @@ public class Type extends SyntaxClass implements Externalizable {
 	// **************************************************************************************************
 	// *** BASIC TYPES
 	// **************************************************************************************************
-	/**
-	 * Simula's Integer type
-	 */
-	public static final Type Integer = new Type(new Token(KeyWord.INTEGER));
+//	/**
+//	 * Simula's Integer type
+//	 */
+//	public static final Type Integer = new Type(new Token(KeyWord.INTEGER));
+//	
+//	/**
+//	 * Simula's Real type
+//	 */
+//	public static final Type Real = new Type(new Token(KeyWord.REAL));
+//
+//	/**
+//	 * Simula's Long Real type
+//	 */
+//	public static final Type LongReal = new Type(new Token(KeyWord.REAL, KeyWord.LONG));
+//	
+//	/**
+//	 * Simula's Boolean type
+//	 */
+//	public static final Type Boolean = new Type(new Token(KeyWord.BOOLEAN));
+//	
+//	/**
+//	 * Simula's Character type
+//	 */
+//	public static final Type Character = new Type(new Token(KeyWord.CHARACTER));
+//	
+//	/**
+//	 * Simula's Text type
+//	 */
+//	public static final Type Text = new Type(new Token(KeyWord.TEXT));
+//	
+//	/**
+//	 * Simula's Ref() type
+//	 */
+//	public static final Type Ref = new Type(new Token(KeyWord.REF));
+//	
+//	/**
+//	 * Simula's Ref(classIdent) type
+//	 * @param classIdent the class name
+//	 * @return a new ref(classIdent) type.
+//	 */
+//	public static final Type Ref(String classIdent) { return (new Type(classIdent)); }
+//	
+//	/**
+//	 * Simula's Procedure type
+//	 */
+//	public static final Type Procedure = new Type(new Token(KeyWord.PROCEDURE));
+//	
+//	/**
+//	 * Simula's Label type
+//	 */
+//	public static final Type Label = new Type(new Token(KeyWord.LABEL));
+//	
+//
+	/** Simula's Integer type */	public static final int T_INTEGER = 1001;
+	/** Simula's Real type */		public static final int T_REAL = 1002;
+	/** Simula's Long Real type */	public static final int T_LONG_REAL = 1003;
+	/** Simula's Boolean type */	public static final int T_BOOLEAN = 1004;
+	/** Simula's Character type */	public static final int T_CHARACTER = 1005;
+	/** Simula's Text type */		public static final int T_TEXT = 1006;
+	/** Simula's Ref() type */		public static final int T_REF = 1007;
+	/** Simula's Procedure type */	public static final int T_PROCEDURE = 1008;
+	/** Simula's Label type */		public static final int T_LABEL = 1009;
 	
-	/**
-	 * Simula's Real type
-	 */
-	public static final Type Real = new Type(new Token(KeyWord.REAL));
 
-	/**
-	 * Simula's Long Real type
-	 */
-	public static final Type LongReal = new Type(new Token(KeyWord.REAL, KeyWord.LONG));
+	/** Simula's Integer type */	public static final Type Integer = new Type(Type.T_INTEGER);
+	/** Simula's Real type */		public static final Type Real = new Type(Type.T_REAL);
+	/** Simula's Long Real type */	public static final Type LongReal = new Type(Type.T_LONG_REAL);
+	/** Simula's Boolean type */	public static final Type Boolean = new Type(Type.T_BOOLEAN);
+	/** Simula's Character type */	public static final Type Character = new Type(Type.T_CHARACTER);
+	/** Simula's Text type */		public static final Type Text = new Type(Type.T_TEXT);
+	/** Simula's Ref() type */		public static final Type Ref = new Type(Type.T_REF);
+	/** Simula's Procedure type */	public static final Type Procedure = new Type(Type.T_PROCEDURE);
+	/** Simula's Label type */		public static final Type Label = new Type(Type.T_LABEL);
 	
 	/**
-	 * Simula's Boolean type
+	 * Simula's Ref(classIdent) type
+	 * @param classIdent the class name
+	 * @return a new ref(classIdent) type.
 	 */
-	public static final Type Boolean = new Type(new Token(KeyWord.BOOLEAN));
-	
-	/**
-	 * Simula's Character type
-	 */
-	public static final Type Character = new Type(new Token(KeyWord.CHARACTER));
-	
-	/**
-	 * Simula's Text type
-	 */
-	public static final Type Text = new Type(new Token(KeyWord.TEXT));
-	
-	/**
-	 * Simula's Ref() type
-	 */
-	public static final Type Ref = new Type(new Token(KeyWord.REF));
-	
-	/**
-	 * Simula's Ref(className) type
-	 * @param className the class name
-	 * @return a new ref(className) type.
-	 */
-	public static final Type Ref(String className) { return (new Type(className)); }
-	
-	/**
-	 * Simula's Procedure type
-	 */
-	public static final Type Procedure = new Type(new Token(KeyWord.PROCEDURE));
-	
-	/**
-	 * Simula's Label type
-	 */
-	public static final Type Label = new Type(new Token(KeyWord.LABEL));
+	public static final Type Ref(String classIdent) { return (new Type(Type.T_REF,classIdent)); }
 	
 
 	// **************************************************************************************************
 	// *** TYPE CREATION - CONSTRUCTORES 
 	// **************************************************************************************************
 
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public Type() {} // Externalization
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public Type() {} // Externalization
 	  
 	/**
-	 * Create a new simple Type with the given key Token
-	 * @param key the given key Token
+	 * Create a new simple Type with the given keyWord
+	 * @param key the given keyWord
 	 */
-	public Type(Token key) { this.key=key; }
+	private Type(int keyWord) {
+		this.keyWord = keyWord;
+	}
+	
+	public Type(int keyWord, String classIdent) {
+//		if(classIdent==null) classIdent="UNKNOWN"; // Error recovery
+		if(classIdent != null && !Option.CaseSensitive) classIdent = classIdent.toUpperCase();
+//		this.key=new Token(KeyWord.REF,classIdent);
+		this.keyWord = keyWord;
+		this.classIdent = classIdent;
+	}
 
 	/**
-	 * Create a new ref(className) type.
-	 * @param className the class name
+	 * Create a new ref(classIdent) type.
+	 * @param classIdent the class name
 	 */
-	public Type(String className) {
-		if(className==null) className="UNKNOWN"; // Error recovery
-		if(!Option.CaseSensitive) className = className.toUpperCase();
-		this.key=new Token(KeyWord.REF,className);
+	public Type(String classIdent) {
+		this(T_REF,classIdent);
 	}
 	
 	/**
@@ -166,7 +207,10 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @param declaredIn the ConnectionBlock
 	 */
 	public Type(Type tp,ConnectionBlock declaredIn) {
-		this.key = tp.key;
+//		this.key = tp.key;
+		this.keyWord = tp.keyWord;
+		this.classIdent = tp.classIdent;
+		
 		this.qual = tp.qual;
 		this.declaredIn = declaredIn;
 	}
@@ -189,7 +233,8 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * Returns the keyWord or the ref-identifier.
 	 * @return the keyWord or the ref-identifier
 	 */
-	public int getKeyWord() { return(key.getKeyWord()); }
+//	public int getKeyWord() { return(key.getKeyWord()); }
+	public int getKeyWord() { return(this.keyWord); }
 	
 	
 	public static boolean equals(Type type1,Type type2) {
@@ -202,10 +247,11 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the ref-identifier or null
 	 */
 	public String getRefIdent() {
-		if(key.getKeyWord()==KeyWord.REF) {
-			if(key.getValue()==null) return(null);
-			return(key.getValue().toString());
-		}
+//		if(key.getKeyWord()==KeyWord.REF) {
+//			if(key.getValue()==null) return(null);
+//			return(key.getValue().toString());
+//		}
+		if(keyWord == Type.T_REF) return(classIdent);
 		return(null); 
 	}
   
@@ -214,8 +260,10 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the Java ref-identifier or null
 	 */
 	public String getJavaRefIdent() {
-		if(key.getKeyWord()==KeyWord.REF) {
-			if(key.getValue()==null) return("RTS_RTObject");
+//		if(key.getKeyWord()==KeyWord.REF) {
+//			if(key.getValue()==null) return("RTS_RTObject");
+		if(keyWord == Type.T_REF) {
+			if(classIdent == null) return("RTS_RTObject");
 			if(!IS_SEMANTICS_CHECKED()) this.doChecking(Global.getCurrentScope());
 			if(qual==null) return("UNKNOWN");
 			return(qual.getJavaIdentifier());
@@ -266,7 +314,8 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return true if this type is ref() type
 	 */
 	public boolean isReferenceType() {
-		if(key.getKeyWord()==KeyWord.REF) return(true);
+//		if(key.getKeyWord()==KeyWord.REF) return(true);
+		if(keyWord == Type.T_REF) return(true);
 		if(this.equals(Type.Text)) return(true);
 		return(getRefIdent()!=null);
 	}
@@ -276,13 +325,24 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return true if this type is ref(A) type
 	 */
 	public boolean isRefClassType() {
-		if(key.getKeyWord()==KeyWord.REF) return(true);
+//		if(key.getKeyWord()==KeyWord.REF) return(true);
+		if(keyWord == Type.T_REF) return(true);
 		return(getRefIdent()!=null);
 	}
   
 	public boolean equals(final Object obj) {
 		Type other=(Type) obj;
-		return(this.key.equals(other.key));
+//		return(this.key.equals(other.key));
+		if(this.keyWord != other.keyWord) return(false);
+		if (this.classIdent == other.classIdent)
+			return (true);
+		if (this.classIdent == null)
+			return (false);
+		if (other.classIdent == null)
+			return (false);
+		if (!this.classIdent.equals(other.classIdent))
+			return (false);
+		return (true);
 	}
   
 	/**
@@ -424,9 +484,17 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return an edited default value of this Type
 	 */
 	public String edDefaultValue() {
-		if(key==null) return("void");
-		if(key.getKeyWord()==KeyWord.IDENTIFIER) return(null);
-		if(key.getKeyWord()==KeyWord.REF) return("null");
+//		if(key==null) return("void");
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return("void");
+		}
+//		if(key.getKeyWord()==KeyWord.IDENTIFIER) return(null);
+//		if(keyWord == KeyWord.IDENTIFIER) {
+//			Util.IERR("FOREKOMMER DETTE ?");
+//			return(null);
+//		}
+		if(keyWord == Type.T_REF) return("null");
 		if(this.equals(LongReal)) return("0.0d");
 		if(this.equals(Real)) return("0.0f");
 		if(this.equals(Integer)) return("0");
@@ -438,13 +506,17 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
   
 	/**
-	 * Codeing utility: toJavaType.
+	 * Coding utility: toJavaType.
 	 * @return the resulting code string.
 	 */
 	public String toJavaType() {
-		if(key==null) return("void");
+//		if(key==null) return("void");
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return("void");
+		}
 	    //if(this.equals(Array)) return("array"); // ARRAY Elements 
-		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
+		if(keyWord == Type.T_REF) return(getJavaRefIdent());
 		if(this.equals(LongReal)) return("double");
 		if(this.equals(Real)) return("float");
 		if(this.equals(Integer)) return("int");
@@ -457,12 +529,16 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
 	 
 	/**
-	 * Codeing utility: toJavaTypeClass.
+	 * Coding utility: toJavaTypeClass.
 	 * @return the resulting code string.
 	 */
 	public String toJavaTypeClass() {
-		if(key==null) return("void");
-		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
+//		if(key==null) return("void");
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return("void");
+		}
+		if(keyWord == Type.T_REF) return(getJavaRefIdent());
 		if(this.equals(LongReal)) return("Double");
 		if(this.equals(Real)) return("Float");
 		if(this.equals(Integer)) return("Integer");
@@ -473,11 +549,11 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
 	
 	/**
-	 * Codeing utility: toJavaArrayType.
+	 * Coding utility: toJavaArrayType.
 	 * @return the resulting code string.
 	 */
 	public String toJavaArrayType() {
-		if(key.getKeyWord()==KeyWord.REF) {
+		if(keyWord == Type.T_REF) {
 			String rtQual=getJavaRefIdent();
 			return("RTS_REF_ARRAY<"+rtQual+">");
 		}
@@ -494,7 +570,7 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
 
 	public String toJavaArrayType2() {
-		if(key.getKeyWord()==KeyWord.REF) {
+		if(keyWord == Type.T_REF) {
 			return("RTS_REF_ARRAY");
 		}
 		return(this.toJavaArrayType());
@@ -521,7 +597,11 @@ public class Type extends SyntaxClass implements Externalizable {
 		return(jvmType);
 	}
 	private String toPrivJVMType() {
-		if(key==null) return("V");
+//		if(key==null) return("V");
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return("V");
+		}
 //		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
 		if(this.equals(LongReal)) return("D");
 		if(this.equals(Real)) return("F");
@@ -539,7 +619,7 @@ public class Type extends SyntaxClass implements Externalizable {
 				 return("Lsimula/runtime/"+refIdent+";");
 			else return("L"+Global.packetName+"/"+refIdent+";");
 		}
-		System.out.println("KeyWord="+key.getKeyWord());
+		System.out.println("KeyWord="+keyWord);
 		Util.IERR("NOT IMPLEMENTED: "+this);
 		return(null);
 	}
@@ -575,19 +655,19 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the resulting Class Descriptor.
 	 */
 	public ClassDesc toClassDesc(Declaration declaredIn) {
-		if(key.getKeyWord()==KeyWord.REF) {
+		if(keyWord == Type.T_REF) {
 			// CD.RTS_RTObject
 			String refID=getJavaRefIdent();
 //			String refID=getRefIdent();
 //			System.out.println("Type.toClassDesc: refID="+refID);
 			if(declaredIn != null) {
 //				System.out.println("Type.toClassDesc: refID="+refID+", declaredIn.declarationKind="+declaredIn.declarationKind);
-				if(declaredIn.declarationKind == Declaration.Kind.StandardClass) {
+				if(declaredIn.declarationKind == ObjectKind.StandardClass) {
 					ClassDesc classDesc = ClassDesc.of("simula.runtime."+refID);
 //					System.out.println("Type.toClassDesc: "+ this +"  ==>  classDesc = ClassDesc.of(\"simula.runtime."+refID+"\")");
 					return(classDesc);
 				}
-				if(declaredIn.declarationKind == Declaration.Kind.MemberMethod) {
+				if(declaredIn.declarationKind == ObjectKind.MemberMethod) {
 					ClassDesc classDesc = ClassDesc.of("simula.runtime."+refID);
 //					System.out.println("Type.toClassDesc: "+ this +"  ==>  classDesc = ClassDesc.of(\"simula.runtime."+refID+"\")");
 					return(classDesc);
@@ -603,7 +683,11 @@ public class Type extends SyntaxClass implements Externalizable {
 	 * @return the resulting Class Descriptor.
 	 */
 	public ClassDesc toClassDesc() {
-		if(key==null) return(ConstantDescs.CD_void);
+//		if(key==null) return(ConstantDescs.CD_void);
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return(ConstantDescs.CD_void);
+		}
 //		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
 		if(this.equals(LongReal))  return(ConstantDescs.CD_double);
 		if(this.equals(Real))      return(ConstantDescs.CD_float);
@@ -638,7 +722,11 @@ public class Type extends SyntaxClass implements Externalizable {
 		}
 	}
 	public ClassDesc toObjectClassDesc() {
-		if(key==null) return(ConstantDescs.CD_void);
+//		if(key==null) return(ConstantDescs.CD_void);
+		if(keyWord == 0) {
+			Util.IERR("FOREKOMMER DETTE ?");
+			return(ConstantDescs.CD_void);
+		}
 //		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
 		if(this.equals(LongReal))  return(ConstantDescs.CD_Double);
 		if(this.equals(Real))      return(ConstantDescs.CD_Float);
@@ -731,7 +819,7 @@ public class Type extends SyntaxClass implements Externalizable {
 	 */
 	public ClassSignature toArrayClassSignature() {
 		ClassSignature CS = null;
-		if(key.getKeyWord()==KeyWord.REF) {
+		if(keyWord == Type.T_REF) {
 			String T = this.toJVMType();
 //			System.out.println("Type.toClassSignature: "+this.toJVMType());
 //			CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_RTObject$RTS_REF_ARRAY<LsimulaTestPrograms/adHoc03_A;>;");
@@ -771,90 +859,73 @@ public class Type extends SyntaxClass implements Externalizable {
 	}
 
 	@Override
+//	public String toString() {
+//		if(key==null) return("null");
+//		if(key.getKeyWord()==KeyWord.REF) {
+//			if(declaredIn==null) {
+//				if(qual==null) return("ref("+key.getValue()+')');
+//				return("ref("+key.getValue()+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
+//			}
+//			return("ref("+key.getValue()+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
+//		}
+//		if(this.equals(LongReal)) return("LONG REAL"); 
+//		return(key.toString().toUpperCase());
+//	}
 	public String toString() {
-		if(key==null) return("null");
-		if(key.getKeyWord()==KeyWord.REF) {
+//		if(key==null) return("null");
+		if(keyWord == Type.T_REF) {
 			if(declaredIn==null) {
-				if(qual==null) return("ref("+key.getValue()+')');
-				return("ref("+key.getValue()+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
+				if(qual==null) return("ref("+classIdent+')');
+				return("ref("+classIdent+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
 			}
-			return("ref("+key.getValue()+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
+			return("ref("+classIdent+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
 		}
 		if(this.equals(LongReal)) return("LONG REAL"); 
-		return(key.toString().toUpperCase());
-	}
-
-	// ***********************************************************************************************
-	// *** Attribute File I/O
-	// ***********************************************************************************************
-
-//	public static void outType(Type type,DataOutput oupt) throws IOException {
-	public static void outType(Type type,ObjectOutput oupt) throws IOException {
-		if(Option.NEW_ATTR_FILE) {
-			if(type == null) {
-				oupt.writeInt(KeyWord.NONE);
-			} else {
-//				type.key.writeATTR(oupt);
-				oupt.writeInt(type.key.keyWord);
-				oupt.writeObject(type.key.value);
-			}
-//			oupt.writeObject(qual);
-//			oupt.writeObject(declaredIn);
-		} else {
-			oupt.writeObject(type);			
+		//return (KeyWord.edit(keyWord).toUpperCase());+
+		switch(keyWord) {
+			case T_INTEGER:		return "Integer";
+			case T_REAL:		return "Real";
+			case T_LONG_REAL:	return "Long Real";
+			case T_BOOLEAN:		return "Boolean";
+			case T_CHARACTER:	return "Character";
+			case T_TEXT:		return "Text";
+			case T_REF:			return "Ref()";
+			case T_PROCEDURE:	return "Procedure";
+			case T_LABEL:		return "Label";
 		}
-	}
-	
-	/**
-	 * Read a type from an ObjectInput file.
-	 * @param inpt the ObjectInput
-	 * @return the resulting Type
-	 * @throws IOException if an IOException occur
-	 * @throws ClassNotFoundException if the operation failed
-	 */
-	public static Type inType(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		if(Option.NEW_ATTR_FILE) {
-//			Token key=Token.readAttr(inpt);
-			int keyWord = inpt.readInt();
-			if(keyWord == KeyWord.NONE) return(null);
-			Object value = inpt.readObject();
-			Token key = new Token("",keyWord,value);
-
-			
-//			qual=(ClassDeclaration) inpt.readObject();
-//			declaredIn=(ConnectionBlock) inpt.readObject();
-			return(new Type(key));			
-		} else {
-			Type tp=(Type)inpt.readObject();
-			return(tp);
-		}
+		return "UNKNOWN";
 	}
 
-//	public static Type readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
-//		Token key=Token.readAttr(inpt);
+//	// ***********************************************************************************************
+//	// *** Attribute File I/O
+//	// ***********************************************************************************************
+//
+////	public static void outType(Type type,DataOutput oupt) throws IOException {
+//	public static void outType(Type type,AttrOutput oupt) throws IOException {
+//		if(type == null) {
+//			oupt.writeInt(-1);
+//		} else {
+//			oupt.writeInt(type.keyWord);
+//			oupt.writeString(type.classIdent);
+//		}
+////		oupt.writeObject(qual);
+////		oupt.writeObject(declaredIn);
+//	}
+//	
+//	/**
+//	 * Read a type from an ObjectInput file.
+//	 * @param inpt the AttrInput
+//	 * @return the resulting Type
+//	 * @throws IOException if an IOException occur
+//	 * @throws ClassNotFoundException if the operation failed
+//	 */
+//	public static Type inType(AttrInput inpt) throws IOException {
+//		int keyWord = inpt.readInt();
+//		if(keyWord == -1) return(null);
+//		String classIdent = inpt.readString();
 ////		qual=(ClassDeclaration) inpt.readObject();
 ////		declaredIn=(ConnectionBlock) inpt.readObject();
-//		return(new Type(key));
+//		return(new Type(keyWord,classIdent));			
 //	}
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		if(Option.NEW_ATTR_FILE) Util.IERR("");
-		oupt.writeObject(key);
-		oupt.writeObject(qual);
-		oupt.writeObject(declaredIn);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		if(Option.NEW_ATTR_FILE) Util.IERR("");
-		key = (Token)inpt.readObject();
-		qual = (ClassDeclaration) inpt.readObject();
-		declaredIn = (ConnectionBlock) inpt.readObject();
-	}
 	
 }

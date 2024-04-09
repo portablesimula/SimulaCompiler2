@@ -25,6 +25,7 @@ import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
@@ -82,10 +83,10 @@ public final class CallProcedure {
 		if(procedure.myVirtual!=null) {
 			// Call Remote Virtual Procedure
 			return(remoteVirtual(obj,func,procedure.myVirtual.virtualSpec));
-		} else if(procedure.declarationKind==Declaration.Kind.ContextFreeMethod) {
+		} else if(procedure.declarationKind==ObjectKind.ContextFreeMethod) {
 			// Call Remote Method
 			return(asRemoteMethod(obj,procedure,func));
-		} else if(procedure.declarationKind==Declaration.Kind.MemberMethod) {
+		} else if(procedure.declarationKind==ObjectKind.MemberMethod) {
 			// Call Remote Method
 			return(asRemoteMethod(obj,procedure,func));
 		}

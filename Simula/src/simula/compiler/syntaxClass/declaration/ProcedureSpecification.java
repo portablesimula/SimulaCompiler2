@@ -13,6 +13,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -61,7 +63,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class ProcedureSpecification implements Externalizable {
+public final class ProcedureSpecification {
 	
 	/**
 	 * The procedure identifier.
@@ -153,7 +155,7 @@ public final class ProcedureSpecification implements Externalizable {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
@@ -161,23 +163,61 @@ public final class ProcedureSpecification implements Externalizable {
 	public ProcedureSpecification() {
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write ProcedureSpecification: " + identifier);
-		oupt.writeUTF(identifier);
-		Type.outType(type,oupt);
+	public static void writeProcedureSpec(ProcedureSpecification spec,AttrOutput oupt) throws IOException {
+		if(spec == null) {
+			oupt.writeBoolean(false);
+		} else {
+			Util.TRACE_OUTPUT("BEGIN Write ProcedureSpecification: " + spec.identifier);
+			oupt.writeBoolean(true);
+			oupt.writeString(spec.identifier);
+			oupt.writeType(spec.type);
 
-		oupt.writeObject(parameterList);
+			// oupt.writeObject(parameterList);
+			oupt.writeInt(spec.parameterList.size());
+			for(Parameter par:spec.parameterList) {
+				par.writeParameter(oupt);
+			}
+		}
 	}
+	
+//	public static ProcedureSpecification readParameter(ObjectInput inpt) throws IOException {
+	public static ProcedureSpecification readProcedureSpec(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readProcedureSpec: ");
+		boolean present = inpt.readBoolean();
+		if(!present) return(null);
+		ProcedureSpecification spec = new ProcedureSpecification();
+		spec.identifier = inpt.readString();
+		spec.type = inpt.readType();
 
-	@Override
-	@SuppressWarnings("unchecked")
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		type = Type.inType(inpt);
-
-		parameterList = (Vector<Parameter>) inpt.readObject();
-		Util.TRACE_INPUT("END Read ProcedureSpecification: " + identifier);
+		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
+		int nPar = inpt.readInt();
+		for(int i=0;i<nPar;i++)
+			spec.parameterList.add(Parameter.readParameter(inpt));
+		Util.TRACE_INPUT("END Read ProcedureSpecification: " + spec.identifier);
+		return(spec);
 	}
+	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write ProcedureSpecification: " + identifier);
+//		oupt.writeString(identifier);
+//		oupt.writeType(type);
+//
+//		oupt.writeObject(parameterList);
+//	}
+//
+//	@Override
+//	@SuppressWarnings("unchecked")
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		type = inpt.readType();
+//
+//		parameterList = (Vector<Parameter>) inpt.readObject();
+//		Util.TRACE_INPUT("END Read ProcedureSpecification: " + identifier);
+//	}
 
 }

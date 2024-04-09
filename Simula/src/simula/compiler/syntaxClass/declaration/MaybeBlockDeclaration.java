@@ -20,8 +20,11 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
@@ -29,6 +32,7 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -83,7 +87,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		if (Option.TRACE_PARSE)	Util.TRACE("BlockStatement.createMainProgramBlock: line="+lineNumber+" "+Parse.prevToken);
 		MaybeBlockDeclaration module = new MaybeBlockDeclaration(Global.sourceName);
 		module.isMainModule = true;
-		module.declarationKind = Declaration.Kind.SimulaProgram;
+		module.declarationKind = ObjectKind.SimulaProgram;
 		module.expectMaybeBlock(lineNumber);
 		return (module);
 	}
@@ -118,12 +122,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 			Statement stm = Statement.expectStatement();
 			if (stm != null) statements.add(stm);
 		}
-		if (declarationKind != Declaration.Kind.SimulaProgram) {
+		if (declarationKind != ObjectKind.SimulaProgram) {
 			if (!declarationList.isEmpty()) {
-				declarationKind = Declaration.Kind.SubBlock;
+				declarationKind = ObjectKind.SubBlock;
 				modifyIdentifier("SubBlock" + line);
 			} else {
-				declarationKind = Declaration.Kind.CompoundStatement;
+				declarationKind = ObjectKind.CompoundStatement;
 				modifyIdentifier("CompoundStatement" + Global.sourceLineNumber);
 				if (!labelList.isEmpty())
 					moveLabelsFrom(this); // Label is also declaration
@@ -147,8 +151,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 //		DeclarationScope declaredIn = block.declaredIn;
 //		Vector<LabelDeclaration> labelList = block.labelList;
 //		DeclarationScope enc = declaredIn;
-//		while (enc.declarationKind == Declaration.Kind.CompoundStatement
-//				&& enc.declarationKind == Declaration.Kind.ConnectionBlock
+//		while (enc.declarationKind == ObjectKind.CompoundStatement
+//				&& enc.declarationKind == ObjectKind.ConnectionBlock
 //				&& enc.declarationList.isEmpty())
 //			enc = enc.declaredIn;
 //		for (LabelDeclaration lab : labelList) enc.labelList.add(lab);
@@ -158,8 +162,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		DeclarationScope declaredIn = block.declaredIn;
 		Vector<LabelDeclaration> labelList = block.labelList;
 		DeclarationScope enc = declaredIn;
-		while (enc.declarationKind == Declaration.Kind.CompoundStatement
-				&& enc.declarationKind == Declaration.Kind.ConnectionBlock
+		while (enc.declarationKind == ObjectKind.CompoundStatement
+				&& enc.declarationKind == ObjectKind.ConnectionBlock
 				&& enc.declarationList.isEmpty())
 			enc = enc.declaredIn;
 		for (LabelDeclaration lab : labelList) {
@@ -177,14 +181,14 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
 		if (externalIdent == null) externalIdent = edJavaClassName();
-		if (declarationKind != Declaration.Kind.CompoundStatement) currentRTBlockLevel++;
+		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 		for (Declaration dcl : declarationList)	dcl.doChecking();
 		for (Statement stm : statements) stm.doChecking();
 		doCheckLabelList(null);
 		Global.exitScope();
-		if (declarationKind != Declaration.Kind.CompoundStatement) currentRTBlockLevel--;
+		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -215,7 +219,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiled)	return;
-		if (declarationKind == Declaration.Kind.CompoundStatement)
+		if (declarationKind == ObjectKind.CompoundStatement)
 			 doCompoundStatementCoding();
 		else doSubBlockCoding();
 	}
@@ -298,7 +302,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + "(RTS_RTObject staticLink) {");
 		GeneratedJavaClass.code("super(staticLink);");
 		GeneratedJavaClass.code("BBLK();");
-		if (declarationKind == Declaration.Kind.SimulaProgram) GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
+		if (declarationKind == ObjectKind.SimulaProgram) GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
 		GeneratedJavaClass.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
 		GeneratedJavaClass.code("}");
@@ -408,7 +412,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 			codeBuilder.aload(0)
 				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
 
-			if (declarationKind == Declaration.Kind.SimulaProgram) {
+			if (declarationKind == ObjectKind.SimulaProgram) {
 				// BPRG("adHoc06");
 				codeBuilder
 					.aload(0)
@@ -432,7 +436,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiled)	return;
-		if (declarationKind == Declaration.Kind.CompoundStatement) {
+		if (declarationKind == ObjectKind.CompoundStatement) {
 			build_STM_BODY(codeBuilder);
 			return;
 		}
@@ -513,6 +517,30 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+		oupt.writeKind(declarationKind);
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
+	}
+	
+	public static MaybeBlockDeclaration readAttr(AttrInput inpt) throws IOException {
+		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
+		Util.TRACE_INPUT("BEGIN Read "+blk);
+		blk.identifier = inpt.readString();
+		blk.externalIdent = inpt.readString();
+		blk.type = inpt.readType();
+		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
+//		Util.IERR("SJEKK DETTE");
+		return(blk);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -527,7 +555,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	}
 
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		super.readExternal(inpt);
 		Global.setScope(this.declaredIn);

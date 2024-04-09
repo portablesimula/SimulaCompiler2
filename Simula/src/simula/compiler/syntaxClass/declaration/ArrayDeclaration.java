@@ -23,6 +23,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Enumeration;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -36,6 +38,7 @@ import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -105,7 +108,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class ArrayDeclaration extends Declaration implements Externalizable {
+public final class ArrayDeclaration extends Declaration {
 	// Type type; inherited
 
 	/**
@@ -126,7 +129,7 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 	 */
 	private ArrayDeclaration(final String identifier, final Type type, final Vector<BoundPair> boundPairList) {
 		super(identifier);
-		this.declarationKind = Declaration.Kind.ArrayDeclaration;
+		this.declarationKind = ObjectKind.ArrayDeclaration;
 		this.type = type;
 		this.boundPairList = boundPairList;
 		this.nDim = boundPairList.size();
@@ -548,31 +551,58 @@ public final class ArrayDeclaration extends Declaration implements Externalizabl
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
 	 */
 	public ArrayDeclaration() {
 		super(null);
-		this.declarationKind = Declaration.Kind.ArrayDeclaration;
+		this.declarationKind = ObjectKind.ArrayDeclaration;
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
+	public void writeAttr(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-		Type.outType(type,oupt);
+		oupt.writeKind(declarationKind);
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
 		oupt.writeInt(nDim);
 	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-		type = Type.inType(inpt);
-		nDim = inpt.readInt();
-		Util.TRACE_INPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
+	
+	public static ArrayDeclaration readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
+		ArrayDeclaration arr = new ArrayDeclaration();
+		arr.identifier = inpt.readString();
+		arr.externalIdent = inpt.readString();
+		arr.type = inpt.readType();
+		arr.nDim = inpt.readInt();
+		Util.TRACE_INPUT("Array: " + arr);
+		Util.IERR("SJEKK DETTE");
+		return(arr);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeInt(nDim);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+//		nDim = inpt.readInt();
+//		Util.TRACE_INPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
+//	}
+	
 }

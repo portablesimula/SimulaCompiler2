@@ -14,6 +14,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
@@ -27,6 +29,7 @@ import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -50,18 +53,21 @@ public final class RemoteVariable extends Expression {
 	
 	/**
 	 * The remote attribute's semantic meaning.
+	 * Set by doChecking.
 	 */
 	private Meaning remoteAttribute; // Set by doChecking
 	
 	/**
 	 * If the remoteAttribute is declared as a ProcedureDeclaration 'callRemoteProcedure' is the procedure to be called.
+	 * Set by doChecking.
 	 */
-	private ProcedureDeclaration callRemoteProcedure = null;
+	private ProcedureDeclaration callRemoteProcedure = null;  // Set by doChecking
 	
 	/**
 	 * If the remoteAttribute is declared as a VirtualSpecification 'callRemoteVirtual' is the procedure to be called.
+	 * Set by doChecking.
 	 */
-	private VirtualSpecification callRemoteVirtual = null;
+	private VirtualSpecification callRemoteVirtual = null;  // Set by doChecking
 	
 	/**
 	 * The object expression
@@ -279,45 +285,84 @@ public final class RemoteVariable extends Expression {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
-	public RemoteVariable() {
-	}
+	private RemoteVariable() {}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeRemoteVariable: " + this);
+		oupt.writeKind(ObjectKind.RemoteVariable);
 		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
-		oupt.writeObject(remoteAttribute);
-		oupt.writeObject(callRemoteProcedure);
-		oupt.writeObject(callRemoteVirtual);
-		oupt.writeObject(obj);
-		oupt.writeObject(var);
-		oupt.writeObject(accessRemoteArray);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+//		oupt.writeObj(remoteAttribute);
+//		oupt.writeObj(callRemoteProcedure);
+//		oupt.writeObj(callRemoteVirtual);
+		oupt.writeObj(obj);
+		oupt.writeObj(var);
+//		oupt.writeBoolean(accessRemoteArray);
 	}
 	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		remoteAttribute = (Meaning) inpt.readObject();
-		callRemoteProcedure = (ProcedureDeclaration) inpt.readObject();
-		callRemoteVirtual = (VirtualSpecification) inpt.readObject();
-		obj = (Expression) inpt.readObject();
-		var = (VariableExpression) inpt.readObject();
-		accessRemoteArray = (boolean) inpt.readObject();
+	public static RemoteVariable readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
+		RemoteVariable rem = new RemoteVariable();
+		rem.lineNumber = inpt.readInt();
+		rem.type = inpt.readType();
+		rem.backLink = (SyntaxClass) inpt.readObj();
+//		rem.remoteAttribute = (Meaning) inpt.readObj();
+//		rem.callRemoteProcedure = (ProcedureDeclaration) inpt.readObj();
+//		rem.callRemoteVirtual = (VirtualSpecification) inpt.readObj();
+		rem.obj = (Expression) inpt.readObj();
+		rem.var = (VariableExpression) inpt.readObj();
+//		rem.accessRemoteArray = inpt.readBoolean();
+		Util.TRACE_INPUT("readRemoteVariable: " + rem);
+		return(rem);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public RemoteVariable() {
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
+//		oupt.writeObject(remoteAttribute);
+//		oupt.writeObject(callRemoteProcedure);
+//		oupt.writeObject(callRemoteVirtual);
+//		oupt.writeObject(obj);
+//		oupt.writeObject(var);
+//		oupt.writeObject(accessRemoteArray);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
+//		remoteAttribute = (Meaning) inpt.readObject();
+//		callRemoteProcedure = (ProcedureDeclaration) inpt.readObject();
+//		callRemoteVirtual = (VirtualSpecification) inpt.readObject();
+//		obj = (Expression) inpt.readObject();
+//		var = (VariableExpression) inpt.readObject();
+//		accessRemoteArray = (boolean) inpt.readObject();
+//	}
 	
 
 }

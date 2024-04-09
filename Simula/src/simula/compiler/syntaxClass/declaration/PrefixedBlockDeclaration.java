@@ -23,6 +23,7 @@ import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -89,7 +90,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public static PrefixedBlockDeclaration expectPrefixedBlock(final VariableExpression blockPrefix,boolean isMainModule) {
 		PrefixedBlockDeclaration block=new PrefixedBlockDeclaration(blockPrefix,isMainModule);
 		block.lineNumber=Parse.prevToken.lineNumber;
-		block.declarationKind=Declaration.Kind.PrefixedBlock;
+		block.declarationKind=ObjectKind.PrefixedBlock;
 		Util.ASSERT(blockPrefix != null,"blockPrefix == null");
 		block.blockPrefix = blockPrefix;
 		block.prefix = blockPrefix.identifier;

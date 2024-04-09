@@ -13,13 +13,49 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
+import simula.compiler.syntaxClass.declaration.ClassDeclaration;
+import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
+import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
+import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
-import simula.compiler.syntaxClass.declaration.StandardProcedure;
-import simula.compiler.syntaxClass.expression.Expression;
-import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.syntaxClass.expression.ArithmeticExpression;
+import simula.compiler.syntaxClass.expression.AssignmentOperation;
+import simula.compiler.syntaxClass.expression.BooleanExpression;
+import simula.compiler.syntaxClass.expression.ConditionalExpression;
+import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.syntaxClass.expression.LocalObject;
+import simula.compiler.syntaxClass.expression.ObjectGenerator;
+import simula.compiler.syntaxClass.expression.ObjectRelation;
+import simula.compiler.syntaxClass.expression.QualifiedObject;
+import simula.compiler.syntaxClass.expression.RelationalOperation;
+import simula.compiler.syntaxClass.expression.RemoteVariable;
+import simula.compiler.syntaxClass.expression.TextExpression;
+import simula.compiler.syntaxClass.expression.TypeConversion;
+import simula.compiler.syntaxClass.expression.UnaryOperation;
+import simula.compiler.syntaxClass.expression.VariableExpression;
+import simula.compiler.syntaxClass.statement.ActivationStatement;
+import simula.compiler.syntaxClass.statement.BlockStatement;
+import simula.compiler.syntaxClass.statement.ConditionalStatement;
+import simula.compiler.syntaxClass.statement.ConnectionStatement;
+import simula.compiler.syntaxClass.statement.DummyStatement;
+import simula.compiler.syntaxClass.statement.ForStatement;
+import simula.compiler.syntaxClass.statement.GotoStatement;
+import simula.compiler.syntaxClass.statement.InlineStatement;
+import simula.compiler.syntaxClass.statement.InnerStatement;
+import simula.compiler.syntaxClass.statement.LabeledStatement;
+import simula.compiler.syntaxClass.statement.ProgramModule;
+import simula.compiler.syntaxClass.statement.StandaloneExpression;
+import simula.compiler.syntaxClass.statement.SwitchStatement;
+import simula.compiler.syntaxClass.statement.WhileStatement;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -102,6 +138,15 @@ public abstract class SyntaxClass implements Externalizable {
 	 */
 	protected boolean CHECKED = false;
 
+	/**
+	 * Object sequence number used by Attribute File I/O
+	 * to fixup object references.
+	 * <p>
+	 * During Attribute File Input it is index to the Object Reference Table.
+	 * See: Global.
+	 */
+	public int SEQU;
+	
 	/**
 	 * The source line number
 	 */
@@ -236,6 +281,21 @@ public abstract class SyntaxClass implements Externalizable {
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.IERR("Method 'writeAttr' needs a redefinition in "+this.getClass().getSimpleName());
+	}
+
+	public static SyntaxClass readAttr(AttrInput inpt) throws IOException {
+		Util.IERR("Method 'readAttr' needs a redefiniton");
+		return(null);
+	}
+
+	
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 
@@ -248,7 +308,7 @@ public abstract class SyntaxClass implements Externalizable {
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();

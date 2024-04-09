@@ -22,6 +22,7 @@ import simula.compiler.syntaxClass.declaration.*;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -97,11 +98,11 @@ public final class BuildProcedureCall {
 		if(procedure.myVirtual!=null) {
 			// Call Remote Virtual Procedure
 			remoteVirtual(obj,func,procedure.myVirtual.virtualSpec,codeBuilder);
-		} else if(procedure.declarationKind==Declaration.Kind.ContextFreeMethod) {
+		} else if(procedure.declarationKind==ObjectKind.ContextFreeMethod) {
 			// Call Remote Method
 			//return(asRemoteMethod(obj,procedure,func));
 			Util.IERR("NOT IMPL");
-		} else if(procedure.declarationKind==Declaration.Kind.MemberMethod) {
+		} else if(procedure.declarationKind==ObjectKind.MemberMethod) {
 			// Call Remote Method
 			asRemoteMethod(obj,procedure,func,codeBuilder);
 		} else {
@@ -141,7 +142,7 @@ public final class BuildProcedureCall {
 	private static void asRemoteMethod(final Expression obj, final ProcedureDeclaration pro, final VariableExpression func,CodeBuilder codeBuilder) {
 		BlockDeclaration declaredIn = (BlockDeclaration)pro.declaredIn;
 //		System.out.println("BuildProcedureCall: obj="+obj+", procedure="+pro+", func="+func);
-		if(declaredIn.declarationKind == Declaration.Kind.StandardClass) {
+		if(declaredIn.declarationKind == ObjectKind.StandardClass) {
 			// Call Standard Member Method
 			callRemoteStandardProcedure(obj,(StandardProcedure) pro,func,codeBuilder);
 			if(pro.type != null) {
@@ -282,7 +283,7 @@ public final class BuildProcedureCall {
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
 //		System.out.println("BuildeProcedureCall.callStandardProcedure: "+pro+", pro.declarationKind="+pro.declarationKind);
-		if(pro.declarationKind == Declaration.Kind.MemberMethod) { // EG: File attribute procedure
+		if(pro.declarationKind == ObjectKind.MemberMethod) { // EG: File attribute procedure
 			if (meaning.isConnected()) {
 				Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
 				callRemoteStandardProcedure(inspectedVariable, pro, variable, codeBuilder);
@@ -299,7 +300,7 @@ public final class BuildProcedureCall {
 				ClassDesc owner = meaning.declaredIn.getClassDesc();
 				codeBuilder.invokevirtual(pool.methodRefEntry(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams)));
 			}
-		} else if(pro.declarationKind == Declaration.Kind.ContextFreeMethod) {
+		} else if(pro.declarationKind == ObjectKind.ContextFreeMethod) {
 			// PUSH Parameter values onto the stack
 			if (variable.checkedParams != null) {
 				int n=variable.checkedParams.size();

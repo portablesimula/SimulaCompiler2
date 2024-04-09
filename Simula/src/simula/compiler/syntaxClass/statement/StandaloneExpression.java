@@ -13,12 +13,15 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -126,32 +129,53 @@ public final class StandaloneExpression extends Statement implements Externaliza
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
 	 */
-	public StandaloneExpression() {
+	private StandaloneExpression() {
 		super(0);
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName()+": "+this);
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeStandaloneExpression: " + this);
+		oupt.writeKind(ObjectKind.StandaloneExpression);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(expression);
+		oupt.writeObj(expression);
 	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		expression = (Expression) inpt.readObject();
+
+	public static StandaloneExpression readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readStandaloneExpression: ");
+		StandaloneExpression stm = new StandaloneExpression();
+		stm.lineNumber = inpt.readInt();
+		stm.expression = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("StandaloneExpression: " + stm);
+		return(stm);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName()+": "+this);
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(expression);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		expression = (Expression) inpt.readObject();
+//	}
 	
 
 }

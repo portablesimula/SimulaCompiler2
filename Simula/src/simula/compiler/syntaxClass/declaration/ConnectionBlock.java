@@ -25,6 +25,7 @@ import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -77,7 +78,7 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 	 */
 	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
 		super("Connection block at line " + (Global.sourceLineNumber - 1));
-		declarationKind = Declaration.Kind.ConnectionBlock;
+		declarationKind = ObjectKind.ConnectionBlock;
 		this.inspectedVariable = inspectedVariable;
 		this.whenClassIdentifier = whenClassIdentifier;
 	}
@@ -238,78 +239,78 @@ public final class ConnectionBlock extends DeclarationScope implements Externali
 		this.inspectedVariable = null;
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		super.writeExternal(oupt);
-
-		// SyntaxClass
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-		
-		// Declaration
-		Type.outType(type,oupt);
-		oupt.writeObject(isProtected);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-//		oupt.writeObject(declaredIn);
-//		oupt.writeObject(declarationKind);
-//		oupt.writeInt(slot);
-		
-		// DeclarationScope
-		oupt.writeInt(sourceBlockLevel);
-		oupt.writeInt(ctBlockLevel);
-		oupt.writeInt(rtBlockLevel);
-		oupt.writeBoolean(hasLocalClasses);
-		oupt.writeObject(declarationList);
-		oupt.writeObject(labelList);
-		
-		// ConnectionBlock
-		oupt.writeObject(statement);
-		oupt.writeUTF(whenClassIdentifier);
-		oupt.writeObject(whenClassDeclaration);
-		oupt.writeObject(inspectedVariable);
-		oupt.writeObject(classDeclaration);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		declarationKind = Declaration.Kind.ConnectionBlock;
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		super.readExternal(inpt);
-
-		// SyntaxClass
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-
-		// Declaration
-		type = Type.inType(inpt);
-		isProtected = (ProtectedSpecification) inpt.readObject();
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-//		declaredIn = (DeclarationScope) inpt.readObject();
-//		declarationKind = (Kind) inpt.readObject();
-//		slot = inpt.readInt();
-
-		// DeclarationScope
-		sourceBlockLevel = inpt.readInt();
-		ctBlockLevel = inpt.readInt();
-		rtBlockLevel = inpt.readInt();
-		hasLocalClasses = inpt.readBoolean();
-		declarationList = (DeclarationList) inpt.readObject();
-		labelList = (Vector<LabelDeclaration>) inpt.readObject();
-		
-		// ConnectionBlock
-		statement = (Statement) inpt.readObject();
-		whenClassIdentifier = inpt.readUTF();
-		whenClassDeclaration = (Declaration) inpt.readObject();
-		inspectedVariable = (VariableExpression) inpt.readObject();
-		classDeclaration = (ClassDeclaration) inpt.readObject();
-
-	}
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+////		super.writeExternal(oupt);
+//
+//		// SyntaxClass
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		
+//		// Declaration
+//		oupt.writeType(type);
+//		oupt.writeObject(isProtected);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+////		oupt.writeObject(declaredIn);
+////		oupt.writeObject(declarationKind);
+////		oupt.writeInt(slot);
+//		
+//		// DeclarationScope
+//		oupt.writeInt(sourceBlockLevel);
+//		oupt.writeInt(ctBlockLevel);
+//		oupt.writeInt(rtBlockLevel);
+//		oupt.writeBoolean(hasLocalClasses);
+//		oupt.writeObject(declarationList);
+//		oupt.writeObject(labelList);
+//		
+//		// ConnectionBlock
+//		oupt.writeObject(statement);
+//		oupt.writeString(whenClassIdentifier);
+//		oupt.writeObject(whenClassDeclaration);
+//		oupt.writeObject(inspectedVariable);
+//		oupt.writeObject(classDeclaration);
+//	}
+//
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		declarationKind = ObjectKind.ConnectionBlock;
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+////		super.readExternal(inpt);
+//
+//		// SyntaxClass
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//
+//		// Declaration
+//		type = inpt.readType();
+//		isProtected = (ProtectedSpecification) inpt.readObject();
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+////		declaredIn = (DeclarationScope) inpt.readObject();
+////		declarationKind = (Kind) inpt.readObject();
+////		slot = inpt.readInt();
+//
+//		// DeclarationScope
+//		sourceBlockLevel = inpt.readInt();
+//		ctBlockLevel = inpt.readInt();
+//		rtBlockLevel = inpt.readInt();
+//		hasLocalClasses = inpt.readBoolean();
+//		declarationList = (DeclarationList) inpt.readObject();
+//		labelList = (Vector<LabelDeclaration>) inpt.readObject();
+//		
+//		// ConnectionBlock
+//		statement = (Statement) inpt.readObject();
+//		whenClassIdentifier = inpt.readString();
+//		whenClassDeclaration = (Declaration) inpt.readObject();
+//		inspectedVariable = (VariableExpression) inpt.readObject();
+//		classDeclaration = (ClassDeclaration) inpt.readObject();
+//
+//	}
 
 
 }

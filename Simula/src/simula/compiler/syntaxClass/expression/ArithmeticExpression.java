@@ -13,12 +13,15 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -326,39 +329,39 @@ public final class ArithmeticExpression extends Expression {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ArithmeticExpression() {
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeArithmeticExpression: " + this);
+		oupt.writeKind(ObjectKind.ArithmeticExpression);
 		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
-		oupt.writeObject(lhs);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeObj(lhs);
 		oupt.writeInt(opr);
-		oupt.writeObject(rhs);
+		oupt.writeObj(rhs);
 	}
 	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		lhs = (Expression) inpt.readObject();
-		opr = inpt.readInt();
-		rhs = (Expression) inpt.readObject();
+	public static ArithmeticExpression readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readArithmeticExpression: ");
+		ArithmeticExpression expr = new ArithmeticExpression();
+		expr.lineNumber = inpt.readInt();
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		expr.lhs = (Expression) inpt.readObj();
+		expr.opr = inpt.readInt();
+		expr.rhs = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("readArithmeticExpression: " + expr);
+		return(expr);
 	}
+
 	
 
 }

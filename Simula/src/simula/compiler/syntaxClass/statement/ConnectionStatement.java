@@ -147,7 +147,7 @@ public final class ConnectionStatement extends Statement {
 		inspectedVariable = new VariableExpression(ident);
 		inspectVariableDeclaration = new SimpleVariableDeclaration(Type.Ref("RTObject"), ident);
 		DeclarationScope scope = Global.getCurrentScope();
-		while (scope.declarationKind == null || scope instanceof ConnectionBlock) {
+		while (scope.declarationKind == 0 || scope instanceof ConnectionBlock) {
 			scope = scope.declaredIn;
 		}
 		scope.declarationList.add(inspectVariableDeclaration);
@@ -477,7 +477,7 @@ public final class ConnectionStatement extends Statement {
 	
 	@SuppressWarnings("unchecked")
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();

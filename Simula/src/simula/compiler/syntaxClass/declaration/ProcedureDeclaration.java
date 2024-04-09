@@ -29,6 +29,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.List;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -42,6 +44,7 @@ import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -90,7 +93,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public class ProcedureDeclaration extends BlockDeclaration implements Externalizable {
+public class ProcedureDeclaration extends BlockDeclaration {
 
 	/**
 	 * Result in case of Type Procedure 
@@ -119,7 +122,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	 * @param identifier procedure identifier
 	 * @param declarationKind procedure or switch
 	 */
-	protected ProcedureDeclaration(final String identifier,final Declaration.Kind declarationKind) {
+	protected ProcedureDeclaration(final String identifier,final int declarationKind) {
 		super(identifier);
 		this.declarationKind = declarationKind;
 	}
@@ -148,8 +151,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	 * @return a newly created ProcedureDeclaration
 	 */
 	public static ProcedureDeclaration expectProcedureDeclaration(final Type type) {
-		Declaration.Kind declarationKind = Declaration.Kind.Procedure;
-		ProcedureDeclaration proc = new ProcedureDeclaration(null, declarationKind);
+		ProcedureDeclaration proc = new ProcedureDeclaration(null, ObjectKind.Procedure);
 		proc.lineNumber=Parse.prevToken.lineNumber;
 		proc.type = type;
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ProcedureDeclaration, type=" + type);
@@ -312,8 +314,8 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (declarationKind == Declaration.Kind.ContextFreeMethod) externalIdent = this.identifier;
-		if (declarationKind == Declaration.Kind.MemberMethod) externalIdent = this.identifier;
+		if (declarationKind == ObjectKind.ContextFreeMethod) externalIdent = this.identifier;
+		if (declarationKind == ObjectKind.MemberMethod) externalIdent = this.identifier;
 		else if (externalIdent == null)	externalIdent = edJavaClassName();
 
 		currentRTBlockLevel++;
@@ -325,7 +327,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 				declarationList.add(result);
 			}
 			int prfx = 0;// prefixLevel();
-			if (declarationKind == Declaration.Kind.Procedure)
+			if (declarationKind == ObjectKind.Procedure)
 				for (Parameter par : this.parameterList) par.setExternalIdentifier(prfx);
 			for (Declaration par : this.parameterList) par.doChecking();
 			for (Declaration dcl : declarationList)	dcl.doChecking();
@@ -377,9 +379,9 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiled)	return;
 		switch (declarationKind) {
-		case ContextFreeMethod -> doMethodJavaCoding("static ", false);
-		case MemberMethod -> doMethodJavaCoding("", true);
-		case Procedure -> doProcedureCoding();
+		case ObjectKind.ContextFreeMethod -> doMethodJavaCoding("static ", false);
+		case ObjectKind.MemberMethod -> doMethodJavaCoding("", true);
+		case ObjectKind.Procedure -> doProcedureCoding();
 		default -> Util.IERR("Impossible Situation !");
 		}
 	}
@@ -463,7 +465,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (declarationKind == Declaration.Kind.Procedure && type != null) {
+		if (declarationKind == ObjectKind.Procedure && type != null) {
 			GeneratedJavaClass.code("@Override");
 			GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
 		}
@@ -480,7 +482,7 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList) decl.doJavaCoding();
-		if (declarationKind == Declaration.Kind.Procedure && hasParameter) doCodePrepareFormal();
+		if (declarationKind == ObjectKind.Procedure && hasParameter) doCodePrepareFormal();
 		doCodeConstructor();
 		codeProcedureBody();
 		javaModule.codeProgramInfo();
@@ -1077,21 +1079,29 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public ProcedureDeclaration() {	super(null); }
 
-	public void writeAttr(ObjectOutput oupt) throws IOException {
-//		this.print(10);
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
-		oupt.writeBoolean(false); // Mark: This is a ProcedureDeclaration
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-//		Type.outType(type,oupt);
-		Type.outType(type,oupt);
+		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+		oupt.writeType(type);
 //		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		oupt.writeObject(declarationKind);
+		oupt.writeKind(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
 
-		oupt.writeObject(parameterList);
+		//oupt.writeObject(parameterList);
+		oupt.writeInt(parameterList.size());
+		for(Parameter par:parameterList) par.writeParameter(oupt);
+		
+		
 //		oupt.writeObject(labelList);
 //		oupt.writeObject(declarationList);
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
@@ -1112,23 +1122,27 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ProcedureDeclaration readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public static ProcedureDeclaration readAttr(AttrInput inpt) throws IOException {
 //		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
-		String identifier = inpt.readUTF();
-		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, Declaration.Kind.Procedure);
+		String identifier = inpt.readString();
+		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
 
-		System.out.println("ProcedureDeclaration.readAttr: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
-		pro.print(2);
+//		System.out.println("ProcedureDeclaration.readAttr: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
+//		pro.print(2);
 //		Util.IERR("");
 
-		pro.externalIdent = inpt.readUTF();
-		pro.type=Type.inType(inpt);
+		pro.externalIdent = inpt.readString();
+		pro.type=inpt.readType();
 //		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		pro.declarationKind = (Kind) inpt.readObject();
+		pro.declarationKind = inpt.readInt();
 		pro.rtBlockLevel = inpt.readInt();
 		pro.hasLocalClasses = inpt.readBoolean();
 		
-		pro.parameterList=(Vector<Parameter>) inpt.readObject();
+		//pro.parameterList=(Vector<Parameter>) inpt.readObject();
+		int n = inpt.readInt();
+		for(int i=0;i<n;i++)
+			pro.parameterList.add(Parameter.readParameter(inpt));
+
 //		pro.labelList=(Vector<LabelDeclaration>) inpt.readObject();
 //		pro.declarationList=(DeclarationList) inpt.readObject();
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
@@ -1136,55 +1150,51 @@ public class ProcedureDeclaration extends BlockDeclaration implements Externaliz
 		return(pro);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public ProcedureDeclaration() {	super(null); }
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
-		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR(""+this+"  Declared in "+this.declaredIn);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-//		Type.outType(type,oupt);
-		Type.outType(type,oupt);
-//		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		oupt.writeObject(declarationKind);
-		oupt.writeInt(rtBlockLevel);
-		oupt.writeBoolean(hasLocalClasses);
-
-		oupt.writeObject(parameterList);
-		oupt.writeObject(labelList);
-//		oupt.writeObject(declarationList);
-		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
-	}
-
-	@Override
-	@SuppressWarnings("unchecked")
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR("");
-		externalIdent = inpt.readUTF();
-		type=Type.inType(inpt);
-//		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		declarationKind=(Kind) inpt.readObject();
-		rtBlockLevel=inpt.readInt();
-		hasLocalClasses=inpt.readBoolean();
-		
-		parameterList=(Vector<Parameter>) inpt.readObject();
-		labelList=(Vector<LabelDeclaration>) inpt.readObject();
-//		declarationList=(DeclarationList) inpt.readObject();
-		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-		
-//		if(identifier.equals("outtext"))
-//		System.out.println("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-		
-		Global.setScope(this.declaredIn);
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
+//		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR(""+this+"  Declared in "+this.declaredIn);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+////		oupt.writeType(type);
+//		oupt.writeType(type);
+////		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+//		oupt.writeInt(declarationKind);
+//		oupt.writeInt(rtBlockLevel);
+//		oupt.writeBoolean(hasLocalClasses);
+//
+//		oupt.writeObject(parameterList);
+//		oupt.writeObject(labelList);
+////		oupt.writeObject(declarationList);
+//		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
+//	}
+//
+//	@Override
+//	@SuppressWarnings("unchecked")
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+//		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR("");
+//		externalIdent = inpt.readString();
+//		type=inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
+//		declarationKind = inpt.readInt();
+//		rtBlockLevel=inpt.readInt();
+//		hasLocalClasses=inpt.readBoolean();
+//		
+//		parameterList=(Vector<Parameter>) inpt.readObject();
+//		labelList=(Vector<LabelDeclaration>) inpt.readObject();
+////		declarationList=(DeclarationList) inpt.readObject();
+//		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+//		
+////		if(identifier.equals("outtext"))
+////		System.out.println("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
+//		
+//		Global.setScope(this.declaredIn);
+//	}
 
 }

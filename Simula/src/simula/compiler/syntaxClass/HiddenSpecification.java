@@ -12,7 +12,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
+import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
@@ -32,7 +35,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class HiddenSpecification extends SyntaxClass implements Externalizable {
+public final class HiddenSpecification extends SyntaxClass {
 
 	/**
 	 * The hidden identifier.
@@ -166,7 +169,7 @@ public final class HiddenSpecification extends SyntaxClass implements Externaliz
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
@@ -174,18 +177,36 @@ public final class HiddenSpecification extends SyntaxClass implements Externaliz
 	public HiddenSpecification() {
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("ProtectedSpecification: " + identifier);
-		oupt.writeUTF(identifier);
+	public void writeHiddenSpecification(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
+		oupt.writeString(identifier);
+	}
+	
+	public static HiddenSpecification readHiddenSpecification(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readHiddenSpecification: ");
+		HiddenSpecification spec = new HiddenSpecification();
+		spec.identifier = inpt.readString();
+		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
+		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
+		return(spec);
 	}
 
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		this.definedIn = (ClassDeclaration) Global.getCurrentScope();
-		Util.TRACE_INPUT("ProtectedSpecification: " + identifier);
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("ProtectedSpecification: " + identifier);
+//		oupt.writeString(identifier);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		this.definedIn = (ClassDeclaration) Global.getCurrentScope();
+//		Util.TRACE_INPUT("ProtectedSpecification: " + identifier);
+//	}
 
 
 }

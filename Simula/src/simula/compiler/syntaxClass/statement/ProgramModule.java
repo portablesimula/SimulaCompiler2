@@ -24,6 +24,7 @@ import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -85,8 +86,8 @@ public final class ProgramModule extends Statement {
 	 * @return the relative file name
 	 */
 	public String getRelativeAttributeFileName() {
-		if(module.declarationKind==Declaration.Kind.Class) return(Global.packetName+"/CLASS.AF");
-		if(module.declarationKind==Declaration.Kind.Procedure) return(Global.packetName+"/PROCEDURE.AF");
+		if(module.declarationKind==ObjectKind.Class) return(Global.packetName+"/CLASS.AF");
+		if(module.declarationKind==ObjectKind.Procedure) return(Global.packetName+"/PROCEDURE.AF");
 		else return(null);
 	}
 	  
@@ -95,8 +96,8 @@ public final class ProgramModule extends Statement {
 	 * @return true if this program module is executable
 	 */
 	public boolean isExecutable() {
-		if(module.declarationKind==Declaration.Kind.SimulaProgram) return(true);
-		if(module.declarationKind==Declaration.Kind.PrefixedBlock) return(true);
+		if(module.declarationKind==ObjectKind.SimulaProgram) return(true);
+		if(module.declarationKind==ObjectKind.PrefixedBlock) return(true);
 		else return(false);
 	}
 

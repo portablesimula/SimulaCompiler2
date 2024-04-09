@@ -20,6 +20,7 @@ import java.lang.constant.MethodTypeDesc;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
@@ -32,7 +33,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class VirtualMatch extends Declaration implements Externalizable {
+public final class VirtualMatch extends Declaration {
 	
 	/**
 	 * The matching ProcedureDeclaration. Set during doChecking.
@@ -51,7 +52,7 @@ public final class VirtualMatch extends Declaration implements Externalizable {
 	 */
 	VirtualMatch(final VirtualSpecification virtualSpec, final ProcedureDeclaration match) {
 		super(virtualSpec.identifier);
-		this.declarationKind = Declaration.Kind.VirtualMatch;
+		this.declarationKind = ObjectKind.VirtualMatch;
 		// NOTE: Called during Checking
 		this.virtualSpec = virtualSpec;
 		this.match = match;
@@ -113,26 +114,26 @@ public final class VirtualMatch extends Declaration implements Externalizable {
 	 */
 	public VirtualMatch() {
 		super(null);
-		this.declarationKind = Declaration.Kind.VirtualMatch;
+		this.declarationKind = ObjectKind.VirtualMatch;
 	}
 
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("VirtualMatch: " + identifier);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-		Util.TRACE_INPUT("VirtualMatch: " + identifier);
-		match = ((ClassDeclaration) this.declaredIn).findLocalProcedure(identifier);
-		if (match != null) {
-			virtualSpec = VirtualSpecification.getVirtualSpecification(match); // AdHoc
-		} else
-			Util.error("Malformed Attribute File (at VirtualMatch " + identifier + ")");
-	}
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("VirtualMatch: " + identifier);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		Util.TRACE_INPUT("VirtualMatch: " + identifier);
+//		match = ((ClassDeclaration) this.declaredIn).findLocalProcedure(identifier);
+//		if (match != null) {
+//			virtualSpec = VirtualSpecification.getVirtualSpecification(match); // AdHoc
+//		} else
+//			Util.error("Malformed Attribute File (at VirtualMatch " + identifier + ")");
+//	}
 
 }

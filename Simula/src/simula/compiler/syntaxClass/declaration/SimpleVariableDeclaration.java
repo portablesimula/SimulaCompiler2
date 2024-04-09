@@ -18,6 +18,8 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -27,6 +29,7 @@ import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -82,7 +85,7 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 	 */
 	public SimpleVariableDeclaration(final Type type, final String identifier) {
 		super(identifier);
-		this.declarationKind = Declaration.Kind.SimpleVariableDeclaration;
+		this.declarationKind = ObjectKind.SimpleVariableDeclaration;
 		this.type = type;
 	}
 
@@ -228,16 +231,28 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 //              .iconst_0()
 //              .putfield(pool.fieldRefEntry(ClassDesc.of("simulaTestPrograms.adHoc06"),"iii", ConstantDescs.CD_int));
 		codeBuilder.aload(0);
-		if(type.getKeyWord()==KeyWord.REF)   codeBuilder.aconst_null();
-		else if(type.equals(Type.Integer))   codeBuilder.iconst_0();
-		else if(type.equals(Type.LongReal))  codeBuilder.dconst_0();
-		else if(type.equals(Type.Real))      codeBuilder.fconst_0();
-		else if(type.equals(Type.Boolean))   codeBuilder.iconst_0();
-		else if(type.equals(Type.Character)) codeBuilder.iconst_0();
-		else if(type.equals(Type.Text))      codeBuilder.aconst_null();
-		else if(type.equals(Type.Procedure)) codeBuilder.aconst_null();
-		else if(type.equals(Type.Label))     codeBuilder.aconst_null();
-		else Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
+//		if(type.getKeyWord()==KeyWord.REF)   codeBuilder.aconst_null();
+//		else if(type.equals(Type.Integer))   codeBuilder.iconst_0();
+//		else if(type.equals(Type.LongReal))  codeBuilder.dconst_0();
+//		else if(type.equals(Type.Real))      codeBuilder.fconst_0();
+//		else if(type.equals(Type.Boolean))   codeBuilder.iconst_0();
+//		else if(type.equals(Type.Character)) codeBuilder.iconst_0();
+//		else if(type.equals(Type.Text))      codeBuilder.aconst_null();
+//		else if(type.equals(Type.Procedure)) codeBuilder.aconst_null();
+//		else if(type.equals(Type.Label))     codeBuilder.aconst_null();
+//		else Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
+		switch(type.keyWord) {
+			case Type.T_BOOLEAN:
+			case Type.T_CHARACTER:
+			case Type.T_INTEGER:	codeBuilder.iconst_0(); break;
+			case Type.T_LONG_REAL:	codeBuilder.dconst_0(); break;
+			case Type.T_REAL:		codeBuilder.fconst_0(); break;
+			case Type.T_TEXT:
+			case Type.T_REF:
+			case Type.T_PROCEDURE:
+			case Type.T_LABEL:		codeBuilder.aconst_null(); break;
+			default: Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
+		}
 		
 		ClassDesc CD=type.toClassDesc();
 		codeBuilder
@@ -252,44 +267,83 @@ public class SimpleVariableDeclaration extends Declaration implements Externaliz
 
 	@Override
 	public String toString() {
-		String s = "" + type + ' ' + identifier;
+		String s = "Type=" + type + ", identifier=" + identifier;
 		if (constantElement != null)
-			s = s + " = " + constantElement.toString();
-		return (s);
+			s = s + ", constantElement=" + constantElement.toString();
+		return ("SimpleVariableDeclaration "+s);
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public SimpleVariableDeclaration() {
 		super(null);
-		this.declarationKind = Declaration.Kind.SimpleVariableDeclaration;
+		this.declarationKind = ObjectKind.SimpleVariableDeclaration;
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT(
-				"Variable: " + type + ' ' + identifier + ", constant=" + isConstant() + ", const=" + constantElement);
-		oupt.writeUTF(identifier);
-		oupt.writeUTF(externalIdent);
-		Type.outType(type,oupt);
-		oupt.writeBoolean(isConstant());
-		if (constantElement instanceof Constant)
-			oupt.writeObject(constantElement);
-		else
-			oupt.writeObject(null);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("Variable: " + this);
+		oupt.writeKind(declarationKind);
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
+		oupt.writeBoolean(constant);
+		if (constantElement instanceof Constant cnst) {
+			oupt.writeBoolean(true);
+			oupt.writeObj(cnst);
+		} else {
+			oupt.writeBoolean(false);
+		}
+	}
+	
+	public static SimpleVariableDeclaration readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
+		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
+		System.out.println("SimpleVariableDeclaration.readAttr: constantElement="+var.constantElement);
+
+		var.identifier = inpt.readString();
+		var.externalIdent = inpt.readString();
+		var.type = inpt.readType();
+		var.constant = inpt.readBoolean();
+		boolean present = inpt.readBoolean();
+		System.out.println("SimpleVariableDeclaration.readAttr: present="+present);
+		if(present) {
+			var.constantElement = (Constant) inpt.readObj();
+		}
+		Util.TRACE_INPUT("Variable: " + var);
+//		Util.IERR("SJEKK DENNE");
+		return(var);
 	}
 
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		identifier = inpt.readUTF();
-		externalIdent = inpt.readUTF();
-		type = Type.inType(inpt);
-		constant = inpt.readBoolean();
-		constantElement = (Constant) inpt.readObject();
-		Util.TRACE_INPUT("Variable: " + type + ' ' + identifier + ", constant=" + constant + ", constantElement=" + constantElement);
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT(
+//				"Variable: " + type + ' ' + identifier + ", constant=" + isConstant() + ", const=" + constantElement);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeBoolean(isConstant());
+//		if (constantElement instanceof Constant)
+//			oupt.writeObject(constantElement);
+//		else
+//			oupt.writeObject(null);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+//		constant = inpt.readBoolean();
+//		constantElement = (Constant) inpt.readObject();
+//		Util.TRACE_INPUT("Variable: " + type + ' ' + identifier + ", constant=" + constant + ", constantElement=" + constantElement);
+//	}
 }

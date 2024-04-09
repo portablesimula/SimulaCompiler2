@@ -23,6 +23,7 @@ import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -35,7 +36,7 @@ public final class Thunk extends DeclarationScope {
 	
 	private Thunk(int kind,Expression expr) {
 		super(Global.sourceName + "$THUNK$" + (++SEQU));
-		this.declarationKind = Declaration.Kind.Thunk;
+		this.declarationKind = ObjectKind.Thunk;
 		this.rtBlockLevel = this.declaredIn.rtBlockLevel + 1;		this.kind = kind;
 //		this.mode = mode;
 		this.expr = expr;
@@ -111,7 +112,7 @@ public final class Thunk extends DeclarationScope {
 				    if(writeableVariable!=null) {
 				    Declaration declaredAs = writeableVariable.meaning.declaredAs;
 //				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+declaredAs.declarationKind);
-				    	if(declaredAs.declarationKind == Kind.Procedure) writeableVariable = null;
+				    	if(declaredAs.declarationKind == ObjectKind.Procedure) writeableVariable = null;
 				    }
 				    if(writeableVariable!=null) {
 				    	MethodTypeDesc MTD_put=null;

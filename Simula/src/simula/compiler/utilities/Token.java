@@ -263,7 +263,7 @@ public final class Token implements Externalizable {
 		oupt.writeObject(value);
 	}
 
-	public static Token readAttr(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public static Token readAttr(ObjectInput inpt) throws IOException {
 		int keyWord = inpt.readInt();
 		Object value = inpt.readObject();
 		return(new Token("",keyWord,value));
@@ -280,7 +280,7 @@ public final class Token implements Externalizable {
 	}
 
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		keyWord = inpt.readInt();
 		value = inpt.readObject();
 	}

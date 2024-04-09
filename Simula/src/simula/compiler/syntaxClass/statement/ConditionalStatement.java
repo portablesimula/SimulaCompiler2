@@ -14,12 +14,17 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -43,7 +48,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class ConditionalStatement extends Statement implements Externalizable {
+public final class ConditionalStatement extends Statement {
 	
 	/**
 	 * The if-clause condition
@@ -159,7 +164,7 @@ public final class ConditionalStatement extends Statement implements Externaliza
 	
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
@@ -169,25 +174,54 @@ public final class ConditionalStatement extends Statement implements Externaliza
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
+		oupt.writeKind(ObjectKind.ConditionalStatement);
+//		System.out.println("ConditionalStatement.writeAttr: ObjectKind.ConditionalStatement="+ObjectKind.ConditionalStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(condition);
-		oupt.writeObject(thenStatement);
-		oupt.writeObject(elseStatement);
+//		System.out.println("ConditionalStatement.writeAttr: condition="+condition.getClass().getSimpleName()+"  "+condition);
+		oupt.writeObj(condition);
+		oupt.writeObj(thenStatement);
+		oupt.writeObj(elseStatement);
 	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		condition = (Expression) inpt.readObject();
-		thenStatement = (Statement) inpt.readObject();
-		elseStatement = (Statement) inpt.readObject();
+
+	public static ConditionalStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
+		ConditionalStatement stm = new ConditionalStatement();
+		stm.lineNumber = inpt.readInt();
+//		System.out.println("ConditionalStatement.readAttr: lineNumber="+stm.lineNumber);
+		stm.condition = (Expression) inpt.readObj();
+//		System.out.println("ConditionalStatement.readAttr: condition="+stm.condition.getClass().getSimpleName()+"  "+stm.condition);
+		stm.thenStatement = (Statement) inpt.readObj();
+		stm.elseStatement = (Statement) inpt.readObj();
+		Util.TRACE_INPUT("ConditionalStatement: " + stm);
+		return(stm);
 	}
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(condition);
+//		oupt.writeObject(thenStatement);
+//		oupt.writeObject(elseStatement);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		condition = (Expression) inpt.readObject();
+//		thenStatement = (Statement) inpt.readObject();
+//		elseStatement = (Statement) inpt.readObject();
+//	}
 
 }

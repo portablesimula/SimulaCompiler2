@@ -13,7 +13,11 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -77,6 +81,25 @@ public final class DummyStatement extends Statement implements Externalizable {
 	}
 
 	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeDummyStatement: " + this);
+		oupt.writeKind(ObjectKind.DummyStatement);
+		oupt.writeInt(lineNumber);
+	}
+
+	public static DummyStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
+		DummyStatement stm = new DummyStatement();
+		stm.lineNumber = inpt.readInt();
+		Util.TRACE_INPUT("DummyStatement: " + stm);
+		return(stm);
+	}
+
+	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
@@ -96,7 +119,7 @@ public final class DummyStatement extends Statement implements Externalizable {
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 		if(!Option.NEW_ATTR_FILE)
 			CHECKED=inpt.readBoolean();

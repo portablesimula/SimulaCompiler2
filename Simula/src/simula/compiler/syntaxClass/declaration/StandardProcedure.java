@@ -38,7 +38,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	 * @param type the procedure's type
 	 * @param ident the procedure identifier
 	 */
-	StandardProcedure(DeclarationScope declaredIn,Declaration.Kind kind,Type type, String ident) {
+	StandardProcedure(DeclarationScope declaredIn,int kind,Type type, String ident) {
 		super(ident,kind); this.declaredIn = declaredIn; this.type = type; }
 
 	/**
@@ -49,7 +49,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	 * @param ident the procedure identifier
 	 * @param param the parameters
 	 */
-	StandardProcedure(DeclarationScope declaredIn,Declaration.Kind kind,Type type, String ident,Parameter... param) {
+	StandardProcedure(DeclarationScope declaredIn,int kind,Type type, String ident,Parameter... param) {
 		this(declaredIn,kind,type,ident);
 		for(int i=0;i<param.length;i++) param[i].into(parameterList); }
 
@@ -62,7 +62,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	 * @param ident the procedure identifier
 	 * @param param the parameters
 	 */
-	StandardProcedure(DeclarationScope declaredIn,Declaration.Kind kind,String[] mtdSet,Type type, String ident,Parameter... param) {
+	StandardProcedure(DeclarationScope declaredIn,int kind,String[] mtdSet,Type type, String ident,Parameter... param) {
 		this(declaredIn,kind,type,ident);
 		this.mtdSet = mtdSet;
 		for(int i=0;i<param.length;i++) param[i].into(parameterList); 

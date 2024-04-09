@@ -15,11 +15,16 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -305,10 +310,56 @@ public final class Constant extends Expression implements Externalizable {
 	public String toString() {
 //		String val=value==null?"null":(value.getClass().getSimpleName()+'(' + value+')');
 //		return("CONSTANT("+type+','+val+')');
-		if(type.equals(Type.Text)) return("\""+value+'"');
-		return(""+value);
+		if(type != null && type.equals(Type.Text)) return("\""+value+'"');
+		return("Constant type="+type+", value="+value);
 	}
 
+	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	private Constant() {}
+
+	@Override
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
+		oupt.writeKind(ObjectKind.Constant);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		
+		//oupt.writeObject(value);
+		if(type.equals(Type.Boolean)) oupt.writeBoolean((boolean)value);
+		else if(type.equals(Type.Integer)) {
+			Long val = (Long)value;
+			oupt.writeInt(val.intValue());
+		}
+		else
+		Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+this);
+	}
+	
+	public static Constant readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN Constant: ");
+		Constant cnst = new Constant();
+		cnst.lineNumber = inpt.readInt();
+		cnst.type = inpt.readType();
+		cnst.backLink = (SyntaxClass) inpt.readObj();
+		System.out.println("Constant.readAttr: cnst.backLink="+cnst.backLink);
+//		Util.IERR("");
+		
+		//cnst.value=inpt.readObject();
+		if(cnst.type.equals(Type.Boolean)) cnst.value=inpt.readBoolean();
+		else if(cnst.type.equals(Type.Integer)) cnst.value=inpt.readInt();
+		else
+			Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+cnst.type);
+		
+		Util.TRACE_INPUT("Constant: "+cnst);
+		return(cnst);
+	}
 	
 //	// ***********************************************************************************************
 //	// *** Externalization
@@ -321,46 +372,24 @@ public final class Constant extends Expression implements Externalizable {
 //	@Override
 //	public void writeExternal(ObjectOutput oupt) throws IOException {
 //		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
-//		Type.outType(type,oupt);
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObject(backLink);
 //		oupt.writeObject(value);
 //	}
 //
 //	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-//		type=Type.inType(inpt);
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObject();
 //		value=inpt.readObject();
 //		Util.TRACE_INPUT("Constant: "+type+' '+value);
 //	}
-	
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public Constant() {}
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-		Type.outType(type,oupt);
-		oupt.writeObject(backLink);
-		oupt.writeObject(value);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		type = Type.inType(inpt);
-		backLink = (SyntaxClass) inpt.readObject();
-		value=inpt.readObject();
-		Util.TRACE_INPUT("Constant: "+type+' '+value);
-	}
-
+//
 
 }

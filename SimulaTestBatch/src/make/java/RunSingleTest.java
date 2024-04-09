@@ -53,8 +53,8 @@ public final class RunSingleTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;

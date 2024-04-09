@@ -9,8 +9,6 @@ package simula.compiler.syntaxClass.expression;
 
 import java.lang.classfile.CodeBuilder;
 
-//import java.lang.classfile.CodeBuilder;
-
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -105,11 +103,7 @@ public abstract class Expression extends SyntaxClass {
 	/**
 	 * Expression.
 	 */
-	Expression(){}
-	
-	@Override
-	public String toString() { return("NO EXPRESSION"); }
-
+	public Expression(){}
 
 	/**
 	 * Accept expression.
@@ -567,5 +561,9 @@ public abstract class Expression extends SyntaxClass {
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+this);
 	}
-    
+	
+	@Override
+	public String toString() { return("NO EXPRESSION"); }
+
+	    
 }

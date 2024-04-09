@@ -291,8 +291,8 @@ public final class Meaning implements Externalizable {
 //				if(cast.equalsIgnoreCase("RTS_ENVIRONMENT")) Util.IERR("");
 			}
 			
-		} else if (!(meaning.declaredIn.declarationKind == Declaration.Kind.ContextFreeMethod
-				|| meaning.declaredIn.declarationKind == Declaration.Kind.MemberMethod)) {
+		} else if (!(meaning.declaredIn.declarationKind == ObjectKind.ContextFreeMethod
+				|| meaning.declaredIn.declarationKind == ObjectKind.MemberMethod)) {
 			
 //			int n = meaning.declaredIn.rtBlockLevel;
 //			System.out.println("Meaning.buildIdentifierAccess: ****************** "+this+" ******************");
@@ -345,7 +345,7 @@ public final class Meaning implements Externalizable {
 	}
 	
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Read Meaning: ");
 		declaredAs = (Declaration) inpt.readObject();
 		declaredIn = (DeclarationScope) inpt.readObject();

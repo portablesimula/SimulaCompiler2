@@ -59,31 +59,31 @@ public final class OverLoad extends Type {
 	}
 
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public OverLoad() {} // Externalization
-
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		oupt.writeObject(key);
-		oupt.writeObject(qual);
-		int lng = type.length;
-		oupt.writeByte(lng);
-		for(int i=0;i<lng;i++) Type.outType(type[i],oupt);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
-		key=(Token)inpt.readObject();
-		qual=(ClassDeclaration) inpt.readObject();
-		int lng = inpt.readByte();
-		type = new Type[lng];
-		for(int i=0;i<lng;i++) type[i] = Type.inType(inpt);
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public OverLoad() {} // Externalization
+//
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		oupt.writeObject(key);
+//		oupt.writeObject(qual);
+//		int lng = type.length;
+//		oupt.writeByte(lng);
+//		for(int i=0;i<lng;i++) Type.outType(type[i],oupt);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		key=(Token)inpt.readObject();
+//		qual=(ClassDeclaration) inpt.readObject();
+//		int lng = inpt.readByte();
+//		type = new Type[lng];
+//		for(int i=0;i<lng;i++) type[i] = inpt.readType();
+//	}
 
 }

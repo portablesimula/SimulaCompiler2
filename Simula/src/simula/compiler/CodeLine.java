@@ -74,7 +74,7 @@ public final class CodeLine implements Externalizable {
 	}
 
 	@Override
-	public void readExternal(ObjectInput inpt) throws IOException, ClassNotFoundException {
+	public void readExternal(ObjectInput inpt) throws IOException {
 		sourceLineNumber = inpt.readInt();
 		codeLine = (String) inpt.readObject();
 		modid = (String) inpt.readObject();

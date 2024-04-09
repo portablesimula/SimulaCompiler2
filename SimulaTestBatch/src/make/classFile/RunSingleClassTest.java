@@ -197,8 +197,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 //		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
-//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-//		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
+		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
 //		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -235,7 +235,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 //		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
 //			names.add("ExternalClass1.sim");      // OK:  Precompile this for Simtst 119.
-			names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
+//			names.add("ExternalClass2.sim");      // OK:  Precompile this for Simtst 119.
 //			names.add("simtst119.sim"); // OK: Uses EcternalClass1-2
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //

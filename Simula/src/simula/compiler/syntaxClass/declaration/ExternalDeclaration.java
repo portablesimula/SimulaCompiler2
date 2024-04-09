@@ -26,6 +26,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
@@ -112,7 +113,7 @@ public final class ExternalDeclaration extends Declaration {
 	 */
 	private ExternalDeclaration() {
 		super(null);
-		this.declarationKind = Declaration.Kind.ExternalDeclaration;
+		this.declarationKind = ObjectKind.ExternalDeclaration;
 	}
 
 	/**
@@ -208,7 +209,7 @@ public final class ExternalDeclaration extends Declaration {
 				break LOOP;
 			identifier = Parse.expectIdentifier();
 		}
-		System.out.println("ExternalDeclaration.expectExternalHead: END "+identifier);
+//		System.out.println("ExternalDeclaration.expectExternalHead: END "+identifier);
 	}
 
 	static boolean checkJarFiles(File file) {
@@ -280,12 +281,12 @@ public final class ExternalDeclaration extends Declaration {
 			inputStream.close();
 			jarFile.close();
 			Global.externalJarFiles.add(file);
-		} catch (IOException | ClassNotFoundException e) {
+		} catch (IOException e) {
 			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);
 			Util.warning("It may be necessary to recompile '" + identifier + "'");
 			Util.IERR("Caused by:", e);
 		}
-		System.out.println("ExternalDeclaration.readAttributeFile: END "+moduleType);
+//		System.out.println("ExternalDeclaration.readAttributeFile: END "+moduleType);
 		return (moduleType);
 	}
 
