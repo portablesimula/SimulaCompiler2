@@ -110,7 +110,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public class ClassDeclaration extends BlockDeclaration implements Externalizable {
+public class ClassDeclaration extends BlockDeclaration {
 	/**
 	 * The external prefix'identifier.
 	 */

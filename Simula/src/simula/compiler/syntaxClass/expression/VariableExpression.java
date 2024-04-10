@@ -115,7 +115,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class VariableExpression extends Expression implements Externalizable {
+public final class VariableExpression extends Expression {
 
 	/**
 	 * The variable's identifier.

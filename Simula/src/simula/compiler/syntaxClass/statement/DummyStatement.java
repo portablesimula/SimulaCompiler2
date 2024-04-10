@@ -38,7 +38,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class DummyStatement extends Statement implements Externalizable {
+public final class DummyStatement extends Statement {
 	
 	/**
 	 * Create a new DummyStatement.
@@ -83,6 +83,10 @@ public final class DummyStatement extends Statement implements Externalizable {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public DummyStatement() { super(0); }
 
 	@Override
 	public void writeAttr(AttrOutput oupt) throws IOException {
@@ -99,32 +103,32 @@ public final class DummyStatement extends Statement implements Externalizable {
 		return(stm);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public DummyStatement() {
-		super(0);
-	}
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-//		oupt.writeObject(lineNumber);
-	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-	}
-	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public DummyStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+////		oupt.writeObject(lineNumber);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//	}
+//	
 
 }

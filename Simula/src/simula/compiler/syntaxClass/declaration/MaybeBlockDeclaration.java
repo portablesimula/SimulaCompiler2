@@ -59,7 +59,7 @@ import simula.compiler.utilities.Util;
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
  */
-public final class MaybeBlockDeclaration extends BlockDeclaration implements Externalizable {
+public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
@@ -520,6 +520,11 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public MaybeBlockDeclaration() { super(null); }
+
 	@Override
 	public void writeAttr(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
@@ -540,26 +545,26 @@ public final class MaybeBlockDeclaration extends BlockDeclaration implements Ext
 		return(blk);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public MaybeBlockDeclaration() { super(null); }
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		super.writeExternal(oupt);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		super.readExternal(inpt);
-		Global.setScope(this.declaredIn);
-	}
-
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public MaybeBlockDeclaration() { super(null); }
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		super.writeExternal(oupt);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		super.readExternal(inpt);
+//		Global.setScope(this.declaredIn);
+//	}
+//
 
 }

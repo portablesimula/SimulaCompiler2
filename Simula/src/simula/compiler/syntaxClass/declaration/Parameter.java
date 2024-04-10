@@ -45,7 +45,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class Parameter extends Declaration implements Externalizable {
+public final class Parameter extends Declaration {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
 	// Type type; // Inherited:

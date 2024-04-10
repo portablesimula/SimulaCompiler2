@@ -7,56 +7,14 @@
  */
 package simula.compiler.syntaxClass;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttrInput;
 import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
-import simula.compiler.syntaxClass.declaration.ClassDeclaration;
-import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
-import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
-import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
-import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
-import simula.compiler.syntaxClass.declaration.StandardClass;
-import simula.compiler.syntaxClass.expression.ArithmeticExpression;
-import simula.compiler.syntaxClass.expression.AssignmentOperation;
-import simula.compiler.syntaxClass.expression.BooleanExpression;
-import simula.compiler.syntaxClass.expression.ConditionalExpression;
-import simula.compiler.syntaxClass.expression.Constant;
-import simula.compiler.syntaxClass.expression.LocalObject;
-import simula.compiler.syntaxClass.expression.ObjectGenerator;
-import simula.compiler.syntaxClass.expression.ObjectRelation;
-import simula.compiler.syntaxClass.expression.QualifiedObject;
-import simula.compiler.syntaxClass.expression.RelationalOperation;
-import simula.compiler.syntaxClass.expression.RemoteVariable;
-import simula.compiler.syntaxClass.expression.TextExpression;
-import simula.compiler.syntaxClass.expression.TypeConversion;
-import simula.compiler.syntaxClass.expression.UnaryOperation;
-import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.syntaxClass.statement.ActivationStatement;
-import simula.compiler.syntaxClass.statement.BlockStatement;
-import simula.compiler.syntaxClass.statement.ConditionalStatement;
-import simula.compiler.syntaxClass.statement.ConnectionStatement;
-import simula.compiler.syntaxClass.statement.DummyStatement;
-import simula.compiler.syntaxClass.statement.ForStatement;
-import simula.compiler.syntaxClass.statement.GotoStatement;
-import simula.compiler.syntaxClass.statement.InlineStatement;
-import simula.compiler.syntaxClass.statement.InnerStatement;
-import simula.compiler.syntaxClass.statement.LabeledStatement;
-import simula.compiler.syntaxClass.statement.ProgramModule;
-import simula.compiler.syntaxClass.statement.StandaloneExpression;
-import simula.compiler.syntaxClass.statement.SwitchStatement;
-import simula.compiler.syntaxClass.statement.WhileStatement;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -130,7 +88,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 
-public abstract class SyntaxClass implements Externalizable {
+public abstract class SyntaxClass {
 	/**
 	 * Controls semantic checking.
 	 * <p>
@@ -295,25 +253,25 @@ public abstract class SyntaxClass implements Externalizable {
 	}
 
 	
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-	}
-	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//	}
+//	
 
 }

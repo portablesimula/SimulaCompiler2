@@ -10,20 +10,12 @@ package simula.compiler.syntaxClass.declaration;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.classfile.instruction.SwitchCase;
-//import java.lang.classfile.CodeBuilder;
-//import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
-//import java.lang.classfile.Label;
-//import java.lang.classfile.constantpool.ConstantPoolBuilder;
-//import java.lang.classfile.constantpool.FieldRefEntry;
-//import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
@@ -703,32 +695,32 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		return ("" + identifier + '[' + externalIdent + "] ObjectKind=" + declarationKind);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		super.writeExternal(oupt);
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		oupt.writeBoolean(isMainModule);
-		oupt.writeObject(statements);
-		oupt.writeInt(lastLineNumber);
-		oupt.writeBoolean(isContextFree);
-		oupt.writeBoolean(isPreCompiled);
-	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		super.readExternal(inpt);
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		isMainModule = inpt.readBoolean();
-		statements = (Vector<Statement>) inpt.readObject();
-		lastLineNumber = inpt.readInt();
-		isContextFree = inpt.readBoolean();
-		isPreCompiled = inpt.readBoolean();
-	}
-
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		super.writeExternal(oupt);
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		oupt.writeBoolean(isMainModule);
+//		oupt.writeObject(statements);
+//		oupt.writeInt(lastLineNumber);
+//		oupt.writeBoolean(isContextFree);
+//		oupt.writeBoolean(isPreCompiled);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		super.readExternal(inpt);
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		isMainModule = inpt.readBoolean();
+//		statements = (Vector<Statement>) inpt.readObject();
+//		lastLineNumber = inpt.readInt();
+//		isContextFree = inpt.readBoolean();
+//		isPreCompiled = inpt.readBoolean();
+//	}
+//
 
 }

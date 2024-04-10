@@ -57,7 +57,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public class Type extends SyntaxClass implements Externalizable {
+public class Type extends SyntaxClass {
 
 //	/**
 //	 * KeyWord or ref(classIdentifier)

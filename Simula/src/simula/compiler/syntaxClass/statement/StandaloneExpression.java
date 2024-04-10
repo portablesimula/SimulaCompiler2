@@ -44,7 +44,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public final class StandaloneExpression extends Statement implements Externalizable {
+public final class StandaloneExpression extends Statement {
 	
 	/**
 	 * The expression.

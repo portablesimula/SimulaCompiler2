@@ -36,7 +36,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class ProtectedSpecification extends SyntaxClass { // implements Externalizable {
+public final class ProtectedSpecification extends SyntaxClass { // {
 	
 	/**
 	 * The protected identifier.

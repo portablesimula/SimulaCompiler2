@@ -7,10 +7,6 @@
  */
 package simula.compiler.utilities;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
@@ -39,7 +35,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
  * @author Øystein Myhre Andersen
  *
  */
-public final class Meaning implements Externalizable {
+public final class Meaning {
 	/**
 	 * True if it was found behind invisible
 	 */
@@ -326,32 +322,32 @@ public final class Meaning implements Externalizable {
 				+ ",declaredIn=" + declaredIn + ",foundIn=" + foundIn + ')');
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public Meaning() {
-	}
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write Meaning: "+this);
-		oupt.writeObject(declaredAs);
-		oupt.writeObject(declaredIn);
-		oupt.writeObject(foundIn);
-		oupt.writeObject(foundBehindInvisible);
-	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read Meaning: ");
-		declaredAs = (Declaration) inpt.readObject();
-		declaredIn = (DeclarationScope) inpt.readObject();
-		foundIn = (DeclarationScope) inpt.readObject();
-		foundBehindInvisible = (boolean) inpt.readObject();
-	}
-	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public Meaning() {
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write Meaning: "+this);
+//		oupt.writeObject(declaredAs);
+//		oupt.writeObject(declaredIn);
+//		oupt.writeObject(foundIn);
+//		oupt.writeObject(foundBehindInvisible);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read Meaning: ");
+//		declaredAs = (Declaration) inpt.readObject();
+//		declaredIn = (DeclarationScope) inpt.readObject();
+//		foundIn = (DeclarationScope) inpt.readObject();
+//		foundBehindInvisible = (boolean) inpt.readObject();
+//	}
+//	
 
 }

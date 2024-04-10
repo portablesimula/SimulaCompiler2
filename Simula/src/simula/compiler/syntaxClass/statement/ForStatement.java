@@ -20,12 +20,15 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -35,6 +38,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
@@ -158,7 +162,7 @@ public final class ForStatement extends Statement {
 	/**
 	 * Assignment operator  := or :-
 	 */
-	private Token assignmentOperator; // := or :-
+	private int assignmentOperator; // KeyWord := or :-
 	
 	/**
 	 * The list of ForList elements.
@@ -182,7 +186,7 @@ public final class ForStatement extends Statement {
 		controlVariable = new VariableExpression(Parse.expectIdentifier());
 		if (!Parse.accept(KeyWord.ASSIGNVALUE))
 			Parse.expect(KeyWord.ASSIGNREF);
-		assignmentOperator = Parse.prevToken;
+		assignmentOperator = Parse.prevToken.getKeyWord();
 		do {
 			forList.add(expectForListElement());
 		} while (Parse.accept(KeyWord.COMMA));
@@ -226,7 +230,7 @@ public final class ForStatement extends Statement {
 		if (decl instanceof Parameter par && par.mode == Parameter.Mode.name)
 			Util.error(
 					"For-Statement's Controled Variable(" + controlVariable + ") can't be a formal parameter by Name");
-		if (!type.equals(Type.Text) && assignmentOperator.getKeyWord() == KeyWord.ASSIGNVALUE && type.isReferenceType())
+		if (!type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
 			Util.error("Illegal For-Statement with object value assignment ( := )");
 		Iterator<ForListElement> iterator = forList.iterator();
 		while (iterator.hasNext()) {
@@ -320,7 +324,7 @@ public final class ForStatement extends Statement {
 	public void print(final int indent) {
 		String spc = edIndent(indent);
 		String fl = forList.toString().replace('[', ' ').replace(']', ' ');
-		Util.println(spc + "FOR " + controlVariable + " " + assignmentOperator + fl + "DO");
+		Util.println(spc + "FOR " + controlVariable + " " + KeyWord.edit(assignmentOperator) + fl + "DO");
 		if (doStatement != null)
 			doStatement.print(indent);
 	}
@@ -328,14 +332,14 @@ public final class ForStatement extends Statement {
 	@Override
 	public void printTree(final int indent) {
 		String fl = forList.toString().replace('[', ' ').replace(']', ' ');
-		System.out.println(edTreeIndent(indent)+"FOR " + controlVariable + " " + assignmentOperator + fl + " DO ");
+		System.out.println(edTreeIndent(indent)+"FOR " + controlVariable + " " + KeyWord.edit(assignmentOperator) + fl + " DO ");
 		doStatement.printTree(indent+1);
 	}
 
 	@Override
 	public String toString() {
 		String fl = forList.toString().replace('[', ' ').replace(']', ' ');
-		return ("FOR " + controlVariable + " " + assignmentOperator + fl + " DO " + doStatement);
+		return ("FOR " + controlVariable + " " + KeyWord.edit(assignmentOperator) + fl + " DO " + doStatement);
 	}
 
 	// ************************************************************************************
@@ -380,7 +384,7 @@ public final class ForStatement extends Statement {
 		 * @return the resulting Java source code for this ForListElement
 		 */
 		public String edCode(final String classIdent, Type xType) {
-			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator.getKeyWord() == KeyWord.ASSIGNVALUE) ? "TValElt"
+			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 					: "Elt<" + classIdent + ">";
 			return ("new Single" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }})");
@@ -465,6 +469,43 @@ public final class ForStatement extends Statement {
 		public String toString() {
 			return ("" + expr1);
 		}
+
+		// ***********************************************************************************************
+		// *** Attribute File I/O
+		// ***********************************************************************************************
+
+//		@Override
+		public void writeAttr(AttrOutput oupt) throws IOException {
+			Util.TRACE_OUTPUT("writeForListElement: " + this);
+			oupt.writeInt(1);
+			oupt.writeObj(expr1);
+		}
+
+		public static ForListElement readAttr(ForStatement x, AttrInput inpt) throws IOException {
+			Util.TRACE_INPUT("BEGIN readForListElement: ");
+			ForListElement stm = null;
+			int nExpr = inpt.readInt();
+			switch(nExpr) {
+			case 1:
+				Expression expr1 = (Expression) inpt.readObj();
+				stm = x.new ForListElement(expr1);
+				break;
+			case 2: 
+				Expression expr21 = (Expression) inpt.readObj();
+				Expression expr22 = (Expression) inpt.readObj();
+				stm = x.new WhileElement(expr21,expr22);
+				break;
+			case 3: 
+				Expression expr31 = (Expression) inpt.readObj();
+				Expression expr32 = (Expression) inpt.readObj();
+				Expression expr33 = (Expression) inpt.readObj();
+				stm = x.new StepUntilElement(expr31,expr32,expr33);
+				break;
+			}
+			Util.TRACE_INPUT("ForListElement: " + stm);
+			return(stm);
+		}
+
 	}
 
 	// ************************************************************************************
@@ -506,7 +547,7 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public String edCode(final String classIdent, Type xType) {
-			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator.getKeyWord() == KeyWord.ASSIGNVALUE) ? "TValElt"
+			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 					: "Elt<" + classIdent + ">";
 			return ("new While" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }}"
@@ -579,6 +620,18 @@ public final class ForStatement extends Statement {
 			MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor(
 					"(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
 			codeBuilder.invokespecial(CD_WhileElt, "<init>", MTD); // Invoke Constructor
+		}
+
+		// ***********************************************************************************************
+		// *** Attribute File I/O
+		// ***********************************************************************************************
+
+		@Override
+		public void writeAttr(AttrOutput oupt) throws IOException {
+			Util.TRACE_OUTPUT("writeForListElement: " + this);
+			oupt.writeInt(2);
+			oupt.writeObj(expr1);
+			oupt.writeObj(expr2);
 		}
 
 		public String toString() {
@@ -775,6 +828,19 @@ public final class ForStatement extends Statement {
 			codeBuilder.invokespecial(CD_StepUntil, "<init>", MTD); // Invoke Constructor
 		}
 
+		// ***********************************************************************************************
+		// *** Attribute File I/O
+		// ***********************************************************************************************
+
+		@Override
+		public void writeAttr(AttrOutput oupt) throws IOException {
+			Util.TRACE_OUTPUT("writeForListElement: " + this);
+			oupt.writeInt(3);
+			oupt.writeObj(expr1);
+			oupt.writeObj(expr2);
+			oupt.writeObj(expr3);
+		}
+
 		@Override
 		public String toString() {
 			return ("" + expr1 + " step " + expr2 + " until " + expr3);
@@ -855,39 +921,80 @@ public final class ForStatement extends Statement {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ForStatement() {
 		super(0);
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeForStatement: " + this);
+		oupt.writeKind(ObjectKind.ForStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(controlVariable);
-		oupt.writeObject(assignmentOperator);
-		oupt.writeObject(forList);
-		oupt.writeObject(doStatement);
+		oupt.writeObj(controlVariable);
+		oupt.writeInt(assignmentOperator);
+//		oupt.writeObj(forList);
+		oupt.writeInt(forList.size());
+		for(ForListElement ent:forList) ent.writeAttr(oupt);
+		oupt.writeObj(doStatement);
 	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		controlVariable = (VariableExpression) inpt.readObject();
-		assignmentOperator = (Token) inpt.readObject();
-		forList = (Vector<ForListElement>) inpt.readObject();
-		doStatement = (Statement) inpt.readObject();
+
+	public static ForStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readForStatement: ");
+		ForStatement stm = new ForStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.controlVariable = (VariableExpression) inpt.readObj();
+		stm.assignmentOperator = inpt.readInt();
+//		stm.forList = (Vector<ForListElement>) inpt.readObj();
+		int n = inpt.readInt();
+		if(n > 0) {
+			stm.forList = new Vector<ForListElement>();
+			for(int i=0;i<n;i++)
+				stm.forList.add(ForListElement.readAttr(stm,inpt));
+		}
+		stm.doStatement = (Statement) inpt.readObj();
+		Util.TRACE_INPUT("ForStatement: " + stm);
+		return(stm);
 	}
-	
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public ForStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(controlVariable);
+//		oupt.writeObject(assignmentOperator);
+//		oupt.writeObject(forList);
+//		oupt.writeObject(doStatement);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		controlVariable = (VariableExpression) inpt.readObject();
+//		assignmentOperator = (Token) inpt.readObject();
+//		forList = (Vector<ForListElement>) inpt.readObject();
+//		doStatement = (Statement) inpt.readObject();
+//	}
+//	
 
 }

@@ -42,7 +42,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public final class LabelDeclaration extends SimpleVariableDeclaration implements Externalizable {
+public final class LabelDeclaration extends SimpleVariableDeclaration {
 	/**
 	 * The label index. Set by BlockDeclaration.doCheckLabelList.
 	 */
@@ -279,6 +279,11 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
+	/**
+	 * Default constructor used by Externalization.
+	 */
+	public LabelDeclaration() {}
+
 	@Override
 	public void writeAttr(AttrOutput oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabelDeclaration: " + identifier);
@@ -300,36 +305,36 @@ public final class LabelDeclaration extends SimpleVariableDeclaration implements
 		return(lab);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public LabelDeclaration() {
-	}
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		super.writeExternal(oupt);
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
-		oupt.writeInt(lineNumber);
-		oupt.writeInt(index);
-		oupt.writeObject(movedTo);
-	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		super.readExternal(inpt);
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		index = inpt.readInt();
-		movedTo = (DeclarationScope) inpt.readObject();
-	}
-	
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public LabelDeclaration() {
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		super.writeExternal(oupt);
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeInt(index);
+//		oupt.writeObject(movedTo);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		super.readExternal(inpt);
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		index = inpt.readInt();
+//		movedTo = (DeclarationScope) inpt.readObject();
+//	}
+//	
 
 }

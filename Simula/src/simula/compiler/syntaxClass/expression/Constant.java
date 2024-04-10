@@ -46,7 +46,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  * @see simula.compiler.parsing.SimulaScanner
  */
-public final class Constant extends Expression implements Externalizable {
+public final class Constant extends Expression {
 	
 	/**
 	 * The constant's value

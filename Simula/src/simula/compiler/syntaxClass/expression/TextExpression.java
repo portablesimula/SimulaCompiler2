@@ -92,7 +92,7 @@ import simula.compiler.utilities.Util;
  * @author Simula Standard
  * @author Øystein Myhre Andersen
  */
-public final class TextExpression extends Expression implements Externalizable {
+public final class TextExpression extends Expression {
 	
 	/**
 	 * The left hand side of &amp;

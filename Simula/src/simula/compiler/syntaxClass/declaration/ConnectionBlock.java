@@ -46,7 +46,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public final class ConnectionBlock extends DeclarationScope implements Externalizable {
+public final class ConnectionBlock extends DeclarationScope {
 	/**
 	 * The Connection Statement.
 	 */

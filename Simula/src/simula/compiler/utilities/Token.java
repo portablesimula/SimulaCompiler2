@@ -7,11 +7,6 @@
  */
 package simula.compiler.utilities;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 /**
  * Utility class Token.
  * <p>
@@ -21,7 +16,7 @@ import java.io.ObjectOutput;
  * @author Øystein Myhre Andersen
  *
  */
-public final class Token implements Externalizable {
+public final class Token {
 	/**
 	 * The Token's text attribute
 	 */
@@ -48,14 +43,10 @@ public final class Token implements Externalizable {
 	 * The style codes used by Simula Editor.
 	 */
 	public enum StyleCode {
-		/** Regular */
-		regular,
-		/** Keyword */
-		keyword,
-		/** Comment */
-		comment,
-		/** Constant */
-		constant
+		/** Regular */  regular,
+		/** Keyword */  keyword,
+		/** Comment */  comment,
+		/** Constant */ constant
 	};
 
 	/**
@@ -254,35 +245,35 @@ public final class Token implements Externalizable {
 		}
 	}
 
-	// ***********************************************************************************************
-	// *** Attribute File I/O
-	// ***********************************************************************************************
-
-	public void writeATTR(ObjectOutput oupt) throws IOException {
-		oupt.writeObject(keyWord);
-		oupt.writeObject(value);
-	}
-
-	public static Token readAttr(ObjectInput inpt) throws IOException {
-		int keyWord = inpt.readInt();
-		Object value = inpt.readObject();
-		return(new Token("",keyWord,value));
-	}
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		oupt.writeObject(keyWord);
-		oupt.writeObject(value);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		keyWord = inpt.readInt();
-		value = inpt.readObject();
-	}
+//	// ***********************************************************************************************
+//	// *** Attribute File I/O
+//	// ***********************************************************************************************
+//
+//	public void writeATTR(ObjectOutput oupt) throws IOException {
+//		oupt.writeObject(keyWord);
+//		oupt.writeObject(value);
+//	}
+//
+//	public static Token readAttr(ObjectInput inpt) throws IOException {
+//		int keyWord = inpt.readInt();
+//		Object value = inpt.readObject();
+//		return(new Token("",keyWord,value));
+//	}
+//
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		oupt.writeObject(keyWord);
+//		oupt.writeObject(value);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		keyWord = inpt.readInt();
+//		value = inpt.readObject();
+//	}
 
 }

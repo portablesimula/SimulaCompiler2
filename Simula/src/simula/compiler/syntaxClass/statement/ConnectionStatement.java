@@ -17,6 +17,8 @@ import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -24,12 +26,14 @@ import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -190,7 +194,7 @@ public final class ConnectionStatement extends Statement {
 		/**
 		 * The associated connection block.
 		 */
-		final ConnectionBlock connectionBlock;
+		ConnectionBlock connectionBlock;
 
 		/**
 		 * Create a new do-part.
@@ -255,6 +259,41 @@ public final class ConnectionStatement extends Statement {
 		@Override
 		public String toString() {
 			return (connectionBlock.toString());
+		}
+
+		// ***********************************************************************************************
+		// *** Attribute File I/O
+		// ***********************************************************************************************
+		/**
+		 * Default constructor used by Attribute File I/O
+		 */
+		private DoPart() {}
+
+//		@Override
+		public void writeAttr(AttrOutput oupt) throws IOException {
+			Util.TRACE_OUTPUT("writeDoPart: " + this);
+			oupt.writeInt(1);
+			oupt.writeObj(connectionBlock);
+		}
+
+		public static DoPart readAttr(ConnectionStatement x, AttrInput inpt) throws IOException {
+			Util.TRACE_INPUT("BEGIN readDoPart: ");
+			int n = inpt.readInt();
+			switch(n) {
+			case 1:
+				DoPart stm = x.new DoPart();
+				stm.connectionBlock = (ConnectionBlock) inpt.readObj();
+				Util.TRACE_INPUT("DoPart: " + stm);
+				return(stm);
+			case 2:
+				WhenPart whn = x.new WhenPart();
+				whn.classIdentifier = inpt.readString();
+				whn.connectionBlock = (ConnectionBlock) inpt.readObj();
+				Util.TRACE_INPUT("WhenPart: " + whn);
+				return(whn);
+			}
+			Util.IERR("");
+			return(null);
 		}
 	}
 
@@ -354,6 +393,23 @@ public final class ConnectionStatement extends Statement {
 		public String toString() {
 			return ("WHEN " + classIdentifier + " DO ..."); // +statement);
 		}
+
+		// ***********************************************************************************************
+		// *** Attribute File I/O
+		// ***********************************************************************************************
+		/**
+		 * Default constructor used by Attribute File I/O
+		 */
+		private WhenPart() {}
+
+		@Override
+		public void writeAttr(AttrOutput oupt) throws IOException {
+			Util.TRACE_OUTPUT("writeDoPart: " + this);
+			oupt.writeInt(2);
+			oupt.writeString(classIdentifier);
+			oupt.writeObj(connectionBlock);
+		}
+
 	}
 
 	@Override
@@ -452,43 +508,88 @@ public final class ConnectionStatement extends Statement {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ConnectionStatement() {
 		super(0);
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
+		oupt.writeKind(ObjectKind.ConnectionStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(objectExpression);
-		oupt.writeObject(inspectedVariable);
-		oupt.writeObject(inspectVariableDeclaration);
-		oupt.writeObject(connectionPart);
-		oupt.writeObject(otherwise);
-		oupt.writeObject(hasWhenPart);
+		oupt.writeObj(objectExpression);
+		oupt.writeObj(inspectedVariable);
+		oupt.writeObj(inspectVariableDeclaration);
+//		oupt.writeObj(connectionPart);
+		oupt.writeInt(connectionPart.size());
+		for(DoPart part:connectionPart) part.writeAttr(oupt);
+		oupt.writeObj(otherwise);
+		oupt.writeBoolean(hasWhenPart);
 	}
-	
-	@SuppressWarnings("unchecked")
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		objectExpression = (Expression) inpt.readObject();
-		inspectedVariable = (VariableExpression) inpt.readObject();
-		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObject();
-		connectionPart = (Vector<DoPart>) inpt.readObject();
-		otherwise = (Statement) inpt.readObject();
-		hasWhenPart = (Boolean) inpt.readObject();
+
+	public static ConnectionStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
+		ConnectionStatement stm = new ConnectionStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.objectExpression = (Expression) inpt.readObj();
+		stm.inspectedVariable = (VariableExpression) inpt.readObj();
+		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
+//		stm.connectionPart = (Vector<DoPart>) inpt.readObj();
+		int n = inpt.readInt();
+		if(n > 0) {
+			stm.connectionPart = new Vector<DoPart>();
+			for(int i=0;i<n;i++)
+				stm.connectionPart.add(DoPart.readAttr(stm,inpt));
+		}
+		stm.otherwise = (Statement) inpt.readObj();
+		stm.hasWhenPart = inpt.readBoolean();
+		Util.TRACE_INPUT("ConnectionStatement: " + stm);
+		return(stm);
 	}
-	
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public ConnectionStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(objectExpression);
+//		oupt.writeObject(inspectedVariable);
+//		oupt.writeObject(inspectVariableDeclaration);
+//		oupt.writeObject(connectionPart);
+//		oupt.writeObject(otherwise);
+//		oupt.writeObject(hasWhenPart);
+//	}
+//	
+//	@SuppressWarnings("unchecked")
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		objectExpression = (Expression) inpt.readObject();
+//		inspectedVariable = (VariableExpression) inpt.readObject();
+//		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObject();
+//		connectionPart = (Vector<DoPart>) inpt.readObject();
+//		otherwise = (Statement) inpt.readObject();
+//		hasWhenPart = (Boolean) inpt.readObject();
+//	}
+//	
 
 }

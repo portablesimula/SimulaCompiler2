@@ -14,6 +14,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -25,6 +27,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -154,32 +157,59 @@ public final class GotoStatement extends Statement {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public GotoStatement() {
 		super(0);
 	}
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeGotoStatement: " + this);
+		oupt.writeKind(ObjectKind.GotoStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(label);
+		oupt.writeObj(label);
 	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		label = (Expression) inpt.readObject();
+
+	public static GotoStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readGotoStatement: ");
+		GotoStatement stm = new GotoStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.label = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("GotoStatement: " + stm);
+		return(stm);
 	}
-	
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public GotoStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(label);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		label = (Expression) inpt.readObject();
+//	}
+//	
 
 }

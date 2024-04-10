@@ -40,7 +40,7 @@ import simula.compiler.utilities.Util;
  * 
  * @author Øystein Myhre Andersen
  */
-public final class InnerStatement extends Statement implements Externalizable {
+public final class InnerStatement extends Statement {
 
 	/**
 	 * Create a new InnerStatement.

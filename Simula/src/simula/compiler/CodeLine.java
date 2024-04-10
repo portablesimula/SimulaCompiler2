@@ -22,7 +22,7 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public final class CodeLine implements Externalizable {
+public final class CodeLine {
 	
 	/**
 	 * The module identifier.
@@ -56,28 +56,28 @@ public final class CodeLine implements Externalizable {
 		return("CodeLine["+modid+':'+sourceLineNumber+','+codeLine+']');
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public CodeLine() {	}
-
-	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("" + this);
-		oupt.writeInt(sourceLineNumber);
-		oupt.writeObject(codeLine);
-		oupt.writeObject(modid);
-	}
-
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		sourceLineNumber = inpt.readInt();
-		codeLine = (String) inpt.readObject();
-		modid = (String) inpt.readObject();
-		Util.TRACE_INPUT("" + this);
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public CodeLine() {	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("" + this);
+//		oupt.writeInt(sourceLineNumber);
+//		oupt.writeObject(codeLine);
+//		oupt.writeObject(modid);
+//	}
+//
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		sourceLineNumber = inpt.readInt();
+//		codeLine = (String) inpt.readObject();
+//		modid = (String) inpt.readObject();
+//		Util.TRACE_INPUT("" + this);
+//	}
 }

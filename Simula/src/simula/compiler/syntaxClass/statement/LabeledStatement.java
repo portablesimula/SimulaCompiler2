@@ -8,18 +8,14 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
 import simula.compiler.AttrInput;
 import simula.compiler.AttrOutput;
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -152,7 +148,7 @@ public final class LabeledStatement extends Statement {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public LabeledStatement() {
+	private LabeledStatement() {
 		super(0);
 	}
 

@@ -14,6 +14,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttrInput;
+import simula.compiler.AttrOutput;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -22,6 +24,7 @@ import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
@@ -363,40 +366,73 @@ public final class ActivationStatement extends Statement {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
-	public ActivationStatement() {
-		super(0);
-	}
+	public ActivationStatement() { super(0); }
 
 	@Override
-	public void writeExternal(ObjectOutput oupt) throws IOException {
-		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			oupt.writeBoolean(CHECKED);
+	public void writeAttr(AttrOutput oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeActivationStatement: " + this);
+		oupt.writeKind(ObjectKind.ActivationStatement);
 		oupt.writeInt(lineNumber);
-		oupt.writeObject(REAC);
-		oupt.writeObject(object1);
-		oupt.writeObject(object2);
-		oupt.writeObject(time);
-		oupt.writeObject(prior);
+		oupt.writeBoolean(REAC);
+		oupt.writeObj(object1);
+		oupt.writeObj(object2);
+		oupt.writeObj(time);
+		oupt.writeBoolean(prior);
 	}
-	
-	@Override
-	public void readExternal(ObjectInput inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-		if(!Option.NEW_ATTR_FILE)
-			CHECKED=inpt.readBoolean();
-		lineNumber = inpt.readInt();
-		REAC = (boolean) inpt.readObject();
-		object1 = (Expression) inpt.readObject();
-		object2 = (Expression) inpt.readObject();
-		time = (Expression) inpt.readObject();
-		prior = (Boolean) inpt.readObject();
+
+	public static ActivationStatement readAttr(AttrInput inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
+		ActivationStatement stm = new ActivationStatement();
+		stm.lineNumber = inpt.readInt();
+		stm.REAC = inpt.readBoolean();
+		stm.object1 = (Expression) inpt.readObj();
+		stm.object2 = (Expression) inpt.readObj();
+		stm.time = (Expression) inpt.readObj();
+		stm.prior = inpt.readBoolean();
+		Util.TRACE_INPUT("ActivationStatement: " + stm);
+		return(stm);
 	}
-	
+
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public ActivationStatement() {
+//		super(0);
+//	}
+//
+//	@Override
+//	public void writeExternal(ObjectOutput oupt) throws IOException {
+//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			oupt.writeBoolean(CHECKED);
+//		oupt.writeInt(lineNumber);
+//		oupt.writeObject(REAC);
+//		oupt.writeObject(object1);
+//		oupt.writeObject(object2);
+//		oupt.writeObject(time);
+//		oupt.writeObject(prior);
+//	}
+//	
+//	@Override
+//	public void readExternal(ObjectInput inpt) throws IOException {
+//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
+//		if(!Option.NEW_ATTR_FILE)
+//			CHECKED=inpt.readBoolean();
+//		lineNumber = inpt.readInt();
+//		REAC = (boolean) inpt.readObject();
+//		object1 = (Expression) inpt.readObject();
+//		object2 = (Expression) inpt.readObject();
+//		time = (Expression) inpt.readObject();
+//		prior = (Boolean) inpt.readObject();
+//	}
+//	
 
 }
