@@ -14,8 +14,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
@@ -293,7 +293,7 @@ public final class RemoteVariable extends Expression {
 	private RemoteVariable() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeRemoteVariable: " + this);
 		oupt.writeKind(ObjectKind.RemoteVariable);
 		oupt.writeInt(lineNumber);
@@ -307,7 +307,7 @@ public final class RemoteVariable extends Expression {
 //		oupt.writeBoolean(accessRemoteArray);
 	}
 	
-	public static RemoteVariable readAttr(AttrInput inpt) throws IOException {
+	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
 		rem.lineNumber = inpt.readInt();

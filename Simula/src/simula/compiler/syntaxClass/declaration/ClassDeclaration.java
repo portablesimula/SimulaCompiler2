@@ -25,8 +25,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -1575,7 +1575,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		super(null);
 	}
 
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		oupt.writeKind(declarationKind); // Mark: This is a ClassDeclaration
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
@@ -1601,25 +1601,25 @@ public class ClassDeclaration extends BlockDeclaration {
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
 		oupt.writeInt(labelList.size());
-		for(LabelDeclaration lab:labelList) lab.writeAttr(oupt);
+		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
 		
 //		oupt.writeObject(declarationList);
 //		oupt.writeObject(prep(declarationList));
 		DeclarationList decls = prep(declarationList);
-		System.out.println("ClassDeclaration.writeAttr: Write Declaration List: "+decls.size());
+		System.out.println("ClassDeclaration.writeObject: Write Declaration List: "+decls.size());
 		oupt.writeInt(decls.size());
-		for(Declaration decl:decls) decl.writeAttr(oupt);
+		for(Declaration decl:decls) decl.writeObject(oupt);
 
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
 		
 		//oupt.writeObject(statements1);
 		oupt.writeInt(statements1.size());
-		for(Statement stm:statements1) stm.writeAttr(oupt);
+		for(Statement stm:statements1) stm.writeObject(oupt);
 
 		//oupt.writeObject(statements);
 		oupt.writeInt(statements.size());
-		for(Statement stm:statements) stm.writeAttr(oupt);
+		for(Statement stm:statements) stm.writeObject(oupt);
 
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
@@ -1639,7 +1639,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ClassDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
 		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
@@ -1669,19 +1669,19 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 		//cls.protectedList = (Vector<ProtectedSpecification>) inpt.readObject();
 		n = inpt.readInt();
-		System.out.println("ClassDeclaration.readAttr: Read Protected List: "+n);
+		System.out.println("ClassDeclaration.readObject: Read Protected List: "+n);
 		for(int i=0;i<n;i++)
 			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
 
 		//cls.labelList = (Vector<LabelDeclaration>) inpt.readObject();
 		n = inpt.readInt();
-		System.out.println("ClassDeclaration.readAttr: Read Label List: "+n);
+		System.out.println("ClassDeclaration.readObject: Read Label List: "+n);
 		for(int i=0;i<n;i++)
-			cls.labelList.add(LabelDeclaration.readAttr(inpt));
+			cls.labelList.add(LabelDeclaration.readObject(inpt));
 
 		//cls.declarationList = (DeclarationList) inpt.readObject();
 		n = inpt.readInt();
-		System.out.println("ClassDeclaration.readAttr: Read Declaration List: "+n);
+		System.out.println("ClassDeclaration.readObject: Read Declaration List: "+n);
 		for(int i=0;i<n;i++) {
 			Declaration decl = (Declaration) inpt.readObj();
 			cls.declarationList.add(decl);
@@ -1689,7 +1689,7 @@ public class ClassDeclaration extends BlockDeclaration {
 
 		//cls.statements1 = (Vector<Statement>) inpt.readObject();
 		n = inpt.readInt();
-		System.out.println("ClassDeclaration.readAttr: Read statements1 List: "+n);
+		System.out.println("ClassDeclaration.readObject: Read statements1 List: "+n);
 		if(n > 0) cls.statements1 = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
@@ -1698,7 +1698,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 		//cls.statements = (Vector<Statement>) inpt.readObject();			
 		n = inpt.readInt();
-		System.out.println("ClassDeclaration.readAttr: Read statements List: "+n);
+		System.out.println("ClassDeclaration.readObject: Read statements List: "+n);
 		if(n > 0) cls.statements = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
@@ -1707,7 +1707,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.printTree(1);
 		Util.IERR("");
 
-//		System.out.println("ClassDeclaration.readAttr: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+//		System.out.println("ClassDeclaration.readObject: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 //		cls.print(2);
 //		Util.IERR("");
 		if(cls.prefix != null && !cls.prefix.equalsIgnoreCase("CLASS")) {
@@ -1733,13 +1733,13 @@ public class ClassDeclaration extends BlockDeclaration {
 		File jarFile = ExternalDeclaration.findJarFile(prefix, externalIdentifier);
 		if (jarFile != null) {
 			if(ExternalDeclaration.checkJarFiles(jarFile)) {
-				System.out.println("ClassDeclaration.readAttr: declaredIn="+declaredIn);
+				System.out.println("ClassDeclaration.readObject: declaredIn="+declaredIn);
 //				BlockDeclaration enclosure = StandardClass.BASICIO; //null; // Implies BASICIO
 				BlockDeclaration enclosure = nearestEnclosingBlock();
-				System.out.println("ClassDeclaration.readAttr: nearestEnclosingBlock="+enclosure);
+				System.out.println("ClassDeclaration.readObject: nearestEnclosingBlock="+enclosure);
 				Type moduleType = ExternalDeclaration.readAttributeFile(prefix, jarFile, enclosure);
 				
-//				System.out.println("\nClassDeclaration.readAttr: ");
+//				System.out.println("\nClassDeclaration.readObject: ");
 //				System.out.println(enclosure.identifier);
 //				Boolean seenStandardClasses = false;
 //				for(Declaration decl:enclosure.declarationList) {

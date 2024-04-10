@@ -33,7 +33,6 @@ public final class RunNewAttrTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
-		Option.NEW_ATTR_FILE=true;
 		Option.TESTING_STACK_SIZE = true;
 //		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;

@@ -13,8 +13,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -89,13 +89,13 @@ public final class DummyStatement extends Statement {
 	public DummyStatement() { super(0); }
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeDummyStatement: " + this);
 		oupt.writeKind(ObjectKind.DummyStatement);
 		oupt.writeInt(lineNumber);
 	}
 
-	public static DummyStatement readAttr(AttrInput inpt) throws IOException {
+	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
 		DummyStatement stm = new DummyStatement();
 		stm.lineNumber = inpt.readInt();

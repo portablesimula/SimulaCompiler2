@@ -18,8 +18,8 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -285,7 +285,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
@@ -300,17 +300,17 @@ public class SimpleVariableDeclaration extends Declaration {
 		}
 	}
 	
-	public static SimpleVariableDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
-		System.out.println("SimpleVariableDeclaration.readAttr: constantElement="+var.constantElement);
+		System.out.println("SimpleVariableDeclaration.readObject: constantElement="+var.constantElement);
 
 		var.identifier = inpt.readString();
 		var.externalIdent = inpt.readString();
 		var.type = inpt.readType();
 		var.constant = inpt.readBoolean();
 		boolean present = inpt.readBoolean();
-		System.out.println("SimpleVariableDeclaration.readAttr: present="+present);
+		System.out.println("SimpleVariableDeclaration.readObject: present="+present);
 		if(present) {
 			var.constantElement = (Constant) inpt.readObj();
 		}

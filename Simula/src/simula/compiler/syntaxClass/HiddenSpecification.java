@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.utilities.Global;
@@ -177,12 +177,12 @@ public final class HiddenSpecification extends SyntaxClass {
 	public HiddenSpecification() {
 	}
 
-	public void writeHiddenSpecification(AttrOutput oupt) throws IOException {
+	public void writeHiddenSpecification(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
 		oupt.writeString(identifier);
 	}
 	
-	public static HiddenSpecification readHiddenSpecification(AttrInput inpt) throws IOException {
+	public static HiddenSpecification readHiddenSpecification(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readHiddenSpecification: ");
 		HiddenSpecification spec = new HiddenSpecification();
 		spec.identifier = inpt.readString();

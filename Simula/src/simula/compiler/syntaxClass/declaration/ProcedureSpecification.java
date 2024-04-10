@@ -13,8 +13,8 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -163,7 +163,7 @@ public final class ProcedureSpecification {
 	public ProcedureSpecification() {
 	}
 
-	public static void writeProcedureSpec(ProcedureSpecification spec,AttrOutput oupt) throws IOException {
+	public static void writeProcedureSpec(ProcedureSpecification spec,AttributeOutputStream oupt) throws IOException {
 		if(spec == null) {
 			oupt.writeBoolean(false);
 		} else {
@@ -181,7 +181,7 @@ public final class ProcedureSpecification {
 	}
 	
 //	public static ProcedureSpecification readParameter(ObjectInput inpt) throws IOException {
-	public static ProcedureSpecification readProcedureSpec(AttrInput inpt) throws IOException {
+	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readProcedureSpec: ");
 		boolean present = inpt.readBoolean();
 		if(!present) return(null);

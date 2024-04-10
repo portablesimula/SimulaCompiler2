@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.utilities.Global;
@@ -153,16 +153,16 @@ public final class LabeledStatement extends Statement {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabeledStatement: " + this);
 		oupt.writeKind(ObjectKind.LabeledStatement);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(statement);
 		oupt.writeInt(labels.size());
-		for(LabelDeclaration lab:labels) lab.writeAttr(oupt);
+		for(LabelDeclaration lab:labels) lab.writeObject(oupt);
 	}
 
-	public static LabeledStatement readAttr(AttrInput inpt) throws IOException {
+	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
 		LabeledStatement stm = new LabeledStatement();
 		stm.lineNumber = inpt.readInt();
@@ -171,7 +171,7 @@ public final class LabeledStatement extends Statement {
 		if(n > 0) {
 			stm.labels = new Vector<LabelDeclaration>();
 			for(int i=0;i<n;i++)
-				stm.labels.add(LabelDeclaration.readAttr(inpt));
+				stm.labels.add(LabelDeclaration.readObject(inpt));
 		}
 		Util.TRACE_INPUT("LabeledStatement: " + stm);
 		return(stm);

@@ -21,8 +21,8 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
@@ -567,7 +567,7 @@ public final class Parameter extends Declaration {
 		this.declarationKind = ObjectKind.Parameter;
 	}
 
-	public void writeParameter(AttrOutput oupt) throws IOException {
+	public void writeParameter(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
@@ -577,7 +577,7 @@ public final class Parameter extends Declaration {
 		oupt.writeInt(mode);
 	}
 	
-	public static Parameter readParameter(AttrInput inpt) throws IOException {
+	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readParameter: ");
 		Parameter par = new Parameter();
 		par.identifier = inpt.readString();

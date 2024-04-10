@@ -280,7 +280,6 @@ public final class RunCompilerTest {
 
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
-			Option.NEW_ATTR_FILE=true;
 			Option.CREATE_JAVA_SOURCE = true;
 //			Option.GENERATE_BYTEFILE=true;
 		    Option.verbose = true;

@@ -20,8 +20,8 @@ import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -285,7 +285,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	public LabelDeclaration() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabelDeclaration: " + identifier);
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
@@ -294,7 +294,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeObj(movedTo);
 	}
 	
-	public static LabelDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabelDeclaration: ");
 		LabelDeclaration lab = new LabelDeclaration();
 		lab.identifier = inpt.readString();

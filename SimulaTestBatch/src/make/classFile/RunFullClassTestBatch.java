@@ -42,7 +42,6 @@ public final class RunFullClassTestBatch {
 		Option.INLINE_TESTING=true;
 		Option.TESTING_STACK_SIZE = true;
 		Option.TESTING_SEPARATE = true;
-		Option.NEW_ATTR_FILE=true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.SPORT=true;
 //		Option.TRACING=false;

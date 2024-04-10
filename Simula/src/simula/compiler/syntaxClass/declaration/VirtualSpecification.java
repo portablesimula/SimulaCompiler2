@@ -16,8 +16,8 @@ import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -295,7 +295,7 @@ public final class VirtualSpecification extends Declaration {
 		this.declarationKind = ObjectKind.VirtualSpecification;
 	}
 
-	public static void writeVirtSpec(VirtualSpecification virt,AttrOutput oupt) throws IOException {
+	public static void writeVirtSpec(VirtualSpecification virt,AttributeOutputStream oupt) throws IOException {
 		if(virt == null) {
 			oupt.writeBoolean(false);
 		} else {
@@ -310,7 +310,7 @@ public final class VirtualSpecification extends Declaration {
 		}
 	}
 
-	public static VirtualSpecification readVirtSpec(AttrInput inpt) throws IOException {
+	public static VirtualSpecification readVirtSpec(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readVirtSpec: ");
 		boolean present = inpt.readBoolean();
 		VirtualSpecification virt = null;

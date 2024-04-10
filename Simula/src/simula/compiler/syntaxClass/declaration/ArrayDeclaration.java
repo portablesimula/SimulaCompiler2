@@ -23,8 +23,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Enumeration;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -562,7 +562,7 @@ public final class ArrayDeclaration extends Declaration {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
@@ -571,7 +571,7 @@ public final class ArrayDeclaration extends Declaration {
 		oupt.writeInt(nDim);
 	}
 	
-	public static ArrayDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
 		arr.identifier = inpt.readString();

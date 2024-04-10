@@ -13,8 +13,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
@@ -171,7 +171,7 @@ public final class UnaryOperation extends Expression {
 	private UnaryOperation() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
 		oupt.writeKind(ObjectKind.UnaryOperation);
 		oupt.writeInt(lineNumber);
@@ -181,7 +181,7 @@ public final class UnaryOperation extends Expression {
 		oupt.writeObj(operand);
 	}
 	
-	public static UnaryOperation readAttr(AttrInput inpt) throws IOException {
+	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
 		UnaryOperation expr = new UnaryOperation();
 		expr.lineNumber = inpt.readInt();

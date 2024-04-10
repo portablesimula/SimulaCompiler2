@@ -15,8 +15,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
@@ -325,7 +325,7 @@ public final class Constant extends Expression {
 	private Constant() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
 		oupt.writeKind(ObjectKind.Constant);
 		oupt.writeInt(lineNumber);
@@ -342,13 +342,13 @@ public final class Constant extends Expression {
 		Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+this);
 	}
 	
-	public static Constant readAttr(AttrInput inpt) throws IOException {
+	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
 		cnst.lineNumber = inpt.readInt();
 		cnst.type = inpt.readType();
 		cnst.backLink = (SyntaxClass) inpt.readObj();
-		System.out.println("Constant.readAttr: cnst.backLink="+cnst.backLink);
+		System.out.println("Constant.readObject: cnst.backLink="+cnst.backLink);
 //		Util.IERR("");
 		
 		//cnst.value=inpt.readObject();

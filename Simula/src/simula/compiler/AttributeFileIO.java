@@ -101,7 +101,7 @@ public final class AttributeFileIO {
 //		ObjectInputStream inpt = new ObjectInputStream(inputStream);
 		byte[] attrFile = inputStream.readAllBytes();
 		System.out.println("AttributeFileIO.readAttributeFile: size="+attrFile.length+", File="+file);
-		AttrInput inpt = new AttrInput(new ByteArrayInputStream(attrFile));
+		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile));
 		
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + attributeFile);
@@ -111,9 +111,9 @@ public final class AttributeFileIO {
 //		Boolean isClass = inpt.readBoolean();
 		int declarationKind = inpt.readKind();
 		if(declarationKind == ObjectKind.Class)
-			 module = ClassDeclaration.readAttr(inpt);
+			 module = ClassDeclaration.readObject(inpt);
 		else if(declarationKind == ObjectKind.Procedure)
-			module = ProcedureDeclaration.readAttr(inpt);
+			module = ProcedureDeclaration.readObject(inpt);
 		else Util.IERR("IMPOSSIBLE");
 			
 		module.isPreCompiled = true;
@@ -169,13 +169,13 @@ public final class AttributeFileIO {
 	 */
 	private byte[] buildAttrFile(final BlockDeclaration module) throws IOException {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		AttrOutput oupt = new AttrOutput(byteArrayOutputStream);
+		AttributeOutputStream oupt = new AttributeOutputStream(byteArrayOutputStream);
 		// writeVersion:
 		oupt.writeString(version);
 //		System.out.println("AttributeFileIO.write: Option.NEW_ATTR_FILE="+Option.NEW_ATTR_FILE);
 //			System.out.println("AttributeFileIO.write: "+module);
-			if(module instanceof ProcedureDeclaration pro)  pro.writeAttr(oupt);
-			else if(module instanceof ClassDeclaration cls) cls.writeAttr(oupt);
+			if(module instanceof ProcedureDeclaration pro)  pro.writeObject(oupt);
+			else if(module instanceof ClassDeclaration cls) cls.writeObject(oupt);
 			else Util.IERR("");
 		oupt.flush(); oupt.close();
 		return(byteArrayOutputStream.toByteArray());
@@ -189,10 +189,10 @@ public final class AttributeFileIO {
 	private void listAttributeFile(final File aFile) throws IOException {
 		if (Option.verbose)	Util.TRACE("*** BEGIN Read SimulaAttributeFile: " + aFile);
 		FileInputStream fileInputStream = new FileInputStream(aFile);
-		ObjectInputStream inpt = new ObjectInputStream(fileInputStream);
+		AttributeInputStream inpt = new AttributeInputStream(fileInputStream);
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + aFile);
-		BlockDeclaration blockDeclaration=(BlockDeclaration)inpt.readObject();
+		BlockDeclaration blockDeclaration=(BlockDeclaration)inpt.readObj();
 		inpt.close();
 		if (Option.verbose) {
 			if (Option.TRACE_ATTRIBUTE_INPUT) {

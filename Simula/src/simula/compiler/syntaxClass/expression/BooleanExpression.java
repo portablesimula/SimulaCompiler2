@@ -13,8 +13,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
@@ -274,7 +274,7 @@ public final class BooleanExpression extends Expression {
 	private BooleanExpression() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeBooleanExpression: " + this);
 		oupt.writeKind(ObjectKind.BooleanExpression);
 		oupt.writeInt(lineNumber);
@@ -285,7 +285,7 @@ public final class BooleanExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
-	public static BooleanExpression readAttr(AttrInput inpt) throws IOException {
+	public static BooleanExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBooleanExpression: ");
 		BooleanExpression expr = new BooleanExpression();
 		expr.lineNumber = inpt.readInt();

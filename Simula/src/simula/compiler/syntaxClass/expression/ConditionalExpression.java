@@ -13,8 +13,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
@@ -138,7 +138,7 @@ public final class ConditionalExpression extends Expression {
 	private ConditionalExpression() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalExpression: " + this);
 		oupt.writeKind(ObjectKind.ConditionalExpression);
 		oupt.writeInt(lineNumber);
@@ -149,7 +149,7 @@ public final class ConditionalExpression extends Expression {
 		oupt.writeObj(elseExpression);
 	}
 	
-	public static ConditionalExpression readAttr(AttrInput inpt) throws IOException {
+	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
 		expr.lineNumber = inpt.readInt();

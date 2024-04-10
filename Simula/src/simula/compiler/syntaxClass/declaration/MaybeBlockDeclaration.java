@@ -20,8 +20,8 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -526,7 +526,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public MaybeBlockDeclaration() { super(null); }
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
@@ -534,7 +534,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		oupt.writeType(type);
 	}
 	
-	public static MaybeBlockDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 		Util.TRACE_INPUT("BEGIN Read "+blk);
 		blk.identifier = inpt.readString();

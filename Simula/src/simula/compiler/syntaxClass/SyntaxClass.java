@@ -10,8 +10,8 @@ package simula.compiler.syntaxClass;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.utilities.Global;
@@ -243,35 +243,14 @@ public abstract class SyntaxClass {
 	// ***********************************************************************************************
 
 	
-	public void writeAttr(AttrOutput oupt) throws IOException {
-		Util.IERR("Method 'writeAttr' needs a redefinition in "+this.getClass().getSimpleName());
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.IERR("Method 'writeObject' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	public static SyntaxClass readAttr(AttrInput inpt) throws IOException {
-		Util.IERR("Method 'readAttr' needs a redefiniton");
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
+		Util.IERR("Method 'readObject' needs a redefiniton");
 		return(null);
 	}
 
-	
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//	}
-//	
 
 }

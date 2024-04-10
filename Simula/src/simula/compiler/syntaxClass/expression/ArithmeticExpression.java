@@ -13,8 +13,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -338,7 +338,7 @@ public final class ArithmeticExpression extends Expression {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeArithmeticExpression: " + this);
 		oupt.writeKind(ObjectKind.ArithmeticExpression);
 		oupt.writeInt(lineNumber);
@@ -349,7 +349,7 @@ public final class ArithmeticExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
-	public static ArithmeticExpression readAttr(AttrInput inpt) throws IOException {
+	public static ArithmeticExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArithmeticExpression: ");
 		ArithmeticExpression expr = new ArithmeticExpression();
 		expr.lineNumber = inpt.readInt();

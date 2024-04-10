@@ -20,8 +20,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -475,13 +475,13 @@ public final class ForStatement extends Statement {
 		// ***********************************************************************************************
 
 //		@Override
-		public void writeAttr(AttrOutput oupt) throws IOException {
+		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
 			oupt.writeInt(1);
 			oupt.writeObj(expr1);
 		}
 
-		public static ForListElement readAttr(ForStatement x, AttrInput inpt) throws IOException {
+		public static ForListElement readObject(ForStatement x, AttributeInputStream inpt) throws IOException {
 			Util.TRACE_INPUT("BEGIN readForListElement: ");
 			ForListElement stm = null;
 			int nExpr = inpt.readInt();
@@ -627,7 +627,7 @@ public final class ForStatement extends Statement {
 		// ***********************************************************************************************
 
 		@Override
-		public void writeAttr(AttrOutput oupt) throws IOException {
+		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
 			oupt.writeInt(2);
 			oupt.writeObj(expr1);
@@ -833,7 +833,7 @@ public final class ForStatement extends Statement {
 		// ***********************************************************************************************
 
 		@Override
-		public void writeAttr(AttrOutput oupt) throws IOException {
+		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
 			oupt.writeInt(3);
 			oupt.writeObj(expr1);
@@ -931,7 +931,7 @@ public final class ForStatement extends Statement {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeForStatement: " + this);
 		oupt.writeKind(ObjectKind.ForStatement);
 		oupt.writeInt(lineNumber);
@@ -939,11 +939,11 @@ public final class ForStatement extends Statement {
 		oupt.writeInt(assignmentOperator);
 //		oupt.writeObj(forList);
 		oupt.writeInt(forList.size());
-		for(ForListElement ent:forList) ent.writeAttr(oupt);
+		for(ForListElement ent:forList) ent.writeObject(oupt);
 		oupt.writeObj(doStatement);
 	}
 
-	public static ForStatement readAttr(AttrInput inpt) throws IOException {
+	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readForStatement: ");
 		ForStatement stm = new ForStatement();
 		stm.lineNumber = inpt.readInt();
@@ -954,7 +954,7 @@ public final class ForStatement extends Statement {
 		if(n > 0) {
 			stm.forList = new Vector<ForListElement>();
 			for(int i=0;i<n;i++)
-				stm.forList.add(ForListElement.readAttr(stm,inpt));
+				stm.forList.add(ForListElement.readObject(stm,inpt));
 		}
 		stm.doStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("ForStatement: " + stm);

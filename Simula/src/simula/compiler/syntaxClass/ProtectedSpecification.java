@@ -12,8 +12,8 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
@@ -130,12 +130,12 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 	 */
 	public ProtectedSpecification() {}
 
-	public void writeProtectedSpecification(AttrOutput oupt) throws IOException {
+	public void writeProtectedSpecification(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeProtectedSpecification: " + identifier);
 		oupt.writeString(identifier);
 	}
 	
-	public static ProtectedSpecification readProtectedSpecification(AttrInput inpt) throws IOException {
+	public static ProtectedSpecification readProtectedSpecification(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readProtectedSpecification: ");
 		ProtectedSpecification spec = new ProtectedSpecification();
 		spec.identifier = inpt.readString();

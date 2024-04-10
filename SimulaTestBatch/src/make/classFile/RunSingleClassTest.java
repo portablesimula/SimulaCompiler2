@@ -34,7 +34,6 @@ public final class RunSingleClassTest {
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.TESTING_SEPARATE = true;
-		Option.NEW_ATTR_FILE=true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
 //		Option.LIST_GENERATED_CLASS_FILES=true;

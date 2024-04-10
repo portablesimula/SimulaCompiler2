@@ -14,8 +14,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -174,24 +174,24 @@ public final class ConditionalStatement extends Statement {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
 		oupt.writeKind(ObjectKind.ConditionalStatement);
-//		System.out.println("ConditionalStatement.writeAttr: ObjectKind.ConditionalStatement="+ObjectKind.ConditionalStatement);
+//		System.out.println("ConditionalStatement.writeObject: ObjectKind.ConditionalStatement="+ObjectKind.ConditionalStatement);
 		oupt.writeInt(lineNumber);
-//		System.out.println("ConditionalStatement.writeAttr: condition="+condition.getClass().getSimpleName()+"  "+condition);
+//		System.out.println("ConditionalStatement.writeObject: condition="+condition.getClass().getSimpleName()+"  "+condition);
 		oupt.writeObj(condition);
 		oupt.writeObj(thenStatement);
 		oupt.writeObj(elseStatement);
 	}
 
-	public static ConditionalStatement readAttr(AttrInput inpt) throws IOException {
+	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
 		ConditionalStatement stm = new ConditionalStatement();
 		stm.lineNumber = inpt.readInt();
-//		System.out.println("ConditionalStatement.readAttr: lineNumber="+stm.lineNumber);
+//		System.out.println("ConditionalStatement.readObject: lineNumber="+stm.lineNumber);
 		stm.condition = (Expression) inpt.readObj();
-//		System.out.println("ConditionalStatement.readAttr: condition="+stm.condition.getClass().getSimpleName()+"  "+stm.condition);
+//		System.out.println("ConditionalStatement.readObject: condition="+stm.condition.getClass().getSimpleName()+"  "+stm.condition);
 		stm.thenStatement = (Statement) inpt.readObj();
 		stm.elseStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("ConditionalStatement: " + stm);

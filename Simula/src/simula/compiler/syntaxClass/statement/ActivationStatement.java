@@ -14,8 +14,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -374,7 +374,7 @@ public final class ActivationStatement extends Statement {
 	public ActivationStatement() { super(0); }
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeActivationStatement: " + this);
 		oupt.writeKind(ObjectKind.ActivationStatement);
 		oupt.writeInt(lineNumber);
@@ -385,7 +385,7 @@ public final class ActivationStatement extends Statement {
 		oupt.writeBoolean(prior);
 	}
 
-	public static ActivationStatement readAttr(AttrInput inpt) throws IOException {
+	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
 		ActivationStatement stm = new ActivationStatement();
 		stm.lineNumber = inpt.readInt();

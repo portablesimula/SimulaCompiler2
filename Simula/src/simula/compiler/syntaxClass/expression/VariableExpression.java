@@ -20,8 +20,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -1077,7 +1077,7 @@ public final class VariableExpression extends Expression {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 //		oupt.writeBoolean(CHECKED);
 		oupt.writeKind(ObjectKind.VariableExpression);
@@ -1098,15 +1098,15 @@ public final class VariableExpression extends Expression {
 //		oupt.writeObject(checkedParams);			
 	}
 	
-	public static VariableExpression readAttr(AttrInput inpt) throws IOException {
+	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readVariableExpression: ");
 		VariableExpression var = new VariableExpression();
 //		CHECKED=inpt.readBoolean();
 		
 		var.lineNumber = inpt.readInt();
-		System.out.println("VariableExpression.readAttr: lineNumber="+var.lineNumber);
+		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
 		var.type = inpt.readType();
-		System.out.println("VariableExpression.readAttr: type="+var.type);
+		System.out.println("VariableExpression.readObject: type="+var.type);
 		var.backLink = (SyntaxClass) inpt.readObj();
 		var.identifier = inpt.readString();
 //		meaning = (Meaning) inpt.readObject();

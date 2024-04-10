@@ -901,7 +901,7 @@ public class Type extends SyntaxClass {
 //	// ***********************************************************************************************
 //
 ////	public static void outType(Type type,DataOutput oupt) throws IOException {
-//	public static void outType(Type type,AttrOutput oupt) throws IOException {
+//	public static void outType(Type type,AttributeOutputStream oupt) throws IOException {
 //		if(type == null) {
 //			oupt.writeInt(-1);
 //		} else {
@@ -914,12 +914,12 @@ public class Type extends SyntaxClass {
 //	
 //	/**
 //	 * Read a type from an ObjectInput file.
-//	 * @param inpt the AttrInput
+//	 * @param inpt the AttributeInputStream
 //	 * @return the resulting Type
 //	 * @throws IOException if an IOException occur
 //	 * @throws ClassNotFoundException if the operation failed
 //	 */
-//	public static Type inType(AttrInput inpt) throws IOException {
+//	public static Type inType(AttributeInputStream inpt) throws IOException {
 //		int keyWord = inpt.readInt();
 //		if(keyWord == -1) return(null);
 //		String classIdent = inpt.readString();

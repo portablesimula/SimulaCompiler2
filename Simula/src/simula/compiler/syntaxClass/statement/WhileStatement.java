@@ -6,8 +6,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -126,7 +126,7 @@ public final class WhileStatement extends Statement {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeWhileStatement: " + this);
 		oupt.writeKind(ObjectKind.WhileStatement);
 		oupt.writeInt(lineNumber);
@@ -134,7 +134,7 @@ public final class WhileStatement extends Statement {
 		oupt.writeObj(doStatement);
 	}
 
-	public static WhileStatement readAttr(AttrInput inpt) throws IOException {
+	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
 		WhileStatement stm = new WhileStatement();
 		stm.lineNumber = inpt.readInt();

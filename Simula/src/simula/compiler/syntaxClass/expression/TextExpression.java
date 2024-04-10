@@ -15,8 +15,8 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
@@ -179,7 +179,7 @@ public final class TextExpression extends Expression {
 	private TextExpression() {}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeTextExpression: " + this);
 		oupt.writeKind(ObjectKind.TextExpression);
 		oupt.writeInt(lineNumber);
@@ -189,7 +189,7 @@ public final class TextExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
-	public static TextExpression readAttr(AttrInput inpt) throws IOException {
+	public static TextExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTextExpression: ");
 		TextExpression expr = new TextExpression();
 		expr.lineNumber = inpt.readInt();

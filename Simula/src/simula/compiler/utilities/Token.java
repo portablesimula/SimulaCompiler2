@@ -254,7 +254,7 @@ public final class Token {
 //		oupt.writeObject(value);
 //	}
 //
-//	public static Token readAttr(ObjectInput inpt) throws IOException {
+//	public static Token readObject(ObjectInput inpt) throws IOException {
 //		int keyWord = inpt.readInt();
 //		Object value = inpt.readObject();
 //		return(new Token("",keyWord,value));

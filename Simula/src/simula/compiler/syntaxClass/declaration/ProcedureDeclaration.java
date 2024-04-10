@@ -29,8 +29,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.List;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
@@ -1085,7 +1085,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public ProcedureDeclaration() {	super(null); }
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
@@ -1122,12 +1122,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static ProcedureDeclaration readAttr(AttrInput inpt) throws IOException {
+	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 //		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		String identifier = inpt.readString();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
 
-//		System.out.println("ProcedureDeclaration.readAttr: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
+//		System.out.println("ProcedureDeclaration.readObject: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
 //		pro.print(2);
 //		Util.IERR("");
 

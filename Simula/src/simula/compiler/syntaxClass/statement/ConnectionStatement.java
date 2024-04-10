@@ -17,8 +17,8 @@ import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
-import simula.compiler.AttrInput;
-import simula.compiler.AttrOutput;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -270,13 +270,13 @@ public final class ConnectionStatement extends Statement {
 		private DoPart() {}
 
 //		@Override
-		public void writeAttr(AttrOutput oupt) throws IOException {
+		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
 			oupt.writeInt(1);
 			oupt.writeObj(connectionBlock);
 		}
 
-		public static DoPart readAttr(ConnectionStatement x, AttrInput inpt) throws IOException {
+		public static DoPart readObject(ConnectionStatement x, AttributeInputStream inpt) throws IOException {
 			Util.TRACE_INPUT("BEGIN readDoPart: ");
 			int n = inpt.readInt();
 			switch(n) {
@@ -403,7 +403,7 @@ public final class ConnectionStatement extends Statement {
 		private WhenPart() {}
 
 		@Override
-		public void writeAttr(AttrOutput oupt) throws IOException {
+		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
 			oupt.writeInt(2);
 			oupt.writeString(classIdentifier);
@@ -518,7 +518,7 @@ public final class ConnectionStatement extends Statement {
 	}
 
 	@Override
-	public void writeAttr(AttrOutput oupt) throws IOException {
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
 		oupt.writeKind(ObjectKind.ConnectionStatement);
 		oupt.writeInt(lineNumber);
@@ -527,12 +527,12 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeObj(inspectVariableDeclaration);
 //		oupt.writeObj(connectionPart);
 		oupt.writeInt(connectionPart.size());
-		for(DoPart part:connectionPart) part.writeAttr(oupt);
+		for(DoPart part:connectionPart) part.writeObject(oupt);
 		oupt.writeObj(otherwise);
 		oupt.writeBoolean(hasWhenPart);
 	}
 
-	public static ConnectionStatement readAttr(AttrInput inpt) throws IOException {
+	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
 		ConnectionStatement stm = new ConnectionStatement();
 		stm.lineNumber = inpt.readInt();
@@ -544,7 +544,7 @@ public final class ConnectionStatement extends Statement {
 		if(n > 0) {
 			stm.connectionPart = new Vector<DoPart>();
 			for(int i=0;i<n;i++)
-				stm.connectionPart.add(DoPart.readAttr(stm,inpt));
+				stm.connectionPart.add(DoPart.readObject(stm,inpt));
 		}
 		stm.otherwise = (Statement) inpt.readObj();
 		stm.hasWhenPart = inpt.readBoolean();
