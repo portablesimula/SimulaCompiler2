@@ -315,6 +315,7 @@ public final class RelationalOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeRelationalOperation: " + this);
 		oupt.writeKind(ObjectKind.RelationalOperation);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -326,6 +327,7 @@ public final class RelationalOperation extends Expression {
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRelationalOperation: ");
 		RelationalOperation expr = new RelationalOperation();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

@@ -565,6 +565,7 @@ public final class ArrayDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeKind(declarationKind);
+		oupt.writeInt(SEQU);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
@@ -574,6 +575,7 @@ public final class ArrayDeclaration extends Declaration {
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
+		arr.SEQU = inpt.readInt();
 		arr.identifier = inpt.readString();
 		arr.externalIdent = inpt.readString();
 		arr.type = inpt.readType();

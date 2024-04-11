@@ -177,7 +177,7 @@ public final class ConditionalStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
 		oupt.writeKind(ObjectKind.ConditionalStatement);
-//		System.out.println("ConditionalStatement.writeObject: ObjectKind.ConditionalStatement="+ObjectKind.ConditionalStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 //		System.out.println("ConditionalStatement.writeObject: condition="+condition.getClass().getSimpleName()+"  "+condition);
 		oupt.writeObj(condition);
@@ -188,11 +188,17 @@ public final class ConditionalStatement extends Statement {
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
 		ConditionalStatement stm = new ConditionalStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 //		System.out.println("ConditionalStatement.readObject: lineNumber="+stm.lineNumber);
 		stm.condition = (Expression) inpt.readObj();
 //		System.out.println("ConditionalStatement.readObject: condition="+stm.condition.getClass().getSimpleName()+"  "+stm.condition);
 		stm.thenStatement = (Statement) inpt.readObj();
+		if(stm.thenStatement == null) {
+			inpt.objectReference.print();
+			Util.IERR("");
+		}
+		
 		stm.elseStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("ConditionalStatement: " + stm);
 		return(stm);

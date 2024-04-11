@@ -296,6 +296,7 @@ public final class RemoteVariable extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeRemoteVariable: " + this);
 		oupt.writeKind(ObjectKind.RemoteVariable);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -310,6 +311,7 @@ public final class RemoteVariable extends Expression {
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
+		rem.SEQU = inpt.readInt();
 		rem.lineNumber = inpt.readInt();
 		rem.type = inpt.readType();
 		rem.backLink = (SyntaxClass) inpt.readObj();

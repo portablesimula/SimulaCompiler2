@@ -934,6 +934,7 @@ public final class ForStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeForStatement: " + this);
 		oupt.writeKind(ObjectKind.ForStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(controlVariable);
 		oupt.writeInt(assignmentOperator);
@@ -946,6 +947,7 @@ public final class ForStatement extends Statement {
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readForStatement: ");
 		ForStatement stm = new ForStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.controlVariable = (VariableExpression) inpt.readObj();
 		stm.assignmentOperator = inpt.readInt();

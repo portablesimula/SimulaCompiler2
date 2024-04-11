@@ -141,6 +141,7 @@ public final class ConditionalExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalExpression: " + this);
 		oupt.writeKind(ObjectKind.ConditionalExpression);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -152,6 +153,7 @@ public final class ConditionalExpression extends Expression {
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

@@ -156,6 +156,7 @@ public final class LabeledStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabeledStatement: " + this);
 		oupt.writeKind(ObjectKind.LabeledStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(statement);
 		oupt.writeInt(labels.size());
@@ -165,6 +166,7 @@ public final class LabeledStatement extends Statement {
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
 		LabeledStatement stm = new LabeledStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.statement = (Statement) inpt.readObj();
 		int n = inpt.readInt();

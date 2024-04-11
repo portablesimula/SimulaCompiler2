@@ -16,8 +16,9 @@ public class ObjectReferenceMap {
 		System.out.println("ObjectReferenceMap.put:" + key + "  <= =>  " + value);
 		if(key == null) Util.IERR("");
 		if(value == null) Util.IERR("");
-		System.out.println("ObjectReferenceMap.put:" + key + "  <= =>  " + value.getClass().getSimpleName());
+//		System.out.println("ObjectReferenceMap.put:" + key + "  <= =>  " + value.getClass().getSimpleName());
 		objectReference.put(key, value);
+//		Util.IERR("");
 	}
 	
 	public SyntaxClass get(int key) {

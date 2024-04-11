@@ -107,12 +107,14 @@ public final class InnerStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeInnerStatement: " + this);
 		oupt.writeKind(ObjectKind.InnerStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 	}
 
 	public static InnerStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readInnerStatement: ");
 		InnerStatement stm = new InnerStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		Util.TRACE_INPUT("InnerStatement: " + stm);
 		return(stm);

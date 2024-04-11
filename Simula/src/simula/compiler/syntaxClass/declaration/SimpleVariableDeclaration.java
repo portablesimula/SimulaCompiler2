@@ -288,33 +288,38 @@ public class SimpleVariableDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
+		oupt.writeInt(SEQU);
+//		if(SEQU == 0) Util.IERR("");
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 		oupt.writeBoolean(constant);
-		if (constantElement instanceof Constant cnst) {
-			oupt.writeBoolean(true);
-			oupt.writeObj(cnst);
-		} else {
-			oupt.writeBoolean(false);
-		}
+
+//		oupt.writeObj(constantElement);
+//		if (constantElement instanceof Constant cnst) {
+//			oupt.writeBoolean(true);
+//			oupt.writeObj(cnst);
+//		} else {
+//			oupt.writeBoolean(false);
+//		}
 	}
 	
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
-		System.out.println("SimpleVariableDeclaration.readObject: constantElement="+var.constantElement);
+//		System.out.println("SimpleVariableDeclaration.readObject: constantElement="+var.constantElement);
 
+		var.SEQU = inpt.readInt();
 		var.identifier = inpt.readString();
 		var.externalIdent = inpt.readString();
 		var.type = inpt.readType();
 		var.constant = inpt.readBoolean();
-		boolean present = inpt.readBoolean();
-		System.out.println("SimpleVariableDeclaration.readObject: present="+present);
-		if(present) {
-			var.constantElement = (Constant) inpt.readObj();
-		}
-		Util.TRACE_INPUT("Variable: " + var);
+//		boolean present = inpt.readBoolean();
+//		System.out.println("SimpleVariableDeclaration.readObject: present="+present);
+//		if(present) {
+//			var.constantElement = (Constant) inpt.readObj();
+//		}
+		Util.TRACE_INPUT("Variable: " + var.SEQU + " " + var);
 //		Util.IERR("SJEKK DENNE");
 		return(var);
 	}

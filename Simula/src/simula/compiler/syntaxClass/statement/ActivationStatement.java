@@ -377,6 +377,7 @@ public final class ActivationStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeActivationStatement: " + this);
 		oupt.writeKind(ObjectKind.ActivationStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeBoolean(REAC);
 		oupt.writeObj(object1);
@@ -388,6 +389,7 @@ public final class ActivationStatement extends Statement {
 	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
 		ActivationStatement stm = new ActivationStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.REAC = inpt.readBoolean();
 		stm.object1 = (Expression) inpt.readObj();
@@ -397,42 +399,5 @@ public final class ActivationStatement extends Statement {
 		Util.TRACE_INPUT("ActivationStatement: " + stm);
 		return(stm);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public ActivationStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(REAC);
-//		oupt.writeObject(object1);
-//		oupt.writeObject(object2);
-//		oupt.writeObject(time);
-//		oupt.writeObject(prior);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		REAC = (boolean) inpt.readObject();
-//		object1 = (Expression) inpt.readObject();
-//		object2 = (Expression) inpt.readObject();
-//		time = (Expression) inpt.readObject();
-//		prior = (Boolean) inpt.readObject();
-//	}
-//	
 
 }

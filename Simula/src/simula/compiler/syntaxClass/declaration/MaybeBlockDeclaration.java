@@ -529,6 +529,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
+		oupt.writeInt(SEQU);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
@@ -537,6 +538,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 		Util.TRACE_INPUT("BEGIN Read "+blk);
+		blk.SEQU = inpt.readInt();
 		blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();

@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -26,7 +24,6 @@ import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -129,7 +126,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * Utility to help generate unique identifiers to the inspected variable.
 	 */
-	private static int SEQU = 4444; //0;
+	private static int SEQUX = 4444; //0;
 
 	/**
 	 * 
@@ -147,7 +144,7 @@ public final class ConnectionStatement extends Statement {
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
 		objectExpression = Expression.expectExpression();
 		objectExpression.backLink = this;
-		String ident = "_inspect_" + lineNumber + '_' + (SEQU++);
+		String ident = "_inspect_" + lineNumber + '_' + (SEQUX++);
 		inspectedVariable = new VariableExpression(ident);
 		inspectVariableDeclaration = new SimpleVariableDeclaration(Type.Ref("RTObject"), ident);
 		DeclarationScope scope = Global.getCurrentScope();
@@ -521,6 +518,7 @@ public final class ConnectionStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
 		oupt.writeKind(ObjectKind.ConnectionStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(objectExpression);
 		oupt.writeObj(inspectedVariable);
@@ -535,6 +533,7 @@ public final class ConnectionStatement extends Statement {
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
 		ConnectionStatement stm = new ConnectionStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.objectExpression = (Expression) inpt.readObj();
 		stm.inspectedVariable = (VariableExpression) inpt.readObj();

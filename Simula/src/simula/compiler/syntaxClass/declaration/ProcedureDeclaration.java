@@ -1089,11 +1089,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
+		oupt.writeInt(SEQU);
 		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
 		oupt.writeType(type);
 //		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		oupt.writeKind(declarationKind);
+//		oupt.writeKind(declarationKind);
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
 
@@ -1131,10 +1132,11 @@ public class ProcedureDeclaration extends BlockDeclaration {
 //		pro.print(2);
 //		Util.IERR("");
 
+		pro.SEQU = inpt.readInt();
 		pro.externalIdent = inpt.readString();
 		pro.type=inpt.readType();
 //		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-		pro.declarationKind = inpt.readInt();
+//		pro.declarationKind = inpt.readInt();
 		pro.rtBlockLevel = inpt.readInt();
 		pro.hasLocalClasses = inpt.readBoolean();
 		

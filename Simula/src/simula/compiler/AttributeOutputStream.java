@@ -13,7 +13,8 @@ import simula.compiler.utilities.Util;
 public class AttributeOutputStream {
 	DataOutputStream oupt;
 
-	private boolean TRACE = true;
+	private boolean TRACE = true; //false; //true;
+	private boolean TESTING = true;
 
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
@@ -28,14 +29,19 @@ public class AttributeOutputStream {
 		if(obj == null) {
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: null");
 			writeKind(ObjectKind.NULL);
-		} else if(obj.SEQU != 0) {
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: ObjectReference "+(obj.SEQU));
-			writeKind(ObjectKind.ObjectReference);
-			writeInt(obj.SEQU);
-		} else {
-			obj.SEQU = Global.Object_SEQU++;
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
+		} else if(TESTING) {
+			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+obj.getClass().getSimpleName()+"  "+obj);
 			obj.writeObject(this);
+		} else {
+			if(obj.SEQU != 0) {
+				if(TRACE) System.out.println("AttributeOutputStream.writeObj: ObjectReference "+(obj.SEQU));
+				writeKind(ObjectKind.ObjectReference);
+				writeInt(obj.SEQU);
+			} else {
+				obj.SEQU = Global.Object_SEQU++;
+				if(TRACE) System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
+				obj.writeObject(this);
+			}
 		}
 	}
 
@@ -49,17 +55,20 @@ public class AttributeOutputStream {
 //		oupt.writeObject(obj);
 //	}
 
-	
+	private static int XXXX = 0;
     public void writeType(Type type) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeType: "+type);
+		if(TRACE) System.out.println("******************************************** AttributeOutputStream.writeType: "+type);
 		if(type == null) {
-			oupt.writeInt(-1);
+			writeInt(-1);
 		} else {
-			oupt.writeInt(type.keyWord);
+			writeInt(type.keyWord);
 			writeString(type.classIdent);
 		}
 //		oupt.writeObject(qual);
 //		oupt.writeObject(declaredIn);
+		if(TRACE) System.out.println("******************************************** AttributeOutputStream.writeType: DONE "+type);
+		Thread.dumpStack();
+		if((XXXX++) > 10) Util.IERR("");
 	}
 	
     public void writeBoolean(boolean b) throws IOException {

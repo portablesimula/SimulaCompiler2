@@ -182,6 +182,7 @@ public final class TextExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeTextExpression: " + this);
 		oupt.writeKind(ObjectKind.TextExpression);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -192,6 +193,7 @@ public final class TextExpression extends Expression {
 	public static TextExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTextExpression: ");
 		TextExpression expr = new TextExpression();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

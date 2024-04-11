@@ -129,6 +129,7 @@ public final class WhileStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeWhileStatement: " + this);
 		oupt.writeKind(ObjectKind.WhileStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(condition);
 		oupt.writeObj(doStatement);
@@ -137,6 +138,7 @@ public final class WhileStatement extends Statement {
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
 		WhileStatement stm = new WhileStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.condition  = (Expression) inpt.readObj();
 		stm.doStatement = (Statement) inpt.readObj();

@@ -1080,10 +1080,14 @@ public final class VariableExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 //		oupt.writeBoolean(CHECKED);
+		System.out.println("writeString ObjectKind="+ObjectKind.VariableExpression);
 		oupt.writeKind(ObjectKind.VariableExpression);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
+		System.out.println("writeObject backLink="+backLink);
 		oupt.writeObj(backLink);
+		System.out.println("writeString identifier="+identifier);
 		oupt.writeString(identifier);
 //		oupt.writeObject(meaning);
 		oupt.writeBoolean(remotelyAccessed);
@@ -1103,10 +1107,11 @@ public final class VariableExpression extends Expression {
 		VariableExpression var = new VariableExpression();
 //		CHECKED=inpt.readBoolean();
 		
+		var.SEQU = inpt.readInt();
 		var.lineNumber = inpt.readInt();
-		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
+//		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
 		var.type = inpt.readType();
-		System.out.println("VariableExpression.readObject: type="+var.type);
+//		System.out.println("VariableExpression.readObject: type="+var.type);
 		var.backLink = (SyntaxClass) inpt.readObj();
 		var.identifier = inpt.readString();
 //		meaning = (Meaning) inpt.readObject();

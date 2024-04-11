@@ -174,6 +174,7 @@ public final class UnaryOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
 		oupt.writeKind(ObjectKind.UnaryOperation);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -184,6 +185,7 @@ public final class UnaryOperation extends Expression {
 	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
 		UnaryOperation expr = new UnaryOperation();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

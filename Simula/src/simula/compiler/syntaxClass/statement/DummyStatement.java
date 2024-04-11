@@ -92,12 +92,14 @@ public final class DummyStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeDummyStatement: " + this);
 		oupt.writeKind(ObjectKind.DummyStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 	}
 
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
 		DummyStatement stm = new DummyStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		Util.TRACE_INPUT("DummyStatement: " + stm);
 		return(stm);

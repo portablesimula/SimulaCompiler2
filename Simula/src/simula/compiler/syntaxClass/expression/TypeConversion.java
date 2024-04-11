@@ -259,6 +259,7 @@ public final class TypeConversion extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeTypeConversion: " + this);
 		oupt.writeKind(ObjectKind.TypeConversion);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -268,6 +269,7 @@ public final class TypeConversion extends Expression {
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTypeConversion: ");
 		TypeConversion expr = new TypeConversion();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

@@ -57,9 +57,10 @@ public class AttributeInputStream {
 	 * The Object Reference Table.
 	 * Used during Attribute File Input to fixup Object References.
 	 */
-	private ObjectReferenceMap objectReference;
+	public ObjectReferenceMap objectReference;
 	
 	private boolean TRACE = false; //true;
+	private boolean TESTING = true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);
@@ -197,17 +198,29 @@ public class AttributeInputStream {
 		if(kind == ObjectKind.NULL) {
 			if(TRACE) System.out.println("AttributeInputStream.readObj: null");
 			return null;
-		} else if(kind == ObjectKind.ObjectReference) {
-			int SEQU = inpt.readInt();
-			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-			SyntaxClass obj = objectReference.get(SEQU);
-			return(obj);
-		} else {
-//			if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
+		} else if(TESTING) {
 			SyntaxClass obj = readObj(kind,this);
-			objectReference.put(obj.SEQU, obj);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
 			return(obj);
+		} else {
+			if(kind == ObjectKind.ObjectReference) {
+				int SEQU = inpt.readInt();
+				if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+				SyntaxClass obj = objectReference.get(SEQU);
+				if(obj == null) {
+					objectReference.print();
+					Util.IERR("");
+				}
+				return(obj);
+			} else {
+//				if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
+				SyntaxClass obj = readObj(kind,this);
+//				obj.SEQU = Global.Object_SEQU++;
+				if(obj.SEQU == 0) Util.IERR("");
+				objectReference.put(obj.SEQU, obj);
+				if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
+				return(obj);
+			}
 		}
 	}
 

@@ -328,6 +328,7 @@ public final class Constant extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
 		oupt.writeKind(ObjectKind.Constant);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -345,10 +346,11 @@ public final class Constant extends Expression {
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
+		cnst.SEQU = inpt.readInt();
 		cnst.lineNumber = inpt.readInt();
 		cnst.type = inpt.readType();
 		cnst.backLink = (SyntaxClass) inpt.readObj();
-		System.out.println("Constant.readObject: cnst.backLink="+cnst.backLink);
+//		System.out.println("Constant.readObject: cnst.backLink="+cnst.backLink);
 //		Util.IERR("");
 		
 		//cnst.value=inpt.readObject();

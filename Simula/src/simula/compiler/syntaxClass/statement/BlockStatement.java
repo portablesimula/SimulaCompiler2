@@ -158,6 +158,7 @@ public final class BlockStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeBlockStatement: " + this);
 		oupt.writeKind(ObjectKind.BlockStatement);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(blockDeclaration);
 	}
@@ -165,39 +166,11 @@ public final class BlockStatement extends Statement {
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBlockStatement: ");
 		BlockStatement stm = new BlockStatement();
+		stm.SEQU = inpt.readInt();
 		stm.lineNumber = inpt.readInt();
 		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
 		Util.TRACE_INPUT("BlockStatement: " + stm);
 		return(stm);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public BlockStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(blockDeclaration);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		blockDeclaration = (BlockDeclaration) inpt.readObject();
-//	}
-//	
 
 }

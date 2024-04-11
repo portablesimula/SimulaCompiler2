@@ -468,6 +468,7 @@ public final class AssignmentOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeAssignmentOperation: " + this);
 		oupt.writeKind(ObjectKind.AssignmentOperation);
+		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
@@ -479,6 +480,7 @@ public final class AssignmentOperation extends Expression {
 	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readAssignmentOperation: ");
 		AssignmentOperation expr = new AssignmentOperation();
+		expr.SEQU = inpt.readInt();
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
