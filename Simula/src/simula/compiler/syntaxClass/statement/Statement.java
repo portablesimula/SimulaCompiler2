@@ -13,6 +13,7 @@ import java.util.Vector;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
@@ -20,6 +21,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -103,7 +105,9 @@ public abstract class Statement extends SyntaxClass {
 //				labels.add(ident);
 				LabelDeclaration label = new LabelDeclaration(ident);
 				labels.add(label);
-				Global.getCurrentScope().labelList.add(label);
+				DeclarationScope scope = Global.getCurrentScope();
+				if(scope.labelList == null) scope.labelList = new LabelList(scope); 
+				scope.labelList.add(label);
 			} else Util.error("Missplaced ':'");
 			ident = Parse.acceptIdentifier();
 		}

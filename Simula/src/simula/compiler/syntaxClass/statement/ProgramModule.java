@@ -8,6 +8,7 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
+import java.util.Vector;
 
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -76,6 +77,11 @@ public final class ProgramModule extends Statement {
 	public final DeclarationScope module;
 
 	/**
+	 * The external head
+	 */
+	public Vector<ExternalDeclaration> externalHead;
+
+	/**
 	 * Returns the module identifier.
 	 * @return the module identifier
 	 */
@@ -119,9 +125,9 @@ public final class ProgramModule extends Statement {
 			Global.getCurrentScope().sourceBlockLevel=0;
 			while(Parse.accept(KeyWord.EXTERNAL)) {
 				if(Option.TESTING_SEPARATE) {
-					ExternalDeclaration.expectExternalHead(StandardClass.BASICIO);					
+					externalHead = ExternalDeclaration.expectExternalHead(StandardClass.BASICIO);					
 				} else
-				ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT);
+					externalHead = ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT);
 				Parse.expect(KeyWord.SEMICOLON);
 			}
 			String ident=Parse.acceptIdentifier();

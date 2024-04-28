@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -28,7 +26,6 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -40,7 +37,6 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
-import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
 
@@ -65,14 +61,14 @@ import simula.compiler.utilities.Util;
  *
  * </pre>
  * The Implementation of the for-statement is a bit tricky. The basic idea is to create a
- * ForList iterator that iterates over a set of ForElt iterators. The following subclasses of
- * ForElt are defined:
+ * ForList iterator that iterates over a set of FOR_Element iterators. The following subclasses of
+ * FOR_Element are defined:
  * <pre>
- *                - SingleElt&lt;T>    for basic types T control variable
- *                - SingleTValElt   for Text type control variable
- *                - StepUntil       for numeric types
- *                - WhileElt&lt;T>     for basic types T control variable
- *                - WhileTValElt    representing For t:= &lt;TextExpr> while &lt;Cond>
+ *                - FOR_SingleELT&lt;T>    for basic types T control variable
+ *                - FOR_SingleTValElt   for Text type control variable
+ *                - FOR_StepUntil       for numeric types
+ *                - FOR_WhileElt&lt;T>     for basic types T control variable
+ *                - FOR_WhileTValElt    representing For t:= &lt;TextExpr> while &lt;Cond>
  *                                  With text value assignment
  * </pre>
  * Each of which deliver a boolean value 'CB' used to indicate whether this for-element is
@@ -90,10 +86,10 @@ import simula.compiler.utilities.Util;
  * Is compiled to:
  * <pre>
  *           for(boolean CB:new ForList(
- *               new SingleElt&lt;Number>(...)
- *              ,new SingleElt&lt;Number>(...)
- *              ,new StepUntil(...)
- *              ,new WhileElt&lt;Number>(...)
+ *               new FOR_SingleELT&lt;Number>(...)
+ *              ,new FOR_SingleELT&lt;Number>(...)
+ *              ,new FOR_StepUntil(...)
+ *              ,new FOR_WhileElt&lt;Number>(...)
  *           )) { if(!CB) continue;
  *                j=j+i;
  *              }
@@ -105,8 +101,8 @@ import simula.compiler.utilities.Util;
  * Where 'other' is a text procedure, is compiled to:
  * <pre>
  *           for(boolean CB:new ForList(
- *               new SingleTValElt(...)
- *              ,new WhileTValElt(...)
+ *               new FOR_SingleTValElt(...)
+ *              ,new FOR_WhileTValElt(...)
  *            )) { if(!CB) continue;
  *                 … // Statement
  *               }
@@ -251,11 +247,11 @@ public final class ForStatement extends Statement {
 		// ------------------------------------------------------------
 		// Example:
 		//
-		// for(boolean CB_:new ForList(
-		//     new SingleElt<Number>(n1)
-		//    ,new SingleElt<Number>(n3)
-		//    ,new StepUntil(n5,n3,n201)
-		//    ,new WhileElt<Number>(n4,b1)
+		// for(boolean CB_:new FOR_List(
+		//     new FOR_SingleELT<Number>(n1)
+		//    ,new FOR_SingleELT<Number>(n3)
+		//    ,new FOR_StepUntil(n5,n3,n201)
+		//    ,new FOR_WhileElt<Number>(n4,b1)
 		// )) { if(!CB_) continue;
 		//      // Statements ...
 		// }
@@ -264,7 +260,7 @@ public final class ForStatement extends Statement {
 		ASSERT_SEMANTICS_CHECKED();
 		boolean refType = controlVariable.type.isReferenceType();
 		String CB = "CB_" + lineNumber;
-		GeneratedJavaClass.code("for(boolean " + CB + ":new ForList(");
+		GeneratedJavaClass.code("for(boolean " + CB + ":new FOR_List(");
 		char del = ' ';
 		for (ForListElement elt : forList) {
 			String classIdent = (refType) ? elt.expr1.type.getJavaRefIdent() : "Number";
@@ -386,7 +382,7 @@ public final class ForStatement extends Statement {
 		public String edCode(final String classIdent, Type xType) {
 			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 					: "Elt<" + classIdent + ">";
-			return ("new Single" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
+			return ("new FOR_Single" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }})");
 		}
 
@@ -442,13 +438,11 @@ public final class ForStatement extends Statement {
 		}
 
 		public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
-//			System.out.println("ForStatement.buildByteCode: new SingleElt: controlVariable="+controlVariable);
-//			System.out.println("ForStatement.buildByteCode: new SingleElt: expr1="+expr1);
-			ClassDesc CD_SingleElt=CD.RTS_RTObject("SingleElt");
+//			System.out.println("ForStatement.buildByteCode: new FOR_SingleELT: controlVariable="+controlVariable);
+//			System.out.println("ForStatement.buildByteCode: new FOR_SingleELT: expr1="+expr1);
 			codeBuilder
-				.new_(CD_SingleElt)
-				.dup()
-				.aload(0);
+				.new_(CD.FOR_SingleElt)
+				.dup();
 
 			// PARAMETER: RTS_NAME<T> cvar  -- Control Variable
 	        //   getstatic     #25                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
@@ -461,8 +455,8 @@ public final class ForStatement extends Statement {
 			// PARAMETER: RTS_NAME<T> value
 			Parameter.buildNameParam(codeBuilder,expr1);
 
-			MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
-			codeBuilder.invokespecial(CD_SingleElt, "<init>", MTD); // Invoke Constructor
+			MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
+			codeBuilder.invokespecial(CD.FOR_SingleElt, "<init>", MTD); // Invoke Constructor
 		}
 
 		@Override
@@ -549,7 +543,7 @@ public final class ForStatement extends Statement {
 		public String edCode(final String classIdent, Type xType) {
 			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 					: "Elt<" + classIdent + ">";
-			return ("new While" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
+			return ("new FOR_While" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }}"
 					+ ",new RTS_NAME<Boolean>() { public Boolean get(){return(" + expr2.toJavaCode() + "); }})");
 		}
@@ -608,18 +602,16 @@ public final class ForStatement extends Statement {
 //			System.out.println("ForStatement.buildByteCode: new WhileElt: controlVariable="+controlVariable);
 //			System.out.println("ForStatement.buildByteCode: new WhileElt: expr1="+expr1);
 //			System.out.println("ForStatement.buildByteCode: new WhileElt: expr2="+expr2);
-			ClassDesc CD_WhileElt=CD.RTS_RTObject("WhileElt");
 			codeBuilder
-				.new_(CD_WhileElt)
-				.dup()
-				.aload(0);
+				.new_(CD.FOR_WhileElt)
+				.dup();
 			Parameter.buildNameParam(codeBuilder,controlVariable);
 			Parameter.buildNameParam(codeBuilder,expr1); // PARAMETER: RTS_NAME<T> expr
 			Parameter.buildNameParam(codeBuilder,expr2); // PARAMETER: RTS_NAME<T> cond
 
 			MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor(
-					"(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
-			codeBuilder.invokespecial(CD_WhileElt, "<init>", MTD); // Invoke Constructor
+					"(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
+			codeBuilder.invokespecial(CD.FOR_WhileElt, "<init>", MTD); // Invoke Constructor
 		}
 
 		// ***********************************************************************************************
@@ -689,7 +681,7 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public String edCode(final String classIdent, Type xType) {
-			return ("new StepUntil(" + edControlVariableByName(classIdent, xType)
+			return ("new FOR_StepUntil(" + edControlVariableByName(classIdent, xType)
 					+ ",new RTS_NAME<Number>() { public Number get(){return(" + expr1.toJavaCode() + "); }}"
 					+ ",new RTS_NAME<Number>() { public Number get(){return(" + expr2.toJavaCode() + "); }}"
 					+ ",new RTS_NAME<Number>() { public Number get(){return(" + expr3.toJavaCode() + "); }})");
@@ -813,19 +805,17 @@ public final class ForStatement extends Statement {
 //			System.out.println("ForStatement.buildByteCode: new StepUntil: expr1="+expr1);
 //			System.out.println("ForStatement.buildByteCode: new StepUntil: expr2="+expr2);
 //			System.out.println("ForStatement.buildByteCode: new StepUntil: expr3="+expr3);
-			ClassDesc CD_StepUntil=CD.RTS_RTObject("StepUntil");
 			codeBuilder
-				.new_(CD_StepUntil)
-				.dup()
-				.aload(0);
+				.new_(CD.FOR_StepUntil)
+				.dup();
 			Parameter.buildNameParam(codeBuilder,controlVariable);
 			Parameter.buildNameParam(codeBuilder,expr1); // PARAMETER: RTS_NAME<T> init
 			Parameter.buildNameParam(codeBuilder,expr2); // PARAMETER: RTS_NAME<T> step
 			Parameter.buildNameParam(codeBuilder,expr3); // PARAMETER: RTS_NAME<T> until
 
 			MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor(
-					"(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
-			codeBuilder.invokespecial(CD_StepUntil, "<init>", MTD); // Invoke Constructor
+					"(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
+			codeBuilder.invokespecial(CD.FOR_StepUntil, "<init>", MTD); // Invoke Constructor
 		}
 
 		// ***********************************************************************************************
@@ -862,10 +852,10 @@ public final class ForStatement extends Statement {
 		// Example:
 		//
 		// for(boolean CB_:new ForList(
-		//     new SingleElt<Number>(n1)
-		//    ,new SingleElt<Number>(n3)
-		//    ,new StepUntil(n5,n3,n201)
-		//    ,new WhileElt<Number>(n4,b1)
+		//     new FOR_SingleELT<Number>(n1)
+		//    ,new FOR_SingleELT<Number>(n3)
+		//    ,new FOR_StepUntil(n5,n3,n201)
+		//    ,new FOR_WhileElt<Number>(n4,b1)
 		// )) { if(!CB_) continue;
 		//      // Statements ...
 		// }
@@ -873,14 +863,12 @@ public final class ForStatement extends Statement {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		
-		ClassDesc CD_ForList = CD.RTS_RTObject("ForList");
 		codeBuilder
-			.new_(CD_ForList)
-			.dup()
-			.aload(0);
+			.new_(CD.FOR_List)
+			.dup();
 		Constant.buildIntConst(codeBuilder, this.forList.size());
 		codeBuilder
-			.anewarray(CD.RTS_RTObject("ForElt"))
+			.anewarray(CD.FOR_Element)
 			.dup();
 
 		int n = this.forList.size();
@@ -892,8 +880,8 @@ public final class ForStatement extends Statement {
 			codeBuilder.aastore();
 			if(i<(n-1)) codeBuilder.dup();
 		}
-		MethodTypeDesc MTD = MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_RTObject$ForElt;)V");
-		codeBuilder.invokespecial(CD_ForList, "<init>", MTD); // Invoke ForList'Constructor
+		MethodTypeDesc MTD = MethodTypeDesc.ofDescriptor("([Lsimula/runtime/FOR_Element;)V");
+		codeBuilder.invokespecial(CD.FOR_List, "<init>", MTD); // Invoke ForList'Constructor
 		
 		Label contLabel = codeBuilder.newLabel();
 		Label stmLabel = codeBuilder.newLabel();
@@ -901,7 +889,7 @@ public final class ForStatement extends Statement {
 		int index1 = BlockDeclaration.currentBlock.getLocalVariableIndex();
 		ClassDesc CD_Iterator = ClassDesc.of("java.util.Iterator");
 		codeBuilder
-			.invokevirtual(pool.methodRefEntry(CD_ForList, "iterator", MethodTypeDesc.ofDescriptor("()Ljava/util/Iterator;")))
+			.invokevirtual(pool.methodRefEntry(CD.FOR_List, "iterator", MethodTypeDesc.ofDescriptor("()Ljava/util/Iterator;")))
 			.astore(index1)
 			.labelBinding(contLabel)
 			.aload(index1)

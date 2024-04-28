@@ -6,6 +6,10 @@ import java.io.OutputStream;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.LabelDeclaration;
+import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
@@ -13,8 +17,7 @@ import simula.compiler.utilities.Util;
 public class AttributeOutputStream {
 	DataOutputStream oupt;
 
-	private boolean TRACE = true; //false; //true;
-	private boolean TESTING = true;
+	private boolean TRACE = false; //true;
 
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
@@ -29,21 +32,22 @@ public class AttributeOutputStream {
 		if(obj == null) {
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: null");
 			writeKind(ObjectKind.NULL);
-		} else if(TESTING) {
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+obj.getClass().getSimpleName()+"  "+obj);
-			obj.writeObject(this);
+		} else if(obj.SEQU != 0) {
+			int kind = 0;
+			if(obj instanceof Declaration)		kind = ObjectKind.DeclarationReference;
+			else if(obj instanceof Statement)	kind = ObjectKind.StatementReference;
+			else if(obj instanceof Expression)	kind = ObjectKind.ExpressionReference;
+			else 								kind = ObjectKind.ObjectReference;
+			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+ObjectKind.edit(kind)+" "+(obj.SEQU));
+			writeKind(kind);
+			writeInt(obj.SEQU);
 		} else {
-			if(obj.SEQU != 0) {
-				if(TRACE) System.out.println("AttributeOutputStream.writeObj: ObjectReference "+(obj.SEQU));
-				writeKind(ObjectKind.ObjectReference);
-				writeInt(obj.SEQU);
-			} else {
-				obj.SEQU = Global.Object_SEQU++;
-				if(TRACE) System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
-				obj.writeObject(this);
-			}
+			obj.SEQU = Global.Object_SEQU++;
+			if(TRACE) System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
+			obj.writeObject(this);
 		}
-	}
+
+    }
 
 	
 //    public void writeObject(Object obj) throws IOException {
@@ -55,9 +59,8 @@ public class AttributeOutputStream {
 //		oupt.writeObject(obj);
 //	}
 
-	private static int XXXX = 0;
     public void writeType(Type type) throws IOException {
-		if(TRACE) System.out.println("******************************************** AttributeOutputStream.writeType: "+type);
+		if(TRACE) System.out.println("AttributeOutputStream.writeType: "+type);
 		if(type == null) {
 			writeInt(-1);
 		} else {
@@ -66,9 +69,6 @@ public class AttributeOutputStream {
 		}
 //		oupt.writeObject(qual);
 //		oupt.writeObject(declaredIn);
-		if(TRACE) System.out.println("******************************************** AttributeOutputStream.writeType: DONE "+type);
-		Thread.dumpStack();
-		if((XXXX++) > 10) Util.IERR("");
 	}
 	
     public void writeBoolean(boolean b) throws IOException {
@@ -122,7 +122,7 @@ public class AttributeOutputStream {
 	}
 
     public void writeString(String s) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeUTF: "+s);
+		if(TRACE) System.out.println("AttributeOutputStream.writeString: "+s);
 //		oupt.writeString(s);
 		if(s == null) oupt.writeInt(-1);
 		else {

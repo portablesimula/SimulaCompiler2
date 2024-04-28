@@ -38,6 +38,7 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
@@ -444,7 +445,7 @@ public final class SimulaCompiler {
 				boolean cread = jarFile.canRead();
 				Util.println(
 						"Precompiled Library:      \"" + jarFile + "\", exists=" + exist + ", canRead=" + cread);
-				listJarFile(jarFile);
+				JarFileIO.listJarFile(jarFile);
 			}
 			classPath = classPath + pathSeparator + (jarFile.toString().trim());
 		}
@@ -540,8 +541,8 @@ public final class SimulaCompiler {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("javac");
 //		cmds.add("-source"); cmds.add("21"); // TODO: Change when ClassFile API is released
-		cmds.add("-target");
-		cmds.add("21");
+//		cmds.add("-target");
+//		cmds.add("21");
 //		cmds.add("-release"); cmds.add("21"); // TODO: Change when ClassFile API is released
 		if (Option.DEBUGGING) {
 			cmds.add("-version");
@@ -656,7 +657,7 @@ public final class SimulaCompiler {
 		if (Option.DEBUGGING) {
 			Util.println(
 					"SimulaCompiler.createJarFile: BEGIN LIST GENERATED .jar FILE  ========================================================");
-			listJarFile(outputJarFile);
+			JarFileIO.listJarFile(outputJarFile);
 			Util.println(
 					"SimulaCompiler.createJarFile: ENDOF LIST GENERATED .jar FILE  ========================================================");
 		}
@@ -754,55 +755,8 @@ public final class SimulaCompiler {
 			Util.println("Resulting File:  \"" + outputJarFile.getAbsolutePath() + "\"");
 			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
-		if (Option.DEBUGGING)
-			listJarFile(outputJarFile);
-	}
-
-	// ***************************************************************
-	// *** LIST .jar file
-	// ***************************************************************
-	/**
-	 * List .jar file
-	 * @param file the .jar file
-	 */
-	private static void listJarFile(final File file) {
-		Util.println("---------  LIST .jar File: " + file + "  ---------");
-		if (!(file.exists() && file.canRead())) {
-			Util.error("Can't read .jar file: " + file);
-			return;
-		}
-		JarFile jarFile = null;
-		try {
-			jarFile = new JarFile(file);
-			Manifest manifest = jarFile.getManifest();
-			Attributes mainAttributes = manifest.getMainAttributes();
-			Set<Object> keys = mainAttributes.keySet();
-			for (Object key : keys) {
-				String val = mainAttributes.getValue(key.toString());
-				Util.println(key.toString() + "=\"" + val + "\"");
-			}
-
-			Enumeration<JarEntry> entries = jarFile.entries();
-			while (entries.hasMoreElements()) {
-				JarEntry entry = entries.nextElement();
-				String size = "" + entry.getSize();
-				while (size.length() < 6)
-					size = " " + size;
-				FileTime fileTime = entry.getLastModifiedTime();
-				String date = DateTimeFormatter.ofPattern("uuuu-MMM-dd HH:mm:ss", Locale.getDefault())
-						.withZone(ZoneId.systemDefault()).format(fileTime.toInstant());
-				Util.println("Jar-Entry: " + size + "  " + date + "  \"" + entry + "\"");
-			}
-		} catch (IOException e) {
-			Util.IERR("Caused by:", e);
-		} finally {
-			if (jarFile != null)
-				try {
-					jarFile.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
+//		if (Option.DEBUGGING)
+			JarFileIO.listJarFile(outputJarFile);
 	}
 
 }

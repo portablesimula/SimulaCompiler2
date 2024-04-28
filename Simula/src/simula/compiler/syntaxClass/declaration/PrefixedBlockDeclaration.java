@@ -22,6 +22,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -128,7 +129,10 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			blockPrefix.doChecking();
 			this.prefix = blockPrefix.identifier;
 			ClassDeclaration prefix=this.getPrefixClass();
-			if(prefix!=null) prefix.doChecking();
+			if(prefix!=null) {
+				prefix.doChecking();
+				LabelList.accumLabelList(this);
+			}
 			Global.exitScope();
 		}
 		Global.enterScope(this);
@@ -175,9 +179,12 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			String tp = par.toJavaType();
 			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
 		}
-		if (!labelList.isEmpty()) {
+		if (labelList != null && !labelList.isEmpty()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-			for (Declaration decl : labelList) decl.doJavaCoding();
+//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
+			for (LabelDeclaration lab : labelList.labels)
+//				decl.doJavaCoding();
+				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList) decl.doJavaCoding();
@@ -239,7 +246,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 
 		try {
 			createJavaClassFile();
@@ -294,7 +301,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 						.withSuperclass(this.superClassDesc());
 
 					// Add Fields (Attributes and parameters)
-					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
 					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
 					for(Parameter par:parameterList) par.buildField(classBuilder,this);
 					
@@ -364,6 +371,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	@Override
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+blockPrefix+" begin  BL="+this.rtBlockLevel);
+		if(labelList != null) labelList.printTree(indent+1);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);

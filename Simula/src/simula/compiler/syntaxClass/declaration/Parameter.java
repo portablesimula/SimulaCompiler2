@@ -443,10 +443,10 @@ public final class Parameter extends Declaration {
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 //		System.out.println("Parameter.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
 		ClassDesc CD_cls=declaredIn.getClassDesc();
-		ClassDesc CD_type=null; //type.toClassDesc2(kind,mode);
+		ClassDesc CD_type=null; //type.toClassDesc(kind,mode);
 		if(kind==Kind.Procedure)
-			 CD_type=Type.Procedure.toClassDesc2(kind,mode);
-		else CD_type=type.toClassDesc2(kind,mode);
+			 CD_type=Type.Procedure.toClassDesc(kind,mode);
+		else CD_type=type.toClassDesc(kind,mode);
 		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
 	}
 	
@@ -468,7 +468,8 @@ public final class Parameter extends Declaration {
 				classBuilder.withField(ident, CD.RTS_NAME, fieldBuilder -> {
 					fieldBuilder
 					.withFlags(ClassFile.ACC_PUBLIC)
-					.with(SignatureAttribute.of(type.toClassSignature(mode)));
+//					.with(SignatureAttribute.of(type.toClassSignature(mode)));
+					.with(SignatureAttribute.of(type.toNameClassSignature()));
 				});
 			}
 		} else if (kind == Parameter.Kind.Array) {
@@ -498,16 +499,37 @@ public final class Parameter extends Declaration {
 		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
-		else if(type.getKeyWord()==KeyWord.REF) codeBuilder.aload(ofst);
-		else if(type.equals(Type.Integer)) codeBuilder.iload(ofst);
-		else if(type.equals(Type.LongReal)) codeBuilder.dload(ofst);
-		else if(type.equals(Type.Real)) codeBuilder.fload(ofst);
-		else if(type.equals(Type.Boolean)) codeBuilder.iload(ofst);
-		else if(type.equals(Type.Character)) codeBuilder.iload(ofst);
-		else if(type.equals(Type.Text)) codeBuilder.aload(ofst);
-		else if(type.equals(Type.Procedure)) codeBuilder.aload(ofst);
-		else if(type.equals(Type.Label)) codeBuilder.aload(ofst);
-		else Util.IERR("NOT IMPLEMENTED: loadParameter "+type);
+		else {
+			switch(type.getKeyWord()) {
+				case Type.T_BOOLEAN:
+				case Type.T_CHARACTER:
+				case Type.T_INTEGER:	codeBuilder.iload(ofst); break;
+				case Type.T_REAL:		codeBuilder.fload(ofst); break;
+				case Type.T_LONG_REAL:	codeBuilder.dload(ofst); break;
+				case Type.T_TEXT:
+				case Type.T_REF:
+				case Type.T_PROCEDURE:
+				case Type.T_LABEL:		codeBuilder.aload(ofst); break;
+				default: Util.IERR("IMPOSSIBLE");
+			}
+		}
+
+//		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
+//		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
+//		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
+////		else if(type.getKeyWord()==KeyWord.REF) codeBuilder.aload(ofst);
+//		else if(type.getKeyWord()==Type.T_REF) codeBuilder.aload(ofst);
+//		else if(type.equals(Type.Integer)) codeBuilder.iload(ofst);
+//		else if(type.equals(Type.LongReal)) codeBuilder.dload(ofst);
+//		else if(type.equals(Type.Real)) codeBuilder.fload(ofst);
+//		else if(type.equals(Type.Boolean)) codeBuilder.iload(ofst);
+//		else if(type.equals(Type.Character)) codeBuilder.iload(ofst);
+//		else if(type.equals(Type.Text)) codeBuilder.aload(ofst);
+//		else if(type.equals(Type.Procedure)) codeBuilder.aload(ofst);
+//		else if(type.equals(Type.Label)) codeBuilder.aload(ofst);
+//		else {
+//			Util.IERR("NOT IMPLEMENTED: loadParameter "+type.getKeyWord()+" "+type);
+//		}
 	}
 	
 

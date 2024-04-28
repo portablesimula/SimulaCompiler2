@@ -7,30 +7,26 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
+import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -53,6 +49,11 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	 * nearest enclosing Block which is not a CompoundStatement or ConnectionBlock.
 	 */
 	public DeclarationScope movedTo;
+	
+//	/**
+//	 * This label is redefined on those prefix levels.
+//	 */
+//	public Vector<Integer> redefLevels; 
 	
 	/**
 	 * Indicates that codeBuilder.labelBinding is called.
@@ -77,6 +78,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		DeclarationScope declaredIn = Global.getCurrentScope();
+//		this.externalIdent = "_LABEL_" + declaredIn.identifier + '_' + identifier;
+		this.externalIdent = "_LABEL_" + declaredIn.externalIdent + '_' + identifier + '_' + declaredIn.prefixLevel();
 		type.doChecking(declaredIn);
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
 		if (virtSpec == null) {
@@ -92,22 +95,19 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 		SET_SEMANTICS_CHECKED();
 	}
-
-	@Override
-//	public void doJavaCoding() {
-//		Global.sourceLineNumber = lineNumber;
-//		String ident = getJavaIdentifier();
-//		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
-//		if (virtSpec != null)
-//			GeneratedJavaClass.code("public RTS_LABEL " + virtSpec.getVirtualIdentifier()
-//					+ " { return(new RTS_LABEL(this," + index + ",\"" + identifier + "\")); }",
-//					" // Virtual Label #" + index + '=' + identifier);
-//		else
-//			GeneratedJavaClass.code(
-//					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," + index + ",\"" + identifier + "\");",
-//					"Local Label #" + index + '=' + identifier);
+	
+	public void updateDeclaredIn(DeclarationScope declaredIn) {
+		this.declaredIn = declaredIn;
+	}
+	
+//	public void addRedef(int prefixLevel) {
+//		if(redefLevels == null) redefLevels = new Vector<Integer>();
+//		redefLevels.add(prefixLevel);
 //	}
-	public void doJavaCoding() {
+
+//	@Override
+//	public void doJavaCoding() {
+	public void declareLocalLabel(BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		String ident = getJavaIdentifier();
 		int prefixLevel=0;
@@ -118,23 +118,19 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
 		if (virtSpec != null) {
-			GeneratedJavaClass.code("public RTS_LABEL " + virtSpec.getVirtualIdentifier()
+//			System.out.println("LabelDeclaration.declareLocalLabel: prefixLevel="+prefixLevel+", virtSpec.prefixLevel="+virtSpec.prefixLevel);
+//			if(this.isLatestVirtualLabel(Global.getCurrentScope())) {
+			if(this.isLatestVirtualLabel(encloser)) {
+				GeneratedJavaClass.code("    public RTS_LABEL " + virtSpec.getVirtualIdentifier()
 					+ " { return(new RTS_LABEL(this," + prefixLevel + ',' + index + ",\"" + identifier + "\")); }",
 					" // Virtual Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
+			}
 		} else {
 			GeneratedJavaClass.code(
 					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," +prefixLevel + ',' + index + ",\"" + identifier + "\");",
 					"Local Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
 		}
 	}
-
-//	@Override
-//	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
-//		String ident = getFieldIdentifier();
-////		System.out.println("LabelDeclaration.buildField: "+externalIdent+", ident="+ident);
-//		ClassDesc CD.RTS_LABEL = CD.RTS_LABEL;
-//		classBuilder.withField(ident, CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
-//	}
 
 	@Override
 	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
@@ -143,13 +139,30 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
 		if (virtSpec != null) {
-			MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$RTS_LABEL;");
-			classBuilder
-				.withMethodBody(virtSpec.getSimpleVirtualIdentifier(), MTD_STM, ClassFile.ACC_PUBLIC,
+			if(this.isLatestVirtualLabel(encloser)) {
+				MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;");
+				classBuilder
+					.withMethodBody(virtSpec.getSimpleVirtualIdentifier(), MTD_STM, ClassFile.ACC_PUBLIC,
 						codeBuilder -> buildVirtualMatchMethodBody(prefixLevel,codeBuilder));
+			}
 		} else {
 			classBuilder.withField(ident, CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
 		}
+	}
+	
+	private boolean isLatestVirtualLabel(DeclarationScope encloser) {
+		LabelDeclaration last = encloser.labelList.getLastLabel(this.identifier);
+//		System.out.println("LabelDeclaration.isLatestVirtualLabel: this="+this);
+//		System.out.println("LabelDeclaration.isLatestVirtualLabel: last="+last);
+//		if(this == last) {
+		if(this.index == last.index) {
+//			System.out.println("LabelDeclaration.isLatestVirtualLabel: this == last");
+			return true;
+		}
+//		Util.IERR("MÅ SJEKKE AT DENNE LABELEN ER ER HØYESTE PREFIX LEVEL");
+//		  public simula.runtime.RTS_LABEL L1_0XXX();
+		
+		return false;
 	}
 	
 	private int getPrefixLevel() {
@@ -159,7 +172,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		} else {
 			if(declaredIn instanceof ClassDeclaration cls) prefixLevel=cls.prefixLevel();			
 		}
-		return(prefixLevel);
+		return prefixLevel;
 	}
 	
 	private void buildVirtualMatchMethodBody(int prefixLevel,CodeBuilder codeBuilder) {
@@ -167,25 +180,26 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		// Build virtual match method:
 		// public RTS_LABEL " + virtSpec.getVirtualIdentifier()
 		// { return(new RTS_LABEL(this, prefixLevel, index, "identifier")); }
-//        0: new           #1                  // class simula/runtime/RTS_RTObject$RTS_LABEL
+//        0: new           #1                  // class simula/runtime/RTS_LABEL
 //        3: dup
 //        4: aload_0
 //        5: aload_0
 //        6: iconst_1			// prefixLevel
 //        7: iconst_1			// index
 //        8: ldc           #3	// String L
-//       10: invokespecial #5   // Method simula/runtime/RTS_RTObject$RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
+//       10: invokespecial #5   // Method simula/runtime/RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
 //       13: areturn
 		codeBuilder
 			.new_(CD.RTS_LABEL)
 			.dup()
-			.aload(0)
+//			.aload(0)
 			.aload(0);
 		Constant.buildIntConst(codeBuilder, prefixLevel);
 		Constant.buildIntConst(codeBuilder, index);
 		codeBuilder.ldc(pool.stringEntry(this.identifier));
 		codeBuilder
-			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
+//		.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
+			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
 			.areturn();
 	}
 
@@ -210,47 +224,39 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 			buildLabelQuant(codeBuilder);
 			ConstantPoolBuilder pool=codeBuilder.constantPool();
 //			ClassDesc CD.RTS_LABEL = CD.RTS_LABEL;
-//			// 19: putfield #14  // Field _LABEL_L1:Lsimula/runtime/RTS_RTObject$RTS_LABEL;
+//			// 19: putfield #14  // Field _LABEL_L1:Lsimula/runtime/RTS_LABEL;
 //			codeBuilder.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),getFieldIdentifier(), CD.RTS_LABEL));
 			codeBuilder.putfield(getFieldRefEntry(pool));
 		}
 	}
 	
 	public void doBind(CodeBuilder codeBuilder) {
-		BlockDeclaration blk=(BlockDeclaration) this.declaredIn;
-//		System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
-		
-		while(!blk.hasLabel()) {
-			blk = (BlockDeclaration)blk.declaredIn;			
-		}
-		
-		SwitchCase switchCase=blk.tableSwitchCases.get(index-1);
-//		System.out.println("LabelDeclaration.doBind: "+this+"   SwitchCase="+switchCase);
+//		BlockDeclaration blk=(BlockDeclaration) this.declaredIn;
 		if(isBinded) {
-			System.out.println("LabelDeclaration.doBind: "+this+"   SwitchCase="+switchCase);
-			System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
-			Util.IERR("IMPOSSIBLE: "+switchCase);
+//			System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
+			Util.IERR("IMPOSSIBLE: "+this);
 		}
-		codeBuilder.labelBinding(switchCase.target());
+		BlockDeclaration labelContext = BlockDeclaration.labelContext;
+//		System.out.println("LabelDeclaration.doBind: labelContext="+labelContext+", labelList="+labelContext.labelList);
+		labelContext.labelList.labelBinding(this,codeBuilder);
 		isBinded = true;
 	}
 	
 	public void buildLabelQuant(CodeBuilder codeBuilder) {
 		// new RTS_LABEL(this,0,1,"L1"); // Local Label #1=L1 At PrefixLevel 0
 //        5: aload_0
-//        6: new           #7                  // class simula/runtime/RTS_RTObject$RTS_LABEL
+//        6: new           #7                  // class simula/runtime/RTS_LABEL
 //        9: dup
 //       10: aload_0
 //       11: aload_0
 //       12: iconst_0
 //       13: iconst_1
 //       14: ldc           #9                  // String L1
-//       16: invokespecial #11                 // Method simula/runtime/RTS_RTObject$RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
+//       16: invokespecial #11                 // Method simula/runtime/RTS_LABEL."<init>":(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V
 		codeBuilder
 			.aload(0)
 			.new_(CD.RTS_LABEL)
 			.dup()
-			.aload(0)
 			.aload(0);
 		
 		int prefixLevel=0;
@@ -261,82 +267,73 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 		Constant.buildIntConst(codeBuilder, prefixLevel);
 		Constant.buildIntConst(codeBuilder, index);
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V");
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V");
 		codeBuilder
 			.ldc(codeBuilder.constantPool().stringEntry(identifier))
 			.invokespecial(CD.RTS_LABEL, "<init>", MTD);
 	}
 
-
+//	public LabelDeclaration copy() {
+//		LabelDeclaration res = new LabelDeclaration(this.identifier);
+//		res.declaredIn = this.declaredIn;
+//		res.lineNumber = this.lineNumber;
+//		return(res);
+//	}
+	
 	@Override
 	public String toString() {
 		String comment = "DeclaredIn: "+declaredIn.identifier;
 		if(movedTo != null) comment = comment+" -> "+movedTo;
-		return ("LABEL " + identifier + ", index=" + index + " IN " + comment);
+		
+//		if(redefLevels != null) {
+//			if(redefLevels.size() == 1) {
+//				comment = comment + ", Redefined on prefixLevel "+redefLevels.getFirst();
+//			}
+//		}
+		
+		return ("LABEL " + identifier + '[' + externalIdent + ']' + ", index=" + index + " IN " + comment);
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public LabelDeclaration() {}
-
+	private final static boolean TRACE = false;//true;//false;
+	
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabelDeclaration: " + identifier);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: declarationKind="+declarationKind);
 		oupt.writeKind(declarationKind);
-		oupt.writeInt(SEQU);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: identifier="+identifier);
 		oupt.writeString(identifier);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: SEQU="+SEQU);
+		oupt.writeInt(SEQU);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: lineNumber="+lineNumber);
 		oupt.writeInt(lineNumber);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: index="+index);
 		oupt.writeInt(index);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: movedTo="+movedTo);
 		oupt.writeObj(movedTo);
+		if(TRACE) System.out.println("LabelDeclaration.writeObject: COMPLETED");
+//		oupt.writeInt(9999);
 	}
 	
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabelDeclaration: ");
-		LabelDeclaration lab = new LabelDeclaration();
+		String identifier = inpt.readString();
+		if(TRACE) System.out.println("LabelDeclaration.readObject: identifier="+identifier);
+		LabelDeclaration lab = new LabelDeclaration(identifier);
 		lab.SEQU = inpt.readInt();
-		lab.identifier = inpt.readString();
+		if(TRACE) System.out.println("LabelDeclaration.readObject: SEQU="+lab.SEQU);
 		lab.lineNumber = inpt.readInt();
+		if(TRACE) System.out.println("LabelDeclaration.readObject: lineNumber="+lab.lineNumber);
 		lab.index = inpt.readInt();
+		if(TRACE) System.out.println("LabelDeclaration.readObject: index="+lab.index);
 		lab.movedTo = (DeclarationScope) inpt.readObj();
-		Util.TRACE_INPUT("readLabelDeclaration: " + lab.identifier);
+		if(TRACE) System.out.println("LabelDeclaration.readObject: movedTo="+lab.movedTo);
+//		int TEST = inpt.readInt();
+		Util.TRACE_INPUT("readLabelDeclaration: " + lab);
 		return(lab);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public LabelDeclaration() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		super.writeExternal(oupt);
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeInt(index);
-//		oupt.writeObject(movedTo);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		super.readExternal(inpt);
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		index = inpt.readInt();
-//		movedTo = (DeclarationScope) inpt.readObject();
-//	}
-//	
 
 }

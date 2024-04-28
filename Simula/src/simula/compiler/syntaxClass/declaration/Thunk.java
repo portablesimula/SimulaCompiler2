@@ -10,7 +10,6 @@ import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
@@ -23,6 +22,7 @@ import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -45,6 +45,19 @@ public final class Thunk extends DeclarationScope {
 //		printScopeChain(this);
 		if(this.declaredIn instanceof Thunk) Util.IERR("");
 		Global.setScope(this.declaredIn);
+	}
+
+	// ***********************************************************************************************
+	// *** Utility: findVisibleAttributeMeaning
+	// ***********************************************************************************************
+	@Override
+	public Meaning findVisibleAttributeMeaning(final String ident) {
+		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
+
+		Meaning meaning = declaredIn.findVisibleAttributeMeaning(ident);
+		
+		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
+		return (meaning);
 	}
 
 	// ***********************************************************************************************
@@ -108,11 +121,30 @@ public final class Thunk extends DeclarationScope {
 						.withMethodBody("get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildMethod_get(codeBuilder));
 					
+//					System.out.println("Thunk.buildClassFile: expr="+expr.getClass().getSimpleName() + "  "+expr);
 				    VariableExpression writeableVariable=expr.getWriteableVariable();
+//					System.out.println("Thunk.buildClassFile: writeableVariable="+writeableVariable);
+					
 				    if(writeableVariable!=null) {
-				    Declaration declaredAs = writeableVariable.meaning.declaredAs;
+				    	Declaration declaredAs = writeableVariable.meaning.declaredAs;
 //				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+declaredAs.declarationKind);
-				    	if(declaredAs.declarationKind == ObjectKind.Procedure) writeableVariable = null;
+//				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+ObjectKind.edit(declaredAs.declarationKind));
+				    	
+//				    	if(declaredAs.declarationKind == ObjectKind.Procedure) writeableVariable = null;
+//				    	if(declaredAs.declarationKind == ObjectKind.MemberMethod) writeableVariable = null;
+////				    	if(declaredAs.declarationKind != ObjectKind.SimpleVariableDeclaration) writeableVariable = null;
+				    	
+				    	switch(declaredAs.declarationKind) {
+		    				case ObjectKind.ArrayDeclaration: writeableVariable = null; break; // TODO: USIKKER - SJEKK DETTE
+			    			case ObjectKind.Parameter:  break; // TODO: USIKKER - SJEKK DETTE, AVHENGIG AV PARAMETER MODE ?
+			    			
+				    		case ObjectKind.SimpleVariableDeclaration: break; // OK
+				    		case ObjectKind.Procedure:
+				    		case ObjectKind.MemberMethod:
+				    		case ObjectKind.ContextFreeMethod:
+				    			writeableVariable = null; break;
+				    		default: Util.IERR(""+ObjectKind.edit(declaredAs.declarationKind));
+				    	}
 				    }
 				    if(writeableVariable!=null) {
 				    	MethodTypeDesc MTD_put=null;
@@ -128,7 +160,7 @@ public final class Thunk extends DeclarationScope {
 				    		} else if(expr.type.equals(Type.Character)) {
 				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;");
 				    		} else if(expr.type.equals(Type.Label)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)Lsimula/runtime/RTS_RTObject$RTS_LABEL;");
+				    			MTD_put=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;");
 				    		} else if(expr.type.isReferenceType()) {
 				    			String CDS=expr.type.toClassDesc().descriptorString();
 				    			MTD_put=MethodTypeDesc.ofDescriptor("("+CDS+')'+CDS);
@@ -291,10 +323,10 @@ public final class Thunk extends DeclarationScope {
 			else if(expr.type.equals(Type.Character))
 				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
 
-			if(expr instanceof TypeConversion) {
+			if(expr instanceof TypeConversion tpc) {
 				Type fromType = expr.type;
 				Type toType = writeableVariable.type;
-				TypeConversion.buildMayBeConvert(fromType,toType,codeBuilder);
+				TypeConversion.buildMayBeConvert(fromType, toType, tpc.expression, codeBuilder);
 			}
 				
 			Declaration decl=writeableVariable.meaning.declaredAs;
@@ -365,7 +397,7 @@ public final class Thunk extends DeclarationScope {
 			codeBuilder
 				.checkcast(CD.RTS_LABEL)
 				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put",
-						MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)Lsimula/runtime/RTS_RTObject$RTS_LABEL;")));
+						MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;")));
 		
 		} else if(expr.type.isReferenceType()) {
 			ClassDesc CD=expr.type.toClassDesc();

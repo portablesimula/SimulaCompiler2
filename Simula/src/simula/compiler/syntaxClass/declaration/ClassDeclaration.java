@@ -7,12 +7,8 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.DataOutput;
-import java.io.Externalizable;
 import java.io.File;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -20,14 +16,18 @@ import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
+import simula.compiler.AttributeFileIO;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JarFileIO;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -38,11 +38,11 @@ import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
-import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
 /**
@@ -495,7 +495,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void doChecking() {
-		if(isPreCompiled && !isBlockLevelUpdated)
+		if(isPreCompiledFromFile != null && !isBlockLevelUpdated)
 			updateBlockLevels(DeclarationScope.currentRTBlockLevel);
 		if (IS_SEMANTICS_CHECKED())
 			return;
@@ -508,17 +508,12 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 //		ClassDeclaration prefixClass = null;
 		if (!hasNoRealPrefix()) {
-			
-//			DeclarationScope scope = this.declaredIn;
-//			for(int i=0;i<3;i++) {
-//				System.out.println("ClassDeclaration.doChecking: "+this.prefix+"  "+identifier +" Before 'getPrefixClass'  scope="+scope);
-//				for(Declaration decl:scope.declarationList)
-//					System.out.println("ClassDeclaration.doChecking:     "+decl);
-//				scope = scope.declaredIn;
-//			}
-			
 			prefixClass = getPrefixClass();
 //			System.out.println("ClassDeclaration.doChecking:     GOT IT: "+prefixClass);
+			prefixClass.doChecking();
+			
+			LabelList.accumLabelList(this);
+			
 			if (prefixClass.declarationKind != ObjectKind.StandardClass) {
 				if (sourceBlockLevel != prefixClass.sourceBlockLevel)
 					Util.warning("Subclass on a deeper block level not allowed.");
@@ -598,6 +593,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * 
 	 * @return the prefix level
 	 */
+	@Override
 	public int prefixLevel() {
 		if (hasNoRealPrefix())
 			return (0);
@@ -605,20 +601,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		if (prfx != null)
 			return (prfx.prefixLevel() + 1);
 		return (-1);
-	}
-
-	// ***********************************************************************************************
-	// *** Utility: getNlabels
-	// ***********************************************************************************************
-	/**
-	 * Returns the number of labels in this class.
-	 * 
-	 * @return the number of labels in this class
-	 */
-	@Override
-	int getNlabels() {
-		if (hasNoRealPrefix()) return (labelList.size());
-		return (labelList.size() + getPrefixClass().getNlabels());
 	}
 
 	// ***********************************************************************************************
@@ -646,7 +628,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, declaration.identifier))
 				return (declaration);
 		}
-		for (LabelDeclaration label : labelList) {
+		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
 			if (Option.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Label " + label);
 			if (Util.equals(ident, label.identifier))
@@ -1002,7 +984,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)
+		if (this.isPreCompiledFromFile != null)
 			return;
 		Global.sourceLineNumber = lineNumber;
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
@@ -1024,10 +1006,11 @@ public class ClassDeclaration extends BlockDeclaration {
 			String tp = par.toJavaType();
 			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
 		}
-		if (!labelList.isEmpty()) {
+		if (labelList != null && !labelList.isEmpty()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-			for (Declaration decl : labelList)
-				decl.doJavaCoding();
+			for (LabelDeclaration lab : labelList.labels)
+//				decl.doJavaCoding();
+				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList)
@@ -1101,11 +1084,11 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	// ***********************************************************************************************
-	// *** Coding Utility: hasLabel
+	// *** Utility: hasLabel
 	// ***********************************************************************************************
 	@Override
 	protected boolean hasLabel() {
-		if (!labelList.isEmpty())
+		if (labelList != null && !labelList.isEmpty())
 			return (true);
 		if (!this.hasNoRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
@@ -1114,6 +1097,41 @@ public class ClassDeclaration extends BlockDeclaration {
 		}
 		return (false);
 	}
+
+	// ***********************************************************************************************
+	// *** Utility: getNlabels
+	// ***********************************************************************************************
+	/**
+	 * Returns the number of labels in this class.
+	 * 
+	 * @return the number of labels in this class
+	 */
+	@Override
+	public int getNlabels() {
+		ASSERT_SEMANTICS_CHECKED();
+		int size = (labelList==null)?0:labelList.tableSize();
+//		if (hasNoRealPrefix()) return size;
+//		return (size + getPrefixClass().getNlabels());
+		return size;
+	}
+
+//	// ***********************************************************************************************
+//	// *** Coding Utility: getNextLabelIndex
+//	// ***********************************************************************************************
+//	/**
+//	 * Returns the next Label index for labels in this block.
+//	 * <p>
+//	 * Redefined in ClassDeclaration
+//	 * 
+//	 * @return the next Label index for labels in this block
+//	 */
+//	@Override
+//	public int getNextLabelIndex() {
+////		int size = (labelList==null)?0:labelList.tableSize();
+////		if (hasNoRealPrefix()) return size;
+////		return (size + getPrefixClass().getNlabels());
+//		return getNlabels() + 1; 
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: saveClassStms
@@ -1228,7 +1246,8 @@ public class ClassDeclaration extends BlockDeclaration {
 						.withSuperclass(this.superClassDesc());
 
 					// Add Fields (Attributes and parameters)
-					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+//					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					buildLabelFields(classBuilder);
 					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
 					for(Parameter par:parameterList) par.buildField(classBuilder,this);
 					
@@ -1259,6 +1278,11 @@ public class ClassDeclaration extends BlockDeclaration {
 				}
 		);
 		return(bytes);
+	}
+	
+	private void buildLabelFields(ClassBuilder classBuilder) {
+//		if(prefixClass != null) prefixClass.buildLabelFields(classBuilder);
+		if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
 	}
 
 	protected MethodTypeDesc MTD_Constructor() {
@@ -1339,11 +1363,13 @@ public class ClassDeclaration extends BlockDeclaration {
 			codeBuilder
 				.invokespecial(pool.methodRefEntry(this.superClassDesc(),"<init>", MTD_Super));
 
-			if (!labelList.isEmpty()) {
-				// Declare local labels
-				for (LabelDeclaration lab : labelList)
-					lab.buildInitAttribute(codeBuilder);
-			}
+			declaraLocalLabels(codeBuilder);
+//			if (!labelList.isEmpty()) {
+//				// Declare local labels
+//				for (LabelDeclaration lab : labelList)
+//					lab.buildInitAttribute(codeBuilder);
+//			}
+			
 			// Add and Initialize attributes
 			for (Declaration decl : declarationList) {
 				decl.buildInitAttribute(codeBuilder);
@@ -1383,6 +1409,15 @@ public class ClassDeclaration extends BlockDeclaration {
 		Global.exitScope();
 	}
 
+	private void declaraLocalLabels(CodeBuilder codeBuilder) {
+//		if(this.prefixClass != null) prefixClass.declaraLocalLabels(codeBuilder);
+		if(labelList != null && !labelList.isEmpty()) {
+			// Declare local labels
+			for (LabelDeclaration lab : labelList.labels)
+				lab.buildInitAttribute(codeBuilder);
+		}
+
+	}
 	
 	@Override
 	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
@@ -1429,21 +1464,34 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		Label begScope = codeBuilder.newLabel();
-		Label endScope = codeBuilder.newLabel();
-		codeBuilder
-			.labelBinding(begScope)
-			.localVariable(0,"this",currentClassDesc(),begScope,endScope);
+//		Label begScope = codeBuilder.newLabel();
+//		Label endScope = codeBuilder.newLabel();
+		clearLabelList();
+//		codeBuilder
+//			.labelBinding(begScope)
+//			.localVariable(0,"this",currentClassDesc(),begScope,endScope);
 
+		stmStack.push(labelContext);
+//		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
+		labelContext = this;
 		buildStatementsBeforeInner(codeBuilder);
 		buildStatementsAfterInner(codeBuilder);
+		labelContext = stmStack.pop();
+//		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 
 		codeBuilder
 			.aload(0)
 			.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")))
 			.aload(0)
 			.areturn()
-			.labelBinding(endScope);
+//			.labelBinding(endScope)
+			;
+	}
+	
+	private void clearLabelList() {
+//		System.out.println("ClassDeclaration.clearLabelList: ");
+		if(labelList != null) for(LabelDeclaration lab:this.labelList.labels) lab.isBinded = false;
+		if(prefixClass != null) prefixClass.clearLabelList();
 	}
 
 	// ***********************************************************************************************
@@ -1452,7 +1500,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	/**
 	 * Coding utility: buildStatementsBeforeInner
 	 */
-	private void buildStatementsBeforeInner(CodeBuilder codeBuilder) { // TODO: NEW_INNER_IMPL
+	private void buildStatementsBeforeInner(CodeBuilder codeBuilder) {
 		if (!this.hasNoRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.buildStatementsBeforeInner(codeBuilder);
@@ -1518,6 +1566,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void print(final int indent) {
+		Util.IERR("");
 		String spc = edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
 		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
@@ -1546,7 +1595,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"CLASS "+identifier+"  BL="+this.rtBlockLevel);
+		System.out.println(edTreeIndent(indent)+"CLASS "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
+		if(labelList != null) labelList.printTree(indent+1);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		if (!virtualSpecList.isEmpty())
 			for( VirtualSpecification v:virtualSpecList) v.printTree(indent+1);
@@ -1576,6 +1626,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_INPUT("BEGIN Write ClassDeclaration: " + identifier + ", Declared in: " + declaredIn);
 		oupt.writeKind(declarationKind); // Mark: This is a ClassDeclaration
 		oupt.writeString(identifier);
 		oupt.writeInt(SEQU);
@@ -1585,6 +1636,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 		oupt.writeInt(rtBlockLevel);
 		oupt.writeString(prefix);
+		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
 //		oupt.writeString(externalPrefixIdent);
@@ -1601,48 +1653,29 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeInt(protectedList.size());
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
-		oupt.writeInt(labelList.size());
-		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
+//		oupt.writeInt(labelList.size());
+//		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
+		LabelList.writeLabelList(labelList, oupt);
 		
-//		oupt.writeObject(declarationList);
-//		oupt.writeObject(prep(declarationList));
 		DeclarationList decls = prep(declarationList);
 //		System.out.println("ClassDeclaration.writeObject: Write Declaration List: "+decls.size());
 		oupt.writeInt(decls.size());
-//		for(Declaration decl:decls) decl.writeObject(oupt);
 		for(Declaration decl:decls) oupt.writeObj(decl);
 
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
 		
-		//oupt.writeObject(statements1);
+//		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS BEFORE INNER: Statements1: "+statements1.size());
 		oupt.writeInt(statements1.size());
-//		for(Statement stm:statements1) stm.writeObject(oupt);
 		for(Statement stm:statements1) oupt.writeObj(stm);
 
-		//oupt.writeObject(statements);
+//		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS AFTER INNER: Statements: "+statements.size());
 		oupt.writeInt(statements.size());
-//		for(Statement stm:statements) stm.writeObject(oupt);
 		for(Statement stm:statements) oupt.writeObj(stm);
 
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
-	
-	private DeclarationList prep(DeclarationList declarationList) {
-		DeclarationList res = new DeclarationList("");
-		for(Declaration decl:declarationList) {
-			if(decl instanceof ArrayDeclaration) res.add(decl);
-			else if(decl instanceof ClassDeclaration && !(decl instanceof StandardClass)) res.add(decl);
-			else if(decl instanceof ExternalDeclaration) res.add(decl);
-			else if(decl instanceof LabelDeclaration) res.add(decl);
-			else if(decl instanceof ProcedureDeclaration) res.add(decl);
-			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
-			else if(decl instanceof SwitchDeclaration) res.add(decl);
-		}
-		return(res);
-	}
 
-	@SuppressWarnings("unchecked")
 	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
@@ -1653,6 +1686,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.type = inpt.readType();
 		cls.rtBlockLevel = inpt.readInt();
 		cls.prefix = inpt.readString();
+		cls.isPreCompiledFromFile = inpt.readString();
 		cls.hasLocalClasses = inpt.readBoolean();
 		cls.detachUsed = inpt.readBoolean();
 //		cls.externalPrefixIdent = inpt.readString();
@@ -1678,14 +1712,9 @@ public class ClassDeclaration extends BlockDeclaration {
 		for(int i=0;i<n;i++)
 			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
 
-		//cls.labelList = (Vector<LabelDeclaration>) inpt.readObject();
-		n = inpt.readInt();
 //		System.out.println("ClassDeclaration.readObject: Read Label List: "+n);
-		for(int i=0;i<n;i++)
-//			cls.labelList.add(LabelDeclaration.readObject(inpt));
-			cls.labelList.add((LabelDeclaration) inpt.readObj());
+		cls.labelList = LabelList.readLabelList(inpt);
 
-		//cls.declarationList = (DeclarationList) inpt.readObject();
 		n = inpt.readInt();
 //		System.out.println("ClassDeclaration.readObject: Read Declaration List: "+n);
 		for(int i=0;i<n;i++) {
@@ -1711,20 +1740,12 @@ public class ClassDeclaration extends BlockDeclaration {
 			cls.statements.add(stm);
 		}
 
-		System.out.println("\nClassDeclaration.readObject: PRINT SYNTAX-TREE");
-		cls.printTree(1);
-		Util.IERR("");
+//		System.out.println("\nClassDeclaration.readObject: PRINT SYNTAX-TREE");
+//		cls.printTree(1);
+//		Util.IERR("");
 
 //		System.out.println("ClassDeclaration.readObject: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 //		cls.print(2);
-//		Util.IERR("");
-		if(cls.prefix != null && !cls.prefix.equalsIgnoreCase("CLASS")) {
-			cls.readPrefixClass();
-		}
-		
-//		BlockDeclaration enclosure = cls.nearestEnclosingBlock();
-//		enclosure.printTree(1);
-//		StandardClass.BASICIO.printTree(1);
 //		Util.IERR("");
 		
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
@@ -1732,37 +1753,5 @@ public class ClassDeclaration extends BlockDeclaration {
 //		Thread.dumpStack();
 		return(cls);
 	}
-	
-	private void readPrefixClass() {
-		System.out.println("ClassDeclaration.readPrefixClass: "+prefix);
-//		Util.IERR("");
-		Token externalIdentifier = null; // MÅ SKRIVES/LESES VIA ATTR-FILE
-		
-		File jarFile = ExternalDeclaration.findJarFile(prefix, externalIdentifier);
-		if (jarFile != null) {
-			if(ExternalDeclaration.checkJarFiles(jarFile)) {
-//				System.out.println("ClassDeclaration.readObject: declaredIn="+declaredIn);
-//				BlockDeclaration enclosure = StandardClass.BASICIO; //null; // Implies BASICIO
-				BlockDeclaration enclosure = nearestEnclosingBlock();
-				System.out.println("ClassDeclaration.readObject: nearestEnclosingBlock="+enclosure);
-//				Type moduleType = ExternalDeclaration.readAttributeFile(prefix, jarFile, enclosure);
-				
-//				System.out.println("\nClassDeclaration.readObject: ");
-//				System.out.println(enclosure.identifier);
-//				Boolean seenStandardClasses = false;
-//				for(Declaration decl:enclosure.declarationList) {
-//					if(decl instanceof StandardProcedure) ; // Nothing
-//					else if(decl instanceof StandardClass) {
-//						if(!seenStandardClasses) System.out.println("    ... Standard Classes and Procedures");
-//						seenStandardClasses = true;
-//					}
-//					else decl.printTree(1);
-//				}
-//				enclosure.printTree(1);
-//				Util.IERR("");
-			}
-		}		
-	}
-
 	
 }

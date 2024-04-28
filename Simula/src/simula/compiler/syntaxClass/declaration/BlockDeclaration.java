@@ -20,6 +20,7 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.List;
+import java.util.Stack;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
@@ -27,7 +28,9 @@ import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -69,9 +72,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	public boolean isContextFree;
 	
 	/**
-	 * If true; this Class/Procedure is Pre-Compiled
+	 * If not null; this Class/Procedure is Pre-Compiled from a .jar file
 	 */
-	public boolean isPreCompiled;
+	public String isPreCompiledFromFile;
 	
 	/**
 	 * Used for precompiled Class/Procedure to indicate whether the rtBlock level has been updated.
@@ -89,6 +92,14 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * The previous value of 'currentBlock'
 	 */
 	private BlockDeclaration prevBlock;
+
+	/**
+	 * Compiler state: Points to the BlockDeclaration whose Statements are being built.
+	 * Used by LabelList.labelBinding to find the right JUMP_TABLE.
+	 */
+	public static BlockDeclaration labelContext;
+
+	public static Stack<BlockDeclaration> stmStack = new Stack<BlockDeclaration>();
 	
 	/**
 	 * Number of Local Variables allocated so far.
@@ -174,10 +185,11 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		if(prefixClass != null) {
 			currentRTBlockLevel--;
 			prefixClass.doChecking();
+//			nextIndex = prefixClass.setLabelIndexes(nextIndex);
 			currentRTBlockLevel++;
 		}
-		int labelIndex = (prefixClass == null)?(1) : prefixClass.getNlabels() + 1;
-		for (LabelDeclaration label : labelList) label.index = labelIndex++;
+		
+		if(labelList != null) labelList.setLabelIdexes();
 	}
 
 	// ***********************************************************************************************
@@ -219,6 +231,26 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	}
 
 	
+	/**
+	 * Prepare the declaration list for attribute output.
+	 * 
+	 * @param declarationList
+	 * @return
+	 */
+	protected DeclarationList prep(DeclarationList declarationList) {
+		DeclarationList res = new DeclarationList("");
+		for(Declaration decl:declarationList) {
+			if(decl instanceof ArrayDeclaration) res.add(decl);
+			else if(decl instanceof ClassDeclaration && !(decl instanceof StandardClass)) res.add(decl);
+			else if(decl instanceof ExternalDeclaration) res.add(decl);
+			else if(decl instanceof LabelDeclaration) res.add(decl);
+			else if(decl instanceof ProcedureDeclaration) res.add(decl);
+			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
+			else if(decl instanceof SwitchDeclaration) res.add(decl);
+		}
+		return(res);
+	}
+	
 	// ***********************************************************************************************
 	// *** Coding Utility: AD'HOC Leading Label
 	// ***********************************************************************************************
@@ -245,7 +277,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	protected boolean hasLabel() {
 		// Needs redefinition for ClassDeclaration
-		return (!labelList.isEmpty());
+		ASSERT_SEMANTICS_CHECKED();
+		return (labelList != null && !labelList.isEmpty());
 	}
 
 	// ***********************************************************************************************
@@ -274,9 +307,23 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * 
 	 * @return the number of labels in this class
 	 */
-	int getNlabels() {
-		return (labelList.size());
+	public int getNlabels() {
+		return (labelList.tableSize());
 	}
+
+//	// ***********************************************************************************************
+//	// *** Coding Utility: getNextLabelIndex
+//	// ***********************************************************************************************
+//	/**
+//	 * Returns the next Label index for labels in this block.
+//	 * <p>
+//	 * Redefined in ClassDeclaration
+//	 * 
+//	 * @return the next Label index for labels in this block
+//	 */
+//	public int getNextLabelIndex() {
+//		return getNlabels() + 1; 
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: codeSTMBody
@@ -332,7 +379,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * @throws IOException 
 	 */
     public void createJavaClassFile() throws IOException {
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 		prevBlock = currentBlock;
 		currentBlock = this;
 
@@ -438,7 +485,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 						.aconst_null()                 // TESTING_STACK_SIZE
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
 				}
-				if (hasLabel())	
+//				if (hasLabel())	
+				if (this.labelList != null && !this.labelList.isEmpty())	
 					build_TRY_CATCH(codeBuilder);
 				else build_STM_BODY(codeBuilder);
 				codeBuilder
@@ -495,6 +543,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		Label loopWhile = codeBuilder.newLabel();
 		Label loopEnd = codeBuilder.newLabel();
+//		initTableSwitchCases();
+//		tableSwitchCases = new Vector<SwitchCase>();
 	    // adHoc000 _THIS=(adHoc000)_CUR;
 		codeBuilder
 			.aload(0)
@@ -509,7 +559,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		
 		codeBuilder.trying(
 				blockCodeBuilder -> {
-					build_JUMPTABLE(blockCodeBuilder);
+//					jumpTable.build_JUMPTABLE(blockCodeBuilder);
+					labelList.build_JUMPTABLE(blockCodeBuilder);
 					build_STM_BODY(blockCodeBuilder);  // Virtual
 					// break _LOOP;
 					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
@@ -519,37 +570,41 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		codeBuilder.labelBinding(loopEnd);
 	}
 	
-	public List<SwitchCase> tableSwitchCases;
+//	public List<SwitchCase> tableSwitchCases;
+//	public LabelList jumpTable;
 
-	private void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
-		// *******************************************************************************
-		// *** JUMPTABLE Case
-		// *******************************************************************************
-		// iconst_n // Number of cases (tableSize)
-		// invokestatic _JUMPTABLE
-		//
-		// Output:
-		//
-		// tableswitch ...
-		//
-		int tableSize = labelList.size();
-//		System.out.println("BlockDeclaration.build_JUMPTABLE: Define TableSwitch " + tableSize);
-		tableSwitchCases = new Vector<SwitchCase>();
-		for (int i = 1; i <= tableSize; i++) {
-			tableSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
-		}
-		// Build the TableSwitch Instruction
-		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
-		int lowValue = 1;          // the minimum key value.
-		int highValue = tableSize; // the maximum key value.
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
-		codeBuilder
-			.aload(0)
-			.getfield(FDE_JTX)
-			.tableswitch(lowValue, highValue, defaultTarget, tableSwitchCases)
-			.labelBinding(defaultTarget);
-	}
+//	private void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
+//		// *******************************************************************************
+//		// *** JUMPTABLE Case
+//		// *******************************************************************************
+//		// iconst_n // Number of cases (tableSize)
+//		// invokestatic _JUMPTABLE
+//		//
+//		// Output:
+//		//
+//		// tableswitch ...
+//		//
+//////		int tableSize = labelList.size();
+////		int tableSize = getNlabels();
+////		for (int i = 1; i <= tableSize; i++) {
+////			Label lab = codeBuilder.newLabel();
+////			System.out.println("BlockDeclaration.build_JUMPTABLE: SwitchCase["+externalIdent+"] " + i + ": " + lab + "  tableSwitchCases.hash="+tableSwitchCases.hashCode());
+////			tableSwitchCases.add(SwitchCase.of(i, lab));
+////		}
+//		// Build the TableSwitch Instruction
+//		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+//		int lowValue = 1;          // the minimum key value.
+////		int highValue = tableSize; // the maximum key value.
+//		int highValue = jumpTable.size(); // the maximum key value.
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
+//		codeBuilder
+//			.aload(0)
+//			.getfield(FDE_JTX)
+////			.tableswitch(lowValue, highValue, defaultTarget, tableSwitchCases)
+//			.tableswitch(lowValue, highValue, defaultTarget, jumpTable.getTableSwitchCases(codeBuilder))
+//			.labelBinding(defaultTarget);
+//	}
 
 	// ==================================================================================
     //        catch(RTS_LABEL q) {
@@ -586,13 +641,10 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		buildTraceGOTO(codeBuilder,"NON-LOCAL");
 		
 		// _CUR._STATE=OperationalState.terminated;
-		ClassDesc CD_OPR=CD.RTS_RTObject("OperationalState");
-		FieldRefEntry FRE_TERM = pool.fieldRefEntry(currentClassDesc(), "terminated", CD_OPR);
-		FieldRefEntry FRE_STATE = pool.fieldRefEntry(CD_RTObject, "_STATE", CD_OPR);
 		codeBuilder
-			.getstatic(FRE_CUR)
-			.getstatic(FRE_TERM)
-			.putfield(FRE_STATE);
+			.invokestatic(CD.RTS_RTObject,
+				"SET_CUR_TERMINATED", MethodTypeDesc.ofDescriptor("()V"));
+
 		
 		buildTraceGOTO(codeBuilder,"RE-THROW");
 		
@@ -624,7 +676,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			.ldc(pool.stringEntry(mss))
 			.aload(2)  // Label quant
 			.invokestatic(CD.RTS_RTObject,
-					"TRACE_GOTO", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V"))
+					"TRACE_GOTO", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;Lsimula/runtime/RTS_LABEL;)V"))
 			.labelBinding(endLabel);
 	}
 	
@@ -694,33 +746,5 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	public String toString() {
 		return ("" + identifier + '[' + externalIdent + "] ObjectKind=" + declarationKind);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		super.writeExternal(oupt);
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		oupt.writeBoolean(isMainModule);
-//		oupt.writeObject(statements);
-//		oupt.writeInt(lastLineNumber);
-//		oupt.writeBoolean(isContextFree);
-//		oupt.writeBoolean(isPreCompiled);
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		super.readExternal(inpt);
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		isMainModule = inpt.readBoolean();
-//		statements = (Vector<Statement>) inpt.readObject();
-//		lastLineNumber = inpt.readInt();
-//		isContextFree = inpt.readBoolean();
-//		isPreCompiled = inpt.readBoolean();
-//	}
-//
 
 }

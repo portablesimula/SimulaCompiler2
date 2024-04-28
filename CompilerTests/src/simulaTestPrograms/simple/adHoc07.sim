@@ -1,10 +1,19 @@
-Simulation begin
-	ref(A) x;
-	
-	Process class A; begin
-		outtext("A: HELLO "); outimage;
-	end;
-	
-	x:-new A;
-	call(x);
-end;
+begin
+
+      class a;
+      begin
+%       L:   
+      end;
+
+    a class b;
+      begin
+       L: L3:
+      end;
+ 
+
+    b class c;
+      begin
+       L: L5:
+      end;
+
+end

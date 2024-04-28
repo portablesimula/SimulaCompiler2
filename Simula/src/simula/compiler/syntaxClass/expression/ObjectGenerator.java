@@ -17,6 +17,8 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -28,6 +30,7 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -271,15 +274,57 @@ public final class ObjectGenerator extends Expression {
 	public String toString() {
 		return (("NEW " + classIdentifier + params).replace('[', '(').replace(']', ')'));
 	}
-
+	
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Externalization.
 	 */
 	public ObjectGenerator() {
 	}
+
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("ObjectGenerator: "+this);
+		oupt.writeKind(ObjectKind.ObjectGenerator);
+		oupt.writeInt(SEQU);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeString(classIdentifier);
+//		oupt.writeObject(params);
+		if(params == null) {
+			oupt.writeInt(-1);			
+		} else {
+			oupt.writeInt(params.size());
+			for(Expression par:params) oupt.writeObj(par);
+		}
+	}
+	
+	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN ObjectGenerator: ");
+		ObjectGenerator gen = new ObjectGenerator();
+		gen.SEQU = inpt.readInt();
+		gen.lineNumber = inpt.readInt();
+		gen.type = inpt.readType();
+		gen.backLink = (SyntaxClass) inpt.readObj();
+		gen.classIdentifier = inpt.readString();
+//		gen.params = (Vector<Expression>) inpt.readObject();
+		int n = inpt.readInt();
+		if(n >= 0) {
+			gen.params = new Vector<Expression>();
+			for(int i=0;i<n;i++)
+				gen.params.add((Expression) inpt.readObj());
+		}
+		Util.TRACE_INPUT("ObjectGenerator: "+gen);
+		return(gen);
+	}
+
+
+	// ***********************************************************************************************
+	// *** Externalization
+	// ***********************************************************************************************
 
 //	@Override
 //	public void writeExternal(ObjectOutput oupt) throws IOException {

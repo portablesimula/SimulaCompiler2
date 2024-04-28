@@ -247,7 +247,7 @@ public final class SwitchStatement extends Statement {
     		GeneratedJavaClass.code("break;");
     	}
        	
-    	private int initTableSwitchCases(int index,CodeBuilder codeBuilder) {
+    	private int initLookupSwitchCases(int index,CodeBuilder codeBuilder) {
     		for(SwitchInterval casePair:this.caseKeyList) {
 //				System.out.println("SwitchStatement'WhenPart.INIT_JUMPTABLE: casePair="+casePair);
     			if(casePair != null) {
@@ -374,7 +374,7 @@ public final class SwitchStatement extends Statement {
 		lookupSwitchCases = new Vector<SwitchCase>();
 		int index = 1;
 		for(WhenPart when:switchCases) {
-			 index = when.initTableSwitchCases(index,codeBuilder);
+			 index = when.initLookupSwitchCases(index,codeBuilder);
 		}
 
 		// Build the LookupSwitch Instruction

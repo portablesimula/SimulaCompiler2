@@ -1030,7 +1030,7 @@ public final class StandardClass extends ClassDeclaration {
 	private static void initCatchingErrors() { 
 		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
 		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
-		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,null));
+		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,CatchingErrors.prefixLevel(),null));
 		CatchingErrors.statements1=new Vector<Statement>();
 		CatchingErrors.statements1.add(new InlineStatement("try")); // Statements before inner 
 		CatchingErrors.statements.add(new InlineStatement("catch")); // Statements after inner 				

@@ -63,7 +63,7 @@ public final class VirtualMatch extends Declaration {
 		String matchCode = "{ throw new RTS_SimulaRuntimeError(\"No Virtual Match: " + identifier + "\"); }";
 		if (match != null)
 			matchCode = "{ return(new RTS_PRCQNT(this," + match.getJavaIdentifier() + ".class)); }";
-		GeneratedJavaClass.code("public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
+		GeneratedJavaClass.code("    public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
 	}
 
 	public void buildMethod(ClassBuilder classBuilder) {

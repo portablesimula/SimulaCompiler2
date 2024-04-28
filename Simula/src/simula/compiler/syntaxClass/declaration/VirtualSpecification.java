@@ -72,7 +72,12 @@ public final class VirtualSpecification extends Declaration {
 	 * Virtual kind.
 	 */
 	public int kind;
-	
+
+	/**
+	 * The prefix level of the class with this virtual specification.
+	 */
+	public int prefixLevel;
+
 	/**
 	 * The procedure specification if present.
 	 */
@@ -90,15 +95,17 @@ public final class VirtualSpecification extends Declaration {
 	 * @param identifier virtual identifier
 	 * @param type the virtual's type
 	 * @param kind the vitual Kind
-	 * @param procedureSpec the ProcedureSpecification
+	 * @param prefixLevel the prefix level of the class with this virtual specification
+	 * @param procedureSpec the ProcedureSpecification or null if not present
 	 */
-	VirtualSpecification(final String identifier, final Type type, final int kind,
+	VirtualSpecification(final String identifier, final Type type, final int kind, final int prefixLevel,
 			final ProcedureSpecification procedureSpec) {
 		super(identifier);
 		this.declarationKind = ObjectKind.VirtualSpecification;
 		this.externalIdent = identifier;
 		this.type = type;
 		this.kind = kind;
+		this.prefixLevel = prefixLevel;
 		this.procedureSpec = procedureSpec;
 //		this.blockKind=BlockKind.Procedure;
 	}
@@ -143,9 +150,9 @@ public final class VirtualSpecification extends Declaration {
 					Parse.expect(KeyWord.PROCEDURE);
 					procedureSpec = ProcedureSpecification.expectProcedureSpecification(procedureType);
 					cls.virtualSpecList
-							.add(new VirtualSpecification(identifier, type, Kind.Procedure, procedureSpec));
+							.add(new VirtualSpecification(identifier, type, Kind.Procedure, cls.prefixLevel(), procedureSpec));
 				} else {
-					cls.virtualSpecList.add(new VirtualSpecification(identifier, type, Kind.Procedure, null));
+					cls.virtualSpecList.add(new VirtualSpecification(identifier, type, Kind.Procedure, cls.prefixLevel(), null));
 					if (Parse.accept(KeyWord.COMMA))
 						expectIdentifierList(cls, type, Kind.Procedure);
 					else
@@ -170,7 +177,7 @@ public final class VirtualSpecification extends Declaration {
 	private static void expectIdentifierList(final ClassDeclaration cls, final Type type, final int kind) {
 		do {
 			String identifier = Parse.expectIdentifier();
-			cls.virtualSpecList.add(new VirtualSpecification(identifier, type, kind, null));
+			cls.virtualSpecList.add(new VirtualSpecification(identifier, type, kind, cls.prefixLevel(), null));
 		} while (Parse.accept(KeyWord.COMMA));
 		Parse.expect(KeyWord.SEMICOLON);
 	}
@@ -194,17 +201,29 @@ public final class VirtualSpecification extends Declaration {
 	 * @return the virtual identifier used i Java code
 	 */
 	public String getVirtualIdentifier() {
-		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
-		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "()");
+//		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
+//		System.out.println("VirtualSpecification.getVirtualIdentifier: "+getJavaIdentifier()+", specifiedIn="+specifiedIn.identifier+", prefixLevel="+specifiedIn.prefixLevel());
+//		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "ZZZ" + "()");
+		return(getSimpleVirtualIdentifier() + "()");
 	}
+
+//	public String getFieldIdentifier() {
+////		ClassDeclaration cls = (ClassDeclaration) this.declaredIn;
+////		return(externalIdent+"_"+cls.prefixLevel()+"()");
+////		Thread.dumpStack();
+////		return(getSimpleVirtualIdentifier() + "()");
+//		return getSimpleVirtualIdentifier();
+//	}
 
 	/**
 	 * Returns the virtual identifier used in JVM code.
 	 * @return the virtual identifier used in JVM code
 	 */
 	public String getSimpleVirtualIdentifier() {
-		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
-		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel());
+//		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
+//		System.out.println("VirtualSpecification.getSimpleVirtualIdentifier: "+getJavaIdentifier()+", specifiedIn="+specifiedIn.identifier+", prefixLevel="+specifiedIn.prefixLevel());
+//		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "XXX");
+		return (getJavaIdentifier() + '_' + prefixLevel + "XXXXXXXXX"); // TODO: FJERN  XXXXXXXXXX
 	}
 
 	// ***********************************************************************************************
@@ -244,11 +263,6 @@ public final class VirtualSpecification extends Declaration {
 		String matchCode = "{ throw new RTS_SimulaRuntimeError(\"No Virtual Match: " + identifier + "\"); }";
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL " : "RTS_PRCQNT ";
 		GeneratedJavaClass.code("public " + qnt + getVirtualIdentifier() + matchCode);
-	}
-
-	public String getFieldIdentifier() {
-		ClassDeclaration cls = (ClassDeclaration) this.declaredIn;
-		return(externalIdent+"_"+cls.prefixLevel()+"()");
 	}
 
 	public void buildMethod(ClassBuilder classBuilder) {
@@ -305,6 +319,7 @@ public final class VirtualSpecification extends Declaration {
 			oupt.writeString(virt.externalIdent);
 			oupt.writeType(virt.type);
 			oupt.writeInt(virt.kind);
+			oupt.writeInt(virt.prefixLevel);
 //			oupt.writeObject(procedureSpec);
 			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
 		}
@@ -320,6 +335,7 @@ public final class VirtualSpecification extends Declaration {
 			virt.externalIdent = inpt.readString();
 			virt.type = inpt.readType();
 			virt.kind = inpt.readInt();
+			virt.prefixLevel = inpt.readInt();
 //			virt.procedureSpec = (ProcedureSpecification) inpt.readObject();
 			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
 		}

@@ -236,7 +236,6 @@ public final class VariableExpression extends Expression {
 
 	@Override
 	public void doChecking() {
-//		System.out.println("VariableExpression.doChecking: "+this+"  "+IS_SEMANTICS_CHECKED());
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
@@ -260,30 +259,35 @@ public final class VariableExpression extends Expression {
 							+ meaning.declaredIn.getClass().getSimpleName());
 			}
 		}
-		if (!this.hasArguments()) {
-			SET_SEMANTICS_CHECKED();
-			return;
-		}
-		checkedParams = new Vector<Expression>();
+//		if (!this.hasArguments()) {
+//			SET_SEMANTICS_CHECKED();
+//			return;
+//		}
+//		checkedParams = new Vector<Expression>();
 		Declaration decl = meaning.declaredAs;
 
+//		System.out.println("VariableExpression.doChecking: "+ObjectKind.edit(decl.declarationKind) + "  " + this);
 		if (decl != null)
 			switch (decl.declarationKind) {
 			case ObjectKind.ArrayDeclaration:
 				ArrayDeclaration array = (ArrayDeclaration) decl;
 				this.type = array.type;
-				// Check parameters
-				if (params.size() != array.nDim)
-					Util.error("Wrong number of indices to " + array);
-				for (Expression actualParameter : params) {
-					actualParameter.doChecking();
-					Expression checkedParameter = TypeConversion.testAndCreate(Type.Integer, actualParameter);
-					checkedParameter.backLink = this;
-					checkedParams.add(checkedParameter);
+				if(params != null) {
+					// Check parameters
+					if (params.size() != array.nDim)
+						Util.error("Wrong number of indices to " + array);
+					checkedParams = new Vector<Expression>();
+					for (Expression actualParameter : params) {
+						actualParameter.doChecking();
+						Expression checkedParameter = TypeConversion.testAndCreate(Type.Integer, actualParameter);
+						checkedParameter.backLink = this;
+						checkedParams.add(checkedParameter);
+					}
 				}
 				break;
 
 			case ObjectKind.Class:
+//			case ObjectKind.PrefixedBlock:
 			case ObjectKind.StandardClass:
 			case ObjectKind.Procedure:
 			case ObjectKind.ContextFreeMethod:
@@ -304,12 +308,18 @@ public final class VariableExpression extends Expression {
 						}
 					}
 				}
-				if (params != null) {
+//				System.out.println("VariableExpression.doChecking: Check parameters: "+this);
+				if (params == null) {
+					if(decl.declarationKind != ObjectKind.Procedure)
+					if (formalIterator.hasNext())
+						Util.error("Missing parameter(s) to " + decl.identifier);
+				} else {
 					// Check parameters
+					checkedParams = new Vector<Expression>();
 					Iterator<Expression> actualIterator = params.iterator();
 					LOOP: while (actualIterator.hasNext()) {
 						if (!formalIterator.hasNext()) {
-							Util.error("Wrong number of parameters to " + decl);
+							Util.error("Too meny parameters to " + decl.identifier);
 							break LOOP;
 						}
 						Parameter formalParameter = (Parameter) formalIterator.next();
@@ -350,9 +360,9 @@ public final class VariableExpression extends Expression {
 						checkedParameter.backLink = this;
 						checkedParams.add(checkedParameter);
 					}
+					if (formalIterator.hasNext())
+						Util.error("Missing parameter(s) to " + decl.identifier);
 				}
-				if (formalIterator.hasNext())
-					Util.error("Wrong number of parameters to " + decl);
 				if (type instanceof OverLoad)
 					this.type = overloadedType;
 				break;
@@ -360,37 +370,48 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.Parameter:
 				Parameter spec = (Parameter) decl;
 				int kind = spec.kind;
-				Util.ASSERT(kind == Parameter.Kind.Array || kind == Parameter.Kind.Procedure, "Invariant ?");
+//				Util.ASSERT(kind == Parameter.Kind.Array || kind == Parameter.Kind.Procedure, "Invariant ? kind="+spec.edKind(kind));
 				this.type = spec.type;
-				if (kind == Parameter.Kind.Array)
-					spec.nDim = params.size();
-				Iterator<Expression> actualIterator = params.iterator();
-				while (actualIterator.hasNext()) {
-					Expression actualParameter = actualIterator.next();
-					actualParameter.doChecking();
-					if (kind == Parameter.Kind.Array) {
-						if (!actualParameter.type.isArithmeticType())
-							Util.error("Illegal index-type");
-						Expression checkedParameter = TypeConversion.testAndCreate(Type.Integer, actualParameter);
-						checkedParameter.backLink = this;
-						checkedParams.add(checkedParameter);
-					} else
-						checkedParams.add(actualParameter);
+				if(params != null) {
+					if (kind == Parameter.Kind.Array)
+						spec.nDim = params.size();
+					Iterator<Expression> actualIterator = params.iterator();
+					checkedParams = new Vector<Expression>();
+					while (actualIterator.hasNext()) {
+						Expression actualParameter = actualIterator.next();
+						actualParameter.doChecking();
+						if (kind == Parameter.Kind.Array) {
+							if (!actualParameter.type.isArithmeticType())
+								Util.error("Illegal index-type");
+							Expression checkedParameter = TypeConversion.testAndCreate(Type.Integer, actualParameter);
+							checkedParameter.backLink = this;
+							checkedParams.add(checkedParameter);
+						} else
+							checkedParams.add(actualParameter);
+					}
 				}
 				break;
 			case ObjectKind.VirtualSpecification:
 				VirtualSpecification vspec = (VirtualSpecification) decl;
 				this.type = vspec.type;
-				Iterator<Expression> pactualIterator = params.iterator();
-				while (pactualIterator.hasNext()) {
-					Expression actualParameter = pactualIterator.next();
-					actualParameter.doChecking();
-					checkedParams.add(actualParameter);
+				if(params != null) {
+					Iterator<Expression> pactualIterator = params.iterator();
+					checkedParams = new Vector<Expression>();
+					while (pactualIterator.hasNext()) {
+						Expression actualParameter = pactualIterator.next();
+						actualParameter.doChecking();
+						if(checkedParams == null) checkedParams = new Vector<Expression>();
+						checkedParams.add(actualParameter);
+					}
 				}
 				break;
 
+			case ObjectKind.SimpleVariableDeclaration:
+			case ObjectKind.LabelDeclaration:
+				break;
+				
 			default:
-				Util.IERR("Variable.doChecking: Impossible - " + decl.declarationKind + "  " + decl);
+				Util.IERR("Variable.doChecking: Impossible - " + ObjectKind.edit(decl.declarationKind) + "  " + decl);
 			}
 
 		if (Option.TRACE_CHECKER)
@@ -807,9 +828,19 @@ public final class VariableExpression extends Expression {
 				if (virtSpec == null) {
 					codeBuilder.getfield(lab.getFieldRefEntry(pool));
 				} else {
-					String ident = virtSpec.getFieldIdentifier();
-					MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$RTS_LABEL;");
+//					String ident = virtSpec.getFieldIdentifier();
+					String ident = virtSpec.getSimpleVirtualIdentifier();
+					MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;");
+//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: virtSpec.declaredIn="+virtSpec.declaredIn);
+//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: lab.declaredIn="+lab.declaredIn);
+//					ClassDesc CD = BlockDeclaration.currentClassDesc();
+//					ClassDesc CD = virtSpec.declaredIn.getClassDesc();
+//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: CD="+CD);
+//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: ident="+ident);
+//					ident = "L1_0XXX";
+//					Util.IERR("");
 					codeBuilder.invokevirtual(BlockDeclaration.currentClassDesc(), ident, MTD);
+//					codeBuilder.invokevirtual(CD, ident, MTD);
 				}
 				break;
 
@@ -1080,14 +1111,11 @@ public final class VariableExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 //		oupt.writeBoolean(CHECKED);
-		System.out.println("writeString ObjectKind="+ObjectKind.VariableExpression);
 		oupt.writeKind(ObjectKind.VariableExpression);
 		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
-		System.out.println("writeObject backLink="+backLink);
 		oupt.writeObj(backLink);
-		System.out.println("writeString identifier="+identifier);
 		oupt.writeString(identifier);
 //		oupt.writeObject(meaning);
 		oupt.writeBoolean(remotelyAccessed);
@@ -1120,6 +1148,7 @@ public final class VariableExpression extends Expression {
 		//params = (Vector<Expression>) inpt.readObject();
 		int n = inpt.readInt();
 		if(n > 0) {
+			var.params = new Vector<Expression>();
 			for(int i=0;i<n;i++)
 				var.params.add((Expression) inpt.readObj());
 		}

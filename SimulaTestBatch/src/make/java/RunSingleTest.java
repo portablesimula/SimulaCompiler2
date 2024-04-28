@@ -63,7 +63,7 @@ public final class RunSingleTest {
 
 		// Coder Trace Options
 //		Option.TRACE_CODING=true;
-		Option.GNERATE_LINE_CALLS=true;
+//		Option.GNERATE_LINE_CALLS=true;
 //		Option.GNERATE_SNAPSHOTS=true;
 
 		// Byte code engineering Options
@@ -88,12 +88,12 @@ public final class RunSingleTest {
 //		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
-		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
-		names.add("adHoc00.sim"); // For ad'hoc testing
+//		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("adHoc00.sim"); // For ad'hoc testing
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -118,7 +118,7 @@ public final class RunSingleTest {
 //		names.add("simtst20.sim"); // OK:  Simple tests: integer relations <, <=, =, >=, > and <>
 //
 //		names.add("simtst21.sim"); // OK:  Arrays of simple types and text.
-//		names.add("simtst22.sim"); // OK:  Test for-loops with various for-list elements
+		names.add("simtst22.sim"); // OK:  Test for-loops with various for-list elements
 //		names.add("simtst23.sim"); // OK:  Type conversions in for step-until element.
 //		names.add("simtst24.sim"); // OK:  Conditional statements with more complex Boolean expressions.
 //		names.add("simtst25.sim"); // OK:  Multiple arithmetic assignment
@@ -193,8 +193,8 @@ public final class RunSingleTest {
 //		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 //		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
-//			names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-//			names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
+//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+//		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
 //		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -207,7 +207,7 @@ public final class RunSingleTest {
 //		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 //		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 //		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-//			names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 //		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 //		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.  Uses GOTO/LABEL
 //
@@ -223,9 +223,9 @@ public final class RunSingleTest {
 //		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 //
 //		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
-//			names.add("simtst112.sim"); // OK: Virtual Label Sample 2    AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst113.sim"); // OK: Virtual Switch Sample 1   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst114.sim"); // OK: Switch Statement          AVSLUTTES MED 'UMULIG' FEIL
+//		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
+//		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
+//		names.add("simtst114.sim"); // OK: Switch Statement
 //		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
 //		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
@@ -236,15 +236,15 @@ public final class RunSingleTest {
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //
 //		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
-//			names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
+//		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
+//		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
-//			names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
 //		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
-//		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
-//		names.add("simtst129.sim"); // OK: Switch in precompiled class
+//			names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
+//			names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
 //		names.add("simtst131.sim"); // OK: Catching Errors

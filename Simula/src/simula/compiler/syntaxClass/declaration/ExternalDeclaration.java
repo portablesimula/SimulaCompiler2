@@ -21,6 +21,9 @@ import java.util.jar.Manifest;
 import java.util.zip.ZipEntry;
 
 import simula.compiler.AttributeFileIO;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
+import simula.compiler.JarFileIO;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.DeclarationList;
@@ -111,6 +114,11 @@ public final class ExternalDeclaration extends Declaration {
 	/**
 	 * Create a new ExternalDeclaration.
 	 */
+	private ExternalDeclaration(String identifier,String extIdentitier) {
+		super(identifier);
+		this.declarationKind = ObjectKind.ExternalDeclaration;
+		this.externalIdent = extIdentitier;
+	}
 	private ExternalDeclaration() {
 		super(null);
 		this.declarationKind = ObjectKind.ExternalDeclaration;
@@ -130,41 +138,7 @@ public final class ExternalDeclaration extends Declaration {
 	 * Precondition: EXTERNAL  is already read.
 	 * @param declarationList the declaration list which is updated
 	 */
-//	public static void expectExternalHead(final DeclarationList declarationList) {
-//		String kind = Parse.acceptIdentifier();
-//		if (kind != null)
-//			Util.IERR("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
-//		Type expectedType = Parse.acceptType();
-//		if (!(Parse.accept(KeyWord.CLASS) || Parse.accept(KeyWord.PROCEDURE)))
-//			Util.error("parseExternalDeclaration: Expecting CLASS or PROCEDURE");
-//
-//		String identifier = Parse.expectIdentifier();
-//		LOOP: while (true) {
-//			Token externalIdentifier = null;
-//			if (Parse.accept(KeyWord.EQ)) {
-//				externalIdentifier = Parse.currentToken;
-//				Parse.expect(KeyWord.TEXTKONST);
-//			}
-//			File jarFile = findJarFile(identifier, externalIdentifier);
-//			if (jarFile != null) {
-//				Type moduleType = readAttributeFile(identifier, jarFile, declarationList);
-//				if (moduleType != expectedType) {
-//					if (expectedType != null)
-//						Util.error("Wrong external type");
-//				}
-//			}
-//
-//			if (Parse.accept(KeyWord.IS)) {
-//				// ...
-//				Util.IERR("*** NOT IMPLEMENTED: " + "External non-Simula Procedure");
-//				break LOOP;
-//			}
-//			if (!Parse.accept(KeyWord.COMMA))
-//				break LOOP;
-//			identifier = Parse.expectIdentifier();
-//		}
-//	}
-	public static void expectExternalHead(final BlockDeclaration enclosure) {
+	public static Vector<ExternalDeclaration> expectExternalHead(final BlockDeclaration enclosure) {
 		String kind = Parse.acceptIdentifier();
 		if (kind != null)
 			Util.IERR("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
@@ -172,6 +146,7 @@ public final class ExternalDeclaration extends Declaration {
 		if (!(Parse.accept(KeyWord.CLASS) || Parse.accept(KeyWord.PROCEDURE)))
 			Util.error("parseExternalDeclaration: Expecting CLASS or PROCEDURE");
 
+		Vector<ExternalDeclaration> externalDeclarations = new Vector<ExternalDeclaration>();
 		String identifier = Parse.expectIdentifier();
 		LOOP: while (true) {
 			Token externalIdentifier = null;
@@ -182,10 +157,15 @@ public final class ExternalDeclaration extends Declaration {
 //			System.out.println("expectExternalHead: "+identifier+"  "+externalIdentifier); // TODO: TESTING3
 //			Util.IERR("");
 			
-			File jarFile = findJarFile(identifier, externalIdentifier);
+			String extIdentitier = (externalIdentifier==null)?null:externalIdentifier.getIdentifier();
+			
+			ExternalDeclaration externalDeclaration = new ExternalDeclaration(identifier,extIdentitier);
+			externalDeclarations.add(externalDeclaration);
+			
+			File jarFile = JarFileIO.findJarFile(identifier, extIdentitier);
 			if (jarFile != null) {
 				if(checkJarFiles(jarFile)) {
-					Type moduleType = readAttributeFile(identifier, jarFile, enclosure);
+					Type moduleType = AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
 //					if (moduleType != expectedType) {
 					if(moduleType == null) {
 						if (expectedType != null) Util.error("Missing external type: "+expectedType);
@@ -210,9 +190,10 @@ public final class ExternalDeclaration extends Declaration {
 			identifier = Parse.expectIdentifier();
 		}
 //		System.out.println("ExternalDeclaration.expectExternalHead: END "+identifier);
+		return externalDeclarations;
 	}
 
-	static boolean checkJarFiles(File file) {
+	private static boolean checkJarFiles(File file) {
 		for(File f:Global.externalJarFiles) if(f.equals(file)) {
 			Util.warning("External already included: "+file.getName());
 			return(false);
@@ -221,120 +202,54 @@ public final class ExternalDeclaration extends Declaration {
 	}
 
 	
-	/**
-	 * Find the .jar file containing an external class or procedure.
-	 * @param identifier class or procedure identifier
-	 * @param externalIdentifier the external identifier if any
-	 * @return the resulting File
-	 */
-	static File findJarFile(final String identifier, final Token externalIdentifier) {
-		File jarFile = null;
-		try {
-			if (externalIdentifier == null) {
-				// If present search extLib
-				if (Global.extLib != null) {
-					jarFile = new File(Global.extLib, identifier + ".jar");
-					if (jarFile.exists())
-						return (jarFile);
-				}
-				jarFile = new File(Global.outputDir, identifier + ".jar");
-				if (jarFile.exists())
-					return (jarFile);
-			} else {
-				jarFile = new File(externalIdentifier.getIdentifier());
-				if (jarFile.exists())
-					return (jarFile);
+	public void readExternal() {
+//		System.out.println("ExternalDeclaration.readExternal: "+this);
+		
+		File jarFile = JarFileIO.findJarFile(identifier, externalIdent);
+//		Util.IERR(""+jarFile);
+		
+		if (jarFile != null) {
+			if(checkJarFiles(jarFile)) {
+//				System.out.println("ExternalDeclaration.readExternal: declaredIn="+declaredIn);
+				BlockDeclaration enclosure = StandardClass.BASICIO; //null; // Implies BASICIO
+//				BlockDeclaration enclosure = nearestEnclosingBlock();
+//				System.out.println("ExternalDeclaration.readExternal: nearestEnclosingBlock="+enclosure);
+				Type moduleType = AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
+//				Util.IERR(""+jarFile);
+				
 			}
-		} catch (Exception e) {
-			Util.IERR("Can't find attribute file: " + jarFile, e);
-		}
-		Util.error("Can't find attribute file: " + jarFile);
-		return (null);
+		}		
 	}
 
-	/**
-	 * Read an attribute file.
-	 * @param identifier class or procedure identifier
-	 * @param file the file to read
-	 * @param enclosure the declaration list to update
-	 * @return the module type
-	 */
-	static Type readAttributeFile(final String identifier, final File file, final BlockDeclaration enclosure) {
-		Type moduleType = null;
-		Util.warning("Separate Compiled Module is read from: \"" + file + "\"");
-		if (!(file.exists() && file.canRead())) {
-			Util.error("Can't read attribute file: " + file);
-			return (null);
-		}
-		try {
-			JarFile jarFile = new JarFile(file);
-			Manifest manifest = jarFile.getManifest();
-			Attributes mainAttributes = manifest.getMainAttributes();
-			String simulaInfo = mainAttributes.getValue("SIMULA-INFO");
-			ZipEntry zipEntry = jarFile.getEntry(simulaInfo);
-			InputStream inputStream = jarFile.getInputStream(zipEntry);
-			moduleType = AttributeFileIO.readAttributeFile(inputStream, new File(simulaInfo), enclosure);
-			inputStream.close();
 
-			File destDir = Global.tempClassFileDir;
-			expandJarEntries(jarFile, destDir);
-			inputStream.close();
-			jarFile.close();
-			Global.externalJarFiles.add(file);
-		} catch (IOException e) {
-			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);
-			Util.warning("It may be necessary to recompile '" + identifier + "'");
-			Util.IERR("Caused by:", e);
-		}
-//		System.out.println("ExternalDeclaration.readAttributeFile: END "+moduleType);
-		return (moduleType);
+	public String toString() {
+		return "ExternalDeclaration: identifier=" + identifier + ", externalIdent=" + externalIdent;
 	}
 
-	/**
-	 * Expand .jar file entries into the given directory.
-	 * @param jarFile the .jar file
-	 * @param destDir the output directory
-	 * @throws IOException if something went wrong
-	 */
-	private static void expandJarEntries(final JarFile jarFile, final File destDir) throws IOException {
-		if (Option.verbose)
-			Util.println("---------  EXPAND .jar File: " + jarFile.getName() + "  ---------");
-		new File(destDir, Global.packetName).mkdirs(); // Create directories
-		Enumeration<JarEntry> entries = jarFile.entries();
-		int nEntriesAdded = 0;
-		LOOP: while (entries.hasMoreElements()) {
-			JarEntry entry = entries.nextElement();
 
-			String name = entry.getName();
-			if (!name.startsWith(Global.packetName))
-				continue LOOP;
-			if (!name.endsWith(".class"))
-				continue LOOP;
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
 
-			InputStream inputStream = null;
-			OutputStream outputStream = null;
-			try {
-				inputStream = jarFile.getInputStream(entry);
-				File destFile = new File(destDir, entry.getName());
-				// System.out.println("ExternalDeclaration.expandJarEntries: "+destFile);
-				outputStream = new FileOutputStream(destFile);
-				byte[] buffer = new byte[4096];
-				int bytesRead = 0;
-				while ((bytesRead = inputStream.read(buffer)) != -1) {
-					outputStream.write(buffer, 0, bytesRead);
-				}
-				nEntriesAdded++;
-			} finally {
-				if (inputStream != null)
-					inputStream.close();
-				if (outputStream != null) {
-					outputStream.flush();
-					outputStream.close();
-				}
-			}
-		}
-		if (Option.verbose)
-			Util.println("---------  END EXPAND .jar File, " + nEntriesAdded + " Entries Added  ---------");
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeExternalDeclaration: " + this);
+		oupt.writeKind(declarationKind);
+		oupt.writeInt(SEQU);
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeInt(lineNumber);
+	}
+	
+	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readExternalDeclaration: ");
+		ExternalDeclaration ext = new ExternalDeclaration();
+		ext.SEQU = inpt.readInt();
+		ext.identifier = inpt.readString();
+		ext.externalIdent = inpt.readString();
+		ext.lineNumber = inpt.readInt();
+		Util.TRACE_INPUT("readExternalDeclaration: " + ext);
+		return(ext);
 	}
 
 }

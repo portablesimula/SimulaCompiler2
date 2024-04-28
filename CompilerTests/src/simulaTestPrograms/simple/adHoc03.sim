@@ -1,14 +1,7 @@
+external class prekomp;
+
+prekomp
 begin
-
-   text               t1, t2;
-
-   text procedure PPP(i1); integer i1;
-   if i1 > 0 then
-   begin
-      text th;
-      PPP :- th
-   end;
-
-   t2 :- PPP(8);
+	integer i;
 
 end of program;

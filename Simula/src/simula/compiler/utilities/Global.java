@@ -21,6 +21,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 

@@ -315,7 +315,6 @@ public final class Constant extends Expression {
 	}
 
 	
-
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
@@ -338,9 +337,12 @@ public final class Constant extends Expression {
 		else if(type.equals(Type.Integer)) {
 			Long val = (Long)value;
 			oupt.writeInt(val.intValue());
+		} else if(type.equals(Type.Text)) {
+			String val = (String)value;
+			oupt.writeString(val);
 		}
 		else
-		Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+this);
+		Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER: "+type);
 	}
 	
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
@@ -356,42 +358,12 @@ public final class Constant extends Expression {
 		//cnst.value=inpt.readObject();
 		if(cnst.type.equals(Type.Boolean)) cnst.value=inpt.readBoolean();
 		else if(cnst.type.equals(Type.Integer)) cnst.value=inpt.readInt();
+		else if(cnst.type.equals(Type.Text)) cnst.value=inpt.readString();
 		else
 			Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+cnst.type);
 		
 		Util.TRACE_INPUT("Constant: "+cnst);
 		return(cnst);
 	}
-	
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public Constant() {}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(value);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		value=inpt.readObject();
-//		Util.TRACE_INPUT("Constant: "+type+' '+value);
-//	}
-//
 
 }

@@ -188,9 +188,9 @@ public final class RunFullClassTestBatch {
 		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
 		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
-//		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
-//		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
-//		names.add("simtst114.sim"); // OK: Switch Statement
+		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
+		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
+		names.add("simtst114.sim"); // OK: Switch Statement
 		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
 		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
@@ -200,9 +200,9 @@ public final class RunFullClassTestBatch {
 //		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
 		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
-//		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
-//		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
-//		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
+		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
+		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
+		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
 		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
 		names.add("simtst127.sim"); // OK: Switch (character) Statement

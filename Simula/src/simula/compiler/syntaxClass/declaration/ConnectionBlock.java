@@ -99,7 +99,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public void end() {
 		if (Option.TRACE_PARSE)
 			Util.TRACE("END ConnectionBlock: " + this.edScopeChain());
-		if (!labelList.isEmpty())
+		if (labelList != null && !labelList.isEmpty())
 			MaybeBlockDeclaration.moveLabelsFrom(this); // Label is also declaration
 		Global.setScope(declaredIn);
 	}

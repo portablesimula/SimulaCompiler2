@@ -160,7 +160,7 @@ public final class LabeledStatement extends Statement {
 		oupt.writeInt(lineNumber);
 		oupt.writeObj(statement);
 		oupt.writeInt(labels.size());
-		for(LabelDeclaration lab:labels) lab.writeObject(oupt);
+		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
 	}
 
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
@@ -173,7 +173,7 @@ public final class LabeledStatement extends Statement {
 		if(n > 0) {
 			stm.labels = new Vector<LabelDeclaration>();
 			for(int i=0;i<n;i++)
-				stm.labels.add(LabelDeclaration.readObject(inpt));
+				stm.labels.add((LabelDeclaration) inpt.readObj());
 		}
 		Util.TRACE_INPUT("LabeledStatement: " + stm);
 		return(stm);

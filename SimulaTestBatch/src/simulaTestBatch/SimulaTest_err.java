@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 10
 package simulaTestBatch;
-// Simula-2.0 Compiled at Sun Feb 04 11:29:47 CET 2024
+// Simula-2.0 Compiled at Sun Apr 21 11:14:39 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SimulaTest_err extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=Procedure, BlockLevel=2, firstLine=10, lastLine=14, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=10, lastLine=14, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public RTS_TXT p_t;
     // Declare locals as attributes
@@ -36,17 +36,17 @@ public final class SimulaTest_err extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public SimulaTest_err _STM() {
-        RTS_COMMON._LINE("Procedure SimulaTest.err",11); // JavaLine 39 <== SourceLine 11
+        // JavaLine 39 <== SourceLine 11
         RTS_BASICIO.sysout().setpos(1);
         ;
-        RTS_COMMON._LINE("Procedure SimulaTest.err",12); // JavaLine 42 <== SourceLine 12
+        // JavaLine 42 <== SourceLine 12
         RTS_BASICIO.sysout().outtext(new RTS_TXT("*** error: in test "));
         ;
         RTS_BASICIO.sysout().outtext(p_t);
         ;
         RTS_BASICIO.sysout().outimage();
         ;
-        RTS_COMMON._LINE("Procedure SimulaTest.err",13); // JavaLine 49 <== SourceLine 13
+        // JavaLine 49 <== SourceLine 13
         ((SimulaTest)(_CUR._SL)).found_error=true;
         ;
         ((SimulaTest)(_CUR._SL)).nFailed=(((SimulaTest)(_CUR._SL)).nFailed+(1));
@@ -54,5 +54,5 @@ public final class SimulaTest_err extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","Procedure err",1,10,39,11,42,12,49,13,56,14);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","5 err",1,10,39,11,42,12,49,13,56,14);
 } // End of Procedure

@@ -191,8 +191,11 @@ public final class ProcedureSpecification {
 
 		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
 		int nPar = inpt.readInt();
-		for(int i=0;i<nPar;i++)
-			spec.parameterList.add(Parameter.readParameter(inpt));
+		if(nPar > 0) {
+			spec.parameterList = new Vector<Parameter>();
+			for(int i=0;i<nPar;i++)
+				spec.parameterList.add(Parameter.readParameter(inpt));
+		}
 		Util.TRACE_INPUT("END Read ProcedureSpecification: " + spec.identifier);
 		return(spec);
 	}

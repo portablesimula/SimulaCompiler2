@@ -42,6 +42,7 @@ import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -309,7 +310,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void doChecking() {
-		if(isPreCompiled && !isBlockLevelUpdated)
+		if(isPreCompiledFromFile != null && !isBlockLevelUpdated)
 			updateBlockLevels(DeclarationScope.currentRTBlockLevel);
 		if (IS_SEMANTICS_CHECKED())
 			return;
@@ -362,7 +363,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, parameter.identifier))
 				return (new Meaning(parameter, this, this, false));
 		}
-		for (LabelDeclaration label : labelList) {
+		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
 			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
@@ -377,7 +378,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 		switch (declarationKind) {
 		case ObjectKind.ContextFreeMethod -> doMethodJavaCoding("static ", false);
 		case ObjectKind.MemberMethod -> doMethodJavaCoding("", true);
@@ -408,7 +409,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			GeneratedJavaClass.debug("// Declare return value as variable");
 			GeneratedJavaClass.code(type.toJavaType() + ' ' + "_RESULT" + '=' + type.edDefaultValue() + ';');
 		}
-		for (Declaration decl : labelList) decl.doJavaCoding();
+		for (Declaration decl : labelList.labels) decl.doJavaCoding();
 		for (Declaration decl : declarationList) decl.doJavaCoding();
 		for (Statement stm : statements) stm.doJavaCoding();
 		if (type != null) GeneratedJavaClass.code("return(_RESULT);");
@@ -455,7 +456,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	private void doProcedureCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
 		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
@@ -476,9 +477,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			hasParameter = true;
 			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
 		}
-		if (!labelList.isEmpty()) {
+		if (labelList != null && !labelList.isEmpty()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-			for (Declaration decl : labelList) decl.doJavaCoding();
+//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
+			for (LabelDeclaration lab : labelList.labels)
+//				decl.doJavaCoding();
+				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList) decl.doJavaCoding();
@@ -591,7 +595,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 								codeBuilder -> buildMethod_RESULT(codeBuilder));
 					}
 					for (Parameter par:parameterList) par.buildField(classBuilder,this);
-					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
 					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
 
 					classBuilder
@@ -698,9 +702,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
 
-			if (!labelList.isEmpty()) {
+			if(labelList != null && !labelList.isEmpty()) {
 				// Declare local labels
-				for (LabelDeclaration lab : labelList)
+				for (LabelDeclaration lab : labelList.labels)
 					lab.buildInitAttribute(codeBuilder);
 			}
 			// Add and Initialize attributes
@@ -1008,10 +1012,15 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 */
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+		stmStack.push(labelContext);
+//		System.out.println("ProcedureDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
+		labelContext = this;
 		for (Statement stm : statements) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
 			stm.buildByteCode(codeBuilder);
 		}
+		labelContext = stmStack.pop();
+//		System.out.println("ProcedureDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 	}
 
 	// ***********************************************************************************************
@@ -1058,6 +1067,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public void printTree(final int indent) {
 		String typeID=(type==null)?"":type.toString()+" ";
 		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier+"  BL="+this.rtBlockLevel);
+		if(labelList != null) labelList.printTree(indent+1);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
@@ -1108,21 +1118,20 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 	
-	private DeclarationList prep(DeclarationList declarationList) {
-		DeclarationList res = new DeclarationList("");
-		for(Declaration decl:declarationList) {
-			if(decl instanceof ArrayDeclaration) res.add(decl);
-			else if(decl instanceof ClassDeclaration) res.add(decl);
-			else if(decl instanceof ExternalDeclaration) res.add(decl);
-			else if(decl instanceof LabelDeclaration) res.add(decl);
-			else if(decl instanceof ProcedureDeclaration) res.add(decl);
-			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
-			else if(decl instanceof SwitchDeclaration) res.add(decl);
-		}
-		return(res);
-	}
+//	private DeclarationList prep(DeclarationList declarationList) {
+//		DeclarationList res = new DeclarationList("");
+//		for(Declaration decl:declarationList) {
+//			if(decl instanceof ArrayDeclaration) res.add(decl);
+//			else if(decl instanceof ClassDeclaration) res.add(decl);
+//			else if(decl instanceof ExternalDeclaration) res.add(decl);
+//			else if(decl instanceof LabelDeclaration) res.add(decl);
+//			else if(decl instanceof ProcedureDeclaration) res.add(decl);
+//			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
+//			else if(decl instanceof SwitchDeclaration) res.add(decl);
+//		}
+//		return(res);
+//	}
 
-	@SuppressWarnings("unchecked")
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 //		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		String identifier = inpt.readString();
@@ -1151,52 +1160,5 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Global.setScope(pro.declaredIn);
 		return(pro);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
-//		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR(""+this+"  Declared in "+this.declaredIn);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-////		oupt.writeType(type);
-//		oupt.writeType(type);
-////		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-//		oupt.writeInt(declarationKind);
-//		oupt.writeInt(rtBlockLevel);
-//		oupt.writeBoolean(hasLocalClasses);
-//
-//		oupt.writeObject(parameterList);
-//		oupt.writeObject(labelList);
-////		oupt.writeObject(declarationList);
-//		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
-//	}
-//
-//	@Override
-//	@SuppressWarnings("unchecked")
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-//		if(Option.NEW_ATTR_FILE && this instanceof StandardProcedure) Util.IERR("");
-//		externalIdent = inpt.readString();
-//		type=inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-//		declarationKind = inpt.readInt();
-//		rtBlockLevel=inpt.readInt();
-//		hasLocalClasses=inpt.readBoolean();
-//		
-//		parameterList=(Vector<Parameter>) inpt.readObject();
-//		labelList=(Vector<LabelDeclaration>) inpt.readObject();
-////		declarationList=(DeclarationList) inpt.readObject();
-//		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-//		
-////		if(identifier.equals("outtext"))
-////		System.out.println("END Read ProcedureDeclaration: "+identifier+", Declared in: "+this.declaredIn);
-//		
-//		Global.setScope(this.declaredIn);
-//	}
 
 }

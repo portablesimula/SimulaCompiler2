@@ -581,7 +581,7 @@ public final class ArrayDeclaration extends Declaration {
 		arr.type = inpt.readType();
 		arr.nDim = inpt.readInt();
 		Util.TRACE_INPUT("Array: " + arr);
-		Util.IERR("SJEKK DETTE");
+//		Util.IERR("SJEKK DETTE");
 		return(arr);
 	}
 

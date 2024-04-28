@@ -139,6 +139,7 @@ public class Type extends SyntaxClass {
 //	public static final Type Label = new Type(new Token(KeyWord.LABEL));
 //	
 //
+	/** Simula's No type */			public static final int T_VOID = 0;
 	/** Simula's Integer type */	public static final int T_INTEGER = 1001;
 	/** Simula's Real type */		public static final int T_REAL = 1002;
 	/** Simula's Long Real type */	public static final int T_LONG_REAL = 1003;
@@ -298,7 +299,13 @@ public class Type extends SyntaxClass {
 	 * @return true if this type is an arithmetic type.
 	 */
 	public boolean isArithmeticType() {
-		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal)); }
+//		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal));
+		switch(keyWord) {
+			case T_INTEGER,T_REAL,T_LONG_REAL: return true;
+			default: return false;
+		}
+	}
+		
 
 	/**
 	 * Returns true if this type is a value type.
@@ -306,8 +313,13 @@ public class Type extends SyntaxClass {
 	 * @return true if this type is a value type.
 	 */
 	public boolean isValueType() {
-		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal)
-			 ||this.equals(Type.Boolean)||this.equals(Type.Character)); }
+//		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal)
+//			 ||this.equals(Type.Boolean)||this.equals(Type.Character));
+		switch(keyWord) {
+		case T_INTEGER,T_REAL,T_LONG_REAL,T_BOOLEAN,T_CHARACTER: return true;
+		default: return false;
+	}
+	}
   
 	/**
 	 * Returns true if this type is ref() type.
@@ -316,7 +328,8 @@ public class Type extends SyntaxClass {
 	public boolean isReferenceType() {
 //		if(key.getKeyWord()==KeyWord.REF) return(true);
 		if(keyWord == Type.T_REF) return(true);
-		if(this.equals(Type.Text)) return(true);
+//		if(this.equals(Type.Text)) return(true);
+		if(keyWord == Type.T_TEXT) return(true);
 		return(getRefIdent()!=null);
 	}
 	  
@@ -461,22 +474,27 @@ public class Type extends SyntaxClass {
 	 * @return the most dominant type
 	 */
 	public static Type arithmeticTypeConversion(final Type type1,final Type type2) {
-		if(type1.equals(Type.Integer)) {
-			if(type2.equals(Type.Integer)) return(Type.Integer); 
-			else if(type2.equals(Type.Real)) return(Type.Real);
-			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
+		switch(type1.keyWord) {
+			case T_INTEGER:
+				switch(type2.keyWord) {
+					case T_INTEGER:		return(Type.Integer); 
+					case T_REAL:		return(Type.Real);
+					case T_LONG_REAL:	return(Type.LongReal);
+				}
+			case T_REAL:
+				switch(type2.keyWord) {
+					case T_INTEGER:		return(Type.Real); 
+					case T_REAL:		return(Type.Real);
+					case T_LONG_REAL:	return(Type.LongReal);
+				}
+			case T_LONG_REAL:
+				switch(type2.keyWord) {
+					case T_INTEGER:		return(Type.LongReal); 
+					case T_REAL:		return(Type.LongReal);
+					case T_LONG_REAL:	return(Type.LongReal);
+				}
 		}
-		else if(type1.equals(Type.Real)) {
-			if(type2.equals(Type.Integer)) return(Type.Real); 
-			else if(type2.equals(Type.Real)) return(Type.Real);
-			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
-		}
-		else if(type1.equals(Type.LongReal)) {
-			if(type2.equals(Type.Integer)) return(Type.LongReal); 
-			else if(type2.equals(Type.Real)) return(Type.LongReal);
-			else if(type2.equals(Type.LongReal)) return(Type.LongReal);
-		}
-		return(null);  
+		return null;
 	}
   
 	/**
@@ -484,25 +502,18 @@ public class Type extends SyntaxClass {
 	 * @return an edited default value of this Type
 	 */
 	public String edDefaultValue() {
-//		if(key==null) return("void");
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return("void");
+		switch(keyWord) {
+			case T_VOID:		return("void");
+			case T_BOOLEAN:		return("false");
+			case T_CHARACTER:	return("0");
+			case T_INTEGER:		return("0");
+			case T_REAL:		return("0.0f");
+			case T_LONG_REAL:	return("0.0d");
+			case T_TEXT:		return("null");
+			case T_LABEL:		return("null");
+			case T_REF:			return("null");
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-//		if(key.getKeyWord()==KeyWord.IDENTIFIER) return(null);
-//		if(keyWord == KeyWord.IDENTIFIER) {
-//			Util.IERR("FOREKOMMER DETTE ?");
-//			return(null);
-//		}
-		if(keyWord == Type.T_REF) return("null");
-		if(this.equals(LongReal)) return("0.0d");
-		if(this.equals(Real)) return("0.0f");
-		if(this.equals(Integer)) return("0");
-		if(this.equals(Boolean)) return("false");
-		if(this.equals(Character)) return("0");
-		if(this.equals(Text)) return("null");
-		if(this.equals(Label)) return("null");
-		return(this.toString());
 	}
   
 	/**
@@ -510,22 +521,18 @@ public class Type extends SyntaxClass {
 	 * @return the resulting code string.
 	 */
 	public String toJavaType() {
-//		if(key==null) return("void");
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return("void");
+		switch(keyWord) {
+			case T_VOID:		return("void");
+			case T_BOOLEAN:		return("boolean");
+			case T_CHARACTER:	return("char");
+			case T_INTEGER:		return("int");
+			case T_REAL:		return("float");
+			case T_LONG_REAL:	return("double");
+			case T_TEXT:		return("RTS_TXT");
+			case T_LABEL:		return("RTS_LABEL");
+			case T_REF:			return(getJavaRefIdent());
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-	    //if(this.equals(Array)) return("array"); // ARRAY Elements 
-		if(keyWord == Type.T_REF) return(getJavaRefIdent());
-		if(this.equals(LongReal)) return("double");
-		if(this.equals(Real)) return("float");
-		if(this.equals(Integer)) return("int");
-		if(this.equals(Boolean)) return("boolean");
-		if(this.equals(Character)) return("char");
-		if(this.equals(Text)) return("RTS_TXT");
-		if(this.equals(Procedure)) return("RTS_PRCQNT");
-		if(this.equals(Label)) return("RTS_LABEL");
-		return(this.toString());
 	}
 	 
 	/**
@@ -533,19 +540,18 @@ public class Type extends SyntaxClass {
 	 * @return the resulting code string.
 	 */
 	public String toJavaTypeClass() {
-//		if(key==null) return("void");
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return("void");
+		switch(keyWord) {
+			case T_VOID:		return("void");
+			case T_BOOLEAN:		return("Boolean");
+			case T_CHARACTER:	return("Character");
+			case T_INTEGER:		return("Integer");
+			case T_REAL:		return("Float");
+			case T_LONG_REAL:	return("Double");
+			case T_TEXT:		return("RTS_TXT");
+			case T_LABEL:		return("RTS_LABEL");
+			case T_REF:			return(getJavaRefIdent());
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-		if(keyWord == Type.T_REF) return(getJavaRefIdent());
-		if(this.equals(LongReal)) return("Double");
-		if(this.equals(Real)) return("Float");
-		if(this.equals(Integer)) return("Integer");
-		if(this.equals(Boolean)) return("Boolean");
-		if(this.equals(Character)) return("Character");
-		if(this.equals(Text)) return("RTS_TXT");
-		return(this.toString());
 	}
 	
 	/**
@@ -553,101 +559,87 @@ public class Type extends SyntaxClass {
 	 * @return the resulting code string.
 	 */
 	public String toJavaArrayType() {
-		if(keyWord == Type.T_REF) {
-			String rtQual=getJavaRefIdent();
-			return("RTS_REF_ARRAY<"+rtQual+">");
+		switch(keyWord) {
+			case T_BOOLEAN:		return("RTS_BOOLEAN_ARRAY");
+			case T_CHARACTER:	return("RTS_CHARACTER_ARRAY");
+			case T_INTEGER:		return("RTS_INTEGER_ARRAY");
+			case T_REAL:		return("RTS_REAL_ARRAY");
+			case T_LONG_REAL:	return("RTS_LONG_REAL_ARRAY");
+			case T_TEXT:		return("RTS_TEXT_ARRAY");
+			case T_REF:			return("RTS_REF_ARRAY<"+getJavaRefIdent()+">");
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-		if(this.equals(LongReal)) return("RTS_LONG_REAL_ARRAY");
-		if(this.equals(Real)) return("RTS_REAL_ARRAY");
-		if(this.equals(Integer)) return("RTS_INTEGER_ARRAY");
-		if(this.equals(Boolean)) return("RTS_BOOLEAN_ARRAY");
-		if(this.equals(Character)) return("RTS_CHARACTER_ARRAY");
-		if(this.equals(Text)) return("RTS_TEXT_ARRAY");
-//		if(this.equals(Procedure)) return("RTS_PRCQNT");
-//		if(this.equals(Label)) return("RTS_LABEL");
-		Util.IERR("");
-		return(this.toString());
-	}
 
-	public String toJavaArrayType2() {
-		if(keyWord == Type.T_REF) {
-			return("RTS_REF_ARRAY");
-		}
-		return(this.toJavaArrayType());
 	}
 	
-	public String getArrayType() {   // TESTING_ARRAY
-		if(this==Type.Integer)     return("RTS_INTEGER_ARRAY");
-		if(this==Type.Character)   return("RTS_CHARACTER_ARRAY");
-		if(this==Type.Boolean)     return("RTS_BOOLEAN_ARRAY");
-		if(this==Type.Real)        return("RTS_REAL_ARRAY");
-		if(this==Type.LongReal)    return("RTS_LONG_REAL_ARRAY");
-		if(this==Type.Text)        return("RTS_TEXT_ARRAY");
-		if(this.isReferenceType()) return("RTS_REF_ARRAY");
-		Util.IERR("IMPOSSIBLE");   return(null);
+	public String getArrayType() {
+		switch(keyWord) {
+			case T_BOOLEAN:		return("RTS_BOOLEAN_ARRAY");
+			case T_CHARACTER:	return("RTS_CHARACTER_ARRAY");
+			case T_INTEGER:		return("RTS_INTEGER_ARRAY");
+			case T_REAL:		return("RTS_REAL_ARRAY");
+			case T_LONG_REAL:	return("RTS_LONG_REAL_ARRAY");
+			case T_TEXT:		return("RTS_TEXT_ARRAY");
+			case T_REF:			return("RTS_REF_ARRAY");
+			default: Util.IERR("IMPOSSIBLE"); return null;
+		}
 	}
 
 	/**
 	 * Coding utility: toJVMType.
 	 * @return the resulting code string.
 	 */
-	public String toJVMType() {
-		String jvmType=toPrivJVMType();
-//		System.out.println("Type.toJVMType(): "+ this +"  ==>  "+jvmType+" ##########################################################");
+	public String toJVMType(int kind,int mode) {
+		String jvmType=toClassDesc(kind,mode).descriptorString();
 		return(jvmType);
 	}
-	private String toPrivJVMType() {
-//		if(key==null) return("V");
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return("V");
+	
+	public String toJVMType() {
+		switch(keyWord) {
+			case T_VOID:		return("V");
+			case T_BOOLEAN:		return("Z");
+			case T_CHARACTER:	return("C");
+			case T_INTEGER:		return("I");
+			case T_REAL:		return("F");
+			case T_LONG_REAL:	return("D");
+			case T_TEXT:		return("Lsimula/runtime/RTS_TXT;");
+			case T_PROCEDURE:	return("Lsimula/runtime/RTS_PRCQNT;");
+			case T_LABEL:		return("Lsimula/runtime/RTS_LABEL;");
+			case T_REF: {
+				String refIdent=this.getJavaRefIdent();
+				if(this.getQual() instanceof StandardClass)
+					return("Lsimula/runtime/"+refIdent+";");
+				else if(refIdent.startsWith("RTS_"))
+					return("Lsimula/runtime/"+refIdent+";");
+				else return("L"+Global.packetName+"/"+refIdent+";");
+			}
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-//		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
-		if(this.equals(LongReal)) return("D");
-		if(this.equals(Real)) return("F");
-		if(this.equals(Integer)) return("I");
-		if(this.equals(Boolean)) return("Z");
-		if(this.equals(Character)) return("C");
-		if(this.equals(Text)) return("Lsimula/runtime/RTS_TXT;");
-		if(this.equals(Procedure)) return("Lsimula/runtime/RTS_PRCQNT;");
-		if(this.equals(Label)) return("Lsimula/runtime/RTS_LABEL;");
-		if(this.isReferenceType()) {
-			String refIdent=this.getJavaRefIdent();
-			if(this.getQual() instanceof StandardClass)
-				return("Lsimula/runtime/"+refIdent+";");
-			else if(refIdent.startsWith("RTS_"))
-				 return("Lsimula/runtime/"+refIdent+";");
-			else return("L"+Global.packetName+"/"+refIdent+";");
-		}
-		System.out.println("KeyWord="+keyWord);
-		Util.IERR("NOT IMPLEMENTED: "+this);
-		return(null);
 	}
 
 	// Used by: Thunk.buildClassFile
 	public static String toJVMClassType(Type type,int kind) {
 		if(kind == Parameter.Kind.Procedure) return("Lsimula/runtime/RTS_PRCQNT;");
-//		if(key==null) return("V");
-//		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
-		if(type.equals(LongReal)) return("Ljava/lang/Double;");
-		if(type.equals(Real)) return("Ljava/lang/Float;");
-		if(type.equals(Integer)) return("Ljava/lang/Integer;");
-		if(type.equals(Boolean)) return("Ljava/lang/Boolean;");
-		if(type.equals(Character)) return("Ljava/lang/Character;");
-		if(type.equals(Text)) return("Lsimula/runtime/RTS_TXT;");
-		if(type.equals(Procedure)) return("Lsimula/runtime/RTS_PRCQNT;");
-		if(type.equals(Label)) return("Lsimula/runtime/RTS_LABEL;");
-		if(type.isReferenceType()) {
-			String refIdent=type.getJavaRefIdent();
-			if(type.getQual() instanceof StandardClass)
-				return("Lsimula/runtime/"+refIdent+";");
-			else if(refIdent.startsWith("RTS_"))
-				 return("Lsimula/runtime/"+refIdent+";");
-			else return("L"+Global.packetName+"/"+refIdent+";");
+		switch(type.getKeyWord()) {
+			case T_VOID:		return("V");
+			case T_BOOLEAN:		return("Ljava/lang/Boolean;");
+			case T_CHARACTER:	return("Ljava/lang/Character;");
+			case T_INTEGER:		return("Ljava/lang/Integer;");
+			case T_REAL:		return("Ljava/lang/Float;");
+			case T_LONG_REAL:	return("Ljava/lang/Double;");
+			case T_TEXT:		return("Lsimula/runtime/RTS_TXT;");
+			case T_PROCEDURE:	return("Lsimula/runtime/RTS_PRCQNT;");
+			case T_LABEL:		return("Lsimula/runtime/RTS_LABEL;");
+			case T_REF: {
+				String refIdent=type.getJavaRefIdent();
+				if(type.getQual() instanceof StandardClass)
+					return("Lsimula/runtime/"+refIdent+";");
+				else if(refIdent.startsWith("RTS_"))
+					return("Lsimula/runtime/"+refIdent+";");
+				else return("L"+Global.packetName+"/"+refIdent+";");
+			}
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-//		System.out.println("KeyWord="+key.getKeyWord());
-		Util.IERR("NOT IMPLEMENTED: "+type);
-		return(null);
 	}
 
 	/**
@@ -656,25 +648,18 @@ public class Type extends SyntaxClass {
 	 */
 	public ClassDesc toClassDesc(Declaration declaredIn) {
 		if(keyWord == Type.T_REF) {
-			// CD.RTS_RTObject
 			String refID=getJavaRefIdent();
-//			String refID=getRefIdent();
-//			System.out.println("Type.toClassDesc: refID="+refID);
 			if(declaredIn != null) {
-//				System.out.println("Type.toClassDesc: refID="+refID+", declaredIn.declarationKind="+declaredIn.declarationKind);
 				if(declaredIn.declarationKind == ObjectKind.StandardClass) {
 					ClassDesc classDesc = ClassDesc.of("simula.runtime."+refID);
-//					System.out.println("Type.toClassDesc: "+ this +"  ==>  classDesc = ClassDesc.of(\"simula.runtime."+refID+"\")");
 					return(classDesc);
 				}
 				if(declaredIn.declarationKind == ObjectKind.MemberMethod) {
 					ClassDesc classDesc = ClassDesc.of("simula.runtime."+refID);
-//					System.out.println("Type.toClassDesc: "+ this +"  ==>  classDesc = ClassDesc.of(\"simula.runtime."+refID+"\")");
 					return(classDesc);
 				}
 			}
 		}
-//		System.out.println("Type.toClassDesc: "+ this +"  ==>  classDesc = " + toClassDesc());
 		return(toClassDesc());
 	}
 
@@ -683,23 +668,19 @@ public class Type extends SyntaxClass {
 	 * @return the resulting Class Descriptor.
 	 */
 	public ClassDesc toClassDesc() {
-//		if(key==null) return(ConstantDescs.CD_void);
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return(ConstantDescs.CD_void);
+		switch(keyWord) {
+			case T_VOID:		return(ConstantDescs.CD_void);
+			case T_BOOLEAN:		return(ConstantDescs.CD_boolean);
+			case T_CHARACTER:	return(ConstantDescs.CD_char);
+			case T_INTEGER:		return(ConstantDescs.CD_int);
+			case T_REAL:		return(ConstantDescs.CD_float);
+			case T_LONG_REAL:	return(ConstantDescs.CD_double);
+			case T_TEXT:		return(CD.RTS_TXT);
+			case T_REF:			return(this.getQual().getClassDesc());
+			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
+			case T_LABEL:		return(CD.RTS_LABEL);
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-//		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
-		if(this.equals(LongReal))  return(ConstantDescs.CD_double);
-		if(this.equals(Real))      return(ConstantDescs.CD_float);
-		if(this.equals(Integer))   return(ConstantDescs.CD_int);
-		if(this.equals(Boolean))   return(ConstantDescs.CD_boolean);
-		if(this.equals(Character)) return(ConstantDescs.CD_char);
-		if(this.equals(Text))      return(CD.RTS_TXT);
-		if(this.equals(Procedure)) return(CD.RTS_PRCQNT);
-		if(this.equals(Label))     return(CD.RTS_LABEL);
-		if(this.isReferenceType()) return(this.getQual().getClassDesc());
-		Util.IERR("NOT IMPLEMENTED: "+this);
-		return(null);
 	}
 
 	public ClassDesc toClassDesc(int kind,int mode) {
@@ -712,105 +693,41 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	public ClassDesc toClassDesc2(int kind,int mode) {
-		if (mode == Parameter.Mode.name) return(CD.RTS_NAME);
-		else switch(kind) {
-			case Parameter.Kind.Array:     return(CD.RTS_ARRAY);
-			case Parameter.Kind.Label:     return(CD.RTS_LABEL);
-			case Parameter.Kind.Procedure: return(CD.RTS_PRCQNT);
-			case Parameter.Kind.Simple: default: return(this.toClassDesc(declaredIn));
-		}
-	}
 	public ClassDesc toObjectClassDesc() {
-//		if(key==null) return(ConstantDescs.CD_void);
-		if(keyWord == 0) {
-			Util.IERR("FOREKOMMER DETTE ?");
-			return(ConstantDescs.CD_void);
+		switch(keyWord) {
+			case T_VOID:		return(ConstantDescs.CD_void);
+			case T_BOOLEAN:		return(ConstantDescs.CD_Boolean);
+			case T_CHARACTER:	return(ConstantDescs.CD_Character);
+			case T_INTEGER:		return(ConstantDescs.CD_Integer);
+			case T_REAL:		return(ConstantDescs.CD_Float);
+			case T_LONG_REAL:	return(ConstantDescs.CD_Double);
+			case T_TEXT:		return(CD.RTS_TXT);
+			case T_REF:			return(this.getQual().getClassDesc());
+			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
+			case T_LABEL:		return(CD.RTS_LABEL);
+			default: Util.IERR("IMPOSSIBLE"); return null;
 		}
-//		if(key.getKeyWord()==KeyWord.REF) return(getJavaRefIdent());
-		if(this.equals(LongReal))  return(ConstantDescs.CD_Double);
-		if(this.equals(Real))      return(ConstantDescs.CD_Float);
-		if(this.equals(Integer))   return(ConstantDescs.CD_Integer);
-		if(this.equals(Boolean))   return(ConstantDescs.CD_Boolean);
-		if(this.equals(Character)) return(ConstantDescs.CD_Character);
-		if(this.equals(Text))      return(CD.RTS_TXT);
-		if(this.equals(Procedure)) return(CD.RTS_PRCQNT);
-		if(this.equals(Label))     return(CD.RTS_LABEL);
-		if(this.isReferenceType()) return(this.getQual().getClassDesc());
-		Util.IERR("NOT IMPLEMENTED: "+this);
-		return(null);
-	}
-	
-	public String toJVMType(int kind,int mode) {
-	String jvmType=toClassDesc(kind,mode).descriptorString();
-	return(jvmType);
-}
-
-	/**
-	 * Coding utility: toClassSignatureString.
-	 * @return the resulting Class Signature.
-	 */
-	public String toClassSignatureString() {
-		return(toClassSignatureString(0));
-	}
-	public String toClassSignatureString(int mode) {
-		String CS=null;
-		if (mode == Parameter.Mode.name) {
-			if(this.equals(Type.Integer)) CS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;";
-			else if(this.equals(Type.Real)) CS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;";
-			else if(this.equals(Type.LongReal)) CS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;";
-			else Util.IERR("FYLL PÅ FLERE TYPER"); // TODO: FYLL PÅ FLERE TYPER
-		} else {
-			if(mode == Parameter.Mode.value) {
-//				Util.IERR("");
-			}
-			CS = toJVMType();
-		}
-//		System.out.println("Type.toClassSignature: "+this+" ==> CS "+CS);
-//		Util.IERR("");
-		return(CS);
 	}
 
 	/**
-	 * Coding utility: toClassSignature.
+	 * Coding utility: toNameClassSignature.
 	 * @return the resulting Class Signature.
 	 */
-	public ClassSignature toClassSignature() {
-		return(toClassSignature(0));
-	}
-	public ClassSignature toClassSignature(int mode) {
-		ClassSignature CS=null;
-		if (mode == Parameter.Mode.name) {
-			if(this.equals(Type.Integer)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;");
-			else if(this.equals(Type.Real)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;");
-			else if(this.equals(Type.LongReal)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;");
-			else if(this.equals(Type.Boolean)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;");
-			else if(this.equals(Type.Character)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;");
-			else if(this.equals(Type.Text)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Lsimula/runtime/TXT;>;");
-			else if(this.equals(Type.Label)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_RTObject$RTS_LABEL;>;");
-			else if(this.isReferenceType()) {
-				String sig="Lsimula/runtime/RTS_NAME<"+this.toJVMType()+">;";
-//				System.out.println("Type.toClassSignature: "+sig);
-				CS = ClassSignature.parseFrom(sig);
-//				Util.IERR(""+CS);
-			}
-			else Util.IERR("FYLL PÅ FLERE TYPER: "+this); // TODO: FYLL PÅ FLERE TYPER
-		} else {
-			ClassDesc CD=null;
-			if(mode == Parameter.Mode.value) {
-				CD=this.toClassDesc(declaredIn);
-//				Util.IERR("");
-			} else {
-				CD=this.toClassDesc(declaredIn);
-			}
-//			System.out.println("Type.toClassSignature: "+this+" ==> CD "+CD);
-			String jvmType=CD.descriptorString();
-			System.out.println("Type.toClassSignature: "+this+" ==> jvmType "+jvmType);
-			CS = ClassSignature.parseFrom(jvmType);
+	public ClassSignature toNameClassSignature() {
+		String CSS=null;
+		switch(keyWord) {
+			case T_BOOLEAN:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;"; break;
+			case T_CHARACTER:	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;"; break;
+			case T_INTEGER:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;"; break;
+			case T_REAL:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;"; break;
+			case T_LONG_REAL:	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;"; break;
+			case T_TEXT:		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/TXT;>;"; break;
+			case T_PROCEDURE:	CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_PRCQNT;>;"; break;
+			case T_LABEL:		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_LABEL;>;"; break;
+			case T_REF:			CSS = "Lsimula/runtime/RTS_NAME<"+this.toJVMType()+">;"; break;
+			default: Util.IERR("FYLL PÅ FLERE TYPER"); return null;
 		}
-//		System.out.println("Type.toClassSignature: "+this+" ==> CS "+CS);
-//		Util.IERR("");
-		return(CS);
+		return ClassSignature.parseFrom(CSS);
 	}
 
 	/**
@@ -818,70 +735,33 @@ public class Type extends SyntaxClass {
 	 * @return the resulting Array Class Signature.
 	 */
 	public ClassSignature toArrayClassSignature() {
-		ClassSignature CS = null;
-		if(keyWord == Type.T_REF) {
-			String T = this.toJVMType();
-//			System.out.println("Type.toClassSignature: "+this.toJVMType());
-//			CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_RTObject$RTS_REF_ARRAY<LsimulaTestPrograms/adHoc03_A;>;");
-			CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_RTObject$RTS_REF_ARRAY<"+T+">;");
-//			System.out.println("Type.toClassSignature: "+this+" ==> CS "+CS);
-		} else if(this.equals(Type.Text)) {
-//			System.out.println("Type.toClassSignature: "+this.toJVMType());
-			CS = ClassSignature.parseFrom(this.toJVMType());
-//			Util.IERR("");
-//		} else if(this.equals(Type.Integer) {
-//			System.out.println("Type.toClassSignature: "+this.toJVMType());
-//			CS = null;
-		}	else if(this.equals(Type.Integer)) CS = ClassSignature.parseFrom("Ljava/lang/Integer;");
-			else if(this.equals(Type.Real)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;");
-			else if(this.equals(Type.LongReal)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;");
-			else if(this.equals(Type.Boolean)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;");
-			else if(this.equals(Type.Character)) CS = ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;");
-
-			else 
-				Util.IERR("");
-//		} else Util.IERR(""+this);
-		return(CS);
+		String CSS=null;
+		switch(keyWord) {
+			case T_BOOLEAN:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_BOOLEAN_ARRAY;"; break;
+			case T_CHARACTER:	CSS = "Lsimula.runtime.RTS_RTObject$RTS_CHARACTER_ARRAY;"; break;
+			case T_INTEGER:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_INTEGER_ARRAY;"; break;
+			case T_REAL:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_REAL_ARRAY;"; break;
+			case T_LONG_REAL:	CSS = "Lsimula.runtime.RTS_RTObject$RTS_LONG_REAL_ARRAY;"; break;
+			case T_TEXT:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_TEXT_ARRAY;"; break;
+			case T_REF:			CSS = "Lsimula/runtime/RTS_RTObject$RTS_REF_ARRAY<"+this.toJVMType()+">;"; break;
+			default: Util.IERR("IMPOSSIBLE");
+		}
+		return ClassSignature.parseFrom(CSS);
 	}
 	
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {
-		if(this.equals(Type.Integer))
-			codeBuilder.invokestatic(ConstantDescs.CD_Integer, "valueOf", MethodTypeDesc.ofDescriptor("(I)Ljava/lang/Integer;"));
-		else if(this.equals(Type.Real))
-			codeBuilder.invokestatic(ConstantDescs.CD_Float, "valueOf", MethodTypeDesc.ofDescriptor("(F)Ljava/lang/Float;"));
-		else if(this.equals(Type.LongReal))
-			codeBuilder.invokestatic(ConstantDescs.CD_Double, "valueOf", MethodTypeDesc.ofDescriptor("(D)Ljava/lang/Double;"));
-		else if(this.equals(Type.Boolean))
-			codeBuilder.invokestatic(ConstantDescs.CD_Boolean, "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;"));
-		else if(this.equals(Type.Character))
-			codeBuilder.invokestatic(ConstantDescs.CD_Character, "valueOf", MethodTypeDesc.ofDescriptor("(C)Ljava/lang/Character;"));
-//		else Util.IERR("FYLL PÅ FLERE TYPE: "+par.type+"  "+par+"  "+par.declaredIn);
+		switch(keyWord) {
+		case T_BOOLEAN:	  codeBuilder.invokestatic(ConstantDescs.CD_Boolean,   "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;")); break;
+		case T_CHARACTER: codeBuilder.invokestatic(ConstantDescs.CD_Character, "valueOf", MethodTypeDesc.ofDescriptor("(C)Ljava/lang/Character;")); break;
+		case T_INTEGER:	  codeBuilder.invokestatic(ConstantDescs.CD_Integer,   "valueOf", MethodTypeDesc.ofDescriptor("(I)Ljava/lang/Integer;")); break;
+		case T_REAL:	  codeBuilder.invokestatic(ConstantDescs.CD_Float,     "valueOf", MethodTypeDesc.ofDescriptor("(F)Ljava/lang/Float;")); break;
+		case T_LONG_REAL: codeBuilder.invokestatic(ConstantDescs.CD_Double,    "valueOf", MethodTypeDesc.ofDescriptor("(D)Ljava/lang/Double;")); break;
+		default: // Nothing
+		}
 	}
 
 	@Override
-//	public String toString() {
-//		if(key==null) return("null");
-//		if(key.getKeyWord()==KeyWord.REF) {
-//			if(declaredIn==null) {
-//				if(qual==null) return("ref("+key.getValue()+')');
-//				return("ref("+key.getValue()+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
-//			}
-//			return("ref("+key.getValue()+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
-//		}
-//		if(this.equals(LongReal)) return("LONG REAL"); 
-//		return(key.toString().toUpperCase());
-//	}
 	public String toString() {
-//		if(key==null) return("null");
-		if(keyWord == Type.T_REF) {
-			if(declaredIn==null) {
-				if(qual==null) return("ref("+classIdent+')');
-				return("ref("+classIdent+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
-			}
-			return("ref("+classIdent+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
-		}
-		if(this.equals(LongReal)) return("LONG REAL"); 
-		//return (KeyWord.edit(keyWord).toUpperCase());+
 		switch(keyWord) {
 			case T_INTEGER:		return "Integer";
 			case T_REAL:		return "Real";
@@ -889,43 +769,16 @@ public class Type extends SyntaxClass {
 			case T_BOOLEAN:		return "Boolean";
 			case T_CHARACTER:	return "Character";
 			case T_TEXT:		return "Text";
-			case T_REF:			return "Ref()";
 			case T_PROCEDURE:	return "Procedure";
 			case T_LABEL:		return "Label";
+			case T_REF:			//return "Ref()";
+				if(declaredIn==null) {
+					if(qual==null) return("ref("+classIdent+')');
+					return("ref("+classIdent+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
+				}
+				return("ref("+classIdent+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
 		}
 		return "UNKNOWN";
 	}
-
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-////	public static void outType(Type type,DataOutput oupt) throws IOException {
-//	public static void outType(Type type,AttributeOutputStream oupt) throws IOException {
-//		if(type == null) {
-//			oupt.writeInt(-1);
-//		} else {
-//			oupt.writeInt(type.keyWord);
-//			oupt.writeString(type.classIdent);
-//		}
-////		oupt.writeObject(qual);
-////		oupt.writeObject(declaredIn);
-//	}
-//	
-//	/**
-//	 * Read a type from an ObjectInput file.
-//	 * @param inpt the AttributeInputStream
-//	 * @return the resulting Type
-//	 * @throws IOException if an IOException occur
-//	 * @throws ClassNotFoundException if the operation failed
-//	 */
-//	public static Type inType(AttributeInputStream inpt) throws IOException {
-//		int keyWord = inpt.readInt();
-//		if(keyWord == -1) return(null);
-//		String classIdent = inpt.readString();
-////		qual=(ClassDeclaration) inpt.readObject();
-////		declaredIn=(ConnectionBlock) inpt.readObject();
-//		return(new Type(keyWord,classIdent));			
-//	}
 	
 }

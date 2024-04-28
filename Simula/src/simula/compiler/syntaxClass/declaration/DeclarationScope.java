@@ -15,6 +15,7 @@ import java.util.Vector;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -66,7 +67,8 @@ public abstract class DeclarationScope extends Declaration  {
 	/**
 	 * The label list.
 	 */
-	public Vector<LabelDeclaration> labelList = new Vector<LabelDeclaration>();
+//	public Vector<LabelDeclaration> labelList = new Vector<LabelDeclaration>();
+	public LabelList labelList; // = new LabelList();
 
 	// ***********************************************************************************************
 	// *** Constructor
@@ -101,6 +103,19 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
+	// *** Utility: prefixLevel
+	// ***********************************************************************************************
+	/**
+	 * Returns the prefix level.
+	 * <p>
+	 * Redefined in ClassDeclaration
+	 * @return the prefix level
+	 */
+	public int prefixLevel() {
+		return 0;
+	}
+
+	// ***********************************************************************************************
 	// *** Utility: findVisibleAttributeMeaning
 	// ***********************************************************************************************
 	/**
@@ -110,7 +125,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return the resulting Meaning
 	 */
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		Util.IERR("DeclarationScope.findVisibleAttributeMeaning: SHOULD BEEN REDEFINED: " + identifier);
+		Util.IERR("DeclarationScope.findVisibleAttributeMeaning: SHOULD BEEN REDEFINED: " + identifier + " IN " + this.getClass().getSimpleName());
 		return (null);
 	}
 
@@ -124,6 +139,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return the resulting Meaning
 	 */
 	public Meaning findMeaning(final String identifier) {
+//		System.out.println("DeclarationScope.findMeaning: "+identifier);
 		Meaning meaning = findVisibleAttributeMeaning(identifier);
 		if (meaning == null && declaredIn != null) {
 			meaning = declaredIn.findMeaning(identifier);
@@ -147,7 +163,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
 	public Meaning findLabelMeaning(final String identifier) {
 //		System.out.println("\nDeclarationScope.findLabelMeaning: "+identifier+" IN "+this);
-		for (LabelDeclaration dcl : labelList) {
+		for (LabelDeclaration dcl : labelList.labels) {
 //			System.out.println("DeclarationScope.findLabelMeaning: Checking "+dcl);
 			if (Util.equals(dcl.identifier, identifier)) {
 				return (new Meaning(dcl, this, this, false));
@@ -379,7 +395,7 @@ public abstract class DeclarationScope extends Declaration  {
 	
 	protected void printDeclarationList(int indent) {
 		for(Declaration d:declarationList) d.printTree(indent);
-		for(LabelDeclaration d:labelList) d.printTree(indent);
+		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent);
 	}
 
 	public void createJavaClassFile() throws IOException {

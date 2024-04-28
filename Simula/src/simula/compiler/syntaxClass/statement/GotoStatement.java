@@ -101,8 +101,8 @@ public final class GotoStatement extends Statement {
 //		}
 //        32: aload_0
 //        33: aload_0
-//        34: getfield      #14                 // Field _LABEL_L1:Lsimula/runtime/RTS_RTObject$RTS_LABEL;
-//        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V
+//        34: getfield      #14                 // Field _LABEL_L1:Lsimula/runtime/RTS_LABEL;
+//        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_LABEL;)V
 //		ClassDesc CD_Lab=CD.RTS_LABEL;
 //		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		FieldRefEntry FRE_Arr=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), arrayIdent, CD_Lab);
@@ -121,25 +121,25 @@ public final class GotoStatement extends Statement {
 					codeBuilder.aload(0);
 				label.buildEvaluation(null,codeBuilder);
 				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 			} else if(meaning.declaredAs instanceof Parameter par) {
 //				System.out.println("GotoStatement.buildByteCode: par.kind="+par.kind);
 				if(par.kind != Parameter.Kind.Procedure)
 					codeBuilder.aload(0);
 				label.buildEvaluation(null,codeBuilder);
 				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 			} else if(meaning.declaredAs instanceof SwitchDeclaration swtch) {
 //				swtch.buildByteCode(codeBuilder);
 				codeBuilder.aload(0);
 				label.buildEvaluation(null,codeBuilder);
 				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 			} else if(meaning.declaredAs instanceof VirtualSpecification virt) {
 				codeBuilder.aload(0);
 				label.buildEvaluation(null,codeBuilder);
 				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject$RTS_LABEL;)V")));
+						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 //				Util.IERR(null);
 			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName()+"  "+label);
 		} else Util.IERR("");

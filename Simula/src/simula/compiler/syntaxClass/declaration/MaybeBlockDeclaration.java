@@ -16,6 +16,7 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
@@ -29,7 +30,9 @@ import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -129,7 +132,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			} else {
 				declarationKind = ObjectKind.CompoundStatement;
 				modifyIdentifier("CompoundStatement" + Global.sourceLineNumber);
-				if (!labelList.isEmpty())
+				if (labelList != null && !labelList.isEmpty())
 					moveLabelsFrom(this); // Label is also declaration
 			}
 		}
@@ -160,17 +163,24 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 //	}
 	static void moveLabelsFrom(DeclarationScope block) {
 		DeclarationScope declaredIn = block.declaredIn;
-		Vector<LabelDeclaration> labelList = block.labelList;
+		Vector<LabelDeclaration> labelList = block.labelList.labels;
 		DeclarationScope enc = declaredIn;
 		while (enc.declarationKind == ObjectKind.CompoundStatement
 				&& enc.declarationKind == ObjectKind.ConnectionBlock
 				&& enc.declarationList.isEmpty())
 			enc = enc.declaredIn;
+		
+//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: "+block+"  ==>  "+enc);
+//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: FROM: "+block.labelList);
 		for (LabelDeclaration lab : labelList) {
 			lab.movedTo=enc;
+			if(enc.labelList == null) enc.labelList = new LabelList(enc);
 			enc.labelList.add(lab);
+			lab.updateDeclaredIn(enc);
 		}
-		labelList.clear();
+//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: INTO: "+block.labelList);
+//		labelList.clear();
+		block.labelList = null;
 	}
 
 	// ***********************************************************************************************
@@ -184,9 +194,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
-		for (Declaration dcl : declarationList)	dcl.doChecking();
-		for (Statement stm : statements) stm.doChecking();
-		doCheckLabelList(null);
+			for (Declaration dcl : declarationList)	dcl.doChecking();
+			for (Statement stm : statements) stm.doChecking();
+			doCheckLabelList(null);
 		Global.exitScope();
 		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
@@ -203,7 +213,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
-		for (LabelDeclaration label : labelList) {
+		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
 			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
@@ -218,7 +228,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 		if (declarationKind == ObjectKind.CompoundStatement)
 			 doCompoundStatementCoding();
 		else doSubBlockCoding();
@@ -234,7 +244,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		Util.ASSERT(declarationList.isEmpty(), "Invariant");
-		Util.ASSERT(labelList.isEmpty(), "Invariant");
+		Util.ASSERT(labelList == null || labelList.isEmpty(), "Invariant");
 		Global.enterScope(this);
 		GeneratedJavaClass.code("{");
 		if(labelcodeList!=null) {
@@ -266,9 +276,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (!labelList.isEmpty()) {
+		if (labelList != null && !labelList.isEmpty()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-			for (Declaration decl : labelList) decl.doJavaCoding();
+//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
+			for (LabelDeclaration lab : labelList.labels)
+//				decl.doJavaCoding();
+				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList) decl.doJavaCoding();
@@ -338,7 +351,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 						.withSuperclass(CD.RTS_BASICIO);
 
 					// Add Fields
-					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
+					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
 					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
 					
 					if (isQPSystemBlock()) {
@@ -398,9 +411,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				.invokespecial(pool.methodRefEntry(CD.RTS_BASICIO
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
 
-			if (!labelList.isEmpty()) {
+			if (labelList != null && !labelList.isEmpty()) {
 				// Declare local labels
-				for (LabelDeclaration lab : labelList)
+				for (LabelDeclaration lab : labelList.labels)
 					lab.buildInitAttribute(codeBuilder);
 			}
 			// Add and Initialize attributes
@@ -435,9 +448,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiled)	return;
+		if (this.isPreCompiledFromFile != null)	return;
 		if (declarationKind == ObjectKind.CompoundStatement) {
-			build_STM_BODY(codeBuilder);
+			build_STMS(codeBuilder);
 			return;
 		}
 		Global.enterScope(this);
@@ -478,6 +491,15 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+		stmStack.push(labelContext);
+//		System.out.println("MaybeBlockDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
+		labelContext = this;
+		build_STMS(codeBuilder);
+		labelContext = stmStack.pop();
+//		System.out.println("MaybeBlockDeclaration.build_STM_BODY: LabelContext: "+labelContext);
+	}
+
+	private void build_STMS(CodeBuilder codeBuilder) {
 		for (Statement stm : statements) {
 //			System.out.println("BlockDeclaration,buildMethod_STM: "+stm.getClass().getSimpleName()+" "+stm);
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
@@ -507,6 +529,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+"BLOCK "+identifier+"  BL="+this.rtBlockLevel);
+		if(labelList != null) labelList.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
 	}
@@ -533,6 +556,18 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
+
+//		oupt.writeInt(labelList.size());
+//		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
+		LabelList.writeLabelList(labelList, oupt);
+		
+		DeclarationList decls = prep(declarationList);
+//		System.out.println("ClassDeclaration.writeObject: Write Declaration List: "+decls.size());
+		oupt.writeInt(decls.size());
+		for(Declaration decl:decls) oupt.writeObj(decl);
+
+		oupt.writeInt(statements.size());
+		for(Statement stm:statements) oupt.writeObj(stm);
 	}
 	
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
@@ -542,6 +577,27 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();
+
+//		int n = inpt.readInt();
+////		System.out.println("ClassDeclaration.readObject: Read Label List: "+n);
+//		for(int i=0;i<n;i++)
+//			blk.labelList.add((LabelDeclaration) inpt.readObj());
+		blk.labelList = LabelList.readLabelList(inpt);
+
+		int n = inpt.readInt();
+//		System.out.println("ClassDeclaration.readObject: Read Declaration List: "+n);
+		for(int i=0;i<n;i++) {
+			Declaration decl = (Declaration) inpt.readObj();
+			blk.declarationList.add(decl);
+		}
+		
+		n = inpt.readInt();
+//		System.out.println("ClassDeclaration.readObject: Read statements List: "+n);
+		if(n > 0) blk.statements = new Vector<Statement>();
+		for(int i=0;i<n;i++) {
+			Statement stm = (Statement) inpt.readObj();
+			blk.statements.add(stm);
+		}
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
 //		Util.IERR("SJEKK DETTE");
 		return(blk);

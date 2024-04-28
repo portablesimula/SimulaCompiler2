@@ -216,7 +216,7 @@ public abstract class SyntaxClass {
 	 * @param indent the number of blanks requested
 	 * @return the resulting string
 	 */
-	protected String edTreeIndent(final int indent) {
+	public String edTreeIndent(final int indent) {
 		int i = indent;
 		String s = "";
 		while ((i--) > 0)

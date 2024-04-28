@@ -454,11 +454,11 @@ public final class BuildProcedureCall {
 	    if(virtual.kind==VirtualSpecification.Kind.Label) {
 //	    	return(ident);
 	        // 1: aload_0
-	        // 2: invokevirtual #20                 // Method L_0:()Lsimula/runtime/RTS_RTObject$RTS_LABEL;
+	        // 2: invokevirtual #20                 // Method L_0:()Lsimula/runtime/RTS_LABEL;
 			ClassDesc owner = BlockDeclaration.currentClassDesc();
 			codeBuilder
 				.aload(0)
-				.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$RTS_LABEL;")));
+				.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;")));
 	    	return;
 	    }
 	    Meaning meaning = variable.meaning;

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -19,6 +20,7 @@ import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
+import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -58,14 +60,14 @@ public final class TypeConversion extends Expression {
 	 * @param expr the expression
 	 * @return piece of Java source code
 	 */
-	public static String mayBeConvert(final Type fromType,final Type toType,final String expr) {
+	public static String mayBeConvert(final Type fromType, final Type toType, final String expr) {
 		if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal))
 		{ if(toType.equals(Type.Integer))
               return("=(int)Math.round("+expr+");");
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
 	}
-	public static void buildMayBeConvert(final Type fromType,final Type toType,CodeBuilder codeBuilder) {
+	public static void buildMayBeConvert(final Type fromType, final Type toType, final Expression expr, CodeBuilder codeBuilder) {
 		// NOTE: 'expr' is top of operand stack
 //		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
 		if(fromType.equals(Type.Integer)) {
@@ -90,8 +92,16 @@ public final class TypeConversion extends Expression {
 			else if(toType.equals(Type.LongReal)) {
 				if (fromType.equals(Type.Real)) codeBuilder.f2d();
 			}
-		} else Util.IERR("fromType="+fromType+", toType="+toType);
-        // return("=("+toType.toJavaType()+")("+expr+");");
+		} else if(toType.isRefClassType()) {
+	        // return("=("+toType.toJavaType()+")("+expr+");");
+			expr.buildEvaluation(null, codeBuilder);
+			System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
+			
+			codeBuilder.checkcast(toType.toClassDesc());
+		}
+		else {
+			Util.IERR("fromType="+fromType+", toType="+toType);
+		}
 	}
 
 	/**
@@ -168,7 +178,10 @@ public final class TypeConversion extends Expression {
 	@Override
 	// Is redefined in Variable, RemoteVariable and TypeConversion
 	public VariableExpression getWriteableVariable() {
-		return(expression.getWriteableVariable());
+		System.out.println("TypeConversion.getWriteableVariable: expression="+expression.getClass().getSimpleName() + "  "+expression);
+	    VariableExpression writeableVariable=expression.getWriteableVariable();
+		System.out.println("TypeConversion.getWriteableVariable: writeableVariable="+writeableVariable);
+		return(writeableVariable);
 	}
 
 	@Override

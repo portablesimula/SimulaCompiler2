@@ -36,9 +36,9 @@ public final class RunSingleClassTest {
 		Option.TESTING_SEPARATE = true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
-//		Option.LIST_GENERATED_CLASS_FILES=true;
+		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
-		Option.verbose = true;
+//		Option.verbose = true;
 		Option.WARNINGS=true;
 //		Option.DEBUGGING=true;
 //		Option.EXTENSIONS=false;
@@ -54,8 +54,8 @@ public final class RunSingleClassTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-		Option.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;
@@ -196,8 +196,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst83.sim"); // OK:  Name Parameter with EXTREME BI-EFFECTS
 //		names.add("simtst84.sim"); // OK:  Test DirectBytefile.
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
-		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
-		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
+//		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
+//		names.add("simtst86.sim"); // OK: Simple Test of Separately Compiled Class.
 //		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
@@ -225,10 +225,10 @@ public final class RunSingleClassTest {
 //		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
 //		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 //
-//		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
-//			names.add("simtst112.sim"); // OK: Virtual Label Sample 2    AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst113.sim"); // OK: Virtual Switch Sample 1   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst114.sim"); // OK: Switch Statement          AVSLUTTES MED 'UMULIG' FEIL
+		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
+//		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
+//		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
+//		names.add("simtst114.sim"); // OK: Switch Statement
 //		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
 //		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 //		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
@@ -239,9 +239,9 @@ public final class RunSingleClassTest {
 //		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 //
 //		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
-//			names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS   AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
-//			names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
+//		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
+//		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
+//		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //			names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement

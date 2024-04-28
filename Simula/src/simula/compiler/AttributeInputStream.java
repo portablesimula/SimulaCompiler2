@@ -3,13 +3,14 @@ package simula.compiler;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
+import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.DeclarationReference;
+import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
@@ -21,6 +22,8 @@ import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.BooleanExpression;
 import simula.compiler.syntaxClass.expression.ConditionalExpression;
 import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.expression.ExpressionReference;
 import simula.compiler.syntaxClass.expression.LocalObject;
 import simula.compiler.syntaxClass.expression.ObjectGenerator;
 import simula.compiler.syntaxClass.expression.ObjectRelation;
@@ -43,9 +46,10 @@ import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.LabeledStatement;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.syntaxClass.statement.StandaloneExpression;
+import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.syntaxClass.statement.StatementReference;
 import simula.compiler.syntaxClass.statement.SwitchStatement;
 import simula.compiler.syntaxClass.statement.WhileStatement;
-import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.ObjectReferenceMap;
 import simula.compiler.utilities.Util;
@@ -60,7 +64,6 @@ public class AttributeInputStream {
 	public ObjectReferenceMap objectReference;
 	
 	private boolean TRACE = false; //true;
-	private boolean TESTING = true;
 
     public AttributeInputStream(InputStream inpt) throws IOException {
     	this.inpt = new DataInputStream(inpt);
@@ -195,33 +198,48 @@ public class AttributeInputStream {
 
 	public SyntaxClass readObj() throws IOException {
 		int kind = readKind();
-		if(kind == ObjectKind.NULL) {
+		switch(kind) {
+		case ObjectKind.NULL:
 			if(TRACE) System.out.println("AttributeInputStream.readObj: null");
 			return null;
-		} else if(TESTING) {
-			SyntaxClass obj = readObj(kind,this);
+		case ObjectKind.ObjectReference:
+			int SEQU = inpt.readInt();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+			SyntaxClass obj = objectReference.get(SEQU);
+			if(obj == null) { objectReference.print(); Util.IERR(""); }
+			return(obj);
+		case ObjectKind.DeclarationReference:
+			SEQU = inpt.readInt();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+			Declaration decl = (Declaration) objectReference.get(SEQU);
+			if(decl == null) { objectReference.print(); Util.IERR(""); }
+			if(TRACE) System.out.println("AttributeInputStream.readObj: Declaration="+decl);
+			return(decl);
+		case ObjectKind.StatementReference:
+			SEQU = inpt.readInt();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+//			Statement stm = (Statement) objectReference.get(SEQU);
+//			if(stm == null) { objectReference.print(); Util.IERR(""); }
+			Statement stm = new StatementReference(SEQU,objectReference);
+			if(TRACE) System.out.println("AttributeInputStream.readObj: "+stm);
+			return(stm);
+		case ObjectKind.ExpressionReference:
+			SEQU = inpt.readInt();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+//			Expression expr = (Expression) objectReference.get(SEQU);
+//			if(expr == null) { objectReference.print(); Util.IERR(""); }
+			Expression expr = new ExpressionReference(SEQU,objectReference);
+			if(TRACE) System.out.println("AttributeInputStream.readObj: "+expr);
+			return(expr);
+		default:
+//			if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
+			obj = readObj(kind,this);
+//			obj.SEQU = Global.Object_SEQU++;
+			if(obj.SEQU == 0) Util.IERR("");
+			objectReference.put(obj.SEQU, obj);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
 			return(obj);
-		} else {
-			if(kind == ObjectKind.ObjectReference) {
-				int SEQU = inpt.readInt();
-				if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-				SyntaxClass obj = objectReference.get(SEQU);
-				if(obj == null) {
-					objectReference.print();
-					Util.IERR("");
-				}
-				return(obj);
-			} else {
-//				if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
-				SyntaxClass obj = readObj(kind,this);
-//				obj.SEQU = Global.Object_SEQU++;
-				if(obj.SEQU == 0) Util.IERR("");
-				objectReference.put(obj.SEQU, obj);
-				if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
-				return(obj);
-			}
-		}
+		}	
 	}
 
 	private SyntaxClass readObj(int kind,AttributeInputStream inpt) throws IOException {
@@ -245,7 +263,7 @@ public class AttributeInputStream {
 //			case ObjectKind.Thunk:						return Thunk.readObject(inpt);
 			case ObjectKind.LabelDeclaration:			return LabelDeclaration.readObject(inpt);
 			case ObjectKind.SimpleVariableDeclaration:	return SimpleVariableDeclaration.readObject(inpt);
-//			case ObjectKind.ExternalDeclaration:		return ExternalDeclaration.readObject(inpt);
+			case ObjectKind.ExternalDeclaration:		return ExternalDeclaration.readObject(inpt);
 
 			case ObjectKind.ActivationStatement:		return ActivationStatement.readObject(inpt);
 			case ObjectKind.BlockStatement:				return BlockStatement.readObject(inpt);
