@@ -48,7 +48,7 @@ public final class RunSimulaSample {
 			Option.INLINE_TESTING=true;
 //		    Option.verbose = true;
 //			Option.WARNINGS=true;
-			Option.CREATE_JAVA_SOURCE = true;
+//			Option.CREATE_JAVA_SOURCE = true;
 //			Option.EXTENSIONS=false;
 //			Option.CASE_SENSITIVE=true;
 //			Option.TESTING=true;

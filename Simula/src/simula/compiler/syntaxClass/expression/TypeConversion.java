@@ -178,9 +178,9 @@ public final class TypeConversion extends Expression {
 	@Override
 	// Is redefined in Variable, RemoteVariable and TypeConversion
 	public VariableExpression getWriteableVariable() {
-		System.out.println("TypeConversion.getWriteableVariable: expression="+expression.getClass().getSimpleName() + "  "+expression);
+//		System.out.println("TypeConversion.getWriteableVariable: expression="+expression.getClass().getSimpleName() + "  "+expression);
 	    VariableExpression writeableVariable=expression.getWriteableVariable();
-		System.out.println("TypeConversion.getWriteableVariable: writeableVariable="+writeableVariable);
+//		System.out.println("TypeConversion.getWriteableVariable: writeableVariable="+writeableVariable);
 		return(writeableVariable);
 	}
 

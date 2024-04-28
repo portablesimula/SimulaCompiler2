@@ -490,7 +490,7 @@ public class RTS_Simulation extends RTS_Simset {
 	 * @param msg the event message
 	 */
 	private void SIM_TRACE(final String msg) {
-		if (RTS_COMMON.Option.SML_TRACING) {
+		if (RTS_Option.SML_TRACING) {
 			Thread thread = Thread.currentThread();
 			RTS_COMMON.println(thread.toString() + ": Time=" + time() + "  " + msg + ", SQS=" + sqs);
 		}

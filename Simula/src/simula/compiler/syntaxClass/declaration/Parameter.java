@@ -354,7 +354,7 @@ public final class Parameter extends Declaration {
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value) {
 					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(type),
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$"+type.getArrayType()+';'));
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+type.getArrayType()+';'));
 				}
 				break;
 			case Kind.Label:

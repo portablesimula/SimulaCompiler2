@@ -78,7 +78,7 @@ public class RTS_Outbytefile extends RTS_Bytefile {
 	 * @return true:ok, false:error
 	 */
 	public boolean open() {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("open Outbytefile");
 		if (_OPEN)
 			return (false);
@@ -86,7 +86,7 @@ public class RTS_Outbytefile extends RTS_Bytefile {
 		try {
 			outputStream = new FileOutputStream(file, _APPEND);
 		} catch (FileNotFoundException e) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
 			return (false);
 		}
@@ -205,7 +205,7 @@ public class RTS_Outbytefile extends RTS_Bytefile {
 		try {
 			outputStream.flush();
 		} catch (IOException e) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
 			return (false);
 		}

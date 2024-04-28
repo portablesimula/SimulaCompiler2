@@ -13,7 +13,6 @@ package simula.runtime;
  * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_RTObject.java"><b>Source File</b></a>.
  * @author Øystein Myhre Andersen
  */
-@SuppressWarnings("unchecked")
 public abstract class RTS_RTObject {
 
 	/**
@@ -55,31 +54,6 @@ public abstract class RTS_RTObject {
 	 */
 	private static long startTimeMs;
 
-	/**
-	 * Simula object Operational States
-	 */
-	public enum OperationalState {
-		/**
-		 * The object is attached
-		 */
-		attached,
-		/**
-		 * The object is detached
-		 */
-		detached,
-		/**
-		 * The object is resumed
-		 */
-		resumed,
-		/**
-		 * The object is terminated
-		 */
-		terminated,
-		/**
-		 * The Process object is shuting down
-		 */
-		terminatingProcess
-	}
 
 	/**
 	 * This object's Operational State.
@@ -166,457 +140,15 @@ public abstract class RTS_RTObject {
 		}
 	}
 
-	// ************************************************************
-	// *** ARRAY OBJECTS
-	// ************************************************************
-
-	/**
-	 * This class is used to hold bound pairs in RTS_ARRAY objects.
-	 *
-	 */
-	public final class RTS_BOUNDS {
-		/**
-		 * An array upper bound
-		 */
-		final public int LB;
-		/**
-		 * An array ELEMENTS size
-		 */
-		final public int SIZE;
-
-		/**
-		 * Create an array bound pair object
-		 * @param LB Lower bound
-		 * @param UB Upper bound
-		 */
-		public RTS_BOUNDS(final int LB, final int UB) {
-			if (LB > UB)
-				throw new RTS_SimulaRuntimeError("Lower bound(" + LB + ") > upper bound(" + UB + ")");
-			this.LB = LB;
-			SIZE = UB - LB + 1;
-		}
-
-		@Override
-		public String toString() {
-			return ("" + LB + ':' + (LB + SIZE - 1));
-		}
-	}
 
 
-	// ************************************************************
-	// *** INTEGER ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula integer array. 
-	 *
-	 */
-	public final class RTS_INTEGER_ARRAY extends RTS_ARRAY {
-		/**
-		 * The elements in this RTS_INTEGER_ARRAY
-		 */
-		final private int[] ELTS;
-
-		/**
-		 * Create a integer array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_INTEGER_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new int[SIZE];
-		}
-
-		/**
-		 * This method will put a value into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public int putELEMENT(int ix, int val) {
-//			System.out.println("RTS_RTObject.putELEMENT: ELTS["+ix+"] = "+val);
-			ELTS[ix] = val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x]
-		 * @param x the index of ELTS
-		 * @return the value loaded
-		 */
-		public int getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
-
-		/**
-		 * Abstract method redefined for all subclaRTS_BOUNDS;type>_ARRAY
-		 * @return a copy of this RTS_INTEGER_ARRAY
-		 */
-		@Override
-		public RTS_INTEGER_ARRAY COPY() {
-			RTS_INTEGER_ARRAY copy = new RTS_INTEGER_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-	}
-
-	// ************************************************************
-	// *** CHARACTER ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula character array. 
-	 *
-	 */
-	public final class RTS_CHARACTER_ARRAY extends RTS_ARRAY {
-		/**
-		 * The elements in this RTS_CHARACTER_ARRAY
-		 */
-		final private char[] ELTS;
-
-		/**
-		 * Create a character array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_CHARACTER_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new char[SIZE];
-		}
-
-		/**
-		 * This method will put a value into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public char putELEMENT(int ix, char val) {
-			ELTS[ix] = val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x]
-		 * @param x the index of ELTS
-		 * @return the value loaded
-		 */
-		public char getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
-
-		/**
-		 * Abstract method redefined for all subclass &lt;type>_ARRAY
-		 * @return a copy of this RTS_CHARACTER_ARRAY
-		 */
-		@Override
-		public RTS_CHARACTER_ARRAY COPY() {
-			RTS_CHARACTER_ARRAY copy = new RTS_CHARACTER_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-	}
-
-	// ************************************************************
-	// *** BOOLEAN ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula boolean array. 
-	 *
-	 */
-	public final class RTS_BOOLEAN_ARRAY extends RTS_ARRAY {
-		/**
-		 * The elements in this RTS_BOOLEAN_ARRAY
-		 */
-		final private boolean[] ELTS;
-
-		/**
-		 * Create a boolean array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_BOOLEAN_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new boolean[SIZE];
-		}
-
-		/**
-		 * This method will put a value into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public boolean putELEMENT(int ix, boolean val) {
-			ELTS[ix] = val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x]
-		 * @param x the index of ELTS
-		 * @return the value loaded
-		 */
-		public boolean getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
-
-		/**
-		 * Abstract method redefined for all subclass &lt;type>_ARRAY
-		 * @return a copy of this RTS_BOOLEAN_ARRAY
-		 */
-		@Override
-		public RTS_BOOLEAN_ARRAY COPY() {
-			RTS_BOOLEAN_ARRAY copy = new RTS_BOOLEAN_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-	}
-
-	// ************************************************************
-	// *** REAL TYPE ARRAY
-	// ************************************************************
-	/**
-	 * This class is the common superclass for real type arrays. 
-	 * It is introduced to implement overloading of real type parameter arrays.
-	 *
-	 */
-	public abstract class RTS_REALTYPE_ARRAY extends RTS_ARRAY {
-
-		/**
-		 * Create a real-type array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_REALTYPE_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-		}
-
-		/**
-		 * Utility for fetching value of a real type array
-		 * <p>
-		 * Used by: Reandom drawing discrete and linear procedures.
-		 * @param i index
-		 * @return value of ELTS[i]
-		 */
-		public abstract double getRealTypeELEMENT(int i);
-	}
-
-	// ************************************************************
-	// *** REAL ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula real array. 
-	 *
-	 */
-	public final class RTS_REAL_ARRAY extends RTS_REALTYPE_ARRAY {
-		/**
-		 * The elements in this RTS_REAL_ARRAY
-		 */
-		final float[] ELTS;
-
-		/**
-		 * Create a real array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_REAL_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new float[SIZE];
-		}
-
-		/**
-		 * This method will put a value into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public float putELEMENT(int ix, float val) {
-			ELTS[ix] = val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x...]
-		 * @param x the index of ELTS
-		 * @return the value loaded
-		 */
-		public float getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
-
-		/**
-		 * Abstract method redefined for all subclass &lt;type>_ARRAY
-		 * @return a copy of this RTS_REAL_ARRAY
-		 */
-		@Override
-		public RTS_REAL_ARRAY COPY() {
-			RTS_REAL_ARRAY copy = new RTS_REAL_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-
-		@Override
-		public double getRealTypeELEMENT(int i) {
-			return (ELTS[i]);
-		}
-	}
-
-	// ************************************************************
-	// *** LONG REAL ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula long real array. 
-	 *
-	 */
-	public final class RTS_LONG_REAL_ARRAY extends RTS_REALTYPE_ARRAY {
-		/**
-		 * The elements in this RTS_LONG_REAL_ARRAY
-		 */
-		final double[] ELTS;
-
-		/**
-		 * Create a long real array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_LONG_REAL_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new double[SIZE];
-		}
-
-		/**
-		 * This method will put a value into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public double putELEMENT(int ix, double val) {
-			ELTS[ix] = val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x...]
-		 * @param x the index of ELTS
-		 * @return the value loaded
-		 */
-		public double getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
-
-		/**
-		 * Abstract method redefined for all subclass &lt;type>_ARRAY
-		 * @return a copy of this RTS_LONG_REAL_ARRAY
-		 */
-		@Override
-		public RTS_LONG_REAL_ARRAY COPY() {
-			RTS_LONG_REAL_ARRAY copy = new RTS_LONG_REAL_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-
-		@Override
-		public double getRealTypeELEMENT(int i) {
-			return (ELTS[i]);
-		}
-	}
-
-	// ************************************************************
-	// *** TEXT ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula text array. 
-	 *
-	 */
-	public final class RTS_TEXT_ARRAY extends RTS_ARRAY {
-		/**
-		 * The elements in this RTS_TEXT_ARRAY
-		 */
-		final private RTS_TXT[] ELTS;
 
 
-		/**
-		 * Create a text array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_TEXT_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new RTS_TXT[SIZE];
-		}
 
-		/**
-		 * This method will put a text reference into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public RTS_TXT putELEMENT(int ix, RTS_TXT val) {
-			ELTS[ix] = val;
-			return (val);
-		}
 
-		/**
-		 * This method will return a text reference from ELTS[x...]
-		 * @param x the indexes of ELTS
-		 * @return the value loaded
-		 */
-		public RTS_TXT getELEMENT(int... x) {
-			return (ELTS[index(x)]);
-		}
 
-		/**
-		 * Abstract method redefined for all subclass &lt;type>_ARRAY
-		 * @return a copy of this TEXT_ARRAY
-		 */
-		@Override
-		public RTS_TEXT_ARRAY COPY() {
-			RTS_TEXT_ARRAY copy = new RTS_TEXT_ARRAY(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-	}
 
-	// ************************************************************
-	// *** REF() ARRAY
-	// ************************************************************
-	/**
-	 * This class represent a Simula ref(T) array. 
-	 *
-	 * @param <T> the actual array type
-	 */
-	public final class RTS_REF_ARRAY<T> extends RTS_ARRAY {
-		/**
-		 * The elements in this RTS_REF_ARRAY
-		 */
-		final private RTS_RTObject[] ELTS;
 
-		/**
-		 * Create a ref() array with the given bounds.
-		 * @param BOUNDS the array bounds
-		 */
-		public RTS_REF_ARRAY(final RTS_BOUNDS... BOUNDS) {
-			super(BOUNDS);
-			ELTS = new RTS_RTObject[SIZE];
-		}
-
-		/**
-		 * This method will put a object reference into ELTS[ix]
-		 * @param ix the index of ELTS
-		 * @param val the value to put
-		 * @return the value stored
-		 */
-		public T putELEMENT(int ix, T val) {
-			ELTS[ix] = (RTS_RTObject) val;
-			return (val);
-		}
-
-		/**
-		 * This method will return a value from ELTS[x...]
-		 * @param x the indexes of ELTS
-		 * @return the value loaded
-		 */
-		public T getELEMENT(int... x) {
-			return ((T) ELTS[index(x)]);
-		}
-
-		@Override
-		public RTS_REF_ARRAY<T> COPY() {
-			RTS_REF_ARRAY<T> copy = new RTS_REF_ARRAY<T>(BOUNDS);
-			System.arraycopy(ELTS, 0, copy.ELTS, 0, SIZE);
-			return (copy);
-		}
-	}
 
 	// ********************************************************************
 	// *** Parameter Transmission in case of Formal/Virtual Procedure Call
@@ -1166,7 +698,7 @@ public abstract class RTS_RTObject {
 	 */
 	public static void _JUMPTABLE(final int labelIndex,final int tableSize) {
 		// Local GOTO - Needs ByteCode Engineering.
-		if (RTS_COMMON.Option.GOTO_TRACING)
+		if (RTS_Option.GOTO_TRACING)
 			RTS_COMMON.TRACE("_RTObject._JUMPTABLE: labelIndex=" + labelIndex);
 		String msg = "FATAL ERROR: Local GOTO LABEL#" + labelIndex + " Needs ByteCode Engineering.";
 		RTS_COMMON.println(msg);
@@ -1198,7 +730,7 @@ public abstract class RTS_RTObject {
 	 * @param q the RTS_LABEL
 	 */
 	public void _GOTO(final RTS_LABEL q) {
-		if (RTS_COMMON.Option.GOTO_TRACING)
+		if (RTS_Option.GOTO_TRACING)
 			RTS_COMMON.TRACE("_RTObject.GOTO: " + q);
 		throw (q);
 	}
@@ -1249,19 +781,19 @@ public abstract class RTS_RTObject {
 
 		@Override
 		public void uncaughtException(Thread thread, Throwable e) {
-			String threadID = (RTS_COMMON.Option.VERBOSE) ? ("Thread:" + thread.getName() + '[' + obj + "]: ") : "";
-			if (RTS_COMMON.Option.GOTO_TRACING) {
+			String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + thread.getName() + '[' + obj + "]: ") : "";
+			if (RTS_Option.GOTO_TRACING) {
 				RTS_COMMON.println(threadID + " throws exception: " + e);
 				e.printStackTrace();
 			}
 			if (e instanceof RTS_LABEL) {
-				if (RTS_COMMON.Option.GOTO_TRACING) {
+				if (RTS_Option.GOTO_TRACING) {
 					System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 					RTS_COMMON.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 				}
 				RTS_RTObject DL = obj._DL;
 				if (DL != null && DL != _CTX) {
-					if (RTS_COMMON.Option.GOTO_TRACING) {
+					if (RTS_Option.GOTO_TRACING) {
 						System.err.println("DL=" + DL.edObjectAttributes());
 						RTS_COMMON.println("DL=" + DL.edObjectAttributes());
 					}
@@ -1272,7 +804,7 @@ public abstract class RTS_RTObject {
 					if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null)
 						treatRuntimeError(msg);
 					RTS_COMMON.println(threadID + "SIMULA RUNTIME ERROR: " + msg);
-					if (RTS_COMMON.Option.VERBOSE)
+					if (RTS_Option.VERBOSE)
 						e.printStackTrace();
 					endProgram(-1);
 				}
@@ -1282,7 +814,7 @@ public abstract class RTS_RTObject {
 				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null)
 					treatRuntimeError(msg);
 				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				RTS_COMMON.printSimulaStackTrace(e, 0);
 				endProgram(-1);
@@ -1290,7 +822,7 @@ public abstract class RTS_RTObject {
 				String msg = e.getClass().getSimpleName();
 				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
 				RTS_COMMON.printSimulaStackTrace(e, 0);
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				endProgram(-1);
 			} else {
@@ -1298,7 +830,7 @@ public abstract class RTS_RTObject {
 				e.printStackTrace();
 				endProgram(-1);
 			}
-			if (RTS_COMMON.Option.GOTO_TRACING)
+			if (RTS_Option.GOTO_TRACING)
 				RTS_COMMON.printThreadList();
 		}
 
@@ -1357,10 +889,10 @@ public abstract class RTS_RTObject {
 		startTimeMs = System.currentTimeMillis();
 		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 		RTS_COMMON.progamIdent = ident;
-		if (RTS_COMMON.Option.BLOCK_TRACING)
+		if (RTS_Option.BLOCK_TRACING)
 			RTS_COMMON.TRACE("Begin Execution of Simula Program: " + ident);
 		if (_SYSIN == null) {
-			if (RTS_COMMON.Option.USE_CONSOLE) {
+			if (RTS_Option.USE_CONSOLE) {
 				RTS_COMMON.console = new RTS_ConsolePanel();
 				RTS_COMMON.console.popup("Runtime Console");
 			}
@@ -1387,7 +919,7 @@ public abstract class RTS_RTObject {
 		_CUR = this;
 		_CORUT = _DL._CORUT;
 		_STATE = OperationalState.attached;
-		if (RTS_COMMON.Option.BLOCK_TRACING)
+		if (RTS_Option.BLOCK_TRACING)
 			RTS_COMMON.TRACE("BEGIN " + edObjectAttributes());
 		if (_SL == null) {
 			throw new RTS_SimulaRuntimeError("NONE-CHECK FAILED: Remote Call on Procedure x.proc, x==none");
@@ -1426,7 +958,7 @@ public abstract class RTS_RTObject {
 	public void EBLK() {
 		switch (_STATE) {
 		case attached -> {
-			if (RTS_COMMON.Option.BLOCK_TRACING)
+			if (RTS_Option.BLOCK_TRACING)
 				RTS_COMMON.TRACE("END ATTACHED BLOCK " + edObjectAttributes());
 			_STATE = OperationalState.terminated;
 			_CUR = _DL; // Make the dynamic enclosure the new current instance.
@@ -1447,11 +979,11 @@ public abstract class RTS_RTObject {
 			_DL = null;
 			_CUR = main._DL;
 			main._DL = dl;
-			if (RTS_COMMON.Option.BLOCK_TRACING)
+			if (RTS_Option.BLOCK_TRACING)
 				RTS_COMMON.TRACE("END COMPONENT " + edObjectAttributes());
 		}
 		case terminatingProcess -> {
-			if (RTS_COMMON.Option.BLOCK_TRACING)
+			if (RTS_Option.BLOCK_TRACING)
 				RTS_COMMON.TRACE("TERMINATING PROCESS " + edObjectAttributes());
 			_STATE = OperationalState.terminated;
 			_CORUT = null; // Leave it to the GarbageCollector
@@ -1460,7 +992,7 @@ public abstract class RTS_RTObject {
 		default -> throw new RTS_SimulaRuntimeError("_RTObject.EBLK: Internal Error " + edObjectAttributes());
 		}
 		if (_CUR == null || _CUR == _CTX) {
-			if (RTS_COMMON.Option.BLOCK_TRACING)
+			if (RTS_Option.BLOCK_TRACING)
 				RTS_COMMON.TRACE("PROGRAM PASSES THROUGH FINAL END " + edObjectAttributes());
 			endProgram(0);
 		} else {
@@ -1562,7 +1094,7 @@ public abstract class RTS_RTObject {
 		}
 		this._STATE = OperationalState.detached;
 
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		RTS_Coroutine.detach();
 	}
@@ -1580,10 +1112,10 @@ public abstract class RTS_RTObject {
 	 * @param sourceLine the sourceline of the call
 	 */
 	public void detach(int sourceLine) {
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		detach();
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("LINE " + sourceLine + ": DETACH(" + this.edObjectIdent() + ") CONTINUE IN "
 					+ _CUR.edObjectIdent());
 	}
@@ -1645,10 +1177,10 @@ public abstract class RTS_RTObject {
 	 * @param sourceLine the sourceline of the call
 	 */
 	public void call(final RTS_RTObject ins, int sourceLine) {
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN CALL " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		call(ins);
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE(
 					"LINE " + sourceLine + ": CALL(" + this.edObjectIdent() + ") CONTINUE IN " + _CUR.edObjectIdent());
 	}
@@ -1705,7 +1237,7 @@ public abstract class RTS_RTObject {
 	 * @param sourceLine the sourceline of the call
 	 */
 	public void resume(final RTS_RTObject ins, int sourceLine) {
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		resume(ins);
 	}
@@ -1744,7 +1276,7 @@ public abstract class RTS_RTObject {
 			_CUR = ins._DL;
 			ins._DL = mainSL;
 			ins._STATE = OperationalState.resumed;
-			if (RTS_COMMON.Option.QPS_TRACING)
+			if (RTS_Option.QPS_TRACING)
 				RTS_COMMON.TRACE("RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 			if (doSwap)
 				swapCoroutines();
@@ -1773,7 +1305,7 @@ public abstract class RTS_RTObject {
 		// _SYSOUT.close();
 		_SYSOUT.outimage();
 		long timeUsed = System.currentTimeMillis() - startTimeMs;
-		if (RTS_COMMON.Option.VERBOSE) {
+		if (RTS_Option.VERBOSE) {
 			RTS_COMMON.println("\nEnd program: " + RTS_COMMON.progamIdent);
 			if (RTS_COMMON.numberOfEditOverflows > 0)
 				RTS_COMMON.println(" -  WARNING " + RTS_COMMON.numberOfEditOverflows + " EditOverflows");

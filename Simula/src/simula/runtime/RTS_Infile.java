@@ -103,7 +103,7 @@ public class RTS_Infile extends RTS_Imagefile {
 	 * @return true if successful, otherwise false.
 	 */
 	public boolean open(final RTS_TXT image) {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open InFile");
 		if (_OPEN)
 			return (false);
@@ -128,7 +128,7 @@ public class RTS_Infile extends RTS_Imagefile {
 			try {
 				reader = new FileReader(file, _CHARSET);
 			} catch (IOException e) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				_OPEN = false;
 				return (false);
@@ -168,7 +168,7 @@ public class RTS_Infile extends RTS_Imagefile {
 				if (lineReader != null)
 					lineReader.close();
 			} catch (IOException e) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				return (false);
 			}

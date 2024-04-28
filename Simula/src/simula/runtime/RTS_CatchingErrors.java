@@ -92,7 +92,7 @@ public abstract class RTS_CatchingErrors extends RTS_CLASS {
 			throw (e);
 		try {
 			String message = getErrorMessage(e);
-			if (RTS_COMMON.Option.VERBOSE) {
+			if (RTS_Option.VERBOSE) {
 				System.out.println("GOT _SimulaRuntimeError:" + message);
 				e.printStackTrace(System.out);
 				RTS_COMMON.printSimulaStackTrace(1);

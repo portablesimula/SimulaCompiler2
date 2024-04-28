@@ -12,7 +12,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import simula.runtime.RTS_COMMON.Option;
+import simula.runtime.RTS_Option;
 
 /**
  * System class ENVIRONMENT.
@@ -2220,7 +2220,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		case 4 -> sb.append("nErrors=" + info);
 		case 5 -> sb.append("nWarnings=" + info);
 		}
-		if (Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			RTS_COMMON.println(sb.toString());
 	}
 	
@@ -2286,7 +2286,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param level not used
 	 */
 	public static void rts_utility(final int index, final int level) {
-		if (Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			RTS_COMMON.println("rts_utility: index=" + index + ", level=" + level + "  Error or Warning given");
 		switch (index) {
 		case 0:
@@ -2300,7 +2300,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		case 4:
 			break;// return; // Abort
 		case 5: // newTag check-point with Stack trace
-			if (Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				RTS_COMMON.println("rts_utility: index=5: newTag should be changed to newTTag(ident)");
 			break;
 		default:

@@ -737,13 +737,13 @@ public class Type extends SyntaxClass {
 	public ClassSignature toArrayClassSignature() {
 		String CSS=null;
 		switch(keyWord) {
-			case T_BOOLEAN:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_BOOLEAN_ARRAY;"; break;
-			case T_CHARACTER:	CSS = "Lsimula.runtime.RTS_RTObject$RTS_CHARACTER_ARRAY;"; break;
-			case T_INTEGER:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_INTEGER_ARRAY;"; break;
-			case T_REAL:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_REAL_ARRAY;"; break;
-			case T_LONG_REAL:	CSS = "Lsimula.runtime.RTS_RTObject$RTS_LONG_REAL_ARRAY;"; break;
-			case T_TEXT:		CSS = "Lsimula.runtime.RTS_RTObject$RTS_TEXT_ARRAY;"; break;
-			case T_REF:			CSS = "Lsimula/runtime/RTS_RTObject$RTS_REF_ARRAY<"+this.toJVMType()+">;"; break;
+			case T_BOOLEAN:		CSS = "Lsimula.runtime.RTS_BOOLEAN_ARRAY;"; break;
+			case T_CHARACTER:	CSS = "Lsimula.runtime.RTS_CHARACTER_ARRAY;"; break;
+			case T_INTEGER:		CSS = "Lsimula.runtime.RTS_INTEGER_ARRAY;"; break;
+			case T_REAL:		CSS = "Lsimula.runtime.RTS_REAL_ARRAY;"; break;
+			case T_LONG_REAL:	CSS = "Lsimula.runtime.RTS_LONG_REAL_ARRAY;"; break;
+			case T_TEXT:		CSS = "Lsimula.runtime.RTS_TEXT_ARRAY;"; break;
+			case T_REF:			CSS = "Lsimula/runtime/RTS_REF_ARRAY<"+this.toJVMType()+">;"; break;
 			default: Util.IERR("IMPOSSIBLE");
 		}
 		return ClassSignature.parseFrom(CSS);

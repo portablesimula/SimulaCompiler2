@@ -325,44 +325,44 @@ public final class ArrayDeclaration extends Declaration {
 
 		// 20: aload_0
 
-		// 21: new           #23                 // class simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY
+		// 21: new           #23                 // class simula/runtime/RTS_INTEGER_ARRAY
 		// 24: dup
 		// 25: aload_0
 		// 26: iconst_3
-		// 27: anewarray     #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 27: anewarray     #25                 // class simula/runtime/RTS_BOUNDS
 
 		// 30: dup
 		// 31: iconst_0
-		// 32: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 32: new           #25                 // class simula/runtime/RTS_BOUNDS
 		// 35: dup
 		// 36: aload_0
 		// 37: iconst_1
 		// 38: iconst_4
-		// 39: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 39: invokespecial #27                 // Method simula/runtime/RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
 		// 42: aastore
 
 		// 43: dup
 		// 44: iconst_1
-		// 45: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 45: new           #25                 // class simula/runtime/RTS_BOUNDS
 		// 48: dup
 		// 49: aload_0
 		// 50: iconst_4
 		// 51: bipush        6
-		// 53: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 53: invokespecial #27                 // Method simula/runtime/RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
 		// 56: aastore
 
 		// 57: dup
 		// 58: iconst_2
-		// 59: new           #25                 // class simula/runtime/RTS_RTObject$RTS_BOUNDS
+		// 59: new           #25                 // class simula/runtime/RTS_BOUNDS
 		// 62: dup
 		// 63: aload_0
 		// 64: bipush        6
 		// 66: bipush        12
-		// 68: invokespecial #27                 // Method simula/runtime/RTS_RTObject$RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
+		// 68: invokespecial #27                 // Method simula/runtime/RTS_BOUNDS."<init>":(Lsimula/runtime/RTS_RTObject;II)V
 		// 71: aastore
 
-		// 72: invokespecial #30                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY."<init>":(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_RTObject$RTS_BOUNDS;)V
-		// 75: putfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+		// 72: invokespecial #30                 // Method simula/runtime/RTS_INTEGER_ARRAY."<init>":(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_BOUNDS;)V
+		// 75: putfield      #7                  // Field A:Lsimula/runtime/RTS_INTEGER_ARRAY;
 
 //		System.out.println("ArrayDeclaration.buildDeclarationCode: "+arrType+" "+arrayIdent+" ++++++++++++++++++++++++++++++++++++++++++++++++++");
 		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
@@ -370,8 +370,7 @@ public final class ArrayDeclaration extends Declaration {
 		codeBuilder
 				.aload(0)
 				.new_(CD_ArrayType)
-				.dup()
-				.aload(0);
+				.dup();
 		Constant.buildIntConst(codeBuilder, boundPairList.size());
 		codeBuilder.anewarray(CD.RTS_BOUNDS);
 
@@ -381,16 +380,15 @@ public final class ArrayDeclaration extends Declaration {
 			Constant.buildIntConst(codeBuilder, i);
 			codeBuilder
 				.new_(CD.RTS_BOUNDS)
-				.dup()
-				.aload(0);
+				.dup();
 			bp.LB.buildEvaluation(null,codeBuilder);
 			bp.UB.buildEvaluation(null,codeBuilder);
 			codeBuilder
-				.invokespecial(CD.RTS_BOUNDS, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;II)V"))
+				.invokespecial(CD.RTS_BOUNDS, "<init>", MethodTypeDesc.ofDescriptor("(II)V"))
 				.aastore();
 		}
 		codeBuilder
-			.invokespecial(CD_ArrayType, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_RTObject$RTS_BOUNDS;)V"))
+			.invokespecial(CD_ArrayType, "<init>", MethodTypeDesc.ofDescriptor("([Lsimula/runtime/RTS_BOUNDS;)V"))
 			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),identifier, CD_ArrayType));
 	}
 
@@ -436,7 +434,7 @@ public final class ArrayDeclaration extends Declaration {
 	// A.putELEMENT(A.index(2,5,9),666);
 	//
 	//  aload_0
-	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_INTEGER_ARRAY;
 	//
 	//  dup
 	
@@ -456,11 +454,11 @@ public final class ArrayDeclaration extends Declaration {
 	//  bipush        9
 	//  iastore
 	
-	//  invokevirtual #33                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.index:([I)I
+	//  invokevirtual #33                 // Method simula/runtime/RTS_INTEGER_ARRAY.index:([I)I
 	//
 	//  sipush        666
 	//
-	//  invokevirtual #37                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.putELEMENT:(II)I
+	//  invokevirtual #37                 // Method simula/runtime/RTS_INTEGER_ARRAY.putELEMENT:(II)I
 
 	public void arrayPutElement(VariableExpression var, boolean isParameter, Expression rhs, CodeBuilder codeBuilder) {
 		String arrayIdent = this.getJavaIdentifier();
@@ -494,7 +492,7 @@ public final class ArrayDeclaration extends Declaration {
 	// A.putELEMENT(A.index(2,5,9),666);
 	//
 	//  aload_0
-	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+	//  getfield      #7                  // Field A:Lsimula/runtime/RTS_INTEGER_ARRAY;
 	
 	//  *** prepIndexing ***
 	//  iconst_3						  // boundPairList.size()
@@ -512,7 +510,7 @@ public final class ArrayDeclaration extends Declaration {
 	//  bipush        9
 	//  iastore
 
-	//  invokevirtual #37                 // Method simula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY.getELEMENT:([I)I
+	//  invokevirtual #37                 // Method simula/runtime/RTS_INTEGER_ARRAY.getELEMENT:([I)I
 
 	public void arrayGetElement(VariableExpression var, boolean isParameter, CodeBuilder codeBuilder) {
 		String arrayIdent = this.getJavaIdentifier();

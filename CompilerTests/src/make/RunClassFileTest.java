@@ -292,7 +292,7 @@ public final class RunClassFileTest {
 //			Option.CREATE_JAVA_SOURCE = true;
 			Option.TESTING_STACK_SIZE = true;
 			Option.TESTING_SEPARATE = true;
-//			Option.LIST_GENERATED_CLASS_FILES=true;
+			Option.LIST_GENERATED_CLASS_FILES=true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;

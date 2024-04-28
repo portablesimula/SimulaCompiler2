@@ -247,9 +247,8 @@ public final class ObjectGenerator extends Expression {
 								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
-					String cast=par.type.toJavaArrayType();
 					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(par.type),
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject$"+cast+';'));
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+par.type.toJavaArrayType()+';'));
 				}
 			}
 		}

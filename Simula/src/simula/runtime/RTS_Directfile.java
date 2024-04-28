@@ -180,7 +180,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 		if (_OPEN)
 			return (false);
 		File file = doCreateAction();
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open Directfile: " + file);
 		_LOC = 1;
 		_MAXLOC = maxint - 1;
@@ -198,7 +198,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 			if (_APPEND)
 				INITIAL_LAST_LOC = lastloc();
 		} catch (IOException e) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
 			return (false);
 		}
@@ -244,7 +244,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 				randomAccessFile.close();
 			randomAccessFile = null;
 		} catch (IOException e) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
 			return (false);
 		}
@@ -522,7 +522,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 		try {
 			randomAccessFile.getChannel().force(true);
 		} catch (IOException e) {
-    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+    		if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (false);
 		}
 		return (false);
@@ -608,7 +608,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 			int size = loc2 - loc1 + 1;
 			fileLock = randomAccessFile.getChannel().tryLock(loc1 - 1, size, true);
 		} catch (IOException e) {
-			if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+			if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (-2);
 		}
 		_LOCKED = fileLock != null;
@@ -633,7 +633,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 			try {
 				fileLock.release();
 			} catch (IOException e) {
-				if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+				if(RTS_Option.VERBOSE) e.printStackTrace();
 				result = false;
 			}
 		_LOCKED = false;

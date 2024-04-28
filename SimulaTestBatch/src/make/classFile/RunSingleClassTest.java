@@ -120,7 +120,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst19.sim"); // OK:  Text concatenation and text expression evaluation.
 //		names.add("simtst20.sim"); // OK:  Simple tests: integer relations <, <=, =, >=, > and <>
 //
-//		names.add("simtst21.sim"); // OK:  Arrays of simple types and text.
+		names.add("simtst21.sim"); // OK:  Arrays of simple types and text.
 //		names.add("simtst22.sim"); // OK:  Test for-loops with various for-list elements
 //		names.add("simtst23.sim"); // OK:  Type conversions in for step-until element.
 //		names.add("simtst24.sim"); // OK:  Conditional statements with more complex Boolean expressions.
@@ -225,7 +225,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
 //		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 //
-		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
+//		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
 //		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
 //		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
 //		names.add("simtst114.sim"); // OK: Switch Statement

@@ -156,7 +156,7 @@ public class RTS_Printfile extends RTS_Outfile {
 	@Override
 	public boolean open(final RTS_TXT image) {
 		String fileName = FILE_NAME.edText();
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open PrintFile");
 		if (_OPEN)
 			return (false); // File already opened
@@ -223,7 +223,7 @@ public class RTS_Printfile extends RTS_Outfile {
 	 */
 	@Override
 	public boolean close() {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Close PrintFile");
 		if (!_OPEN)
 			return (false); // File not opened
@@ -238,7 +238,7 @@ public class RTS_Printfile extends RTS_Outfile {
 				writer.flush();
 				writer.close();
 			} catch (IOException e1) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e1.printStackTrace();
 				return (false);
 			}

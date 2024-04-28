@@ -7,8 +7,6 @@
  */
 package simula.runtime;
 
-import simula.runtime.RTS_RTObject.RTS_BOUNDS;
-
 /**
  * Utility class ARRAY.
  * <p>

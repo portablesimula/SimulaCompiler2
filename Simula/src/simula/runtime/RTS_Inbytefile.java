@@ -97,7 +97,7 @@ public class RTS_Inbytefile extends RTS_Bytefile {
 	 * @return true if the file was successfully opened, otherwise false
 	 */
 	public boolean open() {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open InByteFile");
 		if (_OPEN)
 			return (false);
@@ -113,7 +113,7 @@ public class RTS_Inbytefile extends RTS_Bytefile {
 		} catch (FileNotFoundException e) {
 			_OPEN = false;
 			// _RT.BREAK("INBYTEFILE.OPEN: "+FILE_NAME.edText()+", Returns "+_OPEN);
-    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+    		if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (false);
 		}
 		_OPEN = true;

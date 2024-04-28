@@ -804,7 +804,7 @@ public final class VariableExpression extends Expression {
 //						s.append(edIdentifierAccess(false));
 						buildIdentifierAccess(false,codeBuilder);
 						ArrayDeclaration arr=(ArrayDeclaration)decl;
-						// getfield  #7 // Field Ai:Lsimula/runtime/RTS_RTObject$RTS_INTEGER_ARRAY;
+						// getfield  #7 // Field Ai:Lsimula/runtime/RTS_INTEGER_ARRAY;
 						FieldRefEntry FRE_ARR=pool.fieldRefEntry(arr.declaredIn.getClassDesc(), arr.identifier, ArrayDeclaration.getClassDesc(type));
 						codeBuilder.getfield(FRE_ARR);
 					}

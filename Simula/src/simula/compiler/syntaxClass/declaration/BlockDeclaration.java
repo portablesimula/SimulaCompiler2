@@ -346,12 +346,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			GeneratedJavaClass.code("catch(RTS_LABEL q) {");
 			GeneratedJavaClass.code("_CUR=_THIS;");
 			GeneratedJavaClass.code("if(q._SL!=_CUR) {");
-			GeneratedJavaClass.debug("if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":NON-LOCAL\",q);");
+			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":NON-LOCAL\",q);");
 			GeneratedJavaClass.code("_CUR._STATE=OperationalState.terminated;");
-			GeneratedJavaClass.debug("if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":RE-THROW\",q);");
+			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":RE-THROW\",q);");
 			GeneratedJavaClass.code("throw(q);");
 			GeneratedJavaClass.code("}");
-			GeneratedJavaClass.debug("if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":LOCAL\",q);");
+			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":LOCAL\",q);");
 			GeneratedJavaClass.code("_JTX=q.index; continue _LOOP;","EG. GOTO Lx");
 			GeneratedJavaClass.code("}");
 			GeneratedJavaClass.code("}");
@@ -528,12 +528,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
     //        catch(RTS_LABEL q) {
     //            _CUR=_THIS;
     //            if(q._SL!=_CUR) {
-    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
+    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
     //                _CUR._STATE=OperationalState.terminated;
-    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
+    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
     //                throw(q);
     //            }
-    //            if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
     //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
     //        }
     //    }
@@ -610,12 +610,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
     //        catch(RTS_LABEL q) {
     //            _CUR=_THIS;
     //            if(q._SL!=_CUR) {
-    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
+    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
     //                _CUR._STATE=OperationalState.terminated;
-    //                if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
+    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
     //                throw(q);
     //            }
-    //            if(RTS_COMMON.Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
     //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
     //        }
 	// ==================================================================================
@@ -671,7 +671,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Label endLabel = codeBuilder.newLabel();
 		codeBuilder
-			.getstatic(ClassDesc.of("simula.runtime.RTS_COMMON$Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
+//		.getstatic(ClassDesc.of("simula.runtime.RTS_COMMON$Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
+			.getstatic(ClassDesc.of("simula.runtime.RTS_Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
 			.ifeq(endLabel)
 			.ldc(pool.stringEntry(mss))
 			.aload(2)  // Label quant

@@ -51,60 +51,7 @@ public final class RTS_COMMON {
 	 */
 	static int numberOfEditOverflows;
 
-	/**
-	 *  Runtime Options
-	 *
-	 */
-	public static class Option {
-		
-		/**
-		 * Default constructor.
-		 */
-		private Option() {}
-
-		/**
-		 * Output messages about what the RTS is doing.
-		 * Default: false.
-		 */
-		public static boolean VERBOSE = false;
-		
-		/**
-		 * Map sysout and sysin to a popUp Console.
-		 * Default: false.
-		 */
-		public static boolean USE_CONSOLE = false;
-		
-		/**
-		 * Debug: Trace enter and exit of blocks, classes and procedures.
-		 * Default: false.
-		 */
-		public static boolean BLOCK_TRACING = false;
-		
-		/**
-		 * Debug: Trace goto statements.
-		 * Default: false.
-		 */
-		public static boolean GOTO_TRACING = false;
-		
-		/**
-		 *  Debug: Trace detach, resume and call.
-		 * Default: false.
-		 */
-		public static boolean QPS_TRACING = false;
-		
-		/**
-		 * Debug: Trace Simulation events.
-		 * Default: false.
-		 */
-		public static boolean SML_TRACING = false;
-		
-		/**
-		 * Specify where Simula files (Outfile, Infile, ...) are written and read.
-		 * Default: User working directory. System.property("user.dir")
-		 */
-		public static String RUNTIME_USER_DIR = "";
-	}
-
+	
 	/**
 	 *  S-PORT Options
 	 *
@@ -293,38 +240,26 @@ public final class RTS_COMMON {
 	 */
 	public static void setRuntimeOptions(final String[] args) {
 		// Parse command line arguments.
-		RTS_COMMON.Option.RUNTIME_USER_DIR = System.getProperty("user.dir", null);
+		RTS_Option.RUNTIME_USER_DIR = System.getProperty("user.dir", null);
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
 			if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
-				if (arg.equalsIgnoreCase("-help"))
-					help();
-				else if (arg.equalsIgnoreCase("-verbose"))
-					RTS_COMMON.Option.VERBOSE = true;
-				else if (arg.equalsIgnoreCase("-useConsole"))
-					RTS_COMMON.Option.USE_CONSOLE = true;
-				else if (arg.equalsIgnoreCase("-blockTracing"))
-					RTS_COMMON.Option.BLOCK_TRACING = true;
-				else if (arg.equalsIgnoreCase("-gotoTracing"))
-					RTS_COMMON.Option.GOTO_TRACING = true;
-				else if (arg.equalsIgnoreCase("-qpsTracing"))
-					RTS_COMMON.Option.QPS_TRACING = true;
-				else if (arg.equalsIgnoreCase("-smlTracing"))
-					RTS_COMMON.Option.SML_TRACING = true;
-				else if (arg.equalsIgnoreCase("-userDir"))
-					RTS_COMMON.Option.RUNTIME_USER_DIR = args[++i];
+				if (arg.equalsIgnoreCase("-help"))					help();
+				else if (arg.equalsIgnoreCase("-verbose"))			RTS_Option.VERBOSE = true;
+				else if (arg.equalsIgnoreCase("-useConsole"))		RTS_Option.USE_CONSOLE = true;
+				else if (arg.equalsIgnoreCase("-blockTracing"))		RTS_Option.BLOCK_TRACING = true;
+				else if (arg.equalsIgnoreCase("-gotoTracing"))		RTS_Option.GOTO_TRACING = true;
+				else if (arg.equalsIgnoreCase("-qpsTracing"))		RTS_Option.QPS_TRACING = true;
+				else if (arg.equalsIgnoreCase("-smlTracing"))		RTS_Option.SML_TRACING = true;
+				else if (arg.equalsIgnoreCase("-userDir"))			RTS_Option.RUNTIME_USER_DIR = args[++i];
 
 				// Spesial S-Port Simula and Simuletta Options. Used by get/give ... info routines
-				else if (arg.equalsIgnoreCase("-SPORT_SOURCE_FILE"))
-					SPORT_Option.SPORT_SourceFileName = args[++i];
-				else if (arg.equalsIgnoreCase("-select"))
-					RTS_COMMON.SPORT_Option.Selectors = args[++i];
-				else if (arg.equalsIgnoreCase("-listing"))
-					RTS_COMMON.SPORT_Option.ListingFileName = args[++i];
-				else if (arg.equalsIgnoreCase("-trace"))
-					RTS_COMMON.SPORT_Option.TraceLevel = Integer.decode(args[++i]);
+				else if (arg.equalsIgnoreCase("-SPORT_SOURCE_FILE"))	SPORT_Option.SPORT_SourceFileName = args[++i];
+				else if (arg.equalsIgnoreCase("-select"))				RTS_COMMON.SPORT_Option.Selectors = args[++i];
+				else if (arg.equalsIgnoreCase("-listing"))				RTS_COMMON.SPORT_Option.ListingFileName = args[++i];
+				else if (arg.equalsIgnoreCase("-trace"))				RTS_COMMON.SPORT_Option.TraceLevel = Integer.decode(args[++i]);
 				else
 					error("Unknown option " + arg);
 			} else {
@@ -335,7 +270,7 @@ public final class RTS_COMMON {
 					error("multiple input files specified");
 			}
 		}
-		if (Option.VERBOSE) {
+		if (RTS_Option.VERBOSE) {
 			RTS_COMMON.println("Begin Execution of Simula Program using " + getJavaID());
 			listRuntimeOptions();
 		}
@@ -400,13 +335,13 @@ public final class RTS_COMMON {
 	static void listRuntimeOptions() {
 		System.out.println("file.encoding=" + System.getProperty("file.encoding"));
 		System.out.println("defaultCharset=" + Charset.defaultCharset());
-		System.out.println("verbose=" + Option.VERBOSE);
-		System.out.println("useConsole=" + Option.USE_CONSOLE);
-		System.out.println("blockTracing=" + Option.BLOCK_TRACING);
-		System.out.println("gotoTracing=" + Option.GOTO_TRACING);
-		System.out.println("qpsTracing=" + Option.QPS_TRACING);
-		System.out.println("smlTracing=" + Option.SML_TRACING);
-		System.out.println("userDir=" + Option.RUNTIME_USER_DIR);
+		System.out.println("verbose=" + RTS_Option.VERBOSE);
+		System.out.println("useConsole=" + RTS_Option.USE_CONSOLE);
+		System.out.println("blockTracing=" + RTS_Option.BLOCK_TRACING);
+		System.out.println("gotoTracing=" + RTS_Option.GOTO_TRACING);
+		System.out.println("qpsTracing=" + RTS_Option.QPS_TRACING);
+		System.out.println("smlTracing=" + RTS_Option.SML_TRACING);
+		System.out.println("userDir=" + RTS_Option.RUNTIME_USER_DIR);
 	}
 
 	/**
@@ -558,7 +493,7 @@ public final class RTS_COMMON {
 					break LOOP;
 			}
 		}
-		if (RTS_COMMON.Option.VERBOSE) {
+		if (RTS_Option.VERBOSE) {
 			RTS_COMMON.println("*** DYNAMIC CHAIN:");
 //			Thread.dumpStack();
 			int n = stackTraceElement.length;
@@ -595,7 +530,7 @@ public final class RTS_COMMON {
 					x = x + 2;
 				StringBuilder sb = new StringBuilder();
 				sb.append(lead + info.ident);
-				if (Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					sb.append("(" + elt.getFileName() + ':' + elt.getLineNumber() + " " + elt.getMethodName() + ")");
 				sb.append(" at Simula Source Line " + lineMap[x - 1] + "[" + info.file + "]");
 				RTS_COMMON.println(sb.toString());
@@ -604,7 +539,7 @@ public final class RTS_COMMON {
 				t.printStackTrace();
 			}
 		} catch (Exception e) {
-//			if (RTS_COMMON.Option.VERBOSE)
+//			if (Option.VERBOSE)
 //				e.printStackTrace();
 		}
 		return (false);

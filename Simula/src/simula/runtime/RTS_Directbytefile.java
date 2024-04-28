@@ -134,7 +134,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 			long loc = randomAccessFile.getFilePointer();
 			return ((int) loc + 1);
 		} catch (IOException e) {
-			if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+			if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (-1);
 		}
 	}
@@ -179,7 +179,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 	 * @return true:ok, false:error
 	 */
 	public boolean open() {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open Directbytefile");
 		if (_OPEN)
 			return (false);
@@ -197,7 +197,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 			randomAccessFile = new RandomAccessFile(file, mode);
 			INITIAL_LAST_LOC = (_APPEND) ? lastloc() : -1;
 		} catch (IOException e) {
-			if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+			if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (false);
 		}
 		return (true);
@@ -234,7 +234,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 				randomAccessFile.close();
 			randomAccessFile = null;
 		} catch (IOException e) {
-    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+    		if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (false);
 		}
 		_OPEN = false;
@@ -416,7 +416,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 		try {
 			randomAccessFile.getChannel().force(true);
 		} catch (IOException e) {
-			if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+			if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (false);
 		}
 		return (true);
@@ -502,7 +502,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 			int size = loc2 - loc1 + 1;
 			fileLock = randomAccessFile.getChannel().lock(loc1, size, true);
 		} catch (IOException e) {
-			if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+			if(RTS_Option.VERBOSE) e.printStackTrace();
 			return (-2);
 		}
 		_LOCKED = true;
@@ -527,7 +527,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 			try {
 				fileLock.release();
 			} catch (IOException e) {
-				if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+				if(RTS_Option.VERBOSE) e.printStackTrace();
 				result = false;
 			}
 		_LOCKED = false;

@@ -223,7 +223,7 @@ public class RTS_File extends RTS_CLASS {
 		if (file.exists())
 			return (file);
 		if (!file.isAbsolute()) {
-			File tryFile = new File(RTS_COMMON.Option.RUNTIME_USER_DIR, fileName);
+			File tryFile = new File(RTS_Option.RUNTIME_USER_DIR, fileName);
 			if (tryFile.exists())
 				return (tryFile);
 			File dir = new File(System.getProperty("user.dir", null));
@@ -239,7 +239,7 @@ public class RTS_File extends RTS_CLASS {
 					if (tryFile.exists())
 						return (tryFile);
 				} catch (Throwable e) {
-		    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+		    		if(RTS_Option.VERBOSE) e.printStackTrace();
 				}
 		}
 		JFileChooser fileChooser = new JFileChooser(file.getParent());
@@ -342,7 +342,7 @@ public class RTS_File extends RTS_CLASS {
 		if (charset.startsWith(":")) {
 			charset = charset.substring(1).trim();
 			if (Charset.isSupported(charset)) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					RTS_COMMON.printWarning("FILE(" + FILE_NAME.edText() + ").CHARSET Changed from " + _CHARSET + " to " + charset);
 				_CHARSET = Charset.forName(charset);
 				return (true);
@@ -473,8 +473,8 @@ public class RTS_File extends RTS_CLASS {
 	protected File doCreateAction() {
 		File file = new File(FILE_NAME.edText());
 		try {
-			if (!file.isAbsolute() && RTS_COMMON.Option.RUNTIME_USER_DIR.length() > 0) {
-				file = new File(RTS_COMMON.Option.RUNTIME_USER_DIR + '/' + FILE_NAME.edText());
+			if (!file.isAbsolute() && RTS_Option.RUNTIME_USER_DIR.length() > 0) {
+				file = new File(RTS_Option.RUNTIME_USER_DIR + '/' + FILE_NAME.edText());
 			}
 			switch (_CREATE) {
 			case NA -> {
@@ -509,7 +509,7 @@ public class RTS_File extends RTS_CLASS {
 			}
 			}
 		} catch (IOException e) {
-    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+    		if(RTS_Option.VERBOSE) e.printStackTrace();
 		}
 		return (file);
 	}
@@ -527,7 +527,7 @@ public class RTS_File extends RTS_CLASS {
 				}
 			}
 		} catch (Exception e) {
-    		if(RTS_COMMON.Option.VERBOSE) e.printStackTrace();
+    		if(RTS_Option.VERBOSE) e.printStackTrace();
 		}
 	}
 

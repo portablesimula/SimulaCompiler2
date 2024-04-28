@@ -192,13 +192,11 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		codeBuilder
 			.new_(CD.RTS_LABEL)
 			.dup()
-//			.aload(0)
 			.aload(0);
 		Constant.buildIntConst(codeBuilder, prefixLevel);
 		Constant.buildIntConst(codeBuilder, index);
 		codeBuilder.ldc(pool.stringEntry(this.identifier));
 		codeBuilder
-//		.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
 			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
 			.areturn();
 	}

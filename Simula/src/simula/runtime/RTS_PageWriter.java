@@ -314,7 +314,7 @@ public class RTS_PageWriter extends Writer {
 				printerJob.setPrintService(printService);
 				ok = true;
 			} catch (PrinterException e) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 			}
 		} else

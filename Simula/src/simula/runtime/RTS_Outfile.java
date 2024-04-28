@@ -90,7 +90,7 @@ public class RTS_Outfile extends RTS_Imagefile {
 	 * @return true if successful, otherwise false.
 	 */
 	public boolean open(final RTS_TXT image) {
-		if (RTS_COMMON.Option.VERBOSE)
+		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Open OutFile");
 		if (_OPEN)
 			return (false); // File already opened
@@ -104,7 +104,7 @@ public class RTS_Outfile extends RTS_Imagefile {
 			try {
 				writer = new FileWriter(file, _CHARSET, _APPEND);
 			} catch (IOException e) {
-				if (RTS_COMMON.Option.VERBOSE)
+				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				return (false);
 			}
@@ -148,7 +148,7 @@ public class RTS_Outfile extends RTS_Imagefile {
 			writer.flush();
 			writer.close();
 		} catch (IOException e1) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e1.printStackTrace();
 			return (false);
 		} // else console.close();
@@ -278,7 +278,7 @@ public class RTS_Outfile extends RTS_Imagefile {
 		try {
 			writer.flush();
 		} catch (IOException e) {
-			if (RTS_COMMON.Option.VERBOSE)
+			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
 			return (false);
 		}

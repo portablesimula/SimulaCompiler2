@@ -65,7 +65,7 @@ public abstract class RTS_CLASS extends RTS_BASICIO implements Runnable {
 	private void beginCoroutine() {
 		// Using Thread or Virtual Thread
 		this._CORUT = new RTS_Coroutine(this);
-		if (RTS_COMMON.Option.QPS_TRACING)
+		if (RTS_Option.QPS_TRACING)
 			RTS_COMMON.TRACE("START " + this.edObjectIdent());
 		swapCoroutines();
 	}
