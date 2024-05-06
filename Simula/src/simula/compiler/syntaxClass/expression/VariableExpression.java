@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.expression;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
@@ -302,9 +299,14 @@ public final class VariableExpression extends Expression {
 					if(!Option.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
 //							System.out.println("VariableExpression.doChecking: StandardProcedure="+prc);
-							ProcedureSpecification overLoadMatch = prc.getOverLoadMatch(params);
-							if(overLoadMatch != null)
-								overloadedType = overLoadMatch.type;
+							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
+							else if(prc.identifier.equalsIgnoreCase("discrete")) ; // NOTHING
+							else if(prc.identifier.equalsIgnoreCase("linear")) ; // NOTHING
+							else {
+								ProcedureSpecification overLoadMatch = prc.getOverLoadMatch(params);
+								if(overLoadMatch != null)
+									overloadedType = overLoadMatch.type;
+							}
 						}
 					}
 				}
@@ -777,7 +779,7 @@ public final class VariableExpression extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		Declaration decl=meaning.declaredAs;
-//		System.out.println("VariableExpression.buildEvaluation: "+identifier+", kind="+decl.declarationKind);
+//		System.out.println("VariableExpression.buildEvaluation: "+identifier+", kind="+ObjectKind.edit(decl.declarationKind));
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 		
@@ -839,7 +841,10 @@ public final class VariableExpression extends Expression {
 //					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: ident="+ident);
 //					ident = "L1_0XXX";
 //					Util.IERR("");
-					codeBuilder.invokevirtual(BlockDeclaration.currentClassDesc(), ident, MTD);
+					
+					ClassDesc owner = virtSpec.declaredIn.getClassDesc();
+//					codeBuilder.invokevirtual(BlockDeclaration.currentClassDesc(), ident, MTD);
+					codeBuilder.invokevirtual(owner, ident, MTD);
 //					codeBuilder.invokevirtual(CD, ident, MTD);
 				}
 				break;
@@ -865,6 +870,7 @@ public final class VariableExpression extends Expression {
 				Util.IERR("NOT IMPL: "+identifier);
 
 			case ObjectKind.MemberMethod:
+//				System.out.println("VariableExpression.buildEvaluation: "+identifier+", AT MemberMethod");
 //				if (destination) {
 //					return ("_RESULT=" + rightPart);
 //				}
@@ -908,6 +914,8 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.SimpleVariableDeclaration:
 				SimpleVariableDeclaration var=(SimpleVariableDeclaration)decl;
+//				System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: "+identifier+", inspectedVariable="+inspectedVariable);
+//				System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: var.declaredIn="+var.declaredIn);
 				if(var.constantElement != null) {
 					var.constantElement.buildEvaluation(null,codeBuilder);
 					break;
@@ -928,6 +936,7 @@ public final class VariableExpression extends Expression {
 					
 					codeBuilder
 						.getfield(FRE_inspvar)
+						.checkcast( ((DeclarationScope)var.declaredIn).getClassDesc())  // ?????
 						.getfield(var.getFieldRefEntry(pool));
 				} else {
 					buildIdentifierAccess(destination,codeBuilder);
@@ -1093,9 +1102,9 @@ public final class VariableExpression extends Expression {
 	@Override
 	public String toString() {
 		if (params == null)
-			return ("" + identifier);
+			return ("" + identifier); // + "  backLink=" + this.backLink);
 		else
-			return (("" + identifier + params).replace('[', '(').replace(']', ')'));
+			return (("" + identifier + params).replace('[', '(').replace(']', ')') );// + "  backLink=" + this.backLink);
 	}
 
 	// ***********************************************************************************************
@@ -1135,7 +1144,8 @@ public final class VariableExpression extends Expression {
 		VariableExpression var = new VariableExpression();
 //		CHECKED=inpt.readBoolean();
 		
-		var.SEQU = inpt.readInt();
+//		var.SEQU = inpt.readInt();
+		var.SEQU = inpt.readSEQU(var);
 		var.lineNumber = inpt.readInt();
 //		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
 		var.type = inpt.readType();
@@ -1157,44 +1167,5 @@ public final class VariableExpression extends Expression {
 		Util.TRACE_INPUT("readVariableExpression: " + var);
 		return(var);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public VariableExpression() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
-////		oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeString(identifier);
-////		oupt.writeObject(meaning);
-//		oupt.writeObject(remotelyAccessed);
-//		oupt.writeObject(params);
-////		oupt.writeObject(checkedParams);			
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read VariableExpression: ");
-////		CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		identifier = inpt.readString();
-////		meaning = (Meaning) inpt.readObject();
-//		remotelyAccessed = (boolean) inpt.readObject();
-//		params = (Vector<Expression>) inpt.readObject();
-////		checkedParams = (Vector<Expression>) inpt.readObject();			
-//	}
-//		
 
 }

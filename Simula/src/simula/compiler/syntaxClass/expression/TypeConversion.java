@@ -47,7 +47,7 @@ public final class TypeConversion extends Expression {
 	 * @param type the new type
 	 * @param expression the expression
 	 */
-	private TypeConversion(final Type type,final Expression expression) {
+	public TypeConversion(final Type type,final Expression expression) {
 		this.type=type;
 		this.expression = expression; expression.backLink=this;
 	    this.doChecking();
@@ -67,35 +67,71 @@ public final class TypeConversion extends Expression {
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
 	}
+	public static void buildMayBeConvert(final Type fromType, final Type toType, CodeBuilder codeBuilder) {
+		// NOTE: 'expr' is top of operand stack
+//		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
+		switch(fromType.keyWord) {
+			case Type.T_INTEGER:
+				switch(toType.keyWord) {
+					case Type.T_INTEGER:	break; // Nothing
+					case Type.T_REAL:		codeBuilder.i2f(); break;
+					case Type.T_LONG_REAL:	codeBuilder.i2d(); break;
+					default: Util.IERR("fromType="+fromType+", toType="+toType);
+				} break;
+			case Type.T_REAL:
+				switch(toType.keyWord) {
+					case Type.T_INTEGER:	codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I")); break;
+
+					case Type.T_REAL:		break; // Nothing
+					case Type.T_LONG_REAL:	codeBuilder.f2d(); break;
+					default: Util.IERR("fromType="+fromType+", toType="+toType);
+				} break;
+			case Type.T_LONG_REAL:
+				switch(toType.keyWord) {
+					case Type.T_INTEGER:	codeBuilder
+												.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+												.l2i();
+											break;
+					case Type.T_REAL:		codeBuilder.d2f(); break;
+					case Type.T_LONG_REAL:	break; // Nothing
+					default: Util.IERR("fromType="+fromType+", toType="+toType);
+				} break;
+			default: Util.IERR("fromType="+fromType+", toType="+toType);
+		}
+	}
 	public static void buildMayBeConvert(final Type fromType, final Type toType, final Expression expr, CodeBuilder codeBuilder) {
 		// NOTE: 'expr' is top of operand stack
 //		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
-		if(fromType.equals(Type.Integer)) {
-			if(toType.equals(Type.Real)) codeBuilder.i2f();
-			else if(toType.equals(Type.LongReal)) codeBuilder.i2d();
-			
-		} else if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal)) {
-			if(toType.equals(Type.Integer)) {
-				// return("=(int)Math.round("+expr+");");
-				if (fromType.equals(Type.Real)) {
-					codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
-				}
-				else if (fromType.equals(Type.LongReal)) {
-					codeBuilder
-						.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
-						.l2i();
-				}
-			}
-			else if(toType.equals(Type.Real)) {
-				if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
-			}
-			else if(toType.equals(Type.LongReal)) {
-				if (fromType.equals(Type.Real)) codeBuilder.f2d();
-			}
+		if(fromType.isArithmeticType()) {
+				buildMayBeConvert(fromType,toType, codeBuilder);
+				
+//		if(fromType.equals(Type.Integer)) {
+//			if(toType.equals(Type.Real)) codeBuilder.i2f();
+//			else if(toType.equals(Type.LongReal)) codeBuilder.i2d();
+//			
+//		} else if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal)) {
+//			if(toType.equals(Type.Integer)) {
+//				// return("=(int)Math.round("+expr+");");
+//				if (fromType.equals(Type.Real)) {
+//					codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
+//				}
+//				else if (fromType.equals(Type.LongReal)) {
+//					codeBuilder
+//						.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+//						.l2i();
+//				}
+//			}
+//			else if(toType.equals(Type.Real)) {
+//				if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
+//			}
+//			else if(toType.equals(Type.LongReal)) {
+//				if (fromType.equals(Type.Real)) codeBuilder.f2d();
+//			}
+				
 		} else if(toType.isRefClassType()) {
 	        // return("=("+toType.toJavaType()+")("+expr+");");
 			expr.buildEvaluation(null, codeBuilder);
-			System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
+//			System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
 			
 			codeBuilder.checkcast(toType.toClassDesc());
 		}
@@ -282,7 +318,8 @@ public final class TypeConversion extends Expression {
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTypeConversion: ");
 		TypeConversion expr = new TypeConversion();
-		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
@@ -290,37 +327,5 @@ public final class TypeConversion extends Expression {
 		Util.TRACE_INPUT("readTypeConversion: " + expr);
 		return(expr);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public TypeConversion() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(expression);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		expression = (Expression) inpt.readObject();
-//	}
-//	
 
 }

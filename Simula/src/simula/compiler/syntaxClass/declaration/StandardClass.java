@@ -284,7 +284,7 @@ public final class StandardClass extends ClassDeclaration {
 		//	    Procedures draw, randint, uniform, normal, negexp,
 		//	      Poisson, Erlang, discrete, linear, histd.
 
-		String[] mtd3 = { "(FI)V", "(DI)V" }; // TESING  - MÅ RETTES
+		String[] mtdx = { "SPECIAL", "SPECIAL" };
 
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Boolean,"draw",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"randint",parameter("a",Type.Integer),parameter("b",Type.Integer),parameter("U",Parameter.Mode.name,Type.Integer));
@@ -293,9 +293,9 @@ public final class StandardClass extends ClassDeclaration {
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.LongReal,"negexp",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"Poisson",parameter("a",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.LongReal,"Erlang",parameter("a",Type.LongReal),parameter("b",Type.LongReal),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd3,Type.Integer,"discrete",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd3,Type.LongReal,"linear",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("B",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
-		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd3,Type.Integer,"histd",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtdx,Type.Integer,"discrete",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtdx,Type.LongReal,"linear",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("B",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
+		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtdx,Type.Integer,"histd",parameter("A",new OverLoad(Type.Real,Type.LongReal),Parameter.Kind.Array,1),parameter("U",Parameter.Mode.name,Type.Integer));
 
 		//	    Calendar and timing utilities ........................... 9.10
 		//	    Procedures datetime, cputime, clocktime.
@@ -1083,7 +1083,8 @@ public final class StandardClass extends ClassDeclaration {
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Character,"scanchar",parameter("t",Parameter.Mode.name,Type.Text));  
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"scanfrac",parameter("tt",Parameter.Mode.name,Type.Text));  
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"scanint",parameter("tt",Parameter.Mode.name,Type.Text));  
-		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"scanreal",parameter("tt",Parameter.Mode.name,Type.Text));  
+//		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"scanreal",parameter("tt",Parameter.Mode.name,Type.Text));  
+		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.LongReal,"scanreal",parameter("tt",Parameter.Mode.name,Type.Text));  
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Text,"scanto",parameter("t",Parameter.Mode.name,Type.Text),parameter("c",Type.Character));  
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"search",parameter("t1",Type.Text),parameter("t2",Type.Text));  
 		DEC_Lib.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Text,"skip",parameter("t",Parameter.Mode.name,Type.Text),parameter("c",Type.Character));  

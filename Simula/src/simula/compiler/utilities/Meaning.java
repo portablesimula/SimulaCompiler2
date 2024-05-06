@@ -223,7 +223,7 @@ public final class Meaning {
 		Expression constantElement = meaning.getConstant();
 		if (constantElement != null) {
 			if (constantElement instanceof Constant constant) {
-				Util.IERR("");
+				Util.IERR(""+constant);
 				//return (constant.toJavaCode());
 			}
 		}

@@ -1,124 +1,18 @@
 
-Drawing("Elevator simulation",1000,1000) begin 
------------------------------------------------------------------------------------------
--- This is a simulation model of a number of elevators in an office buiding.
---
--- Typical questions could be:
---
---   1) How many elevators do we need in this building to avoid congestion,
---      taking into consideration the expected arrival intervals of employees.
---
---   2) Given number of elevators,
---      what is the average and maximum waiting times for people in the building.
---
--- Speed and capacity of the elevators is also vital for the flow of the system.
--- A more sofisticated model would have to try to simulate the possibility of
--- different elevators running with different strategies.
--- 
--- This is an implementation written in the 70's and it is fraught with logical errors.
--- If you look closely at the graphical output, you will see that some request
--- for a lift is not satisfied even if a vacant Elevator is on the same floor
---
--- Feel free to correct this program.
---
------------------------------------------------------------------------------------------
-integer	nPersions=500;       -- Number of persions in Simulation
-integer	nFloors=10;          -- Number of floors
-integer	nLifts=8;            -- Number of lifts
-integer maxload=9;           -- Max load in one lift
-real getinTime=0.002;        -- Time to get into lift (average)
-real getoutTime=0.002;       -- Time to get out of lift
-real doorSlamTime=0.001;     -- Lift Door slam time
-real floorToFloorTime=0.003; -- Floor to floor time for lift
-real accelerationTime=0.001; -- Acceleration time for lift
-real decelerationTime=0.001; -- Deceleration time for lift
-real startTime=7.0;          -- Starting time in the morning
-real endTime=19.0;           -- Ending time in the evening
+begin
 
+CatchingErrors begin
+    ref(Inbytefile) bf;
 
-Simulation begin
-    integer neutral=0, wayup=1, waydown=2; -- Elevator States
-    real maxWaitingTime;
-    real totalWaitingTime;
-    integer U1, U2, U3, U4;  -- Random seeds
-    ref(Elevator) array lifts(1:nLifts);
-    ref(Head) idleQueue;
-    ref(Floor) array floors(0:nFloors);
-    integer nPersionArrived,nPersionleft,nToLunch,nFromLunch;
+    procedure onError(message); text message; begin
+        outtext("Inside onError: " & message);
+        goto LAB2;
+    end;
 
-    ----------------------------------
-    --- Process: Person
-    ----------------------------------
-    Process class Person(officeFloor); integer officeFloor; begin
-        ref(Floor) currentFloor;   -- Current floor for this Person
-        integer destination; -- Destination floor when using a lift
-        ref(Elevator) lift;  -- Current lift for this Person
-        real arrivalTime;    -- Arrival time for this Person
-        real lunchTime;      -- Lunch time for this Person
-        real leaveTime;      -- Leave time for this Person
+    bf.inbyte; -- Producing error NONE CHECK FAILED
+      
+end;
 
-        ref(Elevator) procedure getLiftGoingUp; begin
-            ref(Elevator) lift;
-            lift:- currentFloor.lifts.first;
-        end;
-        ------------------------------------------
-        --- Person - Story board (simulation events)
-        ------------------------------------------
-    end of Person;
+LAB2:
 
-
-    ----------------------------------
-    --- Process: Elevator
-    ----------------------------------
-    Process class Elevator(no); integer no; begin
-        integer position, state, goal;
-        boolean doorOpened;
-        boolean array Button(0:nFloors);
-        ref(Head) load;
- 
-        -----------------------------------------------
-        --- Elevator - Story board (simulation events)
-        -----------------------------------------------
-    end class Elevator;
-
-
-    ----------------------------------
-    --- Class: Floor
-    ----------------------------------
-    class Floor(no); integer no; begin
-        integer nPerson; -- on this floor
-        ref(Head) personsGoingUp;   -- Persons going up;
-        ref(Head) personsGoingDown; -- Persons going down;
-        ref(Head) lifts; -- Set of Lifts currently on this floor
-        
-        procedure activateIdleLift;
-        begin
-            ref(Process) lift,nearest;
-            
-%            procedure p1; begin end;
-%            procedure p2; begin end;
-%            procedure p3; begin end;
-            
-            -- Search for idle lift at this floor
-            for lift:-idleQueue.first, lift.suc while lift =/= none do begin
-                if lift qua Elevator.no = no then goto E;
-            end;
-         E:
-         end;
-    end class Floor;
-
-
-
-    ----------------------------------
-    --- Simulation Main Program
-    ----------------------------------
-
-    hold(startTime);
-%    activate new Reporter; 
-
-end Simulation;
-
-while true do; -- Keep graphic window
-
-end DRAWING
-
+end;

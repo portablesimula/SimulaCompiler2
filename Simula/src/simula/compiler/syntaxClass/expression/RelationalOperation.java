@@ -230,7 +230,7 @@ public final class RelationalOperation extends Expression {
 		rhs.buildEvaluation(null,codeBuilder);
 		Label target = codeBuilder.newLabel();
 		Label lab2 = codeBuilder.newLabel();
-		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)) {
+		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)  || lhs.type.equals(Type.Boolean)) {
 			switch (opr) {
 				case KeyWord.GE -> codeBuilder.if_icmplt(target);
 				case KeyWord.NE -> codeBuilder.if_icmpeq(target);
@@ -300,7 +300,7 @@ public final class RelationalOperation extends Expression {
 
 	@Override
 	public String toString() {
-		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
+		return ("(" + lhs + ' ' + KeyWord.edit(opr) + ' ' + rhs + ")");
 	}
 
 	// ***********************************************************************************************
@@ -327,7 +327,8 @@ public final class RelationalOperation extends Expression {
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRelationalOperation: ");
 		RelationalOperation expr = new RelationalOperation();
-		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

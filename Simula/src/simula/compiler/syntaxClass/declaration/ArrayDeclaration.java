@@ -573,7 +573,8 @@ public final class ArrayDeclaration extends Declaration {
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
-		arr.SEQU = inpt.readInt();
+//		arr.SEQU = inpt.readInt();
+		arr.SEQU = inpt.readSEQU(arr);
 		arr.identifier = inpt.readString();
 		arr.externalIdent = inpt.readString();
 		arr.type = inpt.readType();

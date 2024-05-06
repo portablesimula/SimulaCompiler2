@@ -251,12 +251,13 @@ public final class RemoteVariable extends Expression {
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
+//		System.out.println("RemoteVariable.buildEvaluation: var="+var+", backLink="+var.backLink);
 		if(obj.type.equals(Type.Text)) {
 			BuildProcedureCall.callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
 		} else if (callRemoteProcedure != null) {
 			BuildProcedureCall.remote(obj, callRemoteProcedure, var, backLink,codeBuilder);
 		} else if (callRemoteVirtual != null) {
-			BuildProcedureCall.remoteVirtual(obj, var, callRemoteVirtual, codeBuilder);
+			BuildProcedureCall.remoteVirtual(obj, var, callRemoteVirtual, backLink, codeBuilder);
 		} else if (accessRemoteArray) {
 			doAccessRemoteArray(obj, var,codeBuilder);
 		} else {
@@ -311,7 +312,8 @@ public final class RemoteVariable extends Expression {
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
-		rem.SEQU = inpt.readInt();
+//		rem.SEQU = inpt.readInt();
+		rem.SEQU = inpt.readSEQU(rem);
 		rem.lineNumber = inpt.readInt();
 		rem.type = inpt.readType();
 		rem.backLink = (SyntaxClass) inpt.readObj();
@@ -325,46 +327,5 @@ public final class RemoteVariable extends Expression {
 		return(rem);
 	}
 
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public RemoteVariable() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(remoteAttribute);
-//		oupt.writeObject(callRemoteProcedure);
-//		oupt.writeObject(callRemoteVirtual);
-//		oupt.writeObject(obj);
-//		oupt.writeObject(var);
-//		oupt.writeObject(accessRemoteArray);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		remoteAttribute = (Meaning) inpt.readObject();
-//		callRemoteProcedure = (ProcedureDeclaration) inpt.readObject();
-//		callRemoteVirtual = (VirtualSpecification) inpt.readObject();
-//		obj = (Expression) inpt.readObject();
-//		var = (VariableExpression) inpt.readObject();
-//		accessRemoteArray = (boolean) inpt.readObject();
-//	}
-	
 
 }

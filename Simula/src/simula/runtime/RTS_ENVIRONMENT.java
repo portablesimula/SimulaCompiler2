@@ -1683,6 +1683,9 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param hours simulated time 
 	 * @return the edited text
 	 */
+	public static RTS_TXT edtime(float hours) {
+		return(new RTS_TXT(LocalTime.ofSecondOfDay((long) (hours*60*60)).toString()));
+	}
 	public static RTS_TXT edtime(double hours) {
 		return(new RTS_TXT(LocalTime.ofSecondOfDay((long) (hours*60*60)).toString()));
 	}
@@ -1921,41 +1924,41 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	public static RTS_TXT getTextInfo(final int index) {
 		switch (index) {
 		case 1:
-			String sourceFileName = RTS_COMMON.SPORT_Option.getSourceFileName();
+			String sourceFileName = RTS_SPORT_Option.getSourceFileName();
 			return (new RTS_TXT(sourceFileName));
 		case 2:
-			String listingFileName = RTS_COMMON.SPORT_Option.ListingFileName;
+			String listingFileName = RTS_SPORT_Option.ListingFileName;
 			if (listingFileName == null)
 				return (null); // no Listing
 			return (new RTS_TXT(listingFileName)); // listname i.e. Listing File Name
 		case 4:
-			String sCodeFileName = RTS_COMMON.SPORT_Option.getSCodeFileName();
+			String sCodeFileName = RTS_SPORT_Option.getSCodeFileName();
 			return (new RTS_TXT(sCodeFileName));
 		case 7:
-			String scratchFileName = RTS_COMMON.SPORT_Option.getScratchFileName();
+			String scratchFileName = RTS_SPORT_Option.getScratchFileName();
 			return (new RTS_TXT(scratchFileName)); // FileName for intermediate code
 		case 11:
-			String attributeOutputFileName = RTS_COMMON.SPORT_Option.getAttributeOutputFileName();
+			String attributeOutputFileName = RTS_SPORT_Option.getAttributeOutputFileName();
 			return (new RTS_TXT(attributeOutputFileName)); // AttributeInputFileName
 		case 12:
-			String attributeFileName = RTS_COMMON.SPORT_Option.getExternalAttributeFileName();
+			String attributeFileName = RTS_SPORT_Option.getExternalAttributeFileName();
 			return (new RTS_TXT(attributeFileName));
 		case 13: // What is the environment part of the program head?
 			return (new RTS_TXT("/JAVA"));
 		case 14: // Module identifier to be used for the current separate compilation?
-			return (new RTS_TXT(RTS_COMMON.SPORT_Option.currentModuleID));
+			return (new RTS_TXT(RTS_SPORT_Option.currentModuleID));
 		case 15: // Module check code to be used for the current separate compilation?
 			String checkCode = "abracadab";
 			return (new RTS_TXT(checkCode));
 		case 16:
-			return (new RTS_TXT(RTS_COMMON.SPORT_Option.Selectors)); // options and selectors
+			return (new RTS_TXT(RTS_SPORT_Option.Selectors)); // options and selectors
 		case 19:
-			return (new RTS_TXT(RTS_COMMON.SPORT_Option.PredefFileName)); // Name of attribute file for the predefined classes etc.												// procedures (the class PREDEF)?
+			return (new RTS_TXT(RTS_SPORT_Option.PredefFileName)); // Name of attribute file for the predefined classes etc.												// procedures (the class PREDEF)?
 		case 22:
-			return (new RTS_TXT(RTS_COMMON.SPORT_Option.XmessageFileName)); // Name of a file containing seldom used information
+			return (new RTS_TXT(RTS_SPORT_Option.XmessageFileName)); // Name of a file containing seldom used information
 																  // for the front end compiler, such as extended error messages.
 		case 25:
-			File file = new File(RTS_COMMON.SPORT_Option.getSourceFileName());
+			File file = new File(RTS_SPORT_Option.getSourceFileName());
 			String ModuleIdent = file.getName();
 			ModuleIdent = ModuleIdent.substring(0, ModuleIdent.length() - 4).toLowerCase();
 			return (new RTS_TXT(ModuleIdent)); // Modid par of source file name in lower case
@@ -2142,11 +2145,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		// _RT.println("getIntInfo: index="+index);
 		switch (index) {
 		case 1:
-			return (RTS_COMMON.SPORT_Option.GenerateScode);
+			return (RTS_SPORT_Option.GenerateScode);
 		case 4:
-			return (RTS_COMMON.SPORT_Option.MaxErrors); // maxerrno
+			return (RTS_SPORT_Option.MaxErrors); // maxerrno
 		case 5:
-			return (RTS_COMMON.SPORT_Option.GiveNotes); // GiveNotes
+			return (RTS_SPORT_Option.GiveNotes); // GiveNotes
 		case 7:
 			return (260); // Image length for the listing file
 		case 9: // NONE CHECK? Result=0 means no, otherwise yes.
@@ -2155,11 +2158,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 				 //   1 - Partial checking, 2 - No checking will be done.
 			return (0);
 		case 16:
-			return (RTS_COMMON.SPORT_Option.TraceLevel); // Image length for the listing file
+			return (RTS_SPORT_Option.TraceLevel); // Image length for the listing file
 		case 22:
-			return (RTS_COMMON.SPORT_Option.Recompilation); // recomp
+			return (RTS_SPORT_Option.Recompilation); // recomp
 		case 30:
-			return (RTS_COMMON.SPORT_Option.SimobLevel); // simob_level
+			return (RTS_SPORT_Option.SimobLevel); // simob_level
 		default:
 			NOT_IMPLEMENTED("getIntInfo: " + index);
 		}
@@ -2262,16 +2265,16 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		String infoString = ((info == null) ? null : info.edText());
 		switch (index) {
 		case 1:
-			RTS_COMMON.SPORT_Option.currentModuleID = infoString;
+			RTS_SPORT_Option.currentModuleID = infoString;
 			break; // got predefmodule when compiling PREDEF.DEF
 		case 2:
-			RTS_COMMON.SPORT_Option.extIdent = infoString;
+			RTS_SPORT_Option.extIdent = infoString;
 			break;
 		case 3:
-			RTS_COMMON.SPORT_Option.extFile = infoString;
+			RTS_SPORT_Option.extFile = infoString;
 			break;
 		case 4:
-			RTS_COMMON.SPORT_Option.SPORT_SysInsertDirName = infoString;
+			RTS_SPORT_Option.SPORT_SysInsertDirName = infoString;
 			break;
 		default:
 			NOT_IMPLEMENTED("giveTextInfo");

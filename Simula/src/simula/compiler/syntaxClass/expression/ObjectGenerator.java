@@ -247,8 +247,10 @@ public final class ObjectGenerator extends Expression {
 								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
-					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(par.type),
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+par.type.toJavaArrayType()+';'));
+//					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(par.type),   // TODO: TESTING_ARRAY
+//					"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+par.type.toJavaArrayType()+';'));
+					codeBuilder.invokevirtual(CD.RTS_ARRAY,
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
 				}
 			}
 		}
@@ -304,7 +306,8 @@ public final class ObjectGenerator extends Expression {
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN ObjectGenerator: ");
 		ObjectGenerator gen = new ObjectGenerator();
-		gen.SEQU = inpt.readInt();
+//		gen.SEQU = inpt.readInt();
+		gen.SEQU = inpt.readSEQU(gen);
 		gen.lineNumber = inpt.readInt();
 		gen.type = inpt.readType();
 		gen.backLink = (SyntaxClass) inpt.readObj();
@@ -319,42 +322,5 @@ public final class ObjectGenerator extends Expression {
 		Util.TRACE_INPUT("ObjectGenerator: "+gen);
 		return(gen);
 	}
-
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE) {
-//			oupt.writeBoolean(CHECKED);
-//			oupt.writeObject(checkedParams);
-//			oupt.writeObject(meaning);
-//		}
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeString(classIdentifier);
-//		oupt.writeObject(params);
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE) {
-//			CHECKED=inpt.readBoolean();
-//			checkedParams = (Vector<Expression>) inpt.readObject();
-//			meaning = (Meaning) inpt.readObject();
-//		}
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		classIdentifier = inpt.readString();
-//		params = (Vector<Expression>) inpt.readObject();
-//	}
-	
 
 }

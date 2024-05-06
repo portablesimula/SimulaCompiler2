@@ -176,7 +176,7 @@ public final class ObjectRelation extends Expression {
 
 	@Override
 	public String toString() {
-		return ("(" + lhs + ' ' + opr + ' ' + classIdentifier + ")");
+		return ("(" + lhs + ' ' + KeyWord.edit(opr) + ' ' + classIdentifier + ")");
 	}
 
 	// ***********************************************************************************************

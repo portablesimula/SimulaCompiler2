@@ -230,7 +230,7 @@ public final class RunClassFileTest {
 		// String name="/simple/adHoc09.sim";
 		// String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
-		// String name="/simple/adHoc12.sim";
+//		 String name="/simple/adHoc12.sim";
 		// String name="/simple/adHoc13.sim";
 		// String name="/simple/adHoc14.sim";
 		
@@ -321,7 +321,7 @@ public final class RunClassFileTest {
 //			// Coder Trace Options
 //			Option.TRACE_CODING=true;
 //			Option.GNERATE_LINE_CALLS=true;
-			Option.GNERATE_SNAPSHOTS=true;
+//			Option.GNERATE_SNAPSHOTS=true;
 //			
 //			Option.TRACE_REPAIRING=true;
 //			Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
@@ -342,10 +342,10 @@ public final class RunClassFileTest {
 			
 			
 			// Set RunTime Options and tracing.
-//			RTOption.VERBOSE = true;
+			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
 			RTOption.BLOCK_TRACING = true;
-			RTOption.GOTO_TRACING = true;
+//			RTOption.GOTO_TRACING = true;
 //			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;
 

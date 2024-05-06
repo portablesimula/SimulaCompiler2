@@ -201,29 +201,32 @@ public final class RunFullTestBatch {
 		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 		names.add("simtst129.sim"); // OK: Switch in precompiled class
 		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
-//			names.add("simtst131.sim"); // OK: Catching Errors
+		names.add("simtst131.sim"); // OK: Catching Errors
 		names.add("simtst132.sim"); // OK: SPORT Options
 		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND and PURGE.
 		names.add("simtst135.sim"); // OK: OutBytefile with CREATE, APPEND and PURGE.
-//		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.           BRUKER Catching Errors
-//		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.       BRUKER Catching Errors
+		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.           BRUKER Catching Errors
+		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.       BRUKER Catching Errors
 		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 		names.add("simtst139.sim"); // OK: Test remote Array access.
 		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
+		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
+		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
-//		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
-//		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
-//		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
-//		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
+		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
+		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
+		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
+		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
 		names.add("simerr05.sim"); // OK: NumberFormatException
 		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
-//		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
-//		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
-//		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
+		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
+		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
 		
 		Global.packetName="simulaTestBatch";
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime

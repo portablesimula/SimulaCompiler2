@@ -138,43 +138,13 @@ public final class WhileStatement extends Statement {
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
 		WhileStatement stm = new WhileStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.condition  = (Expression) inpt.readObj();
 		stm.doStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("WhileStatement: " + stm);
 		return(stm);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public WhileStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(condition);
-//		oupt.writeObject(doStatement);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		condition = (Expression) inpt.readObject();
-//		doStatement = (Statement) inpt.readObject();
-//	}
-	
 	
 }

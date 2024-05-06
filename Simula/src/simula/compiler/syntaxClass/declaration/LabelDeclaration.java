@@ -321,7 +321,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		String identifier = inpt.readString();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: identifier="+identifier);
 		LabelDeclaration lab = new LabelDeclaration(identifier);
-		lab.SEQU = inpt.readInt();
+//		lab.SEQU = inpt.readInt();
+		lab.SEQU = inpt.readSEQU(lab);
 		if(TRACE) System.out.println("LabelDeclaration.readObject: SEQU="+lab.SEQU);
 		lab.lineNumber = inpt.readInt();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: lineNumber="+lab.lineNumber);

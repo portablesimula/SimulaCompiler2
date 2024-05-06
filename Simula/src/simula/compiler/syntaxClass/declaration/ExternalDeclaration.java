@@ -244,7 +244,8 @@ public final class ExternalDeclaration extends Declaration {
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readExternalDeclaration: ");
 		ExternalDeclaration ext = new ExternalDeclaration();
-		ext.SEQU = inpt.readInt();
+//		ext.SEQU = inpt.readInt();
+		ext.SEQU = inpt.readSEQU(ext);
 		ext.identifier = inpt.readString();
 		ext.externalIdent = inpt.readString();
 		ext.lineNumber = inpt.readInt();

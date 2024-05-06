@@ -166,7 +166,8 @@ public final class BlockStatement extends Statement {
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBlockStatement: ");
 		BlockStatement stm = new BlockStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
 		Util.TRACE_INPUT("BlockStatement: " + stm);

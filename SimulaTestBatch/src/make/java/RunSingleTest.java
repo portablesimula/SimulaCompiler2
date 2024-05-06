@@ -118,7 +118,7 @@ public final class RunSingleTest {
 //		names.add("simtst20.sim"); // OK:  Simple tests: integer relations <, <=, =, >=, > and <>
 //
 //		names.add("simtst21.sim"); // OK:  Arrays of simple types and text.
-		names.add("simtst22.sim"); // OK:  Test for-loops with various for-list elements
+//		names.add("simtst22.sim"); // OK:  Test for-loops with various for-list elements
 //		names.add("simtst23.sim"); // OK:  Type conversions in for step-until element.
 //		names.add("simtst24.sim"); // OK:  Conditional statements with more complex Boolean expressions.
 //		names.add("simtst25.sim"); // OK:  Multiple arithmetic assignment
@@ -243,8 +243,8 @@ public final class RunSingleTest {
 //		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
 //		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
-//			names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
-//			names.add("simtst129.sim"); // OK: Switch in precompiled class
+//		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
+//		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
 //		names.add("simtst131.sim"); // OK: Catching Errors
@@ -256,7 +256,10 @@ public final class RunSingleTest {
 //		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND, SYNCHRONOUS and PURGE.
 //		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 //		names.add("simtst139.sim"); // OK: Test remote Array access.
-//			names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+//		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+//		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
+//		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
+		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

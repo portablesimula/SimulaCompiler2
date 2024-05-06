@@ -1,11 +1,18 @@
 
-class Separat(i); integer i; virtual: procedure checkEvent;
-
 begin
 
-   procedure Event (n,val); integer n,val; begin
-   		checkEvent(n,val);
+   class A; virtual: procedure P;
+   begin 
+      procedure P(FA); value FA; integer array FA;
+      begin
+      end;
    end;
+   
 
-
+   
+   integer array RA(1:3,5:7);
+   ref(A) x;
+   
+   x.P(RA);
+   
 end;

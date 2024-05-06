@@ -166,7 +166,8 @@ public final class LabeledStatement extends Statement {
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
 		LabeledStatement stm = new LabeledStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.statement = (Statement) inpt.readObj();
 		int n = inpt.readInt();
@@ -178,37 +179,5 @@ public final class LabeledStatement extends Statement {
 		Util.TRACE_INPUT("LabeledStatement: " + stm);
 		return(stm);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public LabeledStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(labels);
-//		oupt.writeObject(statement);
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		labels = (Vector<LabelDeclaration>) inpt.readObject();
-//		statement = (Statement) inpt.readObject();
-//	}
-	
 
 }

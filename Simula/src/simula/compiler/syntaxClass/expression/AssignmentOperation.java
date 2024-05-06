@@ -238,7 +238,7 @@ public final class AssignmentOperation extends Expression {
 	}
 
 
-	public void buildTextValueAssignment(CodeBuilder codeBuilder) {
+	private void buildTextValueAssignment(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
@@ -264,7 +264,8 @@ public final class AssignmentOperation extends Expression {
 	}
 
 
-	public void buildAssignment(CodeBuilder codeBuilder) {
+	private void buildAssignment(CodeBuilder codeBuilder) {
+//		System.out.println("AssignmentOperation.buildAssignment: "+this);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(lhs instanceof VariableExpression var) {
 			Declaration decl = var.meaning.declaredAs;
@@ -453,7 +454,7 @@ public final class AssignmentOperation extends Expression {
 
 	@Override
 	public String toString() {
-		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
+		return ("(" + lhs + ' ' + KeyWord.edit(opr) + ' ' + rhs + ")");
 	}
 
 	// ***********************************************************************************************
@@ -480,7 +481,8 @@ public final class AssignmentOperation extends Expression {
 	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readAssignmentOperation: ");
 		AssignmentOperation expr = new AssignmentOperation();
-		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
@@ -490,41 +492,5 @@ public final class AssignmentOperation extends Expression {
 		Util.TRACE_INPUT("readAssignmentOperation: " + expr);
 		return(expr);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public AssignmentOperation() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(lhs);
-//		oupt.writeInt(opr);
-//		oupt.writeObject(rhs);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		lhs = (Expression) inpt.readObject();
-//		opr = inpt.readInt();
-//		rhs = (Expression) inpt.readObject();
-//	}
-	
 
 }

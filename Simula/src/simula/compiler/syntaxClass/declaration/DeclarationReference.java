@@ -29,7 +29,7 @@ public final class DeclarationReference extends Declaration {
 	private ObjectReferenceMap objectReferenceMap;
 
 	/**
-	 * Create a new ExpressionReference
+	 * Create a new DeclarationReference
 	 * @param SEQU the object reference sequence number
 	 */
 	public DeclarationReference(final int SEQU,ObjectReferenceMap objectReferenceMap) {

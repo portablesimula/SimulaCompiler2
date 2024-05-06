@@ -7,7 +7,6 @@ import java.io.OutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;
@@ -104,10 +103,10 @@ public class AttributeOutputStream {
 	}
 
 	
-    public void writeLong(long l) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeLong: "+l);
-		oupt.writeLong(l);
-	}
+//    public void writeLong(long l) throws IOException {
+//		if(TRACE) System.out.println("AttributeOutputStream.writeLong: "+l);
+//		oupt.writeLong(l);
+//	}
 
 	
     public void writeFloat(float f) throws IOException {
@@ -119,6 +118,26 @@ public class AttributeOutputStream {
     public void writeDouble(double d) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeDouble: "+d);
 		oupt.writeDouble(d);
+	}
+	
+    public void writeConstant(Object c) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
+		if(c instanceof Boolean b) {
+			oupt.writeInt(Type.T_BOOLEAN);
+			oupt.writeBoolean(b);
+		} else if(c instanceof Integer i) {
+			oupt.writeInt(Type.T_INTEGER);
+			oupt.writeInt(i);
+		} else if(c instanceof Long li) {
+			oupt.writeInt(Type.T_INTEGER);
+			oupt.writeInt(li.intValue());
+		} else if(c instanceof Character k) {
+			oupt.writeInt(Type.T_CHARACTER);
+			oupt.writeChar(k);
+		} else if(c instanceof String s) {
+			oupt.writeInt(Type.T_TEXT);
+			writeString(s);
+		} else Util.IERR(""+c.getClass().getSimpleName());
 	}
 
     public void writeString(String s) throws IOException {

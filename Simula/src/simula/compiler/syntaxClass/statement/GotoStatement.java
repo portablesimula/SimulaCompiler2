@@ -178,7 +178,8 @@ public final class GotoStatement extends Statement {
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readGotoStatement: ");
 		GotoStatement stm = new GotoStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.label = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("GotoStatement: " + stm);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.ClassFile;
+import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
@@ -13,6 +14,9 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
 
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.BuildProcedureCall;
@@ -21,6 +25,7 @@ import simula.compiler.syntaxClass.expression.RemoteVariable;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -102,14 +107,14 @@ public final class Thunk extends DeclarationScope {
         }
     }
 
-
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
 	// ***********************************************************************************************
 	private byte[] buildClassFile() {
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_NAME);
 		
-		byte[] bytes = ClassFile.of().build(CD_ThisClass,
+		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
@@ -236,6 +241,7 @@ public final class Thunk extends DeclarationScope {
 
 //			Util.buildSNAPSHOT(codeBuilder, "THUNK: get "+expr);
 
+//			System.out.println("Thunk.buildMethod_get: expr="+expr.getClass().getSimpleName()+"  "+expr);
 			if(kind==0) {
 				expr.buildEvaluation(null,codeBuilder);
 	        	expr.type.buildObjectValueOf(codeBuilder);
@@ -278,6 +284,8 @@ public final class Thunk extends DeclarationScope {
 	void buildMethod_put(CodeBuilder codeBuilder, Expression beforeDot, Expression expr) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		VariableExpression writeableVariable=expr.getWriteableVariable();
+		Meaning meaning=writeableVariable.meaning;
+		Declaration declaredAs = meaning.declaredAs;
 		Global.enterScope(this);
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
@@ -305,7 +313,6 @@ public final class Thunk extends DeclarationScope {
 			if(beforeDot != null) beforeDot.buildEvaluation(null,codeBuilder);
 				
 			Parameter nameParameter = null;
-			Declaration declaredAs = writeableVariable.getMeaning().declaredAs;
 			if(declaredAs instanceof Parameter par) {
 				if(par.mode == Parameter.Mode.name) {
 					nameParameter = par;
@@ -332,13 +339,12 @@ public final class Thunk extends DeclarationScope {
 				TypeConversion.buildMayBeConvert(fromType, toType, tpc.expression, codeBuilder);
 			}
 				
-			Declaration decl=writeableVariable.meaning.declaredAs;
 			String ident=null;
-			if(decl instanceof SimpleVariableDeclaration var) ident=var.getFieldIdentifier();
-			else if(decl instanceof Parameter par)            ident=par.getFieldIdentifier();
-			else if(decl instanceof ArrayDeclaration arr)     ident=arr.identifier;
-			else if(decl instanceof ProcedureDeclaration pro) ident=pro.identifier;
-			else Util.IERR("Thunk.buildMethod_put: IMPOSSIBLE: "+decl.getClass().getSimpleName());
+			if(declaredAs instanceof SimpleVariableDeclaration var) ident=var.getFieldIdentifier();
+			else if(declaredAs instanceof Parameter par)            ident=par.getFieldIdentifier();
+			else if(declaredAs instanceof ArrayDeclaration arr)     ident=arr.identifier;
+			else if(declaredAs instanceof ProcedureDeclaration pro) ident=pro.identifier;
+			else Util.IERR("Thunk.buildMethod_put: IMPOSSIBLE: "+declaredAs.getClass().getSimpleName());
 
 			if(nameParameter != null) {
 				expr.type.buildObjectValueOf(codeBuilder);
@@ -347,9 +353,15 @@ public final class Thunk extends DeclarationScope {
 //					.checkcast(expr.type.toObjectClassDesc());
 					.pop();
 			} else {
-				ClassDesc CD_ownr=writeableVariable.meaning.declaredIn.getClassDesc();
-				ClassDesc CD_type=writeableVariable.type.toClassDesc();
-				codeBuilder.putfield(pool.fieldRefEntry(CD_ownr, ident, CD_type));
+				DeclarationScope declaredIn = meaning.declaredIn;
+//				System.out.println("Thunk.buildMethod_put: "+ident+", Thunk.expr="+this.expr.getClass().getSimpleName()+"  "+expr);
+//				System.out.println("Thunk.buildMethod_put: "+ident+", writeableVariable.declaredIn="+declaredIn.getClass().getSimpleName()+"  "+declaredIn);
+				ClassDesc owner = declaredIn.getClassDesc();
+				if(declaredIn instanceof ConnectionBlock conn) {
+					ClassDeclaration whenClass = conn.classDeclaration;
+					if(whenClass != null) owner = whenClass.getClassDesc();
+				}
+				codeBuilder.putfield(pool.fieldRefEntry(owner, ident, writeableVariable.type.toClassDesc()));
 			}
 			
 			if(Option.TESTING_STACK_SIZE) {

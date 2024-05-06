@@ -1,9 +1,5 @@
 package simula.compiler.syntaxClass.statement;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
@@ -11,7 +7,6 @@ import java.lang.constant.MethodTypeDesc;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 public final class InlineStatement extends Statement {

@@ -195,21 +195,21 @@ public final class RunFullClassTestBatch {
 		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
 		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
 		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
-//		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
-//		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
-//		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
+		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
+		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
+		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
 		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
 		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
 		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
 		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
 		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
-//		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
+		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH
 		names.add("simtst127.sim"); // OK: Switch (character) Statement
 		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
-//		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
-//		names.add("simtst129.sim"); // OK: Switch in precompiled class
-//		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
+		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
+		names.add("simtst129.sim"); // OK: Switch in precompiled class
+		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //		names.add("simtst131.sim"); // OK: Catching Errors
 		names.add("simtst132.sim"); // OK: SPORT Options
 		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
@@ -220,6 +220,9 @@ public final class RunFullClassTestBatch {
 		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 		names.add("simtst139.sim"); // OK: Test remote Array access.
 		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
+		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
+		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 //
 //		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

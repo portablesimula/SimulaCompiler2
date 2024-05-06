@@ -30,6 +30,7 @@ import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
@@ -342,8 +343,11 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
-		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+		ClassDesc CD_ThisClass = currentClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_BASICIO);
+		
+		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
@@ -573,7 +577,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 		Util.TRACE_INPUT("BEGIN Read "+blk);
-		blk.SEQU = inpt.readInt();
+//		blk.SEQU = inpt.readInt();
+		blk.SEQU = inpt.readSEQU(blk);
 		blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();

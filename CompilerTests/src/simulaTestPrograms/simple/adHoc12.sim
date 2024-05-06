@@ -1,14 +1,13 @@
+ 
+DEC_Lib begin
 
-begin
-    integer isum;
-   
-    begin
-        integer intr;
+	text t1;
 
-%       intr := 1;
-
-        isum := 444;
-%        isum + intr;
-    end;
-
-end of program;
+        procedure test(t,expectedPosAfter); text t; integer expectedPosAfter; begin
+            long real lr1,lr2;
+            lr1:-scanreal(t);
+        end;
+        
+            t1:-copy("123.78"); t1.setpos(1); test(t1,7);
+  
+end; 

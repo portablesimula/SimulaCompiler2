@@ -17,6 +17,8 @@ SimulaTest(22,"--- Test for-loops with various for-list elements.") begin
 
    integer i,j,n;
    ref(c)cp;
+   
+   integer procedure negStep; negStep := -1;
 
    n := 1 ;
 
@@ -32,6 +34,13 @@ SimulaTest(22,"--- Test for-loops with various for-list elements.") begin
          
       end ;
       n:=n+1;
+   end ;
+   if n ne 3 then begin
+      err(" : Fast For (1b).") ;
+      outimage ;
+      outtext ("Wrong final value(1): ");
+      outint (n,3) ;
+      outimage ;
    end ;
 
    if i <> n then
@@ -60,6 +69,14 @@ SimulaTest(22,"--- Test for-loops with various for-list elements.") begin
          
       end ;
       n:=n+1;
+   end ;
+   if i ne (j+2)+1 then begin
+      err(" : Single Step Element (3b).") ;
+      outimage ;
+      outtext ("Wrong final value(3): ");
+      outint (i,3) ;
+      outint (j+2,3) ;
+      outimage ;
    end ;
 
    if i <> n then
@@ -254,5 +271,50 @@ SimulaTest(22,"--- Test for-loops with various for-list elements.") begin
       outimage ;
       
    end ;
+   
+   n := 4;
+   for i:= 4 step -1 until 0 do            ! Fast For ;
+   begin
+      if i <> n then
+      begin
+         err(" : Fast For (17).") ;
+         outimage ;
+         outtext ("            Erroneus values : ") ;
+         outint (i,3) ; outint (n,3) ;
+         outimage ;
+         
+      end ;
+      n:=n-1;
+   end ;
+   if n ne -1 then begin
+      err(" : Fast For (17b).") ;
+      outimage ;
+      outtext ("Wrong final value(17): ");
+      outint (n,3) ;
+      outimage ;
+   end ;
+   
+   n := 4;
+   for i:= 4 step negStep until 0 do            ! Fast For ;
+   begin
+      if i <> n then
+      begin
+         err(" : Fast For (18).") ;
+         outimage ;
+         outtext ("            Erroneus values : ") ;
+         outint (i,3) ; outint (n,3) ;
+         outimage ;
+         
+      end ;
+      n:=n-1;
+   end ;
+   if n ne -1 then begin
+      err(" : Fast For (18b).") ;
+      outimage ;
+      outtext ("Wrong final value(18): ");
+      outint (n,3) ;
+      outimage ;
+   end ;
+   
 
 end;

@@ -66,7 +66,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public VariableExpression inspectedVariable;
 
 	/**
-	 * The when class identifier
+	 * The when class declaration. Set during checking.
 	 */
 	public ClassDeclaration classDeclaration;
 
@@ -139,6 +139,26 @@ public final class ConnectionBlock extends DeclarationScope {
 			result = new Meaning(null, null); // Error Recovery: No Meaning
 		}
 		return (result);
+	}
+
+	// ***********************************************************************************************
+	// *** Utility: findVisibleAttributeMeaning
+	// ***********************************************************************************************
+	@Override
+	public Meaning findVisibleAttributeMeaning(final String ident) {
+		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		for (Declaration declaration : declarationList) {
+			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
+			if (Util.equals(ident, declaration.identifier))
+				return (new Meaning(declaration, this, this, false));
+		}
+		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
+			if (Util.equals(ident, label.identifier))
+				return (new Meaning(label, this, this, false));
+		}
+		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		return (null);
 	}
 
 	@Override

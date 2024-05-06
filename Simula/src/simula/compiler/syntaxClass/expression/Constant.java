@@ -330,38 +330,19 @@ public final class Constant extends Expression {
 		oupt.writeInt(SEQU);
 		oupt.writeInt(lineNumber);
 		oupt.writeType(type);
-		oupt.writeObj(backLink);
-		
-		//oupt.writeObject(value);
-		if(type.equals(Type.Boolean)) oupt.writeBoolean((boolean)value);
-		else if(type.equals(Type.Integer)) {
-			Long val = (Long)value;
-			oupt.writeInt(val.intValue());
-		} else if(type.equals(Type.Text)) {
-			String val = (String)value;
-			oupt.writeString(val);
-		}
-		else
-		Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER: "+type);
+		oupt.writeObj(backLink);		
+		oupt.writeConstant(value);
 	}
 	
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
-		cnst.SEQU = inpt.readInt();
+//		cnst.SEQU = inpt.readInt();
+		cnst.SEQU = inpt.readSEQU(cnst);
 		cnst.lineNumber = inpt.readInt();
 		cnst.type = inpt.readType();
 		cnst.backLink = (SyntaxClass) inpt.readObj();
-//		System.out.println("Constant.readObject: cnst.backLink="+cnst.backLink);
-//		Util.IERR("");
-		
-		//cnst.value=inpt.readObject();
-		if(cnst.type.equals(Type.Boolean)) cnst.value=inpt.readBoolean();
-		else if(cnst.type.equals(Type.Integer)) cnst.value=inpt.readInt();
-		else if(cnst.type.equals(Type.Text)) cnst.value=inpt.readString();
-		else
-			Util.IERR("DETTE MÅ RETTES: FYLL PÅ TYPER"+cnst.type);
-		
+		cnst.value=inpt.readConstant();
 		Util.TRACE_INPUT("Constant: "+cnst);
 		return(cnst);
 	}

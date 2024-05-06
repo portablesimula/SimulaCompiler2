@@ -240,8 +240,14 @@ public final class ActivationStatement extends Statement {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 //		Util.buildSNAPSHOT(codeBuilder, "ACTIVATION: "+this);
 		Type refProcess = Type.Ref("Process");
-		if (object1 != null) object1 = TypeConversion.testAndCreate(refProcess, object1);
-		if (object2 != null) object2 = TypeConversion.testAndCreate(refProcess, object2);
+		if (object1 != null) {
+			object1 = TypeConversion.testAndCreate(refProcess, object1);
+			object1.backLink = this;
+		}
+		if (object2 != null) {
+			object2 = TypeConversion.testAndCreate(refProcess, object2);
+			object2.backLink = this;
+		}
 		if(time != null) 	 time = TypeConversion.testAndCreate(Type.LongReal, time);
 
 		switch (code) {
@@ -389,7 +395,8 @@ public final class ActivationStatement extends Statement {
 	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
 		ActivationStatement stm = new ActivationStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.REAC = inpt.readBoolean();
 		stm.object1 = (Expression) inpt.readObj();

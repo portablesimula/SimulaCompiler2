@@ -99,7 +99,8 @@ public final class DummyStatement extends Statement {
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
 		DummyStatement stm = new DummyStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		Util.TRACE_INPUT("DummyStatement: " + stm);
 		return(stm);

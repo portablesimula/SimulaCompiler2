@@ -9,7 +9,6 @@ import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.DeclarationReference;
 import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
@@ -176,6 +175,28 @@ public class AttributeInputStream {
     	return d;
 	}
 
+	
+    public Object readConstant() throws IOException {
+    	int key = inpt.readInt();
+    	if(TRACE) System.out.println("AttributeInputStream.readConstant: "+key);
+    	Object res = null;
+		switch(key) {
+//			case Type.T_VOID:		res =("void"); break;
+			case Type.T_BOOLEAN:	res = inpt.readBoolean(); break;
+			case Type.T_CHARACTER:	res = inpt.readChar(); break;
+			case Type.T_INTEGER:	res = inpt.readInt(); break;
+			case Type.T_REAL:		res = inpt.readFloat(); break;
+			case Type.T_LONG_REAL:	res = inpt.readDouble(); break;
+			case Type.T_TEXT:		res = readString(); break;
+//			case Type.T_TEXT:		res =("RTS_TXT"); break;
+//			case Type.T_LABEL:		res =("RTS_LABEL"); break;
+//			case Type.T_REF:		res =(getJavaRefIdent()); break;
+			default: Util.IERR("IMPOSSIBLE: "+key);
+		}
+    	if(TRACE) System.out.println("AttributeInputStream.readDouble: "+res);
+    	return res;
+	}
+
     public String readString() throws IOException {
 //    	if(TRACE) System.out.println("BEGIN AttributeInputStream.readUTF: ");
 //    	String s = inpt.readString();
@@ -196,6 +217,14 @@ public class AttributeInputStream {
     	return s;
     }
 
+    
+    public int readSEQU(SyntaxClass obj) throws IOException {
+    	int SEQU = inpt.readInt();
+    	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + SEQU + "  ====>  " + obj.getClass().getSimpleName());
+		objectReference.put(SEQU, obj);
+    	return SEQU;
+	}
+    
 	public SyntaxClass readObj() throws IOException {
 		int kind = readKind();
 		switch(kind) {

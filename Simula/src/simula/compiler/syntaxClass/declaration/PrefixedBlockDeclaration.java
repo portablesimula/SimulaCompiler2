@@ -21,6 +21,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -292,8 +293,11 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
-		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+		ClassDesc CD_ThisClass = currentClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
+		
+		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))

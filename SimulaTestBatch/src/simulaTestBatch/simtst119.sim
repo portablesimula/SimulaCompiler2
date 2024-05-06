@@ -16,7 +16,10 @@ SubSep(119,"--- Test Use of Precompiled classes",5) begin
      x :- new B; 
      iA(3):=5;
      if ICHR = 49 and IINT = 45 then
-     begin trace("OK"); end;
+     begin trace("OK"); end
+     else begin
+     	outtext("ERROR: ICHR=" & edit(ICHR) & ", IINT=" & edit(IINT)); outimage
+     end;
      
      fname:-filename;
      PP;

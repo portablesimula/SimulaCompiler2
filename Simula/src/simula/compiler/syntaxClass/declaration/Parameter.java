@@ -353,8 +353,10 @@ public final class Parameter extends Declaration {
 //				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value) {
-					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(type),
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+type.getArrayType()+';'));
+//					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(type),  // TODO: TESTING_ARRAY
+//					"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+type.getArrayType()+';'));
+					codeBuilder.invokevirtual(CD.RTS_ARRAY,
+							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
 				}
 				break;
 			case Kind.Label:

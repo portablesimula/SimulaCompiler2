@@ -1,10 +1,13 @@
-external class AdHoc_SimulaTest;
+% external class AdHoc_SimulaTest;
 
-AdHoc_SimulaTest class MainSeparat(i); integer i; virtual: switch EXIT;
+% AdHoc_SimulaTest
+ class MainSeparat(i); integer i; virtual: switch EXIT;
 begin
    boolean TESTING=true;
    integer traceCase;
    text array facit(0:14);
+   integer IINT=45;
+   integer IREA=IINT+1;
 
  
 end;

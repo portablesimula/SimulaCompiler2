@@ -533,7 +533,8 @@ public final class ConnectionStatement extends Statement {
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
 		ConnectionStatement stm = new ConnectionStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.objectExpression = (Expression) inpt.readObj();
 		stm.inspectedVariable = (VariableExpression) inpt.readObj();

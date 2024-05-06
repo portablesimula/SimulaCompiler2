@@ -287,7 +287,7 @@ public final class ForStatement extends Statement {
 		if (forList.size() != 1)
 			return (null);
 		ForListElement elt = forList.firstElement();
-		return (elt.isOptimizable());
+		return (elt.isOptimisable());
 	}
 
 	/**
@@ -390,7 +390,7 @@ public final class ForStatement extends Statement {
 		 * Checks if this ForListElement can be optimized.
 		 * @return this ForListElement if it can be optimized
 		 */
-		public ForListElement isOptimizable() {
+		public ForListElement isOptimisable() {
 			return (this);
 		}
 
@@ -549,7 +549,7 @@ public final class ForStatement extends Statement {
 		}
 
 		@Override
-		public ForListElement isOptimizable() {
+		public ForListElement isOptimisable() {
 			return (this);
 		}
 
@@ -689,16 +689,22 @@ public final class ForStatement extends Statement {
 		}
 
 		@Override
-		public ForListElement isOptimizable() {
-			Number step = expr2.getNumber();
-			if (step == null)
-				return (null);
-			return (this);
+		public ForListElement isOptimisable() {
+//			Number step = expr2.getNumber();
+//			if (step == null)
+//				return (null);
+			
+			return this; // All for-step-until elements are optimisable.
 		}
 
 		@Override
 		public void doSimplifiedJavaCoding() {
-			int step = this.expr2.getNumber().intValue();
+			Number num2 = expr2.getNumber();
+			if(num2 == null) {
+				generalCase();
+				return;
+			}
+			int step = num2.intValue();
 			String cv = controlVariable.toJavaCode();
 			String stepClause, incrClause;
 			if (step >= 0) {
@@ -725,76 +731,224 @@ public final class ForStatement extends Statement {
 			doStatement.doJavaCoding();
 			GeneratedJavaClass.code("}");
 		}
+		
+		/**
+		 * <pre>
+		 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
+		 *
+		 * According to Simula Standard:
+		 *
+		 * 		int/float/double DELTA; // Local
+		 * 
+		 *		controlVariable = expr1();
+		 * 		DELTA = expr2();
+		 * 		while( DELTA*(controlVariable-expr3()) <= 0) {
+		 * 			STATEMENT();
+		 * 			DELTA = expr2();
+		 * 			controlVariable = controlVariable + DELTA;
+		 * 		}  // end while;
+		 *
+		 *
+		*/
+		private static int SEQU=0;
+		private void generalCase() {
+			System.out.println("ForStatement.generalCase: "+this);
+			String cv = controlVariable.toJavaCode();
+			String deltaType=expr2.type.toJavaType();
+			String deltaID = "DELTA_" + (SEQU++);
+			GeneratedJavaClass.debug("// ForStatement:");
+			GeneratedJavaClass.code(deltaType + " " + deltaID + ';');
+			GeneratedJavaClass.code(cv + " = " + this.expr1.toJavaCode() + ";");
+			GeneratedJavaClass.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
+			GeneratedJavaClass.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
+			
+			doStatement.doJavaCoding();
+			
+			GeneratedJavaClass.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
+			GeneratedJavaClass.code(cv + " = " + cv + " + " + deltaID + ';');
+			GeneratedJavaClass.code("}","end while");
+		}
 
+		
+		/**
+		 * <pre>
+		 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
+		 *
+		 *
+		 * int/float/double DELTA; // Local
+		 * 
+		 * controlVariable = expr1();
+		 * DELTA = expr2();
+		 * while( DELTA*(controlVariable-expr3()) <= 0) {
+		 * 		STATEMENT();
+		 * 		DELTA = expr2();
+		 * 		controlVariable = controlVariable + DELTA;
+		 * }  // end while;
+		 * 
+		 * 
+    	 *   // controlVariable = expr1();
+         *   aload_0
+         *   aload_0
+         *   invokevirtual #24                 // Method expr1:()I
+         *   putfield      #12                 // Field controlVariable:I
+
+	     * // DELTA = expr2();
+         *   aload_0
+         *   invokevirtual #26                 // Method expr2:()I
+         *   istore_1	   // Local DELTA
+		 *
+         * TST:
+	     * // if(DELTA*(controlVariable-expr3()) > 0) goto END
+         *   iload_1       // Local DELTA
+         *   aload_0
+         *   getfield      #12                 // Field controlVariable:I
+         *   aload_0
+         *   invokevirtual #30                 // Method expr3:()I
+         *   isub
+         *   imul
+         *   ifle          END
+		 *
+         * // STATEMENT
+         *   aload_0
+         *   invokevirtual #28                 // Method STATEMENT:()V
+         *   
+	     * // DELTA = expr2();
+         *   aload_0
+         *   invokevirtual #26                 // Method expr2:()I
+         *   istore_1      // Local DELTA
+         *   
+         * // controlVariable = controlVariable + DELTA;  
+         *   aload_0
+         *   dup
+         *   getfield      #12                 // Field controlVariable:I
+         *   iload_1       // Local DELTA
+         *   iadd
+         *   putfield      #12                 // Field controlVariable:I
+         *
+         *   goto          TST
+         *   
+         * END:  
+         * </pre>
+		 */
 		@Override
 		public void doSingleElementByteCoding(CodeBuilder codeBuilder) {
-			// for k:= init step stp until limit do
-
-			//  0: aload_0
-			//  1: iconst_1
-			//  2: putfield      #13  // Field k:I = init
-
-			//  5: aload_0
-			//  6: getfield      #13  // Field k:I
-			//  9: bipush        20
-			// 11: if_icmpgt     34
-
-			// 14: aload_0
-			// 15: sipush        888
-			// 18: putfield      #7                  // Field iii:I
-
-			// 21: aload_0
-			// 22: dup
-			// 23: getfield      #13                 // Field k:I
-			// 26: iconst_1
-			// 27: iadd
-			// 28: putfield      #13                 // Field k:I
-			// 31: goto          5
+//			System.out.println("ForStatement.doSingleElementByteCoding: "+this);
 			Label tstLabel = codeBuilder.newLabel();
 			Label endLabel = codeBuilder.newLabel();
-			SimpleVariableDeclaration decl = (SimpleVariableDeclaration)controlVariable.meaning.declaredAs;
-			FieldRefEntry FRE=decl.getFieldRefEntry(codeBuilder.constantPool());
+			
+			FieldRefEntry CTRL = null;
+			if(controlVariable.meaning.declaredAs instanceof SimpleVariableDeclaration var) {
+				CTRL=var.getFieldRefEntry(codeBuilder.constantPool());
+			} else if(controlVariable.meaning.declaredAs instanceof Parameter par) {
+				CTRL=par.getFieldRefEntry(codeBuilder.constantPool());
+			} else Util.IERR("");
+			
+//			SimpleVariableDeclaration decl = (SimpleVariableDeclaration)controlVariable.meaning.declaredAs;
+//			FieldRefEntry CTRL=decl.getFieldRefEntry(codeBuilder.constantPool());
+			
+//			int DELTA = 1; // Local Slot 1
+			int DELTA = BlockDeclaration.currentBlock.allocateLocalVariable(expr2.type); // Local Slot 1, 2 ...
 
-			// controlVariable := init'expression
+	    	//      // controlVariable = expr1();
+	        //      aload_0
+	        //      aload_0
+	        //      invokevirtual #24                 // Method expr1:()I
+	        //      putfield      #12                 // Field controlVariable:I
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
-			this.expr1.buildEvaluation(null,codeBuilder); // init
-			codeBuilder.putfield(FRE);
+			this.expr1.buildEvaluation(null,codeBuilder);
+			TypeConversion.buildMayBeConvert(expr1.type, controlVariable.type, codeBuilder);
+			codeBuilder.putfield(CTRL);
 
+		    //      // DELTA = expr2();
+	        //      aload_0
+	        //      invokevirtual #26                 // Method expr2:()I
+	        //      istore_1
+			this.expr2.buildEvaluation(null,codeBuilder); // init
+//			codeBuilder.istore(DELTA);
+			switch(expr2.type.keyWord) {
+				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
+				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
+				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
+				default: Util.IERR(""+expr2.type);
+			}
+
+			// TST:
+			//      // if(DELTA*(controlVariable-expr3()) > 0) goto END
+			//      iload_1                           // Local DELTA
+			//      aload_0
+			//      getfield      #12                 // Field controlVariable:I
+			//      aload_0
+			//      invokevirtual #30                 // Method expr3:()I
+			//      isub
+			//      imul
+			//      ifle          16  // STM
 			codeBuilder.labelBinding(tstLabel);
-			controlVariable.buildIdentifierAccess(false, codeBuilder);
-			codeBuilder.getfield(FRE);
+			switch(controlVariable.type.keyWord) {
+				case Type.T_INTEGER:   codeBuilder.iload(DELTA); break;
+				case Type.T_REAL:      codeBuilder.fload(DELTA); break;
+				case Type.T_LONG_REAL: codeBuilder.dload(DELTA); break;
+				default: Util.IERR(""+controlVariable.type);
+			}
+			controlVariable.buildIdentifierAccess(true, codeBuilder);
+			codeBuilder.getfield(CTRL);
 
-			this.expr3.buildEvaluation(null,codeBuilder); // Limit
+//			new TypeConversion(controlVariable.type,this.expr3).buildEvaluation(null,codeBuilder);
+			this.expr3.buildEvaluation(null,codeBuilder);
+			TypeConversion.buildMayBeConvert(controlVariable.type,this.expr3.type, codeBuilder);
 			
-			if(controlVariable.type.equals(Type.Integer)) codeBuilder.if_icmpgt(endLabel);
-			else if(controlVariable.type.equals(Type.Real)) {
-				codeBuilder
-					.fcmpg()
-					.ifgt(endLabel);
+			switch(controlVariable.type.keyWord) {
+				case Type.T_INTEGER:   codeBuilder.isub().imul(); break;
+				case Type.T_REAL:      codeBuilder.fsub().fmul().fconst_0().fcmpg();; break;
+				case Type.T_LONG_REAL: codeBuilder.dsub().dmul().dconst_0().dcmpg(); break;
+				default: Util.IERR(""+controlVariable.type);
 			}
-			else if(controlVariable.type.equals(Type.LongReal)) {
-				codeBuilder
-					.dcmpg()
-					.ifgt(endLabel);
-			}
-			else Util.IERR(""+controlVariable.type);
 			
+			codeBuilder.ifgt(endLabel);
+			
+			
+	        // STM: STATEMENT
+	        //      aload_0
+	        //      invokevirtual #28                 // Method STATEMENT:()V
 			doStatement.buildByteCode(codeBuilder);
 
-			// controlVariable := controlVariable + step'expression
+		    // DELTA = expr2();
+	        //      aload_0
+	        //      invokevirtual #26                 // Method expr2:()I
+	        //      istore_1
+			this.expr2.buildEvaluation(null,codeBuilder);
+			switch(expr2.type.keyWord) {
+				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
+				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
+				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
+				default: Util.IERR(""+expr2.type);
+			}
+			
+	        // controlVariable = controlVariable + DELTA;  
+	        // 25: aload_0
+	        // 26: dup
+	        // 27: getfield      #12                 // Field controlVariable:I
+	        // 30: iload_1
+	        // 31: iadd
+	        // 32: putfield      #12                 // Field controlVariable:I
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
-			controlVariable.buildIdentifierAccess(false, codeBuilder);
-			codeBuilder.getfield(FRE);
-			this.expr2.buildEvaluation(null,codeBuilder); // step
-			if(controlVariable.type.equals(Type.Integer)) codeBuilder.iadd();
-			else if(controlVariable.type.equals(Type.Real)) codeBuilder.fadd();
-			else if(controlVariable.type.equals(Type.LongReal)) codeBuilder.dadd();
-			else Util.IERR(""+controlVariable.type);
-			codeBuilder.putfield(FRE);
+			codeBuilder
+				.dup()
+				.getfield(CTRL);
+			switch(expr2.type.keyWord) {
+				case Type.T_INTEGER:   codeBuilder.iload(DELTA).iadd(); break;
+				case Type.T_REAL:      codeBuilder.fload(DELTA).fadd(); break;
+				case Type.T_LONG_REAL: codeBuilder.dload(DELTA).dadd(); break;
+				default: Util.IERR(""+controlVariable.type);
+			}
+			
+			// MAY BE CONVERT   TOS:DELTA to controlVariable.type
+			TypeConversion.buildMayBeConvert(expr2.type, controlVariable.type, codeBuilder);
+			
+			codeBuilder.putfield(CTRL);
 
-			// Repeat loop
+	        // 13: goto          35  // TST
 			codeBuilder.goto_(tstLabel);
-
+			
 			codeBuilder.labelBinding(endLabel);
 		}
 
@@ -886,7 +1040,7 @@ public final class ForStatement extends Statement {
 		Label contLabel = codeBuilder.newLabel();
 		Label stmLabel = codeBuilder.newLabel();
 		Label endLabel = codeBuilder.newLabel();
-		int index1 = BlockDeclaration.currentBlock.getLocalVariableIndex();
+		int index1 = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
 		ClassDesc CD_Iterator = ClassDesc.of("java.util.Iterator");
 		codeBuilder
 			.invokevirtual(pool.methodRefEntry(CD.FOR_List, "iterator", MethodTypeDesc.ofDescriptor("()Ljava/util/Iterator;")))
@@ -935,7 +1089,8 @@ public final class ForStatement extends Statement {
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readForStatement: ");
 		ForStatement stm = new ForStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.controlVariable = (VariableExpression) inpt.readObj();
 		stm.assignmentOperator = inpt.readInt();
@@ -950,41 +1105,5 @@ public final class ForStatement extends Statement {
 		Util.TRACE_INPUT("ForStatement: " + stm);
 		return(stm);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public ForStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(controlVariable);
-//		oupt.writeObject(assignmentOperator);
-//		oupt.writeObject(forList);
-//		oupt.writeObject(doStatement);
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		controlVariable = (VariableExpression) inpt.readObject();
-//		assignmentOperator = (Token) inpt.readObject();
-//		forList = (Vector<ForListElement>) inpt.readObject();
-//		doStatement = (Statement) inpt.readObject();
-//	}
-//	
 
 }

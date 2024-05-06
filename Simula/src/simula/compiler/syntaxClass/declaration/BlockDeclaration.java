@@ -11,26 +11,23 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
-import java.util.List;
 import java.util.Stack;
 import java.util.Vector;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -103,14 +100,21 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	
 	/**
 	 * Number of Local Variables allocated so far.
+	 * <p>
+	 * Note: First Local Variable is used by the outermost try-catch block.
 	 */
-	public int nLocalVariables;
+	public int nLocalVariables = 1;
 	
 	public static ClassDesc currentClassDesc() {
 		return(currentBlock.getClassDesc());
 	}
 	
-	public int getLocalVariableIndex() {
+	public int allocateLocalVariable(Type type) {
+		if(type.keyWord == Type.T_LONG_REAL) {
+			int n = ++nLocalVariables;
+			nLocalVariables++;
+			return(n);
+		}
 		return(++nLocalVariables);
 	}
 
@@ -461,6 +465,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
     public MethodTypeDesc getConstructorMethodTypeDesc() {
     	return(MethodTypeDesc.ofDescriptor(this.edConstructorSignature()));
     }
+
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM

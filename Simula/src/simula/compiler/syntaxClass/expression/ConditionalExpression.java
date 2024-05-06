@@ -153,7 +153,8 @@ public final class ConditionalExpression extends Expression {
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
-		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
@@ -163,41 +164,5 @@ public final class ConditionalExpression extends Expression {
 		Util.TRACE_INPUT("readConditionalExpression: " + expr);
 		return(expr);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public ConditionalExpression() {
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(condition);
-//		oupt.writeObject(thenExpression);
-//		oupt.writeObject(elseExpression);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		condition = (Expression) inpt.readObject();
-//		thenExpression = (Expression) inpt.readObject();
-//		elseExpression = (Expression) inpt.readObject();
-//	}
-	
 
 }

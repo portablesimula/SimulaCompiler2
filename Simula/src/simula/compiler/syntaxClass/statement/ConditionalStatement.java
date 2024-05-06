@@ -188,7 +188,8 @@ public final class ConditionalStatement extends Statement {
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
 		ConditionalStatement stm = new ConditionalStatement();
-		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readInt();
+		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 //		System.out.println("ConditionalStatement.readObject: lineNumber="+stm.lineNumber);
 		stm.condition = (Expression) inpt.readObj();

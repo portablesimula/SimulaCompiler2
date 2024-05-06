@@ -1,12 +1,25 @@
 begin
-    text    t1;      -- Texts to take on the
-    text    t2;      -- various values for the test.
-    integer iii;
+%    integer n,nnnn,ssss,iiii,kkk;
 
-    if t1 <> t2 then iii := 5555;
+    integer controlVariable,n;
+%    real controlVariable;
+%    long real controlVariable;
+    
+%   integer procedure expr1; expr1 := 4;
+%   integer procedure expr2; expr2 := -1;
+%   integer procedure expr3; expr3 := 0;
+    integer xxxx;
 
-%    t1 :- blanks (10); t1 := "abcdefghij";
-
-%    t2 :- blanks (10); t2 := t1;
-
+%	nnnn := 4;
+%	ssss := -1;
+%	xxxx := 0;
+  
+%   n := 4;
+   for controlVariable:= 4 step -1 until 0 do begin
+	   for n:= 0 step 1 until 10 do begin
+%   for controlVariable := expr1 step expr2 until expr3 do begin
+   		xxxx := 9999;
+   		outtext("STEP: " & edit(controlVariable) & ", n=" & edit(n)); outimage; 
+   	end;
+   	
 end;

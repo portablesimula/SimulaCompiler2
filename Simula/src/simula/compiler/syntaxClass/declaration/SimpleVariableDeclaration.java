@@ -161,6 +161,7 @@ public class SimpleVariableDeclaration extends Declaration {
 			constantElement.doChecking();
 			constantElement = TypeConversion.testAndCreate(type, constantElement);
 			constantElement.type = type;
+//			constantElement = constantElement.evaluate(); // ?????
 			constantElement.backLink = this;
 		}
 		
@@ -294,61 +295,21 @@ public class SimpleVariableDeclaration extends Declaration {
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 		oupt.writeBoolean(constant);
-
-//		oupt.writeObj(constantElement);
-//		if (constantElement instanceof Constant cnst) {
-//			oupt.writeBoolean(true);
-//			oupt.writeObj(cnst);
-//		} else {
-//			oupt.writeBoolean(false);
-//		}
+		oupt.writeObj(constantElement);
 	}
 	
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
 //		System.out.println("SimpleVariableDeclaration.readObject: constantElement="+var.constantElement);
-
-		var.SEQU = inpt.readInt();
+		var.SEQU = inpt.readSEQU(var);
 		var.identifier = inpt.readString();
 		var.externalIdent = inpt.readString();
 		var.type = inpt.readType();
 		var.constant = inpt.readBoolean();
-//		boolean present = inpt.readBoolean();
-//		System.out.println("SimpleVariableDeclaration.readObject: present="+present);
-//		if(present) {
-//			var.constantElement = (Constant) inpt.readObj();
-//		}
+		var.constantElement = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("Variable: " + var.SEQU + " " + var);
-//		Util.IERR("SJEKK DENNE");
 		return(var);
 	}
 
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT(
-//				"Variable: " + type + ' ' + identifier + ", constant=" + isConstant() + ", const=" + constantElement);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeBoolean(isConstant());
-//		if (constantElement instanceof Constant)
-//			oupt.writeObject(constantElement);
-//		else
-//			oupt.writeObject(null);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-//		constant = inpt.readBoolean();
-//		constantElement = (Constant) inpt.readObject();
-//		Util.TRACE_INPUT("Variable: " + type + ' ' + identifier + ", constant=" + constant + ", constantElement=" + constantElement);
-//	}
 }

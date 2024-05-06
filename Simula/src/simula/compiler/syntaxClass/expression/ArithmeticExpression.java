@@ -325,7 +325,7 @@ public final class ArithmeticExpression extends Expression {
 
 	@Override
 	public String toString() {
-		return ("(" + lhs + ' ' + opr + ' ' + rhs + ")");
+		return ("(" + lhs + ' ' + KeyWord.edit(opr) + ' ' + rhs + ")");
 	}
 
 	// ***********************************************************************************************
@@ -353,7 +353,8 @@ public final class ArithmeticExpression extends Expression {
 	public static ArithmeticExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArithmeticExpression: ");
 		ArithmeticExpression expr = new ArithmeticExpression();
-		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readInt();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

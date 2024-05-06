@@ -214,7 +214,7 @@ public final class RunCompilerTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
@@ -227,7 +227,7 @@ public final class RunCompilerTest {
 //			 String name="/simple/adHoc09.sim";
 		// String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
-		// String name="/simple/adHoc12.sim";
+		 String name="/simple/adHoc12.sim";
 		
 		// String name="/simple/adHocX01.sim";
 		// String name="/simple/adHocX02.sim";
@@ -337,9 +337,9 @@ public final class RunCompilerTest {
 			// Set RunTime Options and tracing.
 //			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
-			RTOption.BLOCK_TRACING = true;
+//			RTOption.BLOCK_TRACING = true;
 //			RTOption.GOTO_TRACING = false;
-			RTOption.QPS_TRACING = false;
+//			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;
 
 			String fileName=userDir+"/src/"+Global.packetName + name;

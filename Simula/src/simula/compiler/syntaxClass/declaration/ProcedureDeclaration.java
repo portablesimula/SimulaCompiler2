@@ -40,6 +40,7 @@ import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
@@ -581,8 +582,11 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
-		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+		ClassDesc CD_ThisClass = currentClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_PROCEDURE);
+		
+		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
@@ -1141,7 +1145,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 //		pro.print(2);
 //		Util.IERR("");
 
-		pro.SEQU = inpt.readInt();
+//		pro.SEQU = inpt.readInt();
+		pro.SEQU = inpt.readSEQU(pro);
 		pro.externalIdent = inpt.readString();
 		pro.type=inpt.readType();
 //		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!

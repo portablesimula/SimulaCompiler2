@@ -396,7 +396,7 @@ public final class Util {
 
 //	public static void buildSNAPSHOT(CodeBuilder codeBuilder, SyntaxClass stx) {
 	public static void buildLineNumber(CodeBuilder codeBuilder, SyntaxClass stx) {
-		if(!Option.GNERATE_LINE_CALLS) return;
+//		if(!Option.GNERATE_LINE_CALLS) return;
 		codeBuilder.lineNumber(stx.lineNumber);
 		if(!Option.GNERATE_SNAPSHOTS) return;
 		// SnapShot

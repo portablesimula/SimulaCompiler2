@@ -223,7 +223,7 @@ public final class VirtualSpecification extends Declaration {
 //		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
 //		System.out.println("VirtualSpecification.getSimpleVirtualIdentifier: "+getJavaIdentifier()+", specifiedIn="+specifiedIn.identifier+", prefixLevel="+specifiedIn.prefixLevel());
 //		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "XXX");
-		return (getJavaIdentifier() + '_' + prefixLevel + "XXXXXXXXX"); // TODO: FJERN  XXXXXXXXXX
+		return (getJavaIdentifier() + '_' + prefixLevel);
 	}
 
 	// ***********************************************************************************************

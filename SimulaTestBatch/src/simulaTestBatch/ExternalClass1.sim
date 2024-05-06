@@ -20,7 +20,8 @@ begin
 
    procedure trace(msg); text msg;
    begin
-      if verbose then begin outtext(msg); outimage; end;
+      if verbose then
+      begin outtext(msg); outimage; end;
       if TESTING then
       begin
          if msg <> facit(traceCase) then
@@ -74,7 +75,8 @@ begin
 
    if i=5 then
    begin
-      if verbose then begin
+      if verbose then
+      begin
          outtext("--- START SIMULA TEST 119"); outimage ;
          outtext("--- Use of Precompiled classes");
          outimage; outimage;

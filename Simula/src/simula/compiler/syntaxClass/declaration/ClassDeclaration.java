@@ -36,6 +36,7 @@ import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
@@ -1237,8 +1238,11 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+currentClassDesc());
-		byte[] bytes = ClassFile.of().build(currentClassDesc(),
+		ClassDesc CD_ThisClass = currentClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
+		
+		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
@@ -1681,7 +1685,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		ClassDeclaration cls = new ClassDeclaration(identifier);
 		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		cls.declarationKind = ObjectKind.Class;
-		cls.SEQU = inpt.readInt();
+//		cls.SEQU = inpt.readInt();
+		cls.SEQU = inpt.readSEQU(cls);
 		cls.externalIdent = inpt.readString();
 		cls.type = inpt.readType();
 		cls.rtBlockLevel = inpt.readInt();

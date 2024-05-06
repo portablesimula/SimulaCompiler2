@@ -105,7 +105,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 			Parameter par = spec.parameterList.get(i);
 			if(!expr.type.equals(par.type)) return(null);
 		}
-//		System.out.println("StandardProcedure.getLegalMatch: "+this+"  ==>  "+spec);
+//		System.out.println("StandardProcedure.getLegalMatch: "+this+"  ==>  "+spec + ", mtd = "+mtd);
 		this.mtdPicked = mtd;
 		return(spec);
 	}
@@ -174,6 +174,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		} else return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
 	}
 	private String edMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
+//		System.out.println("StandardProcedure.edMethodTypeDesc: "+this.identifier);
 		// MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_Printfile;");
 		StringBuilder sb=new StringBuilder("(");
 		if(beforeDot != null) {

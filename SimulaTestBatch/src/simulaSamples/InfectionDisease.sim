@@ -23,24 +23,24 @@ Simulation begin
    integer nInfected,nSick; 
  
    Process class SickPerson; 
-   begin integer day; boolean symptoms; real contacts; ref(Head) environment;   
+   begin integer day; boolean symptoms; real contacts; ref(Head) context;   
  
       procedure treatment; begin 
          ref(Link) X; 
          if not symptoms then begin 
-            for X :- environment.first while X in Process do X qua SickPerson.treatment; 
+            for X :- context.first while X in Process do X qua SickPerson.treatment; 
          end else if draw(probmass,u4) then begin 
             symptoms := false; nSick := nSick-1; 
          end    
       end treatment; 
  
-      environment :- new Head; uninfected := uninfected-1; symptoms := false; 
+      context :- new Head; uninfected := uninfected-1; symptoms := false; 
       contacts := randint(1,6,u5); nInfected := nInfected+1; 
       hold(incubation); symptoms := true; nSick := nSick+1; 
       for day:=1 step 1 until length do if symptoms then begin 
          hold(1); 
          if draw(probtreat(day),u1) then treatment; 
-         infect(Poisson(contacts,u2),environment); 
+         infect(Poisson(contacts,u2),context); 
       end 
    end SickPerson; 
  
