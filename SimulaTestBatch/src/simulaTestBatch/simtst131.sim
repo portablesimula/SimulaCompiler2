@@ -7,7 +7,7 @@
 % ==============================================================================
 external class SimulaTest;
 
-SimulaTest(131,"--- Test new standard procedure 'CatchingErrors'") begin
+SimulaTest(131,"--- Test new standard class 'CatchingErrors'") begin
 
 CatchingErrors begin
     integer traceCase;

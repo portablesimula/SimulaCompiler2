@@ -10,9 +10,12 @@ package simula.compiler.syntaxClass.declaration;
 import java.io.IOException;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
@@ -325,7 +328,14 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 						.withMethodBody("<init>", MTD_Constructor(), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildMethod_STM(codeBuilder));
+							codeBuilder -> {
+//								if(this.getPrefixClass() == StandardClass.CatchingErrors) {								
+//									buildMethod_STM_CatchingErrors(codeBuilder);
+//								} else {		
+									buildMethod_STM(codeBuilder);
+//								}
+							
+							} );
 					
 					if (isQPSystemBlock()) {
 						//GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
@@ -351,6 +361,84 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		return(bytes);
 	}
 
+
+//	// ***********************************************************************************************
+//	// *** ByteCoding: buildMethod_STM
+//	// ***********************************************************************************************
+//	/**
+//	 * Generate byteCode for the '_STM' method.
+//	 *
+//	 * @param codeBuilder the CodeBuilder
+//	 */
+//	private void buildMethod_STM_CatchingErrors(CodeBuilder codeBuilder) {
+//		ASSERT_SEMANTICS_CHECKED();
+//		Global.enterScope(this);
+//		Label begScope = codeBuilder.newLabel();
+//		Label endScope = codeBuilder.newLabel();
+//		Label checkStackSize = null; // TESTING_STACK_SIZE
+//		codeBuilder.labelBinding(begScope);
+//		if(Option.TESTING_STACK_SIZE) {
+//			checkStackSize = codeBuilder.newLabel();
+//			codeBuilder
+//				.aconst_null()                 // TESTING_STACK_SIZE
+//				.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
+//		}
+//		codeBuilder.trying(
+//			tryCodeBuilder -> {
+//
+////				buildMethod_STM(blockCodeBuilder);
+////				if (hasLabel())	
+//				if (this.labelList != null && !this.labelList.isEmpty())	
+//					build_TRY_CATCH(tryCodeBuilder);
+//				else build_STM_BODY(tryCodeBuilder);
+//			},
+//			catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_RUNTIME_EXCEPTION,
+//				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder)));
+//			
+//		ConstantPoolBuilder pool = codeBuilder.constantPool();
+//		codeBuilder
+//			.aload(0)
+//			.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")));
+//		if(Option.TESTING_STACK_SIZE) {
+//			codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
+//		}
+//			
+//		codeBuilder
+//			.aload(0)
+//			.areturn()
+//		.labelBinding(endScope);
+//			
+//		Global.exitScope();
+////		Util.IERR("");
+//	}
+//
+//	private void buildMyCatchBlock(CodeBuilder  codeBuilder) {
+//		ConstantPoolBuilder pool = codeBuilder.constantPool();
+//		// catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }
+//        //  astore_1
+//        //  aload_0
+//        //  putstatic     #28                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+//        //  aload_0
+//        //  aload_1
+//        //  aload_0
+//        //  invokevirtual #32                 // Method onError_0:()Lsimula/runtime/RTS_PRCQNT;
+//        //  invokevirtual #36                 // Method _onError:(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V
+//
+//		Util.buildSNAPSHOT2(codeBuilder, "HURRA !");
+//		codeBuilder
+//			.astore(1)  // The caught exception will be on top of the operand stack when the catch block is entered.
+//			.aload(0)
+//			.putstatic(pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject))
+//			.aload(0)
+//			.aload(1)
+//			.aload(0)
+//			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+//				"onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")))
+//			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+//				"_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V")));
+//		;
+////		Util.IERR("");
+//	}
 
 	// ***********************************************************************************************
 	// *** Printing Utility: print

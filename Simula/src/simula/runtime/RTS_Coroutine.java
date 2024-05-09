@@ -136,7 +136,17 @@ public class RTS_Coroutine implements Runnable {
 		if (targetThread == null) { // START VIRTUAL THREAD
 			Runnable runner = new Runnable() {
 				public void run() {
-					target.run();
+//					target.run();
+					if (RTS_Option.GOTO_TRACING) {
+						try {
+							target.run();
+						} catch(Exception e){
+							System.out.println("\nRTS_Coroutine.run: CATCH AND RE-TROW EXCEPTION");
+							e.printStackTrace(System.out);
+							throw e;
+						}
+					} else target.run();
+
 					done = true;
 					detach();
 				}
@@ -147,6 +157,7 @@ public class RTS_Coroutine implements Runnable {
 //				targetThread=new Thread(runner);
 //				targetThread.start();
 //			}
+			
 			targetThread.setUncaughtExceptionHandler(uncaughtExceptionHandler);
 		} else {
 			resume(this);

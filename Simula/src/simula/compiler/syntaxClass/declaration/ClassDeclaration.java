@@ -1466,7 +1466,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	@Override
-	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		Label begScope = codeBuilder.newLabel();
 //		Label endScope = codeBuilder.newLabel();
@@ -1478,8 +1478,15 @@ public class ClassDeclaration extends BlockDeclaration {
 		stmStack.push(labelContext);
 //		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;
-		buildStatementsBeforeInner(codeBuilder);
-		buildStatementsAfterInner(codeBuilder);
+//		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getClass().getSimpleName()+"  "+this);
+//		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getPrefixClass());
+		if(this.getPrefixClass() == StandardClass.CatchingErrors) {	
+			buildMethod_CatchingErrors_TRY_CATCH(codeBuilder, begScope, endScope);
+//			Util.IERR("");
+		} else {
+			buildStatementsBeforeInner(codeBuilder);
+			buildStatementsAfterInner(codeBuilder);
+		}
 		labelContext = stmStack.pop();
 //		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 
@@ -1496,6 +1503,59 @@ public class ClassDeclaration extends BlockDeclaration {
 //		System.out.println("ClassDeclaration.clearLabelList: ");
 		if(labelList != null) for(LabelDeclaration lab:this.labelList.labels) lab.isBinded = false;
 		if(prefixClass != null) prefixClass.clearLabelList();
+	}
+
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_STM
+	// ***********************************************************************************************
+	private final boolean TRY_CATCH_TESTING = false;//true;
+	/**
+	 * Generate byteCode for the '_STM' method.
+	 *
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private void buildMethod_CatchingErrors_TRY_CATCH(CodeBuilder codeBuilder, Label begScope, Label endScope) {
+		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "BEGIN ============== TRY_CATCH");
+		codeBuilder.trying(
+			tryCodeBuilder -> {
+				buildStatementsBeforeInner(tryCodeBuilder);
+				buildStatementsAfterInner(tryCodeBuilder);
+			},
+			catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_RUNTIME_EXCEPTION,
+				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder, begScope, endScope)));
+		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "ENDOF ============== TRY_CATCH");
+//		Util.IERR("");
+	}
+
+	private void buildMyCatchBlock(CodeBuilder  codeBuilder, Label begScope, Label endScope) {
+		ConstantPoolBuilder pool = codeBuilder.constantPool();
+		int local_EXEPTN = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+		codeBuilder.localVariable(local_EXEPTN,"exception",CD.JAVA_LANG_RUNTIME_EXCEPTION,begScope,endScope);
+		// catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }
+        //  astore_1
+        //  aload_0
+        //  putstatic     #28                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
+        //  aload_0
+        //  aload_1
+        //  aload_0
+        //  invokevirtual #32                 // Method onError_0:()Lsimula/runtime/RTS_PRCQNT;
+        //  invokevirtual #36                 // Method _onError:(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V
+
+		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "BEGIN ============== CATCH");
+		codeBuilder
+			.astore(local_EXEPTN)  // The caught exception will be on top of the operand stack when the catch block is entered.
+			.aload(0)
+			.putstatic(pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject))
+			.aload(0)
+			.aload(local_EXEPTN)
+			.aload(0)
+			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+				"onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")))
+			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+				"_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V")));
+		;
+//		Util.IERR("");
 	}
 
 	// ***********************************************************************************************
@@ -1531,38 +1591,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (prfx != null) prfx.buildStatementsAfterInner(codeBuilder);
 		}
 	}
-
-	// ***********************************************************************************************
-	// *** ByteCoding: buildMethod_STM2
-	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
-	void buildMethod_STM2(CodeBuilder codeBuilder) {
-
-//    	public simula.runtime.RTS_RTObject _STM();
-//        descriptor: ()Lsimula/runtime/RTS_RTObject;
-//        flags: (0x1041) ACC_PUBLIC, ACC_BRIDGE, ACC_SYNTHETIC
-//        Code:
-//          stack=1, locals=1, args_size=1
-//             0: aload_0
-//             1: invokevirtual #57                 // Method _STM:()LsimulaTestPrograms/adHoc03_A;
-//             4: areturn
-
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		Label begScope = codeBuilder.newLabel();
-		Label endScope = codeBuilder.newLabel();
-		codeBuilder
-				.labelBinding(begScope)
-				.aload(0)
-				.invokevirtual(pool.methodRefEntry(currentClassDesc()
-						,"_STM", MethodTypeDesc.ofDescriptor("()LsimulaTestPrograms/adHoc03_A;")))
-				.areturn()
-				.labelBinding(endScope);
-	}
-
 
 
 	// ***********************************************************************************************

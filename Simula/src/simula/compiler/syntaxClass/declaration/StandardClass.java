@@ -68,6 +68,11 @@ public final class StandardClass extends ClassDeclaration {
 	public static StandardClass Printfile;
 
 	/**
+	 * The Standard Class CatchingErrors.
+	 */
+	public static StandardClass CatchingErrors;
+
+	/**
 	 * Method to initiate all standard classes.
 	 */
 	public static void INITIATE() {
@@ -392,7 +397,8 @@ public final class StandardClass extends ClassDeclaration {
 		BASICIO.isContextFree=true;
 		BASICIO.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Ref("Infile"),"sysin");  
 		BASICIO.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Ref("Printfile"),"sysout");  
-		BASICIO.addStandardProcedure(ObjectKind.MemberMethod,null,"terminate_program");  
+//		BASICIO.addStandardProcedure(ObjectKind.MemberMethod,null,"terminate_program");  
+		BASICIO.addStandardProcedure(ObjectKind.ContextFreeMethod,null,"terminate_program");  
 		BASICIO.addStandardProcedure(ObjectKind.MemberMethod,null,"call",parameter("obj",Type.Ref("RTObject")));
 		BASICIO.addStandardProcedure(ObjectKind.MemberMethod,null,"resume",parameter("obj",Type.Ref("RTObject")));
 	}
@@ -1028,7 +1034,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * Initiate the Standard Class CatchingErrors
 	 */
 	private static void initCatchingErrors() { 
-		StandardClass CatchingErrors=new StandardClass("CLASS","CatchingErrors");
+		CatchingErrors=new StandardClass("CLASS","CatchingErrors");
 		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
 		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,CatchingErrors.prefixLevel(),null));
 		CatchingErrors.statements1=new Vector<Statement>();

@@ -7,6 +7,9 @@
  */
 package simula.runtime;
 
+import java.util.Map;
+import java.util.Set;
+
 /**
  * This class is the main superclass used to form all other Simula classes
  * <p>
@@ -731,7 +734,10 @@ public abstract class RTS_RTObject {
 	 */
 	public void _GOTO(final RTS_LABEL q) {
 		if (RTS_Option.GOTO_TRACING)
-			RTS_COMMON.TRACE("_RTObject.GOTO: " + q);
+			RTS_COMMON.TRACE("RTS_RTObject.GOTO: " + q);
+		
+//        new Exception("RTS_RTObject.GOTO: ").printStackTrace(System.out);
+
 		throw (q);
 	}
 
@@ -755,6 +761,10 @@ public abstract class RTS_RTObject {
 	 */
 	public static void TRACE_GOTO(final String msg, final RTS_LABEL label) {
 		RTS_COMMON.TRACE(msg + " GOTO " + label);
+		
+		System.out.println("\nRTS_RTObject.TRACE_GOTO: "+label.identifier);
+        new Exception("With Operating Chain:").printStackTrace(System.out);
+		
 	}
 
 	// ************************************************************
@@ -783,12 +793,12 @@ public abstract class RTS_RTObject {
 		public void uncaughtException(Thread thread, Throwable e) {
 			String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + thread.getName() + '[' + obj + "]: ") : "";
 			if (RTS_Option.GOTO_TRACING) {
-				RTS_COMMON.println(threadID + " throws exception: " + e);
-				e.printStackTrace();
+				RTS_COMMON.println("\nRTS_RTObject.uncaughtException: In Thread " + thread.getName() + ": " + e);
+				e.printStackTrace(System.out);
 			}
 			if (e instanceof RTS_LABEL) {
 				if (RTS_Option.GOTO_TRACING) {
-					System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
+//					System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 					RTS_COMMON.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 				}
 				RTS_RTObject DL = obj._DL;
@@ -811,6 +821,7 @@ public abstract class RTS_RTObject {
 			} else if (e instanceof RuntimeException) {
 				String msg = getErrorMessage(e);
 				msg = msg.replace("RTS_SimulaRuntimeError: ", "");
+//				System.out.println("RTS_RTObject.uncaughtException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
 				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null)
 					treatRuntimeError(msg);
 				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);

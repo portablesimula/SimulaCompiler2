@@ -119,7 +119,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	@Override
-	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		List<SwitchCase> tableSwitchCases;
 		int tableSize = switchList.size();

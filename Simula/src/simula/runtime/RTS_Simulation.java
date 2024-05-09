@@ -114,6 +114,7 @@ public class RTS_Simulation extends RTS_Simset {
 	 */
 	public RTS_Simulation(RTS_RTObject SL) {
 		super(SL);
+//		System.out.println("BEGIN NEW RTS_Simulation");
 		sqs = new RTS_Ranking();// ("MAIN");
 		sqs.bl = sqs;
 		sqs.ll = sqs;
@@ -122,6 +123,7 @@ public class RTS_Simulation extends RTS_Simset {
 		main_1 = (RTS_MAIN_PROGRAM) new RTS_MAIN_PROGRAM((RTS_Simulation) _CUR)._START();
 		main_1.EVENT = new RTS_EVENT_NOTICE(0, main_1);
 		RTS_Ranking.INTO(main_1.EVENT, sqs, 0);
+//		System.out.println("ENDOF NEW RTS_Simulation");
 	}
 
 	@Override

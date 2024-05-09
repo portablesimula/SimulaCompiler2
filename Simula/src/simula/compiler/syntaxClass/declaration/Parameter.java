@@ -74,7 +74,7 @@ public final class Parameter extends Declaration {
 		/** Parameter transfered by name */  public static final int name = 2;
 	}
 	
-	public String edMode(int mode) {
+	public static String edMode(int mode) {
 		switch(mode) {
 			case 1: return("value");
 			case 2: return("name");
@@ -93,8 +93,8 @@ public final class Parameter extends Declaration {
 		/** Label parameter */     public static final int Label = 4;
 	}
 	
-	public String edKind(int kind) {
-		switch(mode) {
+	public static String edKind(int kind) {
+		switch(kind) {
 			case 1: return("Simple");
 			case 2: return("Procedure");
 			case 3: return("Array");

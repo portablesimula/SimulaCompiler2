@@ -237,7 +237,9 @@ public final class Thunk extends DeclarationScope {
 		Global.enterScope(this);
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
-			codeBuilder.labelBinding(begScope);
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",CD_ThisClass,begScope,endScope);
 
 //			Util.buildSNAPSHOT(codeBuilder, "THUNK: get "+expr);
 
@@ -290,7 +292,10 @@ public final class Thunk extends DeclarationScope {
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			Label checkStackSize = null; // TESTING_STACK_SIZE
-			codeBuilder.labelBinding(begScope);
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",CD_ThisClass,begScope,endScope)
+				.localVariable(1,"parameter_x",CD.RTS_RTObject,begScope,endScope);
 			
 			if(Option.TESTING_STACK_SIZE) {
 				checkStackSize = codeBuilder.newLabel();
@@ -385,6 +390,8 @@ public final class Thunk extends DeclarationScope {
 		Label endScope = codeBuilder.newLabel();
 		codeBuilder
 			.labelBinding(begScope)
+			.localVariable(0,"this",CD_ThisClass,begScope,endScope)
+			.localVariable(1,"parameter_x",CD.RTS_RTObject,begScope,endScope)
 			.aload(0)
 			.aload(1); // Parameter x			
 		

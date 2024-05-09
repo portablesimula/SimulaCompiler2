@@ -494,7 +494,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	}
 	
 	@Override
-	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		stmStack.push(labelContext);
 //		System.out.println("MaybeBlockDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;

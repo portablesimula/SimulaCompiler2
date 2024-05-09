@@ -17,6 +17,9 @@ public class CD {
 	public static final	ClassDesc RTS_LABEL       = ClassDesc.of("simula.runtime.RTS_LABEL");
 	public static final	ClassDesc RTS_NAME        = ClassDesc.of("simula.runtime.RTS_NAME"); 
 	public static final	ClassDesc RTS_PRCQNT      = ClassDesc.of("simula.runtime.RTS_PRCQNT");
+	
+	public static final	ClassDesc JAVA_LANG_RUNTIME_EXCEPTION = ClassDesc.of("java.lang.RuntimeException");
+	
 
 	public static final	ClassDesc FOR_List			= ClassDesc.of("simula.runtime.FOR_List");
 	public static final	ClassDesc FOR_Element		= ClassDesc.of("simula.runtime.FOR_Element");

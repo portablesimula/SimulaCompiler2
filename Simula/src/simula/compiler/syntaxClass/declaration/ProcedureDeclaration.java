@@ -694,9 +694,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
 
 			// Declare local parameters
+			int nPar = 2;
 			for(Parameter par:parameterList) {
 				ClassDesc TD=par.type_toClassDesc();
-				codeBuilder.localVariable(1,par.getJavaIdentifier(),TD,begScope,endScope);
+				codeBuilder.localVariable(nPar++,par.getJavaIdentifier(),TD,begScope,endScope);
 			}
 
 			// super(staticLink);
@@ -837,7 +838,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			Label endScope = codeBuilder.newLabel();
 			codeBuilder
 				.labelBinding(begScope)
-				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
+				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+				.localVariable(1,"param",CD.RTS_RTObject,begScope,endScope);
 
 			codeBuilder.trying(
 					blockCodeBuilder -> {
@@ -1015,7 +1017,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	@Override
-	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		stmStack.push(labelContext);
 //		System.out.println("ProcedureDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;

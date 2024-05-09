@@ -191,11 +191,13 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		}
 		if(parameterList!=null) for(int i=0;i<parameterList.size();i++) {
 			Parameter par = parameterList.get(i);
-///			System.out.println("StandardProcedure.edMethodTypeDesc: par="+par.kind);
+//			System.out.println("StandardProcedure.edMethodTypeDesc: par="+Parameter.edKind(par.kind));
 			if(par.mode == Parameter.Mode.name) {
 				sb.append("Lsimula/runtime/RTS_NAME;");
 			} else if(par.kind == Parameter.Kind.Array) {
 				sb.append("Lsimula/runtime/RTS_ARRAY;");				
+			} else if(par.kind == Parameter.Kind.Procedure) {
+				sb.append("Lsimula/runtime/RTS_PRCQNT;");				
 			} else if(par.type instanceof OverLoad ovl) {
 //				System.out.println("StandardProcedure.edMethodTypeDesc: "+this);
 				boolean found=false;

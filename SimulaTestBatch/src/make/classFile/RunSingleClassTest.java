@@ -36,7 +36,7 @@ public final class RunSingleClassTest {
 		Option.TESTING_SEPARATE = true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
-//		Option.LIST_GENERATED_CLASS_FILES=true;
+		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 //		Option.verbose = true;
 		Option.WARNINGS=true;
@@ -82,8 +82,8 @@ public final class RunSingleClassTest {
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
-//		RTOption.GOTO_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
+		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
 //		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
@@ -248,9 +248,9 @@ public final class RunSingleClassTest {
 //		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
-		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
+//		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
-//		names.add("simtst131.sim"); // OK: Catching Errors
+		names.add("simtst131.sim"); // OK: Catching Errors
 //		names.add("simtst132.sim"); // OK: SPORT Options
 //		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 //		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND, SYNCHRONOUS and PURGE.

@@ -110,12 +110,11 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	}
 	
 	public int allocateLocalVariable(Type type) {
+		int res = nLocalVariables++;
 		if(type.keyWord == Type.T_LONG_REAL) {
-			int n = ++nLocalVariables;
 			nLocalVariables++;
-			return(n);
 		}
-		return(++nLocalVariables);
+		return(res);
 	}
 
 	// ***********************************************************************************************
@@ -482,7 +481,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			Label checkStackSize = null; // TESTING_STACK_SIZE
-			codeBuilder.labelBinding(begScope);
+			codeBuilder
+				.labelBinding(begScope)
+				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
 			
 				if(Option.TESTING_STACK_SIZE) {
 					checkStackSize = codeBuilder.newLabel();
@@ -492,8 +493,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				}
 //				if (hasLabel())	
 				if (this.labelList != null && !this.labelList.isEmpty())	
-					build_TRY_CATCH(codeBuilder);
-				else build_STM_BODY(codeBuilder);
+					build_TRY_CATCH(codeBuilder, begScope, endScope);
+				else build_STM_BODY(codeBuilder, begScope, endScope);
 				codeBuilder
 					.aload(0)
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")));
@@ -510,7 +511,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Global.exitScope();
 	}
 	
-	protected void build_STM_BODY(CodeBuilder codeBuilder) {
+	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		Util.IERR("Missing Override");
 	}
 	
@@ -543,30 +544,37 @@ public abstract class BlockDeclaration extends DeclarationScope {
     //        }
     //    }
 	// ==================================================================================
-	private void build_TRY_CATCH(CodeBuilder codeBuilder) {
+	private int local_THIS;
+	int local_LABEL_q;
+	protected void build_TRY_CATCH(CodeBuilder codeBuilder,Label begScope,Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		Label loopWhile = codeBuilder.newLabel();
 		Label loopEnd = codeBuilder.newLabel();
+		
+		local_THIS = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+		local_LABEL_q = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+		codeBuilder.localVariable(local_THIS,"_THIS",CD.RTS_RTObject,begScope,endScope);
+		codeBuilder.localVariable(local_LABEL_q,"label_q",CD.RTS_LABEL,begScope,endScope);
+		
 //		initTableSwitchCases();
 //		tableSwitchCases = new Vector<SwitchCase>();
 	    // adHoc000 _THIS=(adHoc000)_CUR;
 		codeBuilder
 			.aload(0)
-			.astore(1);  // THIS
+			.astore(local_THIS);  // THIS
 		
 	    // _LOOP:while(_JTX>=0) {
 		codeBuilder
 			.labelBinding(loopWhile)
 			.aload(0)
-			.getfield(FDE_JTX)
+			.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
 			.iflt(loopEnd);
 		
 		codeBuilder.trying(
 				blockCodeBuilder -> {
 //					jumpTable.build_JUMPTABLE(blockCodeBuilder);
 					labelList.build_JUMPTABLE(blockCodeBuilder);
-					build_STM_BODY(blockCodeBuilder);  // Virtual
+					build_STM_BODY(blockCodeBuilder, begScope, endScope);  // Virtual
 					// break _LOOP;
 					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
 				},
@@ -574,42 +582,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 						blockCodeBuilder -> buildCatchBlock(blockCodeBuilder,loopWhile)));
 		codeBuilder.labelBinding(loopEnd);
 	}
-	
-//	public List<SwitchCase> tableSwitchCases;
-//	public LabelList jumpTable;
-
-//	private void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
-//		// *******************************************************************************
-//		// *** JUMPTABLE Case
-//		// *******************************************************************************
-//		// iconst_n // Number of cases (tableSize)
-//		// invokestatic _JUMPTABLE
-//		//
-//		// Output:
-//		//
-//		// tableswitch ...
-//		//
-//////		int tableSize = labelList.size();
-////		int tableSize = getNlabels();
-////		for (int i = 1; i <= tableSize; i++) {
-////			Label lab = codeBuilder.newLabel();
-////			System.out.println("BlockDeclaration.build_JUMPTABLE: SwitchCase["+externalIdent+"] " + i + ": " + lab + "  tableSwitchCases.hash="+tableSwitchCases.hashCode());
-////			tableSwitchCases.add(SwitchCase.of(i, lab));
-////		}
-//		// Build the TableSwitch Instruction
-//		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
-//		int lowValue = 1;          // the minimum key value.
-////		int highValue = tableSize; // the maximum key value.
-//		int highValue = jumpTable.size(); // the maximum key value.
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
-//		codeBuilder
-//			.aload(0)
-//			.getfield(FDE_JTX)
-////			.tableswitch(lowValue, highValue, defaultTarget, tableSwitchCases)
-//			.tableswitch(lowValue, highValue, defaultTarget, jumpTable.getTableSwitchCases(codeBuilder))
-//			.labelBinding(defaultTarget);
-//	}
 
 	// ==================================================================================
     //        catch(RTS_LABEL q) {
@@ -626,19 +598,21 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	// ==================================================================================
 	private void buildCatchBlock(CodeBuilder  codeBuilder,Label contLabel) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		ClassDesc CD_RTObject = CD.RTS_RTObject;
-		FieldRefEntry FRE_CUR = pool.fieldRefEntry(currentClassDesc(), "_CUR", CD_RTObject);
+		FieldRefEntry FRE_CUR = pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject);
+
+//		Util.buildSNAPSHOT2(codeBuilder, "BlockDeclaration.buildCatchBlock: CATCHING LABEL");
+
 		// _CUR=_THIS;
 		codeBuilder
-			.astore(2)
-			.aload(1)
+			.astore(local_LABEL_q)
+			.aload(local_THIS)
 			.putstatic(FRE_CUR);
 		
 		// if(q._SL!=_CUR) {
 		Label endIfLabel = codeBuilder.newLabel();
-		FieldRefEntry FRE_SL=pool.fieldRefEntry(CD.RTS_LABEL, "_SL", CD_RTObject);
+		FieldRefEntry FRE_SL=pool.fieldRefEntry(CD.RTS_LABEL, "_SL", CD.RTS_RTObject);
 		codeBuilder
-			.aload(2)
+			.aload(local_LABEL_q)
 			.getfield(FRE_SL)
 			.getstatic(FRE_CUR)
 			.if_acmpeq(endIfLabel);
@@ -655,20 +629,18 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		
 		// throw(q);
 		codeBuilder
-			.aload(2)
-			.athrow()
+			.aload(local_LABEL_q)
+			.athrow()   // Throw LABEL q
 			.labelBinding(endIfLabel);
 		
 		buildTraceGOTO(codeBuilder,"LOCAL");
 
 		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-		FieldRefEntry FDE_INDEX=pool.fieldRefEntry(CD.RTS_LABEL,"index", ConstantDescs.CD_int);
-		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder
 			.aload(0)
-			.aload(2)
-			.getfield(FDE_INDEX)
-			.putfield(FDE_JTX)
+			.aload(local_LABEL_q)
+			.getfield(pool.fieldRefEntry(CD.RTS_LABEL,"index", ConstantDescs.CD_int))
+			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
 			.goto_(contLabel);
 	}
 
@@ -680,7 +652,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			.getstatic(ClassDesc.of("simula.runtime.RTS_Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
 			.ifeq(endLabel)
 			.ldc(pool.stringEntry(mss))
-			.aload(2)  // Label quant
+			.aload(local_LABEL_q)  // Label quant
 			.invokestatic(CD.RTS_RTObject,
 					"TRACE_GOTO", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;Lsimula/runtime/RTS_LABEL;)V"))
 			.labelBinding(endLabel);

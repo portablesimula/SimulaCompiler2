@@ -54,11 +54,11 @@ public final class InlineStatement extends Statement {
 		}
 		else if(kind.equals("try")) {
 			// GeneratedJavaClass.code("try {");
-			Util.IERR("NOT IMPL");
+//			Util.IERR("NOT IMPL");
 		}
 		else if(kind.equals("catch")) {
 			// GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
-			Util.IERR("NOT IMPL");
+//			Util.IERR("NOT IMPL");
 		}
 		else
 			Util.IERR("IMPOSSIBLE");

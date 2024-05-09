@@ -296,6 +296,7 @@ public final class RunClassFileTest {
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
+			Option.SPORT=true;
 //			Option.CASE_SENSITIVE=true;
 //			Option.TESTING=true;
 
@@ -345,9 +346,9 @@ public final class RunClassFileTest {
 			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
 			RTOption.BLOCK_TRACING = true;
-//			RTOption.GOTO_TRACING = true;
+			RTOption.GOTO_TRACING = true;
 //			RTOption.QPS_TRACING = false;
-//			RTOption.SML_TRACING = false;
+			RTOption.SML_TRACING = false;
 
 			String fileName=userDir+"/src/"+Global.packetName + name;
 			Option.RUNTIME_USER_DIR=new File(fileName).getParent();

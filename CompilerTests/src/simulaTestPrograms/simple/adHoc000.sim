@@ -1,18 +1,32 @@
 
 begin
+	integer iiii;
+	
+	procedure trace(msg); text msg; begin
+		outtext(msg); outimage;
+	end;
 
-CatchingErrors begin
-    ref(Inbytefile) bf;
-
-    procedure onError(message); text message; begin
-        outtext("Inside onError: " & message);
-        goto LAB2;
-    end;
-
-    bf.inbyte; -- Producing error NONE CHECK FAILED
+   class p;
+   begin
+      integer i;
+      Simulation begin
+         ref(Car) car1;
       
-end;
+         Process class Car(pname); text pname;
+         begin
+               goto EXIT_LABEL;
+         end;
+      
+         trace("START SIMULATION");
+         car1:- new Car("Bil 1");
+         trace(car1.pname & " is scheduled for 4.0");
+         activate car1 at 4.0;
+         hold (12);
+EXIT_LABEL: trace("At OUT"); outimage;
+      
+      end;
+   end;
 
-LAB2:
-
+	new p;
+	
 end;
