@@ -365,6 +365,4 @@ public final class ArithmeticExpression extends Expression {
 		return(expr);
 	}
 
-	
-
 }

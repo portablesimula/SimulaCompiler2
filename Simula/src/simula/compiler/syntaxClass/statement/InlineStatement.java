@@ -31,8 +31,7 @@ public final class InlineStatement extends Statement {
 		else if(kind.equals("terminate")) GeneratedJavaClass.code("terminate();","Process'terminate");
 		else if(kind.equals("try")) GeneratedJavaClass.code("try {");
 		else if(kind.equals("catch")) GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
-		else
-			Util.IERR("");
+		else Util.IERR("IMPOSSIBLE");
 	}
 
 	@Override
@@ -52,16 +51,9 @@ public final class InlineStatement extends Statement {
 					.aload(0)
 					.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),"terminate", MethodTypeDesc.ofDescriptor("()V")));
 		}
-		else if(kind.equals("try")) {
-			// GeneratedJavaClass.code("try {");
-//			Util.IERR("NOT IMPL");
-		}
-		else if(kind.equals("catch")) {
-			// GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
-//			Util.IERR("NOT IMPL");
-		}
-		else
-			Util.IERR("IMPOSSIBLE");
+		else if(kind.equals("try")) ;   // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH
+		else if(kind.equals("catch")) ; // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH
+		else Util.IERR("IMPOSSIBLE");
 	}
 
 	@Override
@@ -76,16 +68,16 @@ public final class InlineStatement extends Statement {
 	}
 
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public InlineStatement() {
-		super(0);
-	}
-
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//	/**
+//	 * Default constructor used by Externalization.
+//	 */
+//	public InlineStatement() {
+//		super(0);
+//	}
+//
 //	@Override
 //	public void writeExternal(ObjectOutput oupt) throws IOException {
 //		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());

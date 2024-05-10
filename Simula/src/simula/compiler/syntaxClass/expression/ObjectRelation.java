@@ -13,12 +13,15 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -180,43 +183,40 @@ public final class ObjectRelation extends Expression {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ObjectRelation() {
 	}
 
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(lhs);
-//		oupt.writeInt(opr);
-//		oupt.writeString(classIdentifier);
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeObject(classDeclaration);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		lhs = (Expression) inpt.readObject();
-//		opr = inpt.readInt();
-//		classIdentifier = inpt.readString();
-//		if(!Option.NEW_ATTR_FILE)
-//			classDeclaration = (ClassDeclaration) inpt.readObject();
-//	}
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeObjectRelation: " + this);
+		oupt.writeKind(ObjectKind.ObjectRelation);
+		oupt.writeInt(SEQU);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeObj(lhs);
+		oupt.writeInt(opr);
+		oupt.writeString(classIdentifier);
+	}
 	
+	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readObjectRelation: ");
+		ObjectRelation expr = new ObjectRelation();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
+		expr.lineNumber = inpt.readInt();
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		expr.lhs = (Expression) inpt.readObj();
+		expr.opr = inpt.readInt();
+		expr.classIdentifier = inpt.readString();
+		Util.TRACE_INPUT("readObjectRelation: " + expr);
+		return(expr);
+	}
 
 }

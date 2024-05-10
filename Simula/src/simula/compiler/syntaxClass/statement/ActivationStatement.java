@@ -395,7 +395,6 @@ public final class ActivationStatement extends Statement {
 	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
 		ActivationStatement stm = new ActivationStatement();
-//		stm.SEQU = inpt.readInt();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.REAC = inpt.readBoolean();

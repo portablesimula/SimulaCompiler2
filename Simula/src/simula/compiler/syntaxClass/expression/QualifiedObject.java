@@ -12,10 +12,13 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -140,33 +143,30 @@ public final class QualifiedObject extends Expression {
 	public QualifiedObject() {
 	}
 
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeObject(lhs);
-//		oupt.writeString(classIdentifier);
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeObject(classDeclaration);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		lhs = (Expression) inpt.readObject();
-//		classIdentifier = inpt.readString();
-//		if(!Option.NEW_ATTR_FILE)
-//			classDeclaration = (ClassDeclaration) inpt.readObject();
-//	}
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeQualifiedObject: " + this);
+		oupt.writeKind(ObjectKind.QualifiedObject);
+		oupt.writeInt(SEQU);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeObj(lhs);
+		oupt.writeString(classIdentifier);
+	}
 	
+	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readQualifiedObject: ");
+		QualifiedObject expr = new QualifiedObject();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
+		expr.lineNumber = inpt.readInt();
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		expr.lhs = (Expression) inpt.readObj();
+		expr.classIdentifier = inpt.readString();
+		Util.TRACE_INPUT("readQualifiedObject: " + expr);
+		return(expr);
+	}
 
 }

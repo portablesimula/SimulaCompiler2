@@ -337,7 +337,6 @@ public final class Constant extends Expression {
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
-//		cnst.SEQU = inpt.readInt();
 		cnst.SEQU = inpt.readSEQU(cnst);
 		cnst.lineNumber = inpt.readInt();
 		cnst.type = inpt.readType();

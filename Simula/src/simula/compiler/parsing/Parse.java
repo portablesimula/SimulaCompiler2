@@ -180,6 +180,7 @@ public final class Parse {
 	public static boolean expect(final int key) {
 		if (accept(key)) return (true);
 		Util.error("Got symbol '" + Parse.currentToken + "' while expecting KeyWord " + KeyWord.edit(key).toLowerCase());
+//		Thread.dumpStack();
 		return (false);
 	}
 

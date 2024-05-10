@@ -205,30 +205,4 @@ public final class ConditionalStatement extends Statement {
 		return(stm);
 	}
 
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(condition);
-//		oupt.writeObject(thenStatement);
-//		oupt.writeObject(elseStatement);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		condition = (Expression) inpt.readObject();
-//		thenStatement = (Statement) inpt.readObject();
-//		elseStatement = (Statement) inpt.readObject();
-//	}
-
 }

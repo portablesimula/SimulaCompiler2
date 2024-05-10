@@ -120,13 +120,17 @@ public final class BlockStatement extends Statement {
 			else s.append("._STM();");
 			GeneratedJavaClass.code(s.toString());
 		}
+		boolean duringSTM_Coding=Global.duringSTM_Coding;
+		Global.duringSTM_Coding=false;
 		blockDeclaration.doJavaCoding();
+		Global.duringSTM_Coding=duringSTM_Coding;
 	}
 
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
+//		System.out.println("BlockStatement.buildByteCode: "+this.lineNumber+"  "+this);
 		blockDeclaration.buildByteCode(codeBuilder);
 	}
 
@@ -166,7 +170,6 @@ public final class BlockStatement extends Statement {
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBlockStatement: ");
 		BlockStatement stm = new BlockStatement();
-//		stm.SEQU = inpt.readInt();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readInt();
 		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();

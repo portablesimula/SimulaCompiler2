@@ -36,7 +36,7 @@ public final class RunSingleClassTest {
 		Option.TESTING_SEPARATE = true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
-		Option.LIST_GENERATED_CLASS_FILES=true;
+//		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 //		Option.verbose = true;
 		Option.WARNINGS=true;
@@ -54,8 +54,8 @@ public final class RunSingleClassTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;
@@ -82,10 +82,11 @@ public final class RunSingleClassTest {
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-		RTOption.BLOCK_TRACING = true;
-		RTOption.GOTO_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
+		
 //		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
@@ -250,7 +251,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
-		names.add("simtst131.sim"); // OK: Catching Errors
+//		names.add("simtst131.sim"); // OK: Catching Errors
 //		names.add("simtst132.sim"); // OK: SPORT Options
 //		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 //		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND, SYNCHRONOUS and PURGE.
@@ -263,6 +264,9 @@ public final class RunSingleClassTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
+		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("simtst145.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

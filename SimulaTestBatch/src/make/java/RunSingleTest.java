@@ -259,7 +259,9 @@ public final class RunSingleTest {
 //		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
-		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
+//		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
+		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

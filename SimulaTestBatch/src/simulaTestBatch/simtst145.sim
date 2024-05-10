@@ -1,0 +1,30 @@
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 144
+%
+%  PURPOSE: CATCHING ERRORS
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(145,"--- Test BlockStatement among the Statements") begin
+	ref(A) x; integer K;
+	
+	class A; begin
+		integer N;
+	end;      
+
+	A class B; begin
+		integer N;
+		N := 567;
+	
+		K := this A.N;
+	end;
+	
+	x :- new B;
+	
+	B begin 
+		outtext("   END: " & edit(N));
+	end;
+      
+end;

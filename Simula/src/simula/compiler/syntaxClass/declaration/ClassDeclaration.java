@@ -455,7 +455,8 @@ public class ClassDeclaration extends BlockDeclaration {
 				cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
 		}
 		else {
-			cls.statements.add(Statement.expectStatement());
+			if(Parse.currentToken.keyWord != KeyWord.SEMICOLON)
+				cls.statements.add(Statement.expectStatement());
 			cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
 		}
 	}
@@ -520,7 +521,7 @@ public class ClassDeclaration extends BlockDeclaration {
 					Util.warning("Subclass on a deeper block level not allowed.");
 			}
 		}
-		type.doChecking(declaredIn); // TODO: TESTING
+		if(type != null) type.doChecking(declaredIn); // TODO: TESTING
 		int prfx = prefixLevel();
 		for (Parameter par : this.parameterList)
 			par.setExternalIdentifier(prfx);
@@ -1194,10 +1195,11 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	protected void codeClassStatements() {
 		boolean duringSTM_Coding = Global.duringSTM_Coding;
-		Global.duringSTM_Coding = true;
+		Global.duringSTM_Coding = false;
 		GeneratedJavaClass.debug("// Class Statements");
 		GeneratedJavaClass.code("@Override");
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		Global.duringSTM_Coding = true;
 		codeSTMBody();
 		GeneratedJavaClass.code("EBLK();");
 		GeneratedJavaClass.code("return(this);");
@@ -1481,7 +1483,13 @@ public class ClassDeclaration extends BlockDeclaration {
 //		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getClass().getSimpleName()+"  "+this);
 //		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getPrefixClass());
 		if(this.getPrefixClass() == StandardClass.CatchingErrors) {	
-			buildMethod_CatchingErrors_TRY_CATCH(codeBuilder, begScope, endScope);
+			if(this instanceof PrefixedBlockDeclaration)
+				buildMethod_CatchingErrors_TRY_CATCH(codeBuilder, begScope, endScope);
+			else {
+				Util.error("It is not allowed to declare a subclass of StandardClass CatchingErrors");
+				buildStatementsBeforeInner(codeBuilder);
+				buildStatementsAfterInner(codeBuilder);
+			}
 //			Util.IERR("");
 		} else {
 			buildStatementsBeforeInner(codeBuilder);
@@ -1644,7 +1652,7 @@ public class ClassDeclaration extends BlockDeclaration {
 
 	@Override
 	public String toString() {
-		return ("" + identifier + '[' + externalIdent + "] DeclarationKind=" + declarationKind);
+		return ("" + identifier + '[' + externalIdent + "] DeclarationKind=" + ObjectKind.edit(declarationKind));
 	}
 
 	// ***********************************************************************************************
@@ -1698,12 +1706,16 @@ public class ClassDeclaration extends BlockDeclaration {
 //		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
 		
 //		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS BEFORE INNER: Statements1: "+statements1.size());
-		oupt.writeInt(statements1.size());
-		for(Statement stm:statements1) oupt.writeObj(stm);
+		if(statements1 != null) {
+			oupt.writeInt(statements1.size());
+			for(Statement stm:statements1) oupt.writeObj(stm);
+		} else oupt.writeInt(0);
 
 //		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS AFTER INNER: Statements: "+statements.size());
-		oupt.writeInt(statements.size());
-		for(Statement stm:statements) oupt.writeObj(stm);
+		if(statements != null) {
+			oupt.writeInt(statements.size());
+			for(Statement stm:statements) oupt.writeObj(stm);
+		} else oupt.writeInt(0);
 
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}

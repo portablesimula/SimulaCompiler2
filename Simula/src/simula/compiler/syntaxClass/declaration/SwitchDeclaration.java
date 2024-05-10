@@ -7,6 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -16,6 +17,8 @@ import java.lang.constant.ConstantDescs;
 import java.util.List;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -93,10 +96,11 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	@Override
 	protected void codeProcedureBody() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
-		Global.duringSTM_Coding=true;
+		Global.duringSTM_Coding=false;
 		GeneratedJavaClass.debug("// Switch Body");
 		GeneratedJavaClass.code("@Override");
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		Global.duringSTM_Coding=true;
 		GeneratedJavaClass.code("switch(p__SW-1) {");
 		int n = 0;
 		for (Expression expr : ((SwitchDeclaration) this).switchList) {
@@ -177,8 +181,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	public SwitchDeclaration() { super(null, ObjectKind.Procedure); }
 
 	// Inherited from ProcedureDeclaration:
-	//	public void writeExternal(ObjectOutput oupt) throws IOException {
-	//	public void readExternal(ObjectInput inpt) throws IOException {
-
+	//	public void writeObject(AttributeOutputStream oupt)
+	//	public static ProcedureDeclaration readObject(AttributeInputStream inpt)
 
 }

@@ -564,10 +564,11 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 */
 	protected void codeProcedureBody() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
-		Global.duringSTM_Coding=true;
+		Global.duringSTM_Coding=false;
 		GeneratedJavaClass.debug("// Procedure Statements");
 		GeneratedJavaClass.code("@Override");
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		Global.duringSTM_Coding=true;
 		codeSTMBody();
 		GeneratedJavaClass.code("EBLK();");
 		GeneratedJavaClass.code("return(this);");

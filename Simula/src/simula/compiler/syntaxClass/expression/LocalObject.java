@@ -13,6 +13,8 @@ import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -185,35 +187,36 @@ public final class LocalObject extends Expression {
 	}
 
 	// ***********************************************************************************************
-	// *** Externalization
+	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public LocalObject() {
 	}
 
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObject(backLink);
-//		oupt.writeString(classIdentifier);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		type = inpt.readType();
-//		backLink = (SyntaxClass) inpt.readObject();
-//		classIdentifier = inpt.readString();
-//	}
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("writeLocalObject: " + this);
+		oupt.writeKind(ObjectKind.LocalObject);
+		oupt.writeInt(SEQU);
+		oupt.writeInt(lineNumber);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		oupt.writeString(classIdentifier);
+	}
 	
+	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readLocalObject: ");
+		LocalObject expr = new LocalObject();
+//		expr.SEQU = inpt.readInt();
+		expr.SEQU = inpt.readSEQU(expr);
+		expr.lineNumber = inpt.readInt();
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		expr.classIdentifier = inpt.readString();
+		Util.TRACE_INPUT("readLocalObject: " + expr);
+		return(expr);
+	}
 
 }

@@ -1,0 +1,14 @@
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 144
+%
+%  PURPOSE: CATCHING ERRORS
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class Precompiled144;
+
+Precompiled144(144,"--- Test 'is', 'in', 'qua' and 'this' in precompiled attribute file") begin
+
+	trace("At Main'END with K = " & edit(K));
+      
+end;

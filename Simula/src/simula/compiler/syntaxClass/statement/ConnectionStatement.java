@@ -552,44 +552,4 @@ public final class ConnectionStatement extends Statement {
 		return(stm);
 	}
 
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public ConnectionStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
-//		oupt.writeObject(objectExpression);
-//		oupt.writeObject(inspectedVariable);
-//		oupt.writeObject(inspectVariableDeclaration);
-//		oupt.writeObject(connectionPart);
-//		oupt.writeObject(otherwise);
-//		oupt.writeObject(hasWhenPart);
-//	}
-//	
-//	@SuppressWarnings("unchecked")
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
-//		objectExpression = (Expression) inpt.readObject();
-//		inspectedVariable = (VariableExpression) inpt.readObject();
-//		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObject();
-//		connectionPart = (Vector<DoPart>) inpt.readObject();
-//		otherwise = (Statement) inpt.readObject();
-//		hasWhenPart = (Boolean) inpt.readObject();
-//	}
-//	
-
 }

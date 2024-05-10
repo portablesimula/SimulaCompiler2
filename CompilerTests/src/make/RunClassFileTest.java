@@ -214,9 +214,9 @@ public final class RunClassFileTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
-		// String name="/simple/adHoc01.sim";
+		 String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
 		// String name="/simple/adHoc30a.sim";
@@ -345,10 +345,10 @@ public final class RunClassFileTest {
 			// Set RunTime Options and tracing.
 			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
-			RTOption.BLOCK_TRACING = true;
-			RTOption.GOTO_TRACING = true;
+//			RTOption.BLOCK_TRACING = true;
+//			RTOption.GOTO_TRACING = true;
 //			RTOption.QPS_TRACING = false;
-			RTOption.SML_TRACING = false;
+//			RTOption.SML_TRACING = false;
 
 			String fileName=userDir+"/src/"+Global.packetName + name;
 			Option.RUNTIME_USER_DIR=new File(fileName).getParent();

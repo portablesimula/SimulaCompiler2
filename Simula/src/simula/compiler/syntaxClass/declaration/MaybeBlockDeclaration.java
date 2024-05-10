@@ -269,6 +269,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		ASSERT_SEMANTICS_CHECKED();
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
+		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=false;
 		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
 		GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
@@ -287,7 +288,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		GeneratedJavaClass.debug("// Declare locals as attributes");
 		for (Declaration decl : declarationList) decl.doJavaCoding();
 		doCodeConstructor();
-		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=true;
 		doCodeStatements();
 		Global.duringSTM_Coding=duringSTM_Coding;
