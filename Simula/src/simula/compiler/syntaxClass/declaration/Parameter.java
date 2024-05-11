@@ -515,23 +515,6 @@ public final class Parameter extends Declaration {
 				default: Util.IERR("IMPOSSIBLE");
 			}
 		}
-
-//		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
-//		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
-//		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
-////		else if(type.getKeyWord()==KeyWord.REF) codeBuilder.aload(ofst);
-//		else if(type.getKeyWord()==Type.T_REF) codeBuilder.aload(ofst);
-//		else if(type.equals(Type.Integer)) codeBuilder.iload(ofst);
-//		else if(type.equals(Type.LongReal)) codeBuilder.dload(ofst);
-//		else if(type.equals(Type.Real)) codeBuilder.fload(ofst);
-//		else if(type.equals(Type.Boolean)) codeBuilder.iload(ofst);
-//		else if(type.equals(Type.Character)) codeBuilder.iload(ofst);
-//		else if(type.equals(Type.Text)) codeBuilder.aload(ofst);
-//		else if(type.equals(Type.Procedure)) codeBuilder.aload(ofst);
-//		else if(type.equals(Type.Label)) codeBuilder.aload(ofst);
-//		else {
-//			Util.IERR("NOT IMPLEMENTED: loadParameter "+type.getKeyWord()+" "+type);
-//		}
 	}
 	
 

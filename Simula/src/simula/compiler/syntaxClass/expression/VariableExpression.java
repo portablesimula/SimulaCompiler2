@@ -580,8 +580,6 @@ public final class VariableExpression extends Expression {
 			switch (par.kind) {
 			case Parameter.Kind.Array: // Parameter Array
 				String var = edIdentifierAccess(false);
-				if (inspectedVariable != null)
-					var = inspectedVariable.toJavaCode() + '.' + var;
 				if (par.mode == Parameter.Mode.name)
 					var = var + ".get()";
 				if (this.hasArguments()) {
@@ -782,134 +780,62 @@ public final class VariableExpression extends Expression {
 //		System.out.println("VariableExpression.buildEvaluation: "+identifier+", kind="+ObjectKind.edit(decl.declarationKind));
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
-		
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
 
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:
-				if (this.hasArguments()) { // Array Element Access
-					if (destination) {
-//						return (doPutELEMENT(var, rightPart));
-						Util.IERR("NOT IMPL");
-					} else {
-						ArrayDeclaration arr=(ArrayDeclaration)decl;
-//						return (doGetELEMENT(var));
-						buildIdentifierAccess(false,codeBuilder);
-						arr.arrayGetElement(this, false, codeBuilder);
-					}
-				} else {
-					if (destination) {
-//						s.append(edIdentifierAccess(false)).append('=').append(rightPart);
-						Util.IERR("NOT IMPL");
-					} else {
-//						s.append(edIdentifierAccess(false));
-						buildIdentifierAccess(false,codeBuilder);
-						ArrayDeclaration arr=(ArrayDeclaration)decl;
-						// getfield  #7 // Field Ai:Lsimula/runtime/RTS_INTEGER_ARRAY;
-						FieldRefEntry FRE_ARR=pool.fieldRefEntry(arr.declaredIn.getClassDesc(), arr.identifier, ArrayDeclaration.getClassDesc(type));
-						codeBuilder.getfield(FRE_ARR);
-					}
-				}
+				if (destination) Util.IERR("IMPOSSIBLE");
+				ArrayDeclaration arr=(ArrayDeclaration)decl;
+				buildIdentifierAccess(false,codeBuilder);
+				if (this.hasArguments())
+					 arr.arrayGetElement(this, false, codeBuilder);
+				else codeBuilder.getfield(pool.fieldRefEntry(arr.declaredIn.getClassDesc(), arr.identifier, ArrayDeclaration.getClassDesc(type)));
 				break;
 
 			case ObjectKind.Class:
 			case ObjectKind.StandardClass:
 				Util.error("Illegal use of class identifier: " + decl.identifier);
-//				return (edIdentifierAccess(destination));
-				Util.IERR("NOT IMPL");
 				break;
 
 			case ObjectKind.LabelDeclaration:
-				if (destination)
-					Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration:"); // rightPart=" + rightPart);
+				if (destination) Util.IERR("IMPOSSIBLE");
 //				System.out.println("VariableExpression.buildEvaluation: LabelDeclaration");
-				buildIdentifierAccess(destination,codeBuilder);
+				buildIdentifierAccess(false,codeBuilder);
 				LabelDeclaration lab=(LabelDeclaration)decl;
 				VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
 				if (virtSpec == null) {
 					codeBuilder.getfield(lab.getFieldRefEntry(pool));
 				} else {
-//					String ident = virtSpec.getFieldIdentifier();
 					String ident = virtSpec.getSimpleVirtualIdentifier();
-					MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;");
-//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: virtSpec.declaredIn="+virtSpec.declaredIn);
-//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: lab.declaredIn="+lab.declaredIn);
-//					ClassDesc CD = BlockDeclaration.currentClassDesc();
-//					ClassDesc CD = virtSpec.declaredIn.getClassDesc();
-//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: CD="+CD);
-//					System.out.println("VariableExpression.buildEvaluation: LabelDeclaration: ident="+ident);
-//					ident = "L1_0XXX";
-//					Util.IERR("");
-					
 					ClassDesc owner = virtSpec.declaredIn.getClassDesc();
-//					codeBuilder.invokevirtual(BlockDeclaration.currentClassDesc(), ident, MTD);
-					codeBuilder.invokevirtual(owner, ident, MTD);
-//					codeBuilder.invokevirtual(CD, ident, MTD);
+					codeBuilder.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;"));
 				}
 				break;
 
 			case ObjectKind.Parameter:
-				buildParameter((Parameter) decl,inspectedVariable,rightPart,codeBuilder);
+				buildEvaluateParameter((Parameter) decl,inspectedVariable,rightPart,codeBuilder);
 				break;
 
 			case ObjectKind.ContextFreeMethod:
 				// Standard Library Procedure
-
-				if (Util.equals(identifier, "sourceline")) {
-					//return ("" + Global.sourceLineNumber);
-					Constant.buildIntConst(codeBuilder, this.lineNumber);
-					return;
-				} else if (destination) {
-					Util.IERR("NOT IMPL: "+identifier);
-					//return ("_RESULT=" + rightPart);
-				} else {
-					BuildProcedureCall.callStandardProcedure(this,codeBuilder);
-					return; // OK
-				}
-				Util.IERR("NOT IMPL: "+identifier);
+				if (destination) Util.IERR("IMPOSSIBLE");
+				if (Util.equals(identifier, "sourceline"))
+					 Constant.buildIntConst(codeBuilder, this.lineNumber);
+				else BuildProcedureCall.callStandardProcedure(this,codeBuilder);
+				break;
 
 			case ObjectKind.MemberMethod:
-//				System.out.println("VariableExpression.buildEvaluation: "+identifier+", AT MemberMethod");
-//				if (destination) {
-//					return ("_RESULT=" + rightPart);
-//				}
 				BuildProcedureCall.asNormalMethod(this, codeBuilder);
 				break;
 
 			case ObjectKind.Procedure:
 //     		case ObjectKind.ExternalProcedure:
-				// This Variable is a Procedure-Identifier.
-				// When 'destination' it is a variable used to carry the resulting value until the final return.
-				// otherwise; it is a ordinary procedure-call.
-				
-				
-				if (destination) { // return("_RESULT");
-//					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
-//					ProcedureDeclaration found = Global.getCurrentScope().findProcedure(proc.identifier);
-//					String res = null;
-//					if (found != null) {
-//						if (found.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
-//							res = "_RESULT";
-//						} else {
-//							String cast = found.getJavaIdentifier();
-//							res = "((" + cast + ")" + found.edCTX() + ")._RESULT";
-//						}
-//					} else {
-//						Util.error("Can't assign to procedure " + proc.identifier);
-//						res = proc.identifier; // Error recovery
-//					}
-//					if (destination)
-//						res = res + "=" + rightPart;
-//					return (res);
-					Util.IERR("");
-				} else {
-					ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
-					if (procedure.myVirtual != null) {
-						BuildProcedureCall.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
-					} else
-						BuildProcedureCall.normal(this, procedure, codeBuilder);
-				}
+				if (destination) Util.IERR("IMPOSSIBLE");
+				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
+				if (procedure.myVirtual != null)
+					 BuildProcedureCall.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
+				else BuildProcedureCall.normal(this, procedure, codeBuilder);
 				break;
 
 			case ObjectKind.SimpleVariableDeclaration:
@@ -950,14 +876,14 @@ public final class VariableExpression extends Expression {
 				break;
 
 			default:
-				Util.IERR("Variable.editVariable: Impossible - " + decl.declarationKind);
+				Util.IERR("IMPOSSIBLE");
 		}
 	}
 
 	
 	
 	// ******************************************************************
-	// *** Coding: buildParameter
+	// *** Coding: buildEvaluateParameter
 	// ******************************************************************
 	/**
 	 * Coding Utility: Build this Parameter.
@@ -966,65 +892,39 @@ public final class VariableExpression extends Expression {
 	 * @param rightPart When destination, this is the right part of the assignment
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private void buildParameter(Parameter par,Expression inspectedVariable,Expression rightPart,CodeBuilder codeBuilder) {
+	private void buildEvaluateParameter(Parameter par,Expression inspectedVariable,Expression rightPart,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 				
 		switch (par.kind) {
 		case Parameter.Kind.Array: // Parameter Array
-//			System.out.println("VariableExpression.buildParameter'Array: "+par);
-//			String var = edIdentifierAccess(false);
-			if (inspectedVariable != null) {
-//				var = inspectedVariable.toJavaCode() + '.' + var;
-				Util.IERR("NOT IMPL");
-			}
+			buildIdentifierAccess(destination,codeBuilder);
 			if (par.mode == Parameter.Mode.name) {
+				if (destination) Util.IERR("IMPOSSIBLE");
 				codeBuilder
-					.aload(0)
 					.getfield(par.getFieldRefEntry(pool))
 					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
 					.checkcast(CD.RTS_ARRAY(type));
-				if(checkedParams != null) {
+				if(checkedParams != null)
 					ArrayDeclaration.arrayGetElement2(type,par.getFieldIdentifier(),checkedParams,codeBuilder);
-				}
 			} else {
 				if (this.hasArguments()) {
-//					String arrType = type.toJavaArrayType();
-//					String castedVar = "((" + arrType + ")" + var + ")";
-					if (destination) {
-						meaning.buildIdentifierAccess(false,codeBuilder);
-						ArrayDeclaration.arrayPutElement(meaning,par.getFieldIdentifier(),true,this.checkedParams,rightPart,codeBuilder);
-					} else {
-						codeBuilder.aload(0);
-						ArrayDeclaration.arrayGetElement(type,par.getFieldIdentifier(),true,this.checkedParams,null,par.declaredIn,codeBuilder);
-					}
+					if (destination)
+						 ArrayDeclaration.arrayPutElement(meaning,par.getFieldIdentifier(),true,this.checkedParams,rightPart,codeBuilder);
+					else ArrayDeclaration.arrayGetElement(type,par.getFieldIdentifier(),true,this.checkedParams,null,par.declaredIn,codeBuilder);
 				} else {
-					if (destination) {
-//						s.append(var).append('=').append(rightPart);
-						Util.IERR("NOT IMPL");
-					} else {
-						buildIdentifierAccess(destination,codeBuilder);
-						if (par.mode == Parameter.Mode.name) {
-							MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;");
-							codeBuilder
-								.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MTD));
-							Util.IERR("NOT IMPL");
-						}
-						else if(par.kind == Parameter.Kind.Array) {
-							codeBuilder.getfield(BlockDeclaration.currentClassDesc(), par.getFieldIdentifier(), CD.RTS_ARRAY);
-						}
-					}
+					if (destination) Util.IERR("IMPOSSIBLE");
+					ClassDesc owner = (inspectedVariable == null)
+							? BlockDeclaration.currentClassDesc()
+									: inspectedVariable.type.getQual().getClassDesc();
+					codeBuilder.getfield(owner, par.getFieldIdentifier(), CD.RTS_ARRAY);
 				}
 			}
 			break;
 
 		case Parameter.Kind.Procedure: // Parameter Procedure
-			if (destination)
-				Util.IERR("TEST DETTE -- Variable.editVariable: Parameter Procedure: rightPart=" + rightPart);
-			if (inspectedVariable != null) {
-//				s.append(inspectedVariable.toJavaCode()).append('.');
-				Util.IERR("");
-			}
+			if (destination)               Util.IERR("IMPOSSIBLE");
+			if (inspectedVariable != null) Util.IERR("IMPOSSIBLE");
 			if (par.mode == Parameter.Mode.value)
 				Util.error("Parameter " + this + " by Value is not allowed - Rewrite Program");
 			else { // Procedure By Reference or Name.
@@ -1033,58 +933,35 @@ public final class VariableExpression extends Expression {
 			}
 			break;
 
-		case Parameter.Kind.Simple:
-		case Parameter.Kind.Label:
-//			var = edIdentifierAccess(destination); // Kind: Simple/Label
+		case Parameter.Kind.Simple, 
+		     Parameter.Kind.Label:
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
-//			if (!destination && par.mode == Parameter.Mode.name) {
-//				s.append(var).append(".get()");
-//			} else if (destination) {
-//				if (par.mode == Parameter.Mode.name) {
-//					s.append(var + ".put(" + rightPart + ')');
-//				} else
-//					s.append(var).append('=').append(rightPart);
-//			} else {
-//				s.append(edIdentifierAccess(destination)); // Kind: Simple/Label
-//			}
-
 			codeBuilder.getfield(par.getFieldRefEntry(pool));
 			
 			if (!destination && par.mode == Parameter.Mode.name) {
 				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_NAME,
 						"get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")));
-				if(par.type.equals(Type.Integer)) {
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Integer)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-				} else if(par.type.equals(Type.Real)) {
-						codeBuilder
+				switch(par.type.keyWord) {
+					case Type.T_INTEGER: codeBuilder
+							.checkcast(ConstantDescs.CD_Integer)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I"))); break;
+					case Type.T_REAL: codeBuilder
 							.checkcast(ConstantDescs.CD_Float)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-				} else if(par.type.equals(Type.LongReal)) {
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Double)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-				} else if(par.type.equals(Type.Boolean)) {
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Boolean)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-				} else if(par.type.equals(Type.Character)) {
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Character)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-				} else if(par.type.equals(Type.Text)) {
-					codeBuilder
-						.checkcast(CD.RTS_TXT);
-				} else if(par.type.equals(Type.Label)) {
-					codeBuilder
-						.checkcast(CD.RTS_LABEL);
-				} else if(par.type.isReferenceType()) {
-					codeBuilder
-						.checkcast(par.type.toClassDesc(par));
-				} else {
-					System.out.println("VarableExpression.buildEvaluation: Simple: "+this+"  "+this.meaning);
-					Util.IERR("FYLL PÅ FLERE TYPER: "+par.type);
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F"))); break;
+					case Type.T_LONG_REAL: codeBuilder
+							.checkcast(ConstantDescs.CD_Double)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D"))); break;
+					case Type.T_BOOLEAN: codeBuilder
+							.checkcast(ConstantDescs.CD_Boolean)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"))); break;
+					case Type.T_CHARACTER:
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Character)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C"))); break;
+					case Type.T_TEXT:  codeBuilder.checkcast(CD.RTS_TXT); break;
+					case Type.T_LABEL: codeBuilder.checkcast(CD.RTS_LABEL); break;
+					case Type.T_REF:   codeBuilder.checkcast(par.type.toClassDesc(par)); break;
+					default: Util.IERR("IMPOSSIBLE");
 				}
 			}
 			break; // OK

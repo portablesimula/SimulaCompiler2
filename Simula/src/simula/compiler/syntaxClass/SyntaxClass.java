@@ -126,8 +126,7 @@ public abstract class SyntaxClass {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		String name = this.getClass().getSimpleName();
-		Util.IERR("*** NOT IMPLEMENTED: " + "" + name + ".doChecking");
+		Util.IERR("The method 'doChecking' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
 	/**

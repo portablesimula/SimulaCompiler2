@@ -141,7 +141,7 @@ public final class ExternalDeclaration extends Declaration {
 	public static Vector<ExternalDeclaration> expectExternalHead(final BlockDeclaration enclosure) {
 		String kind = Parse.acceptIdentifier();
 		if (kind != null)
-			Util.IERR("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
+			Util.error("*** NOT IMPLEMENTED: " + "External " + kind + " Procedure");
 		Type expectedType = Parse.acceptType();
 		if (!(Parse.accept(KeyWord.CLASS) || Parse.accept(KeyWord.PROCEDURE)))
 			Util.error("parseExternalDeclaration: Expecting CLASS or PROCEDURE");
@@ -182,7 +182,7 @@ public final class ExternalDeclaration extends Declaration {
 
 			if (Parse.accept(KeyWord.IS)) {
 				// ...
-				Util.IERR("*** NOT IMPLEMENTED: " + "External non-Simula Procedure");
+				Util.error("*** NOT IMPLEMENTED: " + "External non-Simula Procedure");
 				break LOOP;
 			}
 			if (!Parse.accept(KeyWord.COMMA))

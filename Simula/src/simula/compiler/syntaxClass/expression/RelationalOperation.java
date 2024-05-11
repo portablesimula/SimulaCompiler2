@@ -97,47 +97,32 @@ public final class RelationalOperation extends Expression {
 		Global.sourceLineNumber = lineNumber;
 		if (Option.TRACE_CHECKER)
 			Util.TRACE("BEGIN RelationalOperation" + toString() + ".doChecking - Current Scope Chain: "	+ Global.getCurrentScope().edScopeChain());
+		lhs.doChecking();
+		rhs.doChecking();
+		Type type1 = lhs.type;
+		Type type2 = rhs.type;
+		this.type = Type.Boolean;
 		switch (opr) {
-		case KeyWord.LT: case KeyWord.LE: case KeyWord.EQ: case KeyWord.NE: case KeyWord.GE: case KeyWord.GT: {
-			lhs.doChecking();
-			rhs.doChecking();
-			Type type1 = lhs.type;
-			Type type2 = rhs.type;
-			if (type1.equals(Type.Text) && type2.equals(Type.Text)) {
-				this.type = Type.Boolean;
-				break;
-			}
-			if (type1.equals(Type.Character) && type2.equals(Type.Character)) {
-				this.type = Type.Boolean;
-				break;
-			}
-			if (type1.equals(Type.Boolean) && type2.equals(Type.Boolean)) {
-				this.type = Type.Boolean;
-				break;
-			}
+		case KeyWord.LT, KeyWord.LE, KeyWord.EQ, KeyWord.NE, KeyWord.GE, KeyWord.GT: {
+			if (type1.keyWord == Type.T_TEXT      && type1.keyWord == Type.T_TEXT) break;
+			if (type1.keyWord == Type.T_CHARACTER && type1.keyWord == Type.T_CHARACTER) break;
+			if (type1.keyWord == Type.T_BOOLEAN   && type1.keyWord == Type.T_BOOLEAN) break;
 			// Arithmetic Relation
 			Type atype = Type.arithmeticTypeConversion(type1, type2);
 			if (atype == null)
 				Util.error("Incompatible types in binary operation: " + toString());
-			this.type = Type.Boolean;
 			lhs = (Expression) TypeConversion.testAndCreate(atype, lhs);
 			rhs = (Expression) TypeConversion.testAndCreate(atype, rhs);
 			break;
 		}
 		case KeyWord.EQR: case KeyWord.NER: {
 			// Object =/= Object or Object == Object
-			lhs.doChecking();
-			rhs.doChecking();
-			Type type1 = lhs.type;
-			Type type2 = rhs.type;
 			if ((!type1.isReferenceType()) || (!type2.isReferenceType()))
 				Util.error("RelationalOperation: Illegal types: " + type1 + " " + opr + " " + type2);
-
-			this.type = Type.Boolean;
 			break;
 		}
 		default:
-			Util.IERR("*** NOT IMPLEMENTED: " +"RelationalOperation -- Util.error(Something went wrong) opr=" + opr);
+			Util.IERR("IMPOSSIBLE");
 			this.type = rhs.type;
 		}
 		if (Option.TRACE_CHECKER)

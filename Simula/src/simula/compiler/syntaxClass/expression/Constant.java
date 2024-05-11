@@ -248,42 +248,51 @@ public final class Constant extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		//ASSERT_SEMANTICS_CHECKED(); // ØM: Ad'Hoc
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		if(this.value==null) {
+		if(this.value==null)
 			codeBuilder.aconst_null();
-		} else if(type.equals(Type.Text)) {
-			codeBuilder
+		else switch(type.keyWord) {
+			case Type.T_BOOLEAN:
+				buildIntConst(codeBuilder, (boolean) value);
+				break;
+					
+			case Type.T_INTEGER:
+				if(value instanceof Long) {
+					Long i=(Long)value;
+					buildIntConst(codeBuilder, i.intValue());
+				} else {
+					Integer i = (Integer) value;
+					buildIntConst(codeBuilder, i);
+				}
+				break;
+					
+			case Type.T_CHARACTER:
+				buildIntConst(codeBuilder, (int)((char)value));
+				break;
+					
+			case Type.T_REAL:
+				float f=(float) value;
+				if(f==0) codeBuilder.fconst_0();
+				else if(f==1) codeBuilder.fconst_1();
+				else if(f==2) codeBuilder.fconst_2();
+				else codeBuilder.ldc(pool.floatEntry(f));
+				break;
+					
+			case Type.T_LONG_REAL:
+				double d=(double) value;
+				if(d==0) codeBuilder.dconst_0();
+				else if(d==1) codeBuilder.dconst_1();
+				else codeBuilder.ldc(pool.doubleEntry(d));
+				break;
+					
+			case Type.T_TEXT:
+				codeBuilder
 					.new_(CD.RTS_TXT)
 					.dup()
 					.ldc(pool.stringEntry((String) value))
 					.invokespecial(pool.methodRefEntry(CD.RTS_TXT, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
-		} else if(type.equals(Type.Integer)) {
-			if(value instanceof Long){
-				Long i=(Long)value;
-				buildIntConst(codeBuilder, i.intValue());
-			} else {
-				Integer i = (Integer) value;
-				buildIntConst(codeBuilder, i);
-			}
-		} else if(type.equals(Type.Character)) {
-			int i = (int)((char)value);
-			buildIntConst(codeBuilder, i);
-		} else if(type.equals(Type.LongReal)) {
-			double d=(double) value;
-			if(d==0) codeBuilder.dconst_0();
-			else if(d==1) codeBuilder.dconst_1();
-			else codeBuilder.ldc(pool.doubleEntry(d));
-		} else if(type.equals(Type.Real)) {
-			float f=(float) value;
-			if(f==0) codeBuilder.fconst_0();
-			else if(f==1) codeBuilder.fconst_1();
-			else if(f==2) codeBuilder.fconst_2();
-			else codeBuilder.ldc(pool.floatEntry(f));
-		} else if(type.equals(Type.Boolean)) {
-			boolean b=(boolean) value;
-			if(b) codeBuilder.iconst_1(); else codeBuilder.iconst_0();
-		}
-		else {
-			Util.IERR("NOT IMPL: Constant.buildByteCode: "+this.type+"  "+this);
+				break;
+				
+			default: Util.IERR("IMPOSSIBLE");
 		}
 	}
 

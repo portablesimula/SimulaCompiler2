@@ -1,6 +1,22 @@
-class prekomp;
+
 begin
 
- L1: L2:
 
+   integer pval;
+   ref(A) ra;
+   ref(File) test;
+
+   class A; virtual: ref(File) procedure myFile is ref(File) procedure actual(i,j); integer i,j;;
+   begin integer i;
+     ref(File) procedure myFile(i,j); integer i,j;
+     begin pval:=i+j; end;
+     
+   end;
+   
+   ra :- new A;
+  
+   test :- ra.myFile(7,21);
+   
+   outtext("PVAL = " & edit(pval));
+   
 end;

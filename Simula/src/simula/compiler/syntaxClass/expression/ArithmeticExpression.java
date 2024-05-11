@@ -274,34 +274,35 @@ public final class ArithmeticExpression extends Expression {
 		}
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
-		if(type.equals(Type.Integer)) {
-			switch (opr) {
-				case KeyWord.PLUS:   codeBuilder.iadd(); break;
-				case KeyWord.MINUS:  codeBuilder.isub(); break;
-				case KeyWord.MUL:    codeBuilder.imul(); break;
-				case KeyWord.DIV:    codeBuilder.idiv(); break;
-				case KeyWord.INTDIV: codeBuilder.idiv(); break;
-//			case KeyWord.EXP:
-				default:
-					Util.IERR("STOP: "+opr);
-			}
-		} else if(type.equals(Type.Real)) {
-			switch(opr) {
-				case KeyWord.PLUS:  codeBuilder.fadd(); break;
-				case KeyWord.MINUS: codeBuilder.fsub(); break;
-				case KeyWord.MUL:   codeBuilder.fmul(); break;
-				case KeyWord.DIV:   codeBuilder.fdiv(); break;
-				default: Util.IERR("IMPOSSIBLE: "+opr);
-			}
-		} else if(type.equals(Type.LongReal)) {
-			switch(opr) {
-				case KeyWord.PLUS:  codeBuilder.dadd(); break;
-				case KeyWord.MINUS: codeBuilder.dsub(); break;
-				case KeyWord.MUL:   codeBuilder.dmul(); break;
-				case KeyWord.DIV:   codeBuilder.ddiv(); break;
-				default: Util.IERR("IMPOSSIBLE: "+opr);
-			}
-		} else Util.IERR("NOT IMPL: "+type);
+		switch(type.keyWord) {
+			case Type.T_INTEGER:
+				switch (opr) {
+					case KeyWord.PLUS:   codeBuilder.iadd(); break;
+					case KeyWord.MINUS:  codeBuilder.isub(); break;
+					case KeyWord.MUL:    codeBuilder.imul(); break;
+					case KeyWord.DIV:    codeBuilder.idiv(); break;
+					case KeyWord.INTDIV: codeBuilder.idiv(); break;
+					default:
+					Util.IERR("IMPOSSIBLE");
+				} break;
+			case Type.T_REAL:
+				switch(opr) {
+					case KeyWord.PLUS:  codeBuilder.fadd(); break;
+					case KeyWord.MINUS: codeBuilder.fsub(); break;
+					case KeyWord.MUL:   codeBuilder.fmul(); break;
+					case KeyWord.DIV:   codeBuilder.fdiv(); break;
+					default: Util.IERR("IMPOSSIBLE: "+opr);
+				} break;
+			case Type.T_LONG_REAL:
+				switch(opr) {
+					case KeyWord.PLUS:  codeBuilder.dadd(); break;
+					case KeyWord.MINUS: codeBuilder.dsub(); break;
+					case KeyWord.MUL:   codeBuilder.dmul(); break;
+					case KeyWord.DIV:   codeBuilder.ddiv(); break;
+					default: Util.IERR("IMPOSSIBLE: "+opr);
+				} break;
+			default: Util.IERR("IMPOSSIBLE");
+		}
 	}
 
 	@Override

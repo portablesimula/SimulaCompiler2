@@ -1,11 +1,31 @@
 
 begin
 	ref(A) x; integer K;
+	integer array aaa(0:33);
 	
-	class A;;
-	
-	A begin 
-		outtext("   END: ");
+	class A(IA,P2); integer array IA; procedure P2; begin
+		procedure Q; begin
+			outtext("  INSIDE PROCEDURE Q"); outimage;
+		end;
 	end;
-         
+	
+	procedure P(arr,FP); integer array arr; procedure FP; begin
+		outtext("Inside P: " & edit(arr(4)));
+		begin integer i; begin integer j;
+			arr(6) := 3333;
+			outtext(", Inside P: " & edit(arr(7)));
+			FP;
+		end; end;
+	end; 
+	
+	aaa(4) := 888;
+	aaa(7) := 888;
+	
+	inspect new A(aaa) do
+	begin
+		begin integer i; begin integer j;
+			P(IA,Q);
+		end; end;
+	end;        
+	outtext(", END: " & edit(aaa(6)));
 end;

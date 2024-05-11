@@ -286,7 +286,7 @@ public final class AssignmentOperation extends Expression {
 					else codeBuilder.pop();
 				}
 			}
-			else Util.IERR("NOT IMPL: "+decl.getClass().getSimpleName()+"  "+decl);
+			else Util.IERR("IMPOSSIBLE");
 		} else if(lhs instanceof RemoteVariable var) {
 			if(!tryRemoteArray(var, codeBuilder)) {
 				var.obj.buildEvaluation(null,codeBuilder);
@@ -300,7 +300,7 @@ public final class AssignmentOperation extends Expression {
 				codeBuilder.putfield(var.getFieldRefEntry(pool));
 			}
 		}
-		else Util.IERR("NOT IMPL: "+lhs.getClass().getSimpleName()+"  "+lhs);
+		else Util.IERR("IMPOSSIBLE");
 	}
 	
 	private boolean tryRemoteArray(RemoteVariable remvar, CodeBuilder codeBuilder) {

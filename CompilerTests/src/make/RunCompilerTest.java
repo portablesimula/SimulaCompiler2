@@ -214,10 +214,10 @@ public final class RunCompilerTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
-		// String name="/simple/adHoc02.sim";
+		 String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
 		// String name="/simple/adHoc04.sim";
 		// String name="/simple/adHoc05.sim";
@@ -328,7 +328,7 @@ public final class RunCompilerTest {
 			
 			
 			Global.packetName="simulaTestPrograms";
-//			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 			Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //			Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //			Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");

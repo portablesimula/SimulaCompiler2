@@ -226,22 +226,7 @@ public class SimpleVariableDeclaration extends Declaration {
 
 	@Override
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
-//      // Field i = 0
-//      codeBuilder
-//              .aload(0)
-//              .iconst_0()
-//              .putfield(pool.fieldRefEntry(ClassDesc.of("simulaTestPrograms.adHoc06"),"iii", ConstantDescs.CD_int));
 		codeBuilder.aload(0);
-//		if(type.getKeyWord()==KeyWord.REF)   codeBuilder.aconst_null();
-//		else if(type.equals(Type.Integer))   codeBuilder.iconst_0();
-//		else if(type.equals(Type.LongReal))  codeBuilder.dconst_0();
-//		else if(type.equals(Type.Real))      codeBuilder.fconst_0();
-//		else if(type.equals(Type.Boolean))   codeBuilder.iconst_0();
-//		else if(type.equals(Type.Character)) codeBuilder.iconst_0();
-//		else if(type.equals(Type.Text))      codeBuilder.aconst_null();
-//		else if(type.equals(Type.Procedure)) codeBuilder.aconst_null();
-//		else if(type.equals(Type.Label))     codeBuilder.aconst_null();
-//		else Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
 		switch(type.keyWord) {
 			case Type.T_BOOLEAN:
 			case Type.T_CHARACTER:
@@ -252,12 +237,10 @@ public class SimpleVariableDeclaration extends Declaration {
 			case Type.T_REF:
 			case Type.T_PROCEDURE:
 			case Type.T_LABEL:		codeBuilder.aconst_null(); break;
-			default: Util.IERR("NOT IMPLEMENTED: SimpleVariableDeclaration.buildInitAttribute: "+type);
+			default: Util.IERR("IMPOSSIBLE");
 		}
-		
-		ClassDesc CD=type.toClassDesc();
 		codeBuilder
-			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),this.getFieldIdentifier(), CD));
+			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),this.getFieldIdentifier(), type.toClassDesc()));
 	}
 
 	
