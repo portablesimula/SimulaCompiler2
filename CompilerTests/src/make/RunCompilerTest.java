@@ -328,7 +328,7 @@ public final class RunCompilerTest {
 			
 			
 			Global.packetName="simulaTestPrograms";
-			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+//			Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 			Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //			Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //			Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");

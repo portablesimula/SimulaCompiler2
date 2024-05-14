@@ -318,8 +318,8 @@ public final class VirtualSpecification extends Declaration {
 			oupt.writeString(virt.identifier);
 			oupt.writeString(virt.externalIdent);
 			oupt.writeType(virt.type);
-			oupt.writeInt(virt.kind);
-			oupt.writeInt(virt.prefixLevel);
+			oupt.writeShort(virt.kind);
+			oupt.writeShort(virt.prefixLevel);
 //			oupt.writeObject(procedureSpec);
 			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
 		}
@@ -334,8 +334,8 @@ public final class VirtualSpecification extends Declaration {
 			virt.identifier = inpt.readString();
 			virt.externalIdent = inpt.readString();
 			virt.type = inpt.readType();
-			virt.kind = inpt.readInt();
-			virt.prefixLevel = inpt.readInt();
+			virt.kind = inpt.readShort();
+			virt.prefixLevel = inpt.readShort();
 //			virt.procedureSpec = (ProcedureSpecification) inpt.readObject();
 			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
 		}

@@ -291,13 +291,23 @@ public final class CallProcedure {
 								actualParameter.doChecking();
 							}
 						}
-						else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
-						else if(decl instanceof Parameter par) kind=par.kind;
-						else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
-						else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
-						else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
-						else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
-						else Util.IERR("Flere sånne tilfeller ???");
+//						else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
+//						else if(decl instanceof Parameter par) kind=par.kind;
+//						else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
+//						else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
+//						else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
+//						else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
+//						else Util.IERR("Flere sånne tilfeller ???");
+						switch(decl.declarationKind) {
+							case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
+							case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
+							case ObjectKind.Procedure -> kind=Parameter.Kind.Procedure;
+							case ObjectKind.ContextFreeMethod -> kind=Parameter.Kind.Simple;
+							case ObjectKind.ArrayDeclaration -> kind=Parameter.Kind.Array;
+							case ObjectKind.LabelDeclaration -> kind=Parameter.Kind.Label;
+							case ObjectKind.Class -> kind=Parameter.Kind.Simple; // Error Recovery
+							default -> Util.IERR("Flere sånne tilfeller ??? " + ObjectKind.edit(decl.declarationKind));
+						}
 					}
 					int mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
 					s.append(doParameterTransmition(formalType,kind,mode,actualParameter));
@@ -465,10 +475,10 @@ public final class CallProcedure {
 		if(mode==0) // Simple Type/Ref/Text by Default
 		  	s.append(apar.toJavaCode());
 		else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value
-		        if(formalType.equals(Type.Text))
+		        if(formalType.keyWord == Type.T_TEXT)
 		    	     s.append("copy(").append(apar.toJavaCode()).append(')');
 		        else s.append(apar.toJavaCode());
-		} else if(formalType.equals(Type.Label)) {
+		} else if(formalType.keyWord == Type.T_LABEL) {
 		    	String labQuant=apar.toJavaCode();
 		    	if(mode==Parameter.Mode.name) {
 			    	  s.append("new RTS_NAME<RTS_LABEL>()");

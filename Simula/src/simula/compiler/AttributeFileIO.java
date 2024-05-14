@@ -116,13 +116,13 @@ public final class AttributeFileIO {
 			for(ExternalDeclaration xdecl:program.externalHead) {
 				oupt.writeObj(xdecl);
 			}
-//			Util.IERR("");
+//			Util.IERR();
 		}
 		
 		if(program.module instanceof ProcedureDeclaration pro)  pro.writeObject(oupt);
 		else if(program.module instanceof ClassDeclaration cls) cls.writeObject(oupt);
-		else Util.IERR("");
-		oupt.flush(); oupt.close();
+		else Util.IERR();
+		oupt.close();
 		return(byteArrayOutputStream.toByteArray());
 	}
 
@@ -247,7 +247,7 @@ public final class AttributeFileIO {
 //		int declarationKind = inpt.readKind();
 		if(declarationKind == ObjectKind.Procedure)  module = ProcedureDeclaration.readObject(inpt);
 		else if(declarationKind == ObjectKind.Class) module = ClassDeclaration.readObject(inpt);
-		else Util.IERR("IMPOSSIBLE");
+		else Util.IERR();
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + fileID);
 

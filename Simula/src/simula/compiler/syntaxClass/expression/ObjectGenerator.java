@@ -185,7 +185,7 @@ public final class ObjectGenerator extends Expression {
 		for (Expression par : checkedParams) {
 			Parameter formalParameter = formalIterator.next();
 			if (formalParameter.mode == Parameter.Mode.value) {
-				if (par.type.equals(Type.Text))
+				if (par.type.keyWord == Type.T_TEXT)
 					s.append(",copy(").append(par.toJavaCode()).append(')');
 				else if (formalParameter.kind == Parameter.Kind.Array) {
 					String cast=par.type.toJavaArrayType();
@@ -242,7 +242,7 @@ public final class ObjectGenerator extends Expression {
 			par.buildEvaluation(null,codeBuilder);
 			Parameter formalParameter = formalIterator.next();
 			if (formalParameter.mode == Parameter.Mode.value) {
-				if (par.type.equals(Type.Text)) {
+				if (par.type.keyWord == Type.T_TEXT) {
 					codeBuilder.invokestatic(CD.RTS_RTObject,
 								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 				}
@@ -289,16 +289,16 @@ public final class ObjectGenerator extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("ObjectGenerator: "+this);
 		oupt.writeKind(ObjectKind.ObjectGenerator);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeString(classIdentifier);
 //		oupt.writeObject(params);
 		if(params == null) {
-			oupt.writeInt(-1);			
+			oupt.writeShort(-1);			
 		} else {
-			oupt.writeInt(params.size());
+			oupt.writeShort(params.size());
 			for(Expression par:params) oupt.writeObj(par);
 		}
 	}
@@ -306,14 +306,14 @@ public final class ObjectGenerator extends Expression {
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN ObjectGenerator: ");
 		ObjectGenerator gen = new ObjectGenerator();
-//		gen.SEQU = inpt.readInt();
+//		gen.SEQU = inpt.readShort();
 		gen.SEQU = inpt.readSEQU(gen);
-		gen.lineNumber = inpt.readInt();
+		gen.lineNumber = inpt.readShort();
 		gen.type = inpt.readType();
 		gen.backLink = (SyntaxClass) inpt.readObj();
 		gen.classIdentifier = inpt.readString();
 //		gen.params = (Vector<Expression>) inpt.readObject();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		if(n >= 0) {
 			gen.params = new Vector<Expression>();
 			for(int i=0;i<n;i++)

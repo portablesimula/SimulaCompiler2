@@ -65,7 +65,7 @@ public final class WhileStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber=lineNumber;
 		condition.doChecking(); condition.backLink=this;
-		if (!condition.type.equals(Type.Boolean)) Util.error("While condition is not Boolean");
+		if (condition.type.keyWord != Type.T_BOOLEAN) Util.error("While condition is not Boolean");
 		doStatement.doChecking();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -129,8 +129,8 @@ public final class WhileStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeWhileStatement: " + this);
 		oupt.writeKind(ObjectKind.WhileStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(condition);
 		oupt.writeObj(doStatement);
 	}
@@ -138,9 +138,9 @@ public final class WhileStatement extends Statement {
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
 		WhileStatement stm = new WhileStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.condition  = (Expression) inpt.readObj();
 		stm.doStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("WhileStatement: " + stm);

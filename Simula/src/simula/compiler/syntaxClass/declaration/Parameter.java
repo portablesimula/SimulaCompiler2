@@ -282,7 +282,7 @@ public final class Parameter extends Declaration {
 		boolean illegal = false;
 		switch (kind) {
 		case Kind.Simple:
-			if (type.equals(Type.Text))
+			if (type.keyWord == Type.T_TEXT)
 				break; // Simple Text
 			else if (type.isReferenceType()) {
 				if (mode == Parameter.Mode.value)
@@ -313,26 +313,19 @@ public final class Parameter extends Declaration {
 		ASSERT_SEMANTICS_CHECKED();
 		if (mode == Parameter.Mode.name) {
 			switch (kind) {
-			case Kind.Simple:
-				if (type.equals(Type.Label))
-					return ("RTS_NAME<RTS_LABEL>");
-				return ("RTS_NAME<" + type.toJavaTypeClass() + ">");
-			case Kind.Procedure:
-				return ("RTS_NAME<RTS_PRCQNT>");
-			case Kind.Label:
-				return ("RTS_NAME<RTS_LABEL>");
-			case Kind.Array:
-				return ("RTS_NAME<RTS_ARRAY>");
+			case Kind.Simple: if (type.keyWord == Type.T_LABEL)
+								 return ("RTS_NAME<RTS_LABEL>");
+								 return ("RTS_NAME<" + type.toJavaTypeClass() + ">");
+			case Kind.Procedure: return ("RTS_NAME<RTS_PRCQNT>");
+			case Kind.Label:	 return ("RTS_NAME<RTS_LABEL>");
+			case Kind.Array:	 return ("RTS_NAME<RTS_ARRAY>");
 			}
 		}
 		switch (kind) {
-		case Kind.Array:
-			return ("RTS_ARRAY");
-		case Kind.Label:
-			return ("RTS_LABEL");
-		case Kind.Procedure:
-			return ("RTS_PRCQNT");
-		case Kind.Simple: // Fall through
+			case Kind.Array:	 return ("RTS_ARRAY");
+			case Kind.Label:	 return ("RTS_LABEL");
+			case Kind.Procedure: return ("RTS_PRCQNT");
+			case Kind.Simple: // Fall through
 		}
 		return (type.toJavaType());
 	}
@@ -347,9 +340,8 @@ public final class Parameter extends Declaration {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if (mode == Parameter.Mode.name) {
 			buildNameParam(codeBuilder,this,expr);
-		} else {
-		switch (kind) {
-			case Kind.Array:
+		} else switch (kind) {
+			case Kind.Array -> {
 //				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value) {
@@ -357,13 +349,10 @@ public final class Parameter extends Declaration {
 //					"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+type.getArrayType()+';'));
 					codeBuilder.invokevirtual(CD.RTS_ARRAY,
 							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
-				}
-				break;
-			case Kind.Label:
-				Util.IERR("LABEL");
-//				return ("RTS_LABEL");
-				break;
-			case Kind.Procedure:
+				}}
+			case Kind.Label -> Util.IERR();
+				
+			case Kind.Procedure -> {
 //				return ("RTS_PRCQNT");
 //				new RTS_PRCQNT(((adHoc000)(_CUR))
 //		         4: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
@@ -417,12 +406,13 @@ public final class Parameter extends Declaration {
 						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MTD))
 						.checkcast(CD.RTS_PRCQNT);
 				} else {
-					Util.IERR("PROC: "+decl.getClass().getSimpleName());
+					Util.IERR();
 				}
-				break;
-			case Kind.Simple: // Fall through
+			}
+				
+			case Kind.Simple ->  {
 				expr.buildEvaluation(null,codeBuilder);
-				if(mode == Parameter.Mode.value && type.equals(Type.Text)) {
+				if(mode == Parameter.Mode.value && type.keyWord == Type.T_TEXT) {
 					codeBuilder.invokestatic(CD.RTS_ENVIRONMENT,
 							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 				}
@@ -489,7 +479,7 @@ public final class Parameter extends Declaration {
 		switch(this.kind) {
 		case Kind.Array: return(this.type.toClassDesc(this.kind,this.mode));
 		case Kind.Label:
-			Util.IERR("");
+			Util.IERR();
 			return(null);
 		case Kind.Procedure:		  return(Type.Procedure.toClassDesc(this.kind,this.mode));
 		case Kind.Simple: default: return(this.type.toClassDesc(this.kind,this.mode));
@@ -502,7 +492,7 @@ public final class Parameter extends Declaration {
 		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
 		else {
-			switch(type.getKeyWord()) {
+			switch(type.keyWord) {
 				case Type.T_BOOLEAN:
 				case Type.T_CHARACTER:
 				case Type.T_INTEGER:	codeBuilder.iload(ofst); break;
@@ -512,7 +502,7 @@ public final class Parameter extends Declaration {
 				case Type.T_REF:
 				case Type.T_PROCEDURE:
 				case Type.T_LABEL:		codeBuilder.aload(ofst); break;
-				default: Util.IERR("IMPOSSIBLE");
+				default: Util.IERR();
 			}
 		}
 	}
@@ -580,8 +570,8 @@ public final class Parameter extends Declaration {
 		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
 		oupt.writeType(type);
-		oupt.writeInt(kind);
-		oupt.writeInt(mode);
+		oupt.writeShort(kind);
+		oupt.writeShort(mode);
 	}
 	
 	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
@@ -590,43 +580,10 @@ public final class Parameter extends Declaration {
 		par.identifier = inpt.readString();
 		par.externalIdent = inpt.readString();
 		par.type = inpt.readType();
-		par.kind = inpt.readInt();
-		par.mode = inpt.readInt();
+		par.kind = inpt.readShort();
+		par.mode = inpt.readShort();
 		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
 		return(par);
 	}
-
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public Parameter() {
-//		super(null);
-//		this.declarationKind = ObjectKind.Parameter;
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-////		oupt.writeType(type);
-//		oupt.writeType(type);
-//		oupt.writeInt(kind);
-//		oupt.writeInt(mode);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-//		kind = inpt.readInt();
-//		mode = inpt.readInt();
-//		Util.TRACE_INPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
-//	}
 
 }

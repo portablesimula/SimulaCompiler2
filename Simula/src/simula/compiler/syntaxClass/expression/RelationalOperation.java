@@ -122,7 +122,7 @@ public final class RelationalOperation extends Expression {
 			break;
 		}
 		default:
-			Util.IERR("IMPOSSIBLE");
+			Util.IERR();
 			this.type = rhs.type;
 		}
 		if (Option.TRACE_CHECKER)
@@ -144,13 +144,13 @@ public final class RelationalOperation extends Expression {
 			case KeyWord.LT: case KeyWord.LE: case KeyWord.EQ: case KeyWord.NE: case KeyWord.GE: case KeyWord.GT: {
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-				if (type1.equals(Type.Text) && type2.equals(Type.Text))
+				if (type1.keyWord == Type.T_TEXT && type2.keyWord == Type.T_TEXT)
 					return (doCodeTextValueRelation());
 			}
 			case KeyWord.EQR: case KeyWord.NER: {
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-				if (type1.equals(Type.Text) && type2.equals(Type.Text))
+				if (type1.keyWord == Type.T_TEXT && type2.keyWord == Type.T_TEXT)
 					return (doCodeTextRefRelation());
 			}
 			default: {
@@ -178,7 +178,7 @@ public final class RelationalOperation extends Expression {
 		    case KeyWord.GT -> fnc = "GT(";
 		    case KeyWord.NE -> fnc = "NE(";
 		    case KeyWord.GE -> fnc = "GE(";
-		    default -> Util.IERR("Unexpected value: " + opr);
+		    default -> Util.IERR();
 		}
 		s.append("_TXTREL_").append(fnc);
 		s.append(lhs.get()).append(',');
@@ -207,7 +207,7 @@ public final class RelationalOperation extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 //		System.out.println("RelationalOperation.buildByteCode: "+this+", lhs.type="+lhs.type+", rhs.type="+rhs.type);
-		if(lhs.type.equals(Type.Text)) {
+		if(lhs.type.keyWord == Type.T_TEXT) {
 			buildTextRelation(codeBuilder);
 			return;
 		}
@@ -215,7 +215,9 @@ public final class RelationalOperation extends Expression {
 		rhs.buildEvaluation(null,codeBuilder);
 		Label target = codeBuilder.newLabel();
 		Label lab2 = codeBuilder.newLabel();
-		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)  || lhs.type.equals(Type.Boolean)) {
+		int key = lhs.type.keyWord;
+//		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)  || lhs.type.equals(Type.Boolean)) {
+		if(key == Type.T_INTEGER || key == Type.T_CHARACTER  || key == Type.T_BOOLEAN) {
 			switch (opr) {
 				case KeyWord.GE -> codeBuilder.if_icmplt(target);
 				case KeyWord.NE -> codeBuilder.if_icmpeq(target);
@@ -223,9 +225,9 @@ public final class RelationalOperation extends Expression {
 				case KeyWord.LE -> codeBuilder.if_icmpgt(target);
 				case KeyWord.EQ -> codeBuilder.if_icmpne(target);
 				case KeyWord.LT -> codeBuilder.if_icmpge(target);
-				default -> Util.IERR("Unexpected value: " + opr);
+				default -> Util.IERR();
 			}
-		} else if(lhs.type.equals(Type.Real)) {
+		} else if(key == Type.T_REAL) {
 			codeBuilder.fcmpl();
 				switch (opr) {
 					case KeyWord.GE -> codeBuilder.iflt(target);
@@ -234,9 +236,9 @@ public final class RelationalOperation extends Expression {
 					case KeyWord.LE -> codeBuilder.ifgt(target);
 					case KeyWord.EQ -> codeBuilder.ifne(target);
 					case KeyWord.LT -> codeBuilder.ifge(target);
-					default -> Util.IERR("Unexpected value: " + opr);
+					default -> Util.IERR();
 				}
-		} else if(lhs.type.equals(Type.LongReal)) {
+		} else if(key == Type.T_LONG_REAL) {
 			codeBuilder.dcmpl();
 			switch (opr) {
 				case KeyWord.GE -> codeBuilder.iflt(target);
@@ -245,15 +247,15 @@ public final class RelationalOperation extends Expression {
 				case KeyWord.LE -> codeBuilder.ifgt(target);
 				case KeyWord.EQ -> codeBuilder.ifne(target);
 				case KeyWord.LT -> codeBuilder.ifge(target);
-				default -> Util.IERR("Unexpected value: " + opr);
+				default -> Util.IERR();
 			}
 		} else if(lhs.type.isReferenceType()) {
 			switch (opr) {
 				case KeyWord.EQR -> codeBuilder.if_acmpne(target);
 				case KeyWord.NER -> codeBuilder.if_acmpeq(target);
-				default -> Util.IERR("Unexpected value: " + opr);
+				default -> Util.IERR();
 			}
-		} else Util.IERR("STOP IN "+this.getClass().getSimpleName()+"  Type="+lhs.type+"  "+this);
+		} else Util.IERR();
 		codeBuilder.iconst_1();
 		codeBuilder.goto_(lab2);
 		codeBuilder.labelBinding(target);
@@ -275,7 +277,7 @@ public final class RelationalOperation extends Expression {
 			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
 			case KeyWord.EQR -> textRelMethod="TRF_EQ";
 			case KeyWord.NER -> textRelMethod="TRF_NE";
-			default -> Util.IERR("Unexpected value: " + lhs + " " + opr + " "+ rhs);
+			default -> Util.IERR();
 		}
 		ClassDesc CD = BlockDeclaration.currentClassDesc();
 		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
@@ -300,25 +302,25 @@ public final class RelationalOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeRelationalOperation: " + this);
 		oupt.writeKind(ObjectKind.RelationalOperation);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
-		oupt.writeInt(opr);
+		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
 	
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRelationalOperation: ");
 		RelationalOperation expr = new RelationalOperation();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readInt();
+		expr.opr = inpt.readShort();
 		expr.rhs = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readRelationalOperation: " + expr);
 		return(expr);

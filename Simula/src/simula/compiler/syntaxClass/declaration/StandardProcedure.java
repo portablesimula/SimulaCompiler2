@@ -118,50 +118,42 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		int pos=0;
 		Type pType=null;
 		
-		if(mtd.charAt(pos++) != '(') Util.IERR("");
+		if(mtd.charAt(pos++) != '(') Util.IERR();
 		LOOP:while(more) {
 			char c = mtd.charAt(pos++);
 			switch(c) {
-				case ')': break LOOP;
-				case 'Z': pType = Type.Boolean; break;
-				case 'C': pType = Type.Character; break;
-				case 'I': pType = Type.Integer; break;
-				case 'F': pType = Type.Real; break;
-				case 'D': pType = Type.LongReal; break;
-				case 'L': {
+				case ')' -> { break LOOP; }
+				case 'Z' -> pType = Type.Boolean;
+				case 'C' -> pType = Type.Character;
+				case 'I' -> pType = Type.Integer;
+				case 'F' -> pType = Type.Real;
+				case 'D' -> pType = Type.LongReal;
+				case 'L' -> {
 					StringBuilder sb = new StringBuilder();
-					while(c != ';') {
-						c = mtd.charAt(pos++);
-						sb.append(c);
-					}
+					while(c != ';') { c = mtd.charAt(pos++); sb.append(c); }
 					if(sb.toString().equals("simula/runtime/RTS_TXT;")) pType = Type.Text;
 					else Util.IERR(""+sb);
-					break;
 				}
-				default: Util.IERR(""+c);
+				default -> Util.IERR(""+c);
 			}
 			Parameter par = new Parameter("_p"+(pos-1), pType, Parameter.Kind.Simple);
 			pList.add(par);
 		}
 		char c = mtd.charAt(pos++);
 		switch(c) {
-			case 'V': type = null; break;
-			case 'Z': type = Type.Boolean; break;
-			case 'C': type = Type.Character; break;
-			case 'I': type = Type.Integer; break;
-			case 'F': type = Type.Real; break;
-			case 'D': type = Type.LongReal; break;
-			case 'L': {
+			case 'V' -> type = null;
+			case 'Z' -> type = Type.Boolean;
+			case 'C' -> type = Type.Character;
+			case 'I' -> type = Type.Integer;
+			case 'F' -> type = Type.Real;
+			case 'D' -> type = Type.LongReal;
+			case 'L' -> {
 				StringBuilder sb = new StringBuilder();
-				while(c != ';') {
-					c = mtd.charAt(pos++);
-					sb.append(c);
-				}
+				while(c != ';') { c = mtd.charAt(pos++); sb.append(c); }
 				if(sb.toString().equals("simula/runtime/RTS_TXT;")) type = Type.Text;
 				else Util.IERR(""+sb);
-				break;
 			}
-			default: Util.IERR(""+c);
+			default -> Util.IERR(""+c);
 		}
 		
 		return(new ProcedureSpecification(identifier, type, pList)); 
@@ -186,7 +178,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 						found=true;
 						sb.append(beforeDot.type.toJVMType());
 					}
-				} if(!found) Util.IERR("OverLoad");
+				} if(!found) Util.IERR();
 			} else sb.append(beforeDot.type.toJVMType());
 		}
 		if(parameterList!=null) for(int i=0;i<parameterList.size();i++) {
@@ -206,7 +198,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 						found=true;
 						sb.append(params.get(i).type.toJVMType());
 					}
-				} if(!found) Util.IERR("OverLoad: "+ this);
+				} if(!found) Util.IERR();
 			} else sb.append(par.type.toJVMType());
 		}
 		String id=identifier;
@@ -226,11 +218,11 @@ public final class StandardProcedure extends ProcedureDeclaration {
 						found=true;
 						sb.append(params1Type.toJVMType());
 					}
-				} if(!found) Util.IERR("OverLoad");
+				} if(!found) Util.IERR();
 			} else sb.append(this.type.toJVMType());
 		} else sb.append('V');
 //		System.out.println("StandardProcedure.edMethodTypeDesc: "+this.identifier+" ==> res="+sb);
-//		Util.IERR("");
+//		Util.IERR();
 		return(sb.toString());
 	}
 

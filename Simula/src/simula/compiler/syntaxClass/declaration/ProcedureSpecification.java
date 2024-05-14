@@ -173,7 +173,7 @@ public final class ProcedureSpecification {
 			oupt.writeType(spec.type);
 
 			// oupt.writeObject(parameterList);
-			oupt.writeInt(spec.parameterList.size());
+			oupt.writeShort(spec.parameterList.size());
 			for(Parameter par:spec.parameterList) {
 				par.writeParameter(oupt);
 			}
@@ -190,7 +190,7 @@ public final class ProcedureSpecification {
 		spec.type = inpt.readType();
 
 		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
-		int nPar = inpt.readInt();
+		int nPar = inpt.readShort();
 		if(nPar > 0) {
 			spec.parameterList = new Vector<Parameter>();
 			for(int i=0;i<nPar;i++)

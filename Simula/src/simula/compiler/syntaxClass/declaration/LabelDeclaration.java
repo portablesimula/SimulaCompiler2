@@ -152,16 +152,10 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	
 	private boolean isLatestVirtualLabel(DeclarationScope encloser) {
 		LabelDeclaration last = encloser.labelList.getLastLabel(this.identifier);
-//		System.out.println("LabelDeclaration.isLatestVirtualLabel: this="+this);
-//		System.out.println("LabelDeclaration.isLatestVirtualLabel: last="+last);
-//		if(this == last) {
 		if(this.index == last.index) {
 //			System.out.println("LabelDeclaration.isLatestVirtualLabel: this == last");
 			return true;
 		}
-//		Util.IERR("MÅ SJEKKE AT DENNE LABELEN ER ER HØYESTE PREFIX LEVEL");
-//		  public simula.runtime.RTS_LABEL L1_0XXX();
-		
 		return false;
 	}
 	
@@ -232,7 +226,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 //		BlockDeclaration blk=(BlockDeclaration) this.declaredIn;
 		if(isBinded) {
 //			System.out.println("LabelDeclaration.doBind: blk="+blk.getClass().getSimpleName()+"  "+blk);
-			Util.IERR("IMPOSSIBLE: "+this);
+			Util.IERR();
 		}
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
 //		System.out.println("LabelDeclaration.doBind: labelContext="+labelContext+", labelList="+labelContext.labelList);
@@ -305,15 +299,15 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: identifier="+identifier);
 		oupt.writeString(identifier);
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: SEQU="+SEQU);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: lineNumber="+lineNumber);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(lineNumber);
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: index="+index);
-		oupt.writeInt(index);
+		oupt.writeShort(index);
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: movedTo="+movedTo);
 		oupt.writeObj(movedTo);
 		if(TRACE) System.out.println("LabelDeclaration.writeObject: COMPLETED");
-//		oupt.writeInt(9999);
+//		oupt.writeShort(9999);
 	}
 	
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
@@ -321,16 +315,16 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		String identifier = inpt.readString();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: identifier="+identifier);
 		LabelDeclaration lab = new LabelDeclaration(identifier);
-//		lab.SEQU = inpt.readInt();
+//		lab.SEQU = inpt.readShort();
 		lab.SEQU = inpt.readSEQU(lab);
 		if(TRACE) System.out.println("LabelDeclaration.readObject: SEQU="+lab.SEQU);
-		lab.lineNumber = inpt.readInt();
+		lab.lineNumber = inpt.readShort();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: lineNumber="+lab.lineNumber);
-		lab.index = inpt.readInt();
+		lab.index = inpt.readShort();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: index="+lab.index);
 		lab.movedTo = (DeclarationScope) inpt.readObj();
 		if(TRACE) System.out.println("LabelDeclaration.readObject: movedTo="+lab.movedTo);
-//		int TEST = inpt.readInt();
+//		int TEST = inpt.readShort();
 		Util.TRACE_INPUT("readLabelDeclaration: " + lab);
 		return(lab);
 	}

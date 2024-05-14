@@ -68,13 +68,12 @@ public final class InnerStatement extends Statement {
 	@Override
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
-		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
+		// No code !
 	}
 
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
-		// TODO: IMPLEMENT CODE AFTER INNER
-//		Util.IERR("");
+		// No code !
 	}
 
 	@Override
@@ -107,16 +106,16 @@ public final class InnerStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeInnerStatement: " + this);
 		oupt.writeKind(ObjectKind.InnerStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 	}
 
 	public static InnerStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readInnerStatement: ");
 		InnerStatement stm = new InnerStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		Util.TRACE_INPUT("InnerStatement: " + stm);
 		return(stm);
 	}	

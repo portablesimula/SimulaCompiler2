@@ -490,7 +490,7 @@ public final class Global {
 		try {
 			simulaWorkspaces.storeToXML(new FileOutputStream(simulaWorkspacesFile), "Simula Workspaces");
 		} catch (Exception e) {
-			Util.IERR("Impossible", e);
+			Util.IERR();
 		}
 	}
 

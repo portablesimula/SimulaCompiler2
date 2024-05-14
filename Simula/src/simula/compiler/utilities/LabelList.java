@@ -111,7 +111,7 @@ public class LabelList {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		if(TRACING) System.out.println(ident()+".getTableSwitchCases: "+this);
 		if(TRACING) System.out.println("LabelList.getTableSwitchCases: "+this);
-		if(tableSwitchCases == null) Util.IERR("");
+		if(tableSwitchCases == null) Util.IERR();
 		return tableSwitchCases;
 	}
 	
@@ -131,7 +131,7 @@ public class LabelList {
 			}
 		}
 		READY_FOR_CODING = true;
-//		Util.IERR("");
+//		Util.IERR();
 	}
 	
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
@@ -196,7 +196,7 @@ public class LabelList {
 	// ***********************************************************************************************
 
 	public static void writeLabelList(LabelList labelList,AttributeOutputStream oupt) throws IOException {
-//		Util.IERR("");
+//		Util.IERR();
 		if(labelList == null) {
 			oupt.writeBoolean(false);
 		} else {
@@ -204,7 +204,7 @@ public class LabelList {
 			Util.TRACE_OUTPUT(""+labelList);
 //			oupt.writeString(labelList.ident);
 			oupt.writeObj(labelList.declaredIn);
-			oupt.writeInt(labelList.tableSize());			
+			oupt.writeShort(labelList.tableSize());			
 			for(LabelDeclaration lab:labelList.labels) oupt.writeObj(lab);
 		}
 	}
@@ -217,7 +217,7 @@ public class LabelList {
 //			String ident = inpt.readString();
 			DeclarationScope declaredIn = (DeclarationScope) inpt.readObj();
 			labelList = new LabelList(declaredIn);
-			int n = inpt.readInt();
+			int n = inpt.readShort();
 			if(TRACING) System.out.println("LabelList.readObject: Read Label List: "+n);
 			for(int i=0;i<n;i++)
 				labelList.add((LabelDeclaration) inpt.readObj());

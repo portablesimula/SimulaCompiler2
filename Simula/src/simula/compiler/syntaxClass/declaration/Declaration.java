@@ -82,63 +82,6 @@ public abstract class Declaration extends SyntaxClass {
 	 */
 	public int declarationKind;
 
-//	/**
-//	 * The declarationKind
-//	 */
-//	public class Kind {
-//		/** Standard Class */		public static final int StandardClass = 1;
-//		/** Connection Block */		public static final int ConnectionBlock = 2;
-//		/** Compound Statement */	public static final int CompoundStatement = 3;
-//		/** Subblock */				public static final int SubBlock = 4;
-//		/**
-//		 * Normal Simula Procedure implemented as a Java Class
-//		 */
-//		public static final int Procedure = 5;
-//		/**
-//		 * Procedure coded as a Java Member Method.
-//		 */
-//		public static final int MemberMethod = 6;
-//		/**
-//		 * Procedure treated as a Java Static Method.
-//		 */
-//		public static final int ContextFreeMethod = 7;
-//		/** Class */					public static final int Class = 8;
-//		/** Prefixed Block */			public static final int PrefixedBlock = 9;
-//		/** Simula Program */			public static final int SimulaProgram = 10;
-//		/** Array Declaration */		public static final int ArrayDeclaration = 11;
-//		/** Virtual Specification */	public static final int VirtualSpecification = 12;
-//		/** Virtual Match */			public static final int VirtualMatch = 13;
-//		/** Parameter */				public static final int Parameter = 14;
-//		/** Thunk */					public static final int Thunk = 15;
-//		/** Label Declaration */		public static final int LabelDeclaration = 16;
-//		/** Simple Variable */			public static final int SimpleVariableDeclaration = 17;
-//		/** External Declaration */		public static final int ExternalDeclaration = 18;
-//	}
-//	
-//	public static String edDeclarationKind(int kind) {
-//		switch(kind) {
-//			case Kind.StandardClass:				return "StandardClass";
-//			case Kind.ConnectionBlock:				return "ConnectionBlock";
-//			case Kind.CompoundStatement:			return "CompoundStatement";
-//			case Kind.SubBlock:						return "SubBlock";
-//			case Kind.Procedure:					return "Procedure";
-//			case Kind.MemberMethod:					return "MemberMethod";
-//			case Kind.ContextFreeMethod:			return "ContextFreeMethod";
-//			case Kind.Class:						return "Class";
-//			case Kind.PrefixedBlock:				return "PrefixedBlock";
-//			case Kind.SimulaProgram:				return "SimulaProgram";
-//			case Kind.ArrayDeclaration:				return "ArrayDeclaration";
-//			case Kind.VirtualSpecification:			return "VirtualSpecification";
-//			case Kind.VirtualMatch:					return "VirtualMatch";
-//			case Kind.Parameter:					return "Parameter";
-//			case Kind.Thunk:						return "Thunk";
-//			case Kind.LabelDeclaration:				return "LabelDeclaration";
-//			case Kind.SimpleVariableDeclaration:	return "SimpleVariableDeclaration";
-//			case Kind.ExternalDeclaration:			return "ExternalDeclaration";
-//		}
-//		Util.IERR("IMPOSSIBLE "+kind);
-//		return(null);
-//	}
 
 	// ***********************************************************************************************
 	// *** Constructor
@@ -325,7 +268,7 @@ public abstract class Declaration extends SyntaxClass {
 	 */
 	public void buildDeclarationCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
-//		Util.IERR("Method buildDeclarationCode need a redefinition in "+this.getClass().getSimpleName());
+		// Default: No code
 	}
 
 
@@ -343,8 +286,8 @@ public abstract class Declaration extends SyntaxClass {
 //		oupt.writeString(externalIdent);
 //		if(!Option.NEW_ATTR_FILE)
 //			oupt.writeObject(declaredIn);
-//		oupt.writeInt(declarationKind);
-////		oupt.writeInt(slot);
+//		oupt.writeShort(declarationKind);
+////		oupt.writeShort(slot);
 //	}
 //	
 //	@Override
@@ -357,8 +300,8 @@ public abstract class Declaration extends SyntaxClass {
 //		externalIdent = inpt.readString();
 //		if(!Option.NEW_ATTR_FILE)
 //			declaredIn = (DeclarationScope) inpt.readObject();
-//		declarationKind = inpt.readInt();
-////		slot = inpt.readInt();
+//		declarationKind = inpt.readShort();
+////		slot = inpt.readShort();
 //	}
 
 }

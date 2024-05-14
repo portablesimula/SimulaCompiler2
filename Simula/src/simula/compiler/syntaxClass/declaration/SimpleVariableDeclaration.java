@@ -237,7 +237,7 @@ public class SimpleVariableDeclaration extends Declaration {
 			case Type.T_REF:
 			case Type.T_PROCEDURE:
 			case Type.T_LABEL:		codeBuilder.aconst_null(); break;
-			default: Util.IERR("IMPOSSIBLE");
+			default: Util.IERR();
 		}
 		codeBuilder
 			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),this.getFieldIdentifier(), type.toClassDesc()));
@@ -272,8 +272,8 @@ public class SimpleVariableDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
-		oupt.writeInt(SEQU);
-//		if(SEQU == 0) Util.IERR("");
+		oupt.writeShort(SEQU);
+//		if(SEQU == 0) Util.IERR();
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);

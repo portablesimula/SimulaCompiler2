@@ -269,13 +269,13 @@ public final class ConnectionStatement extends Statement {
 //		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
-			oupt.writeInt(1);
+			oupt.writeShort(1);
 			oupt.writeObj(connectionBlock);
 		}
 
 		public static DoPart readObject(ConnectionStatement x, AttributeInputStream inpt) throws IOException {
 			Util.TRACE_INPUT("BEGIN readDoPart: ");
-			int n = inpt.readInt();
+			int n = inpt.readShort();
 			switch(n) {
 			case 1:
 				DoPart stm = x.new DoPart();
@@ -289,7 +289,7 @@ public final class ConnectionStatement extends Statement {
 				Util.TRACE_INPUT("WhenPart: " + whn);
 				return(whn);
 			}
-			Util.IERR("");
+			Util.IERR();
 			return(null);
 		}
 	}
@@ -402,7 +402,7 @@ public final class ConnectionStatement extends Statement {
 		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
-			oupt.writeInt(2);
+			oupt.writeShort(2);
 			oupt.writeString(classIdentifier);
 			oupt.writeObj(connectionBlock);
 		}
@@ -518,13 +518,13 @@ public final class ConnectionStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
 		oupt.writeKind(ObjectKind.ConnectionStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(objectExpression);
 		oupt.writeObj(inspectedVariable);
 		oupt.writeObj(inspectVariableDeclaration);
 //		oupt.writeObj(connectionPart);
-		oupt.writeInt(connectionPart.size());
+		oupt.writeShort(connectionPart.size());
 		for(DoPart part:connectionPart) part.writeObject(oupt);
 		oupt.writeObj(otherwise);
 		oupt.writeBoolean(hasWhenPart);
@@ -533,14 +533,14 @@ public final class ConnectionStatement extends Statement {
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
 		ConnectionStatement stm = new ConnectionStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.objectExpression = (Expression) inpt.readObj();
 		stm.inspectedVariable = (VariableExpression) inpt.readObj();
 		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
 //		stm.connectionPart = (Vector<DoPart>) inpt.readObj();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		if(n > 0) {
 			stm.connectionPart = new Vector<DoPart>();
 			for(int i=0;i<n;i++)

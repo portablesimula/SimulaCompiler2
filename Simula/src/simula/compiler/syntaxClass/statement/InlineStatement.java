@@ -31,7 +31,7 @@ public final class InlineStatement extends Statement {
 		else if(kind.equals("terminate")) GeneratedJavaClass.code("terminate();","Process'terminate");
 		else if(kind.equals("try")) GeneratedJavaClass.code("try {");
 		else if(kind.equals("catch")) GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
-		else Util.IERR("IMPOSSIBLE");
+		else Util.IERR();
 	}
 
 	@Override
@@ -53,7 +53,7 @@ public final class InlineStatement extends Statement {
 		}
 		else if(kind.equals("try")) ;   // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH
 		else if(kind.equals("catch")) ; // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH
-		else Util.IERR("IMPOSSIBLE");
+		else Util.IERR();
 	}
 
 	@Override
@@ -83,7 +83,7 @@ public final class InlineStatement extends Statement {
 //		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 //		if(!Option.NEW_ATTR_FILE)
 //			oupt.writeBoolean(CHECKED);
-//		oupt.writeInt(lineNumber);
+//		oupt.writeShort(lineNumber);
 //		oupt.writeString(kind);
 //	}
 //	
@@ -92,7 +92,7 @@ public final class InlineStatement extends Statement {
 //		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
 //		if(!Option.NEW_ATTR_FILE)
 //			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readInt();
+//		lineNumber = inpt.readShort();
 //		kind = inpt.readString();
 //	}
 	

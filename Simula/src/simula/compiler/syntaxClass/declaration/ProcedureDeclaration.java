@@ -22,6 +22,7 @@ import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
+import java.lang.classfile.constantpool.MethodRefEntry;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
@@ -381,42 +382,42 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiledFromFile != null)	return;
 		switch (declarationKind) {
-		case ObjectKind.ContextFreeMethod -> doMethodJavaCoding("static ", false);
-		case ObjectKind.MemberMethod -> doMethodJavaCoding("", true);
+//		case ObjectKind.ContextFreeMethod -> doMethodJavaCoding("static ", false);
+//		case ObjectKind.MemberMethod -> doMethodJavaCoding("", true);
 		case ObjectKind.Procedure -> doProcedureCoding();
-		default -> Util.IERR("Impossible Situation !");
+		default -> Util.IERR();
 		}
 	}
 
-	// ***********************************************************************************************
-	// *** Coding: METHOD -- Generate Inline Method code for Procedure.
-	// ***********************************************************************************************
-	/**
-	 * Generate Inline Method code for Procedure.
-	 * @param modifier mthod modifier: "static " or ""
-	 * @param addStaticLink add static link as 0'th parameter
-	 */
-	private void doMethodJavaCoding(final String modifier,final boolean addStaticLink) {
-
-		Util.IERR("DEAD CODE ? NOT BELEAVED TO BE IN USE");
-		
-		Global.sourceLineNumber = lineNumber;
-		ASSERT_SEMANTICS_CHECKED();
-		Global.enterScope(this);
-		String line = "public " + modifier + ((type == null) ? "void" : type.toJavaType());
-		line = line + ' ' + getJavaIdentifier() + ' ' + edFormalParameterList(true, addStaticLink);
-		GeneratedJavaClass.code(line);
-		if (type != null) {
-			GeneratedJavaClass.debug("// Declare return value as variable");
-			GeneratedJavaClass.code(type.toJavaType() + ' ' + "_RESULT" + '=' + type.edDefaultValue() + ';');
-		}
-		for (Declaration decl : labelList.labels) decl.doJavaCoding();
-		for (Declaration decl : declarationList) decl.doJavaCoding();
-		for (Statement stm : statements) stm.doJavaCoding();
-		if (type != null) GeneratedJavaClass.code("return(_RESULT);");
-		GeneratedJavaClass.code("}");
-		Global.exitScope();
-	}
+//	// ***********************************************************************************************
+//	// *** Coding: METHOD -- Generate Inline Method code for Procedure.
+//	// ***********************************************************************************************
+//	/**
+//	 * Generate Inline Method code for Procedure.
+//	 * @param modifier mthod modifier: "static " or ""
+//	 * @param addStaticLink add static link as 0'th parameter
+//	 */
+//	private void doMethodJavaCoding(final String modifier,final boolean addStaticLink) {
+//
+//		Util.IERR("DEAD CODE ? NOT BELEAVED TO BE IN USE");
+//		
+//		Global.sourceLineNumber = lineNumber;
+//		ASSERT_SEMANTICS_CHECKED();
+//		Global.enterScope(this);
+//		String line = "public " + modifier + ((type == null) ? "void" : type.toJavaType());
+//		line = line + ' ' + getJavaIdentifier() + ' ' + edFormalParameterList(true, addStaticLink);
+//		GeneratedJavaClass.code(line);
+//		if (type != null) {
+//			GeneratedJavaClass.debug("// Declare return value as variable");
+//			GeneratedJavaClass.code(type.toJavaType() + ' ' + "_RESULT" + '=' + type.edDefaultValue() + ';');
+//		}
+//		for (Declaration decl : labelList.labels) decl.doJavaCoding();
+//		for (Declaration decl : declarationList) decl.doJavaCoding();
+//		for (Statement stm : statements) stm.doJavaCoding();
+//		if (type != null) GeneratedJavaClass.code("return(_RESULT);");
+//		GeneratedJavaClass.code("}");
+//		Global.exitScope();
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: edFormalParameterList
@@ -724,7 +725,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			for(Parameter par:parameterList) {
 				codeBuilder.aload(0);
 				par.loadParameter(codeBuilder, parOfst++);
-				if(par.type!=null && par.type.equals(Type.LongReal) && (par.mode != Parameter.Mode.name)) parOfst++;
+//				if(par.type!=null && par.type.equals(Type.LongReal) && (par.mode != Parameter.Mode.name)) parOfst++;
+				if(par.type!=null && par.type.keyWord == Type.T_LONG_REAL && (par.mode != Parameter.Mode.name)) parOfst++;
 				codeBuilder.putfield(par.getFieldRefEntry(pool));
 			}
 
@@ -928,7 +930,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			}
 			else if (par.kind != Parameter.Kind.Simple) {
 //				typeValue = ("(" + tp + ")param");
-				Util.IERR("");
+				Util.IERR();
 			}
 			else if (par.type.isArithmeticType()) {
 				codeBuilder
@@ -955,40 +957,40 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	
 	private void buildCastObject(Parameter par,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		if(par.type.equals(Type.Integer)) {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-		}
-		else if(par.type.equals(Type.Real)) {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-		}
-		else if(par.type.equals(Type.LongReal)) {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-		}
-		else if(par.type.equals(Type.Boolean)) {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-		}
-		else if(par.type.equals(Type.Character)) {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
-		}
-		else {
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
-			codeBuilder.checkcast(par.type_toClassDesc());
+		int key = (par.type==null)?0:par.type.keyWord;
+		switch(key) {
+			case Type.T_INTEGER -> 
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
+			case Type.T_REAL ->
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
+			case Type.T_LONG_REAL ->
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
+			case Type.T_BOOLEAN ->
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
+			case Type.T_CHARACTER ->
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
+			default -> {
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+				codeBuilder.checkcast(par.type_toClassDesc());
+			}
 		}
 	}
 	
 	public void buildGetArithmeticValue(Type type,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		if(type.equals(Type.Integer)) 
+		switch(type.keyWord) {
+		case Type.T_INTEGER -> 
 			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-		else if(type.equals(Type.Real)) 
+		case Type.T_REAL ->
 			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-		else if(type.equals(Type.LongReal)) 
+		case Type.T_LONG_REAL -> 
 			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-		else if(type.equals(Type.Boolean))
+		case Type.T_BOOLEAN ->
 			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-		else if(type.equals(Type.Character))
+		case Type.T_CHARACTER ->
 			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
-		else Util.IERR("ProcedureDeclaration.buildGetArithmeticValue: FYLL PÅ TYPE: "+type);
+		default -> Util.IERR("ProcedureDeclaration.buildGetArithmeticValue: FYLL PÅ TYPE: "+type);
+		}
 	}
 
 	@Override
@@ -997,16 +999,14 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		try {
 			this.createJavaClassFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		Util.IERR("STOP: "+this.getClass().getSimpleName());
 	}
 
 	@Override
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
-//		Util.IERR("Method buildInitAttribute need a redefinition in "+this.getClass().getSimpleName());
+		// NOTHING
 	}
 
 	// ***********************************************************************************************
@@ -1106,17 +1106,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
 		oupt.writeType(type);
 //		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
 //		oupt.writeKind(declarationKind);
-		oupt.writeInt(rtBlockLevel);
+		oupt.writeShort(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
 
 		//oupt.writeObject(parameterList);
-		oupt.writeInt(parameterList.size());
+		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
 		
 		
@@ -1146,19 +1146,19 @@ public class ProcedureDeclaration extends BlockDeclaration {
 
 //		System.out.println("ProcedureDeclaration.readObject: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
 //		pro.print(2);
-//		Util.IERR("");
+//		Util.IERR();
 
-//		pro.SEQU = inpt.readInt();
+//		pro.SEQU = inpt.readShort();
 		pro.SEQU = inpt.readSEQU(pro);
 		pro.externalIdent = inpt.readString();
 		pro.type=inpt.readType();
 //		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-//		pro.declarationKind = inpt.readInt();
-		pro.rtBlockLevel = inpt.readInt();
+//		pro.declarationKind = inpt.readShort();
+		pro.rtBlockLevel = inpt.readShort();
 		pro.hasLocalClasses = inpt.readBoolean();
 		
 		//pro.parameterList=(Vector<Parameter>) inpt.readObject();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pro.parameterList.add(Parameter.readParameter(inpt));
 

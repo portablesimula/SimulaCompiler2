@@ -48,7 +48,7 @@ public final class Thunk extends DeclarationScope {
 //		this.CD_ThisClass = ClassDesc.of(Global.packetName + '.' + externalIdent);
 		this.CD_ThisClass = this.getClassDesc();
 //		printScopeChain(this);
-		if(this.declaredIn instanceof Thunk) Util.IERR("");
+		if(this.declaredIn instanceof Thunk) Util.IERR();
 		Global.setScope(this.declaredIn);
 	}
 
@@ -118,69 +118,53 @@ public final class Thunk extends DeclarationScope {
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
-//						.withFlags(ClassFile.ACC_SUPER)
-//						.withFlags(ClassFile.ACC_SUPER + ClassFile.ACC_FINAL)
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER + ClassFile.ACC_FINAL)
-//						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
 						.withSuperclass(CD.RTS_NAME)
 						.with(SignatureAttribute.of(ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<"+Type.toJVMClassType(expr.type,kind)+">;")))
 						.withMethodBody("<init>", MethodTypeDesc.ofDescriptor("("+BlockDeclaration.currentClassDesc().descriptorString()+")V"), 0,
 							codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildMethod_get(codeBuilder));
-					
-//					System.out.println("Thunk.buildClassFile: expr="+expr.getClass().getSimpleName() + "  "+expr);
 				    VariableExpression writeableVariable=expr.getWriteableVariable();
-//					System.out.println("Thunk.buildClassFile: writeableVariable="+writeableVariable);
-					
 				    if(writeableVariable!=null) {
 				    	Declaration declaredAs = writeableVariable.meaning.declaredAs;
 //				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+declaredAs.declarationKind);
 //				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+ObjectKind.edit(declaredAs.declarationKind));
-				    	
-//				    	if(declaredAs.declarationKind == ObjectKind.Procedure) writeableVariable = null;
-//				    	if(declaredAs.declarationKind == ObjectKind.MemberMethod) writeableVariable = null;
-////				    	if(declaredAs.declarationKind != ObjectKind.SimpleVariableDeclaration) writeableVariable = null;
-				    	
 				    	switch(declaredAs.declarationKind) {
-		    				case ObjectKind.ArrayDeclaration: writeableVariable = null; break; // TODO: USIKKER - SJEKK DETTE
-			    			case ObjectKind.Parameter:  break; // TODO: USIKKER - SJEKK DETTE, AVHENGIG AV PARAMETER MODE ?
-			    			
-				    		case ObjectKind.SimpleVariableDeclaration: break; // OK
-				    		case ObjectKind.Procedure:
-				    		case ObjectKind.MemberMethod:
-				    		case ObjectKind.ContextFreeMethod:
-				    			writeableVariable = null; break;
-				    		default: Util.IERR(""+ObjectKind.edit(declaredAs.declarationKind));
+		    				case ObjectKind.ArrayDeclaration -> writeableVariable = null; // TODO: USIKKER - SJEKK DETTE
+			    			case ObjectKind.Parameter ->  {} // TODO: USIKKER - SJEKK DETTE, AVHENGIG AV PARAMETER MODE ?
+				    		case ObjectKind.SimpleVariableDeclaration -> {} // OK
+				    		case ObjectKind.Procedure,
+				    		     ObjectKind.MemberMethod,
+				    		     ObjectKind.ContextFreeMethod -> writeableVariable = null;
+				    		default -> Util.IERR(ObjectKind.edit(declaredAs.declarationKind));
 				    	}
 				    }
 				    if(writeableVariable!=null) {
-				    	MethodTypeDesc MTD_put=null;
+				    	String MTD_put=null;
 				    	if(expr.type != null) {
-				    		if(expr.type.equals(Type.Integer)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Integer;)Ljava/lang/Integer;");
-				    		} else if(expr.type.equals(Type.Real)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Float;)Ljava/lang/Float;");
-				    		} else if(expr.type.equals(Type.LongReal)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Double;)Ljava/lang/Double;");
-				    		} else if(expr.type.equals(Type.Boolean)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Boolean;)Ljava/lang/Boolean;");
-				    		} else if(expr.type.equals(Type.Character)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;");
-				    		} else if(expr.type.equals(Type.Label)) {
-				    			MTD_put=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;");
-				    		} else if(expr.type.isReferenceType()) {
-				    			String CDS=expr.type.toClassDesc().descriptorString();
-				    			MTD_put=MethodTypeDesc.ofDescriptor("("+CDS+')'+CDS);
+				    		switch(expr.type.keyWord) {
+								case Type.T_INTEGER   -> MTD_put = "(Ljava/lang/Integer;)Ljava/lang/Integer;";
+					    		case Type.T_REAL      -> MTD_put = "(Ljava/lang/Float;)Ljava/lang/Float;";
+					    		case Type.T_LONG_REAL -> MTD_put = "(Ljava/lang/Double;)Ljava/lang/Double;";
+					    		case Type.T_BOOLEAN   -> MTD_put = "(Ljava/lang/Boolean;)Ljava/lang/Boolean;";
+					    		case Type.T_CHARACTER -> MTD_put = "(Ljava/lang/Character;)Ljava/lang/Character;";
+					    		case Type.T_LABEL     -> MTD_put = "(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;";
+					    		case Type.T_TEXT, Type.T_REF -> {
+					    			String CDS=expr.type.toClassDesc().descriptorString();
+					    			MTD_put = "("+CDS+')'+CDS;
+					    		}
+					    		default -> Util.IERR();
 				    		}
-				    		else Util.IERR("FYLL PÅ FLERE TYPER: "+expr.type);
+				    	
 				    		Expression beforeDot=(expr instanceof RemoteVariable rem)?rem.obj:null;
 				    		classBuilder
-				    			.withMethodBody("put", MTD_put, ClassFile.ACC_PUBLIC,
+				    			.withMethodBody("put", MethodTypeDesc.ofDescriptor(MTD_put), ClassFile.ACC_PUBLIC,
 				    				codeBuilder -> buildMethod_put(codeBuilder,beforeDot,expr))
 				    			.withMethodBody("put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;"),
 				    				ClassFile.ACC_PUBLIC + ClassFile.ACC_BRIDGE + ClassFile.ACC_SYNTHETIC,
 				    				codeBuilder -> buildMethod_put2(codeBuilder));
+				    		
 				    	}
 				    }
 					
@@ -249,19 +233,16 @@ public final class Thunk extends DeclarationScope {
 	        	expr.type.buildObjectValueOf(codeBuilder);
 			} else {
 				switch(kind) { // Parameter.Kind
-				case Parameter.Kind.Array:		expr.buildEvaluation(null,codeBuilder);
-								break;
-				case Parameter.Kind.Label:		Util.IERR("kind="+kind);
-								break;
-				case Parameter.Kind.Procedure:	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
-								break;
-				case Parameter.Kind.Simple:	expr.buildEvaluation(null,codeBuilder);
-		        				expr.type.buildObjectValueOf(codeBuilder);
-		        				break;
-				default:
+				case Parameter.Kind.Array ->		expr.buildEvaluation(null,codeBuilder);
+				case Parameter.Kind.Label ->		Util.IERR();
+				case Parameter.Kind.Procedure ->	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
+				case Parameter.Kind.Simple ->     { expr.buildEvaluation(null,codeBuilder);
+													expr.type.buildObjectValueOf(codeBuilder); }
+				default -> {
 					expr.buildEvaluation(null,codeBuilder);
 		        	expr.type.buildObjectValueOf(codeBuilder);
 					break;
+				}
 					}
 			}
 //			Util.buildSNAPSHOT2(codeBuilder, "THUNK: get RESULT "+expr);
@@ -327,21 +308,28 @@ public final class Thunk extends DeclarationScope {
 					
 			codeBuilder.aload(1); // Parameter x
 			
-			if(expr.type.equals(Type.Integer))
-				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-			else if(expr.type.equals(Type.Real))
-				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-			else if(expr.type.equals(Type.LongReal))
-				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-			else if(expr.type.equals(Type.Boolean))
-				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-			else if(expr.type.equals(Type.Character))
-				codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
+			switch(expr.type.keyWord) {
+			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
+			case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
+			case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+		}
 
-			if(expr instanceof TypeConversion tpc) {
+			if(expr instanceof TypeConversion) {
 				Type fromType = expr.type;
 				Type toType = writeableVariable.type;
-				TypeConversion.buildMayBeConvert(fromType, toType, tpc.expression, codeBuilder);
+				// NOTE: 'expr' is top of operand stack
+//				System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
+				if(fromType.isArithmeticType()) {
+					TypeConversion.buildMayBeConvert(fromType,toType, codeBuilder);
+				} else if(toType.isRefClassType()) {
+				    // return("=("+toType.toJavaType()+")("+expr+");");
+					expr.buildEvaluation(null, codeBuilder);
+//					System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
+					codeBuilder.checkcast(toType.toClassDesc());
+				}
+				else Util.IERR();
 			}
 				
 			String ident=null;
@@ -395,41 +383,42 @@ public final class Thunk extends DeclarationScope {
 			.aload(0)
 			.aload(1); // Parameter x			
 		
-		if(expr.type.equals(Type.Integer)) {
-			codeBuilder
-				.checkcast(ConstantDescs.CD_Integer)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Integer;)Ljava/lang/Integer;")));
-		} else if(expr.type.equals(Type.Real)) {
-			codeBuilder
-				.checkcast(ConstantDescs.CD_Float)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Float;)Ljava/lang/Float;")));
-		} else if(expr.type.equals(Type.LongReal)) {
-			codeBuilder
-				.checkcast(ConstantDescs.CD_Double)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Double;)Ljava/lang/Double;")));
-		} else if(expr.type.equals(Type.Boolean)) {
-			codeBuilder
-				.checkcast(ConstantDescs.CD_Boolean)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Boolean;)Ljava/lang/Boolean;")));
-		} else if(expr.type.equals(Type.Character)) {
-			codeBuilder
-				.checkcast(ConstantDescs.CD_Character)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;")));
-		} else if(expr.type.equals(Type.Label)) {
-			codeBuilder
-				.checkcast(CD.RTS_LABEL)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put",
-						MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;")));
-		
-		} else if(expr.type.isReferenceType()) {
-			ClassDesc CD=expr.type.toClassDesc();
-			String CDS=CD.descriptorString();
-			MethodTypeDesc MTD_put=MethodTypeDesc.ofDescriptor("("+CDS+')'+CDS);
-			codeBuilder
-				.checkcast(CD)
-				.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MTD_put));
+		switch(expr.type.keyWord) {
+			case Type.T_INTEGER -> 
+				codeBuilder
+					.checkcast(ConstantDescs.CD_Integer)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Integer;)Ljava/lang/Integer;")));
+			case Type.T_REAL ->
+				codeBuilder
+					.checkcast(ConstantDescs.CD_Float)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Float;)Ljava/lang/Float;")));
+			case Type.T_LONG_REAL ->
+				codeBuilder
+					.checkcast(ConstantDescs.CD_Double)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Double;)Ljava/lang/Double;")));
+			case Type.T_BOOLEAN ->
+				codeBuilder
+					.checkcast(ConstantDescs.CD_Boolean)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Boolean;)Ljava/lang/Boolean;")));
+			case Type.T_CHARACTER ->
+				codeBuilder
+					.checkcast(ConstantDescs.CD_Character)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;")));
+			case Type.T_LABEL ->
+				codeBuilder
+					.checkcast(CD.RTS_LABEL)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put",
+							MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;")));
+			case Type.T_TEXT, Type.T_REF -> {
+				ClassDesc CD=expr.type.toClassDesc();
+				String CDS=CD.descriptorString();
+				MethodTypeDesc MTD_put=MethodTypeDesc.ofDescriptor("("+CDS+')'+CDS);
+				codeBuilder
+					.checkcast(CD)
+					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MTD_put));
+			}
+			default -> Util.IERR("FYLL PÅ FLERE TYPER: "+expr.type);
 		}
-		else Util.IERR("FYLL PÅ FLERE TYPER: "+expr.type);
 		
 		codeBuilder
 			.areturn()

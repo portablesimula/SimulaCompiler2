@@ -255,7 +255,7 @@ public final class Token {
 //	}
 //
 //	public static Token readObject(ObjectInput inpt) throws IOException {
-//		int keyWord = inpt.readInt();
+//		int keyWord = inpt.readShort();
 //		Object value = inpt.readObject();
 //		return(new Token("",keyWord,value));
 //	}
@@ -272,7 +272,7 @@ public final class Token {
 //
 //	@Override
 //	public void readExternal(ObjectInput inpt) throws IOException {
-//		keyWord = inpt.readInt();
+//		keyWord = inpt.readShort();
 //		value = inpt.readObject();
 //	}
 

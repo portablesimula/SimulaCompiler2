@@ -122,7 +122,7 @@ public final class AssignmentOperation extends Expression {
 		rhs.doChecking();
 		Type fromType = rhs.type;
 		if (opr == KeyWord.ASSIGNVALUE)
-			this.textValueAssignment = toType.equals(Type.Text);
+			this.textValueAssignment = (toType.keyWord == Type.T_TEXT);
 		rhs = (Expression) TypeConversion.testAndCreate(toType, rhs);
 		this.type = toType;
 		if (this.type == null)
@@ -281,26 +281,26 @@ public final class AssignmentOperation extends Expression {
 				var.meaning.buildIdentifierAccess(false,codeBuilder);
 				arr.arrayPutElement(var,false,rhs,codeBuilder);
 				if(this.backLink == null) {
-					if(this.type.equals(Type.LongReal))
+					if(this.type.keyWord == Type.T_LONG_REAL)
 						codeBuilder.pop2();
 					else codeBuilder.pop();
 				}
 			}
-			else Util.IERR("IMPOSSIBLE");
+			else Util.IERR();
 		} else if(lhs instanceof RemoteVariable var) {
 			if(!tryRemoteArray(var, codeBuilder)) {
 				var.obj.buildEvaluation(null,codeBuilder);
 				rhs.buildEvaluation(null,codeBuilder);
 				// Prepare for multiple assignment
 				if(this.backLink != null) {
-					if(this.type.equals(Type.LongReal))
+					if(this.type.keyWord == Type.T_LONG_REAL)
 						 codeBuilder.dup2_x1();
 					else codeBuilder.dup_x1();
 				}
 				codeBuilder.putfield(var.getFieldRefEntry(pool));
 			}
 		}
-		else Util.IERR("IMPOSSIBLE");
+		else Util.IERR();
 	}
 	
 	private boolean tryRemoteArray(RemoteVariable remvar, CodeBuilder codeBuilder) {
@@ -317,7 +317,7 @@ public final class AssignmentOperation extends Expression {
 			
 			// Prepare for multiple assignment
 			if(this.backLink == null) {
-				if(this.type.equals(Type.LongReal))
+				if(this.type.keyWord == Type.T_LONG_REAL)
 					codeBuilder.pop2();
 				else codeBuilder.pop();
 			}
@@ -333,7 +333,7 @@ public final class AssignmentOperation extends Expression {
 		
 		// Prepare for multiple assignment
 		if(this.backLink != null) {
-			if(this.type.equals(Type.LongReal))
+			if(this.type.keyWord == Type.T_LONG_REAL)
 				 codeBuilder.dup2_x1();
 			else codeBuilder.dup_x1();
 		}
@@ -365,9 +365,9 @@ public final class AssignmentOperation extends Expression {
 		switch(par.kind) {
 			case Parameter.Kind.Simple:    buildSimpleParameter(par,var,assignRef,codeBuilder); break;
 			case Parameter.Kind.Array:     buildArrayParameter(par,var,assignRef,codeBuilder); break;
-			case Parameter.Kind.Label:     Util.IERR(""); break;
-			case Parameter.Kind.Procedure: Util.IERR(""); break;
-			default: Util.IERR("IMPOSSIBLE");
+			case Parameter.Kind.Label:     Util.IERR(); break;
+			case Parameter.Kind.Procedure: Util.IERR(); break;
+			default: Util.IERR();
 		}
 	}
 	
@@ -388,27 +388,29 @@ public final class AssignmentOperation extends Expression {
 			if(this.backLink == null) {
 				codeBuilder.pop();
 			} else {
-				if(par.type.equals(Type.Integer))
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Integer)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-				else if(par.type.equals(Type.Real))
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Float)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-				else if(par.type.equals(Type.LongReal))
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Double)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-				else if(par.type.equals(Type.Boolean))
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Boolean)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-				else if(par.type.equals(Type.Character))
-					codeBuilder
-						.checkcast(ConstantDescs.CD_Character)
-						.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-				else Util.IERR("FYLL PÅ TYPE: "+type);
+				switch(par.type.keyWord) {
+					case Type.T_INTEGER ->
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Integer)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
+					case Type.T_REAL ->
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Float)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
+					case Type.T_LONG_REAL ->
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Double)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+					case Type.T_BOOLEAN ->
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Boolean)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
+					case Type.T_CHARACTER ->
+						codeBuilder
+							.checkcast(ConstantDescs.CD_Character)
+							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
+					default -> Util.IERR();
+				}
 			}
 			return; // DONE !
 		} else {
@@ -418,7 +420,7 @@ public final class AssignmentOperation extends Expression {
 
 			// Prepare for multiple assignment
 			if(this.backLink != null) {
-				if(this.type.equals(Type.LongReal))
+				if(this.type.keyWord == Type.T_LONG_REAL)
 					 codeBuilder.dup2_x1();
 				else codeBuilder.dup_x1();
 			}
@@ -469,25 +471,25 @@ public final class AssignmentOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeAssignmentOperation: " + this);
 		oupt.writeKind(ObjectKind.AssignmentOperation);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
-		oupt.writeInt(opr);
+		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
 	
 	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readAssignmentOperation: ");
 		AssignmentOperation expr = new AssignmentOperation();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readInt();
+		expr.opr = inpt.readShort();
 		expr.rhs = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readAssignmentOperation: " + expr);
 		return(expr);

@@ -189,26 +189,26 @@ public final class Meaning {
 		return(pool.fieldRefEntry(CD_cls, declaredIn.getJavaIdentifier(), CD_type));
 	}
 
-	/**
-	 * Returns the inspected variable FieldRefEntry or null.
-	 * @return the inspected variable FieldRefEntry or null
-	 */
-	public FieldRefEntry getInspectedFieldRefEntry(ConstantPoolBuilder pool) {
-		if (isConnected()) {
-//			 return (((ConnectionBlock) declaredIn).getInspectedExpression());
-			ConnectionBlock connectionBlock=(ConnectionBlock)declaredIn;
-			VariableExpression inspectedVariable=connectionBlock.inspectedVariable;
-			VariableExpression inspVar=(VariableExpression)inspectedVariable;
-			SimpleVariableDeclaration inspVarDecl=(SimpleVariableDeclaration)inspVar.meaning.declaredAs;
-			System.out.println("Meaning.getInspectedFieldRefEntry: inspVarDecl: "+inspVarDecl.getClass().getSimpleName()+"  "+inspVarDecl);
-			FieldRefEntry FRE1 = inspVarDecl.getFieldRefEntry(pool);
-			System.out.println("Meaning.getInspectedFieldRefEntry: FRE1=" + inspVarDecl + "  ===>  " + FRE1);
-
-			Util.IERR("");
-			return(FRE1);
-		}
-		else return (null);
-	}
+//	/**
+//	 * Returns the inspected variable FieldRefEntry or null.
+//	 * @return the inspected variable FieldRefEntry or null
+//	 */
+//	public FieldRefEntry getInspectedFieldRefEntry(ConstantPoolBuilder pool) {
+//		if (isConnected()) {
+////			 return (((ConnectionBlock) declaredIn).getInspectedExpression());
+//			ConnectionBlock connectionBlock=(ConnectionBlock)declaredIn;
+//			VariableExpression inspectedVariable=connectionBlock.inspectedVariable;
+//			VariableExpression inspVar=(VariableExpression)inspectedVariable;
+//			SimpleVariableDeclaration inspVarDecl=(SimpleVariableDeclaration)inspVar.meaning.declaredAs;
+//			System.out.println("Meaning.getInspectedFieldRefEntry: inspVarDecl: "+inspVarDecl.getClass().getSimpleName()+"  "+inspVarDecl);
+//			FieldRefEntry FRE1 = inspVarDecl.getFieldRefEntry(pool);
+//			System.out.println("Meaning.getInspectedFieldRefEntry: FRE1=" + inspVarDecl + "  ===>  " + FRE1);
+//
+//			Util.IERR();
+//			return(FRE1);
+//		}
+//		else return (null);
+//	}
 
 	/**
 	 * Coding Utility: Edit identifier access.
@@ -218,15 +218,15 @@ public final class Meaning {
 	 */
 	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
 //		System.out.println("Meaning.buildIdentifierAccess: "+this);
-//		Util.IERR("");
+//		Util.IERR();
 		Meaning meaning=this;
-		Expression constantElement = meaning.getConstant();
-		if (constantElement != null) {
-			if (constantElement instanceof Constant constant) {
-				Util.IERR(""+constant);
-				//return (constant.toJavaCode());
-			}
-		}
+//		Expression constantElement = meaning.getConstant();
+//		if (constantElement != null) {
+//			if (constantElement instanceof Constant constant) {
+//				Util.IERR(""+constant);
+//				//return (constant.toJavaCode());
+//			}
+//		}
 		
 		
 		
@@ -247,7 +247,7 @@ public final class Meaning {
 //	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable="+inspectedVariable.getClass().getSimpleName()+"  "+inspectedVariable);
 //	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable.type="+inspectedVariable.type);
 //	 			System.out.println("Meaning.buildIdentifierAccess: inspectedVariable.identifier="+inspectedVariable.identifier);
-//				Util.IERR("");
+//				Util.IERR();
 				
 				inspectedExpression.buildEvaluation(null, codeBuilder);
 			}
@@ -256,12 +256,12 @@ public final class Meaning {
 //			System.out.println("Meaning.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
 //			System.out.println("Meaning.buildIdentifierAccess: DeclaredAs: "+declaredAs);
 //			System.out.println("Meaning.buildIdentifierAccess: DeclaredIn: "+declaredIn);
-//			Util.IERR("");
+//			Util.IERR();
 
 			String cast = meaning.declaredAs.getJavaIdentifier();
 			if (meaning.foundBehindInvisible) {
 				cast = meaning.foundIn.getJavaIdentifier();
-				Util.IERR("");
+				Util.IERR();
 			}
 	        // 0: getstatic     #17                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
 	        // 3: getfield      #21                 // Field simula/runtime/RTS_RTObject._SL:Lsimula/runtime/RTS_RTObject;
@@ -284,7 +284,7 @@ public final class Meaning {
 				}
 //				System.out.println(meaning.declaredAs);
 //				System.out.println(meaning.declaredIn);
-//				if(cast.equalsIgnoreCase("RTS_ENVIRONMENT")) Util.IERR("");
+//				if(cast.equalsIgnoreCase("RTS_ENVIRONMENT")) Util.IERR();
 			}
 			
 		} else if (!(meaning.declaredIn.declarationKind == ObjectKind.ContextFreeMethod
@@ -295,7 +295,7 @@ public final class Meaning {
 //			System.out.println("Meaning.buildIdentifierAccess: declaredAs="+this.declaredAs.getClass().getSimpleName()+"  "+this.declaredAs);
 //			System.out.println("Meaning.buildIdentifierAccess: Current Scope: "+Global.getCurrentScope().externalIdent+"  rtBlockLevel="+Global.getCurrentScope().rtBlockLevel);
 //			System.out.println("Meaning.buildIdentifierAccess: DeclaredIn Scope: "+meaning.declaredIn.externalIdent+"  rtBlockLevel="+n);
-//			Util.IERR("");
+//			Util.IERR();
 
 			// id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id; // ØM
 			if (meaning.foundBehindInvisible) {

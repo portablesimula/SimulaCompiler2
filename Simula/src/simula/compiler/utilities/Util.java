@@ -104,7 +104,15 @@ public final class Util {
 	 * Print a internal error message.
 	 * @param msg the message
 	 */
-	public static void IERR(final String msg) {
+	public static void IERR() {
+		IERR("IMPOSSIBLE");
+	}
+
+		/**
+		 * Print a internal error message.
+		 * @param msg the message
+		 */
+		public static void IERR(final String msg) {
 		String err = edLINE(": Internal error - " + msg);
 		nError++;
 		printError(err);

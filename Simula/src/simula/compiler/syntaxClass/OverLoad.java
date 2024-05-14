@@ -42,7 +42,8 @@ public final class OverLoad extends Type {
 	
 	public boolean contains(Type type) {
 		for(Type tp:this.type) {
-			if(tp.equals(type)) return(true);
+//			if(tp.equals(type)) return(true);
+			if(tp.keyWord == type.keyWord) return(true);
 		}
 		return(false);
 	}

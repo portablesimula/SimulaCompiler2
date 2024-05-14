@@ -149,7 +149,7 @@ public final class ProgramModule extends Statement {
 			StandardClass.BASICIO.declarationList.add(module);
 		
 			if(Option.verbose) Util.TRACE("ProgramModule: END NEW SimulaProgram: "+toString());
-		} catch(Throwable e) { Util.IERR("Impossible",e); }
+		} catch(Throwable e) { Util.IERR(); }
 		this.module=module;
 //		if(Option.PRINT_SYNTAX_TREE) module.printTree(0);
 	}	

@@ -78,7 +78,7 @@ public final class ConditionalExpression extends Expression {
 		condition.doChecking();
 		condition.backLink=this; // To ensure _RESULT from functions
 		Type cType = condition.type;
-		if (!cType.equals(Type.Boolean))
+		if (cType.keyWord != Type.T_BOOLEAN)
 			Util.error("ConditionalExpression: Condition is not a boolean (rather " + cType + ")");
 		thenExpression.doChecking();
 		elseExpression.doChecking();
@@ -141,8 +141,8 @@ public final class ConditionalExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalExpression: " + this);
 		oupt.writeKind(ObjectKind.ConditionalExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(condition);
@@ -153,9 +153,9 @@ public final class ConditionalExpression extends Expression {
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.condition = (Expression) inpt.readObj();

@@ -142,17 +142,17 @@ public final class StandaloneExpression extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeStandaloneExpression: " + this);
 		oupt.writeKind(ObjectKind.StandaloneExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(expression);
 	}
 
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readStandaloneExpression: ");
 		StandaloneExpression stm = new StandaloneExpression();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.expression = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("StandaloneExpression: " + stm);
 		return(stm);

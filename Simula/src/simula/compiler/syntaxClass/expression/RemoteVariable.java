@@ -122,7 +122,7 @@ public final class RemoteVariable extends Expression {
 		Type result;
 		obj.doChecking();
 		Type objType = obj.type;
-		if (objType.equals(Type.Text))
+		if (objType.keyWord == Type.T_TEXT)
 			return (doRemoteTextChecking(obj, attr));
 
 		objType.doChecking(Global.getCurrentScope()); // Nødvendig hvis TypeDeclaration er nedenfor
@@ -239,7 +239,7 @@ public final class RemoteVariable extends Expression {
 			ArrayDeclaration.arrayGetElement(type,par.getFieldIdentifier(),true,array.checkedParams,null,par.declaredIn,codeBuilder);
 		} else if(declaredAs instanceof ArrayDeclaration) {
 			array.buildEvaluation(null, codeBuilder);
-		} else Util.IERR("IMPOSSIBLE");;
+		} else Util.IERR();;
 	}
 
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
@@ -252,7 +252,7 @@ public final class RemoteVariable extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 //		System.out.println("RemoteVariable.buildEvaluation: var="+var+", backLink="+var.backLink);
-		if(obj.type.equals(Type.Text)) {
+		if(obj.type.keyWord == Type.T_TEXT) {
 			BuildProcedureCall.callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
 		} else if (callRemoteProcedure != null) {
 			BuildProcedureCall.remote(obj, callRemoteProcedure, var, backLink,codeBuilder);
@@ -271,7 +271,7 @@ public final class RemoteVariable extends Expression {
 			if (remoteAttribute.foundBehindInvisible) {
 //				String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
 //				result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();
-				Util.IERR("");
+				Util.IERR();
 			} else {
 //				result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
 				obj.buildEvaluation(null,codeBuilder);
@@ -297,8 +297,8 @@ public final class RemoteVariable extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeRemoteVariable: " + this);
 		oupt.writeKind(ObjectKind.RemoteVariable);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 //		oupt.writeObj(remoteAttribute);
@@ -312,9 +312,9 @@ public final class RemoteVariable extends Expression {
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
-//		rem.SEQU = inpt.readInt();
+//		rem.SEQU = inpt.readShort();
 		rem.SEQU = inpt.readSEQU(rem);
-		rem.lineNumber = inpt.readInt();
+		rem.lineNumber = inpt.readShort();
 		rem.type = inpt.readType();
 		rem.backLink = (SyntaxClass) inpt.readObj();
 //		rem.remoteAttribute = (Meaning) inpt.readObj();

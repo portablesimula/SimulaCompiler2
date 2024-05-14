@@ -31,13 +31,13 @@ public final class RunSimulaSample {
 //		 String name="Atkins.sim";
 //		 String name="Dates.sim";
 //		 String name="DatesTest.sim";
-		 String name="Docking.sim";    // FEILER
+//		 String name="Docking.sim";    // FEILER
 //		 String name="FittingRoom.sim";
 //		 String name="HelloWorld.sim";
 //		 String name="HexDump.sim";
 //		 String name="InfectionDisease.sim";
 //		 String name="JensensDevice.sim";
-//		 String name="LiftSimulation.sim";
+		 String name="LiftSimulation.sim";
 //		 String name="PrimeUnder.sim";
 //		 String name="Quine.sim";
 //		 String name="Sudoku.sim";

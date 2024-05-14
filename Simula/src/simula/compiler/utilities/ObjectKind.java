@@ -2,12 +2,6 @@ package simula.compiler.utilities;
 
 public class ObjectKind {
 
-	/** Null */						public static final int NULL = 0;
-	/** Object Reference */			public static final int ObjectReference = 60;
-	/** Declaration Reference */	public static final int DeclarationReference = 61;
-	/** Statement Reference */		public static final int StatementReference = 62;
-	/** Expression Reference */		public static final int ExpressionReference = 63;
-
 	/** Standard Class */		public static final int StandardClass = 1;
 	/** Connection Block */		public static final int ConnectionBlock = 2;
 	/** Compound Statement */	public static final int CompoundStatement = 3;
@@ -71,6 +65,15 @@ public class ObjectKind {
 	/** UnaryOperation */			public static final int UnaryOperation = 54;
 	/** VariableExpression */		public static final int VariableExpression = 55;
 
+	// *** ObjectReferences:
+
+	/** Null */						public static final int NULL = 0;
+	/** Object Reference */			public static final int ObjectReference = 60;
+	/** Declaration Reference */	public static final int DeclarationReference = 61;
+	/** Statement Reference */		public static final int StatementReference = 62;
+	/** Expression Reference */		public static final int ExpressionReference = 63;
+
+	/** Max Value */				public static final int MAX_VALUE = 63;
 
 	
 	public static String edit(int kind) {
@@ -132,7 +135,7 @@ public class ObjectKind {
 			case VariableExpression:		return "VariableExpression";
 
 		}
-		Util.IERR("IMPOSSIBLE "+kind);
+		Util.IERR();
 		return(null);
 	}
 

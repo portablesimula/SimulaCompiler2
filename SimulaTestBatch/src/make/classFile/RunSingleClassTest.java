@@ -54,8 +54,8 @@ public final class RunSingleClassTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-		Option.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;
@@ -199,7 +199,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst85.sim"); // OK:  Test Directfile.
 //		names.add("Separat.sim");  // OK:  Precompile this for Simtst 86.
 //		names.add("simtst86.sim"); // OK:  Simple Test of Separately Compiled Class.
-		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
+//		names.add("simtst87.sim"); // OK:  Specification of Virtual Procedures.
 //		names.add("simtst88.sim"); // OK:  Visibility of Hidden attributes.
 //		names.add("simtst89.sim"); // OK:  Test inbytefile and outbytefile.
 //		names.add("simtst90.sim"); // OK:  Test getfrac/putfrac.
@@ -264,8 +264,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
-//		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

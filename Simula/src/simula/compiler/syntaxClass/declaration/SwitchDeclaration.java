@@ -79,7 +79,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 		externalIdent = edJavaClassName();
 		for (Expression expr : switchList) {
 			expr.doChecking();
-			if(!expr.type.equals(Type.Label)) Util.error("Switch element "+expr+" is not a Label");
+			if(expr.type.keyWord != Type.T_LABEL) Util.error("Switch element "+expr+" is not a Label");
 			expr.backLink = this; // To ensure _RESULT from functions
 		}
 		VirtualSpecification virtSpec=VirtualSpecification.getVirtualSpecification(this);

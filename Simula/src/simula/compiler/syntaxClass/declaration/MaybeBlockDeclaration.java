@@ -556,78 +556,45 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 
-//		oupt.writeInt(labelList.size());
-//		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
 		LabelList.writeLabelList(labelList, oupt);
 		
 		DeclarationList decls = prep(declarationList);
-//		System.out.println("ClassDeclaration.writeObject: Write Declaration List: "+decls.size());
-		oupt.writeInt(decls.size());
+		oupt.writeShort(decls.size());
 		for(Declaration decl:decls) oupt.writeObj(decl);
 
-		oupt.writeInt(statements.size());
+		oupt.writeShort(statements.size());
 		for(Statement stm:statements) oupt.writeObj(stm);
 	}
 	
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 		Util.TRACE_INPUT("BEGIN Read "+blk);
-//		blk.SEQU = inpt.readInt();
 		blk.SEQU = inpt.readSEQU(blk);
 		blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();
 
-//		int n = inpt.readInt();
-////		System.out.println("ClassDeclaration.readObject: Read Label List: "+n);
-//		for(int i=0;i<n;i++)
-//			blk.labelList.add((LabelDeclaration) inpt.readObj());
 		blk.labelList = LabelList.readLabelList(inpt);
 
-		int n = inpt.readInt();
-//		System.out.println("ClassDeclaration.readObject: Read Declaration List: "+n);
+		int n = inpt.readShort();
 		for(int i=0;i<n;i++) {
 			Declaration decl = (Declaration) inpt.readObj();
 			blk.declarationList.add(decl);
 		}
 		
-		n = inpt.readInt();
-//		System.out.println("ClassDeclaration.readObject: Read statements List: "+n);
+		n = inpt.readShort();
 		if(n > 0) blk.statements = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
 			blk.statements.add(stm);
 		}
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
-//		Util.IERR("SJEKK DETTE");
 		return(blk);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public MaybeBlockDeclaration() { super(null); }
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		super.writeExternal(oupt);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		super.readExternal(inpt);
-//		Global.setScope(this.declaredIn);
-//	}
-//
 
 }

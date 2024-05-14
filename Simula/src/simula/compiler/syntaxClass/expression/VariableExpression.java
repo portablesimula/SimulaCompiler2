@@ -413,7 +413,7 @@ public final class VariableExpression extends Expression {
 				break;
 				
 			default:
-				Util.IERR("Variable.doChecking: Impossible - " + ObjectKind.edit(decl.declarationKind) + "  " + decl);
+				Util.IERR();
 			}
 
 		if (Option.TRACE_CHECKER)
@@ -568,7 +568,7 @@ public final class VariableExpression extends Expression {
 
 		case ObjectKind.LabelDeclaration:
 			if (rightPart != null)
-				Util.IERR("TEST DETTE -- Variable.editVariable: LabelDeclaration: rightPart=" + rightPart);
+				Util.IERR();
 			VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
 			if (virtSpec != null)
 				return (edIdentifierAccess(virtSpec.getVirtualIdentifier(), destination));
@@ -599,7 +599,7 @@ public final class VariableExpression extends Expression {
 				break;
 			case Parameter.Kind.Procedure: // Parameter Procedure
 				if (destination)
-					Util.IERR("TEST DETTE -- Variable.editVariable: Parameter Procedure: rightPart=" + rightPart);
+					Util.IERR();
 				if (inspectedVariable != null)
 					s.append(inspectedVariable.toJavaCode()).append('.');
 				if (par.mode == Parameter.Mode.value)
@@ -681,12 +681,12 @@ public final class VariableExpression extends Expression {
 
 		case ObjectKind.VirtualSpecification:
 			if (rightPart != null)
-				Util.IERR("TEST DETTE -- Variable.editVariable: VirtualSpecification: rightPart=" + rightPart);
+				Util.IERR();
 			VirtualSpecification virtual = (VirtualSpecification) decl;
 			return (CallProcedure.virtual(this, virtual, remotelyAccessed));
 
 		default:
-			Util.IERR("Variable.editVariable: Impossible - " + decl.declarationKind);
+			Util.IERR();
 		}
 		return (null);
 
@@ -785,7 +785,7 @@ public final class VariableExpression extends Expression {
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:
-				if (destination) Util.IERR("IMPOSSIBLE");
+				if (destination) Util.IERR();
 				ArrayDeclaration arr=(ArrayDeclaration)decl;
 				buildIdentifierAccess(false,codeBuilder);
 				if (this.hasArguments())
@@ -799,7 +799,7 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.LabelDeclaration:
-				if (destination) Util.IERR("IMPOSSIBLE");
+				if (destination) Util.IERR();
 //				System.out.println("VariableExpression.buildEvaluation: LabelDeclaration");
 				buildIdentifierAccess(false,codeBuilder);
 				LabelDeclaration lab=(LabelDeclaration)decl;
@@ -819,7 +819,7 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.ContextFreeMethod:
 				// Standard Library Procedure
-				if (destination) Util.IERR("IMPOSSIBLE");
+				if (destination) Util.IERR();
 				if (Util.equals(identifier, "sourceline"))
 					 Constant.buildIntConst(codeBuilder, this.lineNumber);
 				else BuildProcedureCall.callStandardProcedure(this,codeBuilder);
@@ -831,7 +831,7 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.Procedure:
 //     		case ObjectKind.ExternalProcedure:
-				if (destination) Util.IERR("IMPOSSIBLE");
+				if (destination) Util.IERR();
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (procedure.myVirtual != null)
 					 BuildProcedureCall.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
@@ -876,7 +876,7 @@ public final class VariableExpression extends Expression {
 				break;
 
 			default:
-				Util.IERR("IMPOSSIBLE");
+				Util.IERR();
 		}
 	}
 
@@ -900,7 +900,7 @@ public final class VariableExpression extends Expression {
 		case Parameter.Kind.Array: // Parameter Array
 			buildIdentifierAccess(destination,codeBuilder);
 			if (par.mode == Parameter.Mode.name) {
-				if (destination) Util.IERR("IMPOSSIBLE");
+				if (destination) Util.IERR();
 				codeBuilder
 					.getfield(par.getFieldRefEntry(pool))
 					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
@@ -913,7 +913,7 @@ public final class VariableExpression extends Expression {
 						 ArrayDeclaration.arrayPutElement(meaning,par.getFieldIdentifier(),true,this.checkedParams,rightPart,codeBuilder);
 					else ArrayDeclaration.arrayGetElement(type,par.getFieldIdentifier(),true,this.checkedParams,null,par.declaredIn,codeBuilder);
 				} else {
-					if (destination) Util.IERR("IMPOSSIBLE");
+					if (destination) Util.IERR();
 					ClassDesc owner = (inspectedVariable == null)
 							? BlockDeclaration.currentClassDesc()
 									: inspectedVariable.type.getQual().getClassDesc();
@@ -923,8 +923,8 @@ public final class VariableExpression extends Expression {
 			break;
 
 		case Parameter.Kind.Procedure: // Parameter Procedure
-			if (destination)               Util.IERR("IMPOSSIBLE");
-			if (inspectedVariable != null) Util.IERR("IMPOSSIBLE");
+			if (destination)               Util.IERR();
+			if (inspectedVariable != null) Util.IERR();
 			if (par.mode == Parameter.Mode.value)
 				Util.error("Parameter " + this + " by Value is not allowed - Rewrite Program");
 			else { // Procedure By Reference or Name.
@@ -961,7 +961,7 @@ public final class VariableExpression extends Expression {
 					case Type.T_TEXT:  codeBuilder.checkcast(CD.RTS_TXT); break;
 					case Type.T_LABEL: codeBuilder.checkcast(CD.RTS_LABEL); break;
 					case Type.T_REF:   codeBuilder.checkcast(par.type.toClassDesc(par)); break;
-					default: Util.IERR("IMPOSSIBLE");
+					default: Util.IERR();
 				}
 			}
 			break; // OK
@@ -998,8 +998,8 @@ public final class VariableExpression extends Expression {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 //		oupt.writeBoolean(CHECKED);
 		oupt.writeKind(ObjectKind.VariableExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeString(identifier);
@@ -1008,9 +1008,9 @@ public final class VariableExpression extends Expression {
 		
 		//oupt.writeObj(params);
 		if(params == null) {
-			oupt.writeInt(0);			
+			oupt.writeShort(0);			
 		} else {
-			oupt.writeInt(params.size());
+			oupt.writeShort(params.size());
 			for(Expression par:params) oupt.writeObj(par);
 		}
 //		oupt.writeObject(checkedParams);			
@@ -1021,9 +1021,9 @@ public final class VariableExpression extends Expression {
 		VariableExpression var = new VariableExpression();
 //		CHECKED=inpt.readBoolean();
 		
-//		var.SEQU = inpt.readInt();
+//		var.SEQU = inpt.readShort();
 		var.SEQU = inpt.readSEQU(var);
-		var.lineNumber = inpt.readInt();
+		var.lineNumber = inpt.readShort();
 //		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
 		var.type = inpt.readType();
 //		System.out.println("VariableExpression.readObject: type="+var.type);
@@ -1033,7 +1033,7 @@ public final class VariableExpression extends Expression {
 		var.remotelyAccessed = inpt.readBoolean();
 		
 		//params = (Vector<Expression>) inpt.readObject();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		if(n > 0) {
 			var.params = new Vector<Expression>();
 			for(int i=0;i<n;i++)

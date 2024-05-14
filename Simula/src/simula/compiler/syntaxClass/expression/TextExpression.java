@@ -132,7 +132,8 @@ public final class TextExpression extends Expression {
 		// TEXT & TEXT
 		lhs.doChecking();
 		rhs.doChecking();
-		if (!(lhs.type.equals(Type.Text) && rhs.type.equals(Type.Text))) {
+//		if (!(lhs.type.equals(Type.Text) && rhs.type.equals(Type.Text))) {
+		if (lhs.type.keyWord != Type.T_TEXT || rhs.type.keyWord != Type.T_TEXT) {
 			Util.error("Operand Type to Text Concatenation(&) is not Text: "+lhs.type+" & "+rhs.type);
 		}
 		this.type = Type.Text;
@@ -182,8 +183,8 @@ public final class TextExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeTextExpression: " + this);
 		oupt.writeKind(ObjectKind.TextExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
@@ -194,7 +195,7 @@ public final class TextExpression extends Expression {
 		Util.TRACE_INPUT("BEGIN readTextExpression: ");
 		TextExpression expr = new TextExpression();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();

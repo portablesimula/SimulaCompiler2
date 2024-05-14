@@ -127,10 +127,12 @@ public final class UnaryOperation extends Expression {
 		else if (oprator == KeyWord.NOT) {
 			buildNOT(codeBuilder);
 		} else if (oprator == KeyWord.MINUS) {
-			if(type.equals(Type.Integer)) codeBuilder.ineg();
-			else if(type.equals(Type.Real)) codeBuilder.fneg();
-			else if(type.equals(Type.LongReal)) codeBuilder.dneg();
-			else Util.IERR("IMPOSSIBLE");
+			switch(type.keyWord) {
+				case Type.T_INTEGER   -> codeBuilder.ineg();
+				case Type.T_REAL      -> codeBuilder.fneg();
+				case Type.T_LONG_REAL -> codeBuilder.dneg();
+				default -> Util.IERR();
+			}
 		}
 	}
 
@@ -174,23 +176,23 @@ public final class UnaryOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
 		oupt.writeKind(ObjectKind.UnaryOperation);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
-		oupt.writeInt(oprator);
+		oupt.writeShort(oprator);
 		oupt.writeObj(operand);
 	}
 	
 	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
 		UnaryOperation expr = new UnaryOperation();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
-		expr.oprator = inpt.readInt();
+		expr.oprator = inpt.readShort();
 		expr.operand = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readUnaryOperation: " + expr);
 		return(expr);

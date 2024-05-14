@@ -86,69 +86,16 @@ public class Type extends SyntaxClass {
 	// **************************************************************************************************
 	// *** BASIC TYPES
 	// **************************************************************************************************
-//	/**
-//	 * Simula's Integer type
-//	 */
-//	public static final Type Integer = new Type(new Token(KeyWord.INTEGER));
-//	
-//	/**
-//	 * Simula's Real type
-//	 */
-//	public static final Type Real = new Type(new Token(KeyWord.REAL));
-//
-//	/**
-//	 * Simula's Long Real type
-//	 */
-//	public static final Type LongReal = new Type(new Token(KeyWord.REAL, KeyWord.LONG));
-//	
-//	/**
-//	 * Simula's Boolean type
-//	 */
-//	public static final Type Boolean = new Type(new Token(KeyWord.BOOLEAN));
-//	
-//	/**
-//	 * Simula's Character type
-//	 */
-//	public static final Type Character = new Type(new Token(KeyWord.CHARACTER));
-//	
-//	/**
-//	 * Simula's Text type
-//	 */
-//	public static final Type Text = new Type(new Token(KeyWord.TEXT));
-//	
-//	/**
-//	 * Simula's Ref() type
-//	 */
-//	public static final Type Ref = new Type(new Token(KeyWord.REF));
-//	
-//	/**
-//	 * Simula's Ref(classIdent) type
-//	 * @param classIdent the class name
-//	 * @return a new ref(classIdent) type.
-//	 */
-//	public static final Type Ref(String classIdent) { return (new Type(classIdent)); }
-//	
-//	/**
-//	 * Simula's Procedure type
-//	 */
-//	public static final Type Procedure = new Type(new Token(KeyWord.PROCEDURE));
-//	
-//	/**
-//	 * Simula's Label type
-//	 */
-//	public static final Type Label = new Type(new Token(KeyWord.LABEL));
-//	
-//
 	/** Simula's No type */			public static final int T_VOID = 0;
-	/** Simula's Integer type */	public static final int T_INTEGER = 1001;
-	/** Simula's Real type */		public static final int T_REAL = 1002;
-	/** Simula's Long Real type */	public static final int T_LONG_REAL = 1003;
-	/** Simula's Boolean type */	public static final int T_BOOLEAN = 1004;
-	/** Simula's Character type */	public static final int T_CHARACTER = 1005;
-	/** Simula's Text type */		public static final int T_TEXT = 1006;
-	/** Simula's Ref() type */		public static final int T_REF = 1007;
-	/** Simula's Procedure type */	public static final int T_PROCEDURE = 1008;
-	/** Simula's Label type */		public static final int T_LABEL = 1009;
+	/** Simula's Integer type */	public static final int T_INTEGER = 1;
+	/** Simula's Real type */		public static final int T_REAL = 2;
+	/** Simula's Long Real type */	public static final int T_LONG_REAL = 3;
+	/** Simula's Boolean type */	public static final int T_BOOLEAN = 4;
+	/** Simula's Character type */	public static final int T_CHARACTER = 5;
+	/** Simula's Text type */		public static final int T_TEXT = 6;
+	/** Simula's Ref() type */		public static final int T_REF = 7;
+	/** Simula's Procedure type */	public static final int T_PROCEDURE = 8;
+	/** Simula's Label type */		public static final int T_LABEL = 9;
 	
 
 	/** Simula's Integer type */	public static final Type Integer = new Type(Type.T_INTEGER);
@@ -229,18 +176,16 @@ public class Type extends SyntaxClass {
 		ASSERT_SEMANTICS_CHECKED();
 		return (qual);
 	}
-	
-	/**
-	 * Returns the keyWord or the ref-identifier.
-	 * @return the keyWord or the ref-identifier
-	 */
-//	public int getKeyWord() { return(key.getKeyWord()); }
-	public int getKeyWord() { return(this.keyWord); }
-	
-	
-	public static boolean equals(Type type1,Type type2) {
-		if(type1 == null) return(type2 == null);
-		return(type1.equals(type2));
+
+	@Override
+	public boolean equals(Object obj) {
+		Type other=(Type) obj;
+		if(this.keyWord != other.keyWord) return(false);
+		if (this.classIdent == other.classIdent) return (true);
+		if (this.classIdent == null) return (false);
+		if (other.classIdent == null) return (false);
+		if (!this.classIdent.equals(other.classIdent)) return (false);
+		return (true);
 	}
 	
 	/**
@@ -248,10 +193,6 @@ public class Type extends SyntaxClass {
 	 * @return the ref-identifier or null
 	 */
 	public String getRefIdent() {
-//		if(key.getKeyWord()==KeyWord.REF) {
-//			if(key.getValue()==null) return(null);
-//			return(key.getValue().toString());
-//		}
 		if(keyWord == Type.T_REF) return(classIdent);
 		return(null); 
 	}
@@ -341,21 +282,6 @@ public class Type extends SyntaxClass {
 //		if(key.getKeyWord()==KeyWord.REF) return(true);
 		if(keyWord == Type.T_REF) return(true);
 		return(getRefIdent()!=null);
-	}
-  
-	public boolean equals(final Object obj) {
-		Type other=(Type) obj;
-//		return(this.key.equals(other.key));
-		if(this.keyWord != other.keyWord) return(false);
-		if (this.classIdent == other.classIdent)
-			return (true);
-		if (this.classIdent == null)
-			return (false);
-		if (other.classIdent == null)
-			return (false);
-		if (!this.classIdent.equals(other.classIdent))
-			return (false);
-		return (true);
 	}
   
 	/**
@@ -512,7 +438,7 @@ public class Type extends SyntaxClass {
 			case T_TEXT:		return("null");
 			case T_LABEL:		return("null");
 			case T_REF:			return("null");
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
   
@@ -531,7 +457,7 @@ public class Type extends SyntaxClass {
 			case T_TEXT:		return("RTS_TXT");
 			case T_LABEL:		return("RTS_LABEL");
 			case T_REF:			return(getJavaRefIdent());
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 	 
@@ -550,7 +476,7 @@ public class Type extends SyntaxClass {
 			case T_TEXT:		return("RTS_TXT");
 			case T_LABEL:		return("RTS_LABEL");
 			case T_REF:			return(getJavaRefIdent());
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 	
@@ -567,7 +493,7 @@ public class Type extends SyntaxClass {
 			case T_LONG_REAL:	return("RTS_LONG_REAL_ARRAY");
 			case T_TEXT:		return("RTS_TEXT_ARRAY");
 			case T_REF:			return("RTS_REF_ARRAY<"+getJavaRefIdent()+">");
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 
 	}
@@ -581,7 +507,7 @@ public class Type extends SyntaxClass {
 			case T_LONG_REAL:	return("RTS_LONG_REAL_ARRAY");
 			case T_TEXT:		return("RTS_TEXT_ARRAY");
 			case T_REF:			return("RTS_REF_ARRAY");
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 
@@ -613,14 +539,14 @@ public class Type extends SyntaxClass {
 					return("Lsimula/runtime/"+refIdent+";");
 				else return("L"+Global.packetName+"/"+refIdent+";");
 			}
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 
 	// Used by: Thunk.buildClassFile
 	public static String toJVMClassType(Type type,int kind) {
 		if(kind == Parameter.Kind.Procedure) return("Lsimula/runtime/RTS_PRCQNT;");
-		switch(type.getKeyWord()) {
+		switch(type.keyWord) {
 			case T_VOID:		return("V");
 			case T_BOOLEAN:		return("Ljava/lang/Boolean;");
 			case T_CHARACTER:	return("Ljava/lang/Character;");
@@ -638,7 +564,7 @@ public class Type extends SyntaxClass {
 					return("Lsimula/runtime/"+refIdent+";");
 				else return("L"+Global.packetName+"/"+refIdent+";");
 			}
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 
@@ -679,7 +605,7 @@ public class Type extends SyntaxClass {
 			case T_REF:			return(this.getQual().getClassDesc());
 			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
 			case T_LABEL:		return(CD.RTS_LABEL);
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 
@@ -705,7 +631,7 @@ public class Type extends SyntaxClass {
 			case T_REF:			return(this.getQual().getClassDesc());
 			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
 			case T_LABEL:		return(CD.RTS_LABEL);
-			default: Util.IERR("IMPOSSIBLE"); return null;
+			default: Util.IERR(); return null;
 		}
 	}
 
@@ -716,16 +642,16 @@ public class Type extends SyntaxClass {
 	public ClassSignature toNameClassSignature() {
 		String CSS=null;
 		switch(keyWord) {
-			case T_BOOLEAN:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;"; break;
-			case T_CHARACTER:	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;"; break;
-			case T_INTEGER:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;"; break;
-			case T_REAL:		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;"; break;
-			case T_LONG_REAL:	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;"; break;
-			case T_TEXT:		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/TXT;>;"; break;
-			case T_PROCEDURE:	CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_PRCQNT;>;"; break;
-			case T_LABEL:		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_LABEL;>;"; break;
-			case T_REF:			CSS = "Lsimula/runtime/RTS_NAME<"+this.toJVMType()+">;"; break;
-			default: Util.IERR("FYLL PÅ FLERE TYPER"); return null;
+			case T_BOOLEAN ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;";
+			case T_CHARACTER ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;";
+			case T_INTEGER ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;";
+			case T_REAL ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;";
+			case T_LONG_REAL ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;";
+			case T_TEXT ->		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/TXT;>;";
+			case T_PROCEDURE ->	CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_PRCQNT;>;";
+			case T_LABEL ->		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/RTS_LABEL;>;";
+			case T_REF ->			CSS = "Lsimula/runtime/RTS_NAME<"+this.toJVMType()+">;";
+			default -> { Util.IERR(); return null; }
 		}
 		return ClassSignature.parseFrom(CSS);
 	}
@@ -737,26 +663,26 @@ public class Type extends SyntaxClass {
 	public ClassSignature toArrayClassSignature() {
 		String CSS=null;
 		switch(keyWord) {
-			case T_BOOLEAN:		CSS = "Lsimula.runtime.RTS_BOOLEAN_ARRAY;"; break;
-			case T_CHARACTER:	CSS = "Lsimula.runtime.RTS_CHARACTER_ARRAY;"; break;
-			case T_INTEGER:		CSS = "Lsimula.runtime.RTS_INTEGER_ARRAY;"; break;
-			case T_REAL:		CSS = "Lsimula.runtime.RTS_REAL_ARRAY;"; break;
-			case T_LONG_REAL:	CSS = "Lsimula.runtime.RTS_LONG_REAL_ARRAY;"; break;
-			case T_TEXT:		CSS = "Lsimula.runtime.RTS_TEXT_ARRAY;"; break;
-			case T_REF:			CSS = "Lsimula/runtime/RTS_REF_ARRAY<"+this.toJVMType()+">;"; break;
-			default: Util.IERR("IMPOSSIBLE");
+			case T_BOOLEAN ->	CSS = "Lsimula.runtime.RTS_BOOLEAN_ARRAY;";
+			case T_CHARACTER ->	CSS = "Lsimula.runtime.RTS_CHARACTER_ARRAY;";
+			case T_INTEGER ->	CSS = "Lsimula.runtime.RTS_INTEGER_ARRAY;";
+			case T_REAL ->		CSS = "Lsimula.runtime.RTS_REAL_ARRAY;";
+			case T_LONG_REAL ->	CSS = "Lsimula.runtime.RTS_LONG_REAL_ARRAY;";
+			case T_TEXT ->		CSS = "Lsimula.runtime.RTS_TEXT_ARRAY;";
+			case T_REF ->		CSS = "Lsimula/runtime/RTS_REF_ARRAY<"+this.toJVMType()+">;";
+			default -> Util.IERR();
 		}
 		return ClassSignature.parseFrom(CSS);
 	}
 	
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {
 		switch(keyWord) {
-		case T_BOOLEAN:	  codeBuilder.invokestatic(ConstantDescs.CD_Boolean,   "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;")); break;
-		case T_CHARACTER: codeBuilder.invokestatic(ConstantDescs.CD_Character, "valueOf", MethodTypeDesc.ofDescriptor("(C)Ljava/lang/Character;")); break;
-		case T_INTEGER:	  codeBuilder.invokestatic(ConstantDescs.CD_Integer,   "valueOf", MethodTypeDesc.ofDescriptor("(I)Ljava/lang/Integer;")); break;
-		case T_REAL:	  codeBuilder.invokestatic(ConstantDescs.CD_Float,     "valueOf", MethodTypeDesc.ofDescriptor("(F)Ljava/lang/Float;")); break;
-		case T_LONG_REAL: codeBuilder.invokestatic(ConstantDescs.CD_Double,    "valueOf", MethodTypeDesc.ofDescriptor("(D)Ljava/lang/Double;")); break;
-		default: // Nothing
+		case T_BOOLEAN ->	codeBuilder.invokestatic(ConstantDescs.CD_Boolean,   "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;"));
+		case T_CHARACTER -> codeBuilder.invokestatic(ConstantDescs.CD_Character, "valueOf", MethodTypeDesc.ofDescriptor("(C)Ljava/lang/Character;"));
+		case T_INTEGER ->	codeBuilder.invokestatic(ConstantDescs.CD_Integer,   "valueOf", MethodTypeDesc.ofDescriptor("(I)Ljava/lang/Integer;"));
+		case T_REAL ->	  	codeBuilder.invokestatic(ConstantDescs.CD_Float,     "valueOf", MethodTypeDesc.ofDescriptor("(F)Ljava/lang/Float;"));
+		case T_LONG_REAL -> codeBuilder.invokestatic(ConstantDescs.CD_Double,    "valueOf", MethodTypeDesc.ofDescriptor("(D)Ljava/lang/Double;"));
+		default -> {} // Nothing
 		}
 	}
 

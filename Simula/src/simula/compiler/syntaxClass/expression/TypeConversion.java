@@ -61,8 +61,8 @@ public final class TypeConversion extends Expression {
 	 * @return piece of Java source code
 	 */
 	public static String mayBeConvert(final Type fromType, final Type toType, final String expr) {
-		if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal))
-		{ if(toType.equals(Type.Integer))
+		if(fromType.keyWord == Type.T_REAL || fromType.keyWord == Type.T_LONG_REAL) {
+			if(toType.keyWord == Type.T_INTEGER)
               return("=(int)Math.round("+expr+");");
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
@@ -76,7 +76,7 @@ public final class TypeConversion extends Expression {
 					case Type.T_INTEGER:	break; // Nothing
 					case Type.T_REAL:		codeBuilder.i2f(); break;
 					case Type.T_LONG_REAL:	codeBuilder.i2d(); break;
-					default: Util.IERR("fromType="+fromType+", toType="+toType);
+					default: Util.IERR();
 				} break;
 			case Type.T_REAL:
 				switch(toType.keyWord) {
@@ -84,7 +84,7 @@ public final class TypeConversion extends Expression {
 
 					case Type.T_REAL:		break; // Nothing
 					case Type.T_LONG_REAL:	codeBuilder.f2d(); break;
-					default: Util.IERR("fromType="+fromType+", toType="+toType);
+					default: Util.IERR();
 				} break;
 			case Type.T_LONG_REAL:
 				switch(toType.keyWord) {
@@ -94,49 +94,9 @@ public final class TypeConversion extends Expression {
 											break;
 					case Type.T_REAL:		codeBuilder.d2f(); break;
 					case Type.T_LONG_REAL:	break; // Nothing
-					default: Util.IERR("fromType="+fromType+", toType="+toType);
+					default: Util.IERR();
 				} break;
-			default: Util.IERR("fromType="+fromType+", toType="+toType);
-		}
-	}
-	public static void buildMayBeConvert(final Type fromType, final Type toType, final Expression expr, CodeBuilder codeBuilder) {
-		// NOTE: 'expr' is top of operand stack
-//		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
-		if(fromType.isArithmeticType()) {
-				buildMayBeConvert(fromType,toType, codeBuilder);
-				
-//		if(fromType.equals(Type.Integer)) {
-//			if(toType.equals(Type.Real)) codeBuilder.i2f();
-//			else if(toType.equals(Type.LongReal)) codeBuilder.i2d();
-//			
-//		} else if(fromType.equals(Type.Real) || fromType.equals(Type.LongReal)) {
-//			if(toType.equals(Type.Integer)) {
-//				// return("=(int)Math.round("+expr+");");
-//				if (fromType.equals(Type.Real)) {
-//					codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
-//				}
-//				else if (fromType.equals(Type.LongReal)) {
-//					codeBuilder
-//						.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
-//						.l2i();
-//				}
-//			}
-//			else if(toType.equals(Type.Real)) {
-//				if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
-//			}
-//			else if(toType.equals(Type.LongReal)) {
-//				if (fromType.equals(Type.Real)) codeBuilder.f2d();
-//			}
-				
-		} else if(toType.isRefClassType()) {
-	        // return("=("+toType.toJavaType()+")("+expr+");");
-			expr.buildEvaluation(null, codeBuilder);
-//			System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
-			
-			codeBuilder.checkcast(toType.toClassDesc());
-		}
-		else {
-			Util.IERR("fromType="+fromType+", toType="+toType);
+			default: Util.IERR();
 		}
 	}
 
@@ -159,13 +119,15 @@ public final class TypeConversion extends Expression {
 		if (testCastNeccessary(toType, expression)) {
 			if(expression instanceof Constant constant) {
 				Number val=(Number)constant.value;
-				if(toType.equals(Type.Integer)) {
-					if(fromType.equals(Type.Real)) val=(int)Math.round(val.floatValue());
-					else if(fromType.equals(Type.LongReal)) val=(int)Math.round(val.doubleValue());
+				switch(toType.keyWord) {
+					case Type.T_INTEGER: {
+						if(fromType.keyWord == Type.T_REAL) val=(int)Math.round(val.floatValue());
+						else if(fromType.keyWord == Type.T_LONG_REAL) val=(int)Math.round(val.doubleValue());
+					} break;
+					case Type.T_REAL: val=val.floatValue(); break;
+					case Type.T_LONG_REAL: val=val.doubleValue(); break;
+					default: Util.IERR();
 				}
-				else if(toType.equals(Type.Real)) val=val.floatValue();
-				else if(toType.equals(Type.LongReal)) val=val.doubleValue();
-				else Util.IERR("IMPOSSIBLE - TypeConversion.testAndCreate: "+expression);
 				Constant c=new Constant(toType,val); c.doChecking();
 				return(c);
 			}
@@ -242,9 +204,9 @@ public final class TypeConversion extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		String evaluated = expression.toJavaCode();
-		if (type.equals(Type.Integer)) {
+		if (type.keyWord == Type.T_INTEGER) {
 			Type fromType = expression.type;
-			if (fromType.equals(Type.Real) || fromType.equals(Type.LongReal))
+			if (fromType.keyWord == Type.T_REAL || fromType.keyWord == Type.T_LONG_REAL)
 				return("(int)Math.round(" + evaluated + ")");
 		}
 		return ("((" + type.toJavaType() + ")(" + evaluated + "))");
@@ -254,38 +216,48 @@ public final class TypeConversion extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		expression.buildEvaluation(null,codeBuilder);
-		if (type.equals(Type.Integer)) {
-			Type fromType = expression.type;
-			if (fromType.equals(Type.Real)) {
-				codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
-			}
-			else if (fromType.equals(Type.LongReal)) {
-				codeBuilder
-					.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
-					.l2i();
-			}
-		} else if (type.equals(Type.Real)) {
-			Type fromType = expression.type;
-			if (fromType.equals(Type.Integer)) codeBuilder.i2f();
-			else if (fromType.equals(Type.LongReal)) codeBuilder.d2f();
-			else if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
-				System.out.println("TypeConvesion.buildEvaluation: backLink="+this.backLink);
-				System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
-				if(!otp.contains(Type.Real)) Util.IERR(""+fromType+"  ==>  "+type);
-			}
-			else if (!fromType .equals(Type.Real)) Util.IERR(""+fromType+"  ==>  "+type);
-		} else if (type.equals(Type.LongReal)) {
-			Type fromType = expression.type;
-			if (fromType.equals(Type.Integer)) codeBuilder.i2d();
-			else if (fromType.equals(Type.Real)) codeBuilder.f2d();
-			else if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
-				System.out.println("TypeConvesion.buildEvaluation: backLink="+backLink);
-				System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
-				if(!otp.contains(Type.LongReal)) Util.IERR(""+fromType+"  ==>  "+type);
-			}
-			else if (!fromType .equals(Type.LongReal)) Util.IERR("");
-		} else {
-			codeBuilder.checkcast(type.toClassDesc());
+		Type fromType = expression.type;
+		switch(type.keyWord) {
+			case Type.T_INTEGER: 
+				switch(fromType.keyWord) {
+					case Type.T_REAL:
+						codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
+						break;
+					case Type.T_LONG_REAL:
+						codeBuilder
+							.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+							.l2i();
+						break;
+				} break;
+			
+			case Type.T_REAL:
+				switch(fromType.keyWord) {
+					case Type.T_INTEGER: codeBuilder.i2f(); break;
+					case Type.T_LONG_REAL: codeBuilder.d2f(); break;
+					default:
+						if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
+//							System.out.println("TypeConvesion.buildEvaluation: backLink="+this.backLink);
+//							System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
+							if(!otp.contains(Type.Real)) Util.IERR();
+//						} else if (!fromType .equals(Type.Real)) Util.IERR();
+						} else if (fromType.keyWord != Type.T_REAL) Util.IERR();
+				} break;
+			
+			case Type.T_LONG_REAL: {
+				switch(fromType.keyWord) {
+					case Type.T_INTEGER: codeBuilder.i2d(); break;
+					case Type.T_REAL: codeBuilder.f2d(); break;
+					default:
+						if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
+//							System.out.println("TypeConvesion.buildEvaluation: backLink="+backLink);
+//							System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
+							if(!otp.contains(Type.LongReal)) Util.IERR();
+//						} else if (!fromType .equals(Type.LongReal)) Util.IERR();
+						} else if (fromType.keyWord != Type.T_LONG_REAL) Util.IERR();
+				}
+			} break;
+			
+			default: codeBuilder.checkcast(type.toClassDesc());
 		}
 	}
 
@@ -308,8 +280,8 @@ public final class TypeConversion extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeTypeConversion: " + this);
 		oupt.writeKind(ObjectKind.TypeConversion);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(expression);
@@ -318,9 +290,9 @@ public final class TypeConversion extends Expression {
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTypeConversion: ");
 		TypeConversion expr = new TypeConversion();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.expression = (Expression) inpt.readObj();

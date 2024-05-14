@@ -158,7 +158,7 @@ public final class ObjectRelation extends Expression {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IS is always FALSE
 			return ("_IS(" + lhs.get() + "," + classDeclaration.getJavaIdentifier() + ".class)");
 		} else {
-			Util.IERR("Impossible");
+			Util.IERR();
 			return ("");
 		}
 	}
@@ -174,7 +174,7 @@ public final class ObjectRelation extends Expression {
 		} else if(opr == KeyWord.IN) {
 			lhs.buildEvaluation(null,codeBuilder);
 			codeBuilder.instanceof_(classDeclaration.getClassDesc());
-		} else Util.IERR(""+opr);
+		} else Util.IERR();
 	}
 
 	@Override
@@ -195,25 +195,25 @@ public final class ObjectRelation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeObjectRelation: " + this);
 		oupt.writeKind(ObjectKind.ObjectRelation);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
-		oupt.writeInt(opr);
+		oupt.writeShort(opr);
 		oupt.writeString(classIdentifier);
 	}
 	
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readObjectRelation: ");
 		ObjectRelation expr = new ObjectRelation();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readInt();
+		expr.opr = inpt.readShort();
 		expr.classIdentifier = inpt.readString();
 		Util.TRACE_INPUT("readObjectRelation: " + expr);
 		return(expr);

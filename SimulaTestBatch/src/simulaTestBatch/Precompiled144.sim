@@ -8,9 +8,16 @@ external class SimulaTest;
 
 SimulaTest class Precompiled144;
 begin
-	text array facit(0:8);
+	text array facit(0:14);
 	integer traceCase;
 	ref(A) x; integer K;
+	
+	integer iConst = 7531;
+	real rConst = 3.14;
+	long real lrConst = 4.13;
+	character cConst = 'Z';
+	text tConst = "AbraCaDabra";
+	boolean bConst = true;
 	
 	   
    procedure trace(msg); text msg;
@@ -45,7 +52,13 @@ begin
 	facit(5):-"TEST-5: x in B";
 	facit(6):-"TEST-6: In B with N = 567";
 	facit(7):-"At Precompiled'END";
-	facit(8):-"At Main'END with K = 432";
+	facit(8):-"Check iConst = 7531";
+	facit(9):-"Check rConst = 3.140";
+	facit(10):-"Check lrConst = 4.130";
+	facit(11):-"Check cConst = Z";
+	facit(12):-"Check tConst = AbraCaDabra";
+	facit(13):-"Check bConst = true";
+	facit(14):-"At Main'END with K = 432";
 	
 	trace("At START");
 	x :- new B;

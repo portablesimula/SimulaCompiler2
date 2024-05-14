@@ -134,7 +134,7 @@ public final class BuildProcedureCall {
 		} else if(procedure.declarationKind==ObjectKind.ContextFreeMethod) {
 			// Call Remote Method
 			//return(asRemoteMethod(obj,procedure,func));
-			Util.IERR("IMPOSSIBLE");
+			Util.IERR();
 		} else if(procedure.declarationKind==ObjectKind.MemberMethod) {
 			// Call Remote Method
 			asRemoteMethod(obj,procedure,func,codeBuilder);
@@ -185,7 +185,7 @@ public final class BuildProcedureCall {
 				if(backLink == null) codeBuilder.pop();
 			}
 		} else
-			Util.IERR("IMPOSSIBLE");
+			Util.IERR();
 	}
 
 
@@ -340,7 +340,7 @@ public final class BuildProcedureCall {
 			if(pro.type != null && variable.backLink == null)
 				codeBuilder.pop();
 		} else
-			Util.IERR("IMPOSSIBLE");
+			Util.IERR();
 	}
 
 	// ********************************************************************
@@ -461,11 +461,9 @@ public final class BuildProcedureCall {
 			prepareForValueType(variable, codeBuilder);
 
 	    	VariableExpression inspectedVariable = variable.meaning.getInspectedVariable();
-			String id = inspectedVariable.getJavaIdentifier();
-			FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),id, inspectedVariable.type.toClassDesc());
 			codeBuilder
 				.aload(0)
-				.getfield(FRE)
+				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), inspectedVariable.getJavaIdentifier(), inspectedVariable.type.toClassDesc()))
 				.invokevirtual(pool.methodRefEntry(meaning.declaredIn.getClassDesc(),
 					ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
 	        
@@ -475,10 +473,8 @@ public final class BuildProcedureCall {
 			if(prc.type != null && variable.backLink != null) {
 //				 codeBuilder.getfield(prc.getResultFieldRefEntry(codeBuilder.constantPool()));
 			} else codeBuilder.pop();
-
-			
-//	    	Util.IERR(""+inspectedVariable);
 		    return;
+		    
 	    } else if(!remotelyAccessed) {
 //		    String staticLink=variable.meaning.edQualifiedStaticLink();
 //	        ident=staticLink+"."+ident;
@@ -569,20 +565,30 @@ public final class BuildProcedureCall {
 							actualParameter.doChecking();
 						}
 					}
-					else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
-					else if(decl instanceof Parameter ppar) kind=ppar.kind;
-					else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
-					else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
-					else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
-					else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
-					else Util.IERR("Flere sånne tilfeller ???");
+//					else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
+//					else if(decl instanceof Parameter ppar) kind=ppar.kind;
+//					else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
+//					else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
+//					else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
+//					else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
+//					else Util.IERR("Flere sånne tilfeller ???");
+					switch(decl.declarationKind) {
+						case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
+						case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
+						case ObjectKind.Procedure -> kind=Parameter.Kind.Procedure;
+						case ObjectKind.ContextFreeMethod -> kind=Parameter.Kind.Simple;
+						case ObjectKind.ArrayDeclaration -> kind=Parameter.Kind.Array;
+						case ObjectKind.LabelDeclaration -> kind=Parameter.Kind.Label;
+						case ObjectKind.Class -> kind=Parameter.Kind.Simple; // Error Recovery
+						default -> Util.IERR("Flere sånne tilfeller ??? " + ObjectKind.edit(decl.declarationKind));
+					}
 				}
 					
 				int mode=Parameter.Mode.name; // NOTE: ALL PARAMETERS BY'NAME !!!
 				if(procedureSpec!=null) {
 					Parameter p = procedureSpec.parameterList.get(i);
 					mode = p.mode;
-//					Util.IERR("");
+//					Util.IERR();
 				}
 //				s.append(doParameterTransmition(formalType,kind,mode,actualParameter));
 //				s.append(')');
@@ -739,17 +745,17 @@ public final class BuildProcedureCall {
 //	    p_SFD.CPF().setPar(new RTS_NAME<Integer>(){ public Integer get() { return(1); } })._ENT();
 		if(mode==0) { // Simple Type/Ref/Text by Default
 //		  	s.append(apar.toJavaCode());
-			Util.IERR("");
+			Util.IERR();
 		} else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value
-		        if(formalType.equals(Type.Text)) {
+		        if(formalType.keyWord == Type.T_TEXT) {
 //		    	     s.append("copy(").append(apar.toJavaCode()).append(')');
-		        	Util.IERR("");
+		        	Util.IERR();
 		        } else {
 //		        	s.append(apar.toJavaCode());
 		        	apar.buildEvaluation(null, codeBuilder);
 		        	apar.type.buildObjectValueOf(codeBuilder);
 		        }
-		} else if(formalType.equals(Type.Label)) {
+		} else if(formalType.keyWord == Type.T_LABEL) {
 //		    	String labQuant=apar.toJavaCode();
 //		    	if(mode==Parameter.Mode.name) {
 //			    	  s.append("new RTS_NAME<RTS_LABEL>()");
@@ -757,7 +763,7 @@ public final class BuildProcedureCall {
 //				      s.append(" }");
 //			    }
 //			    else s.append(labQuant);
-			Util.IERR("");
+			Util.IERR();
 		} else { // Simple Type/Ref/Text by Name
 			Thunk.buildInvoke(kind, apar, codeBuilder);
 		}
@@ -778,7 +784,7 @@ public final class BuildProcedureCall {
 	private static void doArrayParameter(final Type formalType,final int mode,final Expression apar,CodeBuilder codeBuilder) {
 		if(mode==Parameter.Mode.value) {
 //			s.append(apar.toJavaCode()).append(".COPY()");
-			Util.IERR("");
+			Util.IERR();
 		}
 		else if(mode==Parameter.Mode.name) {
 //			s.append("new RTS_NAME<RTS_ARRAY>()");
@@ -788,7 +794,7 @@ public final class BuildProcedureCall {
 			Thunk.buildInvoke(Parameter.Kind.Array, apar, codeBuilder);
 		} else {
 //			s.append(apar.toJavaCode());
-			Util.IERR("");
+			Util.IERR();
 		}
 	}
 	
@@ -863,7 +869,7 @@ public final class BuildProcedureCall {
 				if(procedure.myVirtual!=null) {
 //    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;
 //    				procQuant=staticLink+'.'+vir.getVirtualIdentifier();
-    				Util.IERR("");
+    				Util.IERR();
     	    	}
     			codeBuilder
     				.new_(CD.RTS_PRCQNT)
@@ -875,19 +881,19 @@ public final class BuildProcedureCall {
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V")));
 			} else if (decl instanceof VirtualSpecification vir) {
 //				procQuant=staticLink+'.'+vir.getVirtualIdentifier();
-				Util.IERR("");
+				Util.IERR();
 			} else Util.IERR("Flere sånne(1) tilfeller ???  QUAL="+decl.getClass().getSimpleName());
 	    } else if (apar instanceof RemoteVariable rem) {
 			Declaration decl=rem.var.meaning.declaredAs;
 			ClassDesc procIdent = null;
 			if (decl instanceof VirtualSpecification vir) {
 //				return(staticLink+'.'+vir.getVirtualIdentifier());
-				Util.IERR("");
+				Util.IERR();
 			} else if (decl instanceof ProcedureDeclaration procedure) {
     	    	if(procedure.myVirtual!=null) {
 //    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;
 //    				return(staticLink+'.'+vir.getVirtualIdentifier());
-    				Util.IERR("");
+    				Util.IERR();
     	    	}
     	    	procIdent = procedure.getClassDesc();
 			} else Util.IERR("Flere sånne(2) tilfeller ???  QUAL="+decl.getClass().getSimpleName());

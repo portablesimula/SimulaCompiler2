@@ -183,62 +183,56 @@ public final class ArithmeticExpression extends Expression {
 			Util.TRACE("BEGIN ArithmeticOperation" + toString() + ".doChecking - Current Scope Chain: "
 					+ Global.getCurrentScope().edScopeChain());
 		switch (opr) {
-		case KeyWord.PLUS:
-		case KeyWord.MINUS:
-		case KeyWord.MUL: {
-			// ArithmeticExpression
-			lhs.doChecking();
-			rhs.doChecking();
-			Type type1 = lhs.type;
-			Type type2 = rhs.type;
-			this.type = Type.arithmeticTypeConversion(type1, type2);
-			lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
-			rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
-			if (this.type == null)
-				Util.error("Incompatible types in binary operation: " + toString());
-			break;
-		}
-		case KeyWord.DIV: {
-			// Real Division
-			// The operator / denotes real division.
-			// Any operand of integer type is converted before the operation.
-			// Division by zero constitutes an error.
-			lhs.doChecking();
-			rhs.doChecking();
-			Type type1 = lhs.type;
-			Type type2 = rhs.type;
-			this.type = Type.arithmeticTypeConversion(type1, type2);
-			if (this.type.equals(Type.Integer))
-				this.type = Type.Real;
-			lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
-			rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
-			if (this.type == null)
-				Util.error("Incompatible types in binary operation: " + toString());
-			break;
-		}
-		case KeyWord.INTDIV: { // Integer Division
-			lhs.doChecking();
-			rhs.doChecking();
-			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer)))
-				Util.error("Incompatible types in binary operation: " + toString());
-			this.type = Type.Integer;
-			lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
-			rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
-			break;
-		}
-		case KeyWord.EXP: {
-			lhs.doChecking();
-			rhs.doChecking();
-			if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer))) {
-				this.type = Type.LongReal; // Deviation from Simula Standard
+			case KeyWord.PLUS, KeyWord.MINUS, KeyWord.MUL -> {
+				// ArithmeticExpression
+				lhs.doChecking();
+				rhs.doChecking();
+				Type type1 = lhs.type;
+				Type type2 = rhs.type;
+				this.type = Type.arithmeticTypeConversion(type1, type2);
 				lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
 				rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
-			} else
+				if (this.type == null)
+					Util.error("Incompatible types in binary operation: " + toString());
+			}
+			case KeyWord.DIV -> {
+				// Real Division
+				// The operator / denotes real division.
+				// Any operand of integer type is converted before the operation.
+				// Division by zero constitutes an error.
+				lhs.doChecking();
+				rhs.doChecking();
+				Type type1 = lhs.type;
+				Type type2 = rhs.type;
+				this.type = Type.arithmeticTypeConversion(type1, type2);
+				if (this.type.keyWord == Type.T_INTEGER)
+					this.type = Type.Real;
+				lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
+				rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
+				if (this.type == null)
+					Util.error("Incompatible types in binary operation: " + toString());
+			}
+			case KeyWord.INTDIV -> { // Integer Division
+				lhs.doChecking();
+				rhs.doChecking();
+				if ((lhs.type.keyWord != Type.T_INTEGER) || (rhs.type.keyWord != Type.T_INTEGER))
+					Util.error("Incompatible types in binary operation: " + toString());
 				this.type = Type.Integer;
-			break;
-		}
-		default:
-			Util.IERR("Impossible");
+				lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
+				rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
+			}
+			case KeyWord.EXP -> {
+				lhs.doChecking();
+				rhs.doChecking();
+//				if ((!lhs.type.equals(Type.Integer)) || (!rhs.type.equals(Type.Integer))) {
+				if ((lhs.type.keyWord != Type.T_INTEGER) || (rhs.type.keyWord != Type.T_INTEGER)) {
+					this.type = Type.LongReal; // Deviation from Simula Standard
+					lhs = (Expression) TypeConversion.testAndCreate(this.type, lhs);
+					rhs = (Expression) TypeConversion.testAndCreate(this.type, rhs);
+				} else
+					this.type = Type.Integer;
+			}
+			default -> Util.IERR();
 		}
 		if (Option.TRACE_CHECKER)
 			Util.TRACE("END ArithmeticOperation" + toString() + ".doChecking - Result type=" + this.type);
@@ -260,48 +254,47 @@ public final class ArithmeticExpression extends Expression {
 			// LongReal: r2=Math.pow(r1,e);
 			// Integer:  k=_IPOW(i,j);
 			lhs.buildEvaluation(null,codeBuilder);
-			if(type.equals(Type.Integer)) {
+			if(type.keyWord == Type.T_INTEGER) {
 				rhs.buildEvaluation(null,codeBuilder);
 				codeBuilder.invokestatic(BlockDeclaration.currentClassDesc(), "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
 			} else {
-				if(type.equals(Type.Real)) codeBuilder.f2d();
+				if(type.keyWord == Type.T_REAL) codeBuilder.f2d();
 				rhs.buildEvaluation(null,codeBuilder);
-				if(type.equals(Type.Real)) codeBuilder.f2d();
+				if(type.keyWord == Type.T_REAL) codeBuilder.f2d();
 				codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "pow", MethodTypeDesc.ofDescriptor("(DD)D"));
-				if(type.equals(Type.Real)) codeBuilder.d2f();
+				if(type.keyWord == Type.T_REAL) codeBuilder.d2f();
 			}
 			return;
 		}
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 		switch(type.keyWord) {
-			case Type.T_INTEGER:
+			case Type.T_INTEGER -> {
 				switch (opr) {
-					case KeyWord.PLUS:   codeBuilder.iadd(); break;
-					case KeyWord.MINUS:  codeBuilder.isub(); break;
-					case KeyWord.MUL:    codeBuilder.imul(); break;
-					case KeyWord.DIV:    codeBuilder.idiv(); break;
-					case KeyWord.INTDIV: codeBuilder.idiv(); break;
-					default:
-					Util.IERR("IMPOSSIBLE");
-				} break;
-			case Type.T_REAL:
+					case KeyWord.PLUS ->   codeBuilder.iadd();
+					case KeyWord.MINUS ->  codeBuilder.isub();
+					case KeyWord.MUL ->    codeBuilder.imul();
+					case KeyWord.DIV ->    codeBuilder.idiv();
+					case KeyWord.INTDIV -> codeBuilder.idiv();
+					default -> Util.IERR();
+				} }
+			case Type.T_REAL -> {
 				switch(opr) {
-					case KeyWord.PLUS:  codeBuilder.fadd(); break;
-					case KeyWord.MINUS: codeBuilder.fsub(); break;
-					case KeyWord.MUL:   codeBuilder.fmul(); break;
-					case KeyWord.DIV:   codeBuilder.fdiv(); break;
-					default: Util.IERR("IMPOSSIBLE: "+opr);
-				} break;
-			case Type.T_LONG_REAL:
+					case KeyWord.PLUS ->  codeBuilder.fadd();
+					case KeyWord.MINUS -> codeBuilder.fsub();
+					case KeyWord.MUL ->   codeBuilder.fmul();
+					case KeyWord.DIV ->   codeBuilder.fdiv();
+					default -> Util.IERR();
+				} }
+			case Type.T_LONG_REAL -> {
 				switch(opr) {
-					case KeyWord.PLUS:  codeBuilder.dadd(); break;
-					case KeyWord.MINUS: codeBuilder.dsub(); break;
-					case KeyWord.MUL:   codeBuilder.dmul(); break;
-					case KeyWord.DIV:   codeBuilder.ddiv(); break;
-					default: Util.IERR("IMPOSSIBLE: "+opr);
-				} break;
-			default: Util.IERR("IMPOSSIBLE");
+					case KeyWord.PLUS ->  codeBuilder.dadd();
+					case KeyWord.MINUS -> codeBuilder.dsub();
+					case KeyWord.MUL ->   codeBuilder.dmul();
+					case KeyWord.DIV ->   codeBuilder.ddiv();
+					default -> Util.IERR();
+				} }
+			default -> Util.IERR();
 		}
 	}
 
@@ -310,7 +303,7 @@ public final class ArithmeticExpression extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		switch (opr) {
 		case KeyWord.EXP: {
-			if (this.type.equals(Type.Integer))
+			if (this.type.keyWord == Type.T_INTEGER)
 				return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
 			else
 				return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
@@ -342,25 +335,25 @@ public final class ArithmeticExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeArithmeticExpression: " + this);
 		oupt.writeKind(ObjectKind.ArithmeticExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
-		oupt.writeInt(opr);
+		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
 	
 	public static ArithmeticExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArithmeticExpression: ");
 		ArithmeticExpression expr = new ArithmeticExpression();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readInt();
+		expr.opr = inpt.readShort();
 		expr.rhs = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readArithmeticExpression: " + expr);
 		return(expr);

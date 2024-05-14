@@ -95,26 +95,27 @@ public final class Constant extends Expression {
     static Constant evaluate(final int opr,final Number rhn) { 
     	Type type=getType(rhn);
 		Number result=null;
-		if(type.equals(Type.Integer)) {
-			switch(opr) {
-	        	case KeyWord.PLUS: result=rhn.intValue();
-	        	case KeyWord.MINUS: result= - rhn.intValue(); break;
-	        	default:
-			}
-		} else if(type.equals(Type.Real)) {
+		switch(type.keyWord) {
+			case Type.T_INTEGER -> {
+				switch(opr) {
+		        	case KeyWord.PLUS: result=rhn.intValue(); break;
+		        	case KeyWord.MINUS: result= - rhn.intValue(); break;
+		        	default:
+				} }
+			case Type.T_REAL -> {
 			switch(opr) {
         		case KeyWord.PLUS: result=rhn.floatValue(); break;
         		case KeyWord.MINUS: result= - rhn.floatValue(); break;
         		default:
-			}
-		} else if(type.equals(Type.LongReal)) {
+			} }
+			case Type.T_LONG_REAL -> {
 			switch(opr) {
 				case KeyWord.PLUS: result=rhn.doubleValue(); break;
 				case KeyWord.MINUS: result= - rhn.doubleValue(); break;
 				default:
-			}
+			} }
 		}
-		if(result==null) Util.IERR("Impossible");
+		if(result==null) Util.IERR();
 		return(new Constant(type,result));
     }
   
@@ -127,40 +128,42 @@ public final class Constant extends Expression {
      */
     static Constant evaluate(final Number lhn,final int opr,final Number rhn) { 
     	Type type=Type.arithmeticTypeConversion(getType(lhn),getType(rhn));
-		if(opr==KeyWord.DIV && type.equals(Type.Integer)) type=Type.Real;
+		if(opr==KeyWord.DIV && type.keyWord == Type.T_INTEGER) type=Type.Real;
 		Number result=null;
-		if(type.equals(Type.Integer)) {
-			switch(opr) {
-        		case KeyWord.PLUS   -> result=lhn.longValue() + rhn.longValue();
-        		case KeyWord.MINUS  -> result=lhn.longValue() - rhn.longValue();
-        		case KeyWord.MUL    -> result=lhn.longValue() * rhn.longValue();
-        		case KeyWord.INTDIV -> result=lhn.longValue() / rhn.longValue();
-        		case KeyWord.EXP    -> result=Util.IPOW(lhn.longValue(),rhn.longValue());
-        		default     -> Util.IERR("Unexpected value: " + opr);
+		switch(type.keyWord) {
+			case Type.T_INTEGER -> {
+				switch(opr) {
+	        		case KeyWord.PLUS   -> result=lhn.longValue() + rhn.longValue();
+	        		case KeyWord.MINUS  -> result=lhn.longValue() - rhn.longValue();
+	        		case KeyWord.MUL    -> result=lhn.longValue() * rhn.longValue();
+	        		case KeyWord.INTDIV -> result=lhn.longValue() / rhn.longValue();
+	        		case KeyWord.EXP    -> result=Util.IPOW(lhn.longValue(),rhn.longValue());
+	        		default     -> Util.IERR();
+				}
+				if(result.longValue() > Integer.MAX_VALUE || result.longValue() < Integer.MIN_VALUE)
+					Util.error("Arithmetic overflow: "+lhn+' '+opr+' '+rhn);
+				result=(int) result.longValue();
 			}
-			if(result.longValue() > Integer.MAX_VALUE || result.longValue() < Integer.MIN_VALUE)
-				Util.error("Arithmetic overflow: "+lhn+' '+opr+' '+rhn);
-			result=(int) result.longValue();
-		} else if(type.equals(Type.Real)) {
+			case Type.T_REAL -> {
 			switch(opr) {
         		case KeyWord.PLUS  -> result=lhn.floatValue() + rhn.floatValue();
         		case KeyWord.MINUS -> result=lhn.floatValue() - rhn.floatValue();
         		case KeyWord.MUL   -> result=lhn.floatValue() * rhn.floatValue();
         		case KeyWord.DIV   -> result=lhn.floatValue() / rhn.floatValue();
         		case KeyWord.EXP   -> result=Math.pow(lhn.floatValue(),rhn.floatValue());
-        		default    -> Util.IERR("Unexpected value: " + opr);
-			}
-		} else if(type.equals(Type.LongReal)) {
+        		default    -> Util.IERR();
+			} }
+			case Type.T_LONG_REAL -> {
 			switch(opr) {
 				case KeyWord.PLUS  -> result=lhn.doubleValue() + rhn.doubleValue();
 				case KeyWord.MINUS -> result=lhn.doubleValue() - rhn.doubleValue();
 				case KeyWord.MUL   -> result=lhn.doubleValue() * rhn.doubleValue();
 				case KeyWord.DIV   -> result=lhn.doubleValue() / rhn.doubleValue();
 				case KeyWord.EXP   -> result=Math.pow(lhn.doubleValue(),rhn.doubleValue());
-        		default    -> Util.IERR("Unexpected value: " + opr);
-			}
+        		default    -> Util.IERR();
+			} }
 		}
-		if(result==null) Util.IERR("Impossible");
+		if(result==null) Util.IERR();
 		return(new Constant(type,result));
     }
     
@@ -182,23 +185,25 @@ public final class Constant extends Expression {
 	@Override
 	public String toJavaCode() {
 		//ASSERT_SEMANTICS_CHECKED(); // ØM: Ad'Hoc
-		if(type.equals(Type.Text))
-		{ if(value==null) return("null");
-		  String val=value.toString();
-          val=encode(val);
-		  return("new RTS_TXT(\""+val+"\")");
+		switch(type.keyWord) {
+			case Type.T_TEXT -> {
+				if(value==null) return("null");
+				String val=value.toString();
+				val=encode(val);
+				return "new RTS_TXT(\""+val+"\")";
+			}
+			case Type.T_CHARACTER -> {
+				char charValue=((Character)value).charValue();
+				if(charValue=='\\') return("'\\\\'");
+				int intValue=(int)charValue;
+				if(intValue!='\'' && intValue>32 && intValue<127) return("'"+value+"'");
+				return "((char)"+intValue+')';
+			}
+			case Type.T_INTEGER -> { return ""+((Number)value).intValue(); }
+			case Type.T_REAL    -> { return ""+((Number)value).floatValue()+'f'; }
+			case Type.T_LONG_REAL -> { return ""+((Number)value).doubleValue()+'d'; }
+			default -> { return ""+value; }
 		}
-		if(type.equals(Type.Character)) {
-			char charValue=((Character)value).charValue();
-			if(charValue=='\\') return("'\\\\'");
-			int intValue=(int)charValue;
-			if(intValue!='\'' && intValue>32 && intValue<127) return("'"+value+"'");
-			return("((char)"+intValue+')');
-		}
-		if(type.equals(Type.Integer))  return (""+((Number)value).intValue());
-		if(type.equals(Type.Real))     return (""+((Number)value).floatValue()+'f');
-		if(type.equals(Type.LongReal)) return (""+((Number)value).doubleValue()+'d');
-		return (""+value);
 	}
 	
 	/**
@@ -251,48 +256,39 @@ public final class Constant extends Expression {
 		if(this.value==null)
 			codeBuilder.aconst_null();
 		else switch(type.keyWord) {
-			case Type.T_BOOLEAN:
-				buildIntConst(codeBuilder, (boolean) value);
-				break;
+			case Type.T_BOOLEAN -> buildIntConst(codeBuilder, (boolean) value);
+			
+			case Type.T_CHARACTER -> buildIntConst(codeBuilder, (int)((char)value));
 					
-			case Type.T_INTEGER:
-				if(value instanceof Long) {
-					Long i=(Long)value;
-					buildIntConst(codeBuilder, i.intValue());
-				} else {
-					Integer i = (Integer) value;
-					buildIntConst(codeBuilder, i);
-				}
-				break;
+			case Type.T_INTEGER -> {
+				Number i = (Number) value;
+				buildIntConst(codeBuilder, i.intValue());
+			}
 					
-			case Type.T_CHARACTER:
-				buildIntConst(codeBuilder, (int)((char)value));
-				break;
-					
-			case Type.T_REAL:
-				float f=(float) value;
-				if(f==0) codeBuilder.fconst_0();
-				else if(f==1) codeBuilder.fconst_1();
-				else if(f==2) codeBuilder.fconst_2();
+			case Type.T_REAL -> {
+				float f = (float) value;
+				if (f == 0)		 codeBuilder.fconst_0();
+				else if (f == 1) codeBuilder.fconst_1();
+				else if (f == 2) codeBuilder.fconst_2();
 				else codeBuilder.ldc(pool.floatEntry(f));
-				break;
+			}
 					
-			case Type.T_LONG_REAL:
+			case Type.T_LONG_REAL -> {
 				double d=(double) value;
-				if(d==0) codeBuilder.dconst_0();
-				else if(d==1) codeBuilder.dconst_1();
+				if(d == 0) codeBuilder.dconst_0();
+				else if(d == 1) codeBuilder.dconst_1();
 				else codeBuilder.ldc(pool.doubleEntry(d));
-				break;
+			}
 					
-			case Type.T_TEXT:
+			case Type.T_TEXT -> {
 				codeBuilder
 					.new_(CD.RTS_TXT)
 					.dup()
 					.ldc(pool.stringEntry((String) value))
 					.invokespecial(pool.methodRefEntry(CD.RTS_TXT, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
-				break;
+			}
 				
-			default: Util.IERR("IMPOSSIBLE");
+			default -> Util.IERR();
 		}
 	}
 
@@ -302,24 +298,26 @@ public final class Constant extends Expression {
 	
 	public static void buildIntConst(CodeBuilder codeBuilder, int i) {
 		switch(i) {
-			case 0: codeBuilder.iconst_0(); break;
-			case 1: codeBuilder.iconst_1(); break;
-			case 2: codeBuilder.iconst_2(); break;
-			case 3: codeBuilder.iconst_3(); break;
-			case 4: codeBuilder.iconst_4(); break;
-			case 5: codeBuilder.iconst_5(); break;
-			default: // bipush, sipush or ldc
-				if(i<Byte.MAX_VALUE && i>Byte.MIN_VALUE) codeBuilder.bipush(i);
-				else if(i<Short.MAX_VALUE && i>Short.MIN_VALUE) codeBuilder.sipush(i);
-				else codeBuilder.ldc(codeBuilder.constantPool().intEntry(i));
+			case 0 -> codeBuilder.iconst_0();
+			case 1 -> codeBuilder.iconst_1();
+			case 2 -> codeBuilder.iconst_2();
+			case 3 -> codeBuilder.iconst_3();
+			case 4 -> codeBuilder.iconst_4();
+			case 5 -> codeBuilder.iconst_5();
+			default -> { // bipush, sipush or ldc
+				if (i < Byte.MAX_VALUE && i > Byte.MIN_VALUE)
+					codeBuilder.bipush(i);
+				else if (i < Short.MAX_VALUE && i > Short.MIN_VALUE)
+					codeBuilder.sipush(i);
+				else
+					codeBuilder.ldc(codeBuilder.constantPool().intEntry(i));
+			}
 		}
 	}
 
 	@Override
 	public String toString() {
-//		String val=value==null?"null":(value.getClass().getSimpleName()+'(' + value+')');
-//		return("CONSTANT("+type+','+val+')');
-		if(type != null && type.equals(Type.Text)) return("\""+value+'"');
+		if(type != null && type.keyWord == Type.T_TEXT) return("\""+value+'"');
 		return("Constant type="+type+", value="+value);
 	}
 
@@ -336,8 +334,8 @@ public final class Constant extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
 		oupt.writeKind(ObjectKind.Constant);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);		
 		oupt.writeConstant(value);
@@ -347,7 +345,7 @@ public final class Constant extends Expression {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
 		cnst.SEQU = inpt.readSEQU(cnst);
-		cnst.lineNumber = inpt.readInt();
+		cnst.lineNumber = inpt.readShort();
 		cnst.type = inpt.readType();
 		cnst.backLink = (SyntaxClass) inpt.readObj();
 		cnst.value=inpt.readConstant();

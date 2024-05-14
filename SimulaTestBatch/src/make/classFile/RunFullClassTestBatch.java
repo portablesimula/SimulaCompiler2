@@ -51,6 +51,8 @@ public final class RunFullClassTestBatch {
 //		Option.CaseSensitive=true;
 //		Option.GNERATE_LINE_CALLS=true;
 //		Option.GNERATE_SNAPSHOTS=true;
+//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.TRACE_ATTRIBUTE_INPUT=true;
 		
 		// Set RunTime Options and tracing.
 //		RTOption.VERBOSE = true;

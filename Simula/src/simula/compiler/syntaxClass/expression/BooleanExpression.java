@@ -160,13 +160,15 @@ public final class BooleanExpression extends Expression {
 				rhs.doChecking();
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-				if (type1.equals(type2) & type1.equals(Type.Boolean))
+//				if (type1.equals(type2) & type1.equals(Type.Boolean))
+				if( (type1 != null && type1.keyWord == Type.T_BOOLEAN)
+				&&  (type2 != null && type2.keyWord == Type.T_BOOLEAN) )
 					this.type = Type.Boolean;
 				if (this.type == null)
 					Util.error("Incompatible types in binary operation: " + toString());
 				break;
 		    }
-		    default: Util.IERR("Impossible");
+		    default: Util.IERR();
 		}
 		if (Option.TRACE_CHECKER)
 			Util.TRACE("END BooleanOperation" + toString() + ".doChecking - Result type=" + this.type);
@@ -256,7 +258,7 @@ public final class BooleanExpression extends Expression {
 						.iconst_0()
 						.labelBinding(OL3);
 				break;
-			default: Util.IERR("IMPOSSIBLE: "+opr);
+			default: Util.IERR();
 		}
 	}
 
@@ -277,25 +279,25 @@ public final class BooleanExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeBooleanExpression: " + this);
 		oupt.writeKind(ObjectKind.BooleanExpression);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeObj(lhs);
-		oupt.writeInt(opr);
+		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
 	
 	public static BooleanExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBooleanExpression: ");
 		BooleanExpression expr = new BooleanExpression();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readInt();
+		expr.opr = inpt.readShort();
 		expr.rhs = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readBooleanExpression: " + expr);
 		return(expr);

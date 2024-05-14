@@ -69,34 +69,21 @@ public class AttributeInputStream {
 		objectReference = new ObjectReferenceMap();
     }
 
-	
 	public void close() throws IOException { inpt.close(); }
     
     public int readKind() throws IOException {
-    	int i = inpt.readInt() - 300;
-    	if(TRACE) System.out.println("AttributeInputStream.readKind: "+i+"  "+(i+300)+':'+ObjectKind.edit((i<0)?i+300:i));
-    	return i;
+    	int kind = inpt.readByte();
+    	if(TRACE) System.out.println("AttributeInputStream.readKind: "+kind+':'+ObjectKind.edit(kind));
+    	return kind;
 	}
 	
-//	public Object readObject() throws ClassNotFoundException, IOException {
-//		Util.IERR("");
-//		Object obj = inpt.readObject();
-////		System.out.println("AttributeInputStream.readObject: "+obj.getClass().getSimpleName()+"  "+obj);
-//		if(TRACE) {
-//			if(obj != null) 
-//				 System.out.println("AttributeInputStream.readObject: "+obj.getClass().getSimpleName()+"  "+obj);
-//			else System.out.println("AttributeInputStream.readObject: null");
-//		}
-//		return obj;
-//	}
-	
-	
     public Type readType() throws IOException {
-		int keyWord = inpt.readInt();
-		if(keyWord == -1) return(null);
+		int keyWord = inpt.readUnsignedByte();
+		if(keyWord == 0) {
+	    	if(TRACE) System.out.println("AttributeInputStream.readType: null");
+			return null;
+		}
 		String classIdent = readString();
-//		qual=(ClassDeclaration) inpt.readObject();
-//		declaredIn=(ConnectionBlock) inpt.readObject();
 		Type type = new Type(keyWord,classIdent);			
     	if(TRACE) System.out.println("AttributeInputStream.readType: "+type);
     	return type;
@@ -107,119 +94,45 @@ public class AttributeInputStream {
     	if(TRACE) System.out.println("AttributeInputStream.readBoolean: "+b);
     	return b;
     }
-
 	
-//    public byte readByte() throws IOException {
-//		Util.IERR("SHOULD NOT BE USED");
-//		byte b = inpt.readByte();
-//    	if(TRACE) System.out.println("AttributeInputStream.readByte: "+b);
-//    	return b;
-//	}
-//
-//	
-//    public int readUnsignedByte() throws IOException {
-//		Util.IERR("SHOULD NOT BE USED");
-//    	int b = inpt.readUnsignedByte();
-//    	if(TRACE) System.out.println("AttributeInputStream.readUnsignedByte: "+b);
-//    	return b;
-//	}
-//
-//	
-//    public short readShort() throws IOException {
-//		Util.IERR("SHOULD NOT BE USED");
-//    	short s = inpt.readShort();
-//    	if(TRACE) System.out.println("AttributeInputStream.readShort: "+s);
-//    	return s;
-//	}
-//
-//	
-//    public int readUnsignedShort() throws IOException {
-//		Util.IERR("SHOULD NOT BE USED");
-//    	int s = inpt.readUnsignedShort();
-//    	if(TRACE) System.out.println("AttributeInputStream.readUnsignedShort: "+s);
-//    	return s;
-//	}
-
-	
-    public char readChar() throws IOException {
-    	char c = inpt.readChar();
-    	if(TRACE) System.out.println("AttributeInputStream.readChar: "+c);
-    	return c;
-	}
-
-	
-    public int readInt() throws IOException {
-    	int i = inpt.readInt();
+    public int readShort() throws IOException {
+    	short i = inpt.readShort();
     	if(TRACE) System.out.println("AttributeInputStream.readInt: "+i);
     	return i;
 	}
 
-	
-    public long readLong() throws IOException {
-    	long l = inpt.readLong();
-    	if(TRACE) System.out.println("AttributeInputStream.readLong: "+l);
-    	return l;
-	}
-
-	
-    public float readFloat() throws IOException {
-    	float f = inpt.readFloat();
-    	if(TRACE) System.out.println("AttributeInputStream.readFloat: "+f);
-    	return f;
-	}
-
-	
-    public double readDouble() throws IOException {
-    	double d = inpt.readDouble();
-    	if(TRACE) System.out.println("AttributeInputStream.readDouble: "+d);
-    	return d;
-	}
-
-	
     public Object readConstant() throws IOException {
-    	int key = inpt.readInt();
-    	if(TRACE) System.out.println("AttributeInputStream.readConstant: "+key);
+    	char key = inpt.readChar();
+    	if(TRACE) System.out.println("AttributeInputStream.readConstant: key=" + (int)key + " \"" + key +"\"");
     	Object res = null;
 		switch(key) {
-//			case Type.T_VOID:		res =("void"); break;
-			case Type.T_BOOLEAN:	res = inpt.readBoolean(); break;
-			case Type.T_CHARACTER:	res = inpt.readChar(); break;
-			case Type.T_INTEGER:	res = inpt.readInt(); break;
-			case Type.T_REAL:		res = inpt.readFloat(); break;
-			case Type.T_LONG_REAL:	res = inpt.readDouble(); break;
-			case Type.T_TEXT:		res = readString(); break;
-//			case Type.T_TEXT:		res =("RTS_TXT"); break;
-//			case Type.T_LABEL:		res =("RTS_LABEL"); break;
-//			case Type.T_REF:		res =(getJavaRefIdent()); break;
-			default: Util.IERR("IMPOSSIBLE: "+key);
+			case 'Z':	res = inpt.readBoolean(); break;
+			case 'C':	res = inpt.readChar(); break;
+			case 'I':	res = inpt.readShort(); break;
+			case 'F':	res = inpt.readFloat(); break;
+			case 'D':	res = inpt.readDouble(); break;
+			case 'S':	res = readString(); break;
+			default: throw new RuntimeException("key = "+key);
 		}
     	if(TRACE) System.out.println("AttributeInputStream.readDouble: "+res);
     	return res;
 	}
 
     public String readString() throws IOException {
-//    	if(TRACE) System.out.println("BEGIN AttributeInputStream.readUTF: ");
-//    	String s = inpt.readString();
-    	int lng = inpt.readInt();
-    	if(TRACE) System.out.println("AttributeInputStream.readString: lng="+lng);
+    	int lng = inpt.readShort()-1;
     	if(lng < 0) {
         	if(TRACE) System.out.println("AttributeInputStream.readString: null");
     		return null;
     	}
-    	StringBuffer sb = new StringBuffer();
-    	for(int i=0;i<lng;i++) {
-    		char c = inpt.readChar();
-//        	if(TRACE) System.out.println("AttributeInputStream.readUTF: c="+c);
-    		sb.append(c);
-    	}
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < lng; i++) sb.append(inpt.readChar());
     	String s = sb.toString();
-    	if(TRACE) System.out.println("AttributeInputStream.readString: "+s);
+    	if(TRACE) System.out.println("AttributeInputStream.readString: \""+s+'"');
     	return s;
     }
 
-    
     public int readSEQU(SyntaxClass obj) throws IOException {
-    	int SEQU = inpt.readInt();
+    	int SEQU = inpt.readShort();
     	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + SEQU + "  ====>  " + obj.getClass().getSimpleName());
 		objectReference.put(SEQU, obj);
     	return SEQU;
@@ -232,31 +145,31 @@ public class AttributeInputStream {
 			if(TRACE) System.out.println("AttributeInputStream.readObj: null");
 			return null;
 		case ObjectKind.ObjectReference:
-			int SEQU = inpt.readInt();
+			int SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
 			SyntaxClass obj = objectReference.get(SEQU);
-			if(obj == null) { objectReference.print(); Util.IERR(""); }
+			if(obj == null) { objectReference.print(); Util.IERR(); }
 			return(obj);
 		case ObjectKind.DeclarationReference:
-			SEQU = inpt.readInt();
+			SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
 			Declaration decl = (Declaration) objectReference.get(SEQU);
-			if(decl == null) { objectReference.print(); Util.IERR(""); }
+			if(decl == null) { objectReference.print(); Util.IERR(); }
 			if(TRACE) System.out.println("AttributeInputStream.readObj: Declaration="+decl);
 			return(decl);
 		case ObjectKind.StatementReference:
-			SEQU = inpt.readInt();
+			SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
 //			Statement stm = (Statement) objectReference.get(SEQU);
-//			if(stm == null) { objectReference.print(); Util.IERR(""); }
+//			if(stm == null) { objectReference.print(); Util.IERR(); }
 			Statement stm = new StatementReference(SEQU,objectReference);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+stm);
 			return(stm);
 		case ObjectKind.ExpressionReference:
-			SEQU = inpt.readInt();
+			SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
 //			Expression expr = (Expression) objectReference.get(SEQU);
-//			if(expr == null) { objectReference.print(); Util.IERR(""); }
+//			if(expr == null) { objectReference.print(); Util.IERR(); }
 			Expression expr = new ExpressionReference(SEQU,objectReference);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+expr);
 			return(expr);
@@ -264,7 +177,7 @@ public class AttributeInputStream {
 //			if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
 			obj = readObj(kind,this);
 //			obj.SEQU = Global.Object_SEQU++;
-			if(obj.SEQU == 0) Util.IERR("");
+			if(obj.SEQU == 0) Util.IERR();
 			objectReference.put(obj.SEQU, obj);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
 			return(obj);

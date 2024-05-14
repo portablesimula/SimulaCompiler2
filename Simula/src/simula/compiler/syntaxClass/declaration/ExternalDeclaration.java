@@ -155,7 +155,7 @@ public final class ExternalDeclaration extends Declaration {
 				Parse.expect(KeyWord.TEXTKONST);
 			}
 //			System.out.println("expectExternalHead: "+identifier+"  "+externalIdentifier); // TODO: TESTING3
-//			Util.IERR("");
+//			Util.IERR();
 			
 			String extIdentitier = (externalIdentifier==null)?null:externalIdentifier.getIdentifier();
 			
@@ -204,19 +204,11 @@ public final class ExternalDeclaration extends Declaration {
 	
 	public void readExternal() {
 //		System.out.println("ExternalDeclaration.readExternal: "+this);
-		
 		File jarFile = JarFileIO.findJarFile(identifier, externalIdent);
-//		Util.IERR(""+jarFile);
-		
 		if (jarFile != null) {
 			if(checkJarFiles(jarFile)) {
-//				System.out.println("ExternalDeclaration.readExternal: declaredIn="+declaredIn);
-				BlockDeclaration enclosure = StandardClass.BASICIO; //null; // Implies BASICIO
-//				BlockDeclaration enclosure = nearestEnclosingBlock();
-//				System.out.println("ExternalDeclaration.readExternal: nearestEnclosingBlock="+enclosure);
-				Type moduleType = AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
-//				Util.IERR(""+jarFile);
-				
+				BlockDeclaration enclosure = StandardClass.BASICIO;
+				AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
 			}
 		}		
 	}
@@ -235,20 +227,20 @@ public final class ExternalDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeExternalDeclaration: " + this);
 		oupt.writeKind(declarationKind);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(lineNumber);
 	}
 	
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readExternalDeclaration: ");
 		ExternalDeclaration ext = new ExternalDeclaration();
-//		ext.SEQU = inpt.readInt();
+//		ext.SEQU = inpt.readShort();
 		ext.SEQU = inpt.readSEQU(ext);
 		ext.identifier = inpt.readString();
 		ext.externalIdent = inpt.readString();
-		ext.lineNumber = inpt.readInt();
+		ext.lineNumber = inpt.readShort();
 		Util.TRACE_INPUT("readExternalDeclaration: " + ext);
 		return(ext);
 	}

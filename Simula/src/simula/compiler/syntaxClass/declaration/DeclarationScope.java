@@ -285,7 +285,7 @@ public abstract class DeclarationScope extends Declaration  {
 //		System.out.println("   DeclarationScope.buildCTX: End Scope: "+this.externalIdent+"  rtBlockLevel="+rtBlockLevel);
 //		System.out.println("   DeclarationScope.buildCTX: ctxDiff:   "+curLevel+"  "+rtBlockLevel+" ==> "+ctxDiff);
 //		printScopeChain(curScope);
-//		Util.IERR("");
+//		Util.IERR();
 
 		while ((ctxDiff--) > 0) {
 			curScope=curScope.declaredIn;
@@ -294,7 +294,7 @@ public abstract class DeclarationScope extends Declaration  {
 			codeBuilder.getfield(CD.RTS_RTObject,"_SL",CD.RTS_RTObject);
 		}
 //		System.out.println("================== ENDOF: Build Scope Chain ==================");
-//		Util.IERR("");
+//		Util.IERR();
 		return(withFollowSL);
 	}
 
@@ -400,7 +400,7 @@ public abstract class DeclarationScope extends Declaration  {
 
 	public void createJavaClassFile() throws IOException {
 		// TODO Auto-generated method stub
-		Util.IERR("");
+		Util.IERR();
 	}
 
 }

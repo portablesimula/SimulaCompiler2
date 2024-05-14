@@ -21,10 +21,58 @@ public class AttributeOutputStream {
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
     }
+	
+//	public void flush() throws IOException { oupt.flush(); }
+
+	public void close() throws IOException { oupt.flush(); oupt.close(); }
 
     public void writeKind(int i) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeKind: "+i+':'+ObjectKind.edit(i));
-		oupt.writeInt(300+i);
+		if(i > ObjectKind.MAX_VALUE || i < 0) throw new IllegalArgumentException("Argument = "+i);
+		oupt.writeByte(i);
+	}
+
+    public void writeType(Type type) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeType: "+type);
+		if(type == null)
+			oupt.writeByte(0);
+		else {
+			oupt.writeByte(type.keyWord);
+			writeString(type.classIdent);
+		}
+	}
+	
+    public void writeBoolean(boolean b) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeBoolean: "+b);
+		oupt.writeBoolean(b);
+	}
+
+    public void writeShort(int i) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeInt: "+i);
+		if(i > Short.MAX_VALUE || i < Short.MIN_VALUE) throw new IllegalArgumentException("Argument = "+i);
+		oupt.writeShort(i);			
+	}
+
+    public void writeConstant(Object c) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
+		if(c instanceof Boolean b)			{ oupt.writeChar('Z'); oupt.writeBoolean(b);	}
+		else if(c instanceof Integer i)		{ oupt.writeChar('I'); oupt.writeShort(i);	}
+		else if(c instanceof Long li)		{ oupt.writeChar('I'); oupt.writeShort(li.intValue()); }
+		else if(c instanceof Character k)	{ oupt.writeChar('C'); oupt.writeChar(k); }
+		else if(c instanceof Float f)		{ oupt.writeChar('F'); oupt.writeFloat(f); }
+		else if(c instanceof Double f)		{ oupt.writeChar('D'); oupt.writeDouble(f); }
+		else if(c instanceof String s)		{ oupt.writeChar('S'); writeString(s); }
+		else Util.IERR(""+c.getClass().getSimpleName());
+	}
+
+    public void writeString(String s) throws IOException {
+		if(TRACE) System.out.println("AttributeOutputStream.writeString: "+s);
+		if(s == null) oupt.writeShort(0);
+		else {
+			int lng = s.length();
+			oupt.writeShort(lng+1);
+			for(int i=0;i<lng;i++) oupt.writeChar(s.charAt(i));
+		}
 	}
 
     public void writeObj(SyntaxClass obj) throws IOException {
@@ -39,7 +87,7 @@ public class AttributeOutputStream {
 			else 								kind = ObjectKind.ObjectReference;
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+ObjectKind.edit(kind)+" "+(obj.SEQU));
 			writeKind(kind);
-			writeInt(obj.SEQU);
+			oupt.writeShort(obj.SEQU);
 		} else {
 			obj.SEQU = Global.Object_SEQU++;
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
@@ -47,115 +95,5 @@ public class AttributeOutputStream {
 		}
 
     }
-
-	
-//    public void writeObject(Object obj) throws IOException {
-//		if(TRACE) {
-//			if(obj != null) 
-//				 System.out.println("AttributeOutputStream.writeObject: "+obj.getClass().getSimpleName()+"  "+obj);
-//			else System.out.println("AttributeOutputStream.writeObject: null");
-//		}
-//		oupt.writeObject(obj);
-//	}
-
-    public void writeType(Type type) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeType: "+type);
-		if(type == null) {
-			writeInt(-1);
-		} else {
-			writeInt(type.keyWord);
-			writeString(type.classIdent);
-		}
-//		oupt.writeObject(qual);
-//		oupt.writeObject(declaredIn);
-	}
-	
-    public void writeBoolean(boolean b) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeBoolean: "+b);
-		oupt.writeBoolean(b);
-	}
-
-	
-    public void writeByte(int b) throws IOException {
-		Util.IERR("SHOULD NOT BE USED");
-		if(TRACE) System.out.println("AttributeOutputStream.writeByte: "+b);
-		if(b < 0 || b > 0x7f) Util.IERR("");
-		oupt.writeByte(b);
-	}
-
-	
-    public void writeShort(int s) throws IOException {
-		Util.IERR("SHOULD NOT BE USED");
-		if(TRACE) System.out.println("AttributeOutputStream.writeShort: "+s);
-		oupt.writeShort(s);
-	}
-
-	
-    public void writeChar(int c) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeChar: "+c);
-		oupt.writeChar(c);
-	}
-
-	
-    public void writeInt(int i) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeInt: "+i);
-		oupt.writeInt(i);
-	}
-
-	
-//    public void writeLong(long l) throws IOException {
-//		if(TRACE) System.out.println("AttributeOutputStream.writeLong: "+l);
-//		oupt.writeLong(l);
-//	}
-
-	
-    public void writeFloat(float f) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeFloat: "+f);
-		oupt.writeFloat(f);
-	}
-
-	
-    public void writeDouble(double d) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeDouble: "+d);
-		oupt.writeDouble(d);
-	}
-	
-    public void writeConstant(Object c) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
-		if(c instanceof Boolean b) {
-			oupt.writeInt(Type.T_BOOLEAN);
-			oupt.writeBoolean(b);
-		} else if(c instanceof Integer i) {
-			oupt.writeInt(Type.T_INTEGER);
-			oupt.writeInt(i);
-		} else if(c instanceof Long li) {
-			oupt.writeInt(Type.T_INTEGER);
-			oupt.writeInt(li.intValue());
-		} else if(c instanceof Character k) {
-			oupt.writeInt(Type.T_CHARACTER);
-			oupt.writeChar(k);
-		} else if(c instanceof String s) {
-			oupt.writeInt(Type.T_TEXT);
-			writeString(s);
-		} else Util.IERR(""+c.getClass().getSimpleName());
-	}
-
-    public void writeString(String s) throws IOException {
-		if(TRACE) System.out.println("AttributeOutputStream.writeString: "+s);
-//		oupt.writeString(s);
-		if(s == null) oupt.writeInt(-1);
-		else {
-			int lng = s.length();
-			oupt.writeInt(lng);
-			for(int i=0;i<lng;i++) oupt.writeChar(s.charAt(i));
-		}
-//		oupt.writeChars(s);
-	}
-
-	
-	public void flush() throws IOException { oupt.flush(); }
-
-	
-	public void close() throws IOException { oupt.close(); }
 
 }

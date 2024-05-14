@@ -68,14 +68,14 @@ public final class CodeLine {
 //	@Override
 //	public void writeExternal(ObjectOutput oupt) throws IOException {
 //		Util.TRACE_OUTPUT("" + this);
-//		oupt.writeInt(sourceLineNumber);
+//		oupt.writeShort(sourceLineNumber);
 //		oupt.writeObject(codeLine);
 //		oupt.writeObject(modid);
 //	}
 //
 //	@Override
 //	public void readExternal(ObjectInput inpt) throws IOException {
-//		sourceLineNumber = inpt.readInt();
+//		sourceLineNumber = inpt.readShort();
 //		codeLine = (String) inpt.readObject();
 //		modid = (String) inpt.readObject();
 //		Util.TRACE_INPUT("" + this);

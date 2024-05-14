@@ -563,24 +563,23 @@ public final class ArrayDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeKind(declarationKind);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
-		oupt.writeInt(nDim);
+		oupt.writeShort(nDim);
 	}
 	
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
-//		arr.SEQU = inpt.readInt();
+//		arr.SEQU = inpt.readShort();
 		arr.SEQU = inpt.readSEQU(arr);
 		arr.identifier = inpt.readString();
 		arr.externalIdent = inpt.readString();
 		arr.type = inpt.readType();
-		arr.nDim = inpt.readInt();
+		arr.nDim = inpt.readShort();
 		Util.TRACE_INPUT("Array: " + arr);
-//		Util.IERR("SJEKK DETTE");
 		return(arr);
 	}
 
@@ -594,7 +593,7 @@ public final class ArrayDeclaration extends Declaration {
 //		oupt.writeString(identifier);
 //		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
-//		oupt.writeInt(nDim);
+//		oupt.writeShort(nDim);
 //	}
 //
 //	@Override
@@ -602,7 +601,7 @@ public final class ArrayDeclaration extends Declaration {
 //		identifier = inpt.readString();
 //		externalIdent = inpt.readString();
 //		type = inpt.readType();
-//		nDim = inpt.readInt();
+//		nDim = inpt.readShort();
 //		Util.TRACE_INPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 //	}
 	

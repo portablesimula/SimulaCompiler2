@@ -224,12 +224,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	protected boolean isQPSystemBlock() {
 		switch (declarationKind) {
-		case ObjectKind.SimulaProgram:
-		case ObjectKind.SubBlock:
-		case ObjectKind.PrefixedBlock:
-			return (isBlockWithLocalClasses());
-		default:
-			return (false);
+			case ObjectKind.SimulaProgram:
+			case ObjectKind.SubBlock:
+			case ObjectKind.PrefixedBlock:
+				return (isBlockWithLocalClasses());
+			default:
+				return (false);
 		}
 	}
 
@@ -243,13 +243,14 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	protected DeclarationList prep(DeclarationList declarationList) {
 		DeclarationList res = new DeclarationList("");
 		for(Declaration decl:declarationList) {
-			if(decl instanceof ArrayDeclaration) res.add(decl);
-			else if(decl instanceof ClassDeclaration && !(decl instanceof StandardClass)) res.add(decl);
-			else if(decl instanceof ExternalDeclaration) res.add(decl);
-			else if(decl instanceof LabelDeclaration) res.add(decl);
-			else if(decl instanceof ProcedureDeclaration) res.add(decl);
-			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
-			else if(decl instanceof SwitchDeclaration) res.add(decl);
+			switch(decl.declarationKind) {
+				case ObjectKind.ArrayDeclaration -> res.add(decl);
+				case ObjectKind.Class -> res.add(decl);
+				case ObjectKind.ExternalDeclaration -> res.add(decl);
+				case ObjectKind.LabelDeclaration -> res.add(decl);
+				case ObjectKind.Procedure -> res.add(decl);
+				case ObjectKind.SimpleVariableDeclaration -> res.add(decl);
+			}
 		}
 		return(res);
 	}
@@ -381,6 +382,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * Create Java ClassFile.
 	 * @throws IOException 
 	 */
+	@Override
     public void createJavaClassFile() throws IOException {
 		if (this.isPreCompiledFromFile != null)	return;
 		prevBlock = currentBlock;
@@ -406,10 +408,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
     // ***********************************************************************************************
     // *** ByteCoding: buildClassFile
     // ***********************************************************************************************
-    public byte[] buildClassFile() {
-        Util.IERR("Method buildClassFile need a redefinition in "+this.getClass().getSimpleName());
-        return(null);
-    }
+    public abstract byte[] buildClassFile();
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildIsQPSystemBlock
@@ -512,7 +511,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	}
 	
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
-		Util.IERR("Missing Override");
+		Util.IERR("Method build_STM_BODY need a redefinition in "+this.getClass().getSimpleName());
 	}
 	
 	// ***********************************************************************************************

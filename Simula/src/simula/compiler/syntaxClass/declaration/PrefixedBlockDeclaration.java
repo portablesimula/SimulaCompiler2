@@ -408,7 +408,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		Util.TRACE_INPUT("BEGIN Write PrefixedBlockDeclaration: " + identifier + ", Declared in: " + declaredIn);
 		oupt.writeKind(declarationKind); // Mark: This is a PrefixedBlockDeclaration
 		oupt.writeString(identifier);
-		oupt.writeInt(SEQU);
+		oupt.writeShort(SEQU);
 		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
 		oupt.writeType(type);
@@ -416,32 +416,32 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		oupt.writeObj(blockPrefix);
 		oupt.writeBoolean(isMainModule);
 		
-		oupt.writeInt(rtBlockLevel);
+		oupt.writeShort(rtBlockLevel);
 		oupt.writeString(prefix);
 		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
 //		oupt.writeString(externalPrefixIdent);
 
-		oupt.writeInt(parameterList.size());
+		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
 		
-		oupt.writeInt(virtualSpecList.size());
+		oupt.writeShort(virtualSpecList.size());
 		for(VirtualSpecification virt:virtualSpecList) VirtualSpecification.writeVirtSpec(virt, oupt);
 
-		oupt.writeInt(hiddenList.size());
+		oupt.writeShort(hiddenList.size());
 		for(HiddenSpecification virt:hiddenList) virt.writeHiddenSpecification(oupt);
 
-		oupt.writeInt(protectedList.size());
+		oupt.writeShort(protectedList.size());
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
-//		oupt.writeInt(labelList.size());
+//		oupt.writeShort(labelList.size());
 //		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
 		LabelList.writeLabelList(labelList, oupt);
 		
 		DeclarationList decls = prep(declarationList);
 //		System.out.println("PrefixedBlockDeclaration.writeObject: Write Declaration List: "+decls.size());
-		oupt.writeInt(decls.size());
+		oupt.writeShort(decls.size());
 		for(Declaration decl:decls) oupt.writeObj(decl);
 
 //		System.out.println("PrefixedBlockDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
@@ -449,15 +449,15 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		
 //		System.out.println("PrefixedBlockDeclaration.writeObject: Write STATEMENTS BEFORE INNER: Statements1: "+statements1.size());
 		if(statements1 != null) {
-			oupt.writeInt(statements1.size());
+			oupt.writeShort(statements1.size());
 			for(Statement stm:statements1) oupt.writeObj(stm);
-		} else oupt.writeInt(0);
+		} else oupt.writeShort(0);
 
 //		System.out.println("PrefixedBlockDeclaration.writeObject: Write STATEMENTS AFTER INNER: Statements: "+statements.size());
 		if(statements != null) {
-			oupt.writeInt(statements.size());
+			oupt.writeShort(statements.size());
 			for(Statement stm:statements) oupt.writeObj(stm);
-		} else oupt.writeInt(0);
+		} else oupt.writeShort(0);
 
 		Util.TRACE_OUTPUT("END Write PrefixedBlockDeclaration: " + identifier);
 	}
@@ -467,7 +467,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.identifier = (String) inpt.readString();
 		Util.TRACE_INPUT("BEGIN Read PrefixedBlockDeclaration: Declared in: " + pbl.declaredIn);
 		pbl.declarationKind = ObjectKind.Class;
-//		pbl.SEQU = inpt.readInt();
+//		pbl.SEQU = inpt.readShort();
 		pbl.SEQU = inpt.readSEQU(pbl);
 		pbl.externalIdent = inpt.readString();
 		pbl.type = inpt.readType();
@@ -475,7 +475,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.blockPrefix = (VariableExpression) inpt.readObj();
 		pbl.isMainModule = inpt.readBoolean();
 
-		pbl.rtBlockLevel = inpt.readInt();
+		pbl.rtBlockLevel = inpt.readShort();
 		pbl.prefix = inpt.readString();
 		pbl.isPreCompiledFromFile = inpt.readString();
 		pbl.hasLocalClasses = inpt.readBoolean();
@@ -483,22 +483,22 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 //		pbl.externalPrefixIdent = inpt.readString();
 
 		//parameterList = (Vector<Parameter>) inpt.readObject();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.parameterList.add(Parameter.readParameter(inpt));
 
 		//pbl.virtualSpecList = (Vector<VirtualSpecification>) inpt.readObject();
-		n = inpt.readInt();
+		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
 		
 		//pbl.hiddenList = (Vector<HiddenSpecification>) inpt.readObject();
-		n = inpt.readInt();
+		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
 		
 		//pbl.protectedList = (Vector<ProtectedSpecification>) inpt.readObject();
-		n = inpt.readInt();
+		n = inpt.readShort();
 //		System.out.println("PrefixedBlockDeclaration.readObject: Read Protected List: "+n);
 		for(int i=0;i<n;i++)
 			pbl.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
@@ -506,7 +506,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 //		System.out.println("PrefixedBlockDeclaration.readObject: Read Label List: "+n);
 		pbl.labelList = LabelList.readLabelList(inpt);
 
-		n = inpt.readInt();
+		n = inpt.readShort();
 //		System.out.println("PrefixedBlockDeclaration.readObject: Read Declaration List: "+n);
 		for(int i=0;i<n;i++) {
 			Declaration decl = (Declaration) inpt.readObj();
@@ -514,7 +514,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		}
 
 		//pbl.statements1 = (Vector<Statement>) inpt.readObject();
-		n = inpt.readInt();
+		n = inpt.readShort();
 //		System.out.println("PrefixedBlockDeclaration.readObject: Read statements1 List: "+n);
 		if(n > 0) pbl.statements1 = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
@@ -523,7 +523,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		}
 		
 		//pbl.statements = (Vector<Statement>) inpt.readObject();			
-		n = inpt.readInt();
+		n = inpt.readShort();
 //		System.out.println("PrefixedBlockDeclaration.readObject: Read statements List: "+n);
 		if(n > 0) pbl.statements = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
@@ -533,11 +533,11 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 
 //		System.out.println("\nPrefixedBlockDeclaration.readObject: PRINT SYNTAX-TREE");
 //		pbl.printTree(1);
-//		Util.IERR("");
+//		Util.IERR();
 
 //		System.out.println("PrefixedBlockDeclaration.readObject: END Read PrefixedBlockDeclaration: " + identifier + ", Declared in: " + pbl.declaredIn);
 //		pbl.print(2);
-//		Util.IERR("");
+//		Util.IERR();
 		
 		Util.TRACE_INPUT("END Read PrefixedBlockDeclaration: " + pbl.identifier + ", Declared in: " + pbl.declaredIn);
 		Global.setScope(pbl.declaredIn);

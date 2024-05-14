@@ -106,9 +106,8 @@ public final class ConditionalStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		condition.doChecking();
 		condition.backLink=this; // To ensure _RESULT from functions
-		if (!condition.type.equals(Type.Boolean))
-			Util.error("ConditionalStatement.doChecking: Condition is not of Type Boolean, but: "
-					+ condition.type);
+		if (condition.type.keyWord != Type.T_BOOLEAN)
+			Util.error("ConditionalStatement.doChecking: Condition is not of Type Boolean, but: " + condition.type);
 		thenStatement.doChecking();
 		if (elseStatement != null)
 			elseStatement.doChecking();
@@ -177,9 +176,8 @@ public final class ConditionalStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
 		oupt.writeKind(ObjectKind.ConditionalStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
-//		System.out.println("ConditionalStatement.writeObject: condition="+condition.getClass().getSimpleName()+"  "+condition);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(condition);
 		oupt.writeObj(thenStatement);
 		oupt.writeObj(elseStatement);
@@ -188,18 +186,10 @@ public final class ConditionalStatement extends Statement {
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
 		ConditionalStatement stm = new ConditionalStatement();
-//		stm.SEQU = inpt.readInt();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
-//		System.out.println("ConditionalStatement.readObject: lineNumber="+stm.lineNumber);
+		stm.lineNumber = inpt.readShort();
 		stm.condition = (Expression) inpt.readObj();
-//		System.out.println("ConditionalStatement.readObject: condition="+stm.condition.getClass().getSimpleName()+"  "+stm.condition);
 		stm.thenStatement = (Statement) inpt.readObj();
-		if(stm.thenStatement == null) {
-			inpt.objectReference.print();
-			Util.IERR("");
-		}
-		
 		stm.elseStatement = (Statement) inpt.readObj();
 		Util.TRACE_INPUT("ConditionalStatement: " + stm);
 		return(stm);

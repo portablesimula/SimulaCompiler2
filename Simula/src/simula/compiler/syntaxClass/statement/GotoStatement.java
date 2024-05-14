@@ -77,7 +77,7 @@ public final class GotoStatement extends Statement {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		label.doChecking();
-		if (!label.type.equals(Type.Label))
+		if (label.type.keyWord != Type.T_LABEL)
 			Util.error("Goto " + label + ", " + label + " is not a Label");
 		label.backLink = this; // To ensure _RESULT from functions
 		SET_SEMANTICS_CHECKED();
@@ -88,7 +88,7 @@ public final class GotoStatement extends Statement {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
   		Type type = label.type;
-		Util.ASSERT(type.equals(Type.Label), "Invariant");
+		Util.ASSERT(type.keyWord == Type.T_LABEL, "Invariant");
 		GeneratedJavaClass.code("_GOTO(" + label.toJavaCode() + ");","GOTO EVALUATED LABEL");
 	}
 	
@@ -103,11 +103,6 @@ public final class GotoStatement extends Statement {
 //        33: aload_0
 //        34: getfield      #14                 // Field _LABEL_L1:Lsimula/runtime/RTS_LABEL;
 //        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_LABEL;)V
-//		ClassDesc CD_Lab=CD.RTS_LABEL;
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		FieldRefEntry FRE_Arr=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), arrayIdent, CD_Lab);
-		
-//		Util.buildSNAPSHOT(codeBuilder,"GOTO "+label); // TODO: SNAPSHOT
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
 //		System.out.println("GotoStatement.buildByteCode: "+label.getClass().getSimpleName()+"  "+label);
@@ -116,33 +111,20 @@ public final class GotoStatement extends Statement {
 //			System.out.println("GotoStatement.buildByteCode: "+meaning.declaredAs.getClass().getSimpleName()+"  "+meaning.declaredAs);
 //			System.out.println("GotoStatement.buildByteCode: currentClassDesc="+BlockDeclaration.currentClassDesc());
 //			System.out.println("GotoStatement.buildByteCode: label="+label.getClass().getSimpleName()+"  "+label);
-			if(meaning.declaredAs instanceof LabelDeclaration lab) {
-//				lab.buildLabelQuant(codeBuilder);
-					codeBuilder.aload(0);
-				label.buildEvaluation(null,codeBuilder);
-				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
+			if(meaning.declaredAs instanceof LabelDeclaration) {
+				codeBuilder.aload(0);
 			} else if(meaning.declaredAs instanceof Parameter par) {
-//				System.out.println("GotoStatement.buildByteCode: par.kind="+par.kind);
 				if(par.kind != Parameter.Kind.Procedure)
 					codeBuilder.aload(0);
-				label.buildEvaluation(null,codeBuilder);
-				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
-			} else if(meaning.declaredAs instanceof SwitchDeclaration swtch) {
-//				swtch.buildByteCode(codeBuilder);
+			} else if(meaning.declaredAs instanceof SwitchDeclaration) {
 				codeBuilder.aload(0);
-				label.buildEvaluation(null,codeBuilder);
-				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
-			} else if(meaning.declaredAs instanceof VirtualSpecification virt) {
+			} else if(meaning.declaredAs instanceof VirtualSpecification) {
 				codeBuilder.aload(0);
-				label.buildEvaluation(null,codeBuilder);
-				codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-						"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
-//				Util.IERR(null);
-			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName()+"  "+label);
-		} else Util.IERR("");
+			} else Util.IERR();
+			label.buildEvaluation(null,codeBuilder);
+			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
+		} else Util.IERR();
 	}
 
 	@Override
@@ -170,8 +152,8 @@ public final class GotoStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeGotoStatement: " + this);
 		oupt.writeKind(ObjectKind.GotoStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(label);
 	}
 
@@ -179,7 +161,7 @@ public final class GotoStatement extends Statement {
 		Util.TRACE_INPUT("BEGIN readGotoStatement: ");
 		GotoStatement stm = new GotoStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.label = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("GotoStatement: " + stm);
 		return(stm);

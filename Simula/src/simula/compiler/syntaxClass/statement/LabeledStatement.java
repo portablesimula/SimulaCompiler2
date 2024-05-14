@@ -87,17 +87,20 @@ public final class LabeledStatement extends Statement {
 			labelcode="_SIM_LABEL("+decl.index+");";
 //			System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
 			
-			if(statement instanceof BlockStatement stat) {
-				BlockStatement blockStatement=stat;
-				if(blockStatement.isCompoundStatement())
-				    blockStatement.addLeadingLabel(labelcode);
-				else {
-					GeneratedJavaClass.code(labelcode,comment);
-				}
-			}
-			else {
-				GeneratedJavaClass.code(labelcode,comment);
-			}
+//			if(statement instanceof BlockStatement stat) {
+//				BlockStatement blockStatement=stat;
+//				if(blockStatement.isCompoundStatement())
+//				    blockStatement.addLeadingLabel(labelcode);
+//				else {
+//					GeneratedJavaClass.code(labelcode,comment);
+//				}
+//			}
+//			else {
+//				GeneratedJavaClass.code(labelcode,comment);
+//			}
+			if(statement instanceof BlockStatement stat && stat.isCompoundStatement())
+				     stat.addLeadingLabel(labelcode);
+				else GeneratedJavaClass.code(labelcode,comment);
 		}
 		statement.doJavaCoding();
 		GeneratedJavaClass.code("}");
@@ -105,27 +108,11 @@ public final class LabeledStatement extends Statement {
 
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
-		for (LabelDeclaration lab:labels) {
-			String comment = "DeclaredIn: "+lab.declaredIn.identifier;
-			if(lab.movedTo != null) comment = comment+" -> "+lab.movedTo;
-			String labelcode="_SIM_LABEL("+lab.index+");";
-			if(statement instanceof BlockStatement stat) {
-				BlockStatement blockStatement=stat;
-				if(blockStatement.isCompoundStatement())
-				    blockStatement.addLeadingLabel(labelcode);
-				else {
-//					if(Option.USE_FILE_CLASS_API==2) GeneratedJavaClass.code("_PRE_LABEL()");
-//					GeneratedJavaClass.code(labelcode,comment);
-				}
-				Util.IERR("");
-			}
-			else {
-				// Bind Label
-				lab.doBind(codeBuilder);
-			}
-		}
+		Global.sourceLineNumber=lineNumber;
+		ASSERT_SEMANTICS_CHECKED();
+		for (LabelDeclaration lab:labels)
+			lab.doBind(codeBuilder); // Bind Label
 		statement.buildByteCode(codeBuilder);
-//		Util.IERR("");
 	}
 
 	@Override
@@ -156,21 +143,21 @@ public final class LabeledStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabeledStatement: " + this);
 		oupt.writeKind(ObjectKind.LabeledStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(statement);
-		oupt.writeInt(labels.size());
+		oupt.writeShort(labels.size());
 		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
 	}
 
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
 		LabeledStatement stm = new LabeledStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.statement = (Statement) inpt.readObj();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		if(n > 0) {
 			stm.labels = new Vector<LabelDeclaration>();
 			for(int i=0;i<n;i++)

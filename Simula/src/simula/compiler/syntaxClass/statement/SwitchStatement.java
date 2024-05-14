@@ -338,7 +338,7 @@ public final class SwitchStatement extends Statement {
     	if(Option.TRACE_CHECKER) Util.TRACE("BEGIN SwitchStatement("+toString()+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());    
     	lowKey.doChecking(); hiKey.doChecking();
     	switchKey.doChecking();
-		if(switchKey.type.equals(Type.Character)) {
+		if(switchKey.type.keyWord == Type.T_CHARACTER) {
 			switchKey=TypeConversion.testAndCreate(Type.Character,switchKey);
 		} else
 			switchKey=TypeConversion.testAndCreate(Type.Integer,switchKey);
@@ -444,8 +444,8 @@ public final class SwitchStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeSwitchStatement: " + this);
 		oupt.writeKind(ObjectKind.SwitchStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(lowKey);
 		oupt.writeObj(hiKey);
 		oupt.writeObj(switchKey);
@@ -454,9 +454,9 @@ public final class SwitchStatement extends Statement {
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSwitchStatement: ");
 		SwitchStatement stm = new SwitchStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.lowKey = (Expression) inpt.readObj();
 		stm.hiKey = (Expression) inpt.readObj();
 		stm.switchKey = (Expression) inpt.readObj();

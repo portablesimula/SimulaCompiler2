@@ -226,7 +226,8 @@ public final class ForStatement extends Statement {
 		if (decl instanceof Parameter par && par.mode == Parameter.Mode.name)
 			Util.error(
 					"For-Statement's Controled Variable(" + controlVariable + ") can't be a formal parameter by Name");
-		if (!type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
+//		if (!type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
+		if (type.keyWord != Type.T_TEXT && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
 			Util.error("Illegal For-Statement with object value assignment ( := )");
 		Iterator<ForListElement> iterator = forList.iterator();
 		while (iterator.hasNext()) {
@@ -264,12 +265,10 @@ public final class ForStatement extends Statement {
 		char del = ' ';
 		for (ForListElement elt : forList) {
 			String classIdent = (refType) ? elt.expr1.type.getJavaRefIdent() : "Number";
-			if (elt.expr1.type.equals(Type.Character))
-				classIdent = "Character"; // AD'HOC
-			if (elt.expr1.type.equals(Type.Boolean))
-				classIdent = "Boolean"; // AD'HOC
-			if (elt.expr1.type.equals(Type.Text)) {
-				classIdent = "RTS_TXT"; // AD'HOC
+			switch(elt.expr1.type.keyWord) {
+				case Type.T_CHARACTER -> classIdent = "Character"; // AD'HOC
+				case Type.T_BOOLEAN -> classIdent = "Boolean"; // AD'HOC
+				case Type.T_TEXT -> classIdent = "RTS_TXT"; // AD'HOC
 			}
 			GeneratedJavaClass.code("   " + del + elt.edCode(classIdent, elt.expr1.type));
 			del = ',';
@@ -299,16 +298,17 @@ public final class ForStatement extends Statement {
 	private String edControlVariableByName(final String classIdent, Type xType) {
 		String cv = controlVariable.toJavaCode();
 		String castVar = "x_;";
-		if (controlVariable.type.equals(Type.Integer))
-			castVar = "x_.intValue();";
-		else if (controlVariable.type.equals(Type.Real))
-			castVar = "x_.floatValue();";
-		else if (controlVariable.type.equals(Type.LongReal))
-			castVar = "x_.doubleValue();";
-		else if (controlVariable.type.isReferenceType()) {
-			ClassDeclaration qual = controlVariable.type.getQual();
-			if (!(controlVariable.type.equals(xType)))
-				castVar = "(" + qual.getJavaIdentifier() + ")x_;";
+		switch (controlVariable.type.keyWord) {
+			case Type.T_INTEGER -> castVar = "x_.intValue();";
+			case Type.T_REAL -> castVar = "x_.floatValue();";
+			case Type.T_LONG_REAL -> castVar = "x_.doubleValue();";
+			default -> {
+				if (controlVariable.type.isReferenceType()) {
+					ClassDeclaration qual = controlVariable.type.getQual();
+					if (!(controlVariable.type.equals(xType)))
+						castVar = "(" + qual.getJavaIdentifier() + ")x_;";
+				}
+			}
 		}
 		String cvName = "new RTS_NAME<" + classIdent + ">()" + "{ public " + classIdent + " put(" + classIdent + " x_){"
 				+ cv + "=" + castVar + " return(x_);};" + "  public " + classIdent + " get(){return((" + classIdent
@@ -380,7 +380,7 @@ public final class ForStatement extends Statement {
 		 * @return the resulting Java source code for this ForListElement
 		 */
 		public String edCode(final String classIdent, Type xType) {
-			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
+			String forElt = (controlVariable.type.keyWord == Type.T_TEXT && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 					: "Elt<" + classIdent + ">";
 			return ("new FOR_Single" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }})");
@@ -401,16 +401,17 @@ public final class ForStatement extends Statement {
 			String cv = controlVariable.toJavaCode();
 			String val = this.expr1.toJavaCode();
 			if (expr1.type != controlVariable.type) {
-				if (controlVariable.type.equals(Type.Integer))
-					val = "(int)" + val;
-				else if (controlVariable.type.equals(Type.Real))
-					val = "(float)" + val;
-				else if (controlVariable.type.equals(Type.LongReal))
-					val = "(double)" + val;
-				else if (controlVariable.type.isReferenceType()) {
-					ClassDeclaration qual = controlVariable.type.getQual();
-					if (!(controlVariable.type.equals(this.expr1.type)))
-						val = "(" + qual.getJavaIdentifier() + ")" + val;
+				switch (controlVariable.type.keyWord) {
+					case Type.T_INTEGER ->   val = "(int)" + val;
+					case Type.T_REAL ->      val = "(float)" + val;
+					case Type.T_LONG_REAL -> val = "(double)" + val;
+					default -> {
+						if (controlVariable.type.isReferenceType()) {
+							ClassDeclaration qual = controlVariable.type.getQual();
+							if (!(controlVariable.type.equals(this.expr1.type)))
+								val = "(" + qual.getJavaIdentifier() + ")" + val;
+						}
+					}
 				}
 			}
 			GeneratedJavaClass.code(cv + "=" + val + "; {");
@@ -471,14 +472,14 @@ public final class ForStatement extends Statement {
 //		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
-			oupt.writeInt(1);
+			oupt.writeShort(1);
 			oupt.writeObj(expr1);
 		}
 
 		public static ForListElement readObject(ForStatement x, AttributeInputStream inpt) throws IOException {
 			Util.TRACE_INPUT("BEGIN readForListElement: ");
 			ForListElement stm = null;
-			int nExpr = inpt.readInt();
+			int nExpr = inpt.readShort();
 			switch(nExpr) {
 			case 1:
 				Expression expr1 = (Expression) inpt.readObj();
@@ -532,7 +533,7 @@ public final class ForStatement extends Statement {
 						+ Global.getCurrentScope().edScopeChain());
 			expr1.doChecking();
 			expr2.doChecking();
-			if (!expr2.type.equals(Type.Boolean))
+			if (expr2.type.keyWord != Type.T_BOOLEAN)
 				Util.error("While " + expr2 + " is not of type Boolean");
 			expr1 = TypeConversion.testAndCreate(controlVariable.type, expr1);
 			expr1.backLink = ForStatement.this; // To ensure _RESULT from functions
@@ -541,8 +542,7 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public String edCode(final String classIdent, Type xType) {
-			String forElt = (controlVariable.type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
-					: "Elt<" + classIdent + ">";
+			String forElt = (controlVariable.type.keyWord == Type.T_TEXT && assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt" : "Elt<" + classIdent + ">";
 			return ("new FOR_While" + forElt + "(" + edControlVariableByName(classIdent, xType) + ",new RTS_NAME<"
 					+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }}"
 					+ ",new RTS_NAME<Boolean>() { public Boolean get(){return(" + expr2.toJavaCode() + "); }})");
@@ -621,7 +621,7 @@ public final class ForStatement extends Statement {
 		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
-			oupt.writeInt(2);
+			oupt.writeShort(2);
 			oupt.writeObj(expr1);
 			oupt.writeObj(expr2);
 		}
@@ -752,7 +752,7 @@ public final class ForStatement extends Statement {
 		*/
 		private static int SEQU=0;
 		private void generalCase() {
-			System.out.println("ForStatement.generalCase: "+this);
+//			System.out.println("ForStatement.generalCase: "+this);
 			String cv = controlVariable.toJavaCode();
 			String deltaType=expr2.type.toJavaType();
 			String deltaID = "DELTA_" + (SEQU++);
@@ -841,7 +841,7 @@ public final class ForStatement extends Statement {
 				CTRL=var.getFieldRefEntry(codeBuilder.constantPool());
 			} else if(controlVariable.meaning.declaredAs instanceof Parameter par) {
 				CTRL=par.getFieldRefEntry(codeBuilder.constantPool());
-			} else Util.IERR("");
+			} else Util.IERR();
 			
 //			SimpleVariableDeclaration decl = (SimpleVariableDeclaration)controlVariable.meaning.declaredAs;
 //			FieldRefEntry CTRL=decl.getFieldRefEntry(codeBuilder.constantPool());
@@ -869,7 +869,7 @@ public final class ForStatement extends Statement {
 				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
 				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
 				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
-				default: Util.IERR(""+expr2.type);
+				default: Util.IERR();
 			}
 
 			// TST:
@@ -887,7 +887,7 @@ public final class ForStatement extends Statement {
 				case Type.T_INTEGER:   codeBuilder.iload(DELTA); break;
 				case Type.T_REAL:      codeBuilder.fload(DELTA); break;
 				case Type.T_LONG_REAL: codeBuilder.dload(DELTA); break;
-				default: Util.IERR(""+controlVariable.type);
+				default: Util.IERR();
 			}
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
 			codeBuilder.getfield(CTRL);
@@ -900,7 +900,7 @@ public final class ForStatement extends Statement {
 				case Type.T_INTEGER:   codeBuilder.isub().imul(); break;
 				case Type.T_REAL:      codeBuilder.fsub().fmul().fconst_0().fcmpg();; break;
 				case Type.T_LONG_REAL: codeBuilder.dsub().dmul().dconst_0().dcmpg(); break;
-				default: Util.IERR(""+controlVariable.type);
+				default: Util.IERR();
 			}
 			
 			codeBuilder.ifgt(endLabel);
@@ -920,7 +920,7 @@ public final class ForStatement extends Statement {
 				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
 				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
 				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
-				default: Util.IERR(""+expr2.type);
+				default: Util.IERR();
 			}
 			
 	        // controlVariable = controlVariable + DELTA;  
@@ -938,7 +938,7 @@ public final class ForStatement extends Statement {
 				case Type.T_INTEGER:   codeBuilder.iload(DELTA).iadd(); break;
 				case Type.T_REAL:      codeBuilder.fload(DELTA).fadd(); break;
 				case Type.T_LONG_REAL: codeBuilder.dload(DELTA).dadd(); break;
-				default: Util.IERR(""+controlVariable.type);
+				default: Util.IERR();
 			}
 			
 			// MAY BE CONVERT   TOS:DELTA to controlVariable.type
@@ -979,7 +979,7 @@ public final class ForStatement extends Statement {
 		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeForListElement: " + this);
-			oupt.writeInt(3);
+			oupt.writeShort(3);
 			oupt.writeObj(expr1);
 			oupt.writeObj(expr2);
 			oupt.writeObj(expr3);
@@ -1076,12 +1076,12 @@ public final class ForStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeForStatement: " + this);
 		oupt.writeKind(ObjectKind.ForStatement);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeObj(controlVariable);
-		oupt.writeInt(assignmentOperator);
+		oupt.writeShort(assignmentOperator);
 //		oupt.writeObj(forList);
-		oupt.writeInt(forList.size());
+		oupt.writeShort(forList.size());
 		for(ForListElement ent:forList) ent.writeObject(oupt);
 		oupt.writeObj(doStatement);
 	}
@@ -1089,13 +1089,13 @@ public final class ForStatement extends Statement {
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readForStatement: ");
 		ForStatement stm = new ForStatement();
-//		stm.SEQU = inpt.readInt();
+//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readInt();
+		stm.lineNumber = inpt.readShort();
 		stm.controlVariable = (VariableExpression) inpt.readObj();
-		stm.assignmentOperator = inpt.readInt();
+		stm.assignmentOperator = inpt.readShort();
 //		stm.forList = (Vector<ForListElement>) inpt.readObj();
-		int n = inpt.readInt();
+		int n = inpt.readShort();
 		if(n > 0) {
 			stm.forList = new Vector<ForListElement>();
 			for(int i=0;i<n;i++)

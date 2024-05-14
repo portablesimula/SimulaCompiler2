@@ -173,7 +173,7 @@ public final class LocalObject extends Expression {
 		String cast = classDeclaration.getJavaIdentifier();
 		if (thisScope instanceof ConnectionBlock connectionBlock) {
 			//return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
-			Util.IERR("");
+			Util.IERR();
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
 			DeclarationScope.buildCTX2(ctxDiff,codeBuilder);
@@ -199,8 +199,8 @@ public final class LocalObject extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLocalObject: " + this);
 		oupt.writeKind(ObjectKind.LocalObject);
-		oupt.writeInt(SEQU);
-		oupt.writeInt(lineNumber);
+		oupt.writeShort(SEQU);
+		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeString(classIdentifier);
@@ -209,9 +209,9 @@ public final class LocalObject extends Expression {
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLocalObject: ");
 		LocalObject expr = new LocalObject();
-//		expr.SEQU = inpt.readInt();
+//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readInt();
+		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();
 		expr.classIdentifier = inpt.readString();

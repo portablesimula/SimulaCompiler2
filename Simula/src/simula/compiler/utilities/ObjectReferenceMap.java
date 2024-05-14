@@ -14,11 +14,11 @@ public class ObjectReferenceMap {
 	
 	public void put(Integer key, SyntaxClass value) {
 //		System.out.println("ObjectReferenceMap.put:" + key + "  <= =>  " + value);
-		if(key == null) Util.IERR("");
-		if(value == null) Util.IERR("");
+		if(key == null) Util.IERR();
+		if(value == null) Util.IERR();
 //		System.out.println("ObjectReferenceMap.put:" + key + "  <= =>  " + value.getClass().getSimpleName());
 		objectReference.put(key, value);
-//		Util.IERR("");
+//		Util.IERR();
 	}
 	
 	public SyntaxClass get(int key) {
