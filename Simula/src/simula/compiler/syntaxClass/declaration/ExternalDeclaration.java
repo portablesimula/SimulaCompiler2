@@ -23,7 +23,7 @@ import java.util.zip.ZipEntry;
 import simula.compiler.AttributeFileIO;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.JarFileIO;
+import simula.compiler.JarFileBuilder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.DeclarationList;
@@ -162,7 +162,7 @@ public final class ExternalDeclaration extends Declaration {
 			ExternalDeclaration externalDeclaration = new ExternalDeclaration(identifier,extIdentitier);
 			externalDeclarations.add(externalDeclaration);
 			
-			File jarFile = JarFileIO.findJarFile(identifier, extIdentitier);
+			File jarFile = JarFileBuilder.findJarFile(identifier, extIdentitier);
 			if (jarFile != null) {
 				if(checkJarFiles(jarFile)) {
 					Type moduleType = AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
@@ -204,7 +204,7 @@ public final class ExternalDeclaration extends Declaration {
 	
 	public void readExternal() {
 //		System.out.println("ExternalDeclaration.readExternal: "+this);
-		File jarFile = JarFileIO.findJarFile(identifier, externalIdent);
+		File jarFile = JarFileBuilder.findJarFile(identifier, externalIdent);
 		if (jarFile != null) {
 			if(checkJarFiles(jarFile)) {
 				BlockDeclaration enclosure = StandardClass.BASICIO;

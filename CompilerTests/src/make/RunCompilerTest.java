@@ -285,6 +285,7 @@ public final class RunCompilerTest {
 			Option.INLINE_TESTING=true;
 			Option.CREATE_JAVA_SOURCE = true;
 //			Option.GENERATE_BYTEFILE=true;
+			Option.USE_JAR_FILE_BUILDER = true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
@@ -320,7 +321,7 @@ public final class RunCompilerTest {
 //			Option.TRACE_BYTECODE_OUTPUT=true;
 //			Option.DEBUGGING=true;
 			
-			Option.LIST_GENERATED_CLASS_FILES=true;
+//			Option.LIST_GENERATED_CLASS_FILES=true;
 
 //			File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 			File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");

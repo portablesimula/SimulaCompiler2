@@ -33,9 +33,10 @@ public final class RunSingleTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 		Option.CREATE_JAVA_SOURCE = true;
+		Option.USE_JAR_FILE_BUILDER = true;
 //		Option.GENERATE_BYTEFILE=true;
 		Option.TESTING_STACK_SIZE = true;
-		Option.LIST_GENERATED_CLASS_FILES=true;
+//		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
 //		Option.verbose = true;
 		Option.WARNINGS=true;
@@ -53,8 +54,8 @@ public final class RunSingleTest {
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
 		Option.PRINT_SYNTAX_TREE=true;
-		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-		Option.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.TRACE_FIND_MEANING=4;
@@ -93,7 +94,7 @@ public final class RunSingleTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -140,7 +141,7 @@ public final class RunSingleTest {
 //		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
 //		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
 //			names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 //
 //		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
@@ -260,8 +261,8 @@ public final class RunSingleTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
-		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

@@ -46,6 +46,7 @@ public final class RunSimulaSample {
 
 			// Set Compile Time Options and tracing.
 			Option.INLINE_TESTING=true;
+			Option.USE_JAR_FILE_BUILDER = true;
 //		    Option.verbose = true;
 //			Option.WARNINGS=true;
 //			Option.CREATE_JAVA_SOURCE = true;

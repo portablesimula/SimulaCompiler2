@@ -102,16 +102,16 @@ public class AttributeInputStream {
 	}
 
     public Object readConstant() throws IOException {
-    	char key = inpt.readChar();
+    	int key = inpt.readByte();
     	if(TRACE) System.out.println("AttributeInputStream.readConstant: key=" + (int)key + " \"" + key +"\"");
     	Object res = null;
 		switch(key) {
-			case 'Z':	res = inpt.readBoolean(); break;
-			case 'C':	res = inpt.readChar(); break;
-			case 'I':	res = inpt.readShort(); break;
-			case 'F':	res = inpt.readFloat(); break;
-			case 'D':	res = inpt.readDouble(); break;
-			case 'S':	res = readString(); break;
+			case Type.T_BOOLEAN:	res = inpt.readBoolean(); break;
+			case Type.T_CHARACTER:	res = inpt.readChar(); break;
+			case Type.T_INTEGER:	res = inpt.readShort(); break;
+			case Type.T_REAL:		res = inpt.readFloat(); break;
+			case Type.T_LONG_REAL:	res = inpt.readDouble(); break;
+			case Type.T_TEXT:		res = readString(); break;
 			default: throw new RuntimeException("key = "+key);
 		}
     	if(TRACE) System.out.println("AttributeInputStream.readDouble: "+res);

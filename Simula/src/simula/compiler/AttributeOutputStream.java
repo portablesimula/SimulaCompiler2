@@ -55,13 +55,13 @@ public class AttributeOutputStream {
 
     public void writeConstant(Object c) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
-		if(c instanceof Boolean b)			{ oupt.writeChar('Z'); oupt.writeBoolean(b);	}
-		else if(c instanceof Integer i)		{ oupt.writeChar('I'); oupt.writeShort(i);	}
-		else if(c instanceof Long li)		{ oupt.writeChar('I'); oupt.writeShort(li.intValue()); }
-		else if(c instanceof Character k)	{ oupt.writeChar('C'); oupt.writeChar(k); }
-		else if(c instanceof Float f)		{ oupt.writeChar('F'); oupt.writeFloat(f); }
-		else if(c instanceof Double f)		{ oupt.writeChar('D'); oupt.writeDouble(f); }
-		else if(c instanceof String s)		{ oupt.writeChar('S'); writeString(s); }
+		if(c instanceof Boolean b)			{ oupt.writeByte(Type.T_BOOLEAN);   oupt.writeBoolean(b);	}
+		else if(c instanceof Integer i)		{ oupt.writeByte(Type.T_INTEGER);   oupt.writeShort(i);	}
+		else if(c instanceof Long li)		{ oupt.writeByte(Type.T_INTEGER);   oupt.writeShort(li.intValue()); }
+		else if(c instanceof Character k)	{ oupt.writeByte(Type.T_CHARACTER); oupt.writeChar(k); }
+		else if(c instanceof Float f)		{ oupt.writeByte(Type.T_REAL);      oupt.writeFloat(f); }
+		else if(c instanceof Double f)		{ oupt.writeByte(Type.T_LONG_REAL); oupt.writeDouble(f); }
+		else if(c instanceof String s)		{ oupt.writeByte(Type.T_TEXT);      writeString(s); }
 		else Util.IERR(""+c.getClass().getSimpleName());
 	}
 

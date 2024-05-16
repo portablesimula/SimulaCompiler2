@@ -21,6 +21,7 @@ import java.util.Vector;
 import javax.swing.ImageIcon;
 
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JarFileBuilder;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
@@ -159,6 +160,11 @@ public final class Global {
 	public static boolean duringSTM_Coding;
 
 	/**
+	 * The .jar File Builder
+	 */
+	public static JarFileBuilder jarFileBuilder;
+
+	/**
 	 * The Simula temp directory
 	 */
 	public static File simulaTempDir;
@@ -210,6 +216,7 @@ public final class Global {
 	 */
 	public static void initiate() {
 		Object_SEQU = 8001;
+		jarFileBuilder = null;
 		duringParsing = true;
 		duringChecking = false;
 		duringSTM_Coding = false;

@@ -81,6 +81,7 @@ public final class SimulaCompiler {
 	 * The output .jar file
 	 */
 	private File outputJarFile;
+//	private JarFileBuilder jarFileBuilder;
 	
 	/**
 	 * Main entry name.
@@ -253,6 +254,9 @@ public final class SimulaCompiler {
 				Util.warning("The source file name '" + sourceName + "' is not a legal class identifier. Modified to: "
 						+ Global.sourceName);
 			}
+			if(Option.USE_JAR_FILE_BUILDER) {
+				Global.jarFileBuilder = new JarFileBuilder();
+			}
 			// ***************************************************************
 			// *** Scanning and Parsing
 			// ***************************************************************
@@ -299,8 +303,11 @@ public final class SimulaCompiler {
 				throw new RuntimeException(msg);
 			}
 			// ***************************************************************
-			// *** Generate .java or .class files
+			// *** Generate .java files or ClassFileBuilder -> jarFile
 			// ***************************************************************
+			if(Option.USE_JAR_FILE_BUILDER) {
+				Global.jarFileBuilder.open(programModule);
+			}
 //			if (Option.GENERATE_BYTEFILE) {
 			if (!Option.CREATE_JAVA_SOURCE) {
 				if (Option.TRACING)
@@ -329,29 +336,32 @@ public final class SimulaCompiler {
 				Util.println("BEGIN Possible Generate AttributeFile");
 			AttributeFileIO.write(programModule);
 
-			// ***************************************************************
-			// *** CALL JAVA COMPILER
-			// ***************************************************************
-//			if(!Option.GENERATE_BYTEFILE) doCallJavaCompiler();
-			if(Option.CREATE_JAVA_SOURCE) doCallJavaCompiler();
-
-			// ***************************************************************
-			// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
-			// ***************************************************************
-//			if(!Option.GENERATE_BYTEFILE) doByteCodeEngineering();
-			if(Option.CREATE_JAVA_SOURCE) doByteCodeEngineering();
-
-			// ***************************************************************
-			// *** POSSIBLE - LIST GENERATED .class FILES
-			// ***************************************************************
-//			if(Option.LIST_GENERATED_CLASS_FILES && !Option.GENERATE_BYTEFILE)
-			if(Option.LIST_GENERATED_CLASS_FILES && Option.CREATE_JAVA_SOURCE)
-				listGeneratedClassFiles();
+			if(Option.CREATE_JAVA_SOURCE) {
+				// ***************************************************************
+				// *** CALL JAVA COMPILER
+				// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
+				// *** POSSIBLE - LIST GENERATED .class FILES
+				// ***************************************************************
+				doCallJavaCompiler();
+				doByteCodeEngineering();
+				if(Option.LIST_GENERATED_CLASS_FILES)
+					listGeneratedClassFiles();
+			}
 
 			// ***************************************************************
 			// *** CRERATE .jar FILE INLINE
 			// ***************************************************************
-			String jarFile = createJarFile(programModule);
+			String jarFile = null;
+			if(Option.USE_JAR_FILE_BUILDER) {
+				if(Option.CREATE_JAVA_SOURCE) {
+					Global.jarFileBuilder.addTempClassFiles();
+				}
+				outputJarFile = Global.jarFileBuilder.close();
+				jarFile = outputJarFile.toString();
+			} else {
+//				jarFile = createJarFile(programModule);
+				Util.IERR();
+			}
 			if (Option.verbose)
 				printSummary();
 
@@ -445,7 +455,7 @@ public final class SimulaCompiler {
 				boolean cread = jarFile.canRead();
 				Util.println(
 						"Precompiled Library:      \"" + jarFile + "\", exists=" + exist + ", canRead=" + cread);
-				JarFileIO.listJarFile(jarFile);
+				JarFileBuilder.listJarFile(jarFile);
 			}
 			classPath = classPath + pathSeparator + (jarFile.toString().trim());
 		}
@@ -611,116 +621,116 @@ public final class SimulaCompiler {
 		Util.doListClassFile(""+xFile); // List explicit .class file
 	}
 
-	// ***************************************************************
-	// *** CREATE .jar FILE
-	// ***************************************************************
-	/**
-	 * Create .jar file.
-	 * @param program the ProgramModule
-	 * @return .jar file name
-	 * @throws IOException if something went wrong
-	 */
-	private String createJarFile(final ProgramModule program) throws IOException {
-		if (Option.TRACING)
-			Util.println("BEGIN Create .jar File");
-		outputJarFile = new File(Global.outputDir, program.getIdentifier() + ".jar");
-		outputJarFile.getParentFile().mkdirs();
-		if (!program.isExecutable()) {
-			String id = program.module.identifier;
-			String kind = "Procedure ";
-			if (program.module instanceof ClassDeclaration)
-				kind = "Class ";
-			Util.warning("No execution - Separate Compiled " + kind + id + " is written to: \"" + outputJarFile + "\"");
-		}
-		Manifest manifest = new Manifest();
-		mainEntry = Global.packetName + '/' + program.getIdentifier();
-		mainEntry = mainEntry.replace('/', '.');
-		if (Option.TRACING)
-			Util.println("Output " + outputJarFile + " MANIFEST'mainEntry=\"" + mainEntry + "\"");
-		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
-		manifest.getMainAttributes().putValue("Created-By", Global.simulaReleaseID + " (Portable Simula)");
-		if (program.isExecutable()) {
-			manifest.getMainAttributes().put(Attributes.Name.MAIN_CLASS, mainEntry);
-		} else {
-			String relativeAttributeFileName = program.getRelativeAttributeFileName();
-			if (relativeAttributeFileName != null)
-				manifest.getMainAttributes().putValue("SIMULA-INFO", relativeAttributeFileName);
-		}
-
-		JarOutputStream target = new JarOutputStream(new FileOutputStream(outputJarFile), manifest);
-		add(target, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
-		if (programModule.isExecutable()) {
-			File rtsHome = new File(Global.simulaRtsLib, "simula/runtime");
-			add(target, rtsHome, Global.simulaRtsLib.toString().length());
-		}
-		target.close();
-		if (Option.TRACING)
-			Util.println("END Create .jar File: " + outputJarFile);
-		if (Option.DEBUGGING) {
-			Util.println(
-					"SimulaCompiler.createJarFile: BEGIN LIST GENERATED .jar FILE  ========================================================");
-			JarFileIO.listJarFile(outputJarFile);
-			Util.println(
-					"SimulaCompiler.createJarFile: ENDOF LIST GENERATED .jar FILE  ========================================================");
-		}
-		return (outputJarFile.toString());
-	}
-
-	/**
-	 * Add directory or a file to a JarOutputStream.
-	 * @param target the JarOutputStream
-	 * @param source source file or directory
-	 * @param pathSize the path size
-	 * @throws IOException if something went wrong
-	 */
-	private void add(final JarOutputStream target, final File source, final int pathSize) throws IOException {
-		if(!source.exists()) {
-			Util.IERR("SimulaCompiler.add: source="+source+", exists="+source.exists());
-		}
-		BufferedInputStream inpt = null;
-		try {
-			if (source.isDirectory()) {
-				String name = source.getPath().replace("\\", "/");
-				if (!name.isEmpty()) {
-					if (!name.endsWith("/"))
-						name += "/";
-					name = name.substring(pathSize);
-					if (name.startsWith("/"))
-						name = name.substring(1);
-					JarEntry entry = new JarEntry(name);
-					entry.setTime(source.lastModified());
-					target.putNextEntry(entry);
-					target.closeEntry();
-				}
-				for (File nestedFile : source.listFiles())
-					add(target, nestedFile, pathSize);
-				return;
-			}
-			String entryName = source.getPath().replace("\\", "/");
-			if (!entryName.endsWith(".jasm")) {
-				entryName = entryName.substring(pathSize);
-				if (entryName.startsWith("/"))
-					entryName = entryName.substring(1);
-				if (Option.TRACING && (!entryName.startsWith("simula/runtime")))
-					Util.println("ADD-TO-JAR: "+entryName);
-				JarEntry entry = new JarEntry(entryName);
-				entry.setTime(source.lastModified());
-				target.putNextEntry(entry);
-				inpt = new BufferedInputStream(new FileInputStream(source));
-				byte[] buffer = new byte[1024];
-				while (true) {
-					int count = inpt.read(buffer);
-					if (count == -1)
-						break; // EOF
-					target.write(buffer, 0, count);
-				}
-				target.closeEntry();
-			}
-		} finally {
-			if (inpt != null)
-				inpt.close();
-		}
-	}
+//	// ***************************************************************
+//	// *** CREATE .jar FILE
+//	// ***************************************************************
+//	/**
+//	 * Create .jar file.
+//	 * @param program the ProgramModule
+//	 * @return .jar file name
+//	 * @throws IOException if something went wrong
+//	 */
+//	private String createJarFile(final ProgramModule program) throws IOException {
+//		if (Option.TRACING)
+//			Util.println("BEGIN Create .jar File");
+//		outputJarFile = new File(Global.outputDir, program.getIdentifier() + ".jar");
+//		outputJarFile.getParentFile().mkdirs();
+//		if (!program.isExecutable()) {
+//			String id = program.module.identifier;
+//			String kind = "Procedure ";
+//			if (program.module instanceof ClassDeclaration)
+//				kind = "Class ";
+//			Util.warning("No execution - Separate Compiled " + kind + id + " is written to: \"" + outputJarFile + "\"");
+//		}
+//		Manifest manifest = new Manifest();
+//		mainEntry = Global.packetName + '/' + program.getIdentifier();
+//		mainEntry = mainEntry.replace('/', '.');
+//		if (Option.TRACING)
+//			Util.println("Output " + outputJarFile + " MANIFEST'mainEntry=\"" + mainEntry + "\"");
+//		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
+//		manifest.getMainAttributes().putValue("Created-By", Global.simulaReleaseID + " (Portable Simula)");
+//		if (program.isExecutable()) {
+//			manifest.getMainAttributes().put(Attributes.Name.MAIN_CLASS, mainEntry);
+//		} else {
+//			String relativeAttributeFileName = program.getRelativeAttributeFileName();
+//			if (relativeAttributeFileName != null)
+//				manifest.getMainAttributes().putValue("SIMULA-INFO", relativeAttributeFileName);
+//		}
+//
+//		JarOutputStream target = new JarOutputStream(new FileOutputStream(outputJarFile), manifest);
+//		add(target, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
+//		if (programModule.isExecutable()) {
+//			File rtsHome = new File(Global.simulaRtsLib, "simula/runtime");
+//			add(target, rtsHome, Global.simulaRtsLib.toString().length());
+//		}
+//		target.close();
+//		if (Option.TRACING)
+//			Util.println("END Create .jar File: " + outputJarFile);
+//		if (Option.DEBUGGING) {
+//			Util.println(
+//					"SimulaCompiler.createJarFile: BEGIN LIST GENERATED .jar FILE  ========================================================");
+//			JarFileBuilder.listJarFile(outputJarFile);
+//			Util.println(
+//					"SimulaCompiler.createJarFile: ENDOF LIST GENERATED .jar FILE  ========================================================");
+//		}
+//		return (outputJarFile.toString());
+//	}
+//
+//	/**
+//	 * Add directory or a file to a JarOutputStream.
+//	 * @param target the JarOutputStream
+//	 * @param source source file or directory
+//	 * @param pathSize the path size
+//	 * @throws IOException if something went wrong
+//	 */
+//	private void add(final JarOutputStream target, final File source, final int pathSize) throws IOException {
+//		if(!source.exists()) {
+//			Util.IERR("SimulaCompiler.add: source="+source+", exists="+source.exists());
+//		}
+//		BufferedInputStream inpt = null;
+//		try {
+//			if (source.isDirectory()) {
+//				String name = source.getPath().replace("\\", "/");
+//				if (!name.isEmpty()) {
+//					if (!name.endsWith("/"))
+//						name += "/";
+//					name = name.substring(pathSize);
+//					if (name.startsWith("/"))
+//						name = name.substring(1);
+//					JarEntry entry = new JarEntry(name);
+//					entry.setTime(source.lastModified());
+//					target.putNextEntry(entry);
+//					target.closeEntry();
+//				}
+//				for (File nestedFile : source.listFiles())
+//					add(target, nestedFile, pathSize);
+//				return;
+//			}
+//			String entryName = source.getPath().replace("\\", "/");
+//			if (!entryName.endsWith(".jasm")) {
+//				entryName = entryName.substring(pathSize);
+//				if (entryName.startsWith("/"))
+//					entryName = entryName.substring(1);
+//				if (Option.TRACING && (!entryName.startsWith("simula/runtime")))
+//					Util.println("ADD-TO-JAR: "+entryName);
+//				JarEntry entry = new JarEntry(entryName);
+//				entry.setTime(source.lastModified());
+//				target.putNextEntry(entry);
+//				inpt = new BufferedInputStream(new FileInputStream(source));
+//				byte[] buffer = new byte[1024];
+//				while (true) {
+//					int count = inpt.read(buffer);
+//					if (count == -1)
+//						break; // EOF
+//					target.write(buffer, 0, count);
+//				}
+//				target.closeEntry();
+//			}
+//		} finally {
+//			if (inpt != null)
+//				inpt.close();
+//		}
+//	}
 
 	// ***************************************************************
 	// *** FILE SUMMARY
@@ -758,7 +768,7 @@ public final class SimulaCompiler {
 			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
 //		if (Option.DEBUGGING)
-			JarFileIO.listJarFile(outputJarFile);
+			JarFileBuilder.listJarFile(outputJarFile);
 	}
 
 }

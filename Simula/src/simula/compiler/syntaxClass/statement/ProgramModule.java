@@ -124,10 +124,7 @@ public final class ProgramModule extends Statement {
 			     .setClassDeclaration(StandardClass.Printfile);
 			Global.getCurrentScope().sourceBlockLevel=0;
 			while(Parse.accept(KeyWord.EXTERNAL)) {
-				if(Option.TESTING_SEPARATE) {
-					externalHead = ExternalDeclaration.expectExternalHead(StandardClass.BASICIO);					
-				} else
-					externalHead = ExternalDeclaration.expectExternalHead(StandardClass.ENVIRONMENT);
+				externalHead = ExternalDeclaration.expectExternalHead(StandardClass.BASICIO);					
 				Parse.expect(KeyWord.SEMICOLON);
 			}
 			String ident=Parse.acceptIdentifier();
@@ -149,7 +146,10 @@ public final class ProgramModule extends Statement {
 			StandardClass.BASICIO.declarationList.add(module);
 		
 			if(Option.verbose) Util.TRACE("ProgramModule: END NEW SimulaProgram: "+toString());
-		} catch(Throwable e) { Util.IERR(); }
+		} catch(Throwable e) {
+			e.printStackTrace();
+			Util.IERR();
+			}
 		this.module=module;
 //		if(Option.PRINT_SYNTAX_TREE) module.printTree(0);
 	}	

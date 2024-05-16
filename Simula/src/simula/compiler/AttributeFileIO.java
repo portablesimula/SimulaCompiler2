@@ -78,14 +78,11 @@ public final class AttributeFileIO {
 		File file = new File(Global.tempClassFileDir,relativeAttributeFileName);
 		if (Option.verbose)
 			Util.println("*** BEGIN Generate SimulaAttributeFile: \"" + file+"\"");
-		//AttributeFileIO attributeFile = new AttributeFileIO(file);
-		//attributeFile.XXXwrite((BlockDeclaration) program.module,file);
-		/**
-		 * Write a module's attribute file.
-		 * @param module the module
-		 * @throws IOException if an io-error occurs
-		 */
-		//private void XXXwrite(final BlockDeclaration module,final File attributeFile) throws IOException {
+		if(Option.USE_JAR_FILE_BUILDER) {
+			byte[] bytes = buildAttrFile(program);
+			String entryName = program.getRelativeAttributeFileName();
+			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+		} else {
 			File attributeDir = new File(Global.tempClassFileDir,Global.packetName);
 			attributeDir.mkdirs();
 			file.createNewFile();
@@ -94,7 +91,7 @@ public final class AttributeFileIO {
 			fileOutputStream.write(bytes);
 			fileOutputStream.flush();
 			fileOutputStream.close();
-		//}
+		}
 		if (Option.verbose)	Util.TRACE("*** ENDOF Generate SimulaAttributeFile: " + file);
 	}
 
@@ -148,6 +145,8 @@ public final class AttributeFileIO {
 			Attributes mainAttributes = manifest.getMainAttributes();
 			String simulaInfo = mainAttributes.getValue("SIMULA-INFO");
 			ZipEntry zipEntry = jarFile.getEntry(simulaInfo);
+			if(zipEntry == null)
+				Util.IERR("No Attribute File found in "+file);
 
 			DeclarationList declarationList=enclosure.declarationList;
 			if (Option.verbose)	Util.TRACE("*** BEGIN Read SimulaAttributeFile: " + file);
@@ -166,9 +165,13 @@ public final class AttributeFileIO {
 					System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
 							+"  ==>  "+declarationList.identifier);
 			}
-			File destDir = Global.tempClassFileDir;
-			expandJarEntries(jarFile, destDir);
-			jarFile.close();
+			if(Option.USE_JAR_FILE_BUILDER) {
+				Global.jarFileBuilder.include(jarFile);
+			} else {
+				File destDir = Global.tempClassFileDir;
+				expandJarEntries(jarFile, destDir);
+				jarFile.close();
+			}
 //			Global.externalJarFiles.add(file);
 		} catch (IOException e) {
 			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);

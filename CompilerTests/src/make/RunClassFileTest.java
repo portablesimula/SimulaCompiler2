@@ -214,10 +214,10 @@ public final class RunClassFileTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		// String name="/simple/adHoc000.sim";
+		 String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
-		 String name="/simple/adHoc02.sim";
+		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
 		// String name="/simple/adHoc30a.sim";
 		// String name="/simple/adHoc04.sim";
@@ -291,9 +291,9 @@ public final class RunClassFileTest {
 			Option.INLINE_TESTING=true;
 //			Option.CREATE_JAVA_SOURCE = true;
 			Option.TESTING_STACK_SIZE = true;
-			Option.TESTING_SEPARATE = true;
-			Option.LIST_GENERATED_CLASS_FILES=true;
-		    Option.verbose = true;
+			Option.USE_JAR_FILE_BUILDER = true;
+//			Option.LIST_GENERATED_CLASS_FILES=true;
+//		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
 			Option.SPORT=true;

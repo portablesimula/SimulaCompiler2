@@ -276,12 +276,7 @@ public final class Meaning {
 			if(withFollowSL) {
 //				System.out.println("Meaning.buildIdentifierAccess(1): meaning.declaredAs="+meaning.declaredAs);
 //				System.out.println("Meaning.buildIdentifierAccess(1): meaning.declaredIn="+meaning.declaredIn);
-				if(Option.TESTING_SEPARATE) {
-					codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
-					
-				} else {
-					codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
-				}
+				codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 //				System.out.println(meaning.declaredAs);
 //				System.out.println(meaning.declaredIn);
 //				if(cast.equalsIgnoreCase("RTS_ENVIRONMENT")) Util.IERR();

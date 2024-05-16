@@ -1,32 +1,27 @@
 
 begin
-	integer iiii;
-	
-	procedure trace(msg); text msg; begin
-		outtext(msg); outimage;
-	end;
 
-   class p;
-   begin
-      integer i;
-      Simulation begin
-         ref(Car) car1;
-      
-         Process class Car(pname); text pname;
-         begin
-               goto EXIT_LABEL;
-         end;
-      
-         trace("START SIMULATION");
-         car1:- new Car("Bil 1");
-         trace(car1.pname & " is scheduled for 4.0");
-         activate car1 at 4.0;
-         hold (12);
-EXIT_LABEL: trace("At OUT"); outimage;
-      
-      end;
+   text txt;
+   
+   
+   class A(i); integer i; virtual: procedure V; begin
+       CatchingErrors begin
+           procedure onError(message); text message; begin
+               outtext("onError got error: " & message);
+           end;
+           if i=0 then V;
+           if i=1 then V("text");
+           if i=2 then V("text",4);
+           if i=3 then V("text",4,3.14);
+           if i=4 then V("text",4,3.14,"extra");
+       end;
+    end;
+   
+   A class B; begin
+       procedure V(t,n,r); text t; integer n; real r; begin
+           outtext("V Called by V(" & t & "," & edit(n) & "," & edfix(r,2) & ")" )
+       end;
    end;
-
-	new p;
-	
+   
+ 
 end;

@@ -259,4 +259,10 @@ public final class ConnectionBlock extends DeclarationScope {
 		this.inspectedVariable = null;
 	}
 
+	@Override
+	public byte[] buildClassFile() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

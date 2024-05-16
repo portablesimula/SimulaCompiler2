@@ -301,7 +301,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	@Override
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock "+CD_ThisClass);
+//        new Exception("Stack trace").printStackTrace(System.out);
+		
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,

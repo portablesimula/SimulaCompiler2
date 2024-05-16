@@ -33,12 +33,12 @@ public final class RunSingleClassTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
-		Option.TESTING_SEPARATE = true;
+		Option.USE_JAR_FILE_BUILDER = true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
 //		Option.LIST_GENERATED_CLASS_FILES=true;
 		Option.SPORT=true;
-//		Option.verbose = true;
+		Option.verbose = true;
 		Option.WARNINGS=true;
 //		Option.DEBUGGING=true;
 //		Option.EXTENSIONS=false;
@@ -53,7 +53,7 @@ public final class RunSingleClassTest {
 
 		// Parser Trace Options
 //		Option.TRACE_PARSE=true;
-		Option.PRINT_SYNTAX_TREE=true;
+//		Option.PRINT_SYNTAX_TREE=true;
 //		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 
@@ -95,7 +95,7 @@ public final class RunSingleClassTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
@@ -143,7 +143,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 //		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
 //		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-//			names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 //
@@ -264,10 +264,10 @@ public final class RunSingleClassTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
-		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
-//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
@@ -276,7 +276,7 @@ public final class RunSingleClassTest {
 //		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
 //		names.add("simerr05.sim"); // OK: NumberFormatException
 //		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
-//		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
+		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 //		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 //		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
 

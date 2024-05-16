@@ -69,26 +69,10 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	public boolean isContextFree;
 	
 	/**
-	 * If not null; this Class/Procedure is Pre-Compiled from a .jar file
-	 */
-	public String isPreCompiledFromFile;
-	
-	/**
 	 * Used for precompiled Class/Procedure to indicate whether the rtBlock level has been updated.
 	 * This is done in the doChecking method of the Class/Procedure
 	 */
 	public boolean isBlockLevelUpdated;
-
-	
-	/**
-	 * The Block Declaration that currently is being built
-	 */
-	public static BlockDeclaration currentBlock;
-	
-	/**
-	 * The previous value of 'currentBlock'
-	 */
-	private BlockDeclaration prevBlock;
 
 	/**
 	 * Compiler state: Points to the BlockDeclaration whose Statements are being built.
@@ -97,6 +81,17 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	public static BlockDeclaration labelContext;
 
 	public static Stack<BlockDeclaration> stmStack = new Stack<BlockDeclaration>();
+
+
+	/**
+	 * The DeclarationScope that currently is being built
+	 */
+	public static BlockDeclaration currentBlock;
+	
+	/**
+	 * The previous value of 'currentBlock'
+	 */
+	protected BlockDeclaration prevBlock;
 	
 	/**
 	 * Number of Local Variables allocated so far.
@@ -375,40 +370,62 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
 
-	// ***********************************************************************************************
-	// *** createJavaClassFile
-	// ***********************************************************************************************
-	/**
-	 * Create Java ClassFile.
-	 * @throws IOException 
-	 */
-	@Override
-    public void createJavaClassFile() throws IOException {
-		if (this.isPreCompiledFromFile != null)	return;
-		prevBlock = currentBlock;
-		currentBlock = this;
-
-        byte[] bytes = buildClassFile();
-        currentBlock = prevBlock;
-
-        if(bytes != null) {
-            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
-            outputFile.getParentFile().mkdirs();
-            FileOutputStream oupt = new FileOutputStream(outputFile);
-            oupt.write(bytes); oupt.flush(); oupt.close();
-            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
-
-			if(Option.LIST_GENERATED_CLASS_FILES) {
-				Util.doListClassFile("" + outputFile); // List generated .class file
-			}
-        }
-    }
-
-    
-    // ***********************************************************************************************
-    // *** ByteCoding: buildClassFile
-    // ***********************************************************************************************
-    public abstract byte[] buildClassFile();
+//	// ***********************************************************************************************
+//	// *** createJavaClassFile
+//	// ***********************************************************************************************
+//	/**
+//	 * Create Java ClassFile.
+//	 * @throws IOException 
+//	 */
+//	@Override
+//    public void createJavaClassFile() throws IOException {
+//		if (this.isPreCompiledFromFile != null)	return;
+//		prevBlock = currentBlock;
+//		currentBlock = this;
+//
+//        byte[] bytes = buildClassFile();
+//        currentBlock = prevBlock;
+//
+//        if(bytes != null) {
+//        	if(Option.USE_JAR_FILE_BUILDER) {
+//        		Global.jarFileBuilder.addClassFile(externalIdent,bytes);
+//        		
+//				if(Option.LIST_GENERATED_CLASS_FILES) {
+//					File outputFile = writeClassBytesToFile(bytes);
+//					outputFile.delete();
+//				}
+//        	} else {
+//	            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
+//	            outputFile.getParentFile().mkdirs();
+//	            FileOutputStream oupt = new FileOutputStream(outputFile);
+//	            oupt.write(bytes); oupt.flush(); oupt.close();
+//	            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
+//	
+//				if(Option.LIST_GENERATED_CLASS_FILES) {
+//					Util.doListClassFile("" + outputFile); // List generated .class file
+//				}
+//        	}
+//        }
+//    }
+//	
+//	private File writeClassBytesToFile(byte[] bytes) throws IOException {
+//        File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
+//        outputFile.getParentFile().mkdirs();
+//        FileOutputStream oupt = new FileOutputStream(outputFile);
+//        oupt.write(bytes); oupt.flush(); oupt.close();
+//        if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
+//
+//		if(Option.LIST_GENERATED_CLASS_FILES) {
+//			Util.doListClassFile("" + outputFile); // List generated .class file
+//		}
+//		return outputFile;
+//	}
+//
+//    
+//    // ***********************************************************************************************
+//    // *** ByteCoding: buildClassFile
+//    // ***********************************************************************************************
+//    public abstract byte[] buildClassFile();
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildIsQPSystemBlock
@@ -550,8 +567,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Label loopWhile = codeBuilder.newLabel();
 		Label loopEnd = codeBuilder.newLabel();
 		
-		local_THIS = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
-		local_LABEL_q = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+		local_THIS = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
+		local_LABEL_q = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
 		codeBuilder.localVariable(local_THIS,"_THIS",CD.RTS_RTObject,begScope,endScope);
 		codeBuilder.localVariable(local_LABEL_q,"label_q",CD.RTS_LABEL,begScope,endScope);
 		

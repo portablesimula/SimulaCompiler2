@@ -84,33 +84,37 @@ public final class Thunk extends DeclarationScope {
 			.invokespecial(CD_THUNK, "<init>", MethodTypeDesc.ofDescriptor("("+BlockDeclaration.currentClassDesc().descriptorString()+")V"));
 	}
 	
-	// ***********************************************************************************************
-	// *** createJavaClassFile
-	// ***********************************************************************************************
-	/**
-	 * Create Java ClassFile.
-	 * @throws IOException 
-	 */
-    public void createJavaClassFile() throws IOException {
-//    	System.out.println("Thunk.createJavaClassFile: "+expr);
-        byte[] bytes = buildClassFile();
-        if(bytes != null) {
-            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
-            outputFile.getParentFile().mkdirs();
-            FileOutputStream oupt = new FileOutputStream(outputFile);
-            oupt.write(bytes); oupt.flush(); oupt.close();
-            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile);
-
-			if(Option.LIST_GENERATED_CLASS_FILES) {
-				Util.doListClassFile("" + outputFile); // List generated .class file
-			}
-        }
-    }
+//	// ***********************************************************************************************
+//	// *** createJavaClassFile
+//	// ***********************************************************************************************
+//	/**
+//	 * Create Java ClassFile.
+//	 * @throws IOException 
+//	 */
+//    public void createJavaClassFile() throws IOException {
+////    	System.out.println("Thunk.createJavaClassFile: "+expr);
+//        byte[] bytes = buildClassFile();
+//    	if(Option.USE_JAR_FILE_BUILDER) {
+//    		Global.jarFileBuilder.addClassFile(externalIdent,bytes);
+//    	} else {
+//	        if(bytes != null) {
+//	            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
+//	            outputFile.getParentFile().mkdirs();
+//	            FileOutputStream oupt = new FileOutputStream(outputFile);
+//	            oupt.write(bytes); oupt.flush(); oupt.close();
+//	            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile);
+//	
+//				if(Option.LIST_GENERATED_CLASS_FILES) {
+//					Util.doListClassFile("" + outputFile); // List generated .class file
+//				}
+//	        }
+//    	}
+//    }
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
 	// ***********************************************************************************************
-	private byte[] buildClassFile() {
+	public byte[] buildClassFile() {
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_NAME);
 		

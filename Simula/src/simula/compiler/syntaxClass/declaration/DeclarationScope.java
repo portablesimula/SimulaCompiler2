@@ -7,11 +7,14 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
+import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -58,6 +61,11 @@ public abstract class DeclarationScope extends Declaration  {
 	 * Indicate if this scope has local classes.
 	 */
 	public boolean hasLocalClasses = false;
+	
+	/**
+	 * If not null; this Class/Procedure is Pre-Compiled from a .jar file
+	 */
+	public String isPreCompiledFromFile;
 
 	/**
 	 * The declaration list.
@@ -247,14 +255,6 @@ public abstract class DeclarationScope extends Declaration  {
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
 		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
-		
-		if(!Option.TESTING_SEPARATE) {
-			if (rtBlockLevel == 0) {
-				codeBuilder.getstatic(BlockDeclaration.currentClassDesc(),"_CTX",CD.RTS_CLASS);	
-				System.out.println("DeclarationScope.buildCTX: "+this);
-				return(false);
-			}
-		}
 		int curLevel = curScope.rtBlockLevel;
 		int ctxDiff = curLevel - endScope.rtBlockLevel - corr;
 		
@@ -398,9 +398,71 @@ public abstract class DeclarationScope extends Declaration  {
 		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent);
 	}
 
-	public void createJavaClassFile() throws IOException {
-		// TODO Auto-generated method stub
-		Util.IERR();
+	// ***********************************************************************************************
+    // *** ByteCoding: buildClassFile
+    // ***********************************************************************************************
+    public abstract byte[] buildClassFile();
+
+	// ***********************************************************************************************
+	// *** createJavaClassFile
+	// ***********************************************************************************************
+    /**
+     * Indicator used to prevent multiple ClassFile generation.
+     * This situation may occur during the class body concatenation process.
+     */
+    private boolean CLASSFILE_ALREADY_GENERATED;
+	/**
+	 * Create Java ClassFile.
+	 * @throws IOException 
+	 */
+    public void createJavaClassFile() throws IOException {
+    	if (this.isPreCompiledFromFile != null)	return;
+    	
+//    	System.out.println("DeclarationScope.createJavaClassFile: ================================================================ "+this.externalIdent);
+//    	if(externalIdent.equals("simerr07_PBLK18")) {
+//            new Exception("Stack trace").printStackTrace(System.out);
+//    	}
+    	if(CLASSFILE_ALREADY_GENERATED) return;
+    	CLASSFILE_ALREADY_GENERATED = true;
+    	
+    	byte[] bytes;
+    	if(this instanceof BlockDeclaration blk) {
+    		blk.prevBlock = BlockDeclaration.currentBlock;
+    		BlockDeclaration.currentBlock = blk;
+
+    		bytes = buildClassFile();
+    		BlockDeclaration.currentBlock = blk.prevBlock;
+    	} else {
+    		bytes = buildClassFile();
+    	}
+
+    	if(bytes != null) {
+    		if(Option.USE_JAR_FILE_BUILDER) {
+//    			Global.jarFileBuilder.addClassFile(externalIdent,bytes);
+    			String entryName = Global.packetName + "/" + externalIdent + ".class";
+    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+
+    			if(Option.LIST_GENERATED_CLASS_FILES) {
+    				File outputFile = writeClassBytesToFile(bytes);
+    				outputFile.delete();
+    			}
+    		} else {
+    			writeClassBytesToFile(bytes);
+    		}
+    	}
+    }
+	
+	private File writeClassBytesToFile(byte[] bytes) throws IOException {
+        File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
+        outputFile.getParentFile().mkdirs();
+        FileOutputStream oupt = new FileOutputStream(outputFile);
+        oupt.write(bytes); oupt.flush(); oupt.close();
+        if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
+
+		if(Option.LIST_GENERATED_CLASS_FILES) {
+			Util.doListClassFile("" + outputFile); // List generated .class file
+		}
+		return outputFile;
 	}
 
 }
