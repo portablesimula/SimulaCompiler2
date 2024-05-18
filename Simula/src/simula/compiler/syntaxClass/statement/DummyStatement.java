@@ -84,7 +84,7 @@ public final class DummyStatement extends Statement {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public DummyStatement() { super(0); }
 

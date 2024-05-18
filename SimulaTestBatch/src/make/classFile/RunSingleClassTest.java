@@ -33,7 +33,6 @@ public final class RunSingleClassTest {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 //		Option.CREATE_JAVA_SOURCE = true;
-		Option.USE_JAR_FILE_BUILDER = true;
 //		Option.TESTING_STACK_SIZE = true;
 //		Option.TESTING_THUNK=true;
 //		Option.LIST_GENERATED_CLASS_FILES=true;

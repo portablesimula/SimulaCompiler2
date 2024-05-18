@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -306,6 +303,7 @@ public final class ArrayDeclaration extends Declaration {
 			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),arrayIdent, CD_ArrayType));
 	}
 
+	@Override
 	public String getFieldIdentifier() {
 		return(this.getJavaIdentifier());
 	}
@@ -536,6 +534,7 @@ public final class ArrayDeclaration extends Declaration {
 
 
 
+	@Override
 	public void printTree(int indent) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);
 	}
@@ -552,7 +551,7 @@ public final class ArrayDeclaration extends Declaration {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ArrayDeclaration() {
 		super(null);
@@ -573,7 +572,6 @@ public final class ArrayDeclaration extends Declaration {
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
-//		arr.SEQU = inpt.readShort();
 		arr.SEQU = inpt.readSEQU(arr);
 		arr.identifier = inpt.readString();
 		arr.externalIdent = inpt.readString();
@@ -582,27 +580,5 @@ public final class ArrayDeclaration extends Declaration {
 		Util.TRACE_INPUT("Array: " + arr);
 		return(arr);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeShort(nDim);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-//		nDim = inpt.readShort();
-//		Util.TRACE_INPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
-//	}
 	
 }

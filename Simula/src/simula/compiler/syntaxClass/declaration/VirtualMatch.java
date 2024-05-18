@@ -7,13 +7,8 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
-import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
@@ -21,7 +16,6 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.Util;
 
 /**
  * Virtual match.
@@ -68,27 +62,19 @@ public final class VirtualMatch extends Declaration {
 
 	public void buildMethod(ClassBuilder classBuilder) {
 	    String ident=virtualSpec.getSimpleVirtualIdentifier();
-//	    System.out.println("VirtualMatch.buildMethod: "+this);
 		MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;");
 		classBuilder
 			.withMethodBody(ident, MTD_STM, ClassFile.ACC_PUBLIC,
-					codeBuilder -> buildMethodBody(codeBuilder));
-	}
-	
-	private void buildMethodBody(CodeBuilder codeBuilder) {
-		if (match == null) {
-			Util.IERR("TROR IKKE AT DETTE FOREKOMMER");
-			Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder);
-		} else {
-			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			codeBuilder
-				.new_(CD.RTS_PRCQNT)
-				.dup()
-				.aload(0)
-				.ldc(pool.classEntry(match.getClassDesc()))
-				.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"))
-				.areturn();	
-		}
+				codeBuilder -> {
+					ConstantPoolBuilder pool=codeBuilder.constantPool();
+					codeBuilder
+						.new_(CD.RTS_PRCQNT)
+						.dup()
+						.aload(0)
+						.ldc(pool.classEntry(match.getClassDesc()))
+						.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"))
+						.areturn();	
+				});
 	}
 
 	public void printTree(int indent) {
@@ -105,35 +91,5 @@ public final class VirtualMatch extends Declaration {
 			s.append("[Specified by ").append(virtualSpec.identifier).append(']');
 		return (s.toString());
 	}
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public VirtualMatch() {
-		super(null);
-		this.declarationKind = ObjectKind.VirtualMatch;
-	}
-
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("VirtualMatch: " + identifier);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		Util.TRACE_INPUT("VirtualMatch: " + identifier);
-//		match = ((ClassDeclaration) this.declaredIn).findLocalProcedure(identifier);
-//		if (match != null) {
-//			virtualSpec = VirtualSpecification.getVirtualSpecification(match); // AdHoc
-//		} else
-//			Util.error("Malformed Attribute File (at VirtualMatch " + identifier + ")");
-//	}
 
 }

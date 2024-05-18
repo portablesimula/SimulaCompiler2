@@ -154,7 +154,7 @@ public final class BlockStatement extends Statement {
 	// ***********************************************************************************************
 
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	private BlockStatement() { super(0); }
 

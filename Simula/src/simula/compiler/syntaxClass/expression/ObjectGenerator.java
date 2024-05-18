@@ -280,7 +280,7 @@ public final class ObjectGenerator extends Expression {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ObjectGenerator() {
 	}

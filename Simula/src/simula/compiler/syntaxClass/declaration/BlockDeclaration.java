@@ -7,9 +7,6 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -183,7 +180,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		if(prefixClass != null) {
 			currentRTBlockLevel--;
 			prefixClass.doChecking();
-//			nextIndex = prefixClass.setLabelIndexes(nextIndex);
 			currentRTBlockLevel++;
 		}
 		
@@ -310,20 +306,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		return (labelList.tableSize());
 	}
 
-//	// ***********************************************************************************************
-//	// *** Coding Utility: getNextLabelIndex
-//	// ***********************************************************************************************
-//	/**
-//	 * Returns the next Label index for labels in this block.
-//	 * <p>
-//	 * Redefined in ClassDeclaration
-//	 * 
-//	 * @return the next Label index for labels in this block
-//	 */
-//	public int getNextLabelIndex() {
-//		return getNlabels() + 1; 
-//	}
-
 	// ***********************************************************************************************
 	// *** Coding Utility: codeSTMBody
 	// ***********************************************************************************************
@@ -369,63 +351,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		for (Statement stm : statements) stm.doJavaCoding();
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
-
-//	// ***********************************************************************************************
-//	// *** createJavaClassFile
-//	// ***********************************************************************************************
-//	/**
-//	 * Create Java ClassFile.
-//	 * @throws IOException 
-//	 */
-//	@Override
-//    public void createJavaClassFile() throws IOException {
-//		if (this.isPreCompiledFromFile != null)	return;
-//		prevBlock = currentBlock;
-//		currentBlock = this;
-//
-//        byte[] bytes = buildClassFile();
-//        currentBlock = prevBlock;
-//
-//        if(bytes != null) {
-//        	if(Option.USE_JAR_FILE_BUILDER) {
-//        		Global.jarFileBuilder.addClassFile(externalIdent,bytes);
-//        		
-//				if(Option.LIST_GENERATED_CLASS_FILES) {
-//					File outputFile = writeClassBytesToFile(bytes);
-//					outputFile.delete();
-//				}
-//        	} else {
-//	            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
-//	            outputFile.getParentFile().mkdirs();
-//	            FileOutputStream oupt = new FileOutputStream(outputFile);
-//	            oupt.write(bytes); oupt.flush(); oupt.close();
-//	            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
-//	
-//				if(Option.LIST_GENERATED_CLASS_FILES) {
-//					Util.doListClassFile("" + outputFile); // List generated .class file
-//				}
-//        	}
-//        }
-//    }
-//	
-//	private File writeClassBytesToFile(byte[] bytes) throws IOException {
-//        File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
-//        outputFile.getParentFile().mkdirs();
-//        FileOutputStream oupt = new FileOutputStream(outputFile);
-//        oupt.write(bytes); oupt.flush(); oupt.close();
-//        if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
-//
-//		if(Option.LIST_GENERATED_CLASS_FILES) {
-//			Util.doListClassFile("" + outputFile); // List generated .class file
-//		}
-//		return outputFile;
-//	}
-//
-//    
-//    // ***********************************************************************************************
-//    // *** ByteCoding: buildClassFile
-//    // ***********************************************************************************************
-//    public abstract byte[] buildClassFile();
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildIsQPSystemBlock
@@ -507,8 +432,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 						.aconst_null()                 // TESTING_STACK_SIZE
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
 				}
-//				if (hasLabel())	
-				if (this.labelList != null && !this.labelList.isEmpty())	
+				if (hasLabel())	
+//				if (this.labelList != null && !this.labelList.isEmpty())	
 					build_TRY_CATCH(codeBuilder, begScope, endScope);
 				else build_STM_BODY(codeBuilder, begScope, endScope);
 				codeBuilder
@@ -572,8 +497,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		codeBuilder.localVariable(local_THIS,"_THIS",CD.RTS_RTObject,begScope,endScope);
 		codeBuilder.localVariable(local_LABEL_q,"label_q",CD.RTS_LABEL,begScope,endScope);
 		
-//		initTableSwitchCases();
-//		tableSwitchCases = new Vector<SwitchCase>();
 	    // adHoc000 _THIS=(adHoc000)_CUR;
 		codeBuilder
 			.aload(0)
@@ -588,7 +511,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		
 		codeBuilder.trying(
 				blockCodeBuilder -> {
-//					jumpTable.build_JUMPTABLE(blockCodeBuilder);
 					labelList.build_JUMPTABLE(blockCodeBuilder);
 					build_STM_BODY(blockCodeBuilder, begScope, endScope);  // Virtual
 					// break _LOOP;
@@ -615,8 +537,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	private void buildCatchBlock(CodeBuilder  codeBuilder,Label contLabel) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FRE_CUR = pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject);
-
-//		Util.buildSNAPSHOT2(codeBuilder, "BlockDeclaration.buildCatchBlock: CATCHING LABEL");
 
 		// _CUR=_THIS;
 		codeBuilder
@@ -664,7 +584,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Label endLabel = codeBuilder.newLabel();
 		codeBuilder
-//		.getstatic(ClassDesc.of("simula.runtime.RTS_COMMON$Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
 			.getstatic(ClassDesc.of("simula.runtime.RTS_Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
 			.ifeq(endLabel)
 			.ldc(pool.stringEntry(mss))

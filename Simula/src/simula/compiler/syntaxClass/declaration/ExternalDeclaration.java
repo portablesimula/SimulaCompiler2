@@ -8,29 +8,17 @@
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.Enumeration;
 import java.util.Vector;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-import java.util.zip.ZipEntry;
-
 import simula.compiler.AttributeFileIO;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.JarFileBuilder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
@@ -154,9 +142,6 @@ public final class ExternalDeclaration extends Declaration {
 				externalIdentifier = Parse.currentToken;
 				Parse.expect(KeyWord.TEXTKONST);
 			}
-//			System.out.println("expectExternalHead: "+identifier+"  "+externalIdentifier); // TODO: TESTING3
-//			Util.IERR();
-			
 			String extIdentitier = (externalIdentifier==null)?null:externalIdentifier.getIdentifier();
 			
 			ExternalDeclaration externalDeclaration = new ExternalDeclaration(identifier,extIdentitier);
@@ -189,7 +174,6 @@ public final class ExternalDeclaration extends Declaration {
 				break LOOP;
 			identifier = Parse.expectIdentifier();
 		}
-//		System.out.println("ExternalDeclaration.expectExternalHead: END "+identifier);
 		return externalDeclarations;
 	}
 
@@ -198,12 +182,11 @@ public final class ExternalDeclaration extends Declaration {
 			Util.warning("External already included: "+file.getName());
 			return(false);
 		}
-		return(true);
+		return true;
 	}
 
 	
 	public void readExternal() {
-//		System.out.println("ExternalDeclaration.readExternal: "+this);
 		File jarFile = JarFileBuilder.findJarFile(identifier, externalIdent);
 		if (jarFile != null) {
 			if(checkJarFiles(jarFile)) {
@@ -236,7 +219,6 @@ public final class ExternalDeclaration extends Declaration {
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readExternalDeclaration: ");
 		ExternalDeclaration ext = new ExternalDeclaration();
-//		ext.SEQU = inpt.readShort();
 		ext.SEQU = inpt.readSEQU(ext);
 		ext.identifier = inpt.readString();
 		ext.externalIdent = inpt.readString();

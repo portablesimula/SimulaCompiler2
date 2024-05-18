@@ -285,7 +285,6 @@ public final class RunCompilerTest {
 			Option.INLINE_TESTING=true;
 			Option.CREATE_JAVA_SOURCE = true;
 //			Option.GENERATE_BYTEFILE=true;
-			Option.USE_JAR_FILE_BUILDER = true;
 		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;

@@ -1,10 +1,7 @@
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.ClassFile;
-import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
@@ -14,10 +11,6 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.BuildProcedureCall;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -43,11 +36,8 @@ public final class Thunk extends DeclarationScope {
 		super(Global.sourceName + "$THUNK$" + (++SEQU));
 		this.declarationKind = ObjectKind.Thunk;
 		this.rtBlockLevel = this.declaredIn.rtBlockLevel + 1;		this.kind = kind;
-//		this.mode = mode;
 		this.expr = expr;
-//		this.CD_ThisClass = ClassDesc.of(Global.packetName + '.' + externalIdent);
 		this.CD_ThisClass = this.getClassDesc();
-//		printScopeChain(this);
 		if(this.declaredIn instanceof Thunk) Util.IERR();
 		Global.setScope(this.declaredIn);
 	}
@@ -83,33 +73,6 @@ public final class Thunk extends DeclarationScope {
 			.aload(0)
 			.invokespecial(CD_THUNK, "<init>", MethodTypeDesc.ofDescriptor("("+BlockDeclaration.currentClassDesc().descriptorString()+")V"));
 	}
-	
-//	// ***********************************************************************************************
-//	// *** createJavaClassFile
-//	// ***********************************************************************************************
-//	/**
-//	 * Create Java ClassFile.
-//	 * @throws IOException 
-//	 */
-//    public void createJavaClassFile() throws IOException {
-////    	System.out.println("Thunk.createJavaClassFile: "+expr);
-//        byte[] bytes = buildClassFile();
-//    	if(Option.USE_JAR_FILE_BUILDER) {
-//    		Global.jarFileBuilder.addClassFile(externalIdent,bytes);
-//    	} else {
-//	        if(bytes != null) {
-//	            File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
-//	            outputFile.getParentFile().mkdirs();
-//	            FileOutputStream oupt = new FileOutputStream(outputFile);
-//	            oupt.write(bytes); oupt.flush(); oupt.close();
-//	            if(Option.verbose) System.out.println("ClassFile written to: " + outputFile);
-//	
-//				if(Option.LIST_GENERATED_CLASS_FILES) {
-//					Util.doListClassFile("" + outputFile); // List generated .class file
-//				}
-//	        }
-//    	}
-//    }
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
@@ -132,11 +95,9 @@ public final class Thunk extends DeclarationScope {
 				    VariableExpression writeableVariable=expr.getWriteableVariable();
 				    if(writeableVariable!=null) {
 				    	Declaration declaredAs = writeableVariable.meaning.declaredAs;
-//				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+declaredAs.declarationKind);
-//				    	System.out.println("Thunk.buildClassFile: declaredAs="+declaredAs+", declarationKind="+ObjectKind.edit(declaredAs.declarationKind));
 				    	switch(declaredAs.declarationKind) {
-		    				case ObjectKind.ArrayDeclaration -> writeableVariable = null; // TODO: USIKKER - SJEKK DETTE
-			    			case ObjectKind.Parameter ->  {} // TODO: USIKKER - SJEKK DETTE, AVHENGIG AV PARAMETER MODE ?
+		    				case ObjectKind.ArrayDeclaration -> writeableVariable = null; // OK 
+			    			case ObjectKind.Parameter ->  {} // OK
 				    		case ObjectKind.SimpleVariableDeclaration -> {} // OK
 				    		case ObjectKind.Procedure,
 				    		     ObjectKind.MemberMethod,
@@ -168,10 +129,8 @@ public final class Thunk extends DeclarationScope {
 				    			.withMethodBody("put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;"),
 				    				ClassFile.ACC_PUBLIC + ClassFile.ACC_BRIDGE + ClassFile.ACC_SYNTHETIC,
 				    				codeBuilder -> buildMethod_put2(codeBuilder));
-				    		
 				    	}
 				    }
-					
 				}
 		);
 		return(bytes);
@@ -229,27 +188,22 @@ public final class Thunk extends DeclarationScope {
 				.labelBinding(begScope)
 				.localVariable(0,"this",CD_ThisClass,begScope,endScope);
 
-//			Util.buildSNAPSHOT(codeBuilder, "THUNK: get "+expr);
-
-//			System.out.println("Thunk.buildMethod_get: expr="+expr.getClass().getSimpleName()+"  "+expr);
 			if(kind==0) {
 				expr.buildEvaluation(null,codeBuilder);
 	        	expr.type.buildObjectValueOf(codeBuilder);
 			} else {
 				switch(kind) { // Parameter.Kind
-				case Parameter.Kind.Array ->		expr.buildEvaluation(null,codeBuilder);
-				case Parameter.Kind.Label ->		Util.IERR();
-				case Parameter.Kind.Procedure ->	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
-				case Parameter.Kind.Simple ->     { expr.buildEvaluation(null,codeBuilder);
-													expr.type.buildObjectValueOf(codeBuilder); }
-				default -> {
-					expr.buildEvaluation(null,codeBuilder);
-		        	expr.type.buildObjectValueOf(codeBuilder);
-					break;
-				}
+					case Parameter.Kind.Array ->		expr.buildEvaluation(null,codeBuilder);
+					case Parameter.Kind.Label ->		Util.IERR();
+					case Parameter.Kind.Procedure ->	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
+					case Parameter.Kind.Simple ->     { expr.buildEvaluation(null,codeBuilder);
+														expr.type.buildObjectValueOf(codeBuilder); }
+					default -> {
+						expr.buildEvaluation(null,codeBuilder);
+			        	expr.type.buildObjectValueOf(codeBuilder);
 					}
+				}
 			}
-//			Util.buildSNAPSHOT2(codeBuilder, "THUNK: get RESULT "+expr);
 			codeBuilder
 				.areturn()
 				.labelBinding(endScope);
@@ -313,24 +267,27 @@ public final class Thunk extends DeclarationScope {
 			codeBuilder.aload(1); // Parameter x
 			
 			switch(expr.type.keyWord) {
-			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-			case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-			case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-		}
+				case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean,
+						"booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
+				case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character,
+						"charValue", MethodTypeDesc.ofDescriptor("()C")));
+				case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer,
+						"intValue", MethodTypeDesc.ofDescriptor("()I")));
+				case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float,
+						"floatValue", MethodTypeDesc.ofDescriptor("()F")));
+				case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double,
+						"doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+			}
 
 			if(expr instanceof TypeConversion) {
 				Type fromType = expr.type;
 				Type toType = writeableVariable.type;
 				// NOTE: 'expr' is top of operand stack
-//				System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
 				if(fromType.isArithmeticType()) {
 					TypeConversion.buildMayBeConvert(fromType,toType, codeBuilder);
 				} else if(toType.isRefClassType()) {
 				    // return("=("+toType.toJavaType()+")("+expr+");");
 					expr.buildEvaluation(null, codeBuilder);
-//					System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType+", classIdent="+toType.classIdent);
 					codeBuilder.checkcast(toType.toClassDesc());
 				}
 				else Util.IERR();
@@ -341,18 +298,15 @@ public final class Thunk extends DeclarationScope {
 			else if(declaredAs instanceof Parameter par)            ident=par.getFieldIdentifier();
 			else if(declaredAs instanceof ArrayDeclaration arr)     ident=arr.identifier;
 			else if(declaredAs instanceof ProcedureDeclaration pro) ident=pro.identifier;
-			else Util.IERR("Thunk.buildMethod_put: IMPOSSIBLE: "+declaredAs.getClass().getSimpleName());
+			else Util.IERR();
 
 			if(nameParameter != null) {
 				expr.type.buildObjectValueOf(codeBuilder);
 				codeBuilder
 					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
-//					.checkcast(expr.type.toObjectClassDesc());
 					.pop();
 			} else {
 				DeclarationScope declaredIn = meaning.declaredIn;
-//				System.out.println("Thunk.buildMethod_put: "+ident+", Thunk.expr="+this.expr.getClass().getSimpleName()+"  "+expr);
-//				System.out.println("Thunk.buildMethod_put: "+ident+", writeableVariable.declaredIn="+declaredIn.getClass().getSimpleName()+"  "+declaredIn);
 				ClassDesc owner = declaredIn.getClassDesc();
 				if(declaredIn instanceof ConnectionBlock conn) {
 					ClassDeclaration whenClass = conn.classDeclaration;
@@ -421,7 +375,7 @@ public final class Thunk extends DeclarationScope {
 					.checkcast(CD)
 					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MTD_put));
 			}
-			default -> Util.IERR("FYLL PÅ FLERE TYPER: "+expr.type);
+			default -> Util.IERR();
 		}
 		
 		codeBuilder

@@ -7,15 +7,10 @@
  */
 package simula.compiler.syntaxClass;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
-import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
@@ -81,6 +76,7 @@ public final class HiddenSpecification extends SyntaxClass {
 	 * <p>
 	 * Called from ClassDeclaration.checkHiddenList.
 	 */
+	@Override
 	public void doChecking() {
 		protectedBy = getMatchingProtected();
 		if (protectedBy != null)
@@ -147,6 +143,7 @@ public final class HiddenSpecification extends SyntaxClass {
 		return (null);
 	}
 
+	@Override
 	public void printTree(int indent) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);
 	}
@@ -172,7 +169,7 @@ public final class HiddenSpecification extends SyntaxClass {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public HiddenSpecification() {
 	}
@@ -190,23 +187,5 @@ public final class HiddenSpecification extends SyntaxClass {
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
 		return(spec);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("ProtectedSpecification: " + identifier);
-//		oupt.writeString(identifier);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		this.definedIn = (ClassDeclaration) Global.getCurrentScope();
-//		Util.TRACE_INPUT("ProtectedSpecification: " + identifier);
-//	}
-
 
 }

@@ -7,7 +7,6 @@
  */
 package simula.compiler.syntaxClass;
 
-import java.io.Externalizable;
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
@@ -119,11 +118,6 @@ public class Type extends SyntaxClass {
 	// **************************************************************************************************
 	// *** TYPE CREATION - CONSTRUCTORES 
 	// **************************************************************************************************
-
-//	/**
-//	 * Default constructor used by Externalization.
-//	 */
-//	public Type() {} // Externalization
 	  
 	/**
 	 * Create a new simple Type with the given keyWord
@@ -134,9 +128,7 @@ public class Type extends SyntaxClass {
 	}
 	
 	public Type(int keyWord, String classIdent) {
-//		if(classIdent==null) classIdent="UNKNOWN"; // Error recovery
 		if(classIdent != null && !Option.CaseSensitive) classIdent = classIdent.toUpperCase();
-//		this.key=new Token(KeyWord.REF,classIdent);
 		this.keyWord = keyWord;
 		this.classIdent = classIdent;
 	}
@@ -155,7 +147,6 @@ public class Type extends SyntaxClass {
 	 * @param declaredIn the ConnectionBlock
 	 */
 	public Type(Type tp,ConnectionBlock declaredIn) {
-//		this.key = tp.key;
 		this.keyWord = tp.keyWord;
 		this.classIdent = tp.classIdent;
 		
@@ -202,8 +193,6 @@ public class Type extends SyntaxClass {
 	 * @return the Java ref-identifier or null
 	 */
 	public String getJavaRefIdent() {
-//		if(key.getKeyWord()==KeyWord.REF) {
-//			if(key.getValue()==null) return("RTS_RTObject");
 		if(keyWord == Type.T_REF) {
 			if(classIdent == null) return("RTS_RTObject");
 			if(!IS_SEMANTICS_CHECKED()) this.doChecking(Global.getCurrentScope());
@@ -220,7 +209,6 @@ public class Type extends SyntaxClass {
 	public void doChecking(final DeclarationScope scope) {
 		if(qual!=null) SET_SEMANTICS_CHECKED(); // This Ref-Type is read from attribute file
 		if(IS_SEMANTICS_CHECKED()) return;
-//		System.out.println("Type.doChecking: "+this+" in "+scope);
 		Global.enterScope(scope);
 		String refIdent=getRefIdent();
 		if(refIdent!=null) {
@@ -240,7 +228,6 @@ public class Type extends SyntaxClass {
 	 * @return true if this type is an arithmetic type.
 	 */
 	public boolean isArithmeticType() {
-//		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal));
 		switch(keyWord) {
 			case T_INTEGER,T_REAL,T_LONG_REAL: return true;
 			default: return false;
@@ -254,8 +241,6 @@ public class Type extends SyntaxClass {
 	 * @return true if this type is a value type.
 	 */
 	public boolean isValueType() {
-//		return(this.equals(Type.Integer)||this.equals(Type.Real)||this.equals(Type.LongReal)
-//			 ||this.equals(Type.Boolean)||this.equals(Type.Character));
 		switch(keyWord) {
 		case T_INTEGER,T_REAL,T_LONG_REAL,T_BOOLEAN,T_CHARACTER: return true;
 		default: return false;
@@ -263,25 +248,24 @@ public class Type extends SyntaxClass {
 	}
   
 	/**
-	 * Returns true if this type is ref() type.
-	 * @return true if this type is ref() type
+	 * Returns true if this type is ref or text type.
+	 * @return true if this type is ref or text type
 	 */
 	public boolean isReferenceType() {
-//		if(key.getKeyWord()==KeyWord.REF) return(true);
 		if(keyWord == Type.T_REF) return(true);
-//		if(this.equals(Type.Text)) return(true);
 		if(keyWord == Type.T_TEXT) return(true);
-		return(getRefIdent()!=null);
+//		return(getRefIdent()!=null);
+		return false;
 	}
 	  
 	/**
-	 * Returns true if this type is ref(A) type.
-	 * @return true if this type is ref(A) type
+	 * Returns true if this type is ref type.
+	 * @return true if this type is ref type
 	 */
 	public boolean isRefClassType() {
-//		if(key.getKeyWord()==KeyWord.REF) return(true);
 		if(keyWord == Type.T_REF) return(true);
-		return(getRefIdent()!=null);
+//		return(getRefIdent()!=null);
+		return false;
 	}
   
 	/**
@@ -289,25 +273,10 @@ public class Type extends SyntaxClass {
 	 *
 	 */
     public enum ConversionKind { 
-    	/**
-    	 * Type conversion is illegal.
-    	 */
-    	Illegal,
-    	
-    	/**
-    	 * No type-conversion is necessary. E.g. integer to integer
-    	 */
-    	DirectAssignable,
-    	
-    	/**
-    	 * Type-conversion with possible Runtime check is necessary. E.g. real to integer.
-    	 */
-    	ConvertValue,
-    	
-    	/**
-    	 * Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A.
-    	 */
-    	ConvertRef
+    	/** Type conversion is illegal. */ 																			Illegal,
+    	/** No type-conversion is necessary. E.g. integer to integer */ 											DirectAssignable,
+    	/** Type-conversion with possible Runtime check is necessary. E.g. real to integer. */						ConvertValue,
+    	/** Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A. */	ConvertRef
     }
 
 	/**

@@ -10,12 +10,9 @@ package simula.compiler.syntaxClass.declaration;
 import java.io.IOException;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 
@@ -105,8 +102,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		block.prefix = blockPrefix.identifier;
 		block.isMainModule=isMainModule;
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse PrefixedBlock");
-//		while (Declaration.acceptDeclaration(block.declarationList)) Parse.accept(KeyWord.SEMICOLON);
-		while (Declaration.acceptDeclaration(block)) Parse.accept(KeyWord.SEMICOLON); // TODO: TESTING3
+		while (Declaration.acceptDeclaration(block)) Parse.accept(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
 			Statement stm = Statement.expectStatement();
 			if (stm != null) block.statements.add(stm);
@@ -188,11 +184,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			String tp = par.toJavaType();
 			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
 		}
-		if (labelList != null && !labelList.isEmpty()) {
+		if (this.hasLabel()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
 			for (LabelDeclaration lab : labelList.labels)
-//				decl.doJavaCoding();
 				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
@@ -262,18 +256,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		//  new adHoc05_PBLK14((_CUR))._STM();
-		//
-		//   0: new           #19                 // class simulaTestPrograms/adHoc05_PBLK14
-		//   3: dup
-		//   4: getstatic     #21                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
-		//   7: invokespecial #25                 // Method simulaTestPrograms/adHoc05_PBLK14."<init>":(Lsimula/runtime/RTS_RTObject;)V
-		//  10: invokevirtual #26                 // Method simulaTestPrograms/adHoc05_PBLK14._STM:()LsimulaTestPrograms/adHoc05_PBLK14;
-		//  13: pop
-
 		ClassDesc CD_pblk=this.getClassDesc();
-//		System.out.println("BEGIN PREFIXED BLOCK "+Global.packetName+"."+blockIdent+" ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+		//  new adHoc05_PBLK14((_CUR), par1, ...)._STM();
 		codeBuilder
 			.new_(CD_pblk)
 			.dup()
@@ -302,7 +287,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock "+CD_ThisClass);
-//        new Exception("Stack trace").printStackTrace(System.out);
 		
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
 		
@@ -314,54 +298,46 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 						.withSuperclass(this.superClassDesc());
 
 					// Add Fields (Attributes and parameters)
-					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
-					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
-					for(Parameter par:parameterList) par.buildField(classBuilder,this);
+					if(labelList != null)
+						for (LabelDeclaration lab : labelList.labels)
+							lab.buildField(classBuilder,this);
 					
-					for (VirtualSpecification virtual : virtualSpecList) {
-						if (!virtual.hasDefaultMatch) {
+					for (Declaration decl : declarationList)
+						decl.buildField(classBuilder,this);
+					
+					for(Parameter par:parameterList)
+						par.buildField(classBuilder,this);
+					
+					for (VirtualSpecification virtual : virtualSpecList)
+						if (!virtual.hasDefaultMatch)
 							//virtual.doJavaCoding();
 							virtual.buildMethod(classBuilder);
-						}
-					}
 					
-					for (VirtualMatch match : virtualMatchList) {
+					for (VirtualMatch match : virtualMatchList)
 						match.buildMethod(classBuilder);
-					}
-
 
 					classBuilder
-						.withMethodBody("<init>", MTD_Constructor(), ClassFile.ACC_PUBLIC,
+						.withMethodBody("<init>", MethodTypeDesc.ofDescriptor(edConstructorSignature()), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
-							codeBuilder -> {
-//								if(this.getPrefixClass() == StandardClass.CatchingErrors) {								
-//									buildMethod_STM_CatchingErrors(codeBuilder);
-//								} else {		
-									buildMethod_STM(codeBuilder);
-//								}
-							
-							} );
+							codeBuilder -> buildMethod_STM(codeBuilder) );
 					
-					if (isQPSystemBlock()) {
-						//GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+					if (isQPSystemBlock())
 						classBuilder
 							.withMethodBody("isQPSystemBlock", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildIsQPSystemBlock(codeBuilder));
-					}
 					
-					if (isDetachUsed()) {
+					if (isDetachUsed())
 						//GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
 						classBuilder
 							.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
-					}
 					
-					if (this.isMainModule) {
+					if (this.isMainModule)
 						classBuilder
-							.withMethodBody("main", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"), ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC + ClassFile.ACC_VARARGS,
+							.withMethodBody("main", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"),
+									ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC + ClassFile.ACC_VARARGS,
 								codeBuilder -> buildMethodMain(codeBuilder));
-					}
 				}
 		);
 		return(bytes);
@@ -412,7 +388,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
 		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
 		oupt.writeType(type);
 		
 		oupt.writeObj(blockPrefix);
@@ -423,7 +398,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
-//		oupt.writeString(externalPrefixIdent);
 
 		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
@@ -437,25 +411,17 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		oupt.writeShort(protectedList.size());
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
-//		oupt.writeShort(labelList.size());
-//		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
 		LabelList.writeLabelList(labelList, oupt);
 		
 		DeclarationList decls = prep(declarationList);
-//		System.out.println("PrefixedBlockDeclaration.writeObject: Write Declaration List: "+decls.size());
 		oupt.writeShort(decls.size());
 		for(Declaration decl:decls) oupt.writeObj(decl);
 
-//		System.out.println("PrefixedBlockDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
-//		System.out.println("PrefixedBlockDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
-		
-//		System.out.println("PrefixedBlockDeclaration.writeObject: Write STATEMENTS BEFORE INNER: Statements1: "+statements1.size());
 		if(statements1 != null) {
 			oupt.writeShort(statements1.size());
 			for(Statement stm:statements1) oupt.writeObj(stm);
 		} else oupt.writeShort(0);
 
-//		System.out.println("PrefixedBlockDeclaration.writeObject: Write STATEMENTS AFTER INNER: Statements: "+statements.size());
 		if(statements != null) {
 			oupt.writeShort(statements.size());
 			for(Statement stm:statements) oupt.writeObj(stm);
@@ -469,7 +435,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.identifier = (String) inpt.readString();
 		Util.TRACE_INPUT("BEGIN Read PrefixedBlockDeclaration: Declared in: " + pbl.declaredIn);
 		pbl.declarationKind = ObjectKind.Class;
-//		pbl.SEQU = inpt.readShort();
 		pbl.SEQU = inpt.readSEQU(pbl);
 		pbl.externalIdent = inpt.readString();
 		pbl.type = inpt.readType();
@@ -482,68 +447,47 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.isPreCompiledFromFile = inpt.readString();
 		pbl.hasLocalClasses = inpt.readBoolean();
 		pbl.detachUsed = inpt.readBoolean();
-//		pbl.externalPrefixIdent = inpt.readString();
 
-		//parameterList = (Vector<Parameter>) inpt.readObject();
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.parameterList.add(Parameter.readParameter(inpt));
 
-		//pbl.virtualSpecList = (Vector<VirtualSpecification>) inpt.readObject();
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
 		
-		//pbl.hiddenList = (Vector<HiddenSpecification>) inpt.readObject();
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pbl.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
 		
-		//pbl.protectedList = (Vector<ProtectedSpecification>) inpt.readObject();
 		n = inpt.readShort();
-//		System.out.println("PrefixedBlockDeclaration.readObject: Read Protected List: "+n);
 		for(int i=0;i<n;i++)
 			pbl.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
 
-//		System.out.println("PrefixedBlockDeclaration.readObject: Read Label List: "+n);
 		pbl.labelList = LabelList.readLabelList(inpt);
 
 		n = inpt.readShort();
-//		System.out.println("PrefixedBlockDeclaration.readObject: Read Declaration List: "+n);
 		for(int i=0;i<n;i++) {
 			Declaration decl = (Declaration) inpt.readObj();
 			pbl.declarationList.add(decl);
 		}
 
-		//pbl.statements1 = (Vector<Statement>) inpt.readObject();
 		n = inpt.readShort();
-//		System.out.println("PrefixedBlockDeclaration.readObject: Read statements1 List: "+n);
 		if(n > 0) pbl.statements1 = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
 			pbl.statements1.add(stm);
 		}
 		
-		//pbl.statements = (Vector<Statement>) inpt.readObject();			
 		n = inpt.readShort();
-//		System.out.println("PrefixedBlockDeclaration.readObject: Read statements List: "+n);
 		if(n > 0) pbl.statements = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
 			pbl.statements.add(stm);
 		}
 
-//		System.out.println("\nPrefixedBlockDeclaration.readObject: PRINT SYNTAX-TREE");
-//		pbl.printTree(1);
-//		Util.IERR();
-
-//		System.out.println("PrefixedBlockDeclaration.readObject: END Read PrefixedBlockDeclaration: " + identifier + ", Declared in: " + pbl.declaredIn);
-//		pbl.print(2);
-//		Util.IERR();
-		
 		Util.TRACE_INPUT("END Read PrefixedBlockDeclaration: " + pbl.identifier + ", Declared in: " + pbl.declaredIn);
 		Global.setScope(pbl.declaredIn);
-//		Thread.dumpStack();
 		return(pbl);
 	}
 	

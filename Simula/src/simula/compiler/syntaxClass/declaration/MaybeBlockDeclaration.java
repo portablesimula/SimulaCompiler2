@@ -7,16 +7,12 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
@@ -25,7 +21,6 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
-import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
@@ -119,7 +114,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public BlockStatement expectMaybeBlock(int line) {
 		this.lineNumber=line;
 		if (Option.TRACE_PARSE)	Parse.TRACE("Parse MayBeBlock");
-//		while (Declaration.acceptDeclaration(declarationList))
 		while (Declaration.acceptDeclaration(this))
 			Parse.expect(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
@@ -151,17 +145,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 * a CompoundStatement or ConnectionBlock.
 	 * @param block the block containing labels to be moved
 	 */
-//	static void moveLabelsFrom(DeclarationScope block) {
-//		DeclarationScope declaredIn = block.declaredIn;
-//		Vector<LabelDeclaration> labelList = block.labelList;
-//		DeclarationScope enc = declaredIn;
-//		while (enc.declarationKind == ObjectKind.CompoundStatement
-//				&& enc.declarationKind == ObjectKind.ConnectionBlock
-//				&& enc.declarationList.isEmpty())
-//			enc = enc.declaredIn;
-//		for (LabelDeclaration lab : labelList) enc.labelList.add(lab);
-//		labelList.clear();
-//	}
 	static void moveLabelsFrom(DeclarationScope block) {
 		DeclarationScope declaredIn = block.declaredIn;
 		Vector<LabelDeclaration> labelList = block.labelList.labels;
@@ -171,16 +154,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				&& enc.declarationList.isEmpty())
 			enc = enc.declaredIn;
 		
-//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: "+block+"  ==>  "+enc);
-//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: FROM: "+block.labelList);
 		for (LabelDeclaration lab : labelList) {
 			lab.movedTo=enc;
 			if(enc.labelList == null) enc.labelList = new LabelList(enc);
 			enc.labelList.add(lab);
 			lab.updateDeclaredIn(enc);
 		}
-//		System.out.println("MayBeBlockDeclaration.moveLabelsFrom: INTO: "+block.labelList);
-//		labelList.clear();
 		block.labelList = null;
 	}
 
@@ -278,11 +257,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (labelList != null && !labelList.isEmpty()) {
+		if (hasLabel()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
 			for (LabelDeclaration lab : labelList.labels)
-//				decl.doJavaCoding();
 				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
@@ -354,28 +331,28 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_FINAL + ClassFile.ACC_SUPER)
 						.withSuperclass(CD.RTS_BASICIO);
 
-					// Add Fields
-					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
-					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
+					if(labelList != null)
+						for (LabelDeclaration lab : labelList.labels)
+							lab.buildField(classBuilder,this);
 					
-					if (isQPSystemBlock()) {
+					for (Declaration decl : declarationList)
+						decl.buildField(classBuilder,this);
+					
+					if (isQPSystemBlock())
 						classBuilder
-							.withMethodBody("isQPSystemBlock", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
-								codeBuilder -> buildIsQPSystemBlock(codeBuilder));
-					}
+							.withMethodBody("isQPSystemBlock", MethodTypeDesc.ofDescriptor("()Z"),
+									ClassFile.ACC_PUBLIC, codeBuilder -> buildIsQPSystemBlock(codeBuilder));
 
 					classBuilder
-						.withMethodBody("<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildConstructor(codeBuilder))
-						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildMethod_STM(codeBuilder));
+						.withMethodBody("<init>",
+							MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"), ClassFile.ACC_PUBLIC, codeBuilder -> buildConstructor(codeBuilder))
+						.withMethodBody("_STM",
+							MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC, codeBuilder -> buildMethod_STM(codeBuilder));
 					
-					if (this.isMainModule) {
+					if (this.isMainModule)
 						classBuilder
 							.withMethodBody("main", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"),
-								ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC + ClassFile.ACC_VARARGS,
-								codeBuilder -> buildMethodMain(codeBuilder));
-					}
+								ClassFile.ACC_PUBLIC + ClassFile.ACC_STATIC + ClassFile.ACC_VARARGS, codeBuilder -> buildMethodMain(codeBuilder));
 				}
 		);
 		return(bytes);
@@ -415,32 +392,28 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				.invokespecial(pool.methodRefEntry(CD.RTS_BASICIO
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
 
-			if (labelList != null && !labelList.isEmpty()) {
-				// Declare local labels
+			if (hasLabel()) // Declare local labels
 				for (LabelDeclaration lab : labelList.labels)
 					lab.buildInitAttribute(codeBuilder);
-			}
+			
 			// Add and Initialize attributes
-			for (Declaration decl : declarationList) {
+			for (Declaration decl : declarationList)
 				decl.buildInitAttribute(codeBuilder);
-			}
 			
 			// BBLK();
 			codeBuilder.aload(0)
 				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
 
-			if (declarationKind == ObjectKind.SimulaProgram) {
+			if (declarationKind == ObjectKind.SimulaProgram) 
 				// BPRG("adHoc06");
 				codeBuilder
 					.aload(0)
 					.ldc(pool.stringEntry(this.edJavaClassName()))
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
-			}
 
 			// Add Declaration Code to Constructor
-			for (Declaration decl : declarationList) {
+			for (Declaration decl : declarationList)
 				decl.buildDeclarationCode(codeBuilder);
-			}
 
 			codeBuilder
 				.return_()
@@ -496,16 +469,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		stmStack.push(labelContext);
-//		System.out.println("MaybeBlockDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;
 		build_STMS(codeBuilder);
 		labelContext = stmStack.pop();
-//		System.out.println("MaybeBlockDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 	}
 
 	private void build_STMS(CodeBuilder codeBuilder) {
 		for (Statement stm : statements) {
-//			System.out.println("BlockDeclaration,buildMethod_STM: "+stm.getClass().getSimpleName()+" "+stm);
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
 			stm.buildByteCode(codeBuilder);
 		}
@@ -540,7 +510,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 	@Override
 	public String toString() {
-		return (identifier + '[' + externalIdent + "] Kind=" + declarationKind);
+		return identifier + '[' + externalIdent + "] Kind=" + declarationKind;
 	}
 
 	// ***********************************************************************************************
@@ -548,7 +518,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public MaybeBlockDeclaration() { super(null); }
 

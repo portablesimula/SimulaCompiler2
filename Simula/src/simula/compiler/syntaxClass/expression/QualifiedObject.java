@@ -138,7 +138,7 @@ public final class QualifiedObject extends Expression {
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public QualifiedObject() {
 	}

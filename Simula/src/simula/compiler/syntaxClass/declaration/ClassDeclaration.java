@@ -14,7 +14,6 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
@@ -209,8 +208,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			expectFormalParameterPart(cls.parameterList);
 			Parse.expect(KeyWord.SEMICOLON);
 			acceptValuePart(cls.parameterList);
-//			while (acceptParameterSpecificationPart(cls.parameterList))
-//				Parse.expect(KeyWord.SEMICOLON);
 			acceptParameterSpecificationPart(cls.parameterList);
 		} else
 			Parse.expect(KeyWord.SEMICOLON);
@@ -359,8 +356,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * @param hidden if true, update the hidden list
 	 * @param prtected if true, update the protected list
 	 */
-	private static void expectHiddenProtectedList(final ClassDeclaration cls, final boolean hidden,
-			final boolean prtected) {
+	private static void expectHiddenProtectedList(final ClassDeclaration cls, final boolean hidden, final boolean prtected) {
 		do {
 			String identifier = Parse.expectIdentifier();
 			if (hidden)
@@ -395,36 +391,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * 
 	 * @param cls the ClassDeclaration
 	 */
-//	private static void expectClassBody(ClassDeclaration cls) {
-//		if (Parse.accept(KeyWord.BEGIN)) {
-//			Statement stm;
-//			if (Option.TRACE_PARSE)
-//				Parse.TRACE("Parse Block");
-//			while (Declaration.acceptDeclaration(cls.declarationList)) {
-//				Parse.accept(KeyWord.SEMICOLON);
-//			}
-//			boolean seen = false;
-//			Vector<Statement> stmList = cls.statements;
-//			while (!Parse.accept(KeyWord.END)) {
-//				stm = Statement.expectStatement();
-//				if (stm != null)
-//					stmList.add(stm);
-//				if (Parse.accept(KeyWord.INNER)) {
-//					if (seen)
-//						Util.error("Max one INNER per Block");
-//					else
-//						stmList.add(new InnerStatement(Parse.currentToken.lineNumber));
-//					seen = true;
-//				}
-//			}
-//			if (!seen)
-//				stmList.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
-//		}
-//		else {
-//			cls.statements.add(Statement.expectStatement());
-//			cls.statements.add(new InnerStatement(Parse.currentToken.lineNumber)); // Implicit INNER
-//		}
-//	}
 	private static void expectClassBody(ClassDeclaration cls) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
@@ -503,10 +469,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 		
-//		ClassDeclaration prefixClass = null;
-		if (!hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			prefixClass = getPrefixClass();
-//			System.out.println("ClassDeclaration.doChecking:     GOT IT: "+prefixClass);
 			prefixClass.doChecking();
 			
 			LabelList.accumLabelList(this);
@@ -516,7 +480,7 @@ public class ClassDeclaration extends BlockDeclaration {
 					Util.warning("Subclass on a deeper block level not allowed.");
 			}
 		}
-		if(type != null) type.doChecking(declaredIn); // TODO: TESTING
+		if(type != null) type.doChecking(declaredIn);
 		int prfx = prefixLevel();
 		for (Parameter par : this.parameterList)
 			par.setExternalIdentifier(prfx);
@@ -526,12 +490,11 @@ public class ClassDeclaration extends BlockDeclaration {
 			vrt.doChecking();
 		for (Declaration dcl : declarationList)
 			dcl.doChecking();
-		if(statements1 != null) {
-			for (Statement stm : statements1) {
-//				System.out.println("ClassDeclaration.doChecking: stm="+stm.getClass().getSimpleName()+"  "+stm);
+		if(statements1 != null) 
+			for (Statement stm : statements1) 
 				stm.doChecking();  		
-			}
-		}
+			
+		
 		for (Statement stm : statements)
 			stm.doChecking();
 		checkProtectedList();
@@ -592,7 +555,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	@Override
 	public int prefixLevel() {
-		if (hasNoRealPrefix())
+		if (!hasRealPrefix())
 			return (0);
 		ClassDeclaration prfx = getPrefixClass();
 		if (prfx != null)
@@ -611,8 +574,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	public Declaration findLocalAttribute(final String ident) {
 		if (Option.TRACE_FIND_MEANING > 0)
-			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier
-					+ " ==================================");
+			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		for (Parameter parameter : parameterList) {
 			if (Option.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Parameter " + parameter);
@@ -644,8 +606,7 @@ public class ClassDeclaration extends BlockDeclaration {
 				return (virtual);
 		}
 		if (Option.TRACE_FIND_MEANING > 0)
-			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier
-					+ " ==================================");
+			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		return (null);
 	}
 
@@ -662,9 +623,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		for (Declaration decl : declarationList)
 			if (Util.equals(ident, decl.identifier)) {
 				if (decl instanceof ProcedureDeclaration proc)
-					return (proc);
-				else
-					return (null);
+					 return (proc);
+				else return (null);
 			}
 		return (null);
 	}
@@ -759,8 +719,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
 		if (Option.TRACE_FIND_MEANING > 0)
-			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier
-					+ " ==================================");
+			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		boolean searchBehindHidden = false;
 		ClassDeclaration scope = this;
 		Declaration decl = scope.findLocalAttribute(ident);
@@ -784,8 +743,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			scope = scope.getPrefixClass();
 		}
 		if (Option.TRACE_FIND_MEANING > 0)
-			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier
-					+ " ==================================");
+			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		return (null);
 	}
 
@@ -818,12 +776,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			return (null);
 		if(prefixClass != null) return(prefixClass);
 		
-//		if(!(this instanceof StandardClass)) {
-//			System.out.println("ClassDeclaration.getPrefixClass: "+prefix+" class "+this.identifier+" -- Called from: "+edCallChain());
-//			if(prefix.equalsIgnoreCase("CLASS")) Util.IERR();
-//		}
-
-		
 		Meaning meaning = declaredIn.findMeaning(prefix);
 		if (meaning == null)
 			Util.error("Undefined prefix: " + prefix);
@@ -832,12 +784,9 @@ public class ClassDeclaration extends BlockDeclaration {
 			Util.error("Class prefix chain loops: " + identifier);
 		}
 		if (decl instanceof ClassDeclaration cls) {
-//			System.out.println("ClassDeclaration.getPrefixClass: "+prefix+"  ==>  "+cls);
 			prefixClass = cls;
 			return (cls);
 		}
-//		if (decl instanceof StandardClass scl)
-//			return (scl);
 		Util.error("Prefix " + prefix + " is not a Class");
 		return (null);
 	}
@@ -860,42 +809,31 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	// ***********************************************************************************************
-	// *** Coding Utility: hasNoRealPrefix
+	// *** Coding Utility: hasRealPrefix
 	// ***********************************************************************************************
 	/**
 	 * Check if this class has a real prefix.
 	 * @return true if this class has a real prefix, otherwise false.
 	 */
-//	boolean hasNoRealPrefix() {
-//		ClassDeclaration prfx = getPrefixClass();
-//		boolean noPrefix = true;
-//		if (prfx != null) {
-//			noPrefix = false;
-//			String prfxString = prfx.identifier;
-//			if (Util.equals(prfxString, "CLASS"))
-//				noPrefix = true;
-//		}
-//		return (noPrefix);
-//	}
-	boolean hasNoRealPrefix() {
+	boolean hasRealPrefix() {
 		String prfx = prefix;
-		boolean noPrefix = true;
+		boolean res = false;
 		if (prfx != null) {
-			noPrefix = false;
+			res = true;
 			if (Util.equals(prfx, "CLASS"))
-				noPrefix = true;
+				res = false;
 		}
-		return (noPrefix);
+		return res;
 	}
 
 	// ***********************************************************************************************
 	// *** Coding: isDetachUsed -- If the 'detach' attribute is used
 	// ***********************************************************************************************
 	//
-	// COMMENT FROM Stein: Ta utgangspunkt i hvilke klasser man har kalt "detach"
-	// i, altså kvalifikasjonen av de X som er brukt i "X.detach". Men da må man jo
-	// også holde greie på hvilke slike som har forekommet i eksterne "moduler" (som
-	// f.eks. SIMULATION), uten at det burde være problematisk.
+	// COMMENT FROM Stein: Ta utgangspunkt i hvilke klasser man har kalt "detach" i, altså
+	// kvalifikasjonen av de X som er brukt i "X.detach". Men da må man jo også holde greie på
+	// hvilke slike som har forekommet i eksterne "moduler" (som f.eks. SIMULATION), uten at det
+	// burde være problematisk.
 	// ***********************************************************************************************
 	/**
 	 * Returns true if detach is called in/on this class.
@@ -915,7 +853,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	// ***********************************************************************************************
-	// *** Utility: ClassParameterIterator - // Iterates through prefix-chain
+	// *** Utility: ClassParameterIterator - Iterates through prefix-chain
 	// ***********************************************************************************************
 	/**
 	 * Utility: ClassParameterIterator - Iterates through prefix-chain.
@@ -1006,7 +944,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		if (labelList != null && !labelList.isEmpty()) {
 			GeneratedJavaClass.debug("// Declare local labels");
 			for (LabelDeclaration lab : labelList.labels)
-//				decl.doJavaCoding();
 				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
@@ -1045,7 +982,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		for (Parameter par : parameterList)
 			GeneratedJavaClass.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
 
-		if (hasNoRealPrefix())
+		if (!hasRealPrefix())
 			GeneratedJavaClass.code("BBLK(); // Iff no prefix");
 
 		GeneratedJavaClass.debug("// Declaration Code");
@@ -1087,7 +1024,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	protected boolean hasLabel() {
 		if (labelList != null && !labelList.isEmpty())
 			return (true);
-		if (!this.hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null)
 				return (prfx.hasLabel());
@@ -1107,41 +1044,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	public int getNlabels() {
 		ASSERT_SEMANTICS_CHECKED();
 		int size = (labelList==null)?0:labelList.tableSize();
-//		if (hasNoRealPrefix()) return size;
-//		return (size + getPrefixClass().getNlabels());
 		return size;
 	}
-
-//	// ***********************************************************************************************
-//	// *** Coding Utility: getNextLabelIndex
-//	// ***********************************************************************************************
-//	/**
-//	 * Returns the next Label index for labels in this block.
-//	 * <p>
-//	 * Redefined in ClassDeclaration
-//	 * 
-//	 * @return the next Label index for labels in this block
-//	 */
-//	@Override
-//	public int getNextLabelIndex() {
-////		int size = (labelList==null)?0:labelList.tableSize();
-////		if (hasNoRealPrefix()) return size;
-////		return (size + getPrefixClass().getNlabels());
-//		return getNlabels() + 1; 
-//	}
-
-	// ***********************************************************************************************
-	// *** Coding Utility: saveClassStms
-	// ***********************************************************************************************
-//	private void saveClassStms() {
-//		if (code1 == null) {
-//			code1 = new Vector<CodeLine>();
-//			Global.currentJavaModule.saveCode = code1;
-//			for (Statement stm : statements)
-//				stm.doJavaCoding();
-//			Global.currentJavaModule.saveCode = null;
-//		}
-//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: codeStatements
@@ -1159,7 +1063,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Coding utility: codeStatementsBeforeInner
 	 */
 	private void codeStatementsBeforeInner() {
-		if (!this.hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.codeStatementsBeforeInner();
 		}
@@ -1176,7 +1080,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	private void codeStatementsAfterInner() {
 		GeneratedJavaClass.code("// ENDOF INNER PART");
 		for (Statement stm : statements) stm.doJavaCoding();
-		if (!this.hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.codeStatementsAfterInner();
 		}
@@ -1225,9 +1129,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// *** ByteCoding Utility: superClassDesc
 	// ***********************************************************************************************
 	public ClassDesc superClassDesc() {
-		if(this.hasNoRealPrefix())
-			return(CD.RTS_CLASS);
-		else return(this.getPrefixClass().getClassDesc());
+		if(hasRealPrefix())
+			return getPrefixClass().getClassDesc();
+		return CD.RTS_CLASS;
 	}
 
 	// ***********************************************************************************************
@@ -1246,60 +1150,59 @@ public class ClassDeclaration extends BlockDeclaration {
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
 						.withSuperclass(this.superClassDesc());
 
-					// Add Fields (Attributes and parameters)
-//					for (LabelDeclaration lab : labelList) lab.buildField(classBuilder,this);
-					buildLabelFields(classBuilder);
-					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
-					for(Parameter par:parameterList) par.buildField(classBuilder,this);
+					if(labelList != null)
+						for (LabelDeclaration lab : labelList.labels)
+							lab.buildField(classBuilder,this);
+
+					for (Declaration decl : declarationList)
+						decl.buildField(classBuilder,this);
 					
-					for (VirtualSpecification virtual : virtualSpecList) {
-						if (!virtual.hasDefaultMatch) {
-							//virtual.doJavaCoding();
+					for (Parameter par : parameterList)
+						par.buildField(classBuilder,this);
+					
+					for (VirtualSpecification virtual : virtualSpecList) 
+						if (!virtual.hasDefaultMatch) 
 							virtual.buildMethod(classBuilder);
-						}
-					}
 					
-					for (VirtualMatch match : virtualMatchList) {
+					for (VirtualMatch match : virtualMatchList)
 						match.buildMethod(classBuilder);
-					}
 
 					classBuilder
-						.withMethodBody("<init>", MTD_Constructor(), ClassFile.ACC_PUBLIC,
+						.withMethodBody("<init>", MethodTypeDesc.ofDescriptor(edConstructorSignature()), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildMethod_STM(codeBuilder));
 					
-					if (isDetachUsed()) {
-						//GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
-						MethodTypeDesc MTD_isDetachUsed=MethodTypeDesc.ofDescriptor("()Z");
+					if (isDetachUsed()) 
 						classBuilder
-							.withMethodBody("isDetachUsed", MTD_isDetachUsed, ClassFile.ACC_PUBLIC,
+							.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
-					}
 				}
 		);
 		return(bytes);
 	}
-	
-	private void buildLabelFields(ClassBuilder classBuilder) {
-//		if(prefixClass != null) prefixClass.buildLabelFields(classBuilder);
-		if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
-	}
 
-	protected MethodTypeDesc MTD_Constructor() {
-		// MethodTypeDesc MTD_Constructor=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V");
-		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
-		Iterator<Parameter> parameterIterator = this.parameterIterator();
+	// ***********************************************************************************************
+	// *** ByteCoding: edConstructorSignature
+	// ***********************************************************************************************
+	/**
+	 * Edit the constructor signature.
+	 * <p>
+	 * Example: (Lsimula/runtime/RTS_RTObject;IID)V
+	 * <p>
+	 * Also used by PrefixedBlockDeclaration.
+	 * @return the MethodTypeDesc for the constructor
+	 */
+	@Override
+	public String edConstructorSignature() {
+		StringBuilder sb = new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
+		Iterator<Parameter> parameterIterator = parameterIterator();
 		while(parameterIterator.hasNext()) {
 			Parameter par = parameterIterator.next();
 			sb.append(par.type.toJVMType(par.kind,par.mode));
 		}
 		sb.append(")V");
-		return(MethodTypeDesc.ofDescriptor(sb.toString()));
-	}
-
-	public FieldRefEntry getResultFieldRefEntry(ConstantPoolBuilder pool) {
-		return(pool.fieldRefEntry(this.getClassDesc(), "_RESULT", type.toClassDesc()));
+		return(sb.toString());
 	}
 
 	// ***********************************************************************************************
@@ -1316,6 +1219,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 *		   _STM();
 	 *	   }
 	 * </pre>
+	 * Also used by PrefixedBlockDeclaration
 	 * @param codeBuilder the CodeBuilder
 	 * @param pool the ConstantPoolBuilder
 	 */
@@ -1327,12 +1231,12 @@ public class ClassDeclaration extends BlockDeclaration {
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			MethodTypeDesc MTD_Super;
-			if(this.hasNoRealPrefix()) {
-				MTD_Super = MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V");
-			} else {
+			if(hasRealPrefix()) {
 				ClassDeclaration prefixClass = this.getPrefixClass();
 				String pfxSignatur=prefixClass.edConstructorSignature();
 				MTD_Super = MethodTypeDesc.ofDescriptor(pfxSignatur);
+			} else {
+				MTD_Super = MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V");
 			}
 			codeBuilder
 				.labelBinding(begScope)
@@ -1352,32 +1256,27 @@ public class ClassDeclaration extends BlockDeclaration {
 				.aload(1);
 			// Load parameters
 			int parOfst=2;
-			if(!hasNoRealPrefix()) {
+			if(hasRealPrefix()) {
 				ClassDeclaration prefixClass = this.getPrefixClass();
 				Iterator<Parameter> parIterator = prefixClass.parameterIterator();
 				while(parIterator.hasNext()) {
 					Parameter par = parIterator.next();
 					par.loadParameter(codeBuilder, parOfst++);
-					if(par.type.equals(Type.LongReal)) Util.IERR("HVA GJØR VI HER ???"); // TODO: MÅ SJEKKES
+					if(par.type.keyWord == Type.T_LONG_REAL) parOfst++;
 				}
 			}
 			codeBuilder
 				.invokespecial(pool.methodRefEntry(this.superClassDesc(),"<init>", MTD_Super));
 
-			declaraLocalLabels(codeBuilder);
-//			if (!labelList.isEmpty()) {
-//				// Declare local labels
-//				for (LabelDeclaration lab : labelList)
-//					lab.buildInitAttribute(codeBuilder);
-//			}
+			if(hasLabel()) // Declare local labels
+				for (LabelDeclaration lab : labelList.labels)
+					lab.buildInitAttribute(codeBuilder);
 			
 			// Add and Initialize attributes
-			for (Declaration decl : declarationList) {
+			for (Declaration decl : declarationList)
 				decl.buildInitAttribute(codeBuilder);
-			}
 
 			// Parameter assignment to locals
-			//		int parOfst=2;
 			for(Parameter par:parameterList) {
 				codeBuilder.aload(0);
 				par.loadParameter(codeBuilder, parOfst++);
@@ -1385,39 +1284,27 @@ public class ClassDeclaration extends BlockDeclaration {
 				codeBuilder.putfield(par.getFieldRefEntry(pool));
 			}
 
-			if (this.isMainModule) { // E.g. Main program is Prefixed Block
+			if (this.isMainModule) // E.g. Main program is Prefixed Block
 				// GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
 				codeBuilder
 					.aload(0)
 					.ldc(pool.stringEntry(this.edJavaClassName()))
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
-			}
 
 			// BBLK(); // Iff no prefix
-			if (hasNoRealPrefix()) {
-				codeBuilder.aload(0)
+			if (!hasRealPrefix())
+				codeBuilder
+					.aload(0)
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
-			}
 
 			// Add Declaration Code to Constructor
-			for (Declaration decl : declarationList) {
+			for (Declaration decl : declarationList)
 				decl.buildDeclarationCode(codeBuilder);
-			}
 
 			codeBuilder
 				.return_()
 				.labelBinding(endScope);
 		Global.exitScope();
-	}
-
-	private void declaraLocalLabels(CodeBuilder codeBuilder) {
-//		if(this.prefixClass != null) prefixClass.declaraLocalLabels(codeBuilder);
-		if(labelList != null && !labelList.isEmpty()) {
-			// Declare local labels
-			for (LabelDeclaration lab : labelList.labels)
-				lab.buildInitAttribute(codeBuilder);
-		}
-
 	}
 	
 	@Override
@@ -1426,7 +1313,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		try {
 			this.createJavaClassFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -1434,23 +1320,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
-	}
-
-
-	// ***********************************************************************************************
-	// *** ByteCoding: edConstructorSignature
-	// ***********************************************************************************************
-	@Override
-	public String edConstructorSignature() {
-		// MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V");
-		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
-		Iterator<Parameter> parameterIterator = parameterIterator();
-		while(parameterIterator.hasNext()) {
-			Parameter par = parameterIterator.next();
-			sb.append(par.type.toJVMType(par.kind,par.mode));
-		}
-		sb.append(")V");
-		return(sb.toString());
 	}
 
 	// ***********************************************************************************************
@@ -1464,18 +1333,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		Label begScope = codeBuilder.newLabel();
-//		Label endScope = codeBuilder.newLabel();
 		clearLabelList();
-//		codeBuilder
-//			.labelBinding(begScope)
-//			.localVariable(0,"this",currentClassDesc(),begScope,endScope);
-
 		stmStack.push(labelContext);
-//		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;
-//		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getClass().getSimpleName()+"  "+this);
-//		System.out.println("ClassDeclaration.build_STM_BODY: "+this.getPrefixClass());
 		if(this.getPrefixClass() == StandardClass.CatchingErrors) {	
 			if(this instanceof PrefixedBlockDeclaration)
 				buildMethod_CatchingErrors_TRY_CATCH(codeBuilder, begScope, endScope);
@@ -1484,21 +1344,17 @@ public class ClassDeclaration extends BlockDeclaration {
 				buildStatementsBeforeInner(codeBuilder);
 				buildStatementsAfterInner(codeBuilder);
 			}
-//			Util.IERR();
 		} else {
 			buildStatementsBeforeInner(codeBuilder);
 			buildStatementsAfterInner(codeBuilder);
 		}
 		labelContext = stmStack.pop();
-//		System.out.println("ClassDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 
 		codeBuilder
 			.aload(0)
 			.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")))
 			.aload(0)
-			.areturn()
-//			.labelBinding(endScope)
-			;
+			.areturn();
 	}
 	
 	private void clearLabelList() {
@@ -1511,14 +1367,12 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM
 	// ***********************************************************************************************
-	private final boolean TRY_CATCH_TESTING = false;//true;
 	/**
 	 * Generate byteCode for the '_STM' method.
 	 *
 	 * @param codeBuilder the CodeBuilder
 	 */
 	private void buildMethod_CatchingErrors_TRY_CATCH(CodeBuilder codeBuilder, Label begScope, Label endScope) {
-		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "BEGIN ============== TRY_CATCH");
 		codeBuilder.trying(
 			tryCodeBuilder -> {
 				buildStatementsBeforeInner(tryCodeBuilder);
@@ -1526,8 +1380,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			},
 			catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_RUNTIME_EXCEPTION,
 				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder, begScope, endScope)));
-		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "ENDOF ============== TRY_CATCH");
-//		Util.IERR();
 	}
 
 	private void buildMyCatchBlock(CodeBuilder  codeBuilder, Label begScope, Label endScope) {
@@ -1544,7 +1396,6 @@ public class ClassDeclaration extends BlockDeclaration {
         //  invokevirtual #32                 // Method onError_0:()Lsimula/runtime/RTS_PRCQNT;
         //  invokevirtual #36                 // Method _onError:(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V
 
-		if(TRY_CATCH_TESTING) Util.buildSNAPSHOT(codeBuilder, "BEGIN ============== CATCH");
 		codeBuilder
 			.astore(local_EXEPTN)  // The caught exception will be on top of the operand stack when the catch block is entered.
 			.aload(0)
@@ -1557,7 +1408,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
 				"_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V")));
 		;
-//		Util.IERR();
 	}
 
 	// ***********************************************************************************************
@@ -1567,7 +1417,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Coding utility: buildStatementsBeforeInner
 	 */
 	private void buildStatementsBeforeInner(CodeBuilder codeBuilder) {
-		if (!this.hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.buildStatementsBeforeInner(codeBuilder);
 		}
@@ -1588,7 +1438,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
 			stm.buildByteCode(codeBuilder);
 		}
-		if (!this.hasNoRealPrefix()) {
+		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
 			if (prfx != null) prfx.buildStatementsAfterInner(codeBuilder);
 		}
@@ -1665,7 +1515,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
 		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
 		oupt.writeType(type);
 		
 		oupt.writeShort(rtBlockLevel);
@@ -1673,7 +1522,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
-//		oupt.writeString(externalPrefixIdent);
 
 		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
@@ -1687,25 +1535,17 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeShort(protectedList.size());
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
-//		oupt.writeShort(labelList.size());
-//		for(LabelDeclaration lab:labelList) lab.writeObject(oupt);
 		LabelList.writeLabelList(labelList, oupt);
 		
 		DeclarationList decls = prep(declarationList);
-//		System.out.println("ClassDeclaration.writeObject: Write Declaration List: "+decls.size());
 		oupt.writeShort(decls.size());
 		for(Declaration decl:decls) oupt.writeObj(decl);
 
-//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS BEFORE INNER: "+statements1);
-//		System.out.println("ClassDeclaration.writeExternal: Class " + this.identifier+ ": STATEMENTS AFTER INNER: "+statements);
-		
-//		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS BEFORE INNER: Statements1: "+statements1.size());
 		if(statements1 != null) {
 			oupt.writeShort(statements1.size());
 			for(Statement stm:statements1) oupt.writeObj(stm);
 		} else oupt.writeShort(0);
 
-//		System.out.println("ClassDeclaration.writeObject: Write STATEMENTS AFTER INNER: Statements: "+statements.size());
 		if(statements != null) {
 			oupt.writeShort(statements.size());
 			for(Statement stm:statements) oupt.writeObj(stm);
@@ -1727,68 +1567,47 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.isPreCompiledFromFile = inpt.readString();
 		cls.hasLocalClasses = inpt.readBoolean();
 		cls.detachUsed = inpt.readBoolean();
-//		cls.externalPrefixIdent = inpt.readString();
 
-		//parameterList = (Vector<Parameter>) inpt.readObject();
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			cls.parameterList.add(Parameter.readParameter(inpt));
 
-		//cls.virtualSpecList = (Vector<VirtualSpecification>) inpt.readObject();
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			cls.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
 		
-		//cls.hiddenList = (Vector<HiddenSpecification>) inpt.readObject();
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			cls.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
 		
-		//cls.protectedList = (Vector<ProtectedSpecification>) inpt.readObject();
 		n = inpt.readShort();
-//		System.out.println("ClassDeclaration.readObject: Read Protected List: "+n);
 		for(int i=0;i<n;i++)
 			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
 
-//		System.out.println("ClassDeclaration.readObject: Read Label List: "+n);
 		cls.labelList = LabelList.readLabelList(inpt);
 
 		n = inpt.readShort();
-//		System.out.println("ClassDeclaration.readObject: Read Declaration List: "+n);
 		for(int i=0;i<n;i++) {
 			Declaration decl = (Declaration) inpt.readObj();
 			cls.declarationList.add(decl);
 		}
 
-		//cls.statements1 = (Vector<Statement>) inpt.readObject();
 		n = inpt.readShort();
-//		System.out.println("ClassDeclaration.readObject: Read statements1 List: "+n);
 		if(n > 0) cls.statements1 = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
 			cls.statements1.add(stm);
 		}
 		
-		//cls.statements = (Vector<Statement>) inpt.readObject();			
 		n = inpt.readShort();
-//		System.out.println("ClassDeclaration.readObject: Read statements List: "+n);
 		if(n > 0) cls.statements = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
 			cls.statements.add(stm);
 		}
-
-//		System.out.println("\nClassDeclaration.readObject: PRINT SYNTAX-TREE");
-//		cls.printTree(1);
-//		Util.IERR();
-
-//		System.out.println("ClassDeclaration.readObject: END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
-//		cls.print(2);
-//		Util.IERR();
 		
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		Global.setScope(cls.declaredIn);
-//		Thread.dumpStack();
 		return(cls);
 	}
 	

@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -22,7 +19,6 @@ import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.classfile.constantpool.MethodRefEntry;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
@@ -34,17 +30,13 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
-import simula.compiler.syntaxClass.HiddenSpecification;
-import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -291,8 +283,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 */
 	private static void expectProcedureBody(ProcedureDeclaration proc) {
 		if (Parse.accept(KeyWord.BEGIN)) {
-//			expectStatementBodyBlock(proc);
-			// BEGIN declaration { ; declaration } statement { ; statement } END
 			Statement stm;
 			if (Option.TRACE_PARSE)	Parse.TRACE("Parse Procedure Block");
 			while (Declaration.acceptDeclaration(proc)) {
@@ -325,7 +315,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 			if(type != null) {
-//				type.doChecking(declaredIn); // TODO: TESTING
 				this.result = new SimpleVariableDeclaration(type, "_RESULT");
 				declarationList.add(result);
 			}
@@ -382,42 +371,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiledFromFile != null)	return;
 		switch (declarationKind) {
-//		case ObjectKind.ContextFreeMethod -> doMethodJavaCoding("static ", false);
-//		case ObjectKind.MemberMethod -> doMethodJavaCoding("", true);
-		case ObjectKind.Procedure -> doProcedureCoding();
-		default -> Util.IERR();
+			case ObjectKind.Procedure -> doProcedureCoding();
+			default -> Util.IERR();
 		}
 	}
-
-//	// ***********************************************************************************************
-//	// *** Coding: METHOD -- Generate Inline Method code for Procedure.
-//	// ***********************************************************************************************
-//	/**
-//	 * Generate Inline Method code for Procedure.
-//	 * @param modifier mthod modifier: "static " or ""
-//	 * @param addStaticLink add static link as 0'th parameter
-//	 */
-//	private void doMethodJavaCoding(final String modifier,final boolean addStaticLink) {
-//
-//		Util.IERR("DEAD CODE ? NOT BELEAVED TO BE IN USE");
-//		
-//		Global.sourceLineNumber = lineNumber;
-//		ASSERT_SEMANTICS_CHECKED();
-//		Global.enterScope(this);
-//		String line = "public " + modifier + ((type == null) ? "void" : type.toJavaType());
-//		line = line + ' ' + getJavaIdentifier() + ' ' + edFormalParameterList(true, addStaticLink);
-//		GeneratedJavaClass.code(line);
-//		if (type != null) {
-//			GeneratedJavaClass.debug("// Declare return value as variable");
-//			GeneratedJavaClass.code(type.toJavaType() + ' ' + "_RESULT" + '=' + type.edDefaultValue() + ';');
-//		}
-//		for (Declaration decl : labelList.labels) decl.doJavaCoding();
-//		for (Declaration decl : declarationList) decl.doJavaCoding();
-//		for (Statement stm : statements) stm.doJavaCoding();
-//		if (type != null) GeneratedJavaClass.code("return(_RESULT);");
-//		GeneratedJavaClass.code("}");
-//		Global.exitScope();
-//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: edFormalParameterList
@@ -479,11 +436,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			hasParameter = true;
 			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
 		}
-		if (labelList != null && !labelList.isEmpty()) {
+		if (this.hasLabel()) {
 			GeneratedJavaClass.debug("// Declare local labels");
-//			for (Declaration decl : labelList.labels) decl.doJavaCoding();
 			for (LabelDeclaration lab : labelList.labels)
-//				decl.doJavaCoding();
 				lab.declareLocalLabel(this);
 		}
 		GeneratedJavaClass.debug("// Declare locals as attributes");
@@ -527,8 +482,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		GeneratedJavaClass.debug("// Parameter Transmission in case of Formal/Virtual Procedure Call");
 		GeneratedJavaClass.code("@Override");
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + " setPar(Object param) {");
-//		GeneratedJavaClass.debug("//Util.BREAK(\"CALL " + getJavaIdentifier()
-//				+ ".setPar: param=\"+param+\", qual=\"+param.getClass().getSimpleName()+\", npar=\"+_nParLeft+\", staticLink=\"+_SL);");
 		GeneratedJavaClass.code("try {");
 		GeneratedJavaClass.code("switch(_nParLeft--) {");
 		int nPar = 0;
@@ -594,27 +547,34 @@ public class ProcedureDeclaration extends BlockDeclaration {
 						.with(SourceFileAttribute.of(Global.sourceFileName))
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_FINAL + ClassFile.ACC_SUPER)
 						.withSuperclass(CD.RTS_PROCEDURE);
+					
 					// Add Fields (Return, attributes and parameters)
-					if(type != null) {
+					
+					if(type != null)
 						classBuilder
 							.withMethodBody("_RESULT", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildMethod_RESULT(codeBuilder));
-					}
-					for (Parameter par:parameterList) par.buildField(classBuilder,this);
-					if(labelList != null) for (LabelDeclaration lab : labelList.labels) lab.buildField(classBuilder,this);
-					for (Declaration decl : declarationList) decl.buildField(classBuilder,this);
+					
+					for (Parameter par:parameterList)
+						par.buildField(classBuilder,this);
+					
+					if(labelList != null)
+						for (LabelDeclaration lab : labelList.labels)
+							lab.buildField(classBuilder,this);
+					
+					for (Declaration decl : declarationList)
+						decl.buildField(classBuilder,this);
 
 					classBuilder
 						.withMethod("<init>", MTD_Constructor(true), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildConstructor(codeBuilder));
 					
-					if(parameterList.size() > 0) {
-					classBuilder
-						.withMethod("<init>", MTD_Constructor(false), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildConstructor2(codeBuilder))
-						.withMethod("setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;"), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildSetPar(codeBuilder));
-					}
+					if(parameterList.size() > 0)
+						classBuilder
+							.withMethod("<init>", MTD_Constructor(false), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildConstructor2(codeBuilder))
+							.withMethod("setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;"), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildSetPar(codeBuilder));
 					
 					classBuilder
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
@@ -624,15 +584,23 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return(bytes);
 	}
 
+	// ***********************************************************************************************
+	// *** ByteCoding: MTD_Constructor
+	// ***********************************************************************************************
+	/**
+	 * Create the MethodTypeDesc for the constructor.
+	 * <p>
+	 * Example: (Lsimula/runtime/RTS_RTObject;IID)V
+	 * <p>
+	 * Also used by PrefixedBlockDeclaration.
+	 * @return the MethodTypeDesc for the constructor
+	 */
 	private MethodTypeDesc MTD_Constructor(boolean withParams) {
-//		System.out.println("ProcedureDeclaration.MTD_Constructor: "+this);
 		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
 		if(withParams) for(Parameter par:parameterList) {
-//			System.out.println("ProcedureDeclaration.MTD_Constructor: "+par+" "+par.kind);
 			sb.append(par.type_toClassDesc().descriptorString());
 		}
 		sb.append(")V");
-//		System.out.println("ProcedureDeclaration.MTD_Constructor: "+sb);
 		return(MethodTypeDesc.ofDescriptor(sb.toString()));
 	}
 
@@ -651,9 +619,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		for(Parameter par:parameterList) {
 			if(par.mode==Parameter.Mode.name) sb.append("Lsimula/runtime/RTS_NAME;");
 			else switch(par.kind) {
-				case Parameter.Kind.Array:			  sb.append("Lsimula/runtime/RTS_ARRAY;"); break;
-				case Parameter.Kind.Label:           sb.append("Lsimula/runtime/RTS_LABEL;"); break;
-				case Parameter.Kind.Procedure:       sb.append("Lsimula/runtime/RTS_PRCQNT;");  break;
+				case Parameter.Kind.Array:			 sb.append("Lsimula/runtime/RTS_ARRAY;");  break;
+				case Parameter.Kind.Label:           sb.append("Lsimula/runtime/RTS_LABEL;");  break;
+				case Parameter.Kind.Procedure:       sb.append("Lsimula/runtime/RTS_PRCQNT;"); break;
 				case Parameter.Kind.Simple: default: sb.append(par.type.toJVMType(par.kind, par.mode));
 			}
 		}
@@ -665,12 +633,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	private void buildConstructor(MethodBuilder methodBuilder) {
-		methodBuilder
-			.withFlags(ClassFile.ACC_PUBLIC)
-			.with(SignatureAttribute.of(MethodSignature.parseFrom(edConstructorSignature())))
-			.withCode(codeBuilder -> buildConstructorCode(codeBuilder));		
-	}
 	/**
 	 * Generate byteCode for the Constructor.
 	 * <pre>
@@ -684,83 +646,82 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * </pre>
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private void buildConstructorCode(CodeBuilder codeBuilder) {
-		ASSERT_SEMANTICS_CHECKED();
-		Global.enterScope(this);
-			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			Label begScope = codeBuilder.newLabel();
-			Label endScope = codeBuilder.newLabel();
-			codeBuilder
-				.labelBinding(begScope)
-				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
-				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
-
-			// Declare local parameters
-			int nPar = 2;
-			for(Parameter par:parameterList) {
-				ClassDesc TD=par.type_toClassDesc();
-				codeBuilder.localVariable(nPar++,par.getJavaIdentifier(),TD,begScope,endScope);
-			}
-
-			// super(staticLink);
-			codeBuilder
-				.aload(0)
-				.aload(1)
-				.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
-						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
-
-			if(labelList != null && !labelList.isEmpty()) {
-				// Declare local labels
-				for (LabelDeclaration lab : labelList.labels)
-					lab.buildInitAttribute(codeBuilder);
-			}
-			// Add and Initialize attributes
-			for (Declaration decl : declarationList) {
-				decl.buildInitAttribute(codeBuilder);
-			}
-
-
-			// Parameter assignment to locals
-			int parOfst=2;
-			for(Parameter par:parameterList) {
-				codeBuilder.aload(0);
-				par.loadParameter(codeBuilder, parOfst++);
-//				if(par.type!=null && par.type.equals(Type.LongReal) && (par.mode != Parameter.Mode.name)) parOfst++;
-				if(par.type!=null && par.type.keyWord == Type.T_LONG_REAL && (par.mode != Parameter.Mode.name)) parOfst++;
-				codeBuilder.putfield(par.getFieldRefEntry(pool));
-			}
-
-			// BBLK();
-			codeBuilder
-				.aload(0)
-				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
-
-			// Add Declaration Code to Constructor
-			for (Declaration decl : declarationList) {
-				decl.buildDeclarationCode(codeBuilder);
-			}
-
-			// _STM();
-			codeBuilder
-				.aload(0)
-				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
-				.pop();
-
-			codeBuilder
-				.return_()
-				.labelBinding(endScope);
-		Global.exitScope();
+	private void buildConstructor(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom(edConstructorSignature())))
+			.withCode(codeBuilder -> {
+				ASSERT_SEMANTICS_CHECKED();
+				Global.enterScope(this);
+					ConstantPoolBuilder pool=codeBuilder.constantPool();
+					Label begScope = codeBuilder.newLabel();
+					Label endScope = codeBuilder.newLabel();
+					codeBuilder
+						.labelBinding(begScope)
+						.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+						.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+		
+					// Declare local parameters
+					int nPar = 2;
+					for(Parameter par:parameterList) {
+						ClassDesc TD=par.type_toClassDesc();
+						codeBuilder.localVariable(nPar++,par.getJavaIdentifier(),TD,begScope,endScope);
+					}
+		
+					// super(staticLink);
+					codeBuilder
+						.aload(0)
+						.aload(1)
+						.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
+								,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
+		
+					if (this.hasLabel()) {
+						// Declare local labels
+						for (LabelDeclaration lab : labelList.labels)
+							lab.buildInitAttribute(codeBuilder);
+					}
+					// Add and Initialize attributes
+					for (Declaration decl : declarationList) {
+						decl.buildInitAttribute(codeBuilder);
+					}
+		
+		
+					// Parameter assignment to locals
+					int parOfst=2;
+					for(Parameter par:parameterList) {
+						codeBuilder.aload(0);
+						par.loadParameter(codeBuilder, parOfst++);
+						if(par.type!=null && par.type.keyWord == Type.T_LONG_REAL && (par.mode != Parameter.Mode.name)) parOfst++;
+						codeBuilder.putfield(par.getFieldRefEntry(pool));
+					}
+		
+					// BBLK();
+					codeBuilder
+						.aload(0)
+						.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
+		
+					// Add Declaration Code to Constructor
+					for (Declaration decl : declarationList) {
+						decl.buildDeclarationCode(codeBuilder);
+					}
+		
+					// _STM();
+					codeBuilder
+						.aload(0)
+						.invokevirtual(pool.methodRefEntry(currentClassDesc(),"_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
+						.pop();
+		
+					codeBuilder
+						.return_()
+						.labelBinding(endScope);
+				Global.exitScope();
+		}	);
 	}
+
 	
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	private void buildConstructor2(MethodBuilder methodBuilder) {
-		methodBuilder
-			.withFlags(ClassFile.ACC_PUBLIC)
-			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
-			.withCode(codeBuilder -> buildConstructorCode2(codeBuilder));		
-	}
 	/**
 	 * Generate byteCode for the Constructor.
 	 * <pre>
@@ -779,43 +740,42 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * </pre>
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private void buildConstructorCode2(CodeBuilder codeBuilder) {
-		ASSERT_SEMANTICS_CHECKED();
-		Global.enterScope(this);
-			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			Label begScope = codeBuilder.newLabel();
-			Label endScope = codeBuilder.newLabel();
-			codeBuilder
-				.labelBinding(begScope)
-				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
-				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
-
-			// super(staticLink);
-			codeBuilder
-				.aload(0)
-				.aload(1);
-				
-			Constant.buildIntConst(codeBuilder,parameterList.size());
-			
-			codeBuilder
-				.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
-						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V")));
-
-			codeBuilder
-				.return_()
-				.labelBinding(endScope);
-		Global.exitScope();
-	}
+	private void buildConstructor2(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
+			.withCode(codeBuilder -> {
+				ASSERT_SEMANTICS_CHECKED();
+				Global.enterScope(this);
+					ConstantPoolBuilder pool=codeBuilder.constantPool();
+					Label begScope = codeBuilder.newLabel();
+					Label endScope = codeBuilder.newLabel();
+					codeBuilder
+						.labelBinding(begScope)
+						.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+						.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+		
+					// super(staticLink);
+					codeBuilder
+						.aload(0)
+						.aload(1);
+						
+					Constant.buildIntConst(codeBuilder,parameterList.size());
+					
+					codeBuilder
+						.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
+								,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;I)V")));
+		
+					codeBuilder
+						.return_()
+						.labelBinding(endScope);
+				Global.exitScope();
+			}	);
+		}
 	
 	// ***********************************************************************************************
 	// *** ByteCoding: buildSetPar
 	// ***********************************************************************************************
-	private void buildSetPar(MethodBuilder methodBuilder) {
-		methodBuilder
-			.withFlags(ClassFile.ACC_PUBLIC)
-			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
-			.withCode(codeBuilder -> buildSetParCode(codeBuilder));		
-	}
 	/**
 	 * Generate byteCode for the Constructor.
 	 * <pre>
@@ -834,34 +794,37 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * </pre>
 	 * @param codeBuilder the CodeBuilder
 	 */
-	private void buildSetParCode(CodeBuilder codeBuilder) {
-		ASSERT_SEMANTICS_CHECKED();
-		Global.enterScope(this);
-			Label begScope = codeBuilder.newLabel();
-			Label endScope = codeBuilder.newLabel();
-			codeBuilder
-				.labelBinding(begScope)
-				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
-				.localVariable(1,"param",CD.RTS_RTObject,begScope,endScope);
-
-			codeBuilder.trying(
-					blockCodeBuilder -> {
-						build_SWITCH(blockCodeBuilder);
-					},
-					catchBuilder -> catchBuilder.catching(ClassDesc.of("java.lang.ClassCastException"),
-							blockCodeBuilder -> buildCatchBlock(blockCodeBuilder)));
-
-			codeBuilder
-				.aload(0)
-				.areturn()
-				.labelBinding(endScope);
-		Global.exitScope();
-	}
-	
-	private void buildCatchBlock(BlockCodeBuilder codeBuilder) {
-		// throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
-		codeBuilder.astore(2);
-		Util.buildSimulaRuntimeError("Wrong type of parameter: ", codeBuilder);
+	private void buildSetPar(MethodBuilder methodBuilder) {
+		methodBuilder
+			.withFlags(ClassFile.ACC_PUBLIC)
+			.with(SignatureAttribute.of(MethodSignature.parseFrom("(Lsimula/runtime/RTS_RTObject;)V")))
+			.withCode(codeBuilder -> {
+				ASSERT_SEMANTICS_CHECKED();
+				Global.enterScope(this);
+					Label begScope = codeBuilder.newLabel();
+					Label endScope = codeBuilder.newLabel();
+					codeBuilder
+						.labelBinding(begScope)
+						.localVariable(0,"this",currentClassDesc(),begScope,endScope)
+						.localVariable(1,"param",CD.RTS_RTObject,begScope,endScope);
+		
+					codeBuilder.trying(
+							blockCodeBuilder -> {
+								build_SWITCH(blockCodeBuilder);
+							},
+							catchBuilder -> catchBuilder.catching(ClassDesc.of("java.lang.ClassCastException"),
+									blockCodeBuilder -> {
+										// throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
+										codeBuilder.astore(2);
+										Util.buildSimulaRuntimeError("Wrong type of parameter: ", codeBuilder);
+									}));
+		
+					codeBuilder
+						.aload(0)
+						.areturn()
+						.labelBinding(endScope);
+				Global.exitScope();
+		}	);
 	}
 	
 	private void build_SWITCH(BlockCodeBuilder codeBuilder) {
@@ -924,13 +887,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					.aload(0)
 					.aload(1) // param
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-							"procValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PRCQNT;"))) // TODO: MÅ RETTES
+							"procValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PRCQNT;")))
 					.putfield(par.getFieldRefEntry(pool))
 					.goto_(breakLabel);
 			}
 			else if (par.kind != Parameter.Kind.Simple) {
 //				typeValue = ("(" + tp + ")param");
-				Util.IERR();
+				Util.IERR("NOT IMPL");
 			}
 			else if (par.type.isArithmeticType()) {
 				codeBuilder
@@ -959,18 +922,19 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		int key = (par.type==null)?0:par.type.keyWord;
 		switch(key) {
-			case Type.T_INTEGER -> 
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-			case Type.T_REAL ->
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-			case Type.T_LONG_REAL ->
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-			case Type.T_BOOLEAN ->
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-			case Type.T_CHARACTER ->
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
+			case Type.T_INTEGER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
+			case Type.T_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
+			case Type.T_BOOLEAN -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
 			default -> {
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+						"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
 				codeBuilder.checkcast(par.type_toClassDesc());
 			}
 		}
@@ -979,17 +943,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public void buildGetArithmeticValue(Type type,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		switch(type.keyWord) {
-		case Type.T_INTEGER -> 
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-		case Type.T_REAL ->
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-		case Type.T_LONG_REAL -> 
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-		case Type.T_BOOLEAN ->
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-		case Type.T_CHARACTER ->
-			codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
-		default -> Util.IERR("ProcedureDeclaration.buildGetArithmeticValue: FYLL PÅ TYPE: "+type);
+			case Type.T_INTEGER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
+			case Type.T_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
+			case Type.T_BOOLEAN -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+					"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
+			default -> Util.IERR();
 		}
 	}
 
@@ -1020,14 +984,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		stmStack.push(labelContext);
-//		System.out.println("ProcedureDeclaration.build_STM_BODY: LabelContext: "+labelContext+"  ==>  "+this.externalIdent+", labelList="+this.labelList);
 		labelContext = this;
 		for (Statement stm : statements) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
 			stm.buildByteCode(codeBuilder);
 		}
 		labelContext = stmStack.pop();
-//		System.out.println("ProcedureDeclaration.build_STM_BODY: LabelContext: "+labelContext);
 	}
 
 	// ***********************************************************************************************
@@ -1097,7 +1059,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ProcedureDeclaration() {	super(null); }
 
@@ -1108,62 +1070,29 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
 		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
 		oupt.writeType(type);
-//		oupt.writeObject(declaredIn);  // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-//		oupt.writeKind(declarationKind);
 		oupt.writeShort(rtBlockLevel);
 		oupt.writeBoolean(hasLocalClasses);
 
-		//oupt.writeObject(parameterList);
 		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
 		
-		
-//		oupt.writeObject(labelList);
-//		oupt.writeObject(declarationList);
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
-	
-//	private DeclarationList prep(DeclarationList declarationList) {
-//		DeclarationList res = new DeclarationList("");
-//		for(Declaration decl:declarationList) {
-//			if(decl instanceof ArrayDeclaration) res.add(decl);
-//			else if(decl instanceof ClassDeclaration) res.add(decl);
-//			else if(decl instanceof ExternalDeclaration) res.add(decl);
-//			else if(decl instanceof LabelDeclaration) res.add(decl);
-//			else if(decl instanceof ProcedureDeclaration) res.add(decl);
-//			else if(decl instanceof SimpleVariableDeclaration) res.add(decl);
-//			else if(decl instanceof SwitchDeclaration) res.add(decl);
-//		}
-//		return(res);
-//	}
 
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read ProcedureDeclaration: " + identifier + ", Declared in: " + this.declaredIn);
 		String identifier = inpt.readString();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
-
-//		System.out.println("ProcedureDeclaration.readObject: END Read ProcedureDeclaration: " + identifier + ", Declared in: " + pro.declaredIn);
-//		pro.print(2);
-//		Util.IERR();
-
-//		pro.SEQU = inpt.readShort();
 		pro.SEQU = inpt.readSEQU(pro);
 		pro.externalIdent = inpt.readString();
 		pro.type=inpt.readType();
-//		pro.declaredIn = (DeclarationScope) inpt.readObject();   // MEDFØRER AT SEPARAT KOMPILERING GÅR I LOOP !!!
-//		pro.declarationKind = inpt.readShort();
 		pro.rtBlockLevel = inpt.readShort();
 		pro.hasLocalClasses = inpt.readBoolean();
 		
-		//pro.parameterList=(Vector<Parameter>) inpt.readObject();
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pro.parameterList.add(Parameter.readParameter(inpt));
 
-//		pro.labelList=(Vector<LabelDeclaration>) inpt.readObject();
-//		pro.declarationList=(DeclarationList) inpt.readObject();
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
 		Global.setScope(pro.declaredIn);
 		return(pro);

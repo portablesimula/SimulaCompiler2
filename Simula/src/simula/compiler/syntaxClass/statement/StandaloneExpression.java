@@ -132,7 +132,7 @@ public final class StandaloneExpression extends Statement {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	private StandaloneExpression() {
 		super(0);

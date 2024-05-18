@@ -93,7 +93,7 @@ public final class Token {
 	}
 
 	/**
-	 * The default constructor used by Externalization.
+	 * The default constructor used by Attribute File I/O
 	 */
 	public Token() {
 	} // Externalization

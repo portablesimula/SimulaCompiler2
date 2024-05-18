@@ -66,10 +66,6 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		this(declaredIn,kind,type,ident);
 		this.mtdSet = mtdSet;
 		for(int i=0;i<param.length;i++) param[i].into(parameterList); 
-		
-//		for(String mtd:mtdSet) {
-//			System.out.println("NEW StandardProcedure: "+mtd+"  ==>  "+getProcedureSpecification(mtd));
-//		}
 	}
 
 	@Override
@@ -96,16 +92,13 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	}
 	
 	private ProcedureSpecification getLegalMatch(String mtd,Vector<Expression> params) {
-//		System.out.println("StandardProcedure.getLegalMatch: mtd="+mtd);
 		ProcedureSpecification spec = getProcedureSpecification(mtd);
-//		System.out.println("StandardProcedure.getLegalMatch: spec="+spec);
 		for(int i=0;i<params.size();i++) {
 			Expression expr = params.get(i);
 			expr.doChecking();
 			Parameter par = spec.parameterList.get(i);
 			if(!expr.type.equals(par.type)) return(null);
 		}
-//		System.out.println("StandardProcedure.getLegalMatch: "+this+"  ==>  "+spec + ", mtd = "+mtd);
 		this.mtdPicked = mtd;
 		return(spec);
 	}
@@ -166,11 +159,9 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		} else return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
 	}
 	private String edMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
-//		System.out.println("StandardProcedure.edMethodTypeDesc: "+this.identifier);
 		// MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_Printfile;");
 		StringBuilder sb=new StringBuilder("(");
 		if(beforeDot != null) {
-//			sb.append(beforeDot.type.toJVMType());
 			if(beforeDot.type instanceof OverLoad ovl) {
 				boolean found=false;
 				for(Type alt:ovl.type) {
@@ -183,7 +174,6 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		}
 		if(parameterList!=null) for(int i=0;i<parameterList.size();i++) {
 			Parameter par = parameterList.get(i);
-//			System.out.println("StandardProcedure.edMethodTypeDesc: par="+Parameter.edKind(par.kind));
 			if(par.mode == Parameter.Mode.name) {
 				sb.append("Lsimula/runtime/RTS_NAME;");
 			} else if(par.kind == Parameter.Kind.Array) {
@@ -191,7 +181,6 @@ public final class StandardProcedure extends ProcedureDeclaration {
 			} else if(par.kind == Parameter.Kind.Procedure) {
 				sb.append("Lsimula/runtime/RTS_PRCQNT;");				
 			} else if(par.type instanceof OverLoad ovl) {
-//				System.out.println("StandardProcedure.edMethodTypeDesc: "+this);
 				boolean found=false;
 				for(Type alt:ovl.type) {
 					if(params.get(i).type.equals(alt)) {
@@ -206,7 +195,6 @@ public final class StandardProcedure extends ProcedureDeclaration {
 			// Push extra parameter 'sourceLineNumber'
 			Parameter lno=new Parameter(id,Type.Integer,Parameter.Kind.Simple);
 			sb.append(lno.type.toJVMType());
-//			System.out.println("StandardProcedure.edMethodTypeDesc: ExtraPar: "+id);
 		}
 		sb.append(')');
 		if(this.type != null) {
@@ -221,8 +209,6 @@ public final class StandardProcedure extends ProcedureDeclaration {
 				} if(!found) Util.IERR();
 			} else sb.append(this.type.toJVMType());
 		} else sb.append('V');
-//		System.out.println("StandardProcedure.edMethodTypeDesc: "+this.identifier+" ==> res="+sb);
-//		Util.IERR();
 		return(sb.toString());
 	}
 
@@ -237,7 +223,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public StandardProcedure() {}
 

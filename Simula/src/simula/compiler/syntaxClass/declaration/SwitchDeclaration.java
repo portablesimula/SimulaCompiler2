@@ -7,18 +7,14 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.classfile.instruction.SwitchCase;
 import java.lang.constant.ConstantDescs;
 import java.util.List;
 import java.util.Vector;
 
-import simula.compiler.AttributeInputStream;
-import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -127,7 +123,6 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		List<SwitchCase> tableSwitchCases;
 		int tableSize = switchList.size();
-//		System.out.println("SwitchDeclaration.build_STM_BODY: Define TableSwitch " + tableSize);
 		tableSwitchCases = new Vector<SwitchCase>();
 		for (int i = 1; i <= tableSize; i++) {
 			tableSwitchCases.add(SwitchCase.of(i, codeBuilder.newLabel()));
@@ -150,12 +145,10 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 				.labelBinding(lab)
 				.aload(0);
 			
-//			System.out.println("SwitchDeclaration.build_STM_BODY: exp:"+expr.getClass().getSimpleName()+"  "+expr);
 			expr.buildEvaluation(null,codeBuilder);
 			
-			FieldRefEntry FRE_RESULT=pool.fieldRefEntry(currentClassDesc(), "_RESULT", CD.RTS_LABEL);
 			codeBuilder
-				.putfield(FRE_RESULT) // _RESULT
+				.putfield(pool.fieldRefEntry(currentClassDesc(), "_RESULT", CD.RTS_LABEL)) // _RESULT
 				.goto_(endLabel);
 			
 		}
@@ -170,18 +163,5 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	public String toString() {
 		return ("SWITCH " + identifier + " := " + switchList);
 	}
-	
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Externalization.
-	 */
-	public SwitchDeclaration() { super(null, ObjectKind.Procedure); }
-
-	// Inherited from ProcedureDeclaration:
-	//	public void writeObject(AttributeOutputStream oupt)
-	//	public static ProcedureDeclaration readObject(AttributeInputStream inpt)
 
 }

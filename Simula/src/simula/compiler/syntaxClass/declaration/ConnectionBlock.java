@@ -7,22 +7,14 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
-import java.util.Vector;
-
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -167,7 +159,6 @@ public final class ConnectionBlock extends DeclarationScope {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		// Set External Identifier
-//		externalIdent = inspectedVariable.identifier + '_' + lineNumber;
 		externalIdent = inspectedVariable.identifier;
 		Global.enterScope(this);
 		rtBlockLevel = currentRTBlockLevel;
@@ -235,8 +226,6 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public void printTree(final int indent) {
-//		String spc = edTreeIndent(indent);
-//		Util.println(spc+"BEGIN");
 		printDeclarationList(indent+1);
 		statement.printTree(indent + 1);
 	}
@@ -261,7 +250,6 @@ public final class ConnectionBlock extends DeclarationScope {
 
 	@Override
 	public byte[] buildClassFile() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

@@ -41,7 +41,6 @@ public final class RunFullTestBatch {
 		Option.INLINE_TESTING=true;
 		Option.TESTING_STACK_SIZE = true;
 		Option.CREATE_JAVA_SOURCE = true;
-		Option.USE_JAR_FILE_BUILDER = true;
 //		Option.GENERATE_BYTEFILE=true;
 		Option.SPORT=true;
 //		Option.TRACING=false;

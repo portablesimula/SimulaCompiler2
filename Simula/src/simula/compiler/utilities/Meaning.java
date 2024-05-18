@@ -321,7 +321,7 @@ public final class Meaning {
 //	// *** Externalization
 //	// ***********************************************************************************************
 //	/**
-//	 * Default constructor used by Externalization.
+//	 * Default constructor used by Attribute File I/O
 //	 */
 //	public Meaning() {
 //	}

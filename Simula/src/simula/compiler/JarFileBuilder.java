@@ -57,12 +57,20 @@ public class JarFileBuilder {
 	 */
 	private Vector<String> jarEntryNames;
 
-	private final boolean TESTING = false;//true;//false;
+	private final boolean TESTING = false;
 	
+	/**
+	 * Construct a new JarFileBuilder.
+	 */
 	public JarFileBuilder() {
 		if(TESTING) System.out.println("\nNEW JarFileBuilder");
 	}
 	
+	/**
+	 * Open the JarFileBuilder.
+	 * @param program the relevant ProgramModule
+	 * @throws IOException if something went wrong
+	 */
 	public void open(final ProgramModule program) throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.open: " + program);
 		if(jarOutput != null) Util.IERR();
@@ -97,9 +105,9 @@ public class JarFileBuilder {
 	}
 	
 	/**
-	 * 
-	 * @param entryName
-	 * @param bytes
+	 * Add a JarEntry to the JarOutputStream.
+	 * @param entryName the entry name
+	 * @param bytes the bytes, may be null
 	 * @throws IOException if something went wrong
 	 */
 	public void addJarEntry(String entryName, byte[] bytes) throws IOException {
@@ -128,8 +136,8 @@ public class JarFileBuilder {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Close the JarFileBuilder.
+	 * @return the outputJarFile
 	 * @throws IOException if something went wrong
 	 */
 	public File close() throws IOException {

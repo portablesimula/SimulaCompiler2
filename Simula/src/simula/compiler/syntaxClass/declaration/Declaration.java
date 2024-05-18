@@ -7,15 +7,10 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
-import simula.compiler.AttributeInputStream;
-import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -270,38 +265,5 @@ public abstract class Declaration extends SyntaxClass {
 		Global.sourceLineNumber = lineNumber;
 		// Default: No code
 	}
-
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		super.writeExternal(oupt);
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		oupt.writeType(type);
-//		oupt.writeObject(isProtected);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeObject(declaredIn);
-//		oupt.writeShort(declarationKind);
-////		oupt.writeShort(slot);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		super.readExternal(inpt);
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		type = inpt.readType();
-//		isProtected = (ProtectedSpecification) inpt.readObject();
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		if(!Option.NEW_ATTR_FILE)
-//			declaredIn = (DeclarationScope) inpt.readObject();
-//		declarationKind = inpt.readShort();
-////		slot = inpt.readShort();
-//	}
 
 }

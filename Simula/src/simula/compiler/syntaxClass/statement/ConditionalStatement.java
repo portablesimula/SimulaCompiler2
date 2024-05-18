@@ -166,7 +166,7 @@ public final class ConditionalStatement extends Statement {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public ConditionalStatement() {
 		super(0);

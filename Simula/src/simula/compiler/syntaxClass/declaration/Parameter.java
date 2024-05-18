@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -29,7 +26,6 @@ import simula.compiler.syntaxClass.expression.RemoteVariable;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 	
@@ -102,42 +98,6 @@ public final class Parameter extends Declaration {
 		}
 		return("Default");
 	}
-
-//	/**
-//	 * Procedure parameter transfer Mode.
-//	 */
-//	public enum Mode {
-//		/**
-//		 * Parameter transfered by value
-//		 */
-//		value,
-//		/**
-//		 * Parameter transfered by name
-//		 */
-//		name
-//	}
-//
-//	/**
-//	 * Procedure parameter Kind.
-//	 */
-//	public enum Kind {
-//		/**
-//		 * Simple parameter.
-//		 */
-//		Simple,
-//		/**
-//		 * Procedure parameter.
-//		 */
-//		Procedure,
-//		/**
-//		 * Array parameter.
-//		 */
-//		Array,
-//		/**
-//		 * Label parameter.
-//		 */
-//		Label
-//	}
 
 	/**
 	 * Create a new Parameter.
@@ -228,9 +188,8 @@ public final class Parameter extends Declaration {
 	 */
 	void setExternalIdentifier(final int prefixLevel) {
 		if (prefixLevel > 0)
-			externalIdent = "p" + prefixLevel + '_' + identifier;
-		else
-			externalIdent = "p_" + identifier;
+			 externalIdent = "p" + prefixLevel + '_' + identifier;
+		else externalIdent = "p_" + identifier;
 	}
 
 	@Override
@@ -246,8 +205,7 @@ public final class Parameter extends Declaration {
 		if (type != null)
 			type.doChecking(Global.getCurrentScope().declaredIn);
 		if (!legalTransmitionMode())
-			Util.error("Illegal transmission mode: " + mode + ' ' + kind + ' ' + identifier + " by "
-					+ edMode(mode) + " is not allowed");
+			Util.error("Illegal transmission mode: " + mode + ' ' + kind + ' ' + identifier + " by " + edMode(mode) + " is not allowed");
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -281,26 +239,24 @@ public final class Parameter extends Declaration {
 	private boolean legalTransmitionMode() {
 		boolean illegal = false;
 		switch (kind) {
-		case Kind.Simple:
-			if (type.keyWord == Type.T_TEXT)
-				break; // Simple Text
-			else if (type.isReferenceType()) {
+			case Kind.Simple -> {
+				if (type.keyWord == Type.T_TEXT)
+					break; // Simple Text
+				else if (type.isReferenceType()) {
+					if (mode == Parameter.Mode.value)
+						illegal = true;
+				} // Simple ref(ClassIdentifier)
+				else if (mode == 0)
+					mode = Parameter.Mode.value; // Simple Type Integer, Real, Character
+			}
+			case Kind.Array -> {
+				if (type.isReferenceType() && mode == Parameter.Mode.value)
+					illegal = true;
+			}
+			case Kind.Procedure, Kind.Label -> {
 				if (mode == Parameter.Mode.value)
 					illegal = true;
-			} // Simple ref(ClassIdentifier)
-			else if (mode == 0)
-				mode = Parameter.Mode.value; // Simple Type Integer, Real, Character
-			break;
-		case Kind.Array:
-			if (type.isReferenceType() && mode == Parameter.Mode.value)
-				illegal = true;
-			break;
-		case Kind.Procedure:
-		case Kind.Label:
-			if (mode == Parameter.Mode.value)
-				illegal = true;
-			break;
-		default:
+			}
 		}
 		return (!illegal);
 	}
@@ -342,13 +298,10 @@ public final class Parameter extends Declaration {
 			buildNameParam(codeBuilder,this,expr);
 		} else switch (kind) {
 			case Kind.Array -> {
-//				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value) {
-//					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(type),  // TODO: TESTING_ARRAY
-//					"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+type.getArrayType()+';'));
-					codeBuilder.invokevirtual(CD.RTS_ARRAY,
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
+					codeBuilder
+						.invokevirtual(CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
 				}}
 			case Kind.Label -> Util.IERR();
 				
@@ -363,21 +316,15 @@ public final class Parameter extends Declaration {
 //		        17: ldc           #27                 // class simulaTestPrograms/adHoc000_PPP
 //		        19: invokespecial #29                 // Method simula/runtime/RTS_PRCQNT."<init>":(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V
 
-//				System.out.println("Parameter.buildParamCode: par="+this);
-//				System.out.println("Parameter.buildParamCode: expr="+expr.getClass().getSimpleName()+"  "+expr);
 				Expression beforeDot = null;
 				if(expr instanceof RemoteVariable rem) {
 					beforeDot = rem.obj;
 					expr = rem.var;
 				}
 				VariableExpression var=(VariableExpression)expr;
-//				System.out.println("Parameter.buildParamCode: var.identifier="+var.identifier);
-//				System.out.println("Parameter.buildParamCode: var.meaning="+var.meaning);
-//				System.out.println("Parameter.buildParamCode: var.meaning.declaredAs="+var.meaning.declaredAs.getClass().getSimpleName());
 				
 				Declaration decl = var.meaning.declaredAs;
 				if(decl instanceof ProcedureDeclaration proc) {
-//					System.out.println("Parameter.buildParamCode: par="+proc.externalIdent);
 					codeBuilder
 						.new_(CD.RTS_PRCQNT)
 						.dup();
@@ -390,20 +337,18 @@ public final class Parameter extends Declaration {
 						beforeDot.buildEvaluation(null, codeBuilder);
 					}
 
-					MethodTypeDesc MTD_THIS=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V");
 					codeBuilder
 						.ldc(pool.loadableConstantEntry(proc.getClassDesc()))
-						.invokespecial(CD.RTS_PRCQNT, "<init>", MTD_THIS);
+						.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
 				} else if(decl instanceof Parameter par) {
 //				        10: aload_0
 //				        11: getfield      #9                  // Field p_FFF:Lsimula/runtime/RTS_NAME;
 //				        14: invokevirtual #63                 // Method simula/runtime/RTS_NAME.get:()Ljava/lang/Object;
 //				        17: checkcast     #67                 // class simula/runtime/RTS_PRCQNT
-					MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;");
 					codeBuilder
 						.aload(0)
 						.getfield(par.getFieldRefEntry(pool))
-						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MTD))
+						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
 						.checkcast(CD.RTS_PRCQNT);
 				} else {
 					Util.IERR();
@@ -421,19 +366,16 @@ public final class Parameter extends Declaration {
 	}
 	
 	public static void buildNameParam(CodeBuilder codeBuilder,Expression expr) {
-		buildNameParam(codeBuilder,null,expr);
+//		buildNameParam(codeBuilder,null,expr);
+		Thunk.buildInvoke(0, expr, codeBuilder);
 	}	
 	
-	public static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
-//		System.out.println("Parameter.buildNameParam: par="+par);
-//		System.out.println("Parameter.buildNameParam: expr="+expr+"  type="+expr.type);
-//		Thunk.buildInvoke((par==null)?null:par.kind, expr, codeBuilder);
+	private static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
 		Thunk.buildInvoke((par==null)?0:par.kind, expr, codeBuilder);
 	}
 	
 
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-//		System.out.println("Parameter.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
 		ClassDesc CD_cls=declaredIn.getClassDesc();
 		ClassDesc CD_type=null; //type.toClassDesc(kind,mode);
 		if(kind==Kind.Procedure)
@@ -445,7 +387,7 @@ public final class Parameter extends Declaration {
 	@Override
 	public String getFieldIdentifier() {
 		if(declaredIn instanceof ClassDeclaration cls)
-			return("p"+cls.prefixLevel()+'_'+identifier);
+			 return("p"+cls.prefixLevel()+'_'+identifier);
 		else return("p_"+identifier);
 	}
 
@@ -453,23 +395,21 @@ public final class Parameter extends Declaration {
 	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		String ident = getFieldIdentifier();
 		if (mode == Parameter.Mode.name) {
-//			System.out.println("Parameter.buildField: "+this);
 			if (kind == Parameter.Kind.Procedure) {
 				classBuilder.withField(ident, CD.RTS_NAME, ClassFile.ACC_PUBLIC);
 			} else {			
-				classBuilder.withField(ident, CD.RTS_NAME, fieldBuilder -> {
-					fieldBuilder
-					.withFlags(ClassFile.ACC_PUBLIC)
-//					.with(SignatureAttribute.of(type.toClassSignature(mode)));
-					.with(SignatureAttribute.of(type.toNameClassSignature()));
-				});
+				classBuilder
+					.withField(ident, CD.RTS_NAME, fieldBuilder -> {
+						fieldBuilder
+							.withFlags(ClassFile.ACC_PUBLIC)
+							.with(SignatureAttribute.of(type.toNameClassSignature()));
+					});
 			}
 		} else if (kind == Parameter.Kind.Array) {
 			classBuilder.withField(ident, CD.RTS_ARRAY, ClassFile.ACC_PUBLIC);
 		} else if (kind == Parameter.Kind.Procedure) {
 			classBuilder.withField(ident, CD.RTS_PRCQNT, ClassFile.ACC_PUBLIC);
 		} else {
-//			System.out.println("Parameter.buildField: "+this);
 			ClassDesc CD=type.toClassDesc(kind,mode);
 			classBuilder.withField(ident, CD, ClassFile.ACC_PUBLIC);
 		}
@@ -487,7 +427,6 @@ public final class Parameter extends Declaration {
 	}
 
 	public void loadParameter(CodeBuilder codeBuilder,int ofst) {
-//		System.out.println("CUtil.loadParameter: codeBuilder.<"+type+">load("+ofst+")");
 		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Procedure) codeBuilder.aload(ofst);
@@ -557,7 +496,7 @@ public final class Parameter extends Declaration {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public Parameter() {
 		super(null);
@@ -568,7 +507,6 @@ public final class Parameter extends Declaration {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
 		oupt.writeType(type);
 		oupt.writeShort(kind);
 		oupt.writeShort(mode);

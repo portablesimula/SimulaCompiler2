@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -97,8 +94,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	 * @param constant        the constant indicator
 	 * @param constantElement a constant initial value
 	 */
-	SimpleVariableDeclaration(final Type type, final String identifier, final boolean constant,
-			final Constant constantElement) {
+	SimpleVariableDeclaration(final Type type, final String identifier, final boolean constant, final Constant constantElement) {
 		this(type, identifier);
 		this.constant = constant;
 		this.constantElement = constantElement;
@@ -161,7 +157,6 @@ public class SimpleVariableDeclaration extends Declaration {
 			constantElement.doChecking();
 			constantElement = TypeConversion.testAndCreate(type, constantElement);
 			constantElement.type = type;
-//			constantElement = constantElement.evaluate(); // ?????
 			constantElement.backLink = this;
 		}
 		
@@ -206,10 +201,8 @@ public class SimpleVariableDeclaration extends Declaration {
 	}
 
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-//		System.out.println("SimpleVariableDeclaration.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
 		ClassDesc CD_cls=declaredIn.getClassDesc();
 		ClassDesc CD_type=type.toClassDesc();
-//		System.out.println("SimpleVariableDeclaration.getFieldRefEntry: RETURN: fieldRefEntry("+CD_cls+','+identifier+','+ CD_type+")");
 		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
 	}
 	
@@ -273,7 +266,6 @@ public class SimpleVariableDeclaration extends Declaration {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-//		if(SEQU == 0) Util.IERR();
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
@@ -284,7 +276,6 @@ public class SimpleVariableDeclaration extends Declaration {
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
-//		System.out.println("SimpleVariableDeclaration.readObject: constantElement="+var.constantElement);
 		var.SEQU = inpt.readSEQU(var);
 		var.identifier = inpt.readString();
 		var.externalIdent = inpt.readString();

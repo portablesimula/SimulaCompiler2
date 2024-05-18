@@ -16,7 +16,6 @@ import java.util.Date;
 import java.util.Vector;
 
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
-import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -56,11 +55,6 @@ public final class GeneratedJavaClass {
 	 * Given as argument.
 	 */
 	public final BlockDeclaration blockDeclaration;
-	
-	/**
-	 * Used during coding to save the generated code.
-	 */
-	public Vector<CodeLine> saveCode;
 	
 	/**
 	 * Signals that ByteCodeEngineering is necessary.
@@ -152,14 +146,14 @@ public final class GeneratedJavaClass {
 		code(line + " // " + comment);
 	}
 
-	/**
-	 * Output a code line.
-	 * 
-	 * @param c a code line
-	 */
-	public static void code(final CodeLine c) {
-		Global.currentJavaModule.write(c.sourceLineNumber, c.codeLine, c.modid);
-	}
+//	/**
+//	 * Output a code line.
+//	 * 
+//	 * @param c a code line
+//	 */
+//	public static void code(final CodeLine c) {
+//		Global.currentJavaModule.write(c.sourceLineNumber, c.codeLine, c.modid);
+//	}
 
 	/**
 	 * Current Java line number
@@ -184,35 +178,31 @@ public final class GeneratedJavaClass {
 	 */
 	private void write(final int sourceLineNumber, final String line, final String modid) {
 		Util.ASSERT(sourceLineNumber > 0, "Invariant");
-		if (saveCode != null) {
-			CodeLine codeLine = new CodeLine(modid, sourceLineNumber, line);
-			saveCode.add(codeLine);
-		} else
-			try {
-				currentJavaLineNumber++;
-				if (prevLineNumber != sourceLineNumber) {
-					String s0 = edIndent() + edLineNumberLine(sourceLineNumber, modid);
-					appendLine(currentJavaLineNumber, sourceLineNumber);
-					if (Option.TRACE_CODING)
-						Util.println("CODE " + sourceLineNumber + ": " + s0);
-					currentJavaLineNumber++;
-					writer.write(s0 + '\n');
-				}
-				if (line.contains("}")) {
-					indent--;
-					if (indent < 0)
-						indent = 0;
-				}
-				String s = edIndent() + line;
-				if (line.contains("{"))
-					indent++;
+		try {
+			currentJavaLineNumber++;
+			if (prevLineNumber != sourceLineNumber) {
+				String s0 = edIndent() + edLineNumberLine(sourceLineNumber, modid);
+				appendLine(currentJavaLineNumber, sourceLineNumber);
 				if (Option.TRACE_CODING)
-					Util.println("CODE " + sourceLineNumber + ": " + s);
-				Util.ASSERT(writer != null, "Can't Output Code - writer==null");
-				writer.write(s + '\n');
-			} catch (IOException e) {
-				Util.IERR("Error Writing File: " + javaOutputFile, e);
+					Util.println("CODE " + sourceLineNumber + ": " + s0);
+				currentJavaLineNumber++;
+				writer.write(s0 + '\n');
 			}
+			if (line.contains("}")) {
+				indent--;
+				if (indent < 0)
+					indent = 0;
+			}
+			String s = edIndent() + line;
+			if (line.contains("{"))
+				indent++;
+			if (Option.TRACE_CODING)
+				Util.println("CODE " + sourceLineNumber + ": " + s);
+			Util.ASSERT(writer != null, "Can't Output Code - writer==null");
+			writer.write(s + '\n');
+		} catch (IOException e) {
+			Util.IERR("Error Writing File: " + javaOutputFile, e);
+		}
 		prevLineNumber = sourceLineNumber;
 	}
 

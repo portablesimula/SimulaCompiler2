@@ -12,9 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
-import java.util.Vector;
-
-import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -75,7 +72,6 @@ public abstract class DeclarationScope extends Declaration  {
 	/**
 	 * The label list.
 	 */
-//	public Vector<LabelDeclaration> labelList = new Vector<LabelDeclaration>();
 	public LabelList labelList; // = new LabelList();
 
 	// ***********************************************************************************************
@@ -88,8 +84,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
 	protected DeclarationScope(final String ident) {
 		super(ident);
-		declarationList = new DeclarationList(
-				this.getClass().getSimpleName() + ':' + ident + ":Line=" + Global.sourceLineNumber);
+		declarationList = new DeclarationList(getClass().getSimpleName() + ':' + ident + ":Line=" + Global.sourceLineNumber);
 		declaredIn = Global.getCurrentScope();
 		Global.setScope(this);
 		if (declaredIn != null)
@@ -107,7 +102,7 @@ public abstract class DeclarationScope extends Declaration  {
 	public String scopeID() {
 		if (rtBlockLevel > 1)
 			return (declaredIn.scopeID() + '.' + identifier);
-		return (identifier);
+		return identifier;
 	}
 
 	// ***********************************************************************************************
@@ -134,7 +129,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
 	public Meaning findVisibleAttributeMeaning(final String ident) {
 		Util.IERR("DeclarationScope.findVisibleAttributeMeaning: SHOULD BEEN REDEFINED: " + identifier + " IN " + this.getClass().getSimpleName());
-		return (null);
+		return null;
 	}
 
 	// ***********************************************************************************************
@@ -147,11 +142,10 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return the resulting Meaning
 	 */
 	public Meaning findMeaning(final String identifier) {
-//		System.out.println("DeclarationScope.findMeaning: "+identifier);
 		Meaning meaning = findVisibleAttributeMeaning(identifier);
-		if (meaning == null && declaredIn != null) {
+		if (meaning == null && declaredIn != null)
 			meaning = declaredIn.findMeaning(identifier);
-		}
+		
 		if (meaning == null) {
 			if (!Global.duringParsing)
 				Util.error("Undefined variable: " + identifier);
@@ -170,18 +164,13 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return the resulting Meaning
 	 */
 	public Meaning findLabelMeaning(final String identifier) {
-//		System.out.println("\nDeclarationScope.findLabelMeaning: "+identifier+" IN "+this);
-		for (LabelDeclaration dcl : labelList.labels) {
-//			System.out.println("DeclarationScope.findLabelMeaning: Checking "+dcl);
-			if (Util.equals(dcl.identifier, identifier)) {
+		for (LabelDeclaration dcl : labelList.labels)
+			if (Util.equals(dcl.identifier, identifier))
 				return (new Meaning(dcl, this, this, false));
-			}
-		}
-		if(this instanceof ClassDeclaration cls) {
-			if(!cls.hasNoRealPrefix()) {
-				return(cls.getPrefixClass().findLabelMeaning(identifier));
-			}
-		}
+		
+		if(this instanceof ClassDeclaration cls && cls.hasRealPrefix())
+			return(cls.getPrefixClass().findLabelMeaning(identifier));
+
 		if (declaredIn != null)
 			return (declaredIn.findLabelMeaning(identifier));
 		return (null);
@@ -262,39 +251,19 @@ public abstract class DeclarationScope extends Declaration  {
 		
 		boolean withFollowSL = false;
 		if(Global.getCurrentScope() instanceof Thunk thunk) {
-//			System.out.println("================== BEGIN: Build Scope Chain === From THUNK ===");
-//			printScopeChain(curScope);
 			curScope=thunk.declaredIn;
 			DeclarationScope encl = curScope;
 			while(encl instanceof ConnectionBlock) encl = encl.declaredIn;
 			codeBuilder
 				.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
-//				.checkcast(thunk.declaredIn.getClassDesc());
 				.checkcast(encl.getClassDesc());
-//			withFollowSL = true;			
-//			System.out.println("DeclarationScope.buildCTX: CD_ENC="+CD_ENC);
-//			System.out.println("DeclarationScope.buildCTX: CD_Qual="+this.getJavaIdentifier());
-//			System.out.println("DeclarationScope.buildCTX: thunk.declaredIn="+thunk.declaredIn.getClass().getSimpleName()+"  "+thunk.declaredIn);
-//			System.out.println("DeclarationScope.buildCTX: thunk.declaredIn.rtBlockLevel="+thunk.declaredIn.rtBlockLevel);
-
 			ctxDiff = curScope.rtBlockLevel - rtBlockLevel;
 		}
-
-//		System.out.println("================== BEGIN: Build Scope Chain ==================");
-//		System.out.println("   DeclarationScope.buildCTX: Cur Scope: "+curScope.externalIdent+"  rtBlockLevel="+curLevel);
-//		System.out.println("   DeclarationScope.buildCTX: End Scope: "+this.externalIdent+"  rtBlockLevel="+rtBlockLevel);
-//		System.out.println("   DeclarationScope.buildCTX: ctxDiff:   "+curLevel+"  "+rtBlockLevel+" ==> "+ctxDiff);
-//		printScopeChain(curScope);
-//		Util.IERR();
-
 		while ((ctxDiff--) > 0) {
 			curScope=curScope.declaredIn;
-//			System.out.println("   DeclarationScope.buildCTX: GETFIELD SL of type "+cast);
-			withFollowSL = true;			
 			codeBuilder.getfield(CD.RTS_RTObject,"_SL",CD.RTS_RTObject);
+			withFollowSL = true;			
 		}
-//		System.out.println("================== ENDOF: Build Scope Chain ==================");
-//		Util.IERR();
 		return(withFollowSL);
 	}
 
@@ -341,7 +310,6 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited scope chain
 	 */
 	public String edScopeChain() {
-//		if(Option.NEW_ATTR_FILE) return("UMULIG");
 		if (declaredIn == null)
 			return (identifier);
 		String encName = declaredIn.edScopeChain();
@@ -384,8 +352,6 @@ public abstract class DeclarationScope extends Declaration  {
 		DeclarationScope scope=this.declaredIn;
 		int lim = 5;//7;
 		for(int i=1;i<lim;i++) {
-//		while(scope != null) {
-//			System.out.println("DeclarationScope.printStaticChain: scope="+scope);
 			System.out.println("DeclarationScope.printStaticChain: " + scope.declarationKind + ' ' + scope.identifier + '[' + scope.externalIdent + ']');
 			for(Declaration decl:scope.declarationList) {
 				System.out.println("DeclarationScope.printStaticChain:                  "+decl);			
@@ -417,11 +383,6 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
     public void createJavaClassFile() throws IOException {
     	if (this.isPreCompiledFromFile != null)	return;
-    	
-//    	System.out.println("DeclarationScope.createJavaClassFile: ================================================================ "+this.externalIdent);
-//    	if(externalIdent.equals("simerr07_PBLK18")) {
-//            new Exception("Stack trace").printStackTrace(System.out);
-//    	}
     	if(CLASSFILE_ALREADY_GENERATED) return;
     	CLASSFILE_ALREADY_GENERATED = true;
     	
@@ -437,32 +398,23 @@ public abstract class DeclarationScope extends Declaration  {
     	}
 
     	if(bytes != null) {
-    		if(Option.USE_JAR_FILE_BUILDER) {
-//    			Global.jarFileBuilder.addClassFile(externalIdent,bytes);
-    			String entryName = Global.packetName + "/" + externalIdent + ".class";
-    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+   			String entryName = Global.packetName + "/" + externalIdent + ".class";
+   			Global.jarFileBuilder.addJarEntry(entryName, bytes);
 
-    			if(Option.LIST_GENERATED_CLASS_FILES) {
-    				File outputFile = writeClassBytesToFile(bytes);
-    				outputFile.delete();
-    			}
-    		} else {
-    			writeClassBytesToFile(bytes);
-    		}
+   			if(Option.LIST_GENERATED_CLASS_FILES)
+   				listGeneratedClassFile(bytes);
     	}
     }
 	
-	private File writeClassBytesToFile(byte[] bytes) throws IOException {
+	private void listGeneratedClassFile(byte[] bytes) throws IOException {
         File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
         outputFile.getParentFile().mkdirs();
         FileOutputStream oupt = new FileOutputStream(outputFile);
         oupt.write(bytes); oupt.flush(); oupt.close();
         if(Option.verbose) System.out.println("ClassFile written to: " + outputFile + "  nBytes="+bytes.length);
 
-		if(Option.LIST_GENERATED_CLASS_FILES) {
-			Util.doListClassFile("" + outputFile); // List generated .class file
-		}
-		return outputFile;
+        Util.doListClassFile("" + outputFile); // List generated .class file
+        outputFile.delete();
 	}
 
 }

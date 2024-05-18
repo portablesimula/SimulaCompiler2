@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
@@ -98,8 +95,7 @@ public final class VirtualSpecification extends Declaration {
 	 * @param prefixLevel the prefix level of the class with this virtual specification
 	 * @param procedureSpec the ProcedureSpecification or null if not present
 	 */
-	VirtualSpecification(final String identifier, final Type type, final int kind, final int prefixLevel,
-			final ProcedureSpecification procedureSpec) {
+	VirtualSpecification(final String identifier, final Type type, final int kind, final int prefixLevel, final ProcedureSpecification procedureSpec) {
 		super(identifier);
 		this.declarationKind = ObjectKind.VirtualSpecification;
 		this.externalIdent = identifier;
@@ -107,7 +103,6 @@ public final class VirtualSpecification extends Declaration {
 		this.kind = kind;
 		this.prefixLevel = prefixLevel;
 		this.procedureSpec = procedureSpec;
-//		this.blockKind=BlockKind.Procedure;
 	}
 
 	/**
@@ -189,6 +184,7 @@ public final class VirtualSpecification extends Declaration {
 		Global.sourceLineNumber = lineNumber;
 		if (procedureSpec != null)
 			procedureSpec.doChecking(this.declaredIn);
+		
 		// Label and switch attributes are implicit specified 'protected'
 		if (kind == Kind.Label || kind == Kind.Switch)
 			((ClassDeclaration) declaredIn).protectedList
@@ -201,28 +197,14 @@ public final class VirtualSpecification extends Declaration {
 	 * @return the virtual identifier used i Java code
 	 */
 	public String getVirtualIdentifier() {
-//		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
-//		System.out.println("VirtualSpecification.getVirtualIdentifier: "+getJavaIdentifier()+", specifiedIn="+specifiedIn.identifier+", prefixLevel="+specifiedIn.prefixLevel());
-//		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "ZZZ" + "()");
 		return(getSimpleVirtualIdentifier() + "()");
 	}
-
-//	public String getFieldIdentifier() {
-////		ClassDeclaration cls = (ClassDeclaration) this.declaredIn;
-////		return(externalIdent+"_"+cls.prefixLevel()+"()");
-////		Thread.dumpStack();
-////		return(getSimpleVirtualIdentifier() + "()");
-//		return getSimpleVirtualIdentifier();
-//	}
 
 	/**
 	 * Returns the virtual identifier used in JVM code.
 	 * @return the virtual identifier used in JVM code
 	 */
 	public String getSimpleVirtualIdentifier() {
-//		ClassDeclaration specifiedIn = (ClassDeclaration) this.declaredIn;
-//		System.out.println("VirtualSpecification.getSimpleVirtualIdentifier: "+getJavaIdentifier()+", specifiedIn="+specifiedIn.identifier+", prefixLevel="+specifiedIn.prefixLevel());
-//		return (getJavaIdentifier() + '_' + specifiedIn.prefixLevel() + "XXX");
 		return (getJavaIdentifier() + '_' + prefixLevel);
 	}
 
@@ -266,17 +248,11 @@ public final class VirtualSpecification extends Declaration {
 	}
 
 	public void buildMethod(ClassBuilder classBuilder) {
-//	    System.out.println("VirtualSpecification.buildMethod: "+this);
 	    String ident=getSimpleVirtualIdentifier();
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+qnt);
 		classBuilder
-			.withMethodBody(ident, MTD, ClassFile.ACC_PUBLIC,
-					codeBuilder -> buildMethodBody(codeBuilder));
-	}
-	
-	private void buildMethodBody(CodeBuilder codeBuilder) {
-		Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder);
+			.withMethodBody(ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+qnt), ClassFile.ACC_PUBLIC,
+				codeBuilder -> Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder));
 	}
 
 
@@ -302,7 +278,7 @@ public final class VirtualSpecification extends Declaration {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public VirtualSpecification() {
 		super(null);
@@ -320,7 +296,6 @@ public final class VirtualSpecification extends Declaration {
 			oupt.writeType(virt.type);
 			oupt.writeShort(virt.kind);
 			oupt.writeShort(virt.prefixLevel);
-//			oupt.writeObject(procedureSpec);
 			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
 		}
 	}
@@ -336,35 +311,10 @@ public final class VirtualSpecification extends Declaration {
 			virt.type = inpt.readType();
 			virt.kind = inpt.readShort();
 			virt.prefixLevel = inpt.readShort();
-//			virt.procedureSpec = (ProcedureSpecification) inpt.readObject();
 			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
 		}
 		Util.TRACE_INPUT("VirtualSpec: " + virt);
 		return(virt);
 	}
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeByte(kind);
-//		oupt.writeObject(procedureSpec);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-//		kind = inpt.readByte();
-//		procedureSpec = (ProcedureSpecification) inpt.readObject();
-//		Util.TRACE_INPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
-//	}
 
 }

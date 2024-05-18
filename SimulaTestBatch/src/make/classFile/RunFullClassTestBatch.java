@@ -41,7 +41,6 @@ public final class RunFullClassTestBatch {
 		// Set options and tracing.
 		Option.INLINE_TESTING=true;
 		Option.TESTING_STACK_SIZE = true;
-		Option.USE_JAR_FILE_BUILDER = true;
 //		Option.CREATE_JAVA_SOURCE = true;
 		Option.SPORT=true;
 //		Option.TRACING=false;

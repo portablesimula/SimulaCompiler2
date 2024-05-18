@@ -160,23 +160,17 @@ public class AttributeInputStream {
 		case ObjectKind.StatementReference:
 			SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-//			Statement stm = (Statement) objectReference.get(SEQU);
-//			if(stm == null) { objectReference.print(); Util.IERR(); }
 			Statement stm = new StatementReference(SEQU,objectReference);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+stm);
 			return(stm);
 		case ObjectKind.ExpressionReference:
 			SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-//			Expression expr = (Expression) objectReference.get(SEQU);
-//			if(expr == null) { objectReference.print(); Util.IERR(); }
 			Expression expr = new ExpressionReference(SEQU,objectReference);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+expr);
 			return(expr);
 		default:
-//			if(TRACE) System.out.println("AttributeInputStream.readObj: kind="+kind+":"+ObjectKind.edit(kind));
 			obj = readObj(kind,this);
-//			obj.SEQU = Global.Object_SEQU++;
 			if(obj.SEQU == 0) Util.IERR();
 			objectReference.put(obj.SEQU, obj);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);

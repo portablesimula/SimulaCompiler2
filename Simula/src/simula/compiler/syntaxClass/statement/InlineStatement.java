@@ -72,7 +72,7 @@ public final class InlineStatement extends Statement {
 //	// *** Externalization
 //	// ***********************************************************************************************
 //	/**
-//	 * Default constructor used by Externalization.
+//	 * Default constructor used by Attribute File I/O
 //	 */
 //	public InlineStatement() {
 //		super(0);

@@ -15,7 +15,6 @@ import simula.compiler.utilities.Util;
 import java.lang.constant.ClassDesc;
 import java.util.Vector;
 
-import simula.compiler.CodeLine;
 import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -32,7 +31,6 @@ import simula.compiler.syntaxClass.statement.Statement;
  * @author Øystein Myhre Andersen
  */
 public final class StandardClass extends ClassDeclaration {
-//  private ObjectKind getBlockKind() { return(ObjectKind.StandardClass); }
 	public String edJavaClassName() {
 		return (identifier);
 	}
@@ -189,13 +187,6 @@ public final class StandardClass extends ClassDeclaration {
 		//	    Constants  maxrank, maxint, minint, maxreal, minreal,
 		//	      maxlongreal, minlongreal, simulaid.
 
-//		ENVIRONMENT.addStandardAttribute(Type.LongReal,"maxlongreal");  
-//		ENVIRONMENT.addStandardAttribute(Type.LongReal,"minlongreal");  
-//		ENVIRONMENT.addStandardAttribute(Type.Real,"maxreal");  
-//		ENVIRONMENT.addStandardAttribute(Type.Real,"minreal");  
-//		ENVIRONMENT.addStandardAttribute(Type.Integer,"maxrank");  
-//		ENVIRONMENT.addStandardAttribute(Type.Integer,"maxint");  
-//		ENVIRONMENT.addStandardAttribute(Type.Integer,"minint");  
 		ENVIRONMENT.addStandardAttribute(Type.LongReal,"maxlongreal",Double.MAX_VALUE);  
 		ENVIRONMENT.addStandardAttribute(Type.LongReal,"minlongreal",-Double.MAX_VALUE);  
 		ENVIRONMENT.addStandardAttribute(Type.Real,"maxreal",Float.MAX_VALUE);  
@@ -266,9 +257,6 @@ public final class StandardClass extends ClassDeclaration {
 
 		String[] mtd2 = { "(II)I", "(IF)F", "(ID)D", "(FI)F", "(FF)F", "(FD)D", "(DI)D", "(DF)D", "(DD)D",
 				          "(CC)C", "(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;" };
-
-//		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd2,new OverLoad(Type.Real,Type.LongReal),"min",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
-//		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd2,new OverLoad(Type.Real,Type.LongReal),"max",parameter("x",new OverLoad(Type.Real,Type.LongReal)),parameter("y",new OverLoad(Type.Real,Type.LongReal)));
 
 		OverLoad types = new OverLoad(Type.Integer,Type.Real,Type.LongReal,Type.Character,Type.Text);
 		ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,mtd2,types,"min",parameter("x",types),parameter("y",types));
@@ -828,7 +816,7 @@ public final class StandardClass extends ClassDeclaration {
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Integer,"inbyte");  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,null,"outbyte",parameter("x",Type.Integer));   
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,null,"out2byte",parameter("x",Type.Integer));   
-		//	    Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"checkpoint");  
+		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"checkpoint");  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Integer,"lock",parameter("t",Type.Real),parameter("i",Type.Integer),parameter("j",Type.Integer));  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"unlock");  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Text,"intext",parameter("t",Type.Text));  
@@ -917,11 +905,6 @@ public final class StandardClass extends ClassDeclaration {
 		Simulation=new StandardClass("Simset","Simulation");
 		ENVIRONMENT.addStandardClass(Simulation);  // Declared in ENVIRONMENT
 		Simulation.detachUsed=true;
-		//	    Simulation.code1=codeSet( // Statements before inner 
-		//	    		new CodeLine(1,"SQS = (Head_) new Head_(this)._STM();"),
-		//	    		new CodeLine(1,"main = (MAIN_PROGRAM_) new MAIN_PROGRAM_((Simulation_) _CUR)._START();"),
-		//	    		new CodeLine(1,"main.EVENT = (EVENT_NOTICE_) new EVENT_NOTICE_((Simulation_) _CUR, 0, main)._STM();"),
-		//	    		new CodeLine(1,"main.EVENT.into(SQS);"));
 		Simulation.addStandardAttribute(Type.Ref("Head"),"SQS");  
 		Simulation.addStandardAttribute(Type.Ref("MAIN_PROGRAM"),"main");  
 		Simulation.addStandardProcedure(ObjectKind.MemberMethod,Type.LongReal,"time");  
@@ -1116,10 +1099,6 @@ public final class StandardClass extends ClassDeclaration {
 	private static void initDrawing() {
 		Drawing=new StandardClass("Simset","Drawing",parameter("Title",Type.Text),parameter("width",Type.Integer),parameter("height",Type.Integer)); 
 		ENVIRONMENT.addStandardClass(Drawing);  // Declared in ENVIRONMENT
-		//	    Drawing.code1=codeSet( // Statements before inner 
-		//	  		new CodeLine(1,"// RENDERING_SET = (Head_) new Head_(Drawing_.this)._STM();"),
-		//	  		new CodeLine(1,"// init(title.edText(),width,height);")
-		//	  		);
 		Drawing.addStandardAttribute(Type.Integer,"white",    0xffffff); // Color white:      R=255, G=255, B=255.
 		Drawing.addStandardAttribute(Type.Integer,"lightGray",0xc0c0c0); // Color light gray: R=192, G=192, B=192.  
 		Drawing.addStandardAttribute(Type.Integer,"gray",     0x808080); // Color gray:       R=128, G=128, B=128. 
@@ -1168,10 +1147,6 @@ public final class StandardClass extends ClassDeclaration {
 	private static void initShapeElement() {
 		StandardClass ShapeElement=new StandardClass("Link","ShapeElement");
 		Drawing.addStandardClass(ShapeElement);  // Declared in Drawing
-		//	    ShapeElement.code1=codeSet( // Statements before inner 
-		//			new CodeLine(1,"this.stroke=drawing.currentStroke;"),
-		//			new CodeLine(1,"this.into(drawing.RENDERING_SET);")
-		//			);
 		ShapeElement.addStandardProcedure(ObjectKind.MemberMethod,null,"setColor",parameter("color",Type.Integer));  
 		ShapeElement.addStandardProcedure(ObjectKind.MemberMethod,null,"drawLine",parameter("x1",Type.LongReal),parameter("y1",Type.LongReal),parameter("x2",Type.LongReal),parameter("y2",Type.LongReal));  
 		ShapeElement.addStandardProcedure(ObjectKind.MemberMethod,null,"drawEllipse",parameter("x",Type.LongReal),parameter("y",Type.LongReal),parameter("width",Type.LongReal),parameter("height",Type.LongReal));  
@@ -1278,21 +1253,6 @@ public final class StandardClass extends ClassDeclaration {
 		ClassDeclaration prfx=getPrefixClass();
 		if(prfx!=null) return(prfx.findRemoteAttributeMeaning(ident));
 		return(null);
-	}
-
-	// ******************************************************************
-	// *** PRIVATE UTILITIES
-	// ******************************************************************
-
-	/**
-	 * Utility to hold a set of Java code lines
-	 * @param codeLine a sequence of Java code lines
-	 * @return the resulting set of Java code lines
-	 */
-	private static Vector<CodeLine> codeSet(CodeLine... codeLine) {
-		Vector<CodeLine> set=new Vector<CodeLine>();
-		for(CodeLine c:codeLine) set.add(c);
-		return(set);
 	}
 
 	// ******************************************************************
@@ -1428,7 +1388,7 @@ public final class StandardClass extends ClassDeclaration {
 	// *** Externalization
 	// ***********************************************************************************************
 	/**
-	 * Default constructor used by Externalization.
+	 * Default constructor used by Attribute File I/O
 	 */
 	public StandardClass() {
 		super(null);
