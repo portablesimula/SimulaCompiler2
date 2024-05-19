@@ -13,14 +13,11 @@ import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
-import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
-import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
@@ -291,13 +288,6 @@ public final class CallProcedure {
 								actualParameter.doChecking();
 							}
 						}
-//						else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
-//						else if(decl instanceof Parameter par) kind=par.kind;
-//						else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
-//						else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
-//						else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
-//						else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
-//						else Util.IERR("Flere sånne tilfeller ???");
 						switch(decl.declarationKind) {
 							case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
 							case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
@@ -471,7 +461,6 @@ public final class CallProcedure {
 	 * @param apar actual parameter
 	 */
 	private static void doSimpleParameter(final StringBuilder s,final Type formalType,final int mode,final Expression apar) {
-//		System.out.println("CallProcedure.doSimpleParameter: "+apar.getClass().getSimpleName()+"  "+apar);
 		if(mode==0) // Simple Type/Ref/Text by Default
 		  	s.append(apar.toJavaCode());
 		else if(mode==Parameter.Mode.value) { // Simple Type/Ref/Text by Value

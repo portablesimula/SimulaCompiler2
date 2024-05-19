@@ -217,7 +217,7 @@ public final class RunCompilerTest {
 		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
-		 String name="/simple/adHoc02.sim";
+		// String name="/simple/adHoc02.sim";
 		// String name="/simple/adHoc03.sim";
 		// String name="/simple/adHoc04.sim";
 		// String name="/simple/adHoc05.sim";
@@ -225,7 +225,7 @@ public final class RunCompilerTest {
 //			String name="/simple/adHoc07.sim";
 		// String name="/simple/adHoc08.sim";
 //			 String name="/simple/adHoc09.sim";
-		// String name="/simple/adHoc10.sim";
+		 String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
 //		 String name="/simple/adHoc12.sim";
 		
@@ -320,7 +320,7 @@ public final class RunCompilerTest {
 //			Option.TRACE_BYTECODE_OUTPUT=true;
 //			Option.DEBUGGING=true;
 			
-//			Option.LIST_GENERATED_CLASS_FILES=true;
+			Option.LIST_GENERATED_CLASS_FILES=true;
 
 //			File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 			File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");

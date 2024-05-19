@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
@@ -153,7 +151,6 @@ public final class ConditionalExpression extends Expression {
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

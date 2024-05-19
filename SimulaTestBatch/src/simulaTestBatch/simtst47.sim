@@ -4,16 +4,18 @@
 %
 %  PURPOSE:     Test of this.
 %
-%  REWRITTEN BY:  BEH   29/07-86
+%  REWRITTEN BY:  BEH   29/07-86, MYH  19/05-2024
 % ==============================================================================
 external class SimulaTest;
 
 SimulaTest(47,"--- Test of this") begin
 
    ref(A) ra1, ra2, ra3;
+	ref(B) x;
+	integer k;
 
-   class A;
-   begin
+   class A; begin
+		integer j;
 
       ref(A) procedure z;
       begin
@@ -27,6 +29,10 @@ SimulaTest(47,"--- Test of this") begin
       end of procedure z;
 
    end;
+
+	A class B; begin
+		integer j;
+	end;
 
    ra1 :- new A;
    ra1 :- ra1.z;
@@ -48,4 +54,33 @@ SimulaTest(47,"--- Test of this") begin
       outimage;
    end;
 
+% SECOND TEST BY MYH:
+
+	x :- new B;
+	
+	x qua A.j := 444;
+	
+	inspect x do begin
+		k := this A.j;
+		if k = 444 then
+		else
+		begin
+			err("Second test(1) fails.")
+			outtext("A'j = " & edit(x qua A.j)); outimage;
+			outtext("B'j = " & edit(x qua B.j)); outimage;
+		end;
+	
+		begin integer i;
+			k := this A.j;
+			if k = 444 then
+			else
+			begin
+				err("Second test(2) fails.")
+				outtext("A'j = " & edit(x qua A.j)); outimage;
+				outtext("B'j = " & edit(x qua B.j)); outimage;
+			end;
+		end;
+		
+	end;
+	
 end;

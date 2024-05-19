@@ -173,7 +173,7 @@ public final class Meaning {
 				.getfield(FRE);
 		}
 		else {
-			String cast = declaredIn.getJavaIdentifier();
+//			String cast = declaredIn.getJavaIdentifier();
 			boolean withFollowSL = declaredIn.buildCTX(codeBuilder);
 //			if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
 			if(withFollowSL) codeBuilder.checkcast(declaredIn.getClassDesc());
@@ -185,8 +185,10 @@ public final class Meaning {
 	// ***************************************************************************************
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc CD_type=declaredAs.type.toClassDesc();
-		ClassDesc CD_cls=ClassDesc.of(declaredIn.getJavaIdentifier());
-		return(pool.fieldRefEntry(CD_cls, declaredIn.getJavaIdentifier(), CD_type));
+//		ClassDesc CD_cls=ClassDesc.of(declaredIn.getJavaIdentifier());
+		ClassDesc owner=declaredIn.getClassDesc();
+//		return(pool.fieldRefEntry(owner, declaredIn.getJavaIdentifier(), CD_type));
+		return(pool.fieldRefEntry(owner, declaredAs.getJavaIdentifier(), CD_type));
 	}
 
 //	/**

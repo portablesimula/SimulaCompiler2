@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.statement;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
@@ -18,8 +15,6 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
-import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
@@ -130,7 +125,6 @@ public final class BlockStatement extends Statement {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-//		System.out.println("BlockStatement.buildByteCode: "+this.lineNumber+"  "+this);
 		blockDeclaration.buildByteCode(codeBuilder);
 	}
 

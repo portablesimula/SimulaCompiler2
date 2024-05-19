@@ -899,7 +899,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				codeBuilder
 					.aload(0)
 					.aload(1); // param
-				buildGetArithmeticValue(par.type,codeBuilder);
+				par.type.objectToPrimitiveType(codeBuilder);
 				codeBuilder
 					.putfield(par.getFieldRefEntry(pool))
 					.goto_(breakLabel);
@@ -909,7 +909,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				codeBuilder
 					.aload(0)
 					.aload(1); // param
-					buildCastObject(par,codeBuilder);
+					if(!par.type.objectToPrimitiveType(codeBuilder)) {
+						codeBuilder
+							.invokevirtual(pool.methodRefEntry(CD.RTS_RTObject,
+									"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
+							.checkcast(par.type_toClassDesc());
+					}
 				codeBuilder
 					.putfield(par.getFieldRefEntry(pool))
 					.goto_(breakLabel);
@@ -918,45 +923,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		codeBuilder.labelBinding(breakLabel);
 	}
 	
-	private void buildCastObject(Parameter par,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		int key = (par.type==null)?0:par.type.keyWord;
-		switch(key) {
-			case Type.T_INTEGER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-			case Type.T_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-			case Type.T_BOOLEAN -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
-			default -> {
-				codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-						"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
-				codeBuilder.checkcast(par.type_toClassDesc());
-			}
-		}
-	}
-	
-	public void buildGetArithmeticValue(Type type,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		switch(type.keyWord) {
-			case Type.T_INTEGER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I")));
-			case Type.T_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F")));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D")));
-			case Type.T_BOOLEAN -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z")));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-					"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C")));
-			default -> Util.IERR();
-		}
-	}
-
 	@Override
 	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;

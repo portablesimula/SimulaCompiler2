@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
@@ -302,18 +300,15 @@ public final class ArithmeticExpression extends Expression {
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		switch (opr) {
-		case KeyWord.EXP: {
-			if (this.type.keyWord == Type.T_INTEGER)
-				return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
-			else
-				return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
-		}
-		default: {
-			if (this.backLink == null)
-				return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
-			else
-				return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
-		}
+			case KeyWord.EXP:
+				if (this.type.keyWord == Type.T_INTEGER)
+					 return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
+				else return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
+			
+			default:
+				if (this.backLink == null)
+					 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
+				else return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
 		}
 	}
 

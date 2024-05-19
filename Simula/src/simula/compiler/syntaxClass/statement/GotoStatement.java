@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
@@ -105,12 +103,8 @@ public final class GotoStatement extends Statement {
 //        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_LABEL;)V
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
-//		System.out.println("GotoStatement.buildByteCode: "+label.getClass().getSimpleName()+"  "+label);
 		if(label instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
-//			System.out.println("GotoStatement.buildByteCode: "+meaning.declaredAs.getClass().getSimpleName()+"  "+meaning.declaredAs);
-//			System.out.println("GotoStatement.buildByteCode: currentClassDesc="+BlockDeclaration.currentClassDesc());
-//			System.out.println("GotoStatement.buildByteCode: label="+label.getClass().getSimpleName()+"  "+label);
 			if(meaning.declaredAs instanceof LabelDeclaration) {
 				codeBuilder.aload(0);
 			} else if(meaning.declaredAs instanceof Parameter par) {

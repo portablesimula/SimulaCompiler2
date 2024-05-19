@@ -7,16 +7,12 @@
  */
 package simula.compiler.syntaxClass.statement;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -72,7 +68,6 @@ public final class DummyStatement extends Statement {
 	
 	@Override
 	public void printTree(final int indent) {
-//		System.out.println(edTreeIndent(indent)+"DUMMY ");
 	}
 
 	@Override
@@ -99,7 +94,6 @@ public final class DummyStatement extends Statement {
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
 		DummyStatement stm = new DummyStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		Util.TRACE_INPUT("DummyStatement: " + stm);

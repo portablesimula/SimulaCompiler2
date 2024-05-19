@@ -94,7 +94,7 @@ public final class RunSingleClassTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
@@ -153,7 +153,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst44.sim"); // OK:  Test text procedure.
 //		names.add("simtst45.sim"); // OK:  Test object relations - is and in.
 //		names.add("simtst46.sim"); // OK:  Test the qualification of a function designator.
-//		names.add("simtst47.sim"); // OK:  Test of this.
+		names.add("simtst47.sim"); // OK:  Test of this.
 //		names.add("simtst48.sim"); // OK:  Test of qua.
 //		names.add("simtst49.sim"); // OK:  For statements in connection blocks.
 //		names.add("simtst50.sim"); // OK:  Test binding and qualification in Connection Blocks
@@ -266,7 +266,7 @@ public final class RunSingleClassTest {
 //		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
 //		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		
-		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
@@ -275,7 +275,7 @@ public final class RunSingleClassTest {
 //		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
 //		names.add("simerr05.sim"); // OK: NumberFormatException
 //		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
-		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
+//		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 //		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 //		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
 

@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.constant.ClassDesc;
@@ -140,25 +138,18 @@ public final class RelationalOperation extends Expression {
 	@Override
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
-		switch (opr) {
-			case KeyWord.LT: case KeyWord.LE: case KeyWord.EQ: case KeyWord.NE: case KeyWord.GE: case KeyWord.GT: {
-				Type type1 = lhs.type;
-				Type type2 = rhs.type;
-				if (type1.keyWord == Type.T_TEXT && type2.keyWord == Type.T_TEXT)
-					return (doCodeTextValueRelation());
-			}
-			case KeyWord.EQR: case KeyWord.NER: {
-				Type type1 = lhs.type;
-				Type type2 = rhs.type;
-				if (type1.keyWord == Type.T_TEXT && type2.keyWord == Type.T_TEXT)
-					return (doCodeTextRefRelation());
-			}
-			default: {
-				if (this.backLink == null)
-					 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
-				else return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
+		if (lhs.type.keyWord == Type.T_TEXT && rhs.type.keyWord == Type.T_TEXT) {
+			switch (opr) {
+				case KeyWord.LT, KeyWord.LE, KeyWord.EQ, KeyWord.NE, KeyWord.GE, KeyWord.GT:
+						return (doCodeTextValueRelation());
+				case KeyWord.EQR, KeyWord.NER: 
+						return (doCodeTextRefRelation());
+				default: Util.IERR();
 			}
 		}
+		if (this.backLink == null)
+			 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
+		else return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
 	}
 
 	// ***********************************************************************
@@ -215,20 +206,32 @@ public final class RelationalOperation extends Expression {
 		rhs.buildEvaluation(null,codeBuilder);
 		Label target = codeBuilder.newLabel();
 		Label lab2 = codeBuilder.newLabel();
-		int key = lhs.type.keyWord;
-//		if(lhs.type.equals(Type.Integer) || lhs.type.equals(Type.Character)  || lhs.type.equals(Type.Boolean)) {
-		if(key == Type.T_INTEGER || key == Type.T_CHARACTER  || key == Type.T_BOOLEAN) {
-			switch (opr) {
-				case KeyWord.GE -> codeBuilder.if_icmplt(target);
-				case KeyWord.NE -> codeBuilder.if_icmpeq(target);
-				case KeyWord.GT -> codeBuilder.if_icmple(target);
-				case KeyWord.LE -> codeBuilder.if_icmpgt(target);
-				case KeyWord.EQ -> codeBuilder.if_icmpne(target);
-				case KeyWord.LT -> codeBuilder.if_icmpge(target);
-				default -> Util.IERR();
+		switch(lhs.type.keyWord) {
+			case Type.T_INTEGER, Type.T_CHARACTER, Type.T_BOOLEAN -> {
+				switch (opr) {
+					case KeyWord.GE -> codeBuilder.if_icmplt(target);
+					case KeyWord.NE -> codeBuilder.if_icmpeq(target);
+					case KeyWord.GT -> codeBuilder.if_icmple(target);
+					case KeyWord.LE -> codeBuilder.if_icmpgt(target);
+					case KeyWord.EQ -> codeBuilder.if_icmpne(target);
+					case KeyWord.LT -> codeBuilder.if_icmpge(target);
+					default -> Util.IERR();
+				}
 			}
-		} else if(key == Type.T_REAL) {
-			codeBuilder.fcmpl();
+			case Type.T_REAL -> {
+				codeBuilder.fcmpl();
+					switch (opr) {
+						case KeyWord.GE -> codeBuilder.iflt(target);
+						case KeyWord.NE -> codeBuilder.ifeq(target);
+						case KeyWord.GT -> codeBuilder.ifle(target);
+						case KeyWord.LE -> codeBuilder.ifgt(target);
+						case KeyWord.EQ -> codeBuilder.ifne(target);
+						case KeyWord.LT -> codeBuilder.ifge(target);
+						default -> Util.IERR();
+					}
+			}
+			case Type.T_LONG_REAL -> {
+				codeBuilder.dcmpl();
 				switch (opr) {
 					case KeyWord.GE -> codeBuilder.iflt(target);
 					case KeyWord.NE -> codeBuilder.ifeq(target);
@@ -238,29 +241,22 @@ public final class RelationalOperation extends Expression {
 					case KeyWord.LT -> codeBuilder.ifge(target);
 					default -> Util.IERR();
 				}
-		} else if(key == Type.T_LONG_REAL) {
-			codeBuilder.dcmpl();
-			switch (opr) {
-				case KeyWord.GE -> codeBuilder.iflt(target);
-				case KeyWord.NE -> codeBuilder.ifeq(target);
-				case KeyWord.GT -> codeBuilder.ifle(target);
-				case KeyWord.LE -> codeBuilder.ifgt(target);
-				case KeyWord.EQ -> codeBuilder.ifne(target);
-				case KeyWord.LT -> codeBuilder.ifge(target);
-				default -> Util.IERR();
 			}
-		} else if(lhs.type.isReferenceType()) {
-			switch (opr) {
-				case KeyWord.EQR -> codeBuilder.if_acmpne(target);
-				case KeyWord.NER -> codeBuilder.if_acmpeq(target);
-				default -> Util.IERR();
+			case Type.T_REF, Type.T_TEXT -> {
+				switch (opr) {
+					case KeyWord.EQR -> codeBuilder.if_acmpne(target);
+					case KeyWord.NER -> codeBuilder.if_acmpeq(target);
+					default -> Util.IERR();
+				}
 			}
-		} else Util.IERR();
-		codeBuilder.iconst_1();
-		codeBuilder.goto_(lab2);
-		codeBuilder.labelBinding(target);
-		codeBuilder.iconst_0();
-		codeBuilder.labelBinding(lab2);
+			default -> Util.IERR();
+		}
+		codeBuilder
+			.iconst_1()
+			.goto_(lab2)
+			.labelBinding(target)
+			.iconst_0()
+			.labelBinding(lab2);
 	}
 
 	private void buildTextRelation(CodeBuilder codeBuilder) {
@@ -314,7 +310,6 @@ public final class RelationalOperation extends Expression {
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRelationalOperation: ");
 		RelationalOperation expr = new RelationalOperation();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

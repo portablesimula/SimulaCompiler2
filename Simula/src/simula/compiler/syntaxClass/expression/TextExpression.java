@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.expression;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
@@ -132,7 +129,6 @@ public final class TextExpression extends Expression {
 		// TEXT & TEXT
 		lhs.doChecking();
 		rhs.doChecking();
-//		if (!(lhs.type.equals(Type.Text) && rhs.type.equals(Type.Text))) {
 		if (lhs.type.keyWord != Type.T_TEXT || rhs.type.keyWord != Type.T_TEXT) {
 			Util.error("Operand Type to Text Concatenation(&) is not Text: "+lhs.type+" & "+rhs.type);
 		}

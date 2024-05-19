@@ -233,16 +233,6 @@ public final class ConnectionStatement extends Statement {
 			codeBuilder.goto_(endLabel);
 		}
 
-//		/**
-//		 * Utility print method.
-//		 * @param indent the indent
-//		 */
-//		public void print(final int indent) {
-//	    	String spc=edIndent(indent);
-//			Util.println(spc + "DO ");
-//			connectionBlock.print(indent);
-//		}
-
 		/**
 		 * Utility print method.
 		 * @param indent the indent
@@ -266,7 +256,6 @@ public final class ConnectionStatement extends Statement {
 		 */
 		private DoPart() {}
 
-//		@Override
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
 			oupt.writeShort(1);
@@ -379,13 +368,6 @@ public final class ConnectionStatement extends Statement {
 			}
 		}
 
-//		@Override
-//		public void print(final int indent) {
-//	    	String spc=edIndent(indent);
-//			Util.println(spc + "WHEN " + classIdentifier + " DO ");
-//			connectionBlock.printTree(indent);
-//		}
-
 		@Override
 		public String toString() {
 			return ("WHEN " + classIdentifier + " DO ..."); // +statement);
@@ -452,7 +434,6 @@ public final class ConnectionStatement extends Statement {
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
-//		System.out.println("inspectedVariable="+inspectedVariable.getClass().getSimpleName()+"  "+inspectedVariable);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
@@ -466,12 +447,13 @@ public final class ConnectionStatement extends Statement {
 			codeBuilder.getfield(FRE);
 			codeBuilder.if_null(endLabel);
 		}
-		for(DoPart part:connectionPart) {
+		
+		for(DoPart part:connectionPart) 
 			part.buildByteCode(codeBuilder);
-		}
-		if (otherwise != null) {
+		
+		if (otherwise != null) 
 			otherwise.buildByteCode(codeBuilder);
-		}
+		
 		codeBuilder.labelBinding(endLabel);
 	}
 
@@ -523,7 +505,6 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeObj(objectExpression);
 		oupt.writeObj(inspectedVariable);
 		oupt.writeObj(inspectVariableDeclaration);
-//		oupt.writeObj(connectionPart);
 		oupt.writeShort(connectionPart.size());
 		for(DoPart part:connectionPart) part.writeObject(oupt);
 		oupt.writeObj(otherwise);
@@ -533,13 +514,11 @@ public final class ConnectionStatement extends Statement {
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
 		ConnectionStatement stm = new ConnectionStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.objectExpression = (Expression) inpt.readObj();
 		stm.inspectedVariable = (VariableExpression) inpt.readObj();
 		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
-//		stm.connectionPart = (Vector<DoPart>) inpt.readObj();
 		int n = inpt.readShort();
 		if(n > 0) {
 			stm.connectionPart = new Vector<DoPart>();

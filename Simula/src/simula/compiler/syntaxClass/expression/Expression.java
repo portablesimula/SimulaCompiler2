@@ -553,9 +553,6 @@ public abstract class Expression extends SyntaxClass {
 	 * Build Evaluation Code.
 	 */
 	public abstract void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder);
-// {
-//		Util.IERR("Method buildEvaluation need a redefinition in "+this.getClass().getSimpleName());
-//	}
 
 
 	@Override

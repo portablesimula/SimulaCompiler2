@@ -264,20 +264,8 @@ public final class Thunk extends DeclarationScope {
 				}
 			}
 					
-			codeBuilder.aload(1); // Parameter x
-			
-			switch(expr.type.keyWord) {
-				case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean,
-						"booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-				case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character,
-						"charValue", MethodTypeDesc.ofDescriptor("()C")));
-				case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer,
-						"intValue", MethodTypeDesc.ofDescriptor("()I")));
-				case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float,
-						"floatValue", MethodTypeDesc.ofDescriptor("()F")));
-				case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double,
-						"doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-			}
+			codeBuilder.aload(1); // Parameter x			
+			expr.type.valueToPrimitiveType(codeBuilder);
 
 			if(expr instanceof TypeConversion) {
 				Type fromType = expr.type;

@@ -226,7 +226,6 @@ public final class ForStatement extends Statement {
 		if (decl instanceof Parameter par && par.mode == Parameter.Mode.name)
 			Util.error(
 					"For-Statement's Controled Variable(" + controlVariable + ") can't be a formal parameter by Name");
-//		if (!type.equals(Type.Text) && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
 		if (type.keyWord != Type.T_TEXT && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
 			Util.error("Illegal For-Statement with object value assignment ( := )");
 		Iterator<ForListElement> iterator = forList.iterator();
@@ -428,7 +427,6 @@ public final class ForStatement extends Statement {
 			SimpleVariableDeclaration decl = (SimpleVariableDeclaration)controlVariable.meaning.declaredAs;
 
 			// controlVariable := expr1
-//			System.out.println("ForStatement.doSingleElementByteCoding: "+controlVariable.getClass().getSimpleName()+"  "+controlVariable);
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
 			expr1.buildEvaluation(null,codeBuilder); // evaluate expr1
 			
@@ -439,8 +437,6 @@ public final class ForStatement extends Statement {
 		}
 
 		public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
-//			System.out.println("ForStatement.buildByteCode: new FOR_SingleELT: controlVariable="+controlVariable);
-//			System.out.println("ForStatement.buildByteCode: new FOR_SingleELT: expr1="+expr1);
 			codeBuilder
 				.new_(CD.FOR_SingleElt)
 				.dup();
@@ -599,9 +595,6 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
-//			System.out.println("ForStatement.buildByteCode: new WhileElt: controlVariable="+controlVariable);
-//			System.out.println("ForStatement.buildByteCode: new WhileElt: expr1="+expr1);
-//			System.out.println("ForStatement.buildByteCode: new WhileElt: expr2="+expr2);
 			codeBuilder
 				.new_(CD.FOR_WhileElt)
 				.dup();
@@ -690,10 +683,6 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public ForListElement isOptimisable() {
-//			Number step = expr2.getNumber();
-//			if (step == null)
-//				return (null);
-			
 			return this; // All for-step-until elements are optimisable.
 		}
 
@@ -832,7 +821,6 @@ public final class ForStatement extends Statement {
 		 */
 		@Override
 		public void doSingleElementByteCoding(CodeBuilder codeBuilder) {
-//			System.out.println("ForStatement.doSingleElementByteCoding: "+this);
 			Label tstLabel = codeBuilder.newLabel();
 			Label endLabel = codeBuilder.newLabel();
 			
@@ -843,10 +831,6 @@ public final class ForStatement extends Statement {
 				CTRL=par.getFieldRefEntry(codeBuilder.constantPool());
 			} else Util.IERR();
 			
-//			SimpleVariableDeclaration decl = (SimpleVariableDeclaration)controlVariable.meaning.declaredAs;
-//			FieldRefEntry CTRL=decl.getFieldRefEntry(codeBuilder.constantPool());
-			
-//			int DELTA = 1; // Local Slot 1
 			int DELTA = BlockDeclaration.currentBlock.allocateLocalVariable(expr2.type); // Local Slot 1, 2 ...
 
 	    	//      // controlVariable = expr1();
@@ -864,7 +848,6 @@ public final class ForStatement extends Statement {
 	        //      invokevirtual #26                 // Method expr2:()I
 	        //      istore_1
 			this.expr2.buildEvaluation(null,codeBuilder); // init
-//			codeBuilder.istore(DELTA);
 			switch(expr2.type.keyWord) {
 				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
 				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
@@ -892,7 +875,6 @@ public final class ForStatement extends Statement {
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
 			codeBuilder.getfield(CTRL);
 
-//			new TypeConversion(controlVariable.type,this.expr3).buildEvaluation(null,codeBuilder);
 			this.expr3.buildEvaluation(null,codeBuilder);
 			TypeConversion.buildMayBeConvert(controlVariable.type,this.expr3.type, codeBuilder);
 			
@@ -955,10 +937,6 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
-//			System.out.println("ForStatement.buildByteCode: new StepUntil: controlVariable="+controlVariable);
-//			System.out.println("ForStatement.buildByteCode: new StepUntil: expr1="+expr1);
-//			System.out.println("ForStatement.buildByteCode: new StepUntil: expr2="+expr2);
-//			System.out.println("ForStatement.buildByteCode: new StepUntil: expr3="+expr3);
 			codeBuilder
 				.new_(CD.FOR_StepUntil)
 				.dup();
@@ -1080,7 +1058,6 @@ public final class ForStatement extends Statement {
 		oupt.writeShort(lineNumber);
 		oupt.writeObj(controlVariable);
 		oupt.writeShort(assignmentOperator);
-//		oupt.writeObj(forList);
 		oupt.writeShort(forList.size());
 		for(ForListElement ent:forList) ent.writeObject(oupt);
 		oupt.writeObj(doStatement);
@@ -1089,12 +1066,10 @@ public final class ForStatement extends Statement {
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readForStatement: ");
 		ForStatement stm = new ForStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.controlVariable = (VariableExpression) inpt.readObj();
 		stm.assignmentOperator = inpt.readShort();
-//		stm.forList = (Vector<ForListElement>) inpt.readObj();
 		int n = inpt.readShort();
 		if(n > 0) {
 			stm.forList = new Vector<ForListElement>();

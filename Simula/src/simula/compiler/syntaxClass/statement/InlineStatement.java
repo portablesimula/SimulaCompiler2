@@ -59,42 +59,11 @@ public final class InlineStatement extends Statement {
 	@Override
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+"INLINE "+kind);
-//		label.printTree(indent+1);
 	}
 
 	@Override
 	public String toString() {
 		return ("INLINE " + kind);
 	}
-
-
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//	/**
-//	 * Default constructor used by Attribute File I/O
-//	 */
-//	public InlineStatement() {
-//		super(0);
-//	}
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			oupt.writeBoolean(CHECKED);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeString(kind);
-//	}
-//	
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		Util.TRACE_INPUT("BEGIN Read "+this.getClass().getSimpleName());
-//		if(!Option.NEW_ATTR_FILE)
-//			CHECKED=inpt.readBoolean();
-//		lineNumber = inpt.readShort();
-//		kind = inpt.readString();
-//	}
-	
 
 }

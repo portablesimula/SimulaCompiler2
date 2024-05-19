@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.MethodTypeDesc;
 
@@ -126,12 +124,8 @@ public final class ObjectRelation extends Expression {
 		lhs.doChecking();
 		Type type1 = lhs.type;
 		String refIdent = type1.getRefIdent();
-		if (refIdent == null) {
+		if (refIdent == null)
 			Util.warning("NONE IS/IN " + classIdentifier + " -- Rewrite program");
-//		} else {
-//			if (!checkCompatability(lhs, classIdentifier))
-//				Util.warning("IS/IN is always FALSE -- " + classIdentifier + " is not compatible with " + refIdent);
-		}
 		this.type = Type.Boolean;
 		if (Option.TRACE_CHECKER)
 			Util.TRACE("END ObjectRelation" + toString() + ".doChecking - Result type=" + this.type);
@@ -152,7 +146,6 @@ public final class ObjectRelation extends Expression {
 		if (refIdent == null) return ("false"); // NONE IS/IN Any is always FALSE
 		if (opr == KeyWord.IN) {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IN is always FALSE
-//			return (lhs.get() + opr.toJavaCode() + classDeclaration.getJavaIdentifier());
 			return (lhs.get() + KeyWord.toJavaCode(opr) + classDeclaration.getJavaIdentifier());
 		} else if (opr == KeyWord.IS) {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IS is always FALSE
@@ -207,7 +200,6 @@ public final class ObjectRelation extends Expression {
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readObjectRelation: ");
 		ObjectRelation expr = new ObjectRelation();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

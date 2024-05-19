@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
@@ -158,7 +156,6 @@ public final class QualifiedObject extends Expression {
 	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readQualifiedObject: ");
 		QualifiedObject expr = new QualifiedObject();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

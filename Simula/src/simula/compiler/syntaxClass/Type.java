@@ -9,6 +9,7 @@ package simula.compiler.syntaxClass;
 
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
@@ -642,6 +643,58 @@ public class Type extends SyntaxClass {
 			default -> Util.IERR();
 		}
 		return ClassSignature.parseFrom(CSS);
+	}
+	
+	public void checkCast(CodeBuilder codeBuilder) {
+		switch(keyWord) {
+		case Type.T_INTEGER   -> codeBuilder.checkcast(ConstantDescs.CD_Integer);
+		case Type.T_REAL      -> codeBuilder.checkcast(ConstantDescs.CD_Float);
+		case Type.T_LONG_REAL -> codeBuilder.checkcast(ConstantDescs.CD_Double);
+		case Type.T_BOOLEAN   -> codeBuilder.checkcast(ConstantDescs.CD_Boolean);
+		case Type.T_CHARACTER -> codeBuilder.checkcast(ConstantDescs.CD_Character);
+		case Type.T_TEXT      -> codeBuilder.checkcast(CD.RTS_TXT);
+		case Type.T_LABEL     -> codeBuilder.checkcast(CD.RTS_LABEL);
+		case Type.T_REF       -> codeBuilder.checkcast(this.toClassDesc());
+		default -> Util.IERR();
+	}
+
+	}
+	
+	/**
+	 * Convert JVM Object value to primitive type value.
+	 * @param codeBuilder the CodeBuilder to use
+	 */
+	public void valueToPrimitiveType(CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		// Object TOS value ==> Primitive type
+		switch(keyWord) {
+			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
+			case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
+			case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+		}
+	}
+	
+	/**
+	 * Convert a Runtime Object to a primitive type value.
+	 * <p>
+	 * If the input Object is a name parameter or a parameter procedure it evaluated before the conversion.
+	 * @param codeBuilder the CodeBuilder to use
+	 * @return true if the value is converted; otherwise false
+	 */
+	public boolean objectToPrimitiveType(CodeBuilder codeBuilder) {
+		// Object TOS value ==> possibleEvaluation ==> Primitive type
+		ClassDesc owner = CD.RTS_RTObject;
+		switch(keyWord) {
+			case Type.T_INTEGER   -> codeBuilder.invokevirtual(owner,"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I"));
+			case Type.T_REAL      -> codeBuilder.invokevirtual(owner,"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F"));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(owner,"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D"));
+			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(owner,"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(owner,"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C"));
+			default               -> { return false; }
+		}
+		return true;
 	}
 	
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {

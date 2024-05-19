@@ -12,7 +12,6 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
@@ -256,14 +255,7 @@ public final class VariableExpression extends Expression {
 							+ meaning.declaredIn.getClass().getSimpleName());
 			}
 		}
-//		if (!this.hasArguments()) {
-//			SET_SEMANTICS_CHECKED();
-//			return;
-//		}
-//		checkedParams = new Vector<Expression>();
 		Declaration decl = meaning.declaredAs;
-
-//		System.out.println("VariableExpression.doChecking: "+ObjectKind.edit(decl.declarationKind) + "  " + this);
 		if (decl != null)
 			switch (decl.declarationKind) {
 			case ObjectKind.ArrayDeclaration:
@@ -298,7 +290,6 @@ public final class VariableExpression extends Expression {
 					formalIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
 					if(!Option.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
-//							System.out.println("VariableExpression.doChecking: StandardProcedure="+prc);
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
 							else if(prc.identifier.equalsIgnoreCase("discrete")) ; // NOTHING
 							else if(prc.identifier.equalsIgnoreCase("linear")) ; // NOTHING
@@ -310,7 +301,6 @@ public final class VariableExpression extends Expression {
 						}
 					}
 				}
-//				System.out.println("VariableExpression.doChecking: Check parameters: "+this);
 				if (params == null) {
 					if(decl.declarationKind != ObjectKind.Procedure)
 					if (formalIterator.hasNext())
@@ -328,32 +318,14 @@ public final class VariableExpression extends Expression {
 						Type formalType = formalParameter.type;
 						Expression actualParameter = actualIterator.next();
 						actualParameter.doChecking();
-						
-//						if (formalType instanceof OverLoad) {
-//							formalType = actualParameter.type; // AD'HOC for add/subepsilon
-//							overloadedType = formalType;
-//						}
-						
-						if (formalType instanceof OverLoad otp) {
+						if (formalType instanceof OverLoad) {
 							if(identifier.equalsIgnoreCase("addepsilon") || identifier.equalsIgnoreCase("subepsilon")) {
 								formalType = actualParameter.type; // AD'HOC for add/subepsilon
 								overloadedType = formalType;
-							} else {
-//								System.out.println("VariableExpression.doChecking: identifier="+this.identifier);
-//								System.out.println("VariableExpression.doChecking: formalParameter="+formalParameter);
-//								System.out.println("VariableExpression.doChecking: actualParameter="+actualParameter.type);
-								
-//								formalType = otp.type[0];
-//								LOOP2: for(Type tp:otp.type) {
-//									if(tp.equals(actualParameter.type)) {
-//										formalType = tp; break LOOP2;
-//									}
-//								}
 							}
 						}
 						
 						if (formalParameter.kind == Parameter.Kind.Array) {
-//							if (formalType != null && formalType != actualParameter.type
 							if (formalType != null && (!formalType.equals(actualParameter.type))
 									&& formalType.isArithmeticType())
 								Util.error("Parameter Array " + actualParameter + " must be of Type " + formalType);
@@ -372,7 +344,6 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.Parameter:
 				Parameter spec = (Parameter) decl;
 				int kind = spec.kind;
-//				Util.ASSERT(kind == Parameter.Kind.Array || kind == Parameter.Kind.Procedure, "Invariant ? kind="+spec.edKind(kind));
 				this.type = spec.type;
 				if(params != null) {
 					if (kind == Parameter.Kind.Array)
@@ -431,20 +402,19 @@ public final class VariableExpression extends Expression {
 		if (declaredAs == null)
 			return (false); // Error Recovery
 		switch (declaredAs.declarationKind) {
-		case ObjectKind.Procedure:
-			return (true);
-//			case ObjectKind.ExternalProcedure: return(true);
-		case ObjectKind.ContextFreeMethod:
-			return (true);
-		case ObjectKind.MemberMethod:
-			return (true);
-		case ObjectKind.Parameter:
-			Parameter par = (Parameter) declaredAs;
-			return (par.kind == Parameter.Kind.Procedure);
-		case ObjectKind.VirtualSpecification:
-			VirtualSpecification vir = (VirtualSpecification) declaredAs;
-			return (vir.kind == VirtualSpecification.Kind.Procedure);
-		default:
+			case ObjectKind.Procedure:
+				return (true);
+			case ObjectKind.ContextFreeMethod:
+				return (true);
+			case ObjectKind.MemberMethod:
+				return (true);
+			case ObjectKind.Parameter:
+				Parameter par = (Parameter) declaredAs;
+				return (par.kind == Parameter.Kind.Procedure);
+			case ObjectKind.VirtualSpecification:
+				VirtualSpecification vir = (VirtualSpecification) declaredAs;
+				return (vir.kind == VirtualSpecification.Kind.Procedure);
+			default:
 		}
 		return (false); // Variable, Parameter, Array, Class, Switch
 	}
@@ -542,151 +512,149 @@ public final class VariableExpression extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		Expression inspectedVariable = meaning.getInspectedExpression();
 		StringBuilder s;
-//		System.out.println("Variable.editVariable: "+decl.declarationKind);
 		switch (decl.declarationKind) {
 
-		case ObjectKind.ArrayDeclaration:
-			s = new StringBuilder();
-			if (this.hasArguments()) { // Array Element Access
-				String var = edIdentifierAccess(false);
-				if (rightPart != null)
-					return (doPutELEMENT(var, rightPart));
-				else
-					return (doGetELEMENT(var));
-			} else {
-				if (rightPart != null) {
-					s.append(edIdentifierAccess(false)).append('=').append(rightPart);
-				} else
-					s.append(edIdentifierAccess(false));
-			}
-			return (s.toString());
-
-		case ObjectKind.Class:
-		case ObjectKind.StandardClass:
-			Util.error("Illegal use of class identifier: " + decl.identifier);
-			return (edIdentifierAccess(destination));
-
-		case ObjectKind.LabelDeclaration:
-			if (rightPart != null)
-				Util.IERR();
-			VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
-			if (virtSpec != null)
-				return (edIdentifierAccess(virtSpec.getVirtualIdentifier(), destination));
-			return (edIdentifierAccess(destination));
-
-		case ObjectKind.Parameter:
-			s = new StringBuilder();
-			Parameter par = (Parameter) decl;
-			switch (par.kind) {
-			case Parameter.Kind.Array: // Parameter Array
-				String var = edIdentifierAccess(false);
-				if (par.mode == Parameter.Mode.name)
-					var = var + ".get()";
-				if (this.hasArguments()) {
-					String arrType = type.toJavaArrayType();
-					String castedVar = "((" + arrType + ")" + var + ")";
+			case ObjectKind.ArrayDeclaration:
+				s = new StringBuilder();
+				if (this.hasArguments()) { // Array Element Access
+					String var = edIdentifierAccess(false);
 					if (rightPart != null)
-						return (doPutELEMENT(castedVar, rightPart));
+						return (doPutELEMENT(var, rightPart));
 					else
-						return (doGetELEMENT(castedVar));
+						return (doGetELEMENT(var));
 				} else {
 					if (rightPart != null) {
-						s.append(var).append('=').append(rightPart);
-					} else {
-						s.append(var);
-					}
-				}
-				break;
-			case Parameter.Kind.Procedure: // Parameter Procedure
-				if (destination)
-					Util.IERR();
-				if (inspectedVariable != null)
-					s.append(inspectedVariable.toJavaCode()).append('.');
-				if (par.mode == Parameter.Mode.value)
-					Util.error("Parameter " + this + " by Value is not allowed - Rewrite Program");
-				else // Procedure By Reference or Name.
-					s.append(CallProcedure.formal(this, par));
-				if (rightPart != null) {
-					s.append('=').append(rightPart);
-				}
-				break;
-			case Parameter.Kind.Simple:
-			case Parameter.Kind.Label:
-				var = edIdentifierAccess(destination); // Kind: Simple/Label
-				if (!destination && par.mode == Parameter.Mode.name) {
-					s.append(var).append(".get()");
-				} else if (rightPart != null) {
-					if (par.mode == Parameter.Mode.name) {
-						s.append(var + ".put(" + rightPart + ')');
+						s.append(edIdentifierAccess(false)).append('=').append(rightPart);
 					} else
-						s.append(var).append('=').append(rightPart);
-				} else {
-					s.append(edIdentifierAccess(destination)); // Kind: Simple/Label
+						s.append(edIdentifierAccess(false));
 				}
-			}
-			return (s.toString());
-
-		case ObjectKind.ContextFreeMethod:
-			// Standard Library Procedure
-			if (Util.equals(identifier, "sourceline"))
-				return ("" + Global.sourceLineNumber);
-			if (destination) {
-				return ("_RESULT=" + rightPart);
-			}
-			return (CallProcedure.asStaticMethod(this, true));
-
-		case ObjectKind.MemberMethod:
-			if (destination) {
-				return ("_RESULT=" + rightPart);
-			}
-			return (CallProcedure.asNormalMethod(this));
-
-		case ObjectKind.Procedure:
-//     		case ObjectKind.ExternalProcedure:
-			// This Variable is a Procedure-Identifier.
-			// When 'destination' it is a variable used to carry the resulting value until
-			// the final return.
-			// otherwise; it is a ordinary procedure-call.
-			if (destination) { // return("_RESULT");
-				ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
-				ProcedureDeclaration found = Global.getCurrentScope().findProcedure(proc.identifier);
-				String res = null;
-				if (found != null) {
-					if (found.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
-						res = "_RESULT";
-					} else {
-						String cast = found.getJavaIdentifier();
-						res = "((" + cast + ")" + found.edCTX() + ")._RESULT";
-					}
-				} else {
-					Util.error("Can't assign to procedure " + proc.identifier);
-					res = proc.identifier; // Error recovery
-				}
-				if (rightPart != null)
-					res = res + "=" + rightPart;
-				return (res);
-			} else {
-				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
-				if (procedure.myVirtual != null)
-					return (CallProcedure.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed));
-				else
-					return (CallProcedure.normal(this));
-			}
-
-		case ObjectKind.SimpleVariableDeclaration:
-			if (rightPart != null)
-				return (edIdentifierAccess(destination) + '=' + rightPart);
-			else
+				return (s.toString());
+	
+			case ObjectKind.Class:
+			case ObjectKind.StandardClass:
+				Util.error("Illegal use of class identifier: " + decl.identifier);
 				return (edIdentifierAccess(destination));
-
-		case ObjectKind.VirtualSpecification:
-			if (rightPart != null)
+	
+			case ObjectKind.LabelDeclaration:
+				if (rightPart != null)
+					Util.IERR();
+				VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
+				if (virtSpec != null)
+					return (edIdentifierAccess(virtSpec.getVirtualIdentifier(), destination));
+				return (edIdentifierAccess(destination));
+	
+			case ObjectKind.Parameter:
+				s = new StringBuilder();
+				Parameter par = (Parameter) decl;
+				switch (par.kind) {
+				case Parameter.Kind.Array: // Parameter Array
+					String var = edIdentifierAccess(false);
+					if (par.mode == Parameter.Mode.name)
+						var = var + ".get()";
+					if (this.hasArguments()) {
+						String arrType = type.toJavaArrayType();
+						String castedVar = "((" + arrType + ")" + var + ")";
+						if (rightPart != null)
+							return (doPutELEMENT(castedVar, rightPart));
+						else
+							return (doGetELEMENT(castedVar));
+					} else {
+						if (rightPart != null) {
+							s.append(var).append('=').append(rightPart);
+						} else {
+							s.append(var);
+						}
+					}
+					break;
+				case Parameter.Kind.Procedure: // Parameter Procedure
+					if (destination)
+						Util.IERR();
+					if (inspectedVariable != null)
+						s.append(inspectedVariable.toJavaCode()).append('.');
+					if (par.mode == Parameter.Mode.value)
+						Util.error("Parameter " + this + " by Value is not allowed - Rewrite Program");
+					else // Procedure By Reference or Name.
+						s.append(CallProcedure.formal(this, par));
+					if (rightPart != null) {
+						s.append('=').append(rightPart);
+					}
+					break;
+				case Parameter.Kind.Simple:
+				case Parameter.Kind.Label:
+					var = edIdentifierAccess(destination); // Kind: Simple/Label
+					if (!destination && par.mode == Parameter.Mode.name) {
+						s.append(var).append(".get()");
+					} else if (rightPart != null) {
+						if (par.mode == Parameter.Mode.name) {
+							s.append(var + ".put(" + rightPart + ')');
+						} else
+							s.append(var).append('=').append(rightPart);
+					} else {
+						s.append(edIdentifierAccess(destination)); // Kind: Simple/Label
+					}
+				}
+				return (s.toString());
+	
+			case ObjectKind.ContextFreeMethod:
+				// Standard Library Procedure
+				if (Util.equals(identifier, "sourceline"))
+					return ("" + Global.sourceLineNumber);
+				if (destination) {
+					return ("_RESULT=" + rightPart);
+				}
+				return (CallProcedure.asStaticMethod(this, true));
+	
+			case ObjectKind.MemberMethod:
+				if (destination) {
+					return ("_RESULT=" + rightPart);
+				}
+				return (CallProcedure.asNormalMethod(this));
+	
+			case ObjectKind.Procedure:
+				// This Variable is a Procedure-Identifier.
+				// When 'destination' it is a variable used to carry the resulting value until
+				// the final return.
+				// otherwise; it is a ordinary procedure-call.
+				if (destination) { // return("_RESULT");
+					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
+					ProcedureDeclaration found = Global.getCurrentScope().findProcedure(proc.identifier);
+					String res = null;
+					if (found != null) {
+						if (found.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
+							res = "_RESULT";
+						} else {
+							String cast = found.getJavaIdentifier();
+							res = "((" + cast + ")" + found.edCTX() + ")._RESULT";
+						}
+					} else {
+						Util.error("Can't assign to procedure " + proc.identifier);
+						res = proc.identifier; // Error recovery
+					}
+					if (rightPart != null)
+						res = res + "=" + rightPart;
+					return (res);
+				} else {
+					ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
+					if (procedure.myVirtual != null)
+						return (CallProcedure.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed));
+					else
+						return (CallProcedure.normal(this));
+				}
+	
+			case ObjectKind.SimpleVariableDeclaration:
+				if (rightPart != null)
+					return (edIdentifierAccess(destination) + '=' + rightPart);
+				else
+					return (edIdentifierAccess(destination));
+	
+			case ObjectKind.VirtualSpecification:
+				if (rightPart != null)
+					Util.IERR();
+				VirtualSpecification virtual = (VirtualSpecification) decl;
+				return (CallProcedure.virtual(this, virtual, remotelyAccessed));
+	
+			default:
 				Util.IERR();
-			VirtualSpecification virtual = (VirtualSpecification) decl;
-			return (CallProcedure.virtual(this, virtual, remotelyAccessed));
-
-		default:
-			Util.IERR();
 		}
 		return (null);
 
@@ -740,7 +708,7 @@ public final class VariableExpression extends Expression {
 				cast = meaning.foundIn.getJavaIdentifier();
 			else if (n == Global.getCurrentScope().rtBlockLevel)
 				return (id); // currentScope may be a sub-block
-			id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id; // ØM
+			id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id;
 		}
 		return (id);
 	}
@@ -777,7 +745,6 @@ public final class VariableExpression extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		Declaration decl=meaning.declaredAs;
-//		System.out.println("VariableExpression.buildEvaluation: "+identifier+", kind="+ObjectKind.edit(decl.declarationKind));
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
@@ -800,7 +767,6 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.LabelDeclaration:
 				if (destination) Util.IERR();
-//				System.out.println("VariableExpression.buildEvaluation: LabelDeclaration");
 				buildIdentifierAccess(false,codeBuilder);
 				LabelDeclaration lab=(LabelDeclaration)decl;
 				VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(decl);
@@ -830,7 +796,6 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.Procedure:
-//     		case ObjectKind.ExternalProcedure:
 				if (destination) Util.IERR();
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (procedure.myVirtual != null)
@@ -840,8 +805,6 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.SimpleVariableDeclaration:
 				SimpleVariableDeclaration var=(SimpleVariableDeclaration)decl;
-//				System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: "+identifier+", inspectedVariable="+inspectedVariable);
-//				System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: var.declaredIn="+var.declaredIn);
 				if(var.constantElement != null) {
 					var.constantElement.buildEvaluation(null,codeBuilder);
 					break;
@@ -933,36 +896,16 @@ public final class VariableExpression extends Expression {
 			}
 			break;
 
-		case Parameter.Kind.Simple, 
-		     Parameter.Kind.Label:
+		case Parameter.Kind.Simple, Parameter.Kind.Label:
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
 			codeBuilder.getfield(par.getFieldRefEntry(pool));
 			
 			if (!destination && par.mode == Parameter.Mode.name) {
 				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_NAME,
 						"get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")));
-				switch(par.type.keyWord) {
-					case Type.T_INTEGER: codeBuilder
-							.checkcast(ConstantDescs.CD_Integer)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I"))); break;
-					case Type.T_REAL: codeBuilder
-							.checkcast(ConstantDescs.CD_Float)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F"))); break;
-					case Type.T_LONG_REAL: codeBuilder
-							.checkcast(ConstantDescs.CD_Double)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D"))); break;
-					case Type.T_BOOLEAN: codeBuilder
-							.checkcast(ConstantDescs.CD_Boolean)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"))); break;
-					case Type.T_CHARACTER:
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Character)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C"))); break;
-					case Type.T_TEXT:  codeBuilder.checkcast(CD.RTS_TXT); break;
-					case Type.T_LABEL: codeBuilder.checkcast(CD.RTS_LABEL); break;
-					case Type.T_REF:   codeBuilder.checkcast(par.type.toClassDesc(par)); break;
-					default: Util.IERR();
-				}
+				par.type.checkCast(codeBuilder);
+				par.type.valueToPrimitiveType(codeBuilder);
+
 			}
 			break; // OK
 		}
@@ -996,43 +939,32 @@ public final class VariableExpression extends Expression {
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
-//		oupt.writeBoolean(CHECKED);
 		oupt.writeKind(ObjectKind.VariableExpression);
 		oupt.writeShort(SEQU);
 		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeString(identifier);
-//		oupt.writeObject(meaning);
 		oupt.writeBoolean(remotelyAccessed);
 		
-		//oupt.writeObj(params);
 		if(params == null) {
 			oupt.writeShort(0);			
 		} else {
 			oupt.writeShort(params.size());
 			for(Expression par:params) oupt.writeObj(par);
 		}
-//		oupt.writeObject(checkedParams);			
 	}
 	
 	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readVariableExpression: ");
 		VariableExpression var = new VariableExpression();
-//		CHECKED=inpt.readBoolean();
-		
-//		var.SEQU = inpt.readShort();
 		var.SEQU = inpt.readSEQU(var);
 		var.lineNumber = inpt.readShort();
-//		System.out.println("VariableExpression.readObject: lineNumber="+var.lineNumber);
 		var.type = inpt.readType();
-//		System.out.println("VariableExpression.readObject: type="+var.type);
 		var.backLink = (SyntaxClass) inpt.readObj();
 		var.identifier = inpt.readString();
-//		meaning = (Meaning) inpt.readObject();
 		var.remotelyAccessed = inpt.readBoolean();
 		
-		//params = (Vector<Expression>) inpt.readObject();
 		int n = inpt.readShort();
 		if(n > 0) {
 			var.params = new Vector<Expression>();
@@ -1040,7 +972,6 @@ public final class VariableExpression extends Expression {
 				var.params.add((Expression) inpt.readObj());
 		}
 		
-//		checkedParams = (Vector<Expression>) inpt.readObject();			
 		Util.TRACE_INPUT("readVariableExpression: " + var);
 		return(var);
 	}

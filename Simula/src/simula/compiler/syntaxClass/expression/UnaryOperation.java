@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
@@ -88,7 +86,6 @@ public final class UnaryOperation extends Expression {
 	public Expression evaluate() {
 		// Try to Compile-time Evaluate this expression
 		if (oprator == KeyWord.PLUS || oprator == KeyWord.MINUS) {
-			//System.out.println("UnaryOperation.evaluate: "+oprator+", operand="+operand);
 			Number rhn=operand.getNumber();
 			if(rhn!=null) {
 				return(Constant.evaluate(oprator,rhn));
@@ -187,7 +184,6 @@ public final class UnaryOperation extends Expression {
 	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
 		UnaryOperation expr = new UnaryOperation();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

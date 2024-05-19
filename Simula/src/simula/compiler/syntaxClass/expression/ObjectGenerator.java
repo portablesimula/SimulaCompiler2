@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
@@ -22,7 +20,6 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
@@ -247,8 +244,6 @@ public final class ObjectGenerator extends Expression {
 								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
-//					codeBuilder.invokevirtual(ArrayDeclaration.getClassDesc(par.type),   // TODO: TESTING_ARRAY
-//					"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+par.type.toJavaArrayType()+';'));
 					codeBuilder.invokevirtual(CD.RTS_ARRAY,
 							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
 				}
@@ -294,7 +289,6 @@ public final class ObjectGenerator extends Expression {
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
 		oupt.writeString(classIdentifier);
-//		oupt.writeObject(params);
 		if(params == null) {
 			oupt.writeShort(-1);			
 		} else {
@@ -306,13 +300,11 @@ public final class ObjectGenerator extends Expression {
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN ObjectGenerator: ");
 		ObjectGenerator gen = new ObjectGenerator();
-//		gen.SEQU = inpt.readShort();
 		gen.SEQU = inpt.readSEQU(gen);
 		gen.lineNumber = inpt.readShort();
 		gen.type = inpt.readType();
 		gen.backLink = (SyntaxClass) inpt.readObj();
 		gen.classIdentifier = inpt.readString();
-//		gen.params = (Vector<Expression>) inpt.readObject();
 		int n = inpt.readShort();
 		if(n >= 0) {
 			gen.params = new Vector<Expression>();

@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.statement;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
@@ -19,8 +16,6 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;

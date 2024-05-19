@@ -8,9 +8,8 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -134,8 +133,8 @@ public final class LocalObject extends Expression {
 						return;// (thisScope);
 					}
 				}
-			} else if (thisScope instanceof ConnectionBlock z) {
-				ClassDeclaration x = (ClassDeclaration) z.classDeclaration;
+			} else if (thisScope instanceof ConnectionBlock conn) {
+				ClassDeclaration x = (ClassDeclaration) conn.classDeclaration;
 				if (Util.equals(classIdentifier, x.identifier)) return;
 				while ((x = x.getPrefixClass()) != null) {
 					if (Util.equals(classIdentifier, x.identifier)) return;
@@ -170,14 +169,19 @@ public final class LocalObject extends Expression {
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
-		String cast = classDeclaration.getJavaIdentifier();
+		DeclarationScope.buildCTX2(ctxDiff,codeBuilder);
 		if (thisScope instanceof ConnectionBlock connectionBlock) {
 			//return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
-			Util.IERR();
+			ConstantPoolBuilder pool=codeBuilder.constantPool();
+			Meaning meaning = connectionBlock.inspectedVariable.meaning;
+			codeBuilder
+				.checkcast(meaning.declaredIn.getClassDesc())
+				.getfield(meaning.getFieldRefEntry(pool));
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
-			DeclarationScope.buildCTX2(ctxDiff,codeBuilder);
-			codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
+			String cast = classDeclaration.getJavaIdentifier();
+			codeBuilder
+				.checkcast(ClassDesc.of(Global.packetName,cast));
 		}
 	}
 
@@ -209,7 +213,6 @@ public final class LocalObject extends Expression {
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLocalObject: ");
 		LocalObject expr = new LocalObject();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

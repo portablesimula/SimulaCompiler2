@@ -9,6 +9,10 @@ begin
 		outfix(lr,4,14);
 		outchar(c);
 	end;
+	
+	procedure P(lab); name lab; label lab; begin 
+		goto lab;
+	end;
  
  	new B(11,22.3,44.78,'C',45.21,99.45);
 end;

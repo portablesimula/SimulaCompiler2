@@ -8,16 +8,11 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import java.util.Vector;
-import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.classfile.constantpool.MethodRefEntry;
-
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.*;
@@ -25,7 +20,6 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -97,8 +91,6 @@ public final class BuildProcedureCall {
 	 */
 	static void remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual,final SyntaxClass backLink,CodeBuilder codeBuilder) {
 		//return("<Object>.<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
-//		String ident=obj.get()+'.'+virtual.getVirtualIdentifier();
-//		return(buildCPF(ident,variable,virtual.procedureSpec));
 
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 	    String ident=virtual.getSimpleVirtualIdentifier();
@@ -133,7 +125,6 @@ public final class BuildProcedureCall {
 			remoteVirtual(obj,func,procedure.myVirtual.virtualSpec,backLink,codeBuilder);
 		} else if(procedure.declarationKind==ObjectKind.ContextFreeMethod) {
 			// Call Remote Method
-			//return(asRemoteMethod(obj,procedure,func));
 			Util.IERR();
 		} else if(procedure.declarationKind==ObjectKind.MemberMethod) {
 			// Call Remote Method
@@ -174,7 +165,6 @@ public final class BuildProcedureCall {
 	 */
 	private static void asRemoteMethod(final Expression obj, final ProcedureDeclaration pro, final VariableExpression func,CodeBuilder codeBuilder) {
 		BlockDeclaration declaredIn = (BlockDeclaration)pro.declaredIn;
-//		System.out.println("BuildProcedureCall: obj="+obj+", procedure="+pro+", func="+func);
 		if(declaredIn.declarationKind == ObjectKind.StandardClass) {
 			// Call Standard Member Method
 			callRemoteStandardProcedure(obj,(StandardProcedure) pro,func,codeBuilder);
@@ -197,7 +187,6 @@ public final class BuildProcedureCall {
 	 *
 	 */
 	public static void callStandardTextProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable, Object backLink,CodeBuilder codeBuilder) {
-//		System.out.println("BuildProcedureCall.callStandardTextProcedure: pro.identifier=" + pro.identifier);
 		beforeDot.buildEvaluation(null,codeBuilder);
 		if(variable.checkedParams != null) 
 			for(Expression expr:variable.checkedParams)
@@ -218,14 +207,7 @@ public final class BuildProcedureCall {
 	 *
 	 */
 	private static void callRemoteStandardProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable,CodeBuilder codeBuilder) {
-//		System.out.println("\nBuildProcedureCall.callRemoteStandardProcedure: pro.identifier="+pro.identifier);
-//		System.out.println("BuildProcedureCall.callRemoteStandardProcedure: "+beforeDot+'.'+pro.identifier+"  variable="+variable);
-//		Declaration remoteQual = null;
-
 		if (beforeDot instanceof VariableExpression var) {
-//			System.out.println("BuildProcedureCall.callRemoteStandardProcedure: "+beforeDot+ " declaredAs=" + var.meaning.declaredAs);
-//			System.out.println("BuildProcedureCall.callRemoteStandardProcedure: "+beforeDot+ " declaredIn=" + var.meaning.declaredIn);
-//			System.out.println("BuildProcedureCall.callRemoteStandardProcedure: "+beforeDot+ " foundIn=" + var.meaning.foundIn);
 			Declaration remoteQual = var.meaning.declaredAs;
 			if (remoteQual instanceof StandardProcedure prx) {
 				BlockDeclaration declaredIn = (BlockDeclaration) var.meaning.declaredIn;
@@ -283,7 +265,6 @@ public final class BuildProcedureCall {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
-//		System.out.println("BuildeProcedureCall.callStandardProcedure: "+pro+", pro.declarationKind="+ObjectKind.edit(pro.declarationKind));
 		if(pro.declarationKind == ObjectKind.MemberMethod) { // EG: File attribute procedure
 			if (meaning.isConnected()) {
 				Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
@@ -291,9 +272,7 @@ public final class BuildProcedureCall {
 			} else {
 				// PUSH Parameter values onto the stack
 				boolean xpar = checkForExtraParameter(variable);
-				String cast = meaning.declaredIn.getJavaIdentifier();
 				boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-//				if(withFollowSL) codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
 				if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 				if (variable.checkedParams != null) {
 					if(xpar) {
@@ -313,7 +292,6 @@ public final class BuildProcedureCall {
 					codeBuilder.pop();
 			}
 		} else if(pro.declarationKind == ObjectKind.ContextFreeMethod) {
-//			System.out.println("BuildeProcedureCall.callStandardProcedure: "+pro+", pro.declarationKind="+ObjectKind.edit(pro.declarationKind));
 			// PUSH Parameter values onto the stack
 			if (variable.checkedParams != null) {
 				int n=variable.checkedParams.size();
@@ -323,10 +301,7 @@ public final class BuildProcedureCall {
 					par.buildParamCode(codeBuilder,expr);
 				}
 			}
-//			System.out.println("BuildeProcedureCall.callStandardProcedure: variable="+variable);
-//			System.out.println("BuildeProcedureCall.callStandardProcedure: variable.meaning="+variable.meaning);
 			DeclarationScope declaredIn = variable.meaning.declaredIn;
-//			ClassDesc owner = declaredIn.type.toClassDesc(declaredIn);
 			ClassDesc owner = declaredIn.getClassDesc();
 			MethodTypeDesc MTD = null;
 			if(pro.identifier.equalsIgnoreCase("histd")) {
@@ -355,7 +330,7 @@ public final class BuildProcedureCall {
 	static void asNormalMethod(final VariableExpression variable,CodeBuilder codeBuilder) {
 		Meaning meaning=variable.meaning;
 		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
-		if(meaning.declaredAs instanceof StandardProcedure pro) {
+		if(meaning.declaredAs instanceof StandardProcedure) {
 			callStandardProcedure(variable,codeBuilder);
 		} else { // Normal Simula Procedure
 			//      P(777);
@@ -438,63 +413,54 @@ public final class BuildProcedureCall {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		//return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 	    String ident=virtual.getSimpleVirtualIdentifier();
+	    
 	    if(virtual.kind==VirtualSpecification.Kind.Label) {
-//	    	return(ident);
+	    	// 	return(ident);
 	        // 1: aload_0
 	        // 2: invokevirtual #20                 // Method L_0:()Lsimula/runtime/RTS_LABEL;
 			ClassDesc owner = BlockDeclaration.currentClassDesc();
 			codeBuilder
 				.aload(0)
 				.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;")));
-	    	return;
-	    }
-	    Meaning meaning = variable.meaning;
-	    if(variable.meaning.isConnected()) {
-//	    	String conn=variable.meaning.declaredIn.toJavaCode();
-//	        ident=conn+"."+ident;
-//	        32: aload_0
-//	        33: getfield      #17                 // Field _inspect_21_0:LsimulaTestPrograms/adHoc00_A;
-//	        36: invokevirtual #37                 // Method simulaTestPrograms/adHoc00_A.P1_0:()Lsimula/runtime/RTS_PRCQNT;
-//	        39: invokevirtual #43                 // Method simula/runtime/RTS_PRCQNT.CPF:()Lsimula/runtime/RTS_PROCEDURE;
-//	        42: pop
 
+	    } else {
+		    Meaning meaning = variable.meaning;
 			prepareForValueType(variable, codeBuilder);
-
-	    	VariableExpression inspectedVariable = variable.meaning.getInspectedVariable();
-			codeBuilder
-				.aload(0)
-				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), inspectedVariable.getJavaIdentifier(), inspectedVariable.type.toClassDesc()))
-				.invokevirtual(pool.methodRefEntry(meaning.declaredIn.getClassDesc(),
-					ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
-	        
-		    buildCPF(variable,virtual.procedureSpec,codeBuilder);
-		    
-		    ProcedureDeclaration prc=(ProcedureDeclaration)variable.meaning.declaredAs;
-			if(prc.type != null && variable.backLink != null) {
-//				 codeBuilder.getfield(prc.getResultFieldRefEntry(codeBuilder.constantPool()));
-			} else codeBuilder.pop();
-		    return;
-		    
-	    } else if(!remotelyAccessed) {
-//		    String staticLink=variable.meaning.edQualifiedStaticLink();
-//	        ident=staticLink+"."+ident;
+	    	if(meaning.isConnected()) {
+	    		// String conn=variable.meaning.declaredIn.toJavaCode();
+	    		// ident=conn+"."+ident;
+	    		// 32: aload_0
+	    		// 33: getfield      #17                 // Field _inspect_21_0:LsimulaTestPrograms/adHoc00_A;
+	    		// 36: invokevirtual #37                 // Method simulaTestPrograms/adHoc00_A.P1_0:()Lsimula/runtime/RTS_PRCQNT;
+	    		// 39: invokevirtual #43                 // Method simula/runtime/RTS_PRCQNT.CPF:()Lsimula/runtime/RTS_PROCEDURE;
+	    		// 42: pop
+		    	VariableExpression inspectedVariable = meaning.getInspectedVariable();
+				codeBuilder
+					.aload(0)
+					.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), inspectedVariable.getJavaIdentifier(), inspectedVariable.type.toClassDesc()))
+					.invokevirtual(pool.methodRefEntry(meaning.declaredIn.getClassDesc(),
+						ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
+			    buildCPF(variable,virtual.procedureSpec,codeBuilder);
+			    
+			    ProcedureDeclaration prc=(ProcedureDeclaration)meaning.declaredAs;
+				if(prc.type == null || variable.backLink == null)
+					codeBuilder.pop();
+	
+		    } else {
+		        //  0: getstatic     #7                  // Field _CUR:Lsimula/runtime/RTS_RTObject;
+		        //  3: checkcast     #8                  // class simulaTestPrograms/adHoc000_PBLK20
+		        //  6: invokevirtual #13                 // Method P1_0:()Lsimula/runtime/RTS_PRCQNT;
+		        //  9: invokevirtual #17                 // Method simula/runtime/RTS_PRCQNT.CPF:()Lsimula/runtime/RTS_PROCEDURE;
+		        // 12: pop
+				boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
+				if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
+				codeBuilder
+					.invokevirtual(pool.methodRefEntry(meaning.declaredIn.getClassDesc(),
+						ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
+			    buildCPF(variable,virtual.procedureSpec,codeBuilder);
+			    if(variable.backLink == null) codeBuilder.pop();
+		    }
 	    }
-        //  0: getstatic     #7                  // Field _CUR:Lsimula/runtime/RTS_RTObject;
-        //  3: checkcast     #8                  // class simulaTestPrograms/adHoc000_PBLK20
-        //  6: invokevirtual #13                 // Method P1_0:()Lsimula/runtime/RTS_PRCQNT;
-        //  9: invokevirtual #17                 // Method simula/runtime/RTS_PRCQNT.CPF:()Lsimula/runtime/RTS_PROCEDURE;
-        // 12: pop
-	    
-		prepareForValueType(variable, codeBuilder);
-		
-		boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-		if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
-		codeBuilder
-			.invokevirtual(pool.methodRefEntry(meaning.declaredIn.getClassDesc(),
-				ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
-
-	    buildCPF(variable,virtual.procedureSpec,codeBuilder);
-	    if(variable.backLink == null) codeBuilder.pop();
 	}
 	
 	// ********************************************************************
@@ -523,14 +489,12 @@ public final class BuildProcedureCall {
 	 * @param procedureSpec the procedure spec
 	 * @return the resulting Java source code
 	 */
-//	private static String buildCPF(final String ident,final VariableExpression variable,final ProcedureSpecification procedureSpec) {
 	private static void buildCPF(final VariableExpression variable,final ProcedureSpecification procedureSpec,CodeBuilder codeBuilder) {
 		if(procedureSpec!=null) {
 			buildCSVP(variable, procedureSpec, codeBuilder);
 			return;
 		}
 		
-			
 //		s.append(ident).append(".CPF()");
 //	    p_SFD.CPF().setPar(new RTS_NAME<Integer>(){ public Integer get() { return(1); } })._ENT();
 //		0: aload_0
@@ -559,19 +523,10 @@ public final class BuildProcedureCall {
 					Declaration decl=var.meaning.declaredAs;
 					if(decl instanceof StandardProcedure) {
 						if(Util.equals(decl.identifier, "sourceline")) {
-//							System.out.println("BuildProcedureCall.buildCPF: "+actualParameter.lineNumber);
-//							actualParameter=new Constant(Type.Integer,Global.sourceLineNumber);
 							actualParameter=new Constant(Type.Integer,actualParameter.lineNumber);
 							actualParameter.doChecking();
 						}
 					}
-//					else if(decl instanceof SimpleVariableDeclaration) kind=Parameter.Kind.Simple;
-//					else if(decl instanceof Parameter ppar) kind=ppar.kind;
-//					else if(decl instanceof ProcedureDeclaration) kind=Parameter.Kind.Procedure;
-//					else if(decl instanceof ArrayDeclaration) kind=Parameter.Kind.Array;
-//					else if(decl instanceof LabelDeclaration) kind=Parameter.Kind.Label;
-//					else if(decl instanceof ClassDeclaration) kind=Parameter.Kind.Simple; // Error Recovery
-//					else Util.IERR("Flere sånne tilfeller ???");
 					switch(decl.declarationKind) {
 						case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
 						case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
@@ -588,17 +543,12 @@ public final class BuildProcedureCall {
 				if(procedureSpec!=null) {
 					Parameter p = procedureSpec.parameterList.get(i);
 					mode = p.mode;
-//					Util.IERR();
 				}
-//				s.append(doParameterTransmition(formalType,kind,mode,actualParameter));
-//				s.append(')');
 				buildParameterTransmition(formalType,kind,mode,actualParameter,codeBuilder);
 				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PROCEDURE,
 					"setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;")));
 			}
-//			s.append("._ENT()"); // Only when any parameter
-//			18: invokevirtual #69                 // Method simula/runtime/RTS_PROCEDURE._ENT:()Lsimula/runtime/RTS_PROCEDURE;
-//			21: pop
+			// s.append("._ENT()"); // Only when any parameter
 			codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PROCEDURE,
 				"_ENT", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PROCEDURE;")));
 		}
@@ -609,39 +559,13 @@ public final class BuildProcedureCall {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
 		SyntaxClass backLink = variable.backLink;
-//		System.out.println("BuildProcedureCall.buildCPF: (2) backLink="+backLink);
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
 		Declaration proc=variable.meaning.declaredAs;
-//		System.out.println("BuildProcedureCall.buildCPF: (2) backLink="+backLink);
-//		System.out.println("BuildProcedureCall.buildCPF: decl="+decl.getClass().getSimpleName()+",  "+decl);
-//		System.out.println("BuildProcedureCall.buildCPF: decl.type="+decl.type);
 		if(proc.type != null && backLink != null) {
 			codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PROCEDURE,
 					"_RESULT", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")));
-	
-			ClassDesc owner = BlockDeclaration.currentClassDesc();
-			switch(proc.type.keyWord) {
-				case Type.T_INTEGER:
-					codeBuilder.invokevirtual(owner,"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I"));
-					break;
-				case Type.T_REAL:
-					codeBuilder.invokevirtual(owner,"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F"));
-					break;
-				case Type.T_LONG_REAL:
-					codeBuilder.invokevirtual(owner,"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D"));
-					break;
-				case Type.T_BOOLEAN:
-					codeBuilder.invokevirtual(owner,"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"));
-					break;
-				case Type.T_CHARACTER:
-					codeBuilder.invokevirtual(owner,"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C"));
-					break;
-				case Type.T_LABEL:
-					codeBuilder.checkcast(proc.type.toClassDesc());
-					break;
-				default:
-					codeBuilder.checkcast(proc.type.toClassDesc());					
-			}
+			proc.type.checkCast(codeBuilder);
+			proc.type.objectToPrimitiveType(codeBuilder);
 		}
 	}
 	
@@ -709,7 +633,6 @@ public final class BuildProcedureCall {
      * @param codeBuilder the CodeBuilder
      */
 	private static void buildParameterTransmition(final Type formalType,final int kind,final int mode,final Expression apar,CodeBuilder codeBuilder) {
-//		StringBuilder s = new StringBuilder();
 		switch(kind) {
 		    case Parameter.Kind.Simple -> buildSimpleParameter(formalType,kind,mode,apar,codeBuilder);
 		    case Parameter.Kind.Procedure -> buildProcedureParameter(formalType,mode,apar,codeBuilder);
@@ -718,7 +641,7 @@ public final class BuildProcedureCall {
 //		    		String labQuant=apar.toJavaCode();
 //		    		if(mode==Parameter.Mode.name) {
 //		    			s.append("new RTS_NAME<RTS_LABEL>()");
-//		    			s.append("{ public RTS_LABEL get() { return("+labQuant+"); }");
+//		    			s.append("{ public RTS_LABEL get() { return("+labQuant+"); }");  // TODO: SJEKK DETTE
 //		    			s.append(" }");
 //		    		}
 //		    		else s.append(labQuant);
@@ -759,7 +682,7 @@ public final class BuildProcedureCall {
 //		    	String labQuant=apar.toJavaCode();
 //		    	if(mode==Parameter.Mode.name) {
 //			    	  s.append("new RTS_NAME<RTS_LABEL>()");
-//				      s.append("{ public RTS_LABEL get() { return("+labQuant+"); }");
+//				      s.append("{ public RTS_LABEL get() { return("+labQuant+"); }");  // TODO: SJEKK DETTE
 //				      s.append(" }");
 //			    }
 //			    else s.append(labQuant);
@@ -783,7 +706,7 @@ public final class BuildProcedureCall {
 	 */
 	private static void doArrayParameter(final Type formalType,final int mode,final Expression apar,CodeBuilder codeBuilder) {
 		if(mode==Parameter.Mode.value) {
-//			s.append(apar.toJavaCode()).append(".COPY()");
+//			s.append(apar.toJavaCode()).append(".COPY()");  // TODO: SJEKK DETTE
 			Util.IERR();
 		}
 		else if(mode==Parameter.Mode.name) {
@@ -793,7 +716,7 @@ public final class BuildProcedureCall {
 			
 			Thunk.buildInvoke(Parameter.Kind.Array, apar, codeBuilder);
 		} else {
-//			s.append(apar.toJavaCode());
+//			s.append(apar.toJavaCode());  // TODO: SJEKK DETTE
 			Util.IERR();
 		}
 	}
@@ -880,18 +803,18 @@ public final class BuildProcedureCall {
 					.invokespecial(pool.methodRefEntry(CD.RTS_PRCQNT
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V")));
 			} else if (decl instanceof VirtualSpecification vir) {
-//				procQuant=staticLink+'.'+vir.getVirtualIdentifier();
+//				procQuant=staticLink+'.'+vir.getVirtualIdentifier();  // TODO: SJEKK DETTE
 				Util.IERR();
 			} else Util.IERR("Flere sånne(1) tilfeller ???  QUAL="+decl.getClass().getSimpleName());
 	    } else if (apar instanceof RemoteVariable rem) {
 			Declaration decl=rem.var.meaning.declaredAs;
 			ClassDesc procIdent = null;
 			if (decl instanceof VirtualSpecification vir) {
-//				return(staticLink+'.'+vir.getVirtualIdentifier());
+//				return(staticLink+'.'+vir.getVirtualIdentifier());  // TODO: SJEKK DETTE
 				Util.IERR();
 			} else if (decl instanceof ProcedureDeclaration procedure) {
     	    	if(procedure.myVirtual!=null) {
-//    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;
+//    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;  // TODO: SJEKK DETTE
 //    				return(staticLink+'.'+vir.getVirtualIdentifier());
     				Util.IERR();
     	    	}

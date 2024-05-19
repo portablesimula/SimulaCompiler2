@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
@@ -111,27 +109,12 @@ public final class ActivationStatement extends Statement {
 	 * The activation code
 	 */
 	private enum ActivationCode {
-		/**
-		 * Direct activation
-		 */
-		direct,
-		/**
-		 * (Re)Activate Process AT ...
-		 */
-		at,
-		/**
-		 * (Re)Activate Process DELAY ...
-		 */
-		delay,
-		/**
-		 * (Re)Activate Process BEFORE ...
-		 */
-		before,
-		/**
-		 * (Re)Activate Process AFTER ...
-		 */
-		after
-		}
+		/** Direct activation */				direct,
+		/** (Re)Activate Process AT ... */		at,
+		/** (Re)Activate Process DELAY ... */	delay,
+		/** (Re)Activate Process BEFORE ... */	before,
+		/** (Re)Activate Process AFTER ... */	after
+	}
 
 	/**
 	 * Create a new ActivationStatement.
@@ -238,7 +221,6 @@ public final class ActivationStatement extends Statement {
 	
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
-//		Util.buildSNAPSHOT(codeBuilder, "ACTIVATION: "+this);
 		Type refProcess = Type.Ref("Process");
 		if (object1 != null) {
 			object1 = TypeConversion.testAndCreate(refProcess, object1);

@@ -8,13 +8,10 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -24,8 +21,6 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
@@ -186,7 +181,6 @@ public final class AssignmentOperation extends Expression {
 			if (afterDot instanceof VariableExpression varAfterDot && varAfterDot.hasArguments()) {
 				Declaration decl = varAfterDot.meaning.declaredAs;
 				Expression beforeDot = rem.obj;
-//				System.out.println("AssignmentOperation.doCodeAssignment: beforeDot = " + beforeDot + ", decl=" + decl);
 				if (decl instanceof ArrayDeclaration)
 					return (doAccessRemoteArray(beforeDot, varAfterDot, rhs.toJavaCode()));
 				else if (decl instanceof Parameter par) {
@@ -214,7 +208,6 @@ public final class AssignmentOperation extends Expression {
 		String obj = beforeDot.toJavaCode();
 		String remoteIdent = obj + '.' + array.edIdentifierAccess(true);
 		Declaration decl = array.meaning.declaredAs;
-//		System.out.println("AssignmentOperation.doAccessRemoteArray: decl="+decl.getClass().getSimpleName()+"  "+decl);
 		if(decl instanceof Parameter par) { // TESTING_ARRAY
 			String arrayType = par.type.getArrayType();
 			remoteIdent = "(("+arrayType+")"+remoteIdent+")";
@@ -232,9 +225,8 @@ public final class AssignmentOperation extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.textValueAssignment)
-			buildTextValueAssignment(codeBuilder);
-		else
-			buildAssignment(codeBuilder);
+			 buildTextValueAssignment(codeBuilder);
+		else buildAssignment(codeBuilder);
 	}
 
 
@@ -253,8 +245,6 @@ public final class AssignmentOperation extends Expression {
 				return;
 			}
 		}
-//		System.out.println("AssignmentOperation.buildTextValueAssignment: "+this);
-//		System.out.println("AssignmentOperation.buildTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 		ClassDesc CD = BlockDeclaration.currentClassDesc();
@@ -263,30 +253,59 @@ public final class AssignmentOperation extends Expression {
 		if(this.backLink == null) codeBuilder.pop();
 	}
 
-
 	private void buildAssignment(CodeBuilder codeBuilder) {
-//		System.out.println("AssignmentOperation.buildAssignment: "+this);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(lhs instanceof VariableExpression var) {
 			Declaration decl = var.meaning.declaredAs;
-//			System.out.println("AssignmentOperation.buildAssignment: decl="+decl.getClass().getSimpleName()+"  "+decl+"  "+this);
 
-			if(decl instanceof SimpleVariableDeclaration simplevar) {
-				buildSimple(simplevar,var,opr==KeyWord.ASSIGNREF,codeBuilder);
-			} else if(decl instanceof Parameter par) {
-				buildParameter(par,var,opr==KeyWord.ASSIGNREF,codeBuilder);
-			} else if(decl.getClass() == ProcedureDeclaration.class) {
-				buildProc((ProcedureDeclaration)decl,codeBuilder);
-			} else if(decl instanceof ArrayDeclaration arr) {
-				var.meaning.buildIdentifierAccess(false,codeBuilder);
-				arr.arrayPutElement(var,false,rhs,codeBuilder);
-				if(this.backLink == null) {
-					if(this.type.keyWord == Type.T_LONG_REAL)
-						codeBuilder.pop2();
-					else codeBuilder.pop();
+			switch(decl.declarationKind) {
+				case ObjectKind.SimpleVariableDeclaration -> {
+					var.buildIdentifierAccess(true,codeBuilder);
+					rhs.buildEvaluation(null,codeBuilder);
+						
+					// Prepare for multiple assignment
+					if(this.backLink != null) {
+						if(this.type.keyWord == Type.T_LONG_REAL)
+							 codeBuilder.dup2_x1();
+						else codeBuilder.dup_x1();
+					}
+					SimpleVariableDeclaration simplevar = (SimpleVariableDeclaration)decl;
+					codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
 				}
+					
+				case ObjectKind.Parameter -> {
+					Parameter par = (Parameter)decl;
+					boolean assignRef = opr==KeyWord.ASSIGNREF;
+					switch(par.kind) {
+						case Parameter.Kind.Simple -> buildSimpleParameter(par,var,assignRef,codeBuilder);
+						case Parameter.Kind.Array  -> buildArrayParameter(par,var,assignRef,codeBuilder);
+						default -> Util.IERR();
+					}
+				}
+						
+				case ObjectKind.Procedure -> {
+					Meaning result=Global.getCurrentScope().findMeaning("_RESULT");
+					result.buildIdentifierAccess(false, codeBuilder);
+						
+					ProcedureDeclaration proc = (ProcedureDeclaration)decl;
+					rhs.buildEvaluation(null,codeBuilder);
+					codeBuilder.putfield(pool.fieldRefEntry(proc.getClassDesc(), "_RESULT", type.toClassDesc()));
+				}
+					
+				case ObjectKind.ArrayDeclaration -> {
+					ArrayDeclaration arr = (ArrayDeclaration) decl;
+					var.meaning.buildIdentifierAccess(false,codeBuilder);
+					arr.arrayPutElement(var,false,rhs,codeBuilder);
+					if(this.backLink == null) {
+						if(this.type.keyWord == Type.T_LONG_REAL)
+							 codeBuilder.pop2();
+						else codeBuilder.pop();
+					}
+				}
+				
+				default -> Util.IERR();
 			}
-			else Util.IERR();
+			
 		} else if(lhs instanceof RemoteVariable var) {
 			if(!tryRemoteArray(var, codeBuilder)) {
 				var.obj.buildEvaluation(null,codeBuilder);
@@ -325,51 +344,6 @@ public final class AssignmentOperation extends Expression {
 		}
 		return(false);
 	}
-
-	private void buildSimple(SimpleVariableDeclaration simplevar,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		var.buildIdentifierAccess(true,codeBuilder);
-		rhs.buildEvaluation(null,codeBuilder);
-		
-		// Prepare for multiple assignment
-		if(this.backLink != null) {
-			if(this.type.keyWord == Type.T_LONG_REAL)
-				 codeBuilder.dup2_x1();
-			else codeBuilder.dup_x1();
-		}
-		codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
-	}
-	
-	private void buildProc(ProcedureDeclaration proc,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		System.out.println("AssignmentOperation.buildProc: "+this);
-//		System.out.println("AssignmentOperation.buildProc: "+proc.identifier+":  "+lhs+" = "+rhs);
-//		System.out.println("AssignmentOperation.buildProc: lhs="+lhs.getClass().getSimpleName()+"   "+lhs);
-//		System.out.println("AssignmentOperation.buildProc: lhs.type="+lhs.type);
-//		System.out.println("AssignmentOperation.buildProc: rhs="+rhs.getClass().getSimpleName()+"   "+rhs);
-//		System.out.println("AssignmentOperation.buildProc: rhs.type="+rhs.type);
-		
-		Meaning result=Global.getCurrentScope().findMeaning("_RESULT");
-//		System.out.println("AssignmentOperation.buildProc: result="+result.getClass().getSimpleName()+"  "+result);
-//		System.out.println("AssignmentOperation.buildProc: result.declaredAs="+result.declaredAs.getClass().getSimpleName()+"  "+result.declaredAs);
-		result.buildIdentifierAccess(false, codeBuilder);
-		
-//		VariableExpression var = (VariableExpression)lhs;
-//		var.buildIdentifierAccess(true,codeBuilder);
-		rhs.buildEvaluation(null,codeBuilder);
-		codeBuilder.putfield(pool.fieldRefEntry(proc.getClassDesc(), "_RESULT", type.toClassDesc()));
-	}
-	
-	private void buildParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
-//		System.out.println("AssignmentOperation.buildParameter: "+par+", kind="+par.kind);
-		switch(par.kind) {
-			case Parameter.Kind.Simple:    buildSimpleParameter(par,var,assignRef,codeBuilder); break;
-			case Parameter.Kind.Array:     buildArrayParameter(par,var,assignRef,codeBuilder); break;
-			case Parameter.Kind.Label:     Util.IERR(); break;
-			case Parameter.Kind.Procedure: Util.IERR(); break;
-			default: Util.IERR();
-		}
-	}
 	
 	private void buildSimpleParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
@@ -388,31 +362,9 @@ public final class AssignmentOperation extends Expression {
 			if(this.backLink == null) {
 				codeBuilder.pop();
 			} else {
-				switch(par.type.keyWord) {
-					case Type.T_INTEGER ->
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Integer)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-					case Type.T_REAL ->
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Float)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-					case Type.T_LONG_REAL ->
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Double)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
-					case Type.T_BOOLEAN ->
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Boolean)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-					case Type.T_CHARACTER ->
-						codeBuilder
-							.checkcast(ConstantDescs.CD_Character)
-							.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-					default -> Util.IERR();
-				}
+				par.type.checkCast(codeBuilder);
+				par.type.valueToPrimitiveType(codeBuilder);
 			}
-			return; // DONE !
 		} else {
 			// Simple Parameter by value/default
 			codeBuilder.aload(0);
@@ -483,7 +435,6 @@ public final class AssignmentOperation extends Expression {
 	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readAssignmentOperation: ");
 		AssignmentOperation expr = new AssignmentOperation();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

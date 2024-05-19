@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
@@ -160,7 +158,6 @@ public final class BooleanExpression extends Expression {
 				rhs.doChecking();
 				Type type1 = lhs.type;
 				Type type2 = rhs.type;
-//				if (type1.equals(type2) & type1.equals(Type.Boolean))
 				if( (type1 != null && type1.keyWord == Type.T_BOOLEAN)
 				&&  (type2 != null && type2.keyWord == Type.T_BOOLEAN) )
 					this.type = Type.Boolean;
@@ -291,7 +288,6 @@ public final class BooleanExpression extends Expression {
 	public static BooleanExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBooleanExpression: ");
 		BooleanExpression expr = new BooleanExpression();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

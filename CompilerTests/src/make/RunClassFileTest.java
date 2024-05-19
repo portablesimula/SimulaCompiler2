@@ -214,7 +214,7 @@ public final class RunClassFileTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		 String name="/simple/adHoc000.sim";
+		// String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
@@ -228,7 +228,7 @@ public final class RunClassFileTest {
 //			String name="/simple/adHoc07.sim";
 //			String name="/simple/adHoc08.sim";
 		// String name="/simple/adHoc09.sim";
-		// String name="/simple/adHoc10.sim";
+		 String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
 //		 String name="/simple/adHoc12.sim";
 		// String name="/simple/adHoc13.sim";

@@ -8,10 +8,7 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
-import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -20,7 +17,6 @@ import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
-import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -69,7 +65,6 @@ public final class TypeConversion extends Expression {
 	}
 	public static void buildMayBeConvert(final Type fromType, final Type toType, CodeBuilder codeBuilder) {
 		// NOTE: 'expr' is top of operand stack
-//		System.out.println("TypeConversion.buildMayBeConvert: fromType="+fromType+", toType="+toType);
 		switch(fromType.keyWord) {
 			case Type.T_INTEGER:
 				switch(toType.keyWord) {
@@ -108,7 +103,6 @@ public final class TypeConversion extends Expression {
 	 */
 	public static Expression testAndCreate(final Type toType,final Expression expression) {
 		Type fromType=expression.type;
-//		System.out.println("TypeConversion.testAndCreate: "+fromType+"  ==>  "+toType);
 		String qual=(fromType==null)?null:fromType.getRefIdent();
 		if(!Option.SPORT && qual != null) {
 			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.ctBlockLevel : 0;
@@ -152,7 +146,6 @@ public final class TypeConversion extends Expression {
 		if(!Option.CREATE_JAVA_SOURCE) {
 			if(toType instanceof OverLoad otp) {
 				if(!otp.contains(expression.type)) {
-//					System.out.println("TypeConversion.testCastNeccessary: "+expression.type+"  ==>  "+toType+"  RETURNS TRUE");
 					return(true); // Ad'Hoc
 				}
 			}
@@ -176,9 +169,7 @@ public final class TypeConversion extends Expression {
 	@Override
 	// Is redefined in Variable, RemoteVariable and TypeConversion
 	public VariableExpression getWriteableVariable() {
-//		System.out.println("TypeConversion.getWriteableVariable: expression="+expression.getClass().getSimpleName() + "  "+expression);
 	    VariableExpression writeableVariable=expression.getWriteableVariable();
-//		System.out.println("TypeConversion.getWriteableVariable: writeableVariable="+writeableVariable);
 		return(writeableVariable);
 	}
 
@@ -236,10 +227,7 @@ public final class TypeConversion extends Expression {
 					case Type.T_LONG_REAL: codeBuilder.d2f(); break;
 					default:
 						if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
-//							System.out.println("TypeConvesion.buildEvaluation: backLink="+this.backLink);
-//							System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
 							if(!otp.contains(Type.Real)) Util.IERR();
-//						} else if (!fromType .equals(Type.Real)) Util.IERR();
 						} else if (fromType.keyWord != Type.T_REAL) Util.IERR();
 				} break;
 			
@@ -249,10 +237,7 @@ public final class TypeConversion extends Expression {
 					case Type.T_REAL: codeBuilder.f2d(); break;
 					default:
 						if(!Option.CREATE_JAVA_SOURCE && fromType instanceof OverLoad otp) {
-//							System.out.println("TypeConvesion.buildEvaluation: backLink="+backLink);
-//							System.out.println("TypeConvesion.buildEvaluation: "+fromType+"  ==>  "+type);
 							if(!otp.contains(Type.LongReal)) Util.IERR();
-//						} else if (!fromType .equals(Type.LongReal)) Util.IERR();
 						} else if (fromType.keyWord != Type.T_LONG_REAL) Util.IERR();
 				}
 			} break;
@@ -290,7 +275,6 @@ public final class TypeConversion extends Expression {
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readTypeConversion: ");
 		TypeConversion expr = new TypeConversion();
-//		expr.SEQU = inpt.readShort();
 		expr.SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();

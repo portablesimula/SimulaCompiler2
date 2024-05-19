@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
@@ -27,7 +25,6 @@ import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
-import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -212,7 +209,6 @@ public final class RemoteVariable extends Expression {
 		if (remoteAttribute.foundBehindInvisible) {
 			String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
 			result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();
-//		} else result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
 		} else result = obj.get() + '.' + var.get();
 		return (result);
 	}
@@ -251,7 +247,6 @@ public final class RemoteVariable extends Expression {
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
-//		System.out.println("RemoteVariable.buildEvaluation: var="+var+", backLink="+var.backLink);
 		if(obj.type.keyWord == Type.T_TEXT) {
 			BuildProcedureCall.callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
 		} else if (callRemoteProcedure != null) {
@@ -270,10 +265,10 @@ public final class RemoteVariable extends Expression {
 			}
 			if (remoteAttribute.foundBehindInvisible) {
 //				String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
-//				result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();
+//				result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();  // TODO: CHECK DETTE
 				Util.IERR();
 			} else {
-//				result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
+				// result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
 				obj.buildEvaluation(null,codeBuilder);
 				var.buildEvaluation(null,codeBuilder);
 			}
@@ -301,28 +296,19 @@ public final class RemoteVariable extends Expression {
 		oupt.writeShort(lineNumber);
 		oupt.writeType(type);
 		oupt.writeObj(backLink);
-//		oupt.writeObj(remoteAttribute);
-//		oupt.writeObj(callRemoteProcedure);
-//		oupt.writeObj(callRemoteVirtual);
 		oupt.writeObj(obj);
 		oupt.writeObj(var);
-//		oupt.writeBoolean(accessRemoteArray);
 	}
 	
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
-//		rem.SEQU = inpt.readShort();
 		rem.SEQU = inpt.readSEQU(rem);
 		rem.lineNumber = inpt.readShort();
 		rem.type = inpt.readType();
 		rem.backLink = (SyntaxClass) inpt.readObj();
-//		rem.remoteAttribute = (Meaning) inpt.readObj();
-//		rem.callRemoteProcedure = (ProcedureDeclaration) inpt.readObj();
-//		rem.callRemoteVirtual = (VirtualSpecification) inpt.readObj();
 		rem.obj = (Expression) inpt.readObj();
 		rem.var = (VariableExpression) inpt.readObj();
-//		rem.accessRemoteArray = inpt.readBoolean();
 		Util.TRACE_INPUT("readRemoteVariable: " + rem);
 		return(rem);
 	}
