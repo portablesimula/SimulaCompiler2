@@ -214,7 +214,7 @@ public final class RunClassFileTest {
 
 		// String name="/simple/p41.sim";
 		// String name="/simple/adErr09.sim";
-		// String name="/simple/adHoc000.sim";
+		 String name="/simple/adHoc000.sim";
 		// String name="/simple/adHoc00.sim";
 		// String name="/simple/adHoc01.sim";
 		// String name="/simple/adHoc02.sim";
@@ -228,9 +228,9 @@ public final class RunClassFileTest {
 //			String name="/simple/adHoc07.sim";
 //			String name="/simple/adHoc08.sim";
 		// String name="/simple/adHoc09.sim";
-		 String name="/simple/adHoc10.sim";
+		// String name="/simple/adHoc10.sim";
 		// String name="/simple/adHoc11.sim";
-//		 String name="/simple/adHoc12.sim";
+		// String name="/simple/adHoc12.sim";
 		// String name="/simple/adHoc13.sim";
 		// String name="/simple/adHoc14.sim";
 		
@@ -292,7 +292,7 @@ public final class RunClassFileTest {
 //			Option.CREATE_JAVA_SOURCE = true;
 			Option.TESTING_STACK_SIZE = true;
 			Option.LIST_GENERATED_CLASS_FILES=true;
-//		    Option.verbose = true;
+		    Option.verbose = true;
 			Option.WARNINGS=true;
 //			Option.EXTENSIONS=false;
 			Option.SPORT=true;
@@ -309,7 +309,7 @@ public final class RunClassFileTest {
 //
 //			// Parser Trace Options
 //			Option.TRACE_PARSE=true;
-			Option.PRINT_SYNTAX_TREE=true;
+//			Option.PRINT_SYNTAX_TREE=true;
 			Option.TRACE_ATTRIBUTE_OUTPUT=true;
 			Option.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -345,7 +345,7 @@ public final class RunClassFileTest {
 			RTOption.VERBOSE = true;
 //			RTOption.USE_CONSOLE=true;
 //			RTOption.BLOCK_TRACING = true;
-//			RTOption.GOTO_TRACING = true;
+			RTOption.GOTO_TRACING = true;
 //			RTOption.QPS_TRACING = false;
 //			RTOption.SML_TRACING = false;
 

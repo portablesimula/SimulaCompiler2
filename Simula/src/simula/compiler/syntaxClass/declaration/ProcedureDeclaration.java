@@ -489,13 +489,25 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			String tp = par.toJavaType();
 			String typeValue;
 			if (par.mode == Parameter.Mode.name) typeValue = ("(" + tp + ")param");
-			else if (par.kind == Parameter.Kind.Array) {
-				typeValue = ("arrayValue(param)");
-				if (par.mode == Parameter.Mode.value) typeValue = typeValue + ".COPY()";
-			} else if (par.kind == Parameter.Kind.Procedure) typeValue = ("procValue(param)");
-			else if (par.kind != Parameter.Kind.Simple)	typeValue = ("(" + tp + ")param");
-			else if (par.type.isArithmeticType()) typeValue = (tp + "Value(param)");
-			else typeValue = ("(" + tp + ")objectValue(param)");
+			else {
+				switch(par.kind) {
+					case Parameter.Kind.Simple -> {
+						if(par.type.keyWord == Type.T_TEXT && par.mode == Parameter.Mode.value) {
+							// Edit TEXT.COPY
+							typeValue = ("RTS_RTObject.copy((RTS_TXT)objectValue(param))");
+						}
+						else
+							if (par.type.isArithmeticType()) typeValue = (tp + "Value(param)");
+						else typeValue = ("(" + tp + ")objectValue(param)");
+					}
+					case Parameter.Kind.Array -> {
+						typeValue = ("arrayValue(param)");
+						if (par.mode == Parameter.Mode.value) typeValue = typeValue + ".COPY()";
+					}
+					case Parameter.Kind.Procedure -> typeValue = ("procValue(param)");
+					default -> typeValue = ("(" + tp + ")param");
+				}
+			}
 			GeneratedJavaClass.code("case " + ( parameterList.size() - (nPar++)) + ": " + par.externalIdent + "=" + typeValue + "; break;");
 		}
 		GeneratedJavaClass.code("default: throw new RTS_SimulaRuntimeError(\"Too many parameters\");");
@@ -869,60 +881,74 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					.checkcast(CD.RTS_NAME)
 					.putfield(par.getFieldRefEntry(pool))
 					.goto_(breakLabel);
-			}
-			else if (par.kind == Parameter.Kind.Array) {
-				codeBuilder
-					.aload(0)
-					.aload(1) // param
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-							"arrayValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_ARRAY;")));
-				if(par.mode == Parameter.Mode.value) {
-					codeBuilder.invokevirtual(CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
-				}
-				codeBuilder
-					.putfield(par.getFieldRefEntry(pool))
-					.goto_(breakLabel);
-			} else if (par.kind == Parameter.Kind.Procedure) {
-				codeBuilder
-					.aload(0)
-					.aload(1) // param
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-							"procValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PRCQNT;")))
-					.putfield(par.getFieldRefEntry(pool))
-					.goto_(breakLabel);
-			}
-			else if (par.kind != Parameter.Kind.Simple) {
-//				typeValue = ("(" + tp + ")param");
-				Util.IERR("NOT IMPL");
-			}
-			else if (par.type.isArithmeticType()) {
-				codeBuilder
-					.aload(0)
-					.aload(1); // param
-				par.type.objectToPrimitiveType(codeBuilder);
-				codeBuilder
-					.putfield(par.getFieldRefEntry(pool))
-					.goto_(breakLabel);
-			}
-			else {
-//				typeValue = ("(" + tp + ")objectValue(param)");
-				codeBuilder
-					.aload(0)
-					.aload(1); // param
-					if(!par.type.objectToPrimitiveType(codeBuilder)) {
+			} else {
+				switch(par.kind) {
+					case Parameter.Kind.Array -> {
 						codeBuilder
-							.invokevirtual(pool.methodRefEntry(CD.RTS_RTObject,
-									"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
-							.checkcast(par.type_toClassDesc());
+							.aload(0)
+							.aload(1) // param
+							.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+									"arrayValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_ARRAY;")));
+						if(par.mode == Parameter.Mode.value) {
+							codeBuilder.invokevirtual(CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
+						}
+						codeBuilder
+							.putfield(par.getFieldRefEntry(pool))
+							.goto_(breakLabel);
 					}
-				codeBuilder
-					.putfield(par.getFieldRefEntry(pool))
-					.goto_(breakLabel);
+					
+					case Parameter.Kind.Procedure -> {
+						codeBuilder
+							.aload(0)
+							.aload(1) // param
+							.invokevirtual(pool.methodRefEntry(currentClassDesc(),
+									"procValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PRCQNT;")))
+							.putfield(par.getFieldRefEntry(pool))
+							.goto_(breakLabel);
+					}
+					
+					case Parameter.Kind.Simple -> {
+	
+						if (par.type.isArithmeticType()) {
+							codeBuilder
+								.aload(0)
+								.aload(1); // param
+							par.type.objectToPrimitiveType(codeBuilder);
+							codeBuilder
+								.putfield(par.getFieldRefEntry(pool))
+								.goto_(breakLabel);
+						}
+						else {
+							// typeValue = ("(" + tp + ")objectValue(param)");
+							codeBuilder
+								.aload(0)
+								.aload(1); // param
+							if(!par.type.objectToPrimitiveType(codeBuilder)) {
+								codeBuilder
+									.invokevirtual(pool.methodRefEntry(CD.RTS_RTObject,
+										"objectValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
+									.checkcast(par.type_toClassDesc());
+							}
+							
+							if(par.type.keyWord == Type.T_TEXT && par.mode == Parameter.Mode.value) {
+								// Build TEXT.COPY
+								codeBuilder
+									.invokestatic(CD.RTS_RTObject,
+											"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+							}
+							
+							codeBuilder
+								.putfield(par.getFieldRefEntry(pool))
+								.goto_(breakLabel);
+						}
+					}
+					default -> Util.IERR();
+				}
 			}
 		}
 		codeBuilder.labelBinding(breakLabel);
 	}
-	
+		
 	@Override
 	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;

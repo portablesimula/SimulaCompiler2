@@ -1433,7 +1433,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	/**
 	 * Coding utility: buildStatementsAfterInner
 	 */
-	private void buildStatementsAfterInner(CodeBuilder codeBuilder) { // TODO: NEW_INNER_IMPL
+	private void buildStatementsAfterInner(CodeBuilder codeBuilder) {
 		for (Statement stm : statements){
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
 			stm.buildByteCode(codeBuilder);

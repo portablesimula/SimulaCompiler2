@@ -93,7 +93,11 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	
 	private ProcedureSpecification getLegalMatch(String mtd,Vector<Expression> params) {
 		ProcedureSpecification spec = getProcedureSpecification(mtd);
-		for(int i=0;i<params.size();i++) {
+		int n = params.size();
+		int m = spec.parameterList.size();
+		if(spec.parameterList.size() != params.size())
+			n = Math.min(n, m);
+		for(int i=0;i<n;i++) {
 			Expression expr = params.get(i);
 			expr.doChecking();
 			Parameter par = spec.parameterList.get(i);

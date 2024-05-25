@@ -18,10 +18,9 @@ import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
-import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 
 public class LabelList {
-	private static boolean TRACING = false; //true;//false;
+	private static boolean TRACING = false;
 	private static int SEQU = 0;
 	private int sequ;
 	
@@ -66,38 +65,21 @@ public class LabelList {
 	public void add(LabelDeclaration lab) {
 		if(TRACING) System.out.println(ident()+".add: "+lab.identifier+'['+lab.externalIdent+']');
 		if(READY_FOR_CODING) Util.IERR("Can't add a new Label when LabelLisit is marked READY_FOR_CODING");
-		
-//		if(lab.declaredIn instanceof ClassDeclaration cls) {
-//			// Check for redefined labels
-//			for(LabelDeclaration prev:labels) {
-////				System.out.println("LabelList.add: CHECK: "+lab.identifier+"  <==>  "+prev.identifier);
-//				if(prev.identifier.equalsIgnoreCase(lab.identifier)) {
-//					int prefixLevel = cls.prefixLevel();
-//					System.out.println("LabelList.add: GOT IT: "+prev+" IS REDEFINED ON PREFIX LEVEL "+prefixLevel);
-//					prev.addRedef(prefixLevel);
-//				}
-//			}
-//		}
-		
 		labels.add(lab);
 		if(TRACING) System.out.println(ident()+".add: DONE: LabelList = "+this);
 	}
 	
 	// Used by ClassDeclaration and PrefixedBlockDeclaration
 	public static void accumLabelList(ClassDeclaration cls) {
-//		System.out.println("\nLabelList.accumLabelList: prefixClass="+cls.prefixClass);
 		if(cls.prefixClass != null) {
-//			int prefixLevel = cls.prefixLevel();
 			LabelList newList = new LabelList(cls);
 			if(cls.prefixClass.labelList != null) 
-				for(LabelDeclaration lab:cls.prefixClass.labelList.labels) {
-//					System.out.println("ClassDeclaration.accumLabelList: Maybe ADD: "+lab);
+				for(LabelDeclaration lab:cls.prefixClass.labelList.labels)
 					newList.add(lab);
-				}
-//			System.out.println("ClassDeclaration.accumLabelList: this.labelList="+cls.labelList);
-			if(cls.labelList != null) {
+			
+			if(cls.labelList != null) 
 				for(LabelDeclaration lab:cls.labelList.labels) newList.add(lab);
-			}
+			
 			cls.labelList = newList;				
 		}
 	}
@@ -120,18 +102,14 @@ public class LabelList {
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
 		if(tableSize() > 0) {
 			tableSwitchCases = new Vector<SwitchCase>();
-//			int n = ((BlockDeclaration)declaredIn).getNlabels();
-//			if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: nLabels="+n);
 			if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: nLabels="+tableSize());
 			for (int i = 1; i <= tableSize(); i++) {
-//			for (int i = 1; i <= n; i++) {
 				Label lab = codeBuilder.newLabel();
 				tableSwitchCases.add(SwitchCase.of(i, lab));
 				if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  "+labels.get(i-1).identifier+" = "+lab);
 			}
 		}
 		READY_FOR_CODING = true;
-//		Util.IERR();
 	}
 	
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
@@ -163,8 +141,6 @@ public class LabelList {
 	
 	public void labelBinding(LabelDeclaration label,CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
-//		SwitchCase switchCase=getSwitchCase(index-1,codeBuilder);
-//		SwitchCase switchCase=tableSwitchCases.get(label.index-1);
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
 		LabelList currentList = labelContext.labelList;
 		if(TRACING) System.out.println(ident()+".labelBinding: labelContext="+labelContext);
@@ -202,7 +178,6 @@ public class LabelList {
 		} else {
 			oupt.writeBoolean(true);
 			Util.TRACE_OUTPUT(""+labelList);
-//			oupt.writeString(labelList.ident);
 			oupt.writeObj(labelList.declaredIn);
 			oupt.writeShort(labelList.tableSize());			
 			for(LabelDeclaration lab:labelList.labels) oupt.writeObj(lab);
@@ -214,7 +189,6 @@ public class LabelList {
 		boolean present = inpt.readBoolean();
 		LabelList labelList = null;
 		if(present) {
-//			String ident = inpt.readString();
 			DeclarationScope declaredIn = (DeclarationScope) inpt.readObj();
 			labelList = new LabelList(declaredIn);
 			int n = inpt.readShort();

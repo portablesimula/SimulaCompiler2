@@ -1,31 +1,45 @@
 
 begin
-	ref(A) x; integer K;
-	integer array aaa(0:33);
+	text TA;
 	
-	class A(IA,P2); integer array IA; procedure P2; begin
-		procedure Q; begin
-			outtext("  INSIDE PROCEDURE Q"); outimage;
-		end;
+	procedure P1(fP,TXT); procedure fP; text TXT; begin
+		R1(fP,TXT);
 	end;
 	
-	procedure P(arr,FP); integer array arr; procedure FP; begin
-		outtext("Inside P: " & edit(arr(4)));
-		begin integer i; begin integer j;
-			arr(6) := 3333;
-			outtext(", Inside P: " & edit(arr(7)));
-			FP;
-		end; end;
-	end; 
+	procedure R1(fP,TXT); procedure fP; text TXT; begin
+		fP(TXT);
+	end;
 	
-	aaa(4) := 888;
-	aaa(7) := 888;
+	procedure P2(fP,TXT); name fP, TXT; procedure fP; text TXT; begin
+		R2(fP,TXT);
+	end;
 	
-	inspect new A(aaa) do
-	begin
-		begin integer i; begin integer j;
-			P(IA,Q);
-		end; end;
-	end;        
-	outtext(", END: " & edit(aaa(6)));
+	procedure R2(fP,TXT); procedure fP; text TXT; begin
+		fP(TXT);
+	end;
+	
+	procedure P3(fP,TXT); name fP; value TXT; procedure fP; text TXT; begin
+		R3(fP,TXT);
+	end;
+	
+	procedure R3(fP,TXT); value TXT; procedure fP; text TXT; begin
+		fP(TXT);
+	end;
+	
+	procedure Q(TXT); text TXT; begin
+		outtext(TXT);
+		TXT :- TXT & "-CORR  ";
+	end;
+	
+	TA :- copy("AbraCaDab ");
+	
+	P1(Q,TA);
+		outtext(TA);
+	
+	P2(Q,TA);
+		outtext(TA);
+	
+	P3(Q,TA);
+		outtext(TA);
+
 end;

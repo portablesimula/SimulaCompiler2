@@ -201,9 +201,8 @@ public class SimpleVariableDeclaration extends Declaration {
 	}
 
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-		ClassDesc CD_cls=declaredIn.getClassDesc();
-		ClassDesc CD_type=type.toClassDesc();
-		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
+		ClassDesc owner=declaredIn.getClassDesc();
+		return(pool.fieldRefEntry(owner, getFieldIdentifier(), type.toClassDesc()));
 	}
 	
 	@Override

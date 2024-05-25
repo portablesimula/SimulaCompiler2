@@ -7,10 +7,7 @@
  */
 package simula.compiler.syntaxClass.statement;
 
-import java.io.Externalizable;
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
@@ -150,7 +147,6 @@ public final class StandaloneExpression extends Statement {
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readStandaloneExpression: ");
 		StandaloneExpression stm = new StandaloneExpression();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.expression = (Expression) inpt.readObj();

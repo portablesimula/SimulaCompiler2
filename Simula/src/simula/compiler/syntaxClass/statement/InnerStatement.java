@@ -108,7 +108,6 @@ public final class InnerStatement extends Statement {
 	public static InnerStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readInnerStatement: ");
 		InnerStatement stm = new InnerStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		Util.TRACE_INPUT("InnerStatement: " + stm);

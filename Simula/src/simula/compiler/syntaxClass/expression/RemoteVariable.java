@@ -24,6 +24,7 @@ import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -248,11 +249,11 @@ public final class RemoteVariable extends Expression {
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		if(obj.type.keyWord == Type.T_TEXT) {
-			BuildProcedureCall.callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
+			callStandardTextProcedure(obj, (StandardProcedure)callRemoteProcedure, var, backLink, codeBuilder);
 		} else if (callRemoteProcedure != null) {
-			BuildProcedureCall.remote(obj, callRemoteProcedure, var, backLink,codeBuilder);
+			BuildCP.remote(obj, callRemoteProcedure, var, backLink,codeBuilder);
 		} else if (callRemoteVirtual != null) {
-			BuildProcedureCall.remoteVirtual(obj, var, callRemoteVirtual, backLink, codeBuilder);
+			BuildCPV.remoteVirtual(obj, var, callRemoteVirtual, backLink, codeBuilder);
 		} else if (accessRemoteArray) {
 			doAccessRemoteArray(obj, var,codeBuilder);
 		} else {
@@ -263,15 +264,29 @@ public final class RemoteVariable extends Expression {
 					return;
 				}
 			}
-			if (remoteAttribute.foundBehindInvisible) {
-//				String remoteCast = remoteAttribute.foundIn.getJavaIdentifier();
-//				result = "((" + remoteCast + ")(" + obj.get() + "))." + var.get();  // TODO: CHECK DETTE
-				Util.IERR();
-			} else {
-				// result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
-				obj.buildEvaluation(null,codeBuilder);
-				var.buildEvaluation(null,codeBuilder);
-			}
+			// result = obj.get() + KeyWord.DOT.toJavaCode() + var.get();
+			obj.buildEvaluation(null,codeBuilder);
+			var.buildEvaluation(null,codeBuilder);
+		}
+	}
+
+
+	// ********************************************************************
+	// *** BuildProcedureCall.callStandardTextProcedure
+	// ********************************************************************
+	/**
+	 * callStandardTextProcedure
+	 *
+	 */
+	private static void callStandardTextProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable, Object backLink,CodeBuilder codeBuilder) {
+		beforeDot.buildEvaluation(null,codeBuilder);
+		if(variable.checkedParams != null) 
+			for(Expression expr:variable.checkedParams)
+				expr.buildEvaluation(null,codeBuilder);
+
+		codeBuilder.invokestatic(CD.RTS_TXT, pro.identifier, pro.getMethodTypeDesc(beforeDot,variable.checkedParams));
+		if(pro.type != null && backLink == null) {
+			codeBuilder.pop();
 		}
 	}
 

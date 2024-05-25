@@ -1,8 +1,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 
@@ -138,7 +136,6 @@ public final class WhileStatement extends Statement {
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
 		WhileStatement stm = new WhileStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.condition  = (Expression) inpt.readObj();

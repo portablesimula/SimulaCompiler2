@@ -1,25 +1,34 @@
-begin
-%    integer n,nnnn,ssss,iiii,kkk;
 
-    integer controlVariable,n;
-%    real controlVariable;
-%    long real controlVariable;
+Simulation begin
+        
+   integer limit,acc; 
+   integer startTime,timeUsed;
     
-%   integer procedure expr1; expr1 := 4;
-%   integer procedure expr2; expr2 := -1;
-%   integer procedure expr3; expr3 := 0;
-    integer xxxx;
-
-%	nnnn := 4;
-%	ssss := -1;
-%	xxxx := 0;
-  
-%   n := 4;
-   for controlVariable:= 4 step -1 until 0 do begin
-	   for n:= 0 step 1 until 10 do begin
-%   for controlVariable := expr1 step expr2 until expr3 do begin
-   		xxxx := 9999;
-   		outtext("STEP: " & edit(controlVariable) & ", n=" & edit(n)); outimage; 
-   	end;
-   	
-end;
+   Process class Prime; 
+   begin integer which; 
+         acc   := acc + 1; 
+         which := time; 
+         outint( which, 7 ); 
+         while true do begin 
+           if nextev.evtime > time + 1 then  
+              activate new Prime delay 1; 
+           hold(which); 
+         end; 
+   end; 
+ 
+%   outtext( "Show all primes less than " );
+%   breakoutimage; limit:=inint; 
+	limit := 5000;
+ 
+   startTime:=cputime;
+   
+   activate new Prime at 2; 
+   hold(limit); 
+ 
+   outimage; outimage; 
+   outint( acc, 7 ); outtext( " primes found" ); 
+   
+   outimage; outimage; 
+   timeUsed := cputime - startTime;
+   outtext("Elapsed Time: Approximately " & edit(timeUsed) & " sec.");
+end

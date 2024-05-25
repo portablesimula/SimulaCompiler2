@@ -354,7 +354,6 @@ public final class ConnectionStatement extends Statement {
 			ASSERT_SEMANTICS_CHECKED();
 			if (!impossibleWhenPart) {
 				inspectedVariable.buildEvaluation(null, codeBuilder);
-//				classDeclaration.getClassDesc(); // TESTING
 				Label elseLabel = codeBuilder.newLabel();
 				codeBuilder
 					.instanceof_(classDeclaration.getClassDesc())

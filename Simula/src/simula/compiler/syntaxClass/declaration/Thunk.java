@@ -8,11 +8,11 @@ import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.expression.BuildProcedureCall;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
 import simula.compiler.syntaxClass.expression.TypeConversion;
@@ -100,7 +100,8 @@ public final class Thunk extends DeclarationScope {
 			    			case ObjectKind.Parameter ->  {} // OK
 				    		case ObjectKind.SimpleVariableDeclaration -> {} // OK
 				    		case ObjectKind.Procedure,
-				    		     ObjectKind.MemberMethod,
+			    		     	 ObjectKind.MemberMethod,
+				    		     ObjectKind.LabelDeclaration,
 				    		     ObjectKind.ContextFreeMethod -> writeableVariable = null;
 				    		default -> Util.IERR(ObjectKind.edit(declaredAs.declarationKind));
 				    	}
@@ -195,7 +196,7 @@ public final class Thunk extends DeclarationScope {
 				switch(kind) { // Parameter.Kind
 					case Parameter.Kind.Array ->		expr.buildEvaluation(null,codeBuilder);
 					case Parameter.Kind.Label ->		Util.IERR();
-					case Parameter.Kind.Procedure ->	BuildProcedureCall.buildProcedureQuant(expr,codeBuilder);
+					case Parameter.Kind.Procedure ->	buildProcedureQuant(expr,codeBuilder);
 					case Parameter.Kind.Simple ->     { expr.buildEvaluation(null,codeBuilder);
 														expr.type.buildObjectValueOf(codeBuilder); }
 					default -> {
@@ -370,6 +371,88 @@ public final class Thunk extends DeclarationScope {
 			.areturn()
 			.labelBinding(endScope);
 	}
+	
+	// ********************************************************************
+	// *** edProcedureQuant
+	// ********************************************************************
+	/**
+	 * Coding Utility: Edit new procedure quant.
+	 * @param apar the actual parameter
+	 * @param codeBuilder the CodeBuilder
+	 */
+	private static void buildProcedureQuant(final Expression apar,CodeBuilder codeBuilder) {
+//        0: new           #7                  // class simula/runtime/RTS_PRCQNT
+//        3: dup
+//        4: getstatic     #9                  // Field simula/runtime/RTS_RTObject._CUR:Lsimula/runtime/RTS_RTObject;
+//        7: checkcast     #15                 // class simulaTestPrograms/adHoc000
+//       10: ldc           #17                 // class simulaTestPrograms/adHoc000_SWITCH1
+//       12: invokespecial #19                 // Method simula/runtime/RTS_PRCQNT."<init>":(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+	    if (apar instanceof VariableExpression var) {
+    		Meaning meaning = var.meaning;
+			Declaration decl=meaning.declaredAs;
+	    	String procIdent = decl.getJavaIdentifier();
+			if (decl instanceof Parameter par) {
+				DeclarationScope curScope=Global.getCurrentScope();
+				// The current scope. In case of Thunk one level up to Thunk.ENV
+				if(curScope instanceof Thunk) curScope = curScope.declaredIn;
+				ClassDesc CD_ENV = ClassDesc.of(Global.packetName,curScope.externalIdent);
+				codeBuilder
+					.aload(0)
+					.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
+					.checkcast(CD_ENV)
+					.getfield(par.getFieldRefEntry(pool));
+				if (par.mode == Parameter.Mode.name) {
+					codeBuilder
+						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
+						.checkcast(CD.RTS_PRCQNT);
+				}
+			} else if (decl instanceof ProcedureDeclaration procedure) {
+				if(procedure.myVirtual!=null) {
+    	    		boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
+    	    		if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
+
+    	    		ClassDesc owner = meaning.declaredIn.getClassDesc();
+    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;
+    	    		vir.buildCallMethod(owner, codeBuilder);
+
+				} else {
+					codeBuilder
+						.new_(CD.RTS_PRCQNT)
+						.dup();
+					var.buildIdentifierAccess(false, codeBuilder);
+					codeBuilder
+						.ldc(ClassDesc.of(Global.packetName+"."+procIdent))
+						.invokespecial(pool.methodRefEntry(CD.RTS_PRCQNT,
+								"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V")));
+				}
+			} else Util.IERR();
+			
+	    } else if (apar instanceof RemoteVariable rem) {
+			Meaning meaning = rem.var.meaning;
+			if (meaning.declaredAs instanceof ProcedureDeclaration procedure) {
+    	    	if(procedure.myVirtual!=null) {
+					rem.obj.buildEvaluation(null, codeBuilder);
+					
+			    	ClassDesc owner = meaning.declaredIn.getClassDesc();
+    	    		VirtualSpecification vir = procedure.myVirtual.virtualSpec;
+					vir.buildCallMethod(owner, codeBuilder);
+    	    	} else {
+    				codeBuilder
+    					.new_(CD.RTS_PRCQNT)
+    					.dup();
+    				// Check for <ObjectExpression> DOT <Variable>
+    				rem.obj.buildEvaluation(null,codeBuilder);
+    				codeBuilder.ldc(procedure.getClassDesc());
+    				codeBuilder.invokespecial(CD.RTS_PRCQNT
+    						, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
+    	    	}
+			} else Util.IERR();
+			
+			
+		} else Util.error("Illegal Procedure Expression as Actual Parameter: " + apar);
+	}
+
 
 	@Override
 	public String toString() {

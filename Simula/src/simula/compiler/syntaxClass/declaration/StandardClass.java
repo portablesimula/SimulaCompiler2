@@ -732,8 +732,7 @@ public final class StandardClass extends ClassDeclaration {
 		BASICIO.addStandardClass(Inbytefile);  // Declared in BASICIO
 		Inbytefile.addStandardAttribute(Type.Boolean,"ENDFILE_");  
 		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"endfile");  
-//		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"open",parameter("fileimage",Type.Text));  
-		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"open");  // TESTING
+		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"open");
 		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"close");  
 		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Integer,"inbyte");  
 		Inbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Text,"intext",parameter("t",Type.Text));
@@ -821,7 +820,6 @@ public final class StandardClass extends ClassDeclaration {
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"unlock");  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Text,"intext",parameter("t",Type.Text));  
 		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,null,"outtext",parameter("t",Type.Text));  
-		Directbytefile.addStandardProcedure(ObjectKind.MemberMethod,Type.Boolean,"checkpoint");  
 	}  
 
 	// ******************************************************************

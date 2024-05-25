@@ -1,18 +1,29 @@
 
 begin
 
-	
-	class A(i,r,lr,c); integer i; real r; long real lr; character c; begin
-	end;   
+      ref(A) x;
 
-	A class B(x,y); long real x,y; begin
-		outfix(lr,4,14);
-		outchar(c);
-	end;
-	
-	procedure P(lab); name lab; label lab; begin 
-		goto lab;
-	end;
+%      class A; virtual: procedure vP;
+      class A; virtual: procedure vP is procedure vP(t); value t; text t;;
+      begin
  
- 	new B(11,22.3,44.78,'C',45.21,99.45);
-end;
+            procedure vP(t); value t; text t; begin
+            	outtext(t);
+            end;
+
+			begin integer kk;
+	        	P1(vP);
+	        end;
+      end;
+      
+      procedure P1(fP); name fP; procedure fP; begin
+     	fP(copy("og til slutt var dette bra !!!!"));
+%       	P2(fP);
+      
+      end;
+       
+      x:-new A;
+      P1(x.vP);
+%      x.vP(copy("og til slutt var dette bra !!!!"));
+
+ end;

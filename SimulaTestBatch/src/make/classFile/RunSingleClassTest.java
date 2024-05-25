@@ -153,7 +153,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst44.sim"); // OK:  Test text procedure.
 //		names.add("simtst45.sim"); // OK:  Test object relations - is and in.
 //		names.add("simtst46.sim"); // OK:  Test the qualification of a function designator.
-		names.add("simtst47.sim"); // OK:  Test of this.
+//		names.add("simtst47.sim"); // OK:  Test of this.
 //		names.add("simtst48.sim"); // OK:  Test of qua.
 //		names.add("simtst49.sim"); // OK:  For statements in connection blocks.
 //		names.add("simtst50.sim"); // OK:  Test binding and qualification in Connection Blocks
@@ -265,6 +265,12 @@ public final class RunSingleClassTest {
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 //		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
 //		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
+//		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
+//		names.add("simtst147.sim"); // OK: Test virtual procedure by name
+//		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
+//		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
+		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

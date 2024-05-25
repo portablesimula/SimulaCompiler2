@@ -784,23 +784,23 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.ContextFreeMethod:
-				// Standard Library Procedure
-				if (destination) Util.IERR();
 				if (Util.equals(identifier, "sourceline"))
 					 Constant.buildIntConst(codeBuilder, this.lineNumber);
-				else BuildProcedureCall.callStandardProcedure(this,codeBuilder);
+				else BuildCP.staticStandardProcedure(this,codeBuilder);
 				break;
 
 			case ObjectKind.MemberMethod:
-				BuildProcedureCall.asNormalMethod(this, codeBuilder);
+				BuildCP.normalStandardProcedure(this,codeBuilder);
 				break;
 
 			case ObjectKind.Procedure:
 				if (destination) Util.IERR();
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (procedure.myVirtual != null)
-					 BuildProcedureCall.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
-				else BuildProcedureCall.normal(this, procedure, codeBuilder);
+					 BuildCPV.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
+				else {
+					BuildCP.normal(this, procedure, codeBuilder);
+				}
 				break;
 
 			case ObjectKind.SimpleVariableDeclaration:
@@ -811,21 +811,13 @@ public final class VariableExpression extends Expression {
 				}
 				if(inspectedVariable != null) {
 					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
-					DeclarationScope encl=cblk.declaredIn;
-					String inspectedVariableIdentifier = inspectedVariable.identifier;
-					ClassDesc CD_blck = encl.getClassDesc();
-					ClassDesc CD_type=inspectedVariable.type.toClassDesc();
-					FieldRefEntry FRE_inspvar=pool.fieldRefEntry(CD_blck,inspectedVariableIdentifier, CD_type );
-					
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-					if(withFollowSL) {
-						String cast = encl.externalIdent;
-						codeBuilder.checkcast(ClassDesc.of(Global.packetName,cast));
-					}
+					if(withFollowSL)
+						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
 					
 					codeBuilder
-						.getfield(FRE_inspvar)
-						.checkcast( ((DeclarationScope)var.declaredIn).getClassDesc())  // ?????
+						.getfield(inspectedVariable.getFieldRefEntry(pool))
+						.checkcast( ((DeclarationScope)var.declaredIn).getClassDesc())
 						.getfield(var.getFieldRefEntry(pool));
 				} else {
 					buildIdentifierAccess(destination,codeBuilder);
@@ -835,7 +827,7 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.VirtualSpecification:
 				VirtualSpecification virtual = (VirtualSpecification) decl;
-				BuildProcedureCall.virtual(this, virtual, remotelyAccessed,codeBuilder);
+				BuildCPV.virtual(this, virtual, remotelyAccessed,codeBuilder);
 				break;
 
 			default:
@@ -843,6 +835,15 @@ public final class VariableExpression extends Expression {
 		}
 	}
 
+
+	// ***************************************************************************************
+	// *** JVM CODING: getFieldRefEntry
+	// ***************************************************************************************
+	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+		ClassDesc owner=meaning.declaredIn.getClassDesc();
+		Declaration declaredAs = meaning.declaredAs;
+		return(pool.fieldRefEntry(owner, declaredAs.getJavaIdentifier(), declaredAs.type.toClassDesc()));
+	}
 	
 	
 	// ******************************************************************
@@ -891,7 +892,7 @@ public final class VariableExpression extends Expression {
 			if (par.mode == Parameter.Mode.value)
 				Util.error("Parameter " + this + " by Value is not allowed - Rewrite Program");
 			else { // Procedure By Reference or Name.
-				BuildProcedureCall.formal(this, par, codeBuilder);
+				BuildCPF.formal(this, par, codeBuilder);
 				if(par.type == null) codeBuilder.pop();
 			}
 			break;

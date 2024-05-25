@@ -315,44 +315,44 @@ public final class Parameter extends Declaration {
 //		        14: checkcast     #8                  // class simulaTestPrograms/adHoc000
 //		        17: ldc           #27                 // class simulaTestPrograms/adHoc000_PPP
 //		        19: invokespecial #29                 // Method simula/runtime/RTS_PRCQNT."<init>":(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V
-
 				Expression beforeDot = null;
 				if(expr instanceof RemoteVariable rem) {
 					beforeDot = rem.obj;
 					expr = rem.var;
 				}
 				VariableExpression var=(VariableExpression)expr;
-				
 				Declaration decl = var.meaning.declaredAs;
+				
 				if(decl instanceof ProcedureDeclaration proc) {
+					// Declared Procedure: new RTS_PRCQNT
 					codeBuilder
 						.new_(CD.RTS_PRCQNT)
 						.dup();
-
 					if(beforeDot == null) {
 						codeBuilder
 							.aload(0)
 							.checkcast(BlockDeclaration.currentClassDesc());
-					} else {
-						beforeDot.buildEvaluation(null, codeBuilder);
-					}
-
+					} else beforeDot.buildEvaluation(null, codeBuilder);
 					codeBuilder
 						.ldc(pool.loadableConstantEntry(proc.getClassDesc()))
 						.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
+					
 				} else if(decl instanceof Parameter par) {
+					// Parameter Procedure: 
 //				        10: aload_0
 //				        11: getfield      #9                  // Field p_FFF:Lsimula/runtime/RTS_NAME;
 //				        14: invokevirtual #63                 // Method simula/runtime/RTS_NAME.get:()Ljava/lang/Object;
 //				        17: checkcast     #67                 // class simula/runtime/RTS_PRCQNT
 					codeBuilder
 						.aload(0)
-						.getfield(par.getFieldRefEntry(pool))
-						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
-						.checkcast(CD.RTS_PRCQNT);
-				} else {
-					Util.IERR();
-				}
+						.getfield(par.getFieldRefEntry(pool));
+					if(par.mode == Parameter.Mode.name) {
+						codeBuilder
+							.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
+							.checkcast(CD.RTS_PRCQNT);
+					}
+					
+				} else Util.IERR();
 			}
 				
 			case Kind.Simple ->  {
@@ -376,12 +376,12 @@ public final class Parameter extends Declaration {
 	
 
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-		ClassDesc CD_cls=declaredIn.getClassDesc();
+		ClassDesc owner=declaredIn.getClassDesc();
 		ClassDesc CD_type=null; //type.toClassDesc(kind,mode);
 		if(kind==Kind.Procedure)
 			 CD_type=Type.Procedure.toClassDesc(kind,mode);
 		else CD_type=type.toClassDesc(kind,mode);
-		return(pool.fieldRefEntry(CD_cls, getFieldIdentifier(), CD_type));
+		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD_type));
 	}
 	
 	@Override

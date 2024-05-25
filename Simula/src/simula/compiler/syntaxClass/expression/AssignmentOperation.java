@@ -208,7 +208,7 @@ public final class AssignmentOperation extends Expression {
 		String obj = beforeDot.toJavaCode();
 		String remoteIdent = obj + '.' + array.edIdentifierAccess(true);
 		Declaration decl = array.meaning.declaredAs;
-		if(decl instanceof Parameter par) { // TESTING_ARRAY
+		if(decl instanceof Parameter par) {
 			String arrayType = par.type.getArrayType();
 			remoteIdent = "(("+arrayType+")"+remoteIdent+")";
 		}

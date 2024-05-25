@@ -169,7 +169,7 @@ public class SimulaEditor extends JFrame {
         
 		int javaVersion=getJavaVersion();
 		if(javaVersion < 21) {
-			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'
+			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
 					     +"\nWe recommend at least Java 21."
 					     +"\nCheck the settings and consider"
 					     +"\ninstalling a newer version.\n");

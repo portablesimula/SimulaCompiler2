@@ -180,8 +180,6 @@ public final class ProgramModule extends Statement {
 
 	@Override
 	public void printTree(int indent) {
-//		Thread.dumpStack();
-//		System.out.println("=========== Resulting Syntax Tree after Checking ================");
 		System.out.println("BASICIO");
 		System.out.println("    ... Standard Classes and Procedures");
 		for(Declaration decl:StandardClass.BASICIO.declarationList) {
@@ -189,7 +187,6 @@ public final class ProgramModule extends Statement {
 			else if(decl instanceof StandardClass) ; // Nothing
 			else decl.printTree(1);
 		}
-//		module.printTree(1);
 		System.out.println("=================================================================");
 	}
 	

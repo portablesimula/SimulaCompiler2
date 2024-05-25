@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.instruction.SwitchCase;
@@ -129,14 +127,11 @@ public final class SwitchStatement extends Statement {
 		switchKey = Expression.expectExpression();
 		switchKey.backLink=this;
 		Parse.expect(KeyWord.BEGIN);
-//    	boolean noneCaseUsed=false;
 		has_NONE_case=false;
 		while (Parse.accept(KeyWord.WHEN)) {
 			Vector<SwitchInterval> caseKeyList=new Vector<SwitchInterval>();
 			if (Parse.accept(KeyWord.NONE)) {
 				caseKeyList.add(null);
-//				if(noneCaseUsed) Util.error("NONE Case is already used");
-//				noneCaseUsed=true;
 				if(has_NONE_case) Util.error("NONE Case is already used");
 				has_NONE_case=true;
 			}
@@ -249,7 +244,6 @@ public final class SwitchStatement extends Statement {
        	
     	private int initLookupSwitchCases(int index,CodeBuilder codeBuilder) {
     		for(SwitchInterval casePair:this.caseKeyList) {
-//				System.out.println("SwitchStatement'WhenPart.INIT_JUMPTABLE: casePair="+casePair);
     			if(casePair != null) {
         			casePair.firstTableIndex = index;
     				int low=casePair.lowCase.getInt();
@@ -454,7 +448,6 @@ public final class SwitchStatement extends Statement {
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSwitchStatement: ");
 		SwitchStatement stm = new SwitchStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.lowKey = (Expression) inpt.readObj();

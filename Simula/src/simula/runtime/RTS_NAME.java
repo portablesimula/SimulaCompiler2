@@ -103,5 +103,10 @@ public abstract class RTS_NAME<T> {
 	public T put(final T x) {
 		throw new RTS_SimulaRuntimeError("Illegal assignment. Name parameter is not a variable");
 	}
+
+	@Override
+	public String toString() {
+		return "RTS_NAME " + this.getClass();
+	}
 }
 

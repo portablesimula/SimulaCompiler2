@@ -8,25 +8,13 @@
 package simula.compiler.utilities;
 
 import java.awt.Color;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
-import java.nio.file.attribute.FileTime;
-import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
-import java.util.Enumeration;
-import java.util.Locale;
-import java.util.Set;
 import java.util.Vector;
-import java.util.jar.Attributes;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
-import java.util.jar.Manifest;
-
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -108,11 +96,11 @@ public final class Util {
 		IERR("IMPOSSIBLE");
 	}
 
-		/**
-		 * Print a internal error message.
-		 * @param msg the message
-		 */
-		public static void IERR(final String msg) {
+	/**
+	 * Print a internal error message.
+	 * @param msg the message
+	 */
+	public static void IERR(final String msg) {
 		String err = edLINE(": Internal error - " + msg);
 		nError++;
 		printError(err);
@@ -301,7 +289,6 @@ public final class Util {
 	 * @return Returns the value of 'base' raised to the power of 'x'
 	 */
 	public static int IPOW(final long base, long x) {
-//		System.out.println("Util.IPOW: base="+base+", x="+x);
 		if (x == 0) {
 			if (base == 0)
 				error("Exponentiation: " + base + " ** " + x + "  Result is undefined.");
@@ -312,7 +299,6 @@ public final class Util {
 			return (0); // 0 ** non_zero ==> 0
 		
 		long res=(long) Math.pow((double)base,(double)x);
-//		System.out.println("Util.IPOW: base="+base+", x="+x+" ==> "+res);
 		if(res > Integer.MAX_VALUE || res < Integer.MIN_VALUE)
 			error("Arithmetic overflow: "+base+" ** "+x+" ==> "+res
 					+" which is outside integer value range["+Integer.MIN_VALUE+':'+Integer.MAX_VALUE+']');
@@ -402,7 +388,6 @@ public final class Util {
 			.athrow();		
 	}
 
-//	public static void buildSNAPSHOT(CodeBuilder codeBuilder, SyntaxClass stx) {
 	public static void buildLineNumber(CodeBuilder codeBuilder, SyntaxClass stx) {
 //		if(!Option.GNERATE_LINE_CALLS) return;
 		codeBuilder.lineNumber(stx.lineNumber);

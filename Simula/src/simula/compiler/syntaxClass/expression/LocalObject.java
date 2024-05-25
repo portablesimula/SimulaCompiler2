@@ -176,7 +176,7 @@ public final class LocalObject extends Expression {
 			Meaning meaning = connectionBlock.inspectedVariable.meaning;
 			codeBuilder
 				.checkcast(meaning.declaredIn.getClassDesc())
-				.getfield(meaning.getFieldRefEntry(pool));
+				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
 			String cast = classDeclaration.getJavaIdentifier();

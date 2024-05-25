@@ -226,6 +226,12 @@ public final class RunFullClassTestBatch {
 		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
 		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
+		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
+		names.add("simtst147.sim"); // OK: Test virtual procedure by name
+		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
+		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
+		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

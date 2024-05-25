@@ -24,11 +24,11 @@ end;
 
 Process class p(i); integer i; begin
       if verbose then begin
-      outtext("p("); outint (i,2);
-      outtext(") activated at time = "); outfix(time,3,8); outimage;
-      passive(i):=false; terminatd(i):=false; active(i):=true;
-      outstate(i);
-      active(i):=false; terminatd(i):=true; passive(i):=false;
+	      outtext("p("); outint (i,2);
+	      outtext(") activated at time = "); outfix(time,3,8); outimage;
+	      passive(i):=false; terminatd(i):=false; active(i):=true;
+	      outstate(i);
+	      active(i):=false; terminatd(i):=true; passive(i):=false;
       end;
 end;
 
@@ -76,7 +76,7 @@ procedure createobjects;
 begin integer i;
       for i:=1 step 1 until 10 do
       begin pa(i):-new p(i);
-            terminatd(i):=false; active(i):=false; passive(i):= true
+            terminatd(i):=false; active(i):=false; passive(i):= true;
       end;
       testno:=testno+1
 end;

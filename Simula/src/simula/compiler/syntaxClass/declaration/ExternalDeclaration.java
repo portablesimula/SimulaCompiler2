@@ -151,12 +151,11 @@ public final class ExternalDeclaration extends Declaration {
 			if (jarFile != null) {
 				if(checkJarFiles(jarFile)) {
 					Type moduleType = AttributeFileIO.readAttributeFile(identifier, jarFile, enclosure);
-//					if (moduleType != expectedType) {
 					if(moduleType == null) {
 						if (expectedType != null) Util.error("Missing external type: "+expectedType);
 					}
 					else if(expectedType == null) {
-//						Util.error("Wrong external type: "+moduleType+". No Type Expected"); // TODO: TESTING3		
+//						Util.error("Wrong external type: "+moduleType+". No Type Expected");	
 					}
 					else if (!moduleType.equals(expectedType)) {
 						if (expectedType != null)

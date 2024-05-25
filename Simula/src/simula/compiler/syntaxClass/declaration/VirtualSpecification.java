@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -253,6 +254,21 @@ public final class VirtualSpecification extends Declaration {
 		classBuilder
 			.withMethodBody(ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+qnt), ClassFile.ACC_PUBLIC,
 				codeBuilder -> Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder));
+	}
+
+	public void buildCallMethod(ClassDesc owner, CodeBuilder codeBuilder) {
+	    String ident=getSimpleVirtualIdentifier();
+		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
+		
+        // 4: getfield      #13                 // Field simulaTestPrograms/adHoc000.x:LsimulaTestPrograms/adHoc000_A;
+        // 7: invokevirtual #19                 // Method simulaTestPrograms/adHoc000_A.vP_0:()Lsimula/runtime/RTS_PRCQNT;
+		String name = ident;
+		codeBuilder
+			.invokevirtual(owner, name, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/" + qnt));
+		
+//		classBuilder
+//			.withMethodBody(ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/"+qnt), ClassFile.ACC_PUBLIC,
+//				codeBuilder -> Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder));
 	}
 
 

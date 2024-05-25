@@ -245,35 +245,4 @@ public final class Token {
 		}
 	}
 
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-//	public void writeATTR(ObjectOutput oupt) throws IOException {
-//		oupt.writeObject(keyWord);
-//		oupt.writeObject(value);
-//	}
-//
-//	public static Token readObject(ObjectInput inpt) throws IOException {
-//		int keyWord = inpt.readShort();
-//		Object value = inpt.readObject();
-//		return(new Token("",keyWord,value));
-//	}
-//
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeExternal(ObjectOutput oupt) throws IOException {
-//		oupt.writeObject(keyWord);
-//		oupt.writeObject(value);
-//	}
-//
-//	@Override
-//	public void readExternal(ObjectInput inpt) throws IOException {
-//		keyWord = inpt.readShort();
-//		value = inpt.readObject();
-//	}
-
 }

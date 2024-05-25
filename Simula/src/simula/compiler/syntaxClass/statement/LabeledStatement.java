@@ -57,7 +57,6 @@ public final class LabeledStatement extends Statement {
 	 * @param labels the label identifiers
 	 * @param statement the labeled statement
 	 */
-//	LabeledStatement(final int line,final Vector<String> labels,final Statement statement) {
 	LabeledStatement(final int line,final Vector<LabelDeclaration> labels,final Statement statement) {
 		super(line);
 		this.labels = labels;
@@ -85,19 +84,6 @@ public final class LabeledStatement extends Statement {
 			if(decl.movedTo != null) comment = comment+" -> "+decl.movedTo;
 			String labelcode;
 			labelcode="_SIM_LABEL("+decl.index+");";
-//			System.out.println("LabeledStatement.doJavaCoding: "+labelcode+" USED IN "+Global.currentJavaModule);
-			
-//			if(statement instanceof BlockStatement stat) {
-//				BlockStatement blockStatement=stat;
-//				if(blockStatement.isCompoundStatement())
-//				    blockStatement.addLeadingLabel(labelcode);
-//				else {
-//					GeneratedJavaClass.code(labelcode,comment);
-//				}
-//			}
-//			else {
-//				GeneratedJavaClass.code(labelcode,comment);
-//			}
 			if(statement instanceof BlockStatement stat && stat.isCompoundStatement())
 				     stat.addLeadingLabel(labelcode);
 				else GeneratedJavaClass.code(labelcode,comment);
@@ -153,7 +139,6 @@ public final class LabeledStatement extends Statement {
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
 		LabeledStatement stm = new LabeledStatement();
-//		stm.SEQU = inpt.readShort();
 		stm.SEQU = inpt.readSEQU(stm);
 		stm.lineNumber = inpt.readShort();
 		stm.statement = (Statement) inpt.readObj();

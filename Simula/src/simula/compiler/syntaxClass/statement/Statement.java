@@ -100,7 +100,6 @@ public abstract class Statement extends SyntaxClass {
 	 * Parse Utility: Expect a statement.
 	 * @return the resulting statement
 	 */
-	@SuppressWarnings("incomplete-switch")
 	private static Statement expectUnlabeledStatement() {
 		int lineNumber=Parse.currentToken.lineNumber;
 		if (Option.TRACE_PARSE)

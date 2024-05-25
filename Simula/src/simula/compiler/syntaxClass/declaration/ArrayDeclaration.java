@@ -236,7 +236,7 @@ public final class ArrayDeclaration extends Declaration {
 		Global.sourceLineNumber = lineNumber;
 		if (type == null)
 			type = Type.Real;
-		type.doChecking(declaredIn); // TODO: TESTING
+		type.doChecking(declaredIn);
 		if (boundPairList != null)
 			for (BoundPair it : boundPairList)
 				it.doChecking();

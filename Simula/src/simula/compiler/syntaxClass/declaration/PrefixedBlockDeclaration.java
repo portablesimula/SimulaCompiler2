@@ -253,7 +253,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		try {
 			createJavaClassFile();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		ClassDesc CD_pblk=this.getClassDesc();

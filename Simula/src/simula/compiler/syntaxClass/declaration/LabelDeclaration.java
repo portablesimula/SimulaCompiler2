@@ -170,7 +170,6 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 
 	@Override
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-//		System.out.println("LabelDeclaration.getFieldRefEntry: BEGIN: "+this+" delatedIn="+this.declaredIn);
 		DeclarationScope declaredIn = (movedTo != null)? movedTo : this.declaredIn;
 		ClassDesc owner=declaredIn.getClassDesc();
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD.RTS_LABEL));

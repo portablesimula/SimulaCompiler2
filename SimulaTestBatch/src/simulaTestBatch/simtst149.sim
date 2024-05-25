@@ -1,0 +1,169 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA A/S - SIMULA TEST NO 149
+%
+%  PURPOSE:     Test all mode/type parameters to a Class.
+%
+%  METHOD:      Try some examples and see if they work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(149,"--- Test all mode/type parameters to a Class") begin
+   text array facit(0:27);
+   integer traceCase;
+   
+   procedure trace(msg); text msg;
+   begin
+      if verbose then
+      	 begin outtext(msg); outimage; end;
+      if msg ne facit(traceCase) then
+      begin err("Case " & edit(traceCase));
+         outtext("Trace: " & msg); outimage;
+         outtext("Facit: " & facit(traceCase)); outimage;
+      end;
+      traceCase:=traceCase+1;
+   end;
+
+
+% The available transmission modes for parameters of class declarations.
+%          -------------------------------------------------
+%          |                     |    Transmission modes    |
+%          |      Parameter      | - - - - - - - - - - - - -|
+%          |                     | by value | by reference  |
+%          |------------------------------------------------|
+%          | value type          |     D    |       I       |
+%          | object ref. type    |     I    |       D       |
+%          | text                |     O    |       D       |
+%          | value type array    |     O    |       D       |
+%          | reference type array|     I    |       D       |
+%          -------------------------------------------------
+%             D: default mode  O: optional mode  I: illegal
+
+%   Value types
+	class A(i,r,lr,c); integer i; real r; long real lr; character c; begin
+		trace("A.i = "  & edit(i));
+		trace("A.r = "  & edfix(r,4));
+		trace("A.lr = " & edfix(lr,4));
+		trace("A.c = "  & edit(c));
+	end;   
+
+%   Type text
+	class B(t1,t2); value t1; text t1, t2; begin
+		trace("B.t1 = " & t1); t1.sub(3,6) := " ABRA "; trace("B.t1 = " & t1);
+		trace("B.t2 = " & t2); t2.sub(3,6) := " CABR "; trace("B.t2 = " & t2);
+	end; 
+	
+%	Object ref. type
+	class C(x); ref(A) x; begin
+		trace("x.i = "  & edit(x.i));
+		trace("x.r = "  & edfix(x.r,4));
+		trace("x.lr = " & edfix(x.lr,4));
+		trace("x.c = "  & edit(x.c));
+	end;
+	
+%	Value type array
+	class D(arr1,arr2); value arr1; array arr1, arr2; begin
+		trace("arr1(6) = "  & edfix(arr1(6),4));
+		arr1(6) := -66;
+		trace("arr1(6) = "  & edfix(arr1(6),4));
+		
+		trace("arr2(-6) = "  & edfix(arr2(-6),4));
+		arr2(-6) := 66;
+		trace("arr2(-6) = "  & edfix(arr2(-6),4));
+	end;
+	
+%   ref.type array
+	class E(arr); ref(A) array arr; begin
+		trace("arr(3).i = "  & edit(arr3(3).i));
+		trace("arr(3).r = "  & edfix(arr3(3).r,4));
+		trace("arr(3).lr = " & edfix(arr3(3).lr,4));
+		trace("arr(3).c = "  & edit(arr3(3).c));
+	end;		  
+
+	integer i,j; real r; character k;
+    long real lr; text t1,t2;
+    ref(A) x;
+    array arr1(1:12);
+    array arr2(-12:1);
+    ref(A) array arr3(0:5);
+	
+	
+	facit(0) :- "At START";
+	facit(1) :- "A.i = 1234";
+	facit(2) :- "A.r = 845.1860";
+	facit(3) :- "A.lr = 15.9870";
+	facit(4) :- "A.c = f";
+
+	facit(5) :- "x.i = 1234";
+	facit(6) :- "x.r = 845.1860";
+	facit(7) :- "x.lr = 15.9870";
+	facit(8) :- "x.c = f";
+	
+%   Type text
+	facit(9)  :- "B.t1 = AbraCaDabra";
+	facit(10) :- "B.t1 = Ab ABRA bra";
+	facit(11) :- "B.t2 = CaDabraAbra";
+	facit(12) :- "B.t2 = Ca CABR bra";
+	facit(13) :- "t1 = AbraCaDabra";	
+	facit(14) :- "t2 = Ca CABR bra";
+	
+%	Object ref. type
+	facit(15) :- "x.i = 1234";
+	facit(16) :- "x.r = 845.1860";
+	facit(17) :- "x.lr = 15.9870";
+	facit(18) :- "x.c = f";
+	
+%	Value type array
+	facit(19) :- "arr1(6) = 6.0000";
+	facit(20) :- "arr1(6) = -66.0000";
+	facit(21) :- "arr2(-6) = -6.0000";
+	facit(22) :- "arr2(-6) = 66.0000";
+
+%   ref.type array
+	facit(23) :- "arr(3).i = 1234";
+	facit(24) :- "arr(3).r = 845.1860";
+	facit(25) :- "arr(3).lr = 15.9870";
+	facit(26) :- "arr(3).c = f";
+	
+	facit(27) :- "At END";
+
+% ========================================================
+
+	trace("At START");
+
+
+%   Value types
+	i := 1234;
+	r := 845.186;
+	lr := 15.987;
+	k := 'f';
+	x :- new  A(i,r,lr,k);
+	trace("x.i = "  & edit(x.i));
+	trace("x.r = "  & edfix(x.r,4));
+	trace("x.lr = " & edfix(x.lr,4));
+	trace("x.c = "  & edit(x.c));
+	
+%   Type text
+	t1 :- copy("AbraCaDabra");
+	t2 :- copy("CaDabraAbra");
+	new B(t1,t2);
+	trace("t1 = " & t1);
+	trace("t2 = " & t2);
+	
+%	Object ref. type
+	new C(x);
+		
+%	Value type array
+	for i := 1 step 1 until 12  do arr1(i) := i;
+	for i := -12 step 1 until 1 do arr2(i) := i;
+	new D(arr1,arr2);
+
+%   ref.type array
+	arr3(3) :- x;
+	new E(arr3);
+
+	trace("At END");
+
+ end;

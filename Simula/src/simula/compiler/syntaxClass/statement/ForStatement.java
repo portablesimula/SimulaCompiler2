@@ -366,8 +366,8 @@ public final class ForStatement extends Statement {
 			if (Option.TRACE_CHECKER)
 				Util.TRACE("BEGIN ForListElement(" + this + ").doChecking - Current Scope Chain: "
 						+ Global.getCurrentScope().edScopeChain());
-			expr1.doChecking();                                                // TESTING_FOR_STATEMENT
-			expr1 = TypeConversion.testAndCreate(controlVariable.type, expr1); // TESTING_FOR_STATEMENT
+			expr1.doChecking();
+			expr1 = TypeConversion.testAndCreate(controlVariable.type, expr1);
 			expr1.doChecking();
 			expr1.backLink = ForStatement.this; // To ensure _RESULT from functions
 		}
@@ -768,7 +768,7 @@ public final class ForStatement extends Statement {
 		 * 
 		 * controlVariable = expr1();
 		 * DELTA = expr2();
-		 * while( DELTA*(controlVariable-expr3()) <= 0) {
+		 * while( sign(DELTA) * (controlVariable - expr3() ) <= 0) {
 		 * 		STATEMENT();
 		 * 		DELTA = expr2();
 		 * 		controlVariable = controlVariable + DELTA;
@@ -780,7 +780,7 @@ public final class ForStatement extends Statement {
          *   aload_0
          *   invokevirtual #24                 // Method expr1:()I
          *   putfield      #12                 // Field controlVariable:I
-
+         * 
 	     * // DELTA = expr2();
          *   aload_0
          *   invokevirtual #26                 // Method expr2:()I
@@ -801,7 +801,7 @@ public final class ForStatement extends Statement {
          *   aload_0
          *   invokevirtual #28                 // Method STATEMENT:()V
          *   
-	     * // DELTA = expr2();
+         * // DELTA = expr2();
          *   aload_0
          *   invokevirtual #26                 // Method expr2:()I
          *   istore_1      // Local DELTA
@@ -843,16 +843,17 @@ public final class ForStatement extends Statement {
 			TypeConversion.buildMayBeConvert(expr1.type, controlVariable.type, codeBuilder);
 			codeBuilder.putfield(CTRL);
 
+			// LOOP:
 		    //      // DELTA = expr2();
 	        //      aload_0
 	        //      invokevirtual #26                 // Method expr2:()I
 	        //      istore_1
 			this.expr2.buildEvaluation(null,codeBuilder); // init
 			switch(expr2.type.keyWord) {
-				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
-				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
-				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
-				default: Util.IERR();
+				case Type.T_INTEGER ->   codeBuilder.istore(DELTA);
+				case Type.T_REAL ->      codeBuilder.fstore(DELTA);
+				case Type.T_LONG_REAL -> codeBuilder.dstore(DELTA);
+				default -> Util.IERR();
 			}
 
 			// TST:
@@ -867,10 +868,22 @@ public final class ForStatement extends Statement {
 			//      ifle          16  // STM
 			codeBuilder.labelBinding(tstLabel);
 			switch(controlVariable.type.keyWord) {
-				case Type.T_INTEGER:   codeBuilder.iload(DELTA); break;
-				case Type.T_REAL:      codeBuilder.fload(DELTA); break;
-				case Type.T_LONG_REAL: codeBuilder.dload(DELTA); break;
-				default: Util.IERR();
+				case Type.T_INTEGER -> {
+					codeBuilder
+						.iload(DELTA)
+						.invokestatic(BlockDeclaration.currentClassDesc(), "isign", MethodTypeDesc.ofDescriptor("(I)I"));
+				}
+				case Type.T_REAL -> {
+					codeBuilder
+						.fload(DELTA)
+						.invokestatic(BlockDeclaration.currentClassDesc(), "fsign", MethodTypeDesc.ofDescriptor("(F)F"));
+				}
+				case Type.T_LONG_REAL -> {
+					codeBuilder
+						.dload(DELTA)
+						.invokestatic(BlockDeclaration.currentClassDesc(), "dsign", MethodTypeDesc.ofDescriptor("(D)D"));
+				}
+				default -> Util.IERR();
 			}
 			controlVariable.buildIdentifierAccess(true, codeBuilder);
 			codeBuilder.getfield(CTRL);
@@ -879,10 +892,10 @@ public final class ForStatement extends Statement {
 			TypeConversion.buildMayBeConvert(controlVariable.type,this.expr3.type, codeBuilder);
 			
 			switch(controlVariable.type.keyWord) {
-				case Type.T_INTEGER:   codeBuilder.isub().imul(); break;
-				case Type.T_REAL:      codeBuilder.fsub().fmul().fconst_0().fcmpg();; break;
-				case Type.T_LONG_REAL: codeBuilder.dsub().dmul().dconst_0().dcmpg(); break;
-				default: Util.IERR();
+				case Type.T_INTEGER ->   codeBuilder.isub().imul();
+				case Type.T_REAL ->      codeBuilder.fsub().fmul().fconst_0().fcmpg();
+				case Type.T_LONG_REAL -> codeBuilder.dsub().dmul().dconst_0().dcmpg();
+				default -> Util.IERR();
 			}
 			
 			codeBuilder.ifgt(endLabel);
@@ -893,16 +906,16 @@ public final class ForStatement extends Statement {
 	        //      invokevirtual #28                 // Method STATEMENT:()V
 			doStatement.buildByteCode(codeBuilder);
 
-		    // DELTA = expr2();
-	        //      aload_0
-	        //      invokevirtual #26                 // Method expr2:()I
-	        //      istore_1
+			// DELTA = expr2();
+			//      aload_0
+			//      invokevirtual #26                 // Method expr2:()I
+			//      istore_1
 			this.expr2.buildEvaluation(null,codeBuilder);
 			switch(expr2.type.keyWord) {
-				case Type.T_INTEGER:   codeBuilder.istore(DELTA); break;
-				case Type.T_REAL:      codeBuilder.fstore(DELTA); break;
-				case Type.T_LONG_REAL: codeBuilder.dstore(DELTA); break;
-				default: Util.IERR();
+				case Type.T_INTEGER ->   codeBuilder.istore(DELTA);
+				case Type.T_REAL ->      codeBuilder.fstore(DELTA);
+				case Type.T_LONG_REAL -> codeBuilder.dstore(DELTA);
+				default -> Util.IERR();
 			}
 			
 	        // controlVariable = controlVariable + DELTA;  
@@ -917,10 +930,10 @@ public final class ForStatement extends Statement {
 				.dup()
 				.getfield(CTRL);
 			switch(expr2.type.keyWord) {
-				case Type.T_INTEGER:   codeBuilder.iload(DELTA).iadd(); break;
-				case Type.T_REAL:      codeBuilder.fload(DELTA).fadd(); break;
-				case Type.T_LONG_REAL: codeBuilder.dload(DELTA).dadd(); break;
-				default: Util.IERR();
+				case Type.T_INTEGER ->   codeBuilder.iload(DELTA).iadd();
+				case Type.T_REAL ->      codeBuilder.fload(DELTA).fadd();
+				case Type.T_LONG_REAL -> codeBuilder.dload(DELTA).dadd();
+				default -> Util.IERR();
 			}
 			
 			// MAY BE CONVERT   TOS:DELTA to controlVariable.type

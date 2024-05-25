@@ -93,7 +93,7 @@ public final class RunSingleTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -109,7 +109,7 @@ public final class RunSingleTest {
 //		names.add("simtst11.sim"); // OK:  Text Attributes constant, start, length, pos and main
 //		names.add("simtst12.sim"); // OK:  Text value and reference relations.
 //		names.add("simtst13.sim"); // OK:  Text value assignment and text reference assigment.
-//			names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
+//		names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
 //		names.add("simtst15.sim"); // OK:  Text generation procedures copy and blanks.
 //		names.add("simtst16.sim"); // OK:  Standard Text procedures sub and strip.
 //		names.add("simtst17.sim"); // OK:  Editing and De-editing
@@ -139,8 +139,8 @@ public final class RunSingleTest {
 //		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 //		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
 //		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-//			names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 //
 //		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
@@ -262,6 +262,12 @@ public final class RunSingleTest {
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 //		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
 //		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
+//		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
+//		names.add("simtst147.sim"); // OK: Test virtual procedure by name
+//		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
+//		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
+		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

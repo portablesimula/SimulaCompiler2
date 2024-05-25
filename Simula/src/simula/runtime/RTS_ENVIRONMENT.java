@@ -244,6 +244,15 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param e the argument e
 	 * @return resulting sign code
 	 */
+	public static int isign(final int e) {
+		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
+	}
+	public static float fsign(final float e) {
+		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
+	}
+	public static double dsign(final double e) {
+		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
+	}
 	public static int sign(final double e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}

@@ -1,37 +1,31 @@
 
 begin
 
-
-   integer pval;
-   ref(A) ra;
-   ref(File) test;
-   character c;
-
-   class A; virtual: ref(File) procedure myFile is ref(File) procedure actual(i,j); integer i,j;;
-   begin integer i;
-     ref(File) procedure myFile(i,j); integer i,j;
-     begin pval:=i+j; end;
-     
-   end;
-   
-   ra :- new A;
-  
-   test :- ra.myFile(7,21);
-   
-   outtext("PVAL = " & edit(pval));
-   
-   goto L2;
-   
-   L1: outtext("  UMULIG Å KOMME HIT");
-   
-   L2:
-    A begin
-
-   	outtext("  INNE I PREFIXED BLOCK");
-   
-   end;
-   
-   for c := 'A', 'B', 'C' do outtext("  FOR CHARACTER: " & edit(c));
-   
-   
+	procedure P1(fP,LAB); procedure fP; label LAB; begin
+		R1(fP,LAB);
+	end;
+	
+	procedure R1(fP,LAB); procedure fP; label LAB; begin
+		fP(LAB);
+	end;
+	
+	procedure P2(fP,LAB); name LAB; procedure fP; label LAB; begin
+		R2(fP,LAB);
+	end;
+	
+	procedure R2(fP,LAB); procedure fP; label LAB; begin
+		fP(LAB);
+	end;
+	
+	procedure Q(LAB); label LAB; begin
+		goto LAB;
+	end;
+	
+	P1(Q,L1);
+	
+	L1:
+	
+	P2(Q,L2);
+	
+	L2:
 end;
