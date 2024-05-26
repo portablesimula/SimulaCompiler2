@@ -86,7 +86,7 @@ public final class LocalObject extends Expression {
 	private LocalObject(final String ident) {
 		this.classIdentifier = ident;
 		this.type=Type.Ref(classIdentifier);
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW ThisObjectExpression: " + toString());
 	}
 
@@ -95,7 +95,7 @@ public final class LocalObject extends Expression {
 	 * @return the newly created LocalObject.
 	 */
 	static Expression expectThisIdentifier() {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse ThisObjectExpression, current=" + Parse.currentToken);
 		String classIdentifier = Parse.expectIdentifier();
 		Expression expr = new LocalObject(classIdentifier);
@@ -106,7 +106,7 @@ public final class LocalObject extends Expression {
 	public void doChecking() { 
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber=lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN LocalObject(" + toString()+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());
 		Meaning meaning=Global.getCurrentScope().findMeaning(classIdentifier);
 		Declaration decl = meaning.declaredAs;

@@ -177,7 +177,7 @@ public final class ForStatement extends Statement {
 	 */
 	ForStatement(final int line) {
 		super(line);
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse ForStatement");
 		controlVariable = new VariableExpression(Parse.expectIdentifier());
 		if (!Parse.accept(KeyWord.ASSIGNVALUE))
@@ -193,7 +193,7 @@ public final class ForStatement extends Statement {
 			doStatement = new DummyStatement(line);
 		}
 		this.doStatement = doStatement;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Line " + this.lineNumber + ": ForStatement: " + this);
 	}
 
@@ -202,7 +202,7 @@ public final class ForStatement extends Statement {
 	 * @return the resulting ForListElement
 	 */
 	private ForListElement expectForListElement() {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse ForListElement");
 		Expression expr1 = Expression.expectExpression();
 		if (Parse.accept(KeyWord.WHILE))
@@ -355,7 +355,7 @@ public final class ForStatement extends Statement {
 		 */
 		public ForListElement(final Expression expr1) {
 			this.expr1 = expr1;
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Util.TRACE("NEW ForListElement: " + toString());
 		}
 
@@ -363,7 +363,7 @@ public final class ForStatement extends Statement {
 		 * Perform semantic checking.
 		 */
 		public void doChecking() {
-			if (Option.TRACE_CHECKER)
+			if (Option.internal.TRACE_CHECKER)
 				Util.TRACE("BEGIN ForListElement(" + this + ").doChecking - Current Scope Chain: "
 						+ Global.getCurrentScope().edScopeChain());
 			expr1.doChecking();
@@ -524,7 +524,7 @@ public final class ForStatement extends Statement {
 
 		@Override
 		public void doChecking() {
-			if (Option.TRACE_CHECKER)
+			if (Option.internal.TRACE_CHECKER)
 				Util.TRACE("BEGIN WhileElement(" + this + ").doChecking - Current Scope Chain: "
 						+ Global.getCurrentScope().edScopeChain());
 			expr1.doChecking();

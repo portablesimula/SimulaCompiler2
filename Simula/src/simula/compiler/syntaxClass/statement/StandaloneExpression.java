@@ -56,7 +56,7 @@ public final class StandaloneExpression extends Statement {
 	StandaloneExpression(final int line,final Expression expression) {
 		super(line);
 		this.expression = expression;
-		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": StandaloneExpression: "+this);
+		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": StandaloneExpression: "+this);
 		while (Parse.accept(KeyWord.ASSIGNVALUE,KeyWord.ASSIGNREF)) { 
 			this.expression = new AssignmentOperation(this.expression, Parse.prevToken.getKeyWord(),expectStandaloneExpression());
 		}		
@@ -85,10 +85,10 @@ public final class StandaloneExpression extends Statement {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber=lineNumber;
-		if (Option.TRACE_CHECKER) Util.TRACE("StandaloneExpression("+expression+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());
+		if (Option.internal.TRACE_CHECKER) Util.TRACE("StandaloneExpression("+expression+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());
 		expression.doChecking();
 		if(!expression.maybeStatement()) Util.error("Illegal/Missplaced Expression: "+expression);
-		if (Option.TRACE_CHECKER) Util.TRACE("END StandaloneExpression(" + expression+ ").doChecking:");
+		if (Option.internal.TRACE_CHECKER) Util.TRACE("END StandaloneExpression(" + expression+ ").doChecking:");
 		SET_SEMANTICS_CHECKED();
 	}
 	

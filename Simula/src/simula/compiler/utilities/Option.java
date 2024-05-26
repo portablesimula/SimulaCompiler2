@@ -29,30 +29,6 @@ import javax.swing.JPanel;
  *
  */
 public final class Option {
-	public static boolean TESTING_STACK_SIZE = false;
-//	public static boolean NEW_ATTR_FILE = false;
-//	public static boolean TESTING_SEPARATE = false;
-//	public static boolean USE_JAR_FILE_BUILDER = false;
-	
-	/**
-	 * Create Java source intermediate files
-	 */
-	public static boolean CREATE_JAVA_SOURCE = false;
-	
-	/**
-	 * Experimental direct generation of Java byteCode
-	 */
-	public static boolean GENERATE_BYTEFILE = false;
-
-	/**
-	 * List generated .class files
-	 */
-	public static boolean LIST_GENERATED_CLASS_FILES = false;
-
-	/**
-	 * INLINE_TESTING on/off
-	 */
-	public static boolean INLINE_TESTING = false; 
 	
 	/**
 	 * Source file is case sensitive.
@@ -65,101 +41,132 @@ public final class Option {
 	public static boolean verbose = false; 
 	
 	/**
-	 * Generate no warnings
+	 * Generate warning messages
 	 */
 	public static boolean WARNINGS=true;
 	
 	/**
-	 * Don't execute generated .jar file
+	 * true: Don't execute generated .jar file
 	 */
-	public static boolean noExecution = false;	// true: Don't execute generated .jar file.
+	public static boolean noExecution = false;
 	
 	/**
 	 * Disable all language extensions. In other words,
 	 * follow the Simula Standard literally
 	 */
 	public static boolean EXTENSIONS=true;
-	
+
 	/**
-	 * S-PORT extensions  on/off
+	 * Testing and debugging options
 	 */
-	public static boolean SPORT=false;
+	public static class internal {
+		public static boolean TESTING_STACK_SIZE = false;
+
+		/**
+		 * Create Java source intermediate files
+		 */
+		public static boolean CREATE_JAVA_SOURCE = false;
+
+		/**
+		 * List generated .class files
+		 */
+		public static boolean LIST_GENERATED_CLASS_FILES = false;
+
+		/**
+		 * INLINE_TESTING on/off
+		 */
+		public static boolean INLINE_TESTING = false; 
+		
+		/**
+		 * S-PORT extensions  on/off
+		 */
+		public static boolean SPORT=false;
+		
+		/**
+		 * Used by Java-Coding to save the generated .java files.
+		 * If not set, a temp directory is used/created.
+		 */
+		public static File keepJava = null;
+
+
+		// Overall TRACING Options
+		/** Debug option */	public static boolean TRACING=false;
+		/** Debug option */	public static boolean DEBUGGING=false;		// Set by EditorMenues - doDebugAction
+
+		// Scanner Trace Options
+		/** Debug option */	public static boolean TRACE_SCAN=false;
+		/** Debug option */	public static boolean TRACE_COMMENTS=false;
+
+		// Parser Trace Options
+		/** Debug option */	public static boolean TRACE_PARSE=false;
+		/** Debug option */	public static boolean PRINT_SYNTAX_TREE=false;
+		/** Debug option */	public static boolean TRACE_ATTRIBUTE_OUTPUT=false;
+		/** Debug option */	public static boolean TRACE_ATTRIBUTE_INPUT=false;
+
+		// Checker Trace Options
+		/** Debug option */	public static boolean TRACE_CHECKER=false;
+		/** Debug option */	public static boolean TRACE_CHECKER_OUTPUT=false;
+		/** Debug option */	public static int TRACE_FIND_MEANING=0;
+
+		// Java Coder Options
+		/** Debug option */	public static boolean TRACE_CODING=false;         // Only when .java output
+		/** Debug option */	public static boolean GNERATE_LINE_CALLS=false;   // Only when .java output
+
+		// Byte code engineering Options
+		/** Debug option */	public static boolean TRACE_BYTECODE_OUTPUT=false;
+		/** Debug option */	public static boolean LIST_REPAIRED_INSTRUCTION_LIST=false;
+		/** Debug option */	public static boolean TRACE_REPAIRING=false;
+		/** Debug option */	public static boolean LIST_INPUT_INSTRUCTION_LIST=false;
+		/** Debug option */	public static boolean TRACE_REPAIRING_INPUT=false;
+		/** Debug option */	public static boolean TRACE_REPAIRING_OUTPUT=false;
+
+		/** Runtime Options */ public static String SOURCE_FILE="";
+		/** Runtime Options */ public static String RUNTIME_USER_DIR="";
+		
+		/**
+		 * Initiate Compiler options
+		 */
+		public static void InitCompilerOptions() {
+			Option.internal.SPORT=false;
+
+			// Overall TRACING Options
+			Option.internal.TRACING=false;
+			Option.internal.DEBUGGING=false;
+
+			// Scanner Trace Options
+			Option.internal.TRACE_SCAN=false;
+			Option.internal.TRACE_COMMENTS=false;
+
+			// Parser Trace Options
+			Option.internal.TRACE_PARSE=false;
+
+			// Checker Trace Options
+			Option.internal.TRACE_CHECKER=false;
+			Option.internal.TRACE_CHECKER_OUTPUT=false;
+
+			// Coder Trace Options
+			Option.internal.TRACE_CODING=false;
+
+		}
+
+	}
 	
-	/**
-	 * Used by Java-Coding to save the generated .java files.
-	 * If not set, a temp directory is used/created.
-	 */
-	public static File keepJava = null;
-
-	// Overall TRACING Options
-	/** Debug option */	public static boolean TRACING=false;
-	/** Debug option */	public static boolean DEBUGGING=false;		// Set by EditorMenues - doDebugAction
-
-	// Scanner Trace Options
-	/** Debug option */	public static boolean TRACE_SCAN=false;
-	/** Debug option */	public static boolean TRACE_COMMENTS=false;
-
-	// Parser Trace Options
-	/** Debug option */	public static boolean TRACE_PARSE=false;
-	/** Debug option */	public static boolean PRINT_SYNTAX_TREE=false;
-	/** Debug option */	public static boolean TRACE_ATTRIBUTE_OUTPUT=false;
-	/** Debug option */	public static boolean TRACE_ATTRIBUTE_INPUT=false;
-
-	// Checker Trace Options
-	/** Debug option */	public static boolean TRACE_CHECKER=false;
-	/** Debug option */	public static boolean TRACE_CHECKER_OUTPUT=false;
-	/** Debug option */	public static int TRACE_FIND_MEANING=0;
-
-	// Java Coder Options
-	/** Debug option */	public static boolean TRACE_CODING=false;
-	/** Debug option */	public static boolean GNERATE_LINE_CALLS=false;
-	/** Debug option */	public static boolean GNERATE_SNAPSHOTS=false;
-
-	// Byte code engineering Options
-	/** Debug option */	public static boolean TRACE_BYTECODE_OUTPUT=false;
-	/** Debug option */	public static boolean LIST_REPAIRED_INSTRUCTION_LIST=false;
-	/** Debug option */	public static boolean TRACE_REPAIRING=false;
-	/** Debug option */	public static boolean LIST_INPUT_INSTRUCTION_LIST=false;
-	/** Debug option */	public static boolean TRACE_REPAIRING_INPUT=false;
-	/** Debug option */	public static boolean TRACE_REPAIRING_OUTPUT=false;
-
-	/** Runtime Options */ public static String SOURCE_FILE="";
-	/** Runtime Options */ public static String RUNTIME_USER_DIR="";
-
 	/**
 	 * The default constructor
 	 */
 	private Option() {}
 	
 	/**
-	 * Initiate Compiler options
+	 * Initiate Compiler options.
 	 */
 	public static void InitCompilerOptions() {
 		Option.CaseSensitive=false;
 		Option.verbose = false;
 		Option.noExecution = false;
-		Option.WARNINGS=true;
+		Option.WARNINGS=false;
 		Option.EXTENSIONS=true;
-		Option.SPORT=false;
-
-		// Overall TRACING Options
-		Option.TRACING=false;
-		Option.DEBUGGING=false;
-
-		// Scanner Trace Options
-		Option.TRACE_SCAN=false;
-		Option.TRACE_COMMENTS=false;
-
-		// Parser Trace Options
-		Option.TRACE_PARSE=false;
-
-		// Checker Trace Options
-		Option.TRACE_CHECKER=false;
-		Option.TRACE_CHECKER_OUTPUT=false;
-
-		// Coder Trace Options
-		Option.TRACE_CODING=false;
-
+		
+		Option.internal.InitCompilerOptions();
 	}
 
 	/**
@@ -173,17 +180,17 @@ public final class Option {
 		if(id.equalsIgnoreCase("noExecution")) return(noExecution); 
 		if(id.equalsIgnoreCase("WARNINGS")) return(WARNINGS); 
 		if(id.equalsIgnoreCase("EXTENSIONS")) return(EXTENSIONS); 
-		if(id.equalsIgnoreCase("SPORT")) return(SPORT); 
-		if(id.equalsIgnoreCase("TRACING")) return(TRACING); 
-		if(id.equalsIgnoreCase("TRACE_SCAN")) return(TRACE_SCAN); 
-		if(id.equalsIgnoreCase("TRACE_COMMENTS")) return(TRACE_COMMENTS); 
-		if(id.equalsIgnoreCase("TRACE_PARSE")) return(TRACE_PARSE); 
-		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_OUTPUT")) return(TRACE_ATTRIBUTE_OUTPUT); 
-		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_INPUT")) return(TRACE_ATTRIBUTE_INPUT); 
-		if(id.equalsIgnoreCase("TRACE_CHECKER")) return(TRACE_CHECKER); 
-		if(id.equalsIgnoreCase("TRACE_CHECKER_OUTPUT")) return(TRACE_CHECKER_OUTPUT); 
-		if(id.equalsIgnoreCase("TRACE_CODING")) return(TRACE_CODING); 
-		if(id.equalsIgnoreCase("TRACE_BYTECODE_OUTPUT")) return(TRACE_BYTECODE_OUTPUT); 
+		if(id.equalsIgnoreCase("SPORT")) return(internal.SPORT); 
+		if(id.equalsIgnoreCase("TRACING")) return(internal.TRACING); 
+		if(id.equalsIgnoreCase("TRACE_SCAN")) return(internal.TRACE_SCAN); 
+		if(id.equalsIgnoreCase("TRACE_COMMENTS")) return(internal.TRACE_COMMENTS); 
+		if(id.equalsIgnoreCase("TRACE_PARSE")) return(internal.TRACE_PARSE); 
+		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_OUTPUT")) return(internal.TRACE_ATTRIBUTE_OUTPUT); 
+		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_INPUT")) return(internal.TRACE_ATTRIBUTE_INPUT); 
+		if(id.equalsIgnoreCase("TRACE_CHECKER")) return(internal.TRACE_CHECKER); 
+		if(id.equalsIgnoreCase("TRACE_CHECKER_OUTPUT")) return(internal.TRACE_CHECKER_OUTPUT); 
+		if(id.equalsIgnoreCase("TRACE_CODING")) return(internal.TRACE_CODING); 
+		if(id.equalsIgnoreCase("TRACE_BYTECODE_OUTPUT")) return(internal.TRACE_BYTECODE_OUTPUT); 
 		return(false);
 	}
 
@@ -199,17 +206,17 @@ public final class Option {
 		if(id.equalsIgnoreCase("noExecution")) noExecution=val; 
 		if(id.equalsIgnoreCase("WARNINGS")) WARNINGS=val; 
 		if(id.equalsIgnoreCase("EXTENSIONS")) EXTENSIONS=val; 
-		if(id.equalsIgnoreCase("SPORT")) SPORT=val; 
-		if(id.equalsIgnoreCase("TRACING")) TRACING=val; 
-		if(id.equalsIgnoreCase("TRACE_SCAN")) TRACE_SCAN=val; 
-		if(id.equalsIgnoreCase("TRACE_COMMENTS")) TRACE_COMMENTS=val; 
-		if(id.equalsIgnoreCase("TRACE_PARSE")) TRACE_PARSE=val; 
-		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_OUTPUT")) TRACE_ATTRIBUTE_OUTPUT=val; 
-		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_INPUT")) TRACE_ATTRIBUTE_INPUT=val; 
-		if(id.equalsIgnoreCase("TRACE_CHECKER")) TRACE_CHECKER=val; 
-		if(id.equalsIgnoreCase("TRACE_CHECKER_OUTPUT")) TRACE_CHECKER_OUTPUT=val; 
-		if(id.equalsIgnoreCase("TRACE_CODING")) TRACE_CODING=val; 
-		if(id.equalsIgnoreCase("TRACE_BYTECODE_OUTPUT")) TRACE_BYTECODE_OUTPUT=val; 
+		if(id.equalsIgnoreCase("SPORT")) internal.SPORT=val; 
+		if(id.equalsIgnoreCase("TRACING")) internal.TRACING=val; 
+		if(id.equalsIgnoreCase("TRACE_SCAN")) internal.TRACE_SCAN=val; 
+		if(id.equalsIgnoreCase("TRACE_COMMENTS")) internal.TRACE_COMMENTS=val; 
+		if(id.equalsIgnoreCase("TRACE_PARSE")) internal.TRACE_PARSE=val; 
+		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_OUTPUT")) internal.TRACE_ATTRIBUTE_OUTPUT=val; 
+		if(id.equalsIgnoreCase("TRACE_ATTRIBUTE_INPUT")) internal.TRACE_ATTRIBUTE_INPUT=val; 
+		if(id.equalsIgnoreCase("TRACE_CHECKER")) internal.TRACE_CHECKER=val; 
+		if(id.equalsIgnoreCase("TRACE_CHECKER_OUTPUT")) internal.TRACE_CHECKER_OUTPUT=val; 
+		if(id.equalsIgnoreCase("TRACE_CODING")) internal.TRACE_CODING=val; 
+		if(id.equalsIgnoreCase("TRACE_BYTECODE_OUTPUT")) internal.TRACE_BYTECODE_OUTPUT=val; 
 	}
 
 	/**
@@ -220,19 +227,21 @@ public final class Option {
 		panel.setBackground(Color.white);
 		panel.add(checkBox("CaseSensitive","Source file is case sensitive."));
 		panel.add(checkBox("Verbose","Output messages about what the compiler is doing"));
-		panel.add(checkBox("Warnings","Generate no warnings"));
+		panel.add(checkBox("Warnings","Generate warning messages"));
 		panel.add(checkBox("Extensions","Disable all language extensions. In other words, follow the Simula Standard literally"));
 		panel.add(checkBox("noExecution","Don't execute generated .jar file"));
-		panel.add(checkBox("TRACING","Debug option"));
-		panel.add(checkBox("TRACE_SCAN","Debug option"));
-		panel.add(checkBox("TRACE_COMMENTS","Debug option"));
-		panel.add(checkBox("TRACE_PARSE","Debug option"));
-		panel.add(checkBox("TRACE_ATTRIBUTE_OUTPUT","Debug option"));
-		panel.add(checkBox("TRACE_ATTRIBUTE_INPUT","Debug option"));
-		panel.add(checkBox("TRACE_CHECKER","Debug option"));
-		panel.add(checkBox("TRACE_CHECKER_OUTPUT","Debug option"));
-		panel.add(checkBox("TRACE_CODING","Debug option"));
-		panel.add(checkBox("TRACE_BYTECODE_OUTPUT","Debug option"));
+		if(Option.internal.DEBUGGING) {
+			panel.add(checkBox("TRACING","Debug option"));
+			panel.add(checkBox("TRACE_SCAN","Debug option"));
+			panel.add(checkBox("TRACE_COMMENTS","Debug option"));
+			panel.add(checkBox("TRACE_PARSE","Debug option"));
+			panel.add(checkBox("TRACE_ATTRIBUTE_OUTPUT","Debug option"));
+			panel.add(checkBox("TRACE_ATTRIBUTE_INPUT","Debug option"));
+			panel.add(checkBox("TRACE_CHECKER","Debug option"));
+			panel.add(checkBox("TRACE_CHECKER_OUTPUT","Debug option"));
+			panel.add(checkBox("TRACE_CODING","Debug option"));
+			panel.add(checkBox("TRACE_BYTECODE_OUTPUT","Debug option"));
+		}
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		Util.optionDialog(panel,"Select Compiler Options",JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE,"Ok");
 	}

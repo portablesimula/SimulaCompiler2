@@ -75,7 +75,7 @@ public abstract class Statement extends SyntaxClass {
 	public static Statement expectStatement() {
 		Vector<LabelDeclaration> labels = null;
 		int lineNumber=Parse.currentToken.lineNumber;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Statement.doParse: LabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
 		String ident = Parse.acceptIdentifier();
 		while (Parse.accept(KeyWord.COLON)) {
@@ -102,7 +102,7 @@ public abstract class Statement extends SyntaxClass {
 	 */
 	private static Statement expectUnlabeledStatement() {
 		int lineNumber=Parse.currentToken.lineNumber;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Statement.doUnlabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
 		switch(Parse.currentToken.getKeyWord()) {
 		    case KeyWord.BEGIN: Parse.nextToken(); return (new MaybeBlockDeclaration(null).expectMaybeBlock(lineNumber));

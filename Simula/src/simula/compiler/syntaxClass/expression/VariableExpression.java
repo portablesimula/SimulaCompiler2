@@ -145,7 +145,7 @@ public final class VariableExpression extends Expression {
 	 */
 	public VariableExpression(final String identifier) {
 		this.identifier = identifier;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW Variable: " + identifier);
 	}
 
@@ -205,7 +205,7 @@ public final class VariableExpression extends Expression {
 	 * @return the created Variable
 	 */
 	public static VariableExpression expectVariable(final String ident) {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse Variable, current=" + Parse.currentToken + ", prev=" + Parse.prevToken);
 		VariableExpression variable = new VariableExpression(ident);
 		if (Parse.accept(KeyWord.BEGPAR)) {
@@ -219,7 +219,7 @@ public final class VariableExpression extends Expression {
 			} while (Parse.accept(KeyWord.COMMA));
 			Parse.expect(KeyWord.ENDPAR);
 		}
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW Variable: " + variable);
 		return (variable);
 	}
@@ -288,7 +288,7 @@ public final class VariableExpression extends Expression {
 					formalIterator = cdecl.new ClassParameterIterator();
 				else {
 					formalIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
-					if(!Option.CREATE_JAVA_SOURCE) {
+					if(!Option.internal.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
 							else if(prc.identifier.equalsIgnoreCase("discrete")) ; // NOTHING
@@ -387,7 +387,7 @@ public final class VariableExpression extends Expression {
 				Util.IERR();
 			}
 
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END Variable(" + identifier + ").doChecking: type=" + type);
 		SET_SEMANTICS_CHECKED();
 	}

@@ -59,12 +59,12 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	 */
 	public SwitchDeclaration(final String ident) {
 		super(ident,ObjectKind.Procedure);
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration");
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration");
 		this.type = Type.Label;
 		Parse.expect(KeyWord.ASSIGNVALUE);
 		do { switchList.add(Expression.expectExpression());
 		} while (Parse.accept(KeyWord.COMMA));
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration(3), switchList=" + switchList);
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration(3), switchList=" + switchList);
 		new Parameter("_SW", Type.Integer, Parameter.Kind.Simple).into(parameterList);
 		Global.setScope(declaredIn);
 	}

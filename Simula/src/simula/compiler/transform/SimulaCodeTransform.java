@@ -72,7 +72,7 @@ final class SimulaCodeTransform implements CodeTransform {
 	@Override
 	public void atEnd(CodeBuilder builder) {
 		if (prevElement != null) {
-			if (Option.TRACE_REPAIRING_OUTPUT)
+			if (Option.internal.TRACE_REPAIRING_OUTPUT)
 				Util.TRACE("SimulaCodeTransform.atEnd: Output " + prevElement);
 			builder.with(prevElement);
 			prevElement = null;
@@ -81,7 +81,7 @@ final class SimulaCodeTransform implements CodeTransform {
 
 	@Override
 	public void accept(CodeBuilder builder, CodeElement element) {
-		if (Option.TRACE_REPAIRING_INPUT)
+		if (Option.internal.TRACE_REPAIRING_INPUT)
 			Util.TRACE("SimulaCodeTransform.accept: Input " + element);
 		if (element instanceof InvokeInstruction instr) {
 			if (instr.name().equalsString("_JUMPTABLE")) {
@@ -97,7 +97,7 @@ final class SimulaCodeTransform implements CodeTransform {
 				//
 				int tableSize = getConst(prevElement);
 				prevElement = null;
-				if (Option.TRACE_REPAIRING)
+				if (Option.internal.TRACE_REPAIRING)
 					Util.TRACE("SimulaCodeTransform.accept: Define TableSwitch " + tableSize);
 				cases = new Vector<SwitchCase>();
 				for (int i = 1; i <= tableSize; i++) {
@@ -107,9 +107,9 @@ final class SimulaCodeTransform implements CodeTransform {
 				Label defaultTarget = builder.newLabel(); // beginning of the default handler block.
 				int lowValue = 1; // the minimum key value.
 				int highValue = cases.size(); // the maximum key value.
-				if (Option.TRACE_REPAIRING_OUTPUT)
+				if (Option.internal.TRACE_REPAIRING_OUTPUT)
 					Util.TRACE("SimulaCodeTransform.accept: Output TableSwitch");
-				if (Option.TRACE_REPAIRING_OUTPUT)
+				if (Option.internal.TRACE_REPAIRING_OUTPUT)
 					Util.TRACE("SimulaCodeTransform.accept: Output defaultTarget=" + defaultTarget);
 				builder.tableswitch(lowValue, highValue, defaultTarget, cases).labelBinding(defaultTarget);
 				return;
@@ -127,16 +127,16 @@ final class SimulaCodeTransform implements CodeTransform {
 				//
 				int caseValue = getConst(prevElement);
 				prevElement = null;
-				if (Option.TRACE_REPAIRING)
+				if (Option.internal.TRACE_REPAIRING)
 					Util.TRACE("SimulaCodeTransform.accept: Define Label  " + caseValue);
 				LabelTarget target = (LabelTarget) cases.get(caseValue - 1).target();
 				builder.labelBinding(target.label());
-				if (Option.TRACE_REPAIRING_OUTPUT)
+				if (Option.internal.TRACE_REPAIRING_OUTPUT)
 					Util.TRACE("SimulaCodeTransform.accept: Output " + target);
 				return;
 			}
 		}
-		if (Option.TRACE_REPAIRING_OUTPUT)
+		if (Option.internal.TRACE_REPAIRING_OUTPUT)
 			Util.TRACE("SimulaCodeTransform.accept: Output " + prevElement);
 		if (prevElement != null)
 			builder.with(prevElement);

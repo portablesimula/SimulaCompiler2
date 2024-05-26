@@ -102,10 +102,10 @@ public final class RemoteVariable extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN RemoteVariable" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		this.type = doRemoteChecking(obj, var);
-		if (Option.TRACE_CHECKER) Util.TRACE("END RemoteVariable" + toString() + ".doChecking - Result type=" + this.type);
+		if (Option.internal.TRACE_CHECKER) Util.TRACE("END RemoteVariable" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -128,7 +128,7 @@ public final class RemoteVariable extends Expression {
 		if (qual == null)
 			Util.error("doRemoteChecking: Object Expression (" + obj + ") is not a ref() type rather " + objType);
 		else if (qual.hasLocalClasses)
-			if(Option.SPORT)
+			if(Option.internal.SPORT)
 			     Util.warning("Illegal remote access into object of class with local classes.");
 			else Util.error("Illegal remote access into object of class with local classes.");
 

@@ -76,14 +76,14 @@ public class JarFileBuilder {
 		if(jarOutput != null) Util.IERR();
 		this.programModule = program;
 		jarEntryNames = new Vector<String>();
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("BEGIN Create .jar File");
 		outputJarFile = new File(Global.outputDir, program.getIdentifier() + ".jar");
 		outputJarFile.getParentFile().mkdirs();
 		Manifest manifest = new Manifest();
 		mainEntry = Global.packetName + '/' + program.getIdentifier();
 		mainEntry = mainEntry.replace('/', '.');
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("Output " + outputJarFile + " MANIFEST'mainEntry=\"" + mainEntry + "\"");
 		manifest.getMainAttributes().put(Attributes.Name.MANIFEST_VERSION, "1.0");
 		manifest.getMainAttributes().putValue("Created-By", Global.simulaReleaseID + " (Portable Simula)");
@@ -97,7 +97,7 @@ public class JarFileBuilder {
 
 		jarOutput = new JarOutputStream(new FileOutputStream(outputJarFile), manifest);
 		
-		if(!Option.CREATE_JAVA_SOURCE) {
+		if(!Option.internal.CREATE_JAVA_SOURCE) {
 			// Add initial entry: 
 			String entryName = Global.packetName + '/';
 			addJarEntry(entryName, null);
@@ -169,9 +169,9 @@ public class JarFileBuilder {
 			listJarFile(outputJarFile);
 		}
 
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("END Create .jar File: " + outputJarFile);
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			Util.println(
 					"SimulaCompiler.createJarFile: BEGIN LIST GENERATED .jar FILE  ========================================================");
 			listJarFile(outputJarFile);
@@ -186,7 +186,7 @@ public class JarFileBuilder {
 	 * @throws IOException if something went wrong
 	 */
 	public void addTempClassFiles() throws IOException {
-		if(!Option.CREATE_JAVA_SOURCE) Util.IERR();
+		if(!Option.internal.CREATE_JAVA_SOURCE) Util.IERR();
 		// ADD TEMP FILES
 		add(jarOutput, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
 	}	
@@ -219,7 +219,7 @@ public class JarFileBuilder {
 			entryName = entryName.substring(pathSize);
 			if (entryName.startsWith("/"))
 				entryName = entryName.substring(1);
-			if (Option.TRACING && (!entryName.startsWith("simula/runtime")))
+			if (Option.internal.TRACING && (!entryName.startsWith("simula/runtime")))
 				Util.println("ADD-TO-JAR: "+entryName);
 
 			try (InputStream inpt = new FileInputStream(source)) {

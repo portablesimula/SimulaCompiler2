@@ -134,7 +134,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 			master.put(Master);
 		} else {
 			RTS_TXT subt = RTS_TXT.sub(Master, 1, newMaster.length());
-			DECLIB._ASGSTR(subt, newMaster);
+			RTS_RTObject._ASGSTR(subt, newMaster);
 			Master.POS = P + newt.length();
 			Master.LENGTH = Master.LENGTH + diff; // Note: diff is negative
 			master.put(Master);

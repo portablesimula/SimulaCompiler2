@@ -127,7 +127,7 @@ public class Directive {
 	 */
 	private static void setKeepJava(final String dir) {
 		if (dir != null)
-			Option.keepJava = new File(dir);
+			Option.internal.keepJava = new File(dir);
 		else
 			Util.warning("Missing directory in KEEP_JAVA directive");
 	}

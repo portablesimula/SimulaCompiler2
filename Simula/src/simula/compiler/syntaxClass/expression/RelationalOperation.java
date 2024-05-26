@@ -93,7 +93,7 @@ public final class RelationalOperation extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN RelationalOperation" + toString() + ".doChecking - Current Scope Chain: "	+ Global.getCurrentScope().edScopeChain());
 		lhs.doChecking();
 		rhs.doChecking();
@@ -123,7 +123,7 @@ public final class RelationalOperation extends Expression {
 			Util.IERR();
 			this.type = rhs.type;
 		}
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END RelationalOperation" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

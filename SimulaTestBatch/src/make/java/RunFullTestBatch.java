@@ -37,19 +37,21 @@ public final class RunFullTestBatch {
 
 	public static void main(String[] args) {
 
-		// Set options and tracing.
-		Option.INLINE_TESTING=true;
-		Option.TESTING_STACK_SIZE = true;
-		Option.CREATE_JAVA_SOURCE = true;
-//		Option.GENERATE_BYTEFILE=true;
-		Option.SPORT=true;
-//		Option.TRACING=false;
-		Option.WARNINGS=false;
-//		Option.verbose=false;
+		// Set Compiler Options.
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 		Option.CaseSensitive=true;
-//		Option.GNERATE_LINE_CALLS=true;
-//		Option.GNERATE_SNAPSHOTS=true;
+//		Option.noExecution=true;
+//		Option.WARNINGS=false;
+
+		// Set internal test, debug options.
+		Option.internal.INLINE_TESTING=true;
+		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.internal.SPORT=true;
+//		Option.internal.TRACING=false;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -251,7 +253,7 @@ public final class RunFullTestBatch {
 		for(String name:names) {
 //			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;
 			String fileName = sourceDir+name;
-			Option.RUNTIME_USER_DIR=new File(fileName).getParent();
+			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();
 			SimulaCompiler compiler = new SimulaCompiler(fileName);
 			try { compiler.doCompile(); } catch (IOException e) { Util.IERR("Compiler Error: ", e); }
 		}

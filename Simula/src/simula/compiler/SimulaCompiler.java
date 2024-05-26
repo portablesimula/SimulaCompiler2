@@ -110,7 +110,7 @@ public final class SimulaCompiler {
 			Global.sourceName = name.substring(0, p);
 		Global.sourceFileDir = inputFile.getParentFile();
 
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("Compiling: \"" + inputFileName + "\"");
 
 		if (Global.outputDir == null) {
@@ -122,7 +122,7 @@ public final class SimulaCompiler {
 		deleteTempFiles(Global.simulaTempDir);
 
 		// Create Temp .java-Files Directory:
-		File javatmp = Option.keepJava;
+		File javatmp = Option.internal.keepJava;
 		if (javatmp == null)
 			javatmp = Global.simulaTempDir;
 		File tmpJavaDir = new File(javatmp, "src/" + Global.packetName);
@@ -211,7 +211,7 @@ public final class SimulaCompiler {
 			if (elt == null)
 				return;
 			for (File f : elt) {
-				if (Option.DEBUGGING) {
+				if (Option.internal.DEBUGGING) {
 					if (f.isFile())
 						Util.println("Delete: " + f);
 				}
@@ -246,14 +246,14 @@ public final class SimulaCompiler {
 			Global.generatedJavaClass = new Vector<GeneratedJavaClass>();
 			Parse.initiate(reader);
 			programModule = new ProgramModule();
-			if (Option.TRACING) {
+			if (Option.internal.TRACING) {
 				Util.println("END Parsing, resulting Program: \"" + programModule + "\"");
-				if (Option.TRACE_PARSE && programModule != null)
+				if (Option.internal.TRACE_PARSE && programModule != null)
 					programModule.print(0);
 			}
 			Parse.close();
 			Global.duringParsing = false;
-			if(Option.PRINT_SYNTAX_TREE) {
+			if(Option.internal.PRINT_SYNTAX_TREE) {
 				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Parsing ================");
 				programModule.printTree(1);
 			}
@@ -265,17 +265,17 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Semantic Checker
 			// ***************************************************************
-			if (Option.TRACING)
+			if (Option.internal.TRACING)
 				Util.println("BEGIN Semantic Checker");
 			Global.duringChecking = true;
 			programModule.doChecking();
-			if (Option.TRACING) {
+			if (Option.internal.TRACING) {
 				Util.println("END Semantic Checker: \"" + programModule + "\"");
-				if (Option.TRACE_CHECKER_OUTPUT && programModule != null)
+				if (Option.internal.TRACE_CHECKER_OUTPUT && programModule != null)
 					programModule.print(0);
 			}
 			Global.duringChecking = false;
-			if(Option.PRINT_SYNTAX_TREE) {
+			if(Option.internal.PRINT_SYNTAX_TREE) {
 				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
 				programModule.printTree(1);
 			}
@@ -290,17 +290,17 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			Global.jarFileBuilder.open(programModule);
 			
-			if (!Option.CREATE_JAVA_SOURCE) {
-				if (Option.TRACING)
+			if (!Option.internal.CREATE_JAVA_SOURCE) {
+				if (Option.internal.TRACING)
 					Util.println("BEGIN Generate .class Output Code");
 				// *** Generate .class files
 				programModule.createJavaClassFile();
 			} else {
-				if (Option.TRACING)
+				if (Option.internal.TRACING)
 					Util.println("BEGIN Generate .java Output Code");
 				// *** Generate .java intermediate code
 				programModule.doJavaCoding();
-				if (Option.TRACING) {
+				if (Option.internal.TRACING) {
 					Util.println("END Generate .java Output Code");
 					for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
 						Util.println(javaClass.javaOutputFile.toString());
@@ -313,11 +313,11 @@ public final class SimulaCompiler {
 				throw new RuntimeException(msg);
 			}
 
-			if (Option.TRACING)
+			if (Option.internal.TRACING)
 				Util.println("BEGIN Possible Generate AttributeFile");
 			AttributeFileIO.write(programModule);
 
-			if(Option.CREATE_JAVA_SOURCE) {
+			if(Option.internal.CREATE_JAVA_SOURCE) {
 				// ***************************************************************
 				// *** CALL JAVA COMPILER
 				// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
@@ -325,14 +325,14 @@ public final class SimulaCompiler {
 				// ***************************************************************
 				doCallJavaCompiler();
 				doByteCodeEngineering();
-				if(Option.LIST_GENERATED_CLASS_FILES)
+				if(Option.internal.LIST_GENERATED_CLASS_FILES)
 					listGeneratedClassFiles();
 			}
 
 			// ***************************************************************
 			// *** CRERATE .jar FILE INLINE
 			// ***************************************************************
-			if(Option.CREATE_JAVA_SOURCE) {
+			if(Option.internal.CREATE_JAVA_SOURCE) {
 				Global.jarFileBuilder.addTempClassFiles();
 			}
 			outputJarFile = Global.jarFileBuilder.close();
@@ -343,15 +343,15 @@ public final class SimulaCompiler {
 			// *** EXECUTE .jar FILE
 			// ***************************************************************
 			if (!programModule.isExecutable()) {
-				if (Option.TRACING)
+				if (Option.internal.TRACING)
 					Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
 			} else if (Option.noExecution) {
-				if (Option.TRACING)
+				if (Option.internal.TRACING)
 					Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
 			} else {
 				if (Option.verbose)
 					Util.println("------------  EXECUTION SUMMARY  ------------");
-				if (Option.TRACING)
+				if (Option.internal.TRACING)
 					Util.println("Execute .jar File");
 				Vector<String> cmds = new Vector<String>();
 				cmds.add("java");
@@ -361,16 +361,16 @@ public final class SimulaCompiler {
 //				cmds.add("-Xdiag");
 //				cmds.add("-verbose:class");
 				cmds.add(jarFile);
-				if (Option.RUNTIME_USER_DIR.length() > 0) {
+				if (Option.internal.RUNTIME_USER_DIR.length() > 0) {
 					cmds.add("-userDir");
-					cmds.add(Option.RUNTIME_USER_DIR);
+					cmds.add(Option.internal.RUNTIME_USER_DIR);
 				} else {
 					cmds.add("-userDir");
 					cmds.add(Global.outputDir.getParentFile().getAbsolutePath());
 				}
 				RTOption.addRTArguments(cmds);
-				if (Option.SOURCE_FILE.length() > 0) {
-					cmds.add(Option.SOURCE_FILE);
+				if (Option.internal.SOURCE_FILE.length() > 0) {
+					cmds.add(Option.internal.SOURCE_FILE);
 				}
 				int exitValue3 = Util.execute(cmds);
 				if (Option.verbose)
@@ -380,7 +380,7 @@ public final class SimulaCompiler {
 					throw new RuntimeException("Execution of "+jarFile+" failed. ExitValue = "+exitValue3);
 				}
 			}
-			if (Option.DEBUGGING)
+			if (Option.internal.DEBUGGING)
 				Util.println("------------  CLEANING UP TEMP FILES  ------------");
 			deleteTempFiles(Global.simulaTempDir);
 
@@ -397,7 +397,7 @@ public final class SimulaCompiler {
 
 		if (Option.verbose)
 			fileSummary();
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			Util.println("------------  CLASSPATH DETAILS  ------------");
 			Util.println("Java PathSeparator " + System.getProperty("path.separator"));
 			Util.println("Java ClassPath     " + System.getProperty("java.class.path"));
@@ -410,7 +410,7 @@ public final class SimulaCompiler {
 			Util.popUpError("Unable to access the Runtime System at:" + "\n" + rtsLib
 					+ "\nCheck the installation and consider" + "\nto Download it again.\n");
 		}
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			Util.println(
 					"Simula Runtime System:    \"" + rtsLib + "\", exists=" + rtsExist + ", canRead=" + rtsCread);
 			String[] list = rtsLib.list();
@@ -424,7 +424,7 @@ public final class SimulaCompiler {
 		}
 		String pathSeparator = System.getProperty("path.separator");
 		for (File jarFile : Global.externalJarFiles) {
-			if (Option.DEBUGGING) {
+			if (Option.internal.DEBUGGING) {
 				boolean exist = jarFile.exists();
 				boolean cread = jarFile.canRead();
 				Util.println(
@@ -446,7 +446,7 @@ public final class SimulaCompiler {
 			}
 		} else
 			exitValue = callJavacCompiler(classPath);
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			Util.println("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
 			for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
 				Util.println(javaClass.getClassOutputFileName());
@@ -475,10 +475,10 @@ public final class SimulaCompiler {
 //		arguments.add("-target");
 //		arguments.add("21");
 //		arguments.add("-release"); arguments.add("21"); // TODO: Change when ClassFile API is released
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			arguments.add("-version");
 		}
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("SimulaCompiler.callJavaSystemCompiler: classPath=\"" + classPath + "\"");
 		arguments.add("-classpath");
 		arguments.add(classPath);
@@ -499,7 +499,7 @@ public final class SimulaCompiler {
 			out = Global.console.getOutputStream();
 			err = Global.console.getErrorStream();
 		}
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			Util.println("------------  Call Java System Compiler  ------------");
 			Util.println("System Compiler supports " + compiler.getSourceVersions());
 			for (int i = 0; i < args.length; i++)
@@ -528,10 +528,10 @@ public final class SimulaCompiler {
 //		cmds.add("-target");
 //		cmds.add("21");
 //		cmds.add("-release"); cmds.add("21"); // TODO: Change when ClassFile API is released
-		if (Option.DEBUGGING) {
+		if (Option.internal.DEBUGGING) {
 			cmds.add("-version");
 		}
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			Util.println("SimulaCompiler.callJavacCompiler: classPath=\"" + classPath + "\"");
 		cmds.add("-classpath");
 		cmds.add(classPath);
@@ -543,7 +543,7 @@ public final class SimulaCompiler {
 			cmds.add(javaClass.javaOutputFile.toString()); // Add .java Files
 		}
 		int exitValue = Util.execute(cmds);
-		if (Option.TRACING) {
+		if (Option.internal.TRACING) {
 			Util.println("END Generate .class Output Code. Exit value=" + exitValue);
 			for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
 				Util.println(javaClass.getClassOutputFileName());
@@ -555,8 +555,8 @@ public final class SimulaCompiler {
 	// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
 	// ***************************************************************
 	private void doByteCodeEngineering() throws IOException {
-		if (Option.keepJava == null) {
-			if (Option.TRACE_BYTECODE_OUTPUT) {
+		if (Option.internal.keepJava == null) {
+			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
 				Util.println("------------  LIST ByteCode Before Engineering  ------------");
 				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
 					String classFile = javaClass.getClassOutputFileName();
@@ -569,7 +569,7 @@ public final class SimulaCompiler {
 					ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
 				}
 			}
-			if (Option.TRACE_BYTECODE_OUTPUT) {
+			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
 				Util.println("------------  LIST ByteCode After Engineering  ------------");
 				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
 					String classFile = javaClass.getClassOutputFileName();
@@ -577,7 +577,7 @@ public final class SimulaCompiler {
 				}
 			}
 		} else {
-			Util.warning("Option.keepJava set: No ByteCode Engineering is performed");
+			Util.warning("Option.internal.keepJava set: No ByteCode Engineering is performed");
 		}
 	}
 
@@ -631,7 +631,7 @@ public final class SimulaCompiler {
 			Util.println("Resulting File:  \"" + outputJarFile.getAbsolutePath() + "\"");
 			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
-//		if (Option.DEBUGGING)
+//		if (Option.internal.DEBUGGING)
 			JarFileBuilder.listJarFile(outputJarFile);
 	}
 

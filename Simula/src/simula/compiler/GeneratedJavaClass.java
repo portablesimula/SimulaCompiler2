@@ -183,7 +183,7 @@ public final class GeneratedJavaClass {
 			if (prevLineNumber != sourceLineNumber) {
 				String s0 = edIndent() + edLineNumberLine(sourceLineNumber, modid);
 				appendLine(currentJavaLineNumber, sourceLineNumber);
-				if (Option.TRACE_CODING)
+				if (Option.internal.TRACE_CODING)
 					Util.println("CODE " + sourceLineNumber + ": " + s0);
 				currentJavaLineNumber++;
 				writer.write(s0 + '\n');
@@ -196,7 +196,7 @@ public final class GeneratedJavaClass {
 			String s = edIndent() + line;
 			if (line.contains("{"))
 				indent++;
-			if (Option.TRACE_CODING)
+			if (Option.internal.TRACE_CODING)
 				Util.println("CODE " + sourceLineNumber + ": " + s);
 			Util.ASSERT(writer != null, "Can't Output Code - writer==null");
 			writer.write(s + '\n');
@@ -219,7 +219,7 @@ public final class GeneratedJavaClass {
 	 */
 	private String edLineNumberLine(final int simulaLine, final String modid) {
 		StringBuilder sb = new StringBuilder();
-		if (Global.duringSTM_Coding && Option.GNERATE_LINE_CALLS) {
+		if (Global.duringSTM_Coding && Option.internal.GNERATE_LINE_CALLS) {
 			sb.append("RTS_COMMON._LINE(\"").append(modid).append("\",").append(simulaLine).append("); ");
 		}
 		sb.append("// JavaLine ").append(currentJavaLineNumber).append(" <== SourceLine ").append(simulaLine);
@@ -274,7 +274,7 @@ public final class GeneratedJavaClass {
 	 * @param s the code line string
 	 */
 	private void writeCode(String s) {
-		if (Option.TRACE_CODING)
+		if (Option.internal.TRACE_CODING)
 			Util.println("CODE " + Global.sourceLineNumber + ": " + s);
 		Util.ASSERT(writer != null, "Can't Output Code - writer==null");
 		try {

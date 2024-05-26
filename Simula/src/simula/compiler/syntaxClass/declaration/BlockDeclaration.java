@@ -426,7 +426,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				.labelBinding(begScope)
 				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
 			
-				if(Option.TESTING_STACK_SIZE) {
+				if(Option.internal.TESTING_STACK_SIZE) {
 					checkStackSize = codeBuilder.newLabel();
 					codeBuilder
 						.aconst_null()                 // TESTING_STACK_SIZE
@@ -440,7 +440,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					.aload(0)
 					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")));
 					
-				if(Option.TESTING_STACK_SIZE) {
+				if(Option.internal.TESTING_STACK_SIZE) {
 					codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
 				}
 				

@@ -211,7 +211,7 @@ public class RTS_File extends RTS_CLASS {
 	 * <p>
 	 * If no file exists with that fileName it will try several possibilities:
 	 * <ul>
-	 * <li>First it will search the Option.RUNTIME_USER_DIR</li>
+	 * <li>First it will search the Option.internal.RUNTIME_USER_DIR</li>
 	 * <li>Second, system properties "user.dir" and "java.class.path".parent</li>
 	 * <li>Finally, a JFileChooser dialog is opened to let the user select the file</li>
 	 * </ul>

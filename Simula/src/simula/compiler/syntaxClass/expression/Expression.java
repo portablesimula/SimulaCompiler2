@@ -119,7 +119,7 @@ public abstract class Expression extends SyntaxClass {
 			Parse.expect(KeyWord.THEN); Expression thenExpression=acceptSimpleExpression();
 			Parse.expect(KeyWord.ELSE); Expression elseExpression=acceptExpression();
 			Expression expr=new ConditionalExpression(Type.Boolean,condition,thenExpression,elseExpression);
-			if(Option.TRACE_PARSE) Util.TRACE("Expression: ParseExpression, result="+expr);
+			if(Option.internal.TRACE_PARSE) Util.TRACE("Expression: ParseExpression, result="+expr);
 			return(expr);
 		} else return(acceptSimpleExpression());
 	} 
@@ -371,7 +371,7 @@ public abstract class Expression extends SyntaxClass {
 	private static Expression acceptBASICEXPR() {
 		// Dette er vel kanskje det samme som “primary”?
 		// Merk: Alt som kan stå foran et postfix (DOT, IS, IN og QUA) må være et BASICEXPR
-		if(Option.TRACE_PARSE) Parse.TRACE("Expression: acceptExpression");
+		if(Option.internal.TRACE_PARSE) Parse.TRACE("Expression: acceptExpression");
 		Expression expr=null;
 		if(Parse.accept(KeyWord.BEGPAR)) { expr = acceptExpression(); Parse.expect(KeyWord.ENDPAR); }
 		else if(Parse.accept(KeyWord.INTEGERKONST)) expr = new Constant(Type.Integer,Parse.prevToken.getValue());
@@ -386,7 +386,7 @@ public abstract class Expression extends SyntaxClass {
 		else { String ident=Parse.acceptIdentifier();
 			if(ident!=null) expr=VariableExpression.expectVariable(ident);
 			else {
-				if(Option.TRACE_PARSE) Parse.TRACE("Expression: acceptBASICEXPR returns: NULL, prevKeyword="+Parse.prevToken.getKeyWord());
+				if(Option.internal.TRACE_PARSE) Parse.TRACE("Expression: acceptBASICEXPR returns: NULL, prevKeyword="+Parse.prevToken.getKeyWord());
 				if(Parse.prevToken.getKeyWord()==KeyWord.SEMICOLON) Parse.skipMisplacedCurrentSymbol(); // Ad'Hoc
 				return(null);
 			}
@@ -403,7 +403,7 @@ public abstract class Expression extends SyntaxClass {
 				else expr=new ObjectRelation(expr,opr,classIdentifier);
 			}
 		}
-		if(Option.TRACE_PARSE) Parse.TRACE("Expression: acceptBasicExpression returns: "+expr);
+		if(Option.internal.TRACE_PARSE) Parse.TRACE("Expression: acceptBasicExpression returns: "+expr);
 		return(expr);
 	}
   

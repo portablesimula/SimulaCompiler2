@@ -89,7 +89,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	 * Connection block end.
 	 */
 	public void end() {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ConnectionBlock: " + this.edScopeChain());
 		if (labelList != null && !labelList.isEmpty())
 			MaybeBlockDeclaration.moveLabelsFrom(this); // Label is also declaration
@@ -138,18 +138,18 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
 		for (Declaration declaration : declarationList) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
 		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
 		}
-		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
 		return (null);
 	}
 

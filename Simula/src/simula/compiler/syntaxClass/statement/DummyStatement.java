@@ -42,7 +42,7 @@ public final class DummyStatement extends Statement {
 	 */
 	DummyStatement(final int line) {
 		super(line);
-		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": DummyStatement: "+this);
+		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": DummyStatement: "+this);
 	}
 
 	@Override

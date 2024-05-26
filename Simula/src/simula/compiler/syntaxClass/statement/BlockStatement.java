@@ -67,7 +67,7 @@ public final class BlockStatement extends Statement {
 	public BlockStatement(final BlockDeclaration blockDeclaration) {
 		super(blockDeclaration.lineNumber);
 		this.blockDeclaration = blockDeclaration;
-		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": BlockStatement: "+this);
+		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": BlockStatement: "+this);
 	}
 	
 	/**

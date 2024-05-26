@@ -83,7 +83,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 */
 	public static MaybeBlockDeclaration createMainProgramBlock() {
 		int lineNumber=Parse.prevToken.lineNumber;
-		if (Option.TRACE_PARSE)	Util.TRACE("BlockStatement.createMainProgramBlock: line="+lineNumber+" "+Parse.prevToken);
+		if (Option.internal.TRACE_PARSE)	Util.TRACE("BlockStatement.createMainProgramBlock: line="+lineNumber+" "+Parse.prevToken);
 		MaybeBlockDeclaration module = new MaybeBlockDeclaration(Global.sourceName);
 		module.isMainModule = true;
 		module.declarationKind = ObjectKind.SimulaProgram;
@@ -113,7 +113,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 */
 	public BlockStatement expectMaybeBlock(int line) {
 		this.lineNumber=line;
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse MayBeBlock");
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse MayBeBlock");
 		while (Declaration.acceptDeclaration(this))
 			Parse.expect(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
@@ -187,18 +187,18 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking MayBeBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking MayBeBlock for "+ident+" ================================== "+identifier+" ==================================");
 		for (Declaration declaration : declarationList) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
 		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
 		}
-		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking MayBeBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking MayBeBlock for "+ident+" ================================== "+identifier+" ==================================");
 		return (null);
 	}
 

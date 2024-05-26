@@ -87,7 +87,7 @@ public final class ObjectGenerator extends Expression {
 		this.classIdentifier = ident;
 		this.type = Type.Ref(classIdentifier);
 		this.params = params;
-		if (Option.TRACE_PARSE) Util.TRACE("NEW ObjectGenerator: " + toString());
+		if (Option.internal.TRACE_PARSE) Util.TRACE("NEW ObjectGenerator: " + toString());
 	}
 
 	/**
@@ -101,7 +101,7 @@ public final class ObjectGenerator extends Expression {
 	 * @return the newly created ObjectGenerator.
 	 */
 	static Expression expectNew() {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse ObjectGenerator, current=" + Parse.currentToken);
 		String classIdentifier = Parse.expectIdentifier();
 		Vector<Expression> params = new Vector<Expression>();
@@ -122,7 +122,7 @@ public final class ObjectGenerator extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ObjectGenerator(" + classIdentifier + ").doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		meaning = Global.getCurrentScope().findMeaning(classIdentifier);
 		if (meaning == null) {
@@ -142,13 +142,13 @@ public final class ObjectGenerator extends Expression {
 				Util.error("Wrong number of parameters to " + cls);
 			Declaration formalParameter = formalIterator.next();
 			Type formalType = formalParameter.type;
-			if (Option.TRACE_CHECKER)
+			if (Option.internal.TRACE_CHECKER)
 				Util.TRACE("Formal Parameter: " + formalParameter + ", Formal Type=" + formalType);
 			Expression actualParameter = actualIterator.next();
 			actualParameter.doChecking();
 
 			Type actualType = actualParameter.type;
-			if (Option.TRACE_CHECKER)
+			if (Option.internal.TRACE_CHECKER)
 				Util.TRACE("Actual Parameter: " + actualType + " " + actualParameter + ", Actual Type=" + actualType);
 			Expression checkedParameter = TypeConversion.testAndCreate(formalType, actualParameter);
 			checkedParameter.backLink = this;
@@ -157,7 +157,7 @@ public final class ObjectGenerator extends Expression {
 		}
 		if (formalIterator.hasNext())
 			Util.error("Missing parameter("+formalIterator.next()+") to " + cls);
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END ObjectGenerator(" + classIdentifier + ").doChecking: type=" + type);
 		SET_SEMANTICS_CHECKED();
 	}

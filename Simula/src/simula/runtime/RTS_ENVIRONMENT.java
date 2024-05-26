@@ -12,7 +12,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
-import simula.runtime.RTS_Option;
 
 /**
  * System class ENVIRONMENT.

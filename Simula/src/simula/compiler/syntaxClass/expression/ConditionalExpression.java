@@ -65,7 +65,7 @@ public final class ConditionalExpression extends Expression {
 		this.condition = condition;
 		this.thenExpression = thenExpression; thenExpression.backLink=this;
 		this.elseExpression = elseExpression; elseExpression.backLink=this;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW ConditionalExpression: " + toString());
 	}
 

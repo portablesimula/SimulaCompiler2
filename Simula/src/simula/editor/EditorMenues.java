@@ -354,7 +354,7 @@ public class EditorMenues extends JMenuBar {
     // *** doOpenFileAction
     // ****************************************************************
 	/**
-	 * Open file acation
+	 * Open file action
 	 */
 	private void doOpenFileAction() {
         JFileChooser fileChooser = new JFileChooser(Global.currentWorkspace);
@@ -523,8 +523,8 @@ public class EditorMenues extends JMenuBar {
 	 * The run action
 	 */
 	private void doRunAction() {
-		Option.DEBUGGING=false;
-//		RTOption.DEBUGGING=false;
+		Option.internal.DEBUGGING=false;
+//		RTOption.internal.DEBUGGING=false;
 		doStartRunning();
 	}
 	
@@ -535,8 +535,8 @@ public class EditorMenues extends JMenuBar {
 	 * The debug action
 	 */
 	private void doDebugAction() {
-		Option.DEBUGGING=true;
-//		RTOption.DEBUGGING=true;
+		Option.internal.DEBUGGING=true;
+//		RTOption.internal.DEBUGGING=true;
 		RTOption.VERBOSE=true;
 		RTOption.selectRuntimeOptions();
 		doStartRunning();
@@ -564,7 +564,7 @@ public class EditorMenues extends JMenuBar {
 			String text=SimulaEditor.current.editTextPane.getText();
 			StringReader reader=new StringReader(text);
 			String name=(file!=null)?file.getPath():Global.tempJavaFileDir+"/unnamed.sim";
-			if(file!=null) Option.RUNTIME_USER_DIR=Global.currentWorkspace.toString();
+			if(file!=null) Option.internal.RUNTIME_USER_DIR=Global.currentWorkspace.toString();
 			new Thread(new Runnable() {
 				public void run() {
 					try { new SimulaCompiler(name,reader).doCompile(); }
@@ -658,9 +658,8 @@ public class EditorMenues extends JMenuBar {
 		  + "   held by James Gosling at the 50th anniversary of Simula\n"
 		  + "   in Oslo on 27th September, 2017.\n\n"
 
-		  + "   This Simula System is written in Java and compiles to pure\n" 
-		  + "   Java code with one exception; the Goto Statement need to\n" 
-		  + "   be corrected in the byte code, which is done automatically.\n\n");
+		  + "   This Simula System is written in Java and compiles to an\n" 
+		  + "   executable .jar file consisting of some Java ClassFiles.\n\n");
 		Util.optionDialog(msg,"About Portable Simula",JOptionPane.OK_OPTION, JOptionPane.QUESTION_MESSAGE,"Ok");
 	}
 	

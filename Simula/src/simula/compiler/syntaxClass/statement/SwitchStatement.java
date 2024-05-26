@@ -118,7 +118,7 @@ public final class SwitchStatement extends Statement {
 	 */
 	SwitchStatement(int line) {
 		super(line);
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse SwitchStatement: line="+line);
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse SwitchStatement: line="+line);
 		Parse.expect(KeyWord.BEGPAR);
 		lowKey = Expression.expectExpression();
 		Parse.expect(KeyWord.COLON);
@@ -145,7 +145,7 @@ public final class SwitchStatement extends Statement {
 			switchCases.add(new WhenPart(caseKeyList, statement));
 		}
 		Parse.expect(KeyWord.END);
-		if (Option.TRACE_PARSE)	Util.TRACE("Line "+lineNumber+": SwitchStatement: "+this);
+		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+lineNumber+": SwitchStatement: "+this);
 	}
 
 	/**
@@ -218,7 +218,7 @@ public final class SwitchStatement extends Statement {
     	private WhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
     		this.caseKeyList=caseKeyList;
     		this.statement=statement;
-    		if(Option.TRACE_PARSE) Util.TRACE("NEW WhenPart: " + toString());
+    		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW WhenPart: " + toString());
     	}
 	
     	/**
@@ -329,7 +329,7 @@ public final class SwitchStatement extends Statement {
     public void doChecking() {
     	if(IS_SEMANTICS_CHECKED()) return;
     	Global.sourceLineNumber=lineNumber;
-    	if(Option.TRACE_CHECKER) Util.TRACE("BEGIN SwitchStatement("+toString()+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());    
+    	if(Option.internal.TRACE_CHECKER) Util.TRACE("BEGIN SwitchStatement("+toString()+").doChecking - Current Scope Chain: "+Global.getCurrentScope().edScopeChain());    
     	lowKey.doChecking(); hiKey.doChecking();
     	switchKey.doChecking();
 		if(switchKey.type.keyWord == Type.T_CHARACTER) {

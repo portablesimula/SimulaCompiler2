@@ -95,14 +95,14 @@ public final class QualifiedObject extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN QualifiedObject" + toString() + ".doChecking - Current Scope Chain: "	+ Global.getCurrentScope().edScopeChain());
 		classDeclaration = getQualification(classIdentifier);
 		lhs.doChecking();
 		if (!checkCompatibility(lhs, classIdentifier))
 			Util.error("Illegal Object Expression: " + lhs + " is not compatible with " + classIdentifier);
 		this.type = new Type(classIdentifier);
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END QualifiedObject" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

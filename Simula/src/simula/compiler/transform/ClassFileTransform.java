@@ -29,14 +29,14 @@ public class ClassFileTransform {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public static void doRepairSingleByteCode(final String inputFileName, final String outputFileName) throws IOException {
-		if (Option.TRACE_REPAIRING)
+		if (Option.internal.TRACE_REPAIRING)
 			Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Input = " + inputFileName);
-		if (Option.LIST_INPUT_INSTRUCTION_LIST)
+		if (Option.internal.LIST_INPUT_INSTRUCTION_LIST)
 			Util.doListClassFile(inputFileName);
 		FileInputStream inpt = new FileInputStream(inputFileName);
 		byte[] bytes = inpt.readAllBytes();
 		inpt.close();
-		if (Option.TRACE_REPAIRING_INPUT)
+		if (Option.internal.TRACE_REPAIRING_INPUT)
 			Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Input=" + inputFileName);
 //		Util.IERR("UN-COMMENT FOLLOWING LINES ...");
 //		ClassModel classModel = ClassFile.parse(bytes);
@@ -48,7 +48,7 @@ public class ClassFileTransform {
 		if (transform != null) {
 //			byte[] bytes2 = classModel.transform(transform);
 			byte[] bytes2 = cf.transform(classModel, transform);
-			if (Option.TRACE_REPAIRING_OUTPUT)
+			if (Option.internal.TRACE_REPAIRING_OUTPUT)
 				Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Output=" + outputFileName);
 			FileOutputStream oupt = new FileOutputStream(outputFileName);
 			oupt.write(bytes2);
@@ -56,7 +56,7 @@ public class ClassFileTransform {
 			oupt.close();
 		} else
 			Util.IERR("ClassFileTransform.doRepairSingleByteCode: _STM Method not found");
-		if (Option.LIST_REPAIRED_INSTRUCTION_LIST)
+		if (Option.internal.LIST_REPAIRED_INSTRUCTION_LIST)
 			Util.doListClassFile(outputFileName);
 	}
 

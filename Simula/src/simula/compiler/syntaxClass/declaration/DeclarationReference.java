@@ -36,7 +36,7 @@ public final class DeclarationReference extends Declaration {
 		super(null);
 		this.SEQU = SEQU;
 		this.objectReferenceMap=objectReferenceMap;
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW ThisObjectExpression: " + toString());
 	}
 

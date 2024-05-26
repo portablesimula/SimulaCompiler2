@@ -156,7 +156,7 @@ public final class Util {
 	 * @param msg the message to print
 	 */
 	public static void TRACE(final String msg) {
-		if (Option.TRACING)
+		if (Option.internal.TRACING)
 			println("TRACE " + Global.sourceLineNumber + ": " + msg);
 	}
 
@@ -165,7 +165,7 @@ public final class Util {
 	 * @param msg the message to print
 	 */
 	public static void TRACE_OUTPUT(final String msg) {
-		if (Option.TRACE_ATTRIBUTE_OUTPUT)
+		if (Option.internal.TRACE_ATTRIBUTE_OUTPUT)
 			Util.println("ATTR OUTPUT: " + msg);
 	}
 
@@ -174,7 +174,7 @@ public final class Util {
 	 * @param msg the message to print
 	 */
 	public static void TRACE_INPUT(final String msg) {
-		if (Option.TRACE_ATTRIBUTE_INPUT)
+		if (Option.internal.TRACE_ATTRIBUTE_INPUT)
 			Util.println("ATTR INPUT: " + msg);
 	}
 
@@ -389,18 +389,10 @@ public final class Util {
 	}
 
 	public static void buildLineNumber(CodeBuilder codeBuilder, SyntaxClass stx) {
-//		if(!Option.GNERATE_LINE_CALLS) return;
 		codeBuilder.lineNumber(stx.lineNumber);
-		if(!Option.GNERATE_SNAPSHOTS) return;
-		// SnapShot
-		codeBuilder
-			.sipush(stx.lineNumber)
-			.ldc(codeBuilder.constantPool().stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
 	}
 
 	public static void buildSNAPSHOT(CodeBuilder codeBuilder, String stx) {
-//		if(!Option.GNERATE_LINE_CALLS) return;
 		// SnapShot
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder
@@ -410,7 +402,6 @@ public final class Util {
 	}
 
 	public static void buildSNAPSHOT2(CodeBuilder codeBuilder, String stx) {
-//		if(!Option.GNERATE_LINE_CALLS) return;
 		// SnapShot
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder
@@ -422,7 +413,6 @@ public final class Util {
 
 
 	public static void buildSNAPSHOT2F(CodeBuilder codeBuilder, String stx) {
-//		if(!Option.GNERATE_LINE_CALLS) return;
 		// SnapShot
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder

@@ -8,7 +8,6 @@ import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SignatureAttribute;
 import java.lang.classfile.attribute.SourceFileAttribute;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
@@ -47,11 +46,11 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
 
 		Meaning meaning = declaredIn.findVisibleAttributeMeaning(ident);
 		
-		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Thunk for "+ident+" ================================== "+identifier+" ==================================");
 		return (meaning);
 	}
 
@@ -237,7 +236,7 @@ public final class Thunk extends DeclarationScope {
 				.localVariable(0,"this",CD_ThisClass,begScope,endScope)
 				.localVariable(1,"parameter_x",CD.RTS_RTObject,begScope,endScope);
 			
-			if(Option.TESTING_STACK_SIZE) {
+			if(Option.internal.TESTING_STACK_SIZE) {
 				checkStackSize = codeBuilder.newLabel();
 				codeBuilder
 					.aconst_null()                 // TESTING_STACK_SIZE
@@ -304,7 +303,7 @@ public final class Thunk extends DeclarationScope {
 				codeBuilder.putfield(pool.fieldRefEntry(owner, ident, writeableVariable.type.toClassDesc()));
 			}
 			
-			if(Option.TESTING_STACK_SIZE) {
+			if(Option.internal.TESTING_STACK_SIZE) {
 				codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
 			}
 

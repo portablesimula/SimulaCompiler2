@@ -177,7 +177,7 @@ public final class ArithmeticExpression extends Expression {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ArithmeticOperation" + toString() + ".doChecking - Current Scope Chain: "
 					+ Global.getCurrentScope().edScopeChain());
 		switch (opr) {
@@ -232,7 +232,7 @@ public final class ArithmeticExpression extends Expression {
 			}
 			default -> Util.IERR();
 		}
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END ArithmeticOperation" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

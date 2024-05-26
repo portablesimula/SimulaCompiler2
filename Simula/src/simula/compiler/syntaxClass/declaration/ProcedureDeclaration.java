@@ -149,7 +149,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		ProcedureDeclaration proc = new ProcedureDeclaration(null, ObjectKind.Procedure);
 		proc.lineNumber=Parse.prevToken.lineNumber;
 		proc.type = type;
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ProcedureDeclaration, type=" + type);
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ProcedureDeclaration, type=" + type);
 		proc.modifyIdentifier(Parse.expectIdentifier());
 		if (Parse.accept(KeyWord.BEGPAR)) {
 			expectFormalParameterPart(proc.parameterList);
@@ -160,7 +160,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		expectProcedureBody(proc);
 
 		proc.lastLineNumber = Global.sourceLineNumber;
-		if (Option.TRACE_PARSE)	Util.TRACE("Line "+proc.lineNumber+": ProcedureDeclaration: "+proc);
+		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+proc.lineNumber+": ProcedureDeclaration: "+proc);
 		Global.setScope(proc.declaredIn);
 		return (proc);
 	}
@@ -218,7 +218,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * @param proc the procedure declaration
 	 */
 	private static void expectSpecificationPart(ProcedureDeclaration proc) {
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ParameterSpecifications");
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ParameterSpecifications");
 		LOOP: while(true) {
 			Type type;
 			int kind = Parameter.Kind.Simple;
@@ -284,7 +284,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	private static void expectProcedureBody(ProcedureDeclaration proc) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
-			if (Option.TRACE_PARSE)	Parse.TRACE("Parse Procedure Block");
+			if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse Procedure Block");
 			while (Declaration.acceptDeclaration(proc)) {
 				Parse.accept(KeyWord.SEMICOLON);
 			}
@@ -343,23 +343,23 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Procedure for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Procedure for "+ident+" ================================== "+identifier+" ==================================");
 		for (Declaration declaration : declarationList) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
 		for (Parameter parameter : parameterList) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Parameter "+parameter);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Parameter "+parameter);
 			if (Util.equals(ident, parameter.identifier))
 				return (new Meaning(parameter, this, this, false));
 		}
 		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
 		}
-		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Procedure for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Procedure for "+ident+" ================================== "+identifier+" ==================================");
 		return (null);
 	}
 

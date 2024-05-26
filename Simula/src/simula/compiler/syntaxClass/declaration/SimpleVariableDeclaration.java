@@ -136,7 +136,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	 */
 	static void expectSimpleVariable(final Type type, final DeclarationList declarationList) {
 		// identifier-list = identifier { , identifier }
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse IdentifierList");
 			do {
 				String ident = Parse.expectIdentifier();

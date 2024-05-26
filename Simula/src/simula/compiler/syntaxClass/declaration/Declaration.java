@@ -166,7 +166,7 @@ public abstract class Declaration extends SyntaxClass {
 	 * @return true if a declaration was found, false otherwise
 	 */
 	protected static boolean acceptDeclaration(final BlockDeclaration enclosure) {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse Declaration");
 		DeclarationList declarationList=enclosure.declarationList;
 		String prefix = Parse.acceptIdentifier();
@@ -209,7 +209,7 @@ public abstract class Declaration extends SyntaxClass {
 			else 
 				SimpleVariableDeclaration.expectSimpleVariable(type, declarationList);
 			
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Parse.TRACE("Parse Declaration(2)");
 		}
 		return (true);

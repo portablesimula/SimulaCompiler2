@@ -79,7 +79,7 @@ public final class ConditionalStatement extends Statement {
 		    }
 		}
 		this.elseStatement=elseStatement;
-		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": IfStatement: "+this);
+		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": IfStatement: "+this);
 	}
 
 	@Override

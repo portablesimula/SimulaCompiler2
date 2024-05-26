@@ -124,7 +124,7 @@ public final class TextExpression extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED()) return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN TextOperation" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		// TEXT & TEXT
 		lhs.doChecking();
@@ -133,7 +133,7 @@ public final class TextExpression extends Expression {
 			Util.error("Operand Type to Text Concatenation(&) is not Text: "+lhs.type+" & "+rhs.type);
 		}
 		this.type = Type.Text;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END TextOperation" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

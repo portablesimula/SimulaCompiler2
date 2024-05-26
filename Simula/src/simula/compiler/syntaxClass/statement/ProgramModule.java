@@ -116,7 +116,7 @@ public final class ProgramModule extends Statement {
 		sysin=new VariableExpression("sysin");
 		sysout=new VariableExpression("sysout");
 		try	{
-			if(Option.TRACE_PARSE) Parse.TRACE("Parse Program");
+			if(Option.internal.TRACE_PARSE) Parse.TRACE("Parse Program");
 			Global.setScope(StandardClass.BASICIO);		    	// BASICIO Begin
 			new ConnectionBlock(sysin,null)                     	//    Inspect sysin do
 			     .setClassDeclaration(StandardClass.Infile);

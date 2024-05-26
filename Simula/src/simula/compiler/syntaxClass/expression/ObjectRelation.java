@@ -117,7 +117,7 @@ public final class ObjectRelation extends Expression {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ObjectRelation" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		classDeclaration = getQualification(classIdentifier);
 		// Object IS ClassIdentifier | Object IN ClassIdentifier
@@ -127,7 +127,7 @@ public final class ObjectRelation extends Expression {
 		if (refIdent == null)
 			Util.warning("NONE IS/IN " + classIdentifier + " -- Rewrite program");
 		this.type = Type.Boolean;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END ObjectRelation" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

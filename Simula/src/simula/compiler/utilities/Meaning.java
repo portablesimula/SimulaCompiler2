@@ -15,7 +15,6 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
-import simula.compiler.syntaxClass.declaration.Thunk;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;

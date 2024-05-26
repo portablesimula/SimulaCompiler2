@@ -9,17 +9,12 @@ package make.classFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Vector;
 
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
-import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -38,20 +33,21 @@ public final class RunFullClassTestBatch {
 
 	public static void main(String[] args) {
 
-		// Set options and tracing.
-		Option.INLINE_TESTING=true;
-		Option.TESTING_STACK_SIZE = true;
-//		Option.CREATE_JAVA_SOURCE = true;
-		Option.SPORT=true;
-//		Option.TRACING=false;
-		Option.WARNINGS=false;
-//		Option.verbose=false;
+		// Set Compiler Options.
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
-//		Option.CaseSensitive=true;
-//		Option.GNERATE_LINE_CALLS=true;
-//		Option.GNERATE_SNAPSHOTS=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+		Option.CaseSensitive=true;
+//		Option.noExecution=true;
+		Option.WARNINGS=false;
+
+		// Set internal test, debug options.
+		Option.internal.INLINE_TESTING=true;
+		Option.internal.TESTING_STACK_SIZE = true;
+//		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.internal.SPORT=true;
+//		Option.internal.TRACING=false;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		// Set RunTime Options and tracing.
 //		RTOption.VERBOSE = true;
@@ -60,6 +56,9 @@ public final class RunFullClassTestBatch {
 //		RTOption.GOTO_TRACING = false;
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;
+		
+		Global.packetName="simulaTestBatch";
+		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -245,15 +244,10 @@ public final class RunFullClassTestBatch {
 		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
-		
-		Global.packetName="simulaTestBatch";
-//		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime
-		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 
 		for(String name:names) {
-//			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;
 			String fileName = sourceDir+name;
-			Option.RUNTIME_USER_DIR=new File(fileName).getParent();
+			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();
 			SimulaCompiler compiler = new SimulaCompiler(fileName);
 			try { compiler.doCompile(); } catch (IOException e) { Util.IERR("Compiler Error: ", e); }
 		}
@@ -284,36 +278,36 @@ public final class RunFullClassTestBatch {
 	// ***************************************************************
 	// *** LIST FILES
 	// ***************************************************************
-	private static void list(final String dirName) { list(new File(dirName)); }
-	private static void list(final File dir) {
-		try { System.out.println("------------  LIST "+dir+"  ------------");
-		list("",dir);
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static void list(String indent,final File dir) {
-		try {
-			//System.out.println("tmpClass: "+dir);
-			File[] elt = dir.listFiles();
-			if(elt==null || elt.length==0) {
-				System.out.println("Empty Directory: "+dir);
-				return; 
-			}
-			System.out.println("Elements: "+elt.length);
-			for (File f : elt) {
-				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
-				if(f.isDirectory()) list(indent+"   ",f);
-			}
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static String getModifiedTime(File file) {
-		try { Path path = Paths.get(file.toString());
-		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
-		} catch (IOException e) { e.printStackTrace(); }
-		return(null);
-	}
+//	private static void list(final String dirName) { list(new File(dirName)); }
+//	private static void list(final File dir) {
+//		try { System.out.println("------------  LIST "+dir+"  ------------");
+//		list("",dir);
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static void list(String indent,final File dir) {
+//		try {
+//			//System.out.println("tmpClass: "+dir);
+//			File[] elt = dir.listFiles();
+//			if(elt==null || elt.length==0) {
+//				System.out.println("Empty Directory: "+dir);
+//				return; 
+//			}
+//			System.out.println("Elements: "+elt.length);
+//			for (File f : elt) {
+//				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
+//				if(f.isDirectory()) list(indent+"   ",f);
+//			}
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static String getModifiedTime(File file) {
+//		try { Path path = Paths.get(file.toString());
+//		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+//		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
+//		} catch (IOException e) { e.printStackTrace(); }
+//		return(null);
+//	}
 
 
 }

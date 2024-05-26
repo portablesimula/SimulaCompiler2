@@ -355,7 +355,7 @@ public final class Global {
 	 */
 	private static File getSimulaPropertiesFile() {
 		File javaClassPath = new File(System.getProperty("java.class.path"));
-		if (Option.INLINE_TESTING) {
+		if (Option.internal.INLINE_TESTING) {
 			System.out.println("INLINE_TESTING");
 		}
 		if (javaClassPath.exists()) {
@@ -365,7 +365,7 @@ public final class Global {
 				return (simulaPropertiesFile);
 		}
 
-		if (!Option.INLINE_TESTING)
+		if (!Option.internal.INLINE_TESTING)
 			Util.popUpError("It seems that the system is not properly installed" + "\nSimula Properties is not defined"
 					+ "\n\nPlease check Simula Property File:\n      " + simulaPropertiesFile + "\n");
 

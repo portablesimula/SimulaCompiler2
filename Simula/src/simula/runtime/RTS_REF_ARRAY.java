@@ -39,6 +39,7 @@ public final class RTS_REF_ARRAY<T> extends RTS_ARRAY {
 	 * @param x the indexes of ELTS
 	 * @return the value loaded
 	 */
+	@SuppressWarnings("unchecked")
 	public T getELEMENT(int... x) {
 		return ((T) ELTS[index(x)]);
 	}

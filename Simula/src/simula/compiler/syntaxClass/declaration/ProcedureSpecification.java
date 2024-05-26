@@ -118,7 +118,7 @@ public final class ProcedureSpecification {
 	 */
 	static ProcedureSpecification expectProcedureSpecification(final Type type) {
 		ProcedureDeclaration block = ProcedureDeclaration.expectProcedureDeclaration(type);
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ProcedureSpecification: " + block);
 		Global.setScope(block.declaredIn);
 		ProcedureSpecification procedureSpecification = new ProcedureSpecification(block.identifier, type, block.parameterList);

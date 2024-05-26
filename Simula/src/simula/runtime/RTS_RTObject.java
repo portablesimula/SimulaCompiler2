@@ -7,9 +7,6 @@
  */
 package simula.runtime;
 
-import java.util.Map;
-import java.util.Set;
-
 /**
  * This class is the main superclass used to form all other Simula classes
  * <p>

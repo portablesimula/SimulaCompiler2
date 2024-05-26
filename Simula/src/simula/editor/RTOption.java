@@ -17,7 +17,6 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**

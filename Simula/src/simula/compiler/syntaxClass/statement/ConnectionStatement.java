@@ -141,7 +141,7 @@ public final class ConnectionStatement extends Statement {
 	 */
 	ConnectionStatement(final int line) {
 		super(line);
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
 		objectExpression = Expression.expectExpression();
 		objectExpression.backLink = this;
 		String ident = "_inspect_" + lineNumber + '_' + (SEQUX++);
@@ -180,7 +180,7 @@ public final class ConnectionStatement extends Statement {
 		if (Parse.accept(KeyWord.OTHERWISE)) otherwise = Statement.expectStatement();
 		this.otherwise=otherwise;
 		this.hasWhenPart=hasWhenPart;
-		if (Option.TRACE_PARSE)	Util.TRACE("Line "+this.lineNumber+": ConnectionStatement: "+this);
+		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+this.lineNumber+": ConnectionStatement: "+this);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public final class ConnectionStatement extends Statement {
 		private DoPart(final ConnectionBlock connectionBlock,final Statement statement) {
 			this.connectionBlock = connectionBlock; // this.statement=statement;
 			connectionBlock.setStatement(statement);
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Util.TRACE("NEW DoPart: " + toString());
 		}
 
@@ -313,7 +313,7 @@ public final class ConnectionStatement extends Statement {
 		public WhenPart(final String classIdentifier,final ConnectionBlock connectionBlock,final Statement statement) {
 			super(connectionBlock, statement);
 			this.classIdentifier = classIdentifier;
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Util.TRACE("NEW DoPart: " + toString());
 		}
 
@@ -394,7 +394,7 @@ public final class ConnectionStatement extends Statement {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ConnectionStatement(" + toString() + ").doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		objectExpression.doChecking();
 		Type exprType = objectExpression.type;

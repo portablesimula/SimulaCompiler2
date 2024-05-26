@@ -329,7 +329,7 @@ public final class StandardClass extends ClassDeclaration {
 		// *****************************************
 		// *** Additional S-Port'like Procedures ***
 		// *****************************************
-		if(Option.SPORT) {
+		if(Option.internal.SPORT) {
 			ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,null,"DEFEXCEPTION",parameter("erh",Parameter.Kind.Procedure,Parameter.Mode.value,null));
 			ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Integer,"hash",parameter("t",Type.Text));
 			ENVIRONMENT.addStandardProcedure(ObjectKind.ContextFreeMethod,Type.Character,"loadChar",parameter("t",Type.Text),parameter("i",Type.Integer)); 
@@ -1228,14 +1228,14 @@ public final class StandardClass extends ClassDeclaration {
 
 	@Override
 	public Meaning findVisibleAttributeMeaning(String ident) {
-		if(Option.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
 		for(Declaration declaration:declarationList) {
-			if(Option.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration.identifier);
+			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration.identifier);
 			if(Util.equals(ident, declaration.identifier)) {
 				return(new Meaning(declaration,this));
 			}
 		}
-		if(Option.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking Standard Class "+identifier+" for "+ident+" ================================== "+identifier+" ==================================");
 		if(prefix != null) {
 			ClassDeclaration prfx=getPrefixClass();
 			if(prfx!=null) return(prfx.findVisibleAttributeMeaning(ident));

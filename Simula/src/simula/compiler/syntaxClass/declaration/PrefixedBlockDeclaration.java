@@ -101,7 +101,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		block.blockPrefix = blockPrefix;
 		block.prefix = blockPrefix.identifier;
 		block.isMainModule=isMainModule;
-		if (Option.TRACE_PARSE)	Parse.TRACE("Parse PrefixedBlock");
+		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse PrefixedBlock");
 		while (Declaration.acceptDeclaration(block)) Parse.accept(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
 			Statement stm = Statement.expectStatement();
@@ -112,7 +112,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		else block.modifyIdentifier("" + Global.sourceName + "_PBLK" + block.lineNumber);
 		block.externalIdent = block.identifier;
 		block.lastLineNumber = Global.sourceLineNumber;
-		if (Option.TRACE_PARSE)	Util.TRACE("Line "+block.lineNumber+": PrefixedBlockDeclaration: "+block);
+		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+block.lineNumber+": PrefixedBlockDeclaration: "+block);
 		Global.setScope(block.declaredIn);
 		return block;
 	}

@@ -401,7 +401,7 @@ public abstract class DeclarationScope extends Declaration  {
    			String entryName = Global.packetName + "/" + externalIdent + ".class";
    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
 
-   			if(Option.LIST_GENERATED_CLASS_FILES)
+   			if(Option.internal.LIST_GENERATED_CLASS_FILES)
    				listGeneratedClassFile(bytes);
     	}
     }

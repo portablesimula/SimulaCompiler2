@@ -124,7 +124,7 @@ public final class ActivationStatement extends Statement {
 		super(line);
 		Token activator = Parse.prevToken;
 		REAC = activator.getKeyWord() == KeyWord.REACTIVATE;
-		if (Option.TRACE_PARSE) Parse.TRACE("Parse ActivationStatement");
+		if (Option.internal.TRACE_PARSE) Parse.TRACE("Parse ActivationStatement");
 		object1 = Expression.expectExpression();
 		code = ActivationCode.direct;
 		if (Parse.accept(KeyWord.AT) || Parse.accept(KeyWord.DELAY)) {
@@ -135,7 +135,7 @@ public final class ActivationStatement extends Statement {
 			code = (Parse.prevToken.getKeyWord() == KeyWord.BEFORE) ? ActivationCode.before : ActivationCode.after;
 			object2 = Expression.expectExpression();
 		}
-		if (Option.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": ActivationStatement: "+this);
+		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": ActivationStatement: "+this);
 	}
 
 	@Override

@@ -149,7 +149,7 @@ public final class BooleanExpression extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN BooleanOperation" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		switch (opr) {
 		    case KeyWord.AND:case KeyWord.OR:case KeyWord.IMP:case KeyWord.EQV:case KeyWord.AND_THEN:case KeyWord.OR_ELSE: {
@@ -167,7 +167,7 @@ public final class BooleanExpression extends Expression {
 		    }
 		    default: Util.IERR();
 		}
-		if (Option.TRACE_CHECKER)
+		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("END BooleanOperation" + toString() + ".doChecking - Result type=" + this.type);
 		SET_SEMANTICS_CHECKED();
 	}

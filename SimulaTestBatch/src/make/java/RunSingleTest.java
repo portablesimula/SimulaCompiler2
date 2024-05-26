@@ -13,7 +13,6 @@ import java.util.Vector;
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
-import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -27,54 +26,55 @@ public final class RunSingleTest {
 	private static final File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
 	private static final File userDir=new File("C:/GitHub/SimulaCompiler2/SimulaTestBatch");
 	private static final String sourceDir = userDir+"/src/simulaTestBatch/";
-	private static final String testBatchJarDir = userDir+"/src/simulaTestBatch/bin/";
 
 	public static void main(String[] args) {
-		// Set options and tracing.
-		Option.INLINE_TESTING=true;
-		Option.CREATE_JAVA_SOURCE = true;
-//		Option.GENERATE_BYTEFILE=true;
-		Option.TESTING_STACK_SIZE = true;
-//		Option.LIST_GENERATED_CLASS_FILES=true;
-		Option.SPORT=true;
-//		Option.verbose = true;
-		Option.WARNINGS=true;
-//		Option.DEBUGGING=true;
+		
+		// Set options.
+		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
+//		Option.noExecution=true;
+//		Option.WARNINGS=false;
+
+		// Set internal test, debug options.
+		Option.internal.INLINE_TESTING=true;
+		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.internal.SPORT=true;
+//		Option.internal.DEBUGGING=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
-//		Option.TRACING=true;
+//		Option.internal.TRACING=true;
 
 		// Scanner Trace Options
 //		Option.TRACE_SCAN=true;
 //		Option.TRACE_COMMENTS=true;
 
 		// Parser Trace Options
-//		Option.TRACE_PARSE=true;
-		Option.PRINT_SYNTAX_TREE=true;
+//		Option.internal.TRACE_PARSE=true;
+		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
-//		Option.TRACE_FIND_MEANING=4;
-//		Option.TRACE_CHECKER=true;
-//		Option.TRACE_CHECKER_OUTPUT=true;
+//		Option.internal.TRACE_FIND_MEANING=4;
+//		Option.internal.TRACE_CHECKER=true;
+//		Option.internal.TRACE_CHECKER_OUTPUT=true;
 
-		// Coder Trace Options
+		// .java Coder Trace Options
 //		Option.TRACE_CODING=true;
 //		Option.GNERATE_LINE_CALLS=true;
-//		Option.GNERATE_SNAPSHOTS=true;
 
 		// Byte code engineering Options
 //		Option.LIST_INPUT_INSTRUCTION_LIST=true;
 //		Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
-//		Option.TRACE_REPAIRING_INPUT=true;
-//		Option.TRACE_REPAIRING=true;
-//		Option.TRACE_REPAIRING_OUTPUT=true;
+//		Option.internal.TRACE_REPAIRING_INPUT=true;
+//		Option.internal.TRACE_REPAIRING=true;
+//		Option.internal.TRACE_REPAIRING_OUTPUT=true;
 
 		Global.packetName="simulaTestBatch";
-//		Option.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
@@ -85,8 +85,8 @@ public final class RunSingleTest {
 //		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
-//		Option.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
-    	//System.setProperty("file.encoding","UTF-8");
+		
+		
 		Vector<String> names=new Vector<String>();
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
@@ -286,7 +286,7 @@ public final class RunSingleTest {
 		
 		for(String name:names) {
 			String fileName = sourceDir+name;
-//			Option.RUNTIME_USER_DIR=new File(fileName).getParent();
+//			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();
 			try { SimulaCompiler compiler = new SimulaCompiler(fileName);
 				  compiler.doCompile();
 			}

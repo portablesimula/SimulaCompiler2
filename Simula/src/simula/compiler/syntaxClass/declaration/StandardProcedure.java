@@ -74,9 +74,9 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		Global.enterScope(this);
 		Global.sourceLineNumber=lineNumber;
 		String name=this.getClass().getSimpleName();
-		if(Option.TRACE_CHECKER) Util.TRACE("BEGIN "+name+".doChecking");
+		if(Option.internal.TRACE_CHECKER) Util.TRACE("BEGIN "+name+".doChecking");
 		Global.exitScope();
-		if(Option.TRACE_CHECKER) Util.TRACE("END StandardProcedure("+toString()+").doChecking - Result type="+this.type);
+		if(Option.internal.TRACE_CHECKER) Util.TRACE("END StandardProcedure("+toString()+").doChecking - Result type="+this.type);
 		SET_SEMANTICS_CHECKED();
 	}
 	

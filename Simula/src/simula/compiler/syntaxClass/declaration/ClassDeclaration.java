@@ -219,7 +219,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 		cls.lastLineNumber = Global.sourceLineNumber;
 		cls.type = Type.Ref(cls.identifier);
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Line " + cls.lineNumber + ": ClassDeclaration: " + cls);
 		Global.setScope(cls.declaredIn);
 		return (cls);
@@ -274,7 +274,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * @param pList the parameter list
 	 */
 	private static void acceptParameterSpecificationPart(final Vector<Parameter> pList) {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse ParameterSpecifications");
 		while (true) {
 			Type type;
@@ -394,7 +394,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	private static void expectClassBody(ClassDeclaration cls) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Parse.TRACE("Parse Block");
 			while (Declaration.acceptDeclaration(cls)) {
 				Parse.accept(KeyWord.SEMICOLON);
@@ -573,39 +573,39 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * @return a ProcedureDeclaration when it was found, otherwise null
 	 */
 	public Declaration findLocalAttribute(final String ident) {
-		if (Option.TRACE_FIND_MEANING > 0)
+		if (Option.internal.TRACE_FIND_MEANING > 0)
 			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		for (Parameter parameter : parameterList) {
-			if (Option.TRACE_FIND_MEANING > 1)
+			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Parameter " + parameter);
 			if (Util.equals(ident, parameter.identifier))
 				return (parameter);
 		}
 		for (Declaration declaration : declarationList) {
-			if (Option.TRACE_FIND_MEANING > 1)
+			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Local " + declaration);
 			if (Util.equals(ident, declaration.identifier))
 				return (declaration);
 		}
 		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
-			if (Option.TRACE_FIND_MEANING > 1)
+			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Label " + label);
 			if (Util.equals(ident, label.identifier))
 				return (label);
 		}
 		for (VirtualMatch match : virtualMatchList) {
-			if (Option.TRACE_FIND_MEANING > 1)
+			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Match " + match);
 			if (Util.equals(ident, match.identifier))
 				return (match);
 		}
 		for (VirtualSpecification virtual : virtualSpecList) {
-			if (Option.TRACE_FIND_MEANING > 1)
+			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Virtual " + virtual);
 			if (Util.equals(ident, virtual.identifier))
 				return (virtual);
 		}
-		if (Option.TRACE_FIND_MEANING > 0)
+		if (Option.internal.TRACE_FIND_MEANING > 0)
 			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		return (null);
 	}
@@ -718,7 +718,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if (Option.TRACE_FIND_MEANING > 0)
+		if (Option.internal.TRACE_FIND_MEANING > 0)
 			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		boolean searchBehindHidden = false;
 		ClassDeclaration scope = this;
@@ -742,7 +742,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			}
 			scope = scope.getPrefixClass();
 		}
-		if (Option.TRACE_FIND_MEANING > 0)
+		if (Option.internal.TRACE_FIND_MEANING > 0)
 			Util.println("ENDOF Checking Class for " + ident + " ================================== " + identifier + " ==================================");
 		return (null);
 	}

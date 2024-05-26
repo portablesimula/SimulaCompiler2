@@ -130,7 +130,7 @@ public final class ArrayDeclaration extends Declaration {
 		this.type = type;
 		this.boundPairList = boundPairList;
 		this.nDim = boundPairList.size();
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END NEW ArrayDeclaration: " + toString());
 	}
 
@@ -155,10 +155,10 @@ public final class ArrayDeclaration extends Declaration {
 	 * @param declarationList the given declaration list
 	 */
 	static void expectArrayDeclaration(final Type type, final DeclarationList declarationList) {
-		if (Option.TRACE_PARSE)
+		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse ArrayDeclaration, type=" + type + ", current=" + Parse.currentToken);
 		do {
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Parse.TRACE("Parse ArraySegment");
 			// IdentifierList = Identifier { , Identifier }
 			Vector<String> identList = new Vector<String>();
@@ -167,7 +167,7 @@ public final class ArrayDeclaration extends Declaration {
 			} while (Parse.accept(KeyWord.COMMA));
 			Parse.expect(KeyWord.BEGPAR);
 			// BoundPairList = BoundPair { , BoundPair }
-			if (Option.TRACE_PARSE)
+			if (Option.internal.TRACE_PARSE)
 				Parse.TRACE("Parse BoundPairList");
 			Vector<BoundPair> boundPairList = new Vector<BoundPair>();
 			do {

@@ -89,10 +89,12 @@ public final class Simula {
 		Util.println("  -nowarn                    Generate no warnings");
 		Util.println("  -noextension               Disable all language extensions");
 		Util.println("                             In other words, follow the Simula Standard literally");
-		Util.println("  -sport                     Enable all S-PORT extensions");
+		Util.println("  -verbose                   Output messages about what the compiler is doing");
+
 		Util.println("  -select characters         First, all selectors are reset.");
 		Util.println("                             Then, for each character, the corresponding selector is set");
-		Util.println("  -verbose                   Output messages about what the compiler is doing");
+		Util.println("  -sport                     Enable all S-PORT extensions");
+		
 		Util.println("  -keepJava <directory>      Specify where to place generated .java files");
 		Util.println("                             Default: Temp directory which is deleted upon exit");
 		Util.println("  -output <directory>        Specify where to place generated executable .jar file");
@@ -111,7 +113,7 @@ public final class Simula {
 	public static void main(String[] argv) {
 		String fileName = null;
 		Option.verbose=false;
-		Option.WARNINGS=true;
+		Option.WARNINGS=false;
 		Option.EXTENSIONS=true;
 		Global.initSimulaProperties();
 
@@ -124,18 +126,20 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-noexec")) Option.noExecution=true;
 				else if (arg.equalsIgnoreCase("-nowarn")) Option.WARNINGS=false;
 				else if (arg.equalsIgnoreCase("-noextension")) Option.EXTENSIONS=false;
-				else if (arg.equalsIgnoreCase("-sport")) Option.SPORT=true;
-				else if (arg.equalsIgnoreCase("-select")) setSelectors(argv[++i]);
 				else if (arg.equalsIgnoreCase("-verbose")) Option.verbose=true;
+
+				else if (arg.equalsIgnoreCase("-select")) setSelectors(argv[++i]);
+				else if (arg.equalsIgnoreCase("-sport")) Option.internal.SPORT=true;
+				
 				else if (arg.equalsIgnoreCase("-keepJava")) setKeepJava(argv[++i]);
 				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
 				else if (arg.equalsIgnoreCase("-extLib")) Global.extLib=new File(argv[++i]);
-				else if (arg.equalsIgnoreCase("-source")) Option.SOURCE_FILE=argv[++i];
+				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
 				else error("Unknown option "+arg);
 			} else if(fileName==null) fileName = arg;
 			else error("multiple input files specified");
 		}	
-	    if(!Option.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"rts");
+	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"rts");
 	    
 		if (fileName == null) {
 			// *** STARTING SIMULA EDITOR ***
@@ -192,8 +196,8 @@ public final class Simula {
 	 * @param dir the .java output directory-
 	 */
 	private static void setKeepJava(final String dir) {
-		Option.keepJava = new File(dir);
-		Util.TRACE("KEEP_JAVA: " + Option.keepJava);
+		Option.internal.keepJava = new File(dir);
+		Util.TRACE("KEEP_JAVA: " + Option.internal.keepJava);
 	}
 
 	/**
