@@ -390,16 +390,25 @@ public abstract class DeclarationScope extends Declaration  {
     	if(this instanceof BlockDeclaration blk) {
     		blk.prevBlock = BlockDeclaration.currentBlock;
     		BlockDeclaration.currentBlock = blk;
-
-    		bytes = buildClassFile();
+    			bytes = buildClassFile();
     		BlockDeclaration.currentBlock = blk.prevBlock;
     	} else {
     		bytes = buildClassFile();
     	}
 
     	if(bytes != null) {
-   			String entryName = Global.packetName + "/" + externalIdent + ".class";
-   			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+    		if(Option.internal.USE_SimulaClassLoader) {
+    			if(Global.simulaClassLoader != null) {
+    				String name = Global.packetName + "." + externalIdent;
+    				Global.simulaClassLoader.loadClass(name, bytes);
+    			} else {
+        			String entryName = Global.packetName + "/" + externalIdent + ".class";
+        			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+    			}
+    		} else {
+    			String entryName = Global.packetName + "/" + externalIdent + ".class";
+    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+    		}
 
    			if(Option.internal.LIST_GENERATED_CLASS_FILES)
    				listGeneratedClassFile(bytes);

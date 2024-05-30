@@ -246,12 +246,30 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	public static int isign(final int e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
+	
+	/**
+	 * Standard Procedure sign.
+	 * @param e the argument e
+	 * @return resulting sign code
+	 */
 	public static float fsign(final float e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
+	
+	/**
+	 * Standard Procedure sign.
+	 * @param e the argument e
+	 * @return resulting sign code
+	 */
 	public static double dsign(final double e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
+	
+	/**
+	 * Standard Procedure sign.
+	 * @param e the argument e
+	 * @return resulting sign code
+	 */
 	public static int sign(final double e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
@@ -1694,6 +1712,12 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	public static RTS_TXT edtime(float hours) {
 		return(new RTS_TXT(LocalTime.ofSecondOfDay((long) (hours*60*60)).toString()));
 	}
+	
+	/**
+	 * Edit simulated time.
+	 * @param hours simulated time 
+	 * @return the edited text
+	 */
 	public static RTS_TXT edtime(double hours) {
 		return(new RTS_TXT(LocalTime.ofSecondOfDay((long) (hours*60*60)).toString()));
 	}

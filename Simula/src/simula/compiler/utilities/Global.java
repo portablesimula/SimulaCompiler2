@@ -12,9 +12,11 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.nio.charset.Charset;
 import java.util.ArrayDeque;
+import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Stack;
 import java.util.Vector;
+import java.util.jar.JarFile;
 
 import javax.swing.ImageIcon;
 
@@ -182,6 +184,12 @@ public final class Global {
 	public static int Object_SEQU;
 
 	/**
+	 * 
+	 */
+	public static SimulaClassLoader simulaClassLoader;
+
+	
+	/**
 	 * Packet name used in generated .java files.
 	 * NOTE: Must be a single identifier.
 	 */
@@ -203,6 +211,12 @@ public final class Global {
 	public static ConsolePanel console;
 
 	/**
+	 * The Jar files queued for later inclusion.
+	 * See: JarFileBuilder for details.
+	 */
+	public static LinkedList<JarFile> includeQueue;
+
+	/**
 	 * Default constructor.
 	 */
 	Global() {
@@ -214,6 +228,7 @@ public final class Global {
 	public static void initiate() {
 		Object_SEQU = 8001;
 		jarFileBuilder = null;
+		simulaClassLoader = null;
 		duringParsing = true;
 		duringChecking = false;
 		duringSTM_Coding = false;

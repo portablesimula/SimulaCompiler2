@@ -34,6 +34,7 @@ public final class RTS_LABEL extends RuntimeException {
 	/**
 	 * Create a label quantity
 	 * @param _SL static link
+	 * @param _PRFX prefix level
 	 * @param index label index
 	 * @param identifier label identifier
 	 */

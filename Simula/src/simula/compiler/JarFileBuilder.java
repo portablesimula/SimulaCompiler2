@@ -23,14 +23,10 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 
 public class JarFileBuilder {
-
-	/**
-	 * The Jar files queued for later inclusion
-	 */
-	private LinkedList<JarFile> includeQueue;
 	
 	/**
 	 * The ProgramModule.
@@ -57,7 +53,7 @@ public class JarFileBuilder {
 	 */
 	private Vector<String> jarEntryNames;
 
-	private final boolean TESTING = false;
+	private final static boolean TESTING = false;
 	
 	/**
 	 * Construct a new JarFileBuilder.
@@ -134,6 +130,17 @@ public class JarFileBuilder {
 		}
 		return false;
 	}
+
+	/**
+	 * Add the jarFile to the includeQueue in reverse order.
+	 * @param jarFile
+	 * @throws IOException if something went wrong
+	 */
+	public static void addToIncludeQueue(final JarFile jarFile) throws IOException {
+		if(Global.includeQueue == null) Global.includeQueue = new LinkedList<JarFile>();
+		if(TESTING) System.out.println("JarFileBuilder.addToIncludeQueue: includeQueue.add: "+jarFile.getName());
+		Global.includeQueue.addFirst(jarFile);
+	}
 	
 	/**
 	 * Close the JarFileBuilder.
@@ -142,9 +149,14 @@ public class JarFileBuilder {
 	 */
 	public File close() throws IOException {
 		if (programModule.isExecutable()) {
-			// Add the Runtime System
-			File rtsHome = new File(Global.simulaRtsLib, "simula/runtime");
-			add(jarOutput, rtsHome, Global.simulaRtsLib.toString().length());
+			if(TESTING) System.out.println("JarFileBuilder.close: Executable "+programModule);
+			if(Option.internal.USE_SimulaClassLoader) {
+				Util.IERR();
+			} else {
+				// Add the Runtime System
+				File rtsHome = new File(Global.simulaRtsLib, "simula/runtime");
+				add(jarOutput, rtsHome, Global.simulaRtsLib.toString().length());
+			}
 		} else {
 			String id = programModule.getIdentifier();
 			String kind = "Procedure ";
@@ -153,8 +165,8 @@ public class JarFileBuilder {
 			Util.warning("No execution - Separate Compiled " + kind + id + " is written to: \"" + outputJarFile + "\"");
 		}
 		
-		if(includeQueue != null) {
-			for(JarFile jarFile:includeQueue) {
+		if(Global.includeQueue != null) {
+			for(JarFile jarFile:Global.includeQueue) {
 				if(TESTING) System.out.println("new JarFileBuilder: includeQueue'addJarEntries: "+jarFile);
 				addJarEntries(jarFile);		
 				jarFile.close();
@@ -162,7 +174,7 @@ public class JarFileBuilder {
 		}
 
 		jarOutput.close();
-		includeQueue = null;
+		Global.includeQueue = null;
 		
 		if(TESTING) {
 			System.out.println("JarFileBuilder.close: ");
@@ -227,17 +239,6 @@ public class JarFileBuilder {
 				addJarEntry(entryName, bytes);
 			}
 		}
-	}
-
-	/**
-	 * Add the jarFile to the includeQueue in reverse order.
-	 * @param jarFile
-	 * @throws IOException if something went wrong
-	 */
-	public void include(final JarFile jarFile) throws IOException {
-		if(includeQueue == null) includeQueue = new LinkedList<JarFile>();
-		if(TESTING) System.out.println("JarFileBuilder.addJarEntries: includeQueue.add: "+jarFile.getName());
-		this.includeQueue.addFirst(jarFile);
 	}
 	
 	/**
@@ -305,6 +306,56 @@ public class JarFileBuilder {
 		return (null);
 	}
 
+	public static void loadIncludeQueue() throws IOException {
+		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
+		if(Global.includeQueue != null) {
+			for(JarFile jarFile:Global.includeQueue) {
+//				if(TESTING)
+					System.out.println("JarFileBuilder.loadIncludeQueue: loadJarEntries: "+jarFile);
+				loadJarEntries(jarFile, Global.simulaClassLoader);	
+				jarFile.close();
+			}
+		}
+	}
+	
+	/**
+	 * Expand .jar file entries into the target SimulaClassLoader.
+	 * @param jarFile the .jar file
+	 * @param destDir the output directory
+	 * @throws IOException if something went wrong
+	 */
+	private static void loadJarEntries(final JarFile jarFile, final SimulaClassLoader loader) throws IOException {
+		if(TESTING) System.out.println("JarFileBuilder.loadJarEntries: JarFileName="+jarFile.getName());
+		if (Option.verbose)
+			Util.println("---------  INCLUDE .jar File: " + jarFile.getName() + "  ---------");
+		Enumeration<JarEntry> entries = jarFile.entries();
+		LOOP: while (entries.hasMoreElements()) {
+			JarEntry inputEntry = entries.nextElement();
+
+			String entryName = inputEntry.getName();
+			if (!entryName.startsWith(Global.packetName))	continue LOOP;
+			if (!entryName.endsWith(".class"))				continue LOOP;
+
+//			if(!entryPresent(entryName)) {
+				InputStream inputStream = null;
+				try {
+					inputStream = jarFile.getInputStream(inputEntry);
+					byte[] bytes = inputStream.readAllBytes();
+					
+//					addJarEntry(entryName, bytes);
+					String name = entryName.substring(0, entryName.length() - 6).replace('/', '.');
+					System.out.println("JarFileBuilder.loadJarEntries: name="+name);
+					loader.loadClass(name, bytes);
+//					Util.IERR();
+					
+				} finally {	if (inputStream != null) inputStream.close(); }
+			}
+//		}
+//		if (Option.verbose)
+//			Util.println("---------  END INCLUDE .jar File, " + (jarEntryNames.size()) + " Entries Added  ---------");
+	}
+
+	
 	// ***************************************************************
 	// *** LIST .jar file
 	// ***************************************************************

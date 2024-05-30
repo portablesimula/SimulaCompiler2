@@ -2,6 +2,9 @@ package simula.runtime;
 
 import java.util.Iterator;
 
+/**
+ * This class holds a for-list for a FOR-Statement.
+ */
 public final class FOR_List implements Iterable<Boolean> {
 	/**
 	 * The ForList Iterator.

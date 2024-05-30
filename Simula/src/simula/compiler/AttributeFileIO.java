@@ -70,7 +70,16 @@ public final class AttributeFileIO {
 			Util.println("*** BEGIN Generate SimulaAttributeFile: \"" + file+"\"");
 		byte[] bytes = buildAttrFile(program);
 		String entryName = program.getRelativeAttributeFileName();
-		Global.jarFileBuilder.addJarEntry(entryName, bytes);
+
+//		if(Option.internal.USE_SimulaClassLoader && Global.simulaClassLoader != null) {
+		if(Option.internal.USE_SimulaClassLoader) {
+			if(Global.jarFileBuilder!=null) {
+				Global.jarFileBuilder.addJarEntry(entryName, bytes);
+			} else
+			Util.IERR();
+		} else {
+			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+		}
 		if (Option.verbose)	Util.TRACE("*** ENDOF Generate SimulaAttributeFile: " + file);
 	}
 
@@ -141,7 +150,9 @@ public final class AttributeFileIO {
 					System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
 							+"  ==>  "+declarationList.identifier);
 			}
-			Global.jarFileBuilder.include(jarFile);
+//    		if(!Option.internal.USE_SimulaClassLoader) {
+    			JarFileBuilder.addToIncludeQueue(jarFile);
+//    		}
 		} catch (IOException e) {
 			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);
 			Util.warning("It may be necessary to recompile '" + identifier + "'");

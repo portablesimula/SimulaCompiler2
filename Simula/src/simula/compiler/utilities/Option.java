@@ -51,7 +51,7 @@ public final class Option {
 	public static boolean noExecution = false;
 	
 	/**
-	 * Disable all language extensions. In other words,
+	 * false: Disable all language extensions. In other words,
 	 * follow the Simula Standard literally
 	 */
 	public static boolean EXTENSIONS=true;
@@ -60,6 +60,16 @@ public final class Option {
 	 * Testing and debugging options
 	 */
 	public static class internal {
+		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
+
+		/**
+		 * Use the SimulaClassLoader instead of the executable jar file
+		 */
+		public static boolean USE_SimulaClassLoader = false;
+		
+		/**
+		 * Used to insert code to enforce 'stack size mismatch'
+		 */
 		public static boolean TESTING_STACK_SIZE = false;
 
 		/**

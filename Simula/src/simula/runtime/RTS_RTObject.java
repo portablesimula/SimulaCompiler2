@@ -7,6 +7,8 @@
  */
 package simula.runtime;
 
+import simula.compiler.utilities.Option;
+
 /**
  * This class is the main superclass used to form all other Simula classes
  * <p>
@@ -826,6 +828,8 @@ public abstract class RTS_RTObject {
 					e.printStackTrace();
 				RTS_COMMON.printSimulaStackTrace(e, 0);
 				endProgram(-1);
+			} else if (e instanceof RTS_EndProgram) {
+				// NOTHING
 			} else if (e instanceof Error) {
 				String msg = e.getClass().getSimpleName();
 				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
@@ -1324,7 +1328,13 @@ public abstract class RTS_RTObject {
 		} else if (RTS_COMMON.numberOfEditOverflows > 0)
 			RTS_COMMON.println("End program: WARNING " + RTS_COMMON.numberOfEditOverflows + " EditOverflows");
 		if (RTS_COMMON.console == null) {
-			System.exit(exitValue);
+//			System.out.println("RTS_RTObject.endProgram: "+exitValue);
+
+//			if(Option.internal.USE_SimulaClassLoader) {
+//				throw new RTS_EndProgram("Simula - endProgram");				
+//			} else {
+				System.exit(exitValue);				
+//			}
 		}
 	}
 

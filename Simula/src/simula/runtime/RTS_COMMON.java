@@ -229,6 +229,11 @@ public final class RTS_COMMON {
 	// *** TRACING AND DEBUGGING UTILITIES
 	// *********************************************************************
 
+	/**
+	 * Debug utility method to print a snapshot in the generated code.
+	 * @param sequ a sequence number
+	 * @param msg a message
+	 */
 	public static void _SNAPSHOT(int sequ,String msg) {
 //		RTS_RTObject cur=RTS_RTObject._CUR;
 //		String id=""+cur;
@@ -242,6 +247,12 @@ public final class RTS_COMMON {
 		}
 	}
 
+	/**
+	 * Debug utility method to print a snapshot in the generated code.
+	 * @param TOS top of operand stack
+	 * @param sequ a sequence number
+	 * @param msg a message
+	 */
 	public static void _SNAPSHOT(Object TOS,int sequ,String msg) {
 //		RTS_RTObject cur=RTS_RTObject._CUR;
 //		String id=""+cur;

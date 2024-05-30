@@ -234,6 +234,17 @@ public class RTS_Imagefile extends RTS_File {
 	public void outfix(final float r, final int n, final int w) {
 		outfix((double)r, n, w);
 	}
+
+	/**
+	 * Procedure outfix.
+	 * <p>
+	 * See <b>{@link RTS_Imagefile#outint(int,int)}</b>
+	 * 
+	 * @param r the real value to be edited and outputed
+	 * @param n the number of digits after decimal sign
+	 * @param w the width of editing field
+	 * @throws RTS_SimulaRuntimeError if the Item is too long in output operation
+	 */
 	public void outfix(final double r, final int n, final int w) {
 		if (w <= 0) {
 			RTS_TXT T = blanks(n + 10);

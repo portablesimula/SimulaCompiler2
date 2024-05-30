@@ -15,6 +15,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -43,6 +44,7 @@ public final class RunFullClassTestBatch {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+//		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -50,6 +52,7 @@ public final class RunFullClassTestBatch {
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		// Set RunTime Options and tracing.
+		RTOption.VERBOSE = false;
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;

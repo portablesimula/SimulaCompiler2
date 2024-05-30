@@ -23,7 +23,9 @@ import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 
@@ -238,7 +240,15 @@ public final class SimulaCompiler {
 				Util.warning("The source file name '" + sourceName + "' is not a legal class identifier. Modified to: "
 						+ Global.sourceName);
 			}
-			Global.jarFileBuilder = new JarFileBuilder();
+			
+    		if(Option.internal.USE_SimulaClassLoader) {
+//    			if(!programModule.isExecutable()) {
+//    				// Separate Compilation
+//        			Global.jarFileBuilder = new JarFileBuilder();
+//    			}
+    		} else {
+    			Global.jarFileBuilder = new JarFileBuilder();
+    		}
 			
 			// ***************************************************************
 			// *** Scanning and Parsing
@@ -288,7 +298,18 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Generate .java files or ClassFileBuilder -> jarFile
 			// ***************************************************************
-			Global.jarFileBuilder.open(programModule);
+			if(Option.internal.USE_SimulaClassLoader) {
+				if (!programModule.isExecutable()) {
+					// Separate Compilation
+					Global.jarFileBuilder = new JarFileBuilder();
+					Global.jarFileBuilder.open(programModule);
+				} else {
+					Global.simulaClassLoader = new SimulaClassLoader();
+	    			JarFileBuilder.loadIncludeQueue();
+				}
+			} else {
+    			Global.jarFileBuilder.open(programModule);
+    		}
 			
 			if (!Option.internal.CREATE_JAVA_SOURCE) {
 				if (Option.internal.TRACING)
@@ -332,54 +353,63 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** CRERATE .jar FILE INLINE
 			// ***************************************************************
-			if(Option.internal.CREATE_JAVA_SOURCE) {
-				Global.jarFileBuilder.addTempClassFiles();
-			}
-			outputJarFile = Global.jarFileBuilder.close();
-			String jarFile = outputJarFile.toString();
+			String jarFile = null;
+    		if(Option.internal.USE_SimulaClassLoader) {
+    			if(Global.jarFileBuilder != null) {
+    				if(Option.internal.CREATE_JAVA_SOURCE) {
+    					Global.jarFileBuilder.addTempClassFiles();
+    				}
+    				outputJarFile = Global.jarFileBuilder.close();
+    				jarFile = outputJarFile.toString(); 				
+    			}
+    		} else {
+				if(Option.internal.CREATE_JAVA_SOURCE) {
+					Global.jarFileBuilder.addTempClassFiles();
+				}
+				outputJarFile = Global.jarFileBuilder.close();
+				jarFile = outputJarFile.toString();
+    		}
+    		
 			if (Option.verbose) printSummary();
 
 			// ***************************************************************
 			// *** EXECUTE .jar FILE
 			// ***************************************************************
-			if (!programModule.isExecutable()) {
-				if (Option.internal.TRACING)
-					Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
-			} else if (Option.noExecution) {
-				if (Option.internal.TRACING)
-					Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
+			Vector<String> cmds = new Vector<String>();
+			cmds.add("java");
+//			cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
+    		if(!Option.internal.USE_SimulaClassLoader) {
+    			cmds.add("-jar");
+    			cmds.add(jarFile);
+    		}
+			if (Option.internal.RUNTIME_USER_DIR.length() > 0) {
+				cmds.add("-userDir");
+				cmds.add(Option.internal.RUNTIME_USER_DIR);
 			} else {
-				if (Option.verbose)
-					Util.println("------------  EXECUTION SUMMARY  ------------");
-				if (Option.internal.TRACING)
-					Util.println("Execute .jar File");
-				Vector<String> cmds = new Vector<String>();
-				cmds.add("java");
-//				cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
-				cmds.add("-jar");
-//				cmds.add("-verbose:class");
-//				cmds.add("-Xdiag");
-//				cmds.add("-verbose:class");
-				cmds.add(jarFile);
-				if (Option.internal.RUNTIME_USER_DIR.length() > 0) {
-					cmds.add("-userDir");
-					cmds.add(Option.internal.RUNTIME_USER_DIR);
-				} else {
-					cmds.add("-userDir");
-					cmds.add(Global.outputDir.getParentFile().getAbsolutePath());
-				}
-				RTOption.addRTArguments(cmds);
-				if (Option.internal.SOURCE_FILE.length() > 0) {
-					cmds.add(Option.internal.SOURCE_FILE);
-				}
-				int exitValue3 = Util.execute(cmds);
-				if (Option.verbose)
-					Util.println("END Execute .jar File. Exit value=" + exitValue3);
-				if(exitValue3 != 0) {
-					System.out.println("SimulaCompiler.doCompile: Exit value = " + exitValue3);
-					throw new RuntimeException("Execution of "+jarFile+" failed. ExitValue = "+exitValue3);
-				}
+				cmds.add("-userDir");
+				cmds.add(Global.outputDir.getParentFile().getAbsolutePath());
 			}
+			RTOption.addRTArguments(cmds);
+			if (Option.internal.SOURCE_FILE.length() > 0) {
+				cmds.add(Option.internal.SOURCE_FILE);
+			}
+    		if(Option.internal.USE_SimulaClassLoader) {
+    			if(Global.simulaClassLoader != null) {
+    				String name = Global.packetName + '.' + programModule.getIdentifier();
+//    				System.out.println(""+name);
+    				Global.simulaClassLoader.runClass(name, cmds);
+//    				Util.IERR();
+    			} else {
+    				if(Global.jarFileBuilder != null) {
+    	    			doExecuteJarFile(jarFile,cmds);    					
+    				} else
+    				Util.IERR();
+    			}
+    		} else {
+    			doExecuteJarFile(jarFile,cmds);
+    		}
+			
+			
 			if (Option.internal.DEBUGGING)
 				Util.println("------------  CLEANING UP TEMP FILES  ------------");
 			deleteTempFiles(Global.simulaTempDir);
@@ -387,6 +417,32 @@ public final class SimulaCompiler {
 //		} catch (IOException e) {
 //			Util.IERR("Compiler Error: ", e);
 //		}
+	}
+
+
+	// ***************************************************************
+	// *** EXECUTE .jar FILE
+	// ***************************************************************
+	private void doExecuteJarFile(String jarFile,Vector<String> cmds) throws IOException {
+	if (!programModule.isExecutable()) {
+		if (Option.internal.TRACING)
+			Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
+	} else if (Option.noExecution) {
+		if (Option.internal.TRACING)
+			Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
+	} else {
+		if (Option.verbose)
+			Util.println("------------  EXECUTION SUMMARY  ------------");
+		if (Option.internal.TRACING)
+			Util.println("Execute .jar File");
+		int exitValue3 = Util.execute(cmds);
+		if (Option.verbose)
+			Util.println("END Execute .jar File. Exit value=" + exitValue3);
+		if(exitValue3 != 0) {
+			System.out.println("SimulaCompiler.doCompile: Exit value = " + exitValue3);
+			throw new RuntimeException("Execution of "+jarFile+" failed. ExitValue = "+exitValue3);
+		}
+	}
 	}
 
 	// ***************************************************************
@@ -624,15 +680,18 @@ public final class SimulaCompiler {
 	private void printSummary() {
 		Util.println("------------  COMPILATION SUMMARY  ------------");
 		if (!programModule.isExecutable()) {
-			Util.println("Separate Compiled " + programModule.module.declarationKind + " is written to: \"" + outputJarFile
-					+ "\"");
+			Util.println("Separate Compiled " + ObjectKind.edit(programModule.module.declarationKind)
+			                   + " " + programModule  + " is written to: \"" + outputJarFile + "\"");
 			Util.println("Rel Attr.File:   \"" + programModule.getRelativeAttributeFileName() + "\"");
 		} else {
-			Util.println("Resulting File:  \"" + outputJarFile.getAbsolutePath() + "\"");
+    		if(outputJarFile != null) {
+    			Util.println("Resulting File:  \"" + outputJarFile.getAbsolutePath() + "\"");
+    		}
 			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
-//		if (Option.internal.DEBUGGING)
+		if(outputJarFile != null) {
 			JarFileBuilder.listJarFile(outputJarFile);
+		}
 	}
 
 }
