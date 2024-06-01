@@ -4,6 +4,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Vector;
 
+import simula.runtime.RTS_EndProgram;
+
 /**
  *
  * SEE: https://www.digitalocean.com/community/tutorials/java-classloader
@@ -45,9 +47,14 @@ public class SimulaClassLoader extends ClassLoader {
 			if(TESTING) System.out.println("SimulaClassLoader.runClass: BEFORE INVOKE clazz = " + clazz);
 			try {
 				main.invoke(null, arg);
-			} catch (IllegalAccessException | InvocationTargetException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				if(TESTING)	System.out.println("SimulaClassLoader.runClass: EXCEPTION-1 AFTER INVOKE clazz = " + clazz);
+				Util.IERR();
+			} catch (InvocationTargetException e) {
+				Throwable cause = e.getCause();
+				if(TESTING)	System.out.println("SimulaClassLoader.runClass: EXCEPTION-2 AFTER INVOKE cause = " + cause + ", clazz = " + clazz);
+				if(cause instanceof RTS_EndProgram) ; // OK
+				else Util.IERR(""+cause);
 			}
 			if(TESTING) System.out.println("SimulaClassLoader.runClass: AFTER INVOKE clazz = " + clazz);
 			

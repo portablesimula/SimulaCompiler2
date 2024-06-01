@@ -1,48 +1,23 @@
 begin
+	integer i;
 
-%       real x,y; integer i; text t;
-%       t:-blanks(20); t.putreal(min(x,y),10);
-%       outreal(i,10,5);
-
-
-
-       integer i,j; real x,y; character c;
-       long real lx,ly; text t;
-
-       t:-blanks(20);
-%       t.putreal(min(lx,ly),10);
-       x := min(i,j);
-       x := min(i,y);
-       x := min(i,ly);
-
-       x := min(x,j);
-       x := min(x,y);
-       x := min(x,ly);
-
-       x := min(lx,j);
-       x := min(lx,y);
-       x := min(lx,ly);
-       
-       c := min('A','B');
-	   t := min("AAA","BBB");
-
-       x := max(i,j);
-       x := max(i,y);
-       x := max(i,ly);
-
-       x := max(x,j);
-       x := max(x,y);
-       x := max(x,ly);
-
-       x := max(lx,j);
-       x := max(lx,y);
-       x := max(lx,ly);
+      Simulation begin
+         ref(Car) car1;
       
-       c := max('A','B');
-	   t := max("AAA","BBB");
-	   
-	   t :- edfix(x,4);
-
-
+         Process class Car(pname); text pname;
+         begin
+%            while true do
+%            begin
+%               hold (4);
+               outtext("goto EXIT_LABEL"); outimage;
+               goto EXIT_LABEL;
+%		    end;
+         end;
+      
+         car1:- new Car("Bil 1");
+         activate car1 at 4.0;
+         hold (12);
+EXIT_LABEL: outtext("++++++++++++++++++++++  At OUT"); outimage;
+      
+      end;
 end;
-

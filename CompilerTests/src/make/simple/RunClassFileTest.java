@@ -36,11 +36,11 @@ public final class RunClassFileTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -79,8 +79,8 @@ public final class RunClassFileTest {
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 		RTOption.GOTO_TRACING = true;
-//		RTOption.QPS_TRACING = false;
-//		RTOption.SML_TRACING = false;
+//		RTOption.QPS_TRACING = true;
+//		RTOption.SML_TRACING = true;
 
 		String sourceDir=userDir+"/src/"+Global.packetName;
 //		String fileName=userDir+"/src/"+Global.packetName + name;
@@ -106,9 +106,9 @@ public final class RunClassFileTest {
 
 		// names.add("/simple/p41.sim");
 		// names.add("/simple/adErr09.sim");
-		// names.add("/simple/adHoc000.sim");
-		// names.add("/simple/adHoc00.sim");
-		 names.add("/simple/adHoc01.sim");
+//		 names.add("/simple/adHoc000.sim");
+		 names.add("/simple/adHoc00.sim");
+//		 names.add("/simple/adHoc01.sim");
 		// names.add("/simple/adHoc02.sim");
 		// names.add("/simple/adHoc03.sim");
 		// names.add("/simple/adHoc30a.sim");

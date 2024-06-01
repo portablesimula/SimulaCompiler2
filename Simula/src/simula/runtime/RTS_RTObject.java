@@ -7,8 +7,6 @@
  */
 package simula.runtime;
 
-import simula.compiler.utilities.Option;
-
 /**
  * This class is the main superclass used to form all other Simula classes
  * <p>
@@ -734,9 +732,6 @@ public abstract class RTS_RTObject {
 	public void _GOTO(final RTS_LABEL q) {
 		if (RTS_Option.GOTO_TRACING)
 			RTS_COMMON.TRACE("RTS_RTObject.GOTO: " + q);
-		
-//        new Exception("RTS_RTObject.GOTO: ").printStackTrace(System.out);
-
 		throw (q);
 	}
 
@@ -746,9 +741,18 @@ public abstract class RTS_RTObject {
 	/**
 	 * Utility method to set current object terminated
 	 */
-	public static void SET_CUR_TERMINATED() {
-		_CUR._STATE=OperationalState.terminated;
-	}
+	public static void _TREAT_GOTO_CATCH_BLOCK(RTS_RTObject _THIS, RTS_LABEL q) {
+        _CUR=_THIS;
+        if(q._SL!=_CUR) {
+            if(RTS_Option.GOTO_TRACING)
+            	TRACE_GOTO(_CUR.getClass().getSimpleName()+":NON-LOCAL",q);
+            _CUR._STATE=OperationalState.terminated;
+            throw(q);
+        }
+        if(RTS_Option.GOTO_TRACING)
+        	TRACE_GOTO(_CUR.getClass().getSimpleName()+":LOCAL",q);
+//        _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+    }
 
 	// ************************************************************
 	// *** TRACING: TRACE_GOTO
@@ -761,7 +765,7 @@ public abstract class RTS_RTObject {
 	public static void TRACE_GOTO(final String msg, final RTS_LABEL label) {
 		RTS_COMMON.TRACE(msg + " GOTO " + label);
 		
-		System.out.println("\nRTS_RTObject.TRACE_GOTO: "+label.identifier);
+		System.out.println("\nRTS_RTObject.TRACE_GOTO: "+label.identifier + ", CUR="+_CUR);
         new Exception("With Operating Chain:").printStackTrace(System.out);
 		
 	}
@@ -795,6 +799,32 @@ public abstract class RTS_RTObject {
 				RTS_COMMON.println("\nRTS_RTObject.uncaughtException: In Thread " + thread.getName() + ": " + e);
 				e.printStackTrace(System.out);
 			}
+//			System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, _PENDING_DL="+RTS_Coroutine._PENDING_DL);
+//			System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, obj="+obj);
+//			if(RTS_Coroutine._PENDING_DL != null) {
+//				if(RTS_Coroutine._PENDING_DL != obj) {
+//					
+//					System.out.println("RTS_RTObject.uncaughtException: KOMMER VI HIT NOEN GANG(1) ?");
+//					System.exit(-9);
+//					
+//					System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, THROW="+new RuntimeException(e)+"ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+//					throw new RuntimeException(e);
+//				}
+//				RTS_Coroutine._PENDING_DL = null;
+//			}
+//			
+//			if(e instanceof RuntimeException rte) {
+//				Throwable cause = rte.getCause();
+//				System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, cause="+cause);
+//				if(cause != null) {
+//					
+//					System.out.println("RTS_RTObject.uncaughtException: KOMMER VI HIT NOEN GANG(2) ?");
+//					System.exit(-9);
+//					
+//					e = cause;
+//				}
+//			}
+			
 			if (e instanceof RTS_LABEL) {
 				if (RTS_Option.GOTO_TRACING) {
 //					System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
@@ -815,8 +845,17 @@ public abstract class RTS_RTObject {
 					RTS_COMMON.println(threadID + "SIMULA RUNTIME ERROR: " + msg);
 					if (RTS_Option.VERBOSE)
 						e.printStackTrace();
-					endProgram(-1);
+					if(TESTING_END_PROGRAM) {
+						System.exit(-1);				
+					} else {
+						endProgram(-1);
+					}
 				}
+			} else if (e instanceof RTS_EndProgram) {
+//				System.out.println("RTS_RTObject.uncaughtException: RTS_EndProgram");
+//				Thread.dumpStack();
+				// NOTHING
+				System.exit(0);				
 			} else if (e instanceof RuntimeException) {
 				String msg = getErrorMessage(e);
 				msg = msg.replace("RTS_SimulaRuntimeError: ", "");
@@ -827,20 +866,30 @@ public abstract class RTS_RTObject {
 				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
 				RTS_COMMON.printSimulaStackTrace(e, 0);
-				endProgram(-1);
-			} else if (e instanceof RTS_EndProgram) {
-				// NOTHING
+				if(TESTING_END_PROGRAM) {
+					System.exit(-1);				
+				} else {
+					endProgram(-1);
+				}
 			} else if (e instanceof Error) {
 				String msg = e.getClass().getSimpleName();
 				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
 				RTS_COMMON.printSimulaStackTrace(e, 0);
 				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
-				endProgram(-1);
+				if(TESTING_END_PROGRAM) {
+					System.exit(-1);				
+				} else {
+					endProgram(-1);
+				}
 			} else {
 				RTS_COMMON.printError(threadID + "UNCAUGHT EXCEPTION: " + e.getMessage());
 				e.printStackTrace();
-				endProgram(-1);
+				if(TESTING_END_PROGRAM) {
+					System.exit(-1);				
+				} else {
+					endProgram(-1);
+				}
 			}
 			if (RTS_Option.GOTO_TRACING)
 				RTS_COMMON.printThreadList();
@@ -1305,6 +1354,7 @@ public abstract class RTS_RTObject {
 		return (this);
 	}
 
+	private static boolean TESTING_END_PROGRAM = false; //true;
 	// *********************************************************************
 	// *** endProgram
 	// *********************************************************************
@@ -1330,11 +1380,11 @@ public abstract class RTS_RTObject {
 		if (RTS_COMMON.console == null) {
 //			System.out.println("RTS_RTObject.endProgram: "+exitValue);
 
-//			if(Option.internal.USE_SimulaClassLoader) {
-//				throw new RTS_EndProgram("Simula - endProgram");				
-//			} else {
+			if(TESTING_END_PROGRAM) {
+				throw new RTS_EndProgram("Simula - endProgram");				
+			} else {
 				System.exit(exitValue);				
-//			}
+			}
 		}
 	}
 

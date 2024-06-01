@@ -10,7 +10,6 @@ package simula.compiler.syntaxClass.declaration;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
@@ -325,14 +324,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			GeneratedJavaClass.code("break _LOOP;");
 			GeneratedJavaClass.code("}");
 			GeneratedJavaClass.code("catch(RTS_LABEL q) {");
-			GeneratedJavaClass.code("_CUR=_THIS;");
-			GeneratedJavaClass.code("if(q._SL!=_CUR) {");
-			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":NON-LOCAL\",q);");
-			GeneratedJavaClass.code("_CUR._STATE=OperationalState.terminated;");
-			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":RE-THROW\",q);");
-			GeneratedJavaClass.code("throw(q);");
-			GeneratedJavaClass.code("}");
-			GeneratedJavaClass.debug("if(RTS_Option.GOTO_TRACING) TRACE_GOTO(\"" + identifier + ":LOCAL\",q);");
+			
+			GeneratedJavaClass.code("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);");
+			
 			GeneratedJavaClass.code("_JTX=q.index; continue _LOOP;","EG. GOTO Lx");
 			GeneratedJavaClass.code("}");
 			GeneratedJavaClass.code("}");
@@ -523,53 +517,20 @@ public abstract class BlockDeclaration extends DeclarationScope {
 
 	// ==================================================================================
     //        catch(RTS_LABEL q) {
-    //            _CUR=_THIS;
-    //            if(q._SL!=_CUR) {
-    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
-    //                _CUR._STATE=OperationalState.terminated;
-    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
-    //                throw(q);
-    //            }
-    //            if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
     //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
     //        }
 	// ==================================================================================
 	private void buildCatchBlock(CodeBuilder  codeBuilder,Label contLabel) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		FieldRefEntry FRE_CUR = pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject);
 
-		// _CUR=_THIS;
+		// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
 		codeBuilder
 			.astore(local_LABEL_q)
 			.aload(local_THIS)
-			.putstatic(FRE_CUR);
-		
-		// if(q._SL!=_CUR) {
-		Label endIfLabel = codeBuilder.newLabel();
-		FieldRefEntry FRE_SL=pool.fieldRefEntry(CD.RTS_LABEL, "_SL", CD.RTS_RTObject);
-		codeBuilder
 			.aload(local_LABEL_q)
-			.getfield(FRE_SL)
-			.getstatic(FRE_CUR)
-			.if_acmpeq(endIfLabel);
-		
-		buildTraceGOTO(codeBuilder,"NON-LOCAL");
-		
-		// _CUR._STATE=OperationalState.terminated;
-		codeBuilder
 			.invokestatic(CD.RTS_RTObject,
-				"SET_CUR_TERMINATED", MethodTypeDesc.ofDescriptor("()V"));
-
-		
-		buildTraceGOTO(codeBuilder,"RE-THROW");
-		
-		// throw(q);
-		codeBuilder
-			.aload(local_LABEL_q)
-			.athrow()   // Throw LABEL q
-			.labelBinding(endIfLabel);
-		
-		buildTraceGOTO(codeBuilder,"LOCAL");
+					"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
 
 		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
 		codeBuilder
@@ -578,19 +539,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			.getfield(pool.fieldRefEntry(CD.RTS_LABEL,"index", ConstantDescs.CD_int))
 			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
 			.goto_(contLabel);
-	}
-
-	private void buildTraceGOTO(CodeBuilder  codeBuilder,String mss) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		Label endLabel = codeBuilder.newLabel();
-		codeBuilder
-			.getstatic(ClassDesc.of("simula.runtime.RTS_Option"),"GOTO_TRACING",ConstantDescs.CD_boolean)
-			.ifeq(endLabel)
-			.ldc(pool.stringEntry(mss))
-			.aload(local_LABEL_q)  // Label quant
-			.invokestatic(CD.RTS_RTObject,
-					"TRACE_GOTO", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;Lsimula/runtime/RTS_LABEL;)V"))
-			.labelBinding(endLabel);
 	}
 	
 	// ***********************************************************************************************

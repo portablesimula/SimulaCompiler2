@@ -307,13 +307,13 @@ public class JarFileBuilder {
 	}
 
 	public static void loadIncludeQueue() throws IOException {
-		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
+//		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
 		if(Global.includeQueue != null) {
 			for(JarFile jarFile:Global.includeQueue) {
-//				if(TESTING)
+				if(TESTING)
 					System.out.println("JarFileBuilder.loadIncludeQueue: loadJarEntries: "+jarFile);
 				loadJarEntries(jarFile, Global.simulaClassLoader);	
-				jarFile.close();
+//				jarFile.close();
 			}
 		}
 	}
@@ -344,7 +344,7 @@ public class JarFileBuilder {
 					
 //					addJarEntry(entryName, bytes);
 					String name = entryName.substring(0, entryName.length() - 6).replace('/', '.');
-					System.out.println("JarFileBuilder.loadJarEntries: name="+name);
+//					System.out.println("JarFileBuilder.loadJarEntries: name="+name);
 					loader.loadClass(name, bytes);
 //					Util.IERR();
 					

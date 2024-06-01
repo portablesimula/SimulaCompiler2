@@ -271,10 +271,14 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		codeBuilder.invokespecial(CD_pblk, "<init>", this.getConstructorMethodTypeDesc());
 
 		// _STM();
+		//         new adHoc00_PBLK4((_CUR))._START();
+
 		String resultType="Lsimula/runtime/RTS_RTObject;";
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		String name = (isDetachUsed())? "_START" : "_STM";
 		codeBuilder
-			.invokevirtual(pool.methodRefEntry(CD_pblk,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType)))
+//			.invokevirtual(pool.methodRefEntry(CD_pblk,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType)))
+			.invokevirtual(pool.methodRefEntry(CD_pblk,name, MethodTypeDesc.ofDescriptor("()"+resultType)))
 			.pop()
 		;
 	}

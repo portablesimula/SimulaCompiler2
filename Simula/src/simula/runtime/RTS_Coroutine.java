@@ -51,7 +51,8 @@ public class RTS_Coroutine implements Runnable {
 	/**
 	 * The runnable target
 	 */
-	private Runnable target;
+//	private Runnable target;
+	private RTS_CLASS target;
 	
 	/**
 	 * The target thread
@@ -97,7 +98,8 @@ public class RTS_Coroutine implements Runnable {
 	 * 
 	 * @param target a runnable target
 	 */
-	public RTS_Coroutine(Runnable target) {
+//	public RTS_Coroutine(Runnable target) {
+	public RTS_Coroutine(RTS_CLASS target) {
 		this.target = target;
 	}
 
@@ -127,8 +129,9 @@ public class RTS_Coroutine implements Runnable {
 		if (caller != null) {
 			if (caller != current)
 				throw new IllegalStateException("caller != currentCoroutine");
-		} else
+		} else{
 			caller = current;
+		}
 		current = this;
 		callerThread = Thread.currentThread();
 		if (targetThread == callerThread)
@@ -140,8 +143,7 @@ public class RTS_Coroutine implements Runnable {
 					if (RTS_Option.GOTO_TRACING) {
 						try {
 							target.run();
-						} catch(Exception e){
-							System.out.println("\nRTS_Coroutine.run: CATCH AND RE-TROW EXCEPTION");
+						} catch(Exception e) {
 							e.printStackTrace(System.out);
 							throw e;
 						}

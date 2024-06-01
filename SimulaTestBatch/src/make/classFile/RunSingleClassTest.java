@@ -41,8 +41,8 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.USE_SimulaClassLoader = true;
-//		Option.internal.CREATE_JAVA_SOURCE = true;
+//		Option.internal.USE_SimulaClassLoader = true;
+		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
@@ -67,7 +67,7 @@ public final class RunSingleClassTest {
 
 		Global.packetName="simulaTestBatch";
 
-//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
@@ -75,7 +75,7 @@ public final class RunSingleClassTest {
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
-//		RTOption.GOTO_TRACING = true;
+		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
 		
@@ -85,9 +85,10 @@ public final class RunSingleClassTest {
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
 //		names.add("adHoc01.sim"); // For ad'hoc testing
+		
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
@@ -134,10 +135,10 @@ public final class RunSingleClassTest {
 //		names.add("simtst37.sim"); // OK:  Parameter by name and type conversion
 //		names.add("simtst38.sim"); // OK:  Test the value of type procedures.
 //		names.add("simtst39.sim"); // OK:  Check that a formal parameter is global to the procedure body.
-		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
+//		names.add("p40b.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40a.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("p40c.sim");     // OK:  Precompile this for Simtst 40.
+//		names.add("simtst40.sim"); // OK:  Test separate compilation of procedures.
 //
 //		names.add("p41.sim");      // OK:  Precompile this for Simtst 41.
 //		names.add("simtst41.sim"); // OK:  Name parameter in external procedure.
@@ -265,8 +266,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		
-//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
-//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
 //		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 

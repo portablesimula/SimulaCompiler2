@@ -88,6 +88,7 @@ public abstract class RTS_CatchingErrors extends RTS_CLASS {
 	 * @param match virtual match procedure 
 	 */
 	public void _onError(RuntimeException e, RTS_PRCQNT match) {
+//		System.out.println("RTS_CatchingErrors._onError: GOT _SimulaRuntimeError:" + e);
 		if (e instanceof RTS_LABEL)
 			throw (e);
 		try {

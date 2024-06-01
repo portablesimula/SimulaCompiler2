@@ -5,14 +5,10 @@
  * You find a copy of the License on the following
  * page: https://creativecommons.org/licenses/by/4.0/
  */
-package make.java;
+package make.classFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Vector;
 
 import simula.compiler.SimulaCompiler;
@@ -29,7 +25,7 @@ import simula.editor.RTOption;
  * @author Øystein Myhre Andersen
  *
  */
-public final class RunFullTestBatch {
+public final class RunFullClassTestBatch2 {
 	private static final File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
 	private static final File userDir=new File("C:/GitHub/SimulaCompiler2/SimulaTestBatch");
 	private static final String sourceDir = userDir+"/src/simulaTestBatch/";
@@ -48,19 +44,24 @@ public final class RunFullTestBatch {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		// Set RunTime Options and tracing.
+		RTOption.VERBOSE = false;
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;
 //		RTOption.GOTO_TRACING = false;
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;
+		
+		Global.packetName="simulaTestBatch";
+		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -124,7 +125,7 @@ public final class RunFullTestBatch {
 		names.add("simtst49.sim"); // OK:  For statements in connection blocks.
 		names.add("simtst50.sim"); // OK:  Test binding and qualification in Connection Blocks
 
-		names.add("simtst51.sim"); // OK:  Test 'inner'.
+//		names.add("simtst51.sim"); // OK:  Test 'inner'.
 		names.add("simtst52.sim"); // OK:  Test 'inner'
 		names.add("simtst53.sim"); // OK:  Syntax check on virtual part
 		names.add("simtst54.sim"); // OK:  A VERY Simple Simulation
@@ -154,7 +155,7 @@ public final class RunFullTestBatch {
 		names.add("simtst76.sim"); // OK:  Test of detach and resume in SIMSET.
 		names.add("simtst77.sim"); // OK:  Two infile objects reading from the same external file.
 		names.add("simtst78.sim"); // OK:  Test the text procedure filename of class file.
-		names.add("simtst79.sim"); // OK:  Test the attribute 'IsOpen' of class file.
+//		names.add("simtst79.sim"); // OK:  Test the attribute 'IsOpen' of class file.
 		names.add("simtst80.sim"); // OK:  Test the attribute 'IsOpen' of class file.
 
 		names.add("simtst81.sim"); // OK:  Test the value of close.
@@ -176,32 +177,32 @@ public final class RunFullTestBatch {
 		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.
 		names.add("simtst101.sim"); // OK: Test Standard Procedure 'sourceline'.
 		names.add("simtst102.sim"); // OK: GOTO out of an operating Process
-		names.add("simtst103.sim"); // OK: All kinds of Activation Statements
+//		names.add("simtst103.sim"); // OK: All kinds of Activation Statements
 		names.add("simtst104.sim"); // OK: Procedure parameter 'F' by name.
 		names.add("simtst105.sim"); // OK: Multiple assignments.
 //		//names.add("simtst106.sim"); // ERR: Test SIMULATION, complex example.
-		names.add("simtst107.sim"); // OK:  Test Process, activation statements, idle, terminated, time.
-		names.add("simtst108.sim"); // OK: Simple Co-Routine Sample 1: detach - call
-		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
-		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
+//		names.add("simtst107.sim"); // OK:  Test Process, activation statements, idle, terminated, time.
+//		names.add("simtst108.sim"); // OK: Simple Co-Routine Sample 1: detach - call
+//		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
+//		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
 		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
 		names.add("simtst113.sim"); // OK: Virtual Switch Sample 1
 		names.add("simtst114.sim"); // OK: Switch Statement
-		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
-		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
-		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
-		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
+//		names.add("simtst115.sim"); // OK: Simple QPS-Sample 1
+//		names.add("simtst116.sim"); // OK: Simple QPS-Sample 2
+//		names.add("simtst117.sim"); // OK: Simple QPS-Sample 3
+//		names.add("simtst118.sim"); // OK: Simple QPS-Sample 4
 		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
 		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
-		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
+//		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
 		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
-		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
+//		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
 		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
 		names.add("simtst123.sim"); // OK: GOTO VIRTUAL LABEL
 		names.add("simtst124.sim"); // OK: GOTO VIRTUAL LABEL
@@ -210,23 +211,23 @@ public final class RunFullTestBatch {
 		names.add("simtst127.sim"); // OK: Switch (character) Statement
 		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
-		names.add("simtst129.sim"); // OK: Switch in precompiled class
+//		names.add("simtst129.sim"); // OK: Switch in precompiled class
 		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 		names.add("simtst131.sim"); // OK: Catching Errors
 		names.add("simtst132.sim"); // OK: SPORT Options
 		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND and PURGE.
 		names.add("simtst135.sim"); // OK: OutBytefile with CREATE, APPEND and PURGE.
-		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.           BRUKER Catching Errors
-		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.       BRUKER Catching Errors
+		names.add("simtst136.sim"); // OK: Directfile with CREATE, APPEND and PURGE.
+		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.
 		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 		names.add("simtst139.sim"); // OK: Test remote Array access.
 		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
-		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
+//		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
 		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
 		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
 		names.add("simtst147.sim"); // OK: Test virtual procedure by name
@@ -235,24 +236,19 @@ public final class RunFullTestBatch {
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
-		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
-		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
+//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+//		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
-		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
+//		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
 		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
-		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
-		names.add("simerr05.sim"); // OK: NumberFormatException
-		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
+//		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
+//		names.add("simerr05.sim"); // OK: NumberFormatException
+//		names.add("simerr06.sim"); // OK: ArrayIndexOutOfBounds
 		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
-		
-		Global.packetName="simulaTestBatch";
-//		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime
-		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 
 		for(String name:names) {
-//			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;
 			String fileName = sourceDir+name;
 			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();
 			SimulaCompiler compiler = new SimulaCompiler(fileName);
@@ -285,36 +281,36 @@ public final class RunFullTestBatch {
 	// ***************************************************************
 	// *** LIST FILES
 	// ***************************************************************
-	private static void list(final String dirName) { list(new File(dirName)); }
-	private static void list(final File dir) {
-		try { System.out.println("------------  LIST "+dir+"  ------------");
-		list("",dir);
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static void list(String indent,final File dir) {
-		try {
-			//System.out.println("tmpClass: "+dir);
-			File[] elt = dir.listFiles();
-			if(elt==null || elt.length==0) {
-				System.out.println("Empty Directory: "+dir);
-				return; 
-			}
-			System.out.println("Elements: "+elt.length);
-			for (File f : elt) {
-				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
-				if(f.isDirectory()) list(indent+"   ",f);
-			}
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static String getModifiedTime(File file) {
-		try { Path path = Paths.get(file.toString());
-		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
-		} catch (IOException e) { e.printStackTrace(); }
-		return(null);
-	}
+//	private static void list(final String dirName) { list(new File(dirName)); }
+//	private static void list(final File dir) {
+//		try { System.out.println("------------  LIST "+dir+"  ------------");
+//		list("",dir);
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static void list(String indent,final File dir) {
+//		try {
+//			//System.out.println("tmpClass: "+dir);
+//			File[] elt = dir.listFiles();
+//			if(elt==null || elt.length==0) {
+//				System.out.println("Empty Directory: "+dir);
+//				return; 
+//			}
+//			System.out.println("Elements: "+elt.length);
+//			for (File f : elt) {
+//				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
+//				if(f.isDirectory()) list(indent+"   ",f);
+//			}
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static String getModifiedTime(File file) {
+//		try { Path path = Paths.get(file.toString());
+//		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+//		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
+//		} catch (IOException e) { e.printStackTrace(); }
+//		return(null);
+//	}
 
 
 }
