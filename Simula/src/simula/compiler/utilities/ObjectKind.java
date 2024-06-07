@@ -29,6 +29,7 @@ public class ObjectKind {
 	/** Label Declaration */		public static final int LabelDeclaration = 16;
 	/** Simple Variable */			public static final int SimpleVariableDeclaration = 17;
 	/** External Declaration */		public static final int ExternalDeclaration = 18;
+//	/** Switch Declaration */		public static final int Switch = 19;
 
 	// *** Statements:
 

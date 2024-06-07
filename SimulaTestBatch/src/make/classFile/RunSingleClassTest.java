@@ -41,11 +41,11 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-//		Option.internal.USE_SimulaClassLoader = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -56,9 +56,9 @@ public final class RunSingleClassTest {
 
 		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-//		Option.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Checker Trace Options
 //		Option.internal.TRACE_FIND_MEANING=4;
@@ -67,17 +67,17 @@ public final class RunSingleClassTest {
 
 		Global.packetName="simulaTestBatch";
 
-		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
 		RTOption.GOTO_TRACING = true;
-//		RTOption.QPS_TRACING = true;
-//		RTOption.SML_TRACING = true;
+		RTOption.QPS_TRACING = true;
+		RTOption.SML_TRACING = true;
 		
 //		Option.internal.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
@@ -88,6 +88,7 @@ public final class RunSingleClassTest {
 		
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
+		
 //		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
@@ -254,6 +255,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 //		names.add("simtst139.sim"); // OK: Test remote Array access.
 //		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
+		
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
@@ -267,10 +269,10 @@ public final class RunSingleClassTest {
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		
 		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
-		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
-//		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
-//		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
-//		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
+//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
+		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
+		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
 //		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
 //		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
 //		names.add("simerr05.sim"); // OK: NumberFormatException
@@ -287,7 +289,9 @@ public final class RunSingleClassTest {
 			try { SimulaCompiler compiler = new SimulaCompiler(fileName);
 				  compiler.doCompile();
 			}
-			catch(Throwable t) { System.err.println("ERROR: "+t.getMessage()); t.printStackTrace(); }
+			catch(Throwable t) {
+				System.out.print("RunSingleClassTest CATCHED: "); t.printStackTrace(System.out);
+			}
 		}
 	}
 

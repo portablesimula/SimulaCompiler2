@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 20
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri May 31 15:50:59 CEST 2024
+// Simula-2.0 Compiled at Fri Jun 07 09:54:26 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class simerr01_p_simerr01_PBLK17_Car extends RTS_Process {

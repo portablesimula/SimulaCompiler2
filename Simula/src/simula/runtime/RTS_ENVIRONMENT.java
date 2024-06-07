@@ -1772,6 +1772,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 */
 	public static RTS_PRCQNT EXCEPTION_HANDLER = null;
 
+//	/**
+//	 * The registered EXCEPTION_HANDLER or null.
+//	 */
+//	public static boolean IN_EXCEPTION_HANDLER = false;
+
 	/**
 	 * S-PORT Extension Procedure hash.
 	 * <p>
@@ -2346,13 +2351,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		printStaticChain();
 		try {
 			Thread.sleep(10);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 		Thread.dumpStack();
 		try {
 			Thread.sleep(10);
-		} catch (Exception e) {
-		}
+		} catch (Exception e) {}
 		// System.exit(-1);
 	}
 

@@ -113,7 +113,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 */
 	public BlockStatement expectMaybeBlock(int line) {
 		this.lineNumber=line;
-		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse MayBeBlock");
+		if (Option.internal.TRACE_PARSE)
+			Parse.TRACE("Parse MayBeBlock");
 		while (Declaration.acceptDeclaration(this))
 			Parse.expect(KeyWord.SEMICOLON);
 		while (!Parse.accept(KeyWord.END)) {
@@ -273,7 +274,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			GeneratedJavaClass.code("public static void main(String[] args) {");
 			GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
 			GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
-			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
+			
+//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
+			
+			GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
+			GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+
 			GeneratedJavaClass.code("}", "End of main");
 		}
 		javaModule.codeProgramInfo();
@@ -543,6 +549,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
+		blk.declarationKind = ObjectKind.CompoundStatement;
 		Util.TRACE_INPUT("BEGIN Read "+blk);
 		blk.SEQU = inpt.readSEQU(blk);
 		blk.identifier = inpt.readString();

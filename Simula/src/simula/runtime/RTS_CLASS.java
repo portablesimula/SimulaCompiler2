@@ -40,6 +40,7 @@ public abstract class RTS_CLASS extends RTS_BASICIO implements Runnable {
 	 */
 	public RTS_CLASS(final RTS_RTObject SL) {
 		super(SL);
+//		System.out.println("NEW RTS_CLASS "+this.getClass()+" SL="+SL);
 	}
 
 	/**
@@ -47,12 +48,14 @@ public abstract class RTS_CLASS extends RTS_BASICIO implements Runnable {
 	 * @return this object
 	 */
 	public RTS_RTObject _START() {
+//		System.out.println("START RTS_CLASS "+this.getClass());
 		beginCoroutine();
 		return (this);
 	}
 
 	@Override
 	public void run() {
+//		System.out.println("RUN'STM RTS_CLASS "+this.getClass());
 		_STM();
 	}
 

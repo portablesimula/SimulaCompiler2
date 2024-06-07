@@ -730,9 +730,14 @@ public abstract class RTS_RTObject {
 	 * @param q the RTS_LABEL
 	 */
 	public void _GOTO(final RTS_LABEL q) {
-		if (RTS_Option.GOTO_TRACING)
+		if (RTS_Option.GOTO_TRACING) {
 			RTS_COMMON.TRACE("RTS_RTObject.GOTO: " + q);
-		throw (q);
+		
+			System.out.println("\nRTS_RTObject._GOTO: "+q.identifier + ", CUR="+_CUR);
+			System.out.println("RTS_RTObject._GOTO: "+q.identifier+" = "+q);
+	        new Exception("With Operating Chain:").printStackTrace(System.out);
+		}
+		throw q;
 	}
 
 	// ************************************************************
@@ -742,12 +747,13 @@ public abstract class RTS_RTObject {
 	 * Utility method to set current object terminated
 	 */
 	public static void _TREAT_GOTO_CATCH_BLOCK(RTS_RTObject _THIS, RTS_LABEL q) {
+//		System.out.println("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK: "+q);
         _CUR=_THIS;
         if(q._SL!=_CUR) {
             if(RTS_Option.GOTO_TRACING)
             	TRACE_GOTO(_CUR.getClass().getSimpleName()+":NON-LOCAL",q);
             _CUR._STATE=OperationalState.terminated;
-            throw(q);
+            throw q;
         }
         if(RTS_Option.GOTO_TRACING)
         	TRACE_GOTO(_CUR.getClass().getSimpleName()+":LOCAL",q);
@@ -794,121 +800,111 @@ public abstract class RTS_RTObject {
 
 		@Override
 		public void uncaughtException(Thread thread, Throwable e) {
-			String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + thread.getName() + '[' + obj + "]: ") : "";
-			if (RTS_Option.GOTO_TRACING) {
-				RTS_COMMON.println("\nRTS_RTObject.uncaughtException: In Thread " + thread.getName() + ": " + e);
-				e.printStackTrace(System.out);
-			}
-//			System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, _PENDING_DL="+RTS_Coroutine._PENDING_DL);
-//			System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, obj="+obj);
-//			if(RTS_Coroutine._PENDING_DL != null) {
-//				if(RTS_Coroutine._PENDING_DL != obj) {
-//					
-//					System.out.println("RTS_RTObject.uncaughtException: KOMMER VI HIT NOEN GANG(1) ?");
-//					System.exit(-9);
-//					
-//					System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, THROW="+new RuntimeException(e)+"ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-//					throw new RuntimeException(e);
-//				}
-//				RTS_Coroutine._PENDING_DL = null;
-//			}
-//			
-//			if(e instanceof RuntimeException rte) {
-//				Throwable cause = rte.getCause();
-//				System.out.println("RTS_RTObject.uncaughtException: CATCH RE-TROWN EXCEPTION, cause="+cause);
-//				if(cause != null) {
-//					
-//					System.out.println("RTS_RTObject.uncaughtException: KOMMER VI HIT NOEN GANG(2) ?");
-//					System.exit(-9);
-//					
-//					e = cause;
-//				}
-//			}
 			
-			if (e instanceof RTS_LABEL) {
-				if (RTS_Option.GOTO_TRACING) {
-//					System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
-					RTS_COMMON.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
-				}
-				RTS_RTObject DL = obj._DL;
-				if (DL != null && DL != _CTX) {
-					if (RTS_Option.GOTO_TRACING) {
-						System.err.println("DL=" + DL.edObjectAttributes());
-						RTS_COMMON.println("DL=" + DL.edObjectAttributes());
-					}
-					RTS_Coroutine._PENDING_EXCEPTION = (RuntimeException) e;
-					DL._CORUT.run();
-				} else {
-					String msg = "Illegal GOTO " + ((RTS_LABEL) e).identifier;
-					if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null)
-						treatRuntimeError(msg);
-					RTS_COMMON.println(threadID + "SIMULA RUNTIME ERROR: " + msg);
-					if (RTS_Option.VERBOSE)
-						e.printStackTrace();
-					if(TESTING_END_PROGRAM) {
-						System.exit(-1);				
-					} else {
-						endProgram(-1);
-					}
-				}
-			} else if (e instanceof RTS_EndProgram) {
-//				System.out.println("RTS_RTObject.uncaughtException: RTS_EndProgram");
-//				Thread.dumpStack();
-				// NOTHING
-				System.exit(0);				
-			} else if (e instanceof RuntimeException) {
-				String msg = getErrorMessage(e);
-				msg = msg.replace("RTS_SimulaRuntimeError: ", "");
-//				System.out.println("RTS_RTObject.uncaughtException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
-				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null)
-					treatRuntimeError(msg);
-				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
-				if (RTS_Option.VERBOSE)
-					e.printStackTrace();
-				RTS_COMMON.printSimulaStackTrace(e, 0);
-				if(TESTING_END_PROGRAM) {
-					System.exit(-1);				
-				} else {
-					endProgram(-1);
-				}
-			} else if (e instanceof Error) {
-				String msg = e.getClass().getSimpleName();
-				RTS_COMMON.printError(threadID + "SIMULA RUNTIME ERROR: " + msg);
-				RTS_COMMON.printSimulaStackTrace(e, 0);
-				if (RTS_Option.VERBOSE)
-					e.printStackTrace();
-				if(TESTING_END_PROGRAM) {
-					System.exit(-1);				
-				} else {
-					endProgram(-1);
-				}
-			} else {
-				RTS_COMMON.printError(threadID + "UNCAUGHT EXCEPTION: " + e.getMessage());
-				e.printStackTrace();
-				if(TESTING_END_PROGRAM) {
-					System.exit(-1);				
-				} else {
-					endProgram(-1);
-				}
+			if (RTS_Option.GOTO_TRACING) {
+				System.out.println("RTS_RTObject.uncaughtException: in "+obj+"  "+e);
+				System.out.println("RTS_RTObject.uncaughtException: IMPOSSIBLE ???????????????");
+				System.exit(-44);
 			}
-			if (RTS_Option.GOTO_TRACING)
-				RTS_COMMON.printThreadList();
+			treatException(e, obj);
 		}
 
-		/**
-		 * Utility: Treat Runtime error
-		 * @param msg the message
-		 */
-		private void treatRuntimeError(String msg) {
-			RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
-			try {
-				RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
-				erh.CPF().setPar(new RTS_TXT(msg))._ENT();
-			} catch (Throwable t) {
-				RTS_COMMON.printError("EXCEPTION IN SIMULA EXCEPTION_HANDLER: " + t);
-				RTS_COMMON.printError("EXCEPTION_HANDLER: " + erh);
-				t.printStackTrace();
+	}
+	
+	public static void treatException(final Throwable e, final RTS_RTObject obj) {
+		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
+		if (RTS_Option.GOTO_TRACING) {
+			RTS_COMMON.println("\nRTS_RTObject.treatException: In "+ threadID + e);
+			e.printStackTrace(System.out);
+		}
+		
+		if (e instanceof RTS_LABEL) {
+			if (RTS_Option.GOTO_TRACING) {
+//				System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
+				RTS_COMMON.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 			}
+			RTS_RTObject DL = obj._DL;
+			if (DL != null && DL != _CTX) {
+				if (RTS_Option.GOTO_TRACING) {
+					System.err.println("DL=" + DL.edObjectAttributes());
+					RTS_COMMON.println("DL=" + DL.edObjectAttributes());
+				}
+				RTS_Coroutine._PENDING_EXCEPTION = (RuntimeException) e;
+				DL._CORUT.run();
+			} else {
+				String msg = "Illegal GOTO " + ((RTS_LABEL) e).identifier;
+//				System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
+				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
+					callExceptionHandler(msg);
+				} else {
+					RTS_COMMON.println(threadID + "SIMULA RUNTIME(1) ERROR: " + msg);
+					if (RTS_Option.VERBOSE)
+						e.printStackTrace();
+					
+					if (RTS_Option.GOTO_TRACING) {
+						System.out.println("RTS_RTObject.treatException: Return after 'Illege GOTO' message");
+					}
+					System.exit(-1);
+				}
+			}
+		} else if (e instanceof RTS_EndProgram) {
+			if (RTS_Option.GOTO_TRACING) {
+				System.out.println("RTS_RTObject.treatException: RTS_EndProgram EXIT");
+			}
+			// NOTHING
+		} else if (e instanceof RuntimeException) {
+			String msg = getErrorMessage(e);
+			msg = msg.replace("RTS_SimulaRuntimeError: ", "");
+//			System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
+			if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
+				callExceptionHandler(msg);
+			} else {
+				RTS_COMMON.printError(threadID + "SIMULA RUNTIME(2) ERROR: " + msg);
+				if (RTS_Option.VERBOSE)
+					e.printStackTrace();
+				RTS_COMMON.printSimulaStackTrace(e, 0);
+				System.exit(-1);
+			}
+			
+		} else if (e instanceof Error) {
+			String msg = e.getClass().getSimpleName();
+			RTS_COMMON.printError(threadID + "SIMULA RUNTIME(3) ERROR: " + msg);
+			RTS_COMMON.printSimulaStackTrace(e, 0);
+			if (RTS_Option.VERBOSE)
+				e.printStackTrace();
+			System.exit(-1);				
+		} else {
+			RTS_COMMON.printError(threadID + "UNCAUGHT EXCEPTION: " + e.getMessage());
+			e.printStackTrace();
+			System.exit(-1);				
+		}
+		if (RTS_Option.GOTO_TRACING)
+			RTS_COMMON.printThreadList();
+		
+	}
+	
+	/**
+	 * Utility: Treat Runtime error
+	 * @param msg the message
+	 */
+	private static void callExceptionHandler(String msg) {
+		RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
+//		System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
+		try {
+			RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
+//			RTS_ENVIRONMENT.IN_EXCEPTION_HANDLER = true;
+//			System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
+			erh.CPF().setPar(new RTS_TXT(msg))._ENT();
+		} catch (RTS_EndProgram e) {
+			if(RTS_Option.GOTO_TRACING) {
+				System.out.println("RTS_RTObject.callExceptionHandler: callExceptionHandler returned with exception: "+e);
+			}
+			// NOTHING
+		} catch (Throwable t) {
+			RTS_COMMON.printError("EXCEPTION IN SIMULA EXCEPTION_HANDLER: " + t);
+//			Thread.dumpStack();
+			RTS_COMMON.printError("EXCEPTION_HANDLER: " + erh);
+			t.printStackTrace();
 		}
 	}
 
@@ -947,6 +943,8 @@ public abstract class RTS_RTObject {
 	 * @param ident the program identifier
 	 */
 	public void BPRG(final String ident) {
+		RTS_Coroutine.INIT();
+		RTS_COMMON.numberOfEditOverflows = 0;
 		startTimeMs = System.currentTimeMillis();
 		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
 		RTS_COMMON.progamIdent = ident;
@@ -983,6 +981,7 @@ public abstract class RTS_RTObject {
 		if (RTS_Option.BLOCK_TRACING)
 			RTS_COMMON.TRACE("BEGIN " + edObjectAttributes());
 		if (_SL == null) {
+//			Thread.dumpStack();
 			throw new RTS_SimulaRuntimeError("NONE-CHECK FAILED: Remote Call on Procedure x.proc, x==none");
 		}
 	}
@@ -1354,7 +1353,6 @@ public abstract class RTS_RTObject {
 		return (this);
 	}
 
-	private static boolean TESTING_END_PROGRAM = false; //true;
 	// *********************************************************************
 	// *** endProgram
 	// *********************************************************************
@@ -1378,13 +1376,11 @@ public abstract class RTS_RTObject {
 		} else if (RTS_COMMON.numberOfEditOverflows > 0)
 			RTS_COMMON.println("End program: WARNING " + RTS_COMMON.numberOfEditOverflows + " EditOverflows");
 		if (RTS_COMMON.console == null) {
-//			System.out.println("RTS_RTObject.endProgram: "+exitValue);
-
-			if(TESTING_END_PROGRAM) {
-				throw new RTS_EndProgram("Simula - endProgram");				
-			} else {
-				System.exit(exitValue);				
+			if(RTS_Option.GOTO_TRACING) {
+				System.out.println("RTS_RTObject.endProgram: "+exitValue);
 			}
+
+			throw new RTS_EndProgram("Simula - endProgram");				
 		}
 	}
 
@@ -1396,16 +1392,16 @@ public abstract class RTS_RTObject {
 	 */
 	static void swapCoroutines() {
 		RTS_Coroutine cont = RTS_Coroutine.getCurrentCoroutine();
-		// if(_RT.Option.QPS_TRACING) _RT.TRACE("SWAP: CURRENT= "+cont);
+//		System.out.println("RTS_RTObject.swapCoroutines: SWAP: CURRENT= "+cont);
 		if (cont == null) {
 			cont = _CUR._CORUT;
 			RTS_RTObject next = _CUR;
 			while (next._CORUT != null) {
-				// if(_RT.Option.QPS_TRACING) _RT.TRACE("SWAP: RUN NEXT "+next);
+//				System.out.println("RTS_RTObject.swapCoroutines: SWAP: RUN NEXT "+next);
 				next._CORUT.run();
 				// Return here when Coroutine is Detached or Done
 				next = _CUR;
-				// if(_RT.Option.QPS_TRACING) _RT.TRACE("SWAP: RUN RETURNED "+next);
+//				System.out.println("RTS_RTObject.swapCoroutines: SWAP: RUN RETURNED "+next);
 			}
 		} else {
 			// if(_RT.Option.QPS_TRACING) _RT.TRACE("SWAP: YIELD "+cont);

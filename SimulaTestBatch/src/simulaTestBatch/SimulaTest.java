@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 2
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri May 10 08:07:47 CEST 2024
+// Simula-2.0 Compiled at Sat Jun 01 12:00:29 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SimulaTest extends RTS_CLASS {
@@ -29,7 +29,7 @@ public class SimulaTest extends RTS_CLASS {
     // Class Statements
     @Override
     public SimulaTest _STM() {
-        RTS_COMMON._LINE("8 SimulaTest",16); // JavaLine 32 <== SourceLine 16
+        // JavaLine 32 <== SourceLine 16
         if(_VALUE(false)) {
             {
                 // JavaLine 35 <== SourceLine 17
@@ -50,11 +50,11 @@ public class SimulaTest extends RTS_CLASS {
             }
         }
         ;
-        RTS_COMMON._LINE("8 SimulaTest",22); // JavaLine 53 <== SourceLine 22
+        // JavaLine 53 <== SourceLine 22
         // BEGIN INNER PART
         // ENDOF INNER PART
         ;
-        RTS_COMMON._LINE("8 SimulaTest",24); // JavaLine 57 <== SourceLine 24
+        // JavaLine 57 <== SourceLine 24
         if(_VALUE(noMessage)) {
             ;
         } else {

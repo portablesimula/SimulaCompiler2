@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 13
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri May 31 15:50:58 CEST 2024
+// Simula-2.0 Compiled at Fri Jun 07 09:54:25 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class RT_ErrorTest_trace extends RTS_PROCEDURE {
@@ -37,7 +37,7 @@ public final class RT_ErrorTest_trace extends RTS_PROCEDURE {
     @Override
     public RT_ErrorTest_trace _STM() {
         // JavaLine 39 <== SourceLine 15
-        if(_VALUE(((RT_ErrorTest)(_CUR._SL)).verbose)) {
+        if(_VALUE(false)) {
             {
                 RTS_BASICIO.sysout().outtext(p_msg);
                 ;

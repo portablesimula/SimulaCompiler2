@@ -386,6 +386,49 @@ public abstract class DeclarationScope extends Declaration  {
     	if(CLASSFILE_ALREADY_GENERATED) return;
     	CLASSFILE_ALREADY_GENERATED = true;
     	
+//    	byte[] bytes;
+//    	if(this instanceof BlockDeclaration blk) {
+//    		blk.prevBlock = BlockDeclaration.currentBlock;
+//    		BlockDeclaration.currentBlock = blk;
+//    			bytes = buildClassFile();
+//    		BlockDeclaration.currentBlock = blk.prevBlock;
+//    	} else {
+//    		bytes = buildClassFile();
+//    	}
+//
+//    	if(bytes != null) {
+//    		if(Option.internal.USE_SimulaClassLoader) {
+//    			if(Global.simulaClassLoader != null) {
+//    				String name = Global.packetName + "." + externalIdent;
+//    				Global.simulaClassLoader.loadClass(name, bytes);
+//    			} else {
+//        			String entryName = Global.packetName + "/" + externalIdent + ".class";
+//        			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+//    			}
+//    		} else {
+//    			String entryName = Global.packetName + "/" + externalIdent + ".class";
+//    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+//    		}
+//
+//   			if(Option.internal.LIST_GENERATED_CLASS_FILES)
+//   				listGeneratedClassFile(bytes);
+//    	}
+
+    	buildAndLoadOrAddClassFile();
+    }
+	
+    /**
+     * Redefined in ClassDeclaration
+     * @throws IOException
+     */
+    protected void buildAndLoadOrAddClassFile() throws IOException {
+    	if(isPreCompiledFromFile == null) {
+	    	byte[] bytes = doBuildClassFile();
+	    	loadOrAddClassFile(bytes);
+    	}
+    }
+    
+    protected byte[] doBuildClassFile() {  // TODO: TESTING
     	byte[] bytes;
     	if(this instanceof BlockDeclaration blk) {
     		blk.prevBlock = BlockDeclaration.currentBlock;
@@ -395,7 +438,10 @@ public abstract class DeclarationScope extends Declaration  {
     	} else {
     		bytes = buildClassFile();
     	}
-
+    	return bytes;
+    }
+    
+    protected void loadOrAddClassFile(byte[] bytes) throws IOException {  // TODO: TESTING
     	if(bytes != null) {
     		if(Option.internal.USE_SimulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
@@ -413,8 +459,9 @@ public abstract class DeclarationScope extends Declaration  {
    			if(Option.internal.LIST_GENERATED_CLASS_FILES)
    				listGeneratedClassFile(bytes);
     	}
+    	
     }
-	
+
 	private void listGeneratedClassFile(byte[] bytes) throws IOException {
         File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
         outputFile.getParentFile().mkdirs();

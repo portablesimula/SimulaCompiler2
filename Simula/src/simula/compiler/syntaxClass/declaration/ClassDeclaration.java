@@ -1133,6 +1133,30 @@ public class ClassDeclaration extends BlockDeclaration {
 			return getPrefixClass().getClassDesc();
 		return CD.RTS_CLASS;
 	}
+	
+	
+	private boolean isLoaded;
+    /**
+     * Defined in DeclarationScope - Redefined in ClassDeclaration
+     * @throws IOException
+     */
+	@Override
+    protected void buildAndLoadOrAddClassFile() throws IOException {
+		if(this.isLoaded) return;
+		if(this instanceof StandardClass) return;
+		if(hasRealPrefix()) {
+			ClassDeclaration prefix = this.getPrefixClass();
+//			System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: prefix="+prefix);
+			if(!prefix.isLoaded) {
+//				System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: prefix.buildAndLoadOrAddClassFile");
+//				Util.IERR();
+				prefix.buildAndLoadOrAddClassFile();
+			}
+		}
+    	byte[] bytes = doBuildClassFile();
+    	loadOrAddClassFile(bytes);
+    	this.isLoaded = true;
+    }
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
@@ -1140,15 +1164,16 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
+		ClassDesc CD_SuperClass = superClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
-						.withSuperclass(this.superClassDesc());
+						.withSuperclass(CD_SuperClass);
 
 					if(labelList != null)
 						for (LabelDeclaration lab : labelList.labels)

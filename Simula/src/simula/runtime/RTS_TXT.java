@@ -861,7 +861,7 @@ public final class RTS_TXT {
 			while (p >= 0)
 				item[p--] = ' ';
 		} catch (ArrayIndexOutOfBoundsException e) {
-			RTS_COMMON.numberOfEditOverflows++;
+//			RTS_COMMON.numberOfEditOverflows++;
 			for (int i = 0; i < item.length; i++)
 				item[i] = '*';
 		}

@@ -281,6 +281,7 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.Procedure:
 			case ObjectKind.ContextFreeMethod:
 			case ObjectKind.MemberMethod:
+//			case ObjectKind.Switch:
 				this.type = decl.type;
 				Type overloadedType = this.type;
 				Iterator<Parameter> formalIterator;
@@ -302,6 +303,7 @@ public final class VariableExpression extends Expression {
 					}
 				}
 				if (params == null) {
+//					if(decl.declarationKind != ObjectKind.Procedure && decl.declarationKind != ObjectKind.Switch)
 					if(decl.declarationKind != ObjectKind.Procedure)
 					if (formalIterator.hasNext())
 						Util.error("Missing parameter(s) to " + decl.identifier);
@@ -403,11 +405,11 @@ public final class VariableExpression extends Expression {
 			return (false); // Error Recovery
 		switch (declaredAs.declarationKind) {
 			case ObjectKind.Procedure:
-				return (true);
+//			case ObjectKind.Switch:
 			case ObjectKind.ContextFreeMethod:
-				return (true);
 			case ObjectKind.MemberMethod:
 				return (true);
+				
 			case ObjectKind.Parameter:
 				Parameter par = (Parameter) declaredAs;
 				return (par.kind == Parameter.Kind.Procedure);
@@ -611,6 +613,7 @@ public final class VariableExpression extends Expression {
 				return (CallProcedure.asNormalMethod(this));
 	
 			case ObjectKind.Procedure:
+//			case ObjectKind.Switch:
 				// This Variable is a Procedure-Identifier.
 				// When 'destination' it is a variable used to carry the resulting value until
 				// the final return.
@@ -794,6 +797,7 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.Procedure:
+//			case ObjectKind.Switch:
 				if (destination) Util.IERR();
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (procedure.myVirtual != null)

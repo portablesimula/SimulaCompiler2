@@ -19,6 +19,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -103,7 +104,7 @@ public final class GotoStatement extends Statement {
 //        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_LABEL;)V
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
-		if(label instanceof VariableExpression var) {
+		if(label instanceof VariableExpression var) { // TODO: DETTE KAN FORENKLES !!!
 			Meaning meaning = var.meaning;
 			if(meaning.declaredAs instanceof LabelDeclaration) {
 				codeBuilder.aload(0);
@@ -114,7 +115,9 @@ public final class GotoStatement extends Statement {
 				codeBuilder.aload(0);
 			} else if(meaning.declaredAs instanceof VirtualSpecification) {
 				codeBuilder.aload(0);
-			} else Util.IERR();
+			} else if(meaning.declaredAs instanceof ProcedureDeclaration) {
+				codeBuilder.aload(0);
+			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName());
 			label.buildEvaluation(null,codeBuilder);
 			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
 					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));

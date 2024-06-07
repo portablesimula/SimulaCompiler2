@@ -67,7 +67,7 @@ public class RTS_Coroutine implements Runnable {
 	/**
 	 * Semaphore used to suspend/resume main (platform) Thread
 	 */
-	private static Semaphore mainSemaphore = new Semaphore(0);
+	private static Semaphore mainSemaphore;// = new Semaphore(0);
 	
 	/**
 	 * Semaphore used to suspend/resume this coroutine's Thread
@@ -77,7 +77,7 @@ public class RTS_Coroutine implements Runnable {
 	/**
 	 * Used to propagate exceptions to caller.
 	 */
-	public static RuntimeException _PENDING_EXCEPTION = null;
+	public static RuntimeException _PENDING_EXCEPTION;// = null;
 
 	/**
 	 * The UncaughtExceptionHandler.
@@ -89,9 +89,19 @@ public class RTS_Coroutine implements Runnable {
 			else
 				_PENDING_EXCEPTION = new RuntimeException(e);
 			done = true;
+			if (RTS_Option.GOTO_TRACING) {
+				System.out.print("RTS_Coroutine.UncaughtExceptionHandler: GOT Exception ");
+				_PENDING_EXCEPTION.printStackTrace(System.out);
+			}
 			detach();
 		}
 	};
+	
+	public static void INIT() {
+		current = null;
+		mainSemaphore = new Semaphore(0);
+		_PENDING_EXCEPTION = null;
+	}
 
 	/**
 	 * Create a new Coroutine with the given target.
@@ -144,6 +154,7 @@ public class RTS_Coroutine implements Runnable {
 						try {
 							target.run();
 						} catch(Exception e) {
+							System.out.print("RTS_Coroutine.run: GOT Exception ");
 							e.printStackTrace(System.out);
 							throw e;
 						}
@@ -199,7 +210,15 @@ public class RTS_Coroutine implements Runnable {
 		if (_PENDING_EXCEPTION != null) {
 			RuntimeException t = _PENDING_EXCEPTION;
 			_PENDING_EXCEPTION = null;
-			throw (t);
+			if (RTS_Option.GOTO_TRACING) {
+				System.out.print("RTS_Coroutine.suspend: THROW Exception ");
+				t.printStackTrace(System.out);
+			}
+			throw t;
+			
+//			System.out.println("RTS_Coroutine.suspend: "+coroutine);
+//			Thread.UncaughtExceptionHandler handler = Thread.currentThread().getUncaughtExceptionHandler();
+//			handler.uncaughtException(Thread.currentThread(), t);
 		}
 	}
 

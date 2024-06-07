@@ -13,6 +13,7 @@ import java.util.Vector;
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
+import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -79,12 +80,12 @@ public final class RunSingleTest {
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
-//		RTOption.GOTO_TRACING = true;
-//		RTOption.QPS_TRACING = true;
-//		RTOption.SML_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
+		RTOption.GOTO_TRACING = true;
+		RTOption.QPS_TRACING = true;
+		RTOption.SML_TRACING = true;
 		
 		
 		Vector<String> names=new Vector<String>();
@@ -93,7 +94,7 @@ public final class RunSingleTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -267,10 +268,10 @@ public final class RunSingleTest {
 //		names.add("simtst147.sim"); // OK: Test virtual procedure by name
 //		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
-		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
+//		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		
-//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
-//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
 //		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
@@ -290,7 +291,9 @@ public final class RunSingleTest {
 			try { SimulaCompiler compiler = new SimulaCompiler(fileName);
 				  compiler.doCompile();
 			}
-			catch(Throwable t) { System.err.println("ERROR: "+t.getMessage()); t.printStackTrace(); }
+			catch(Throwable t) {
+				System.out.print("RunSingleTest CATCHED: "); t.printStackTrace(System.out);
+			}
 		}
 	}
 

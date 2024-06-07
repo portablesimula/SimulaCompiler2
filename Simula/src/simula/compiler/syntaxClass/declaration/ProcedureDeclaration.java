@@ -319,6 +319,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				declarationList.add(result);
 			}
 			int prfx = 0;// prefixLevel();
+//			if (declarationKind == ObjectKind.Procedure || declarationKind == ObjectKind.Switch)
 			if (declarationKind == ObjectKind.Procedure)
 				for (Parameter par : this.parameterList) par.setExternalIdentifier(prfx);
 			for (Declaration par : this.parameterList) par.doChecking();
@@ -371,6 +372,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.isPreCompiledFromFile != null)	return;
 		switch (declarationKind) {
+//			case ObjectKind.Procedure, ObjectKind.Switch -> doProcedureCoding();
 			case ObjectKind.Procedure -> doProcedureCoding();
 			default -> Util.IERR();
 		}
@@ -425,7 +427,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (declarationKind == ObjectKind.Procedure && type != null) {
+//		if ( ( declarationKind == ObjectKind.Procedure || declarationKind == ObjectKind.Switch ) && type != null) {
+		if ( declarationKind == ObjectKind.Procedure && type != null) {
 			GeneratedJavaClass.code("@Override");
 			GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
 		}
@@ -1085,6 +1088,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		for(int i=0;i<n;i++)
 			pro.parameterList.add(Parameter.readParameter(inpt));
 
+		if(!Option.internal.CREATE_JAVA_SOURCE)
+			pro.isPreCompiledFromFile = inpt.jarFileName;
+//		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
+		
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
 		Global.setScope(pro.declaredIn);
 		return(pro);

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 24
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri May 31 15:50:58 CEST 2024
+// Simula-2.0 Compiled at Fri Jun 07 09:54:25 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class RT_ErrorTest_err extends RTS_PROCEDURE {

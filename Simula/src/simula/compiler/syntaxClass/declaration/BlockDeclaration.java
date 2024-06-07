@@ -239,6 +239,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				case ObjectKind.ExternalDeclaration -> res.add(decl);
 				case ObjectKind.LabelDeclaration -> res.add(decl);
 				case ObjectKind.Procedure -> res.add(decl);
+//				case ObjectKind.Switch -> res.add(decl);
 				case ObjectKind.SimpleVariableDeclaration -> res.add(decl);
 			}
 		}
@@ -425,6 +426,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					codeBuilder
 						.aconst_null()                 // TESTING_STACK_SIZE
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
+//					Util.buildSNAPSHOT(codeBuilder, "BEGIN _STM: "+this.identifier);
 				}
 				if (hasLabel())	
 //				if (this.labelList != null && !this.labelList.isEmpty())	
@@ -467,14 +469,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
     //            break _LOOP;
     //        }
     //        catch(RTS_LABEL q) {
-    //            _CUR=_THIS;
-    //            if(q._SL!=_CUR) {
-    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:NON-LOCAL",q);
-    //                _CUR._STATE=OperationalState.terminated;
-    //                if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:RE-THROW",q);
-    //                throw(q);
-    //            }
-    //            if(Option.GOTO_TRACING) TRACE_GOTO("adHoc000:LOCAL",q);
+    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
     //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
     //        }
     //    }
@@ -544,6 +539,35 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethodMain
 	// ***********************************************************************************************
+//	  public static void main(java.lang.String[]);
+//    descriptor: ([Ljava/lang/String;)V
+//    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
+//    Code:
+//      stack=3, locals=3, args_size=1
+//         0: aload_0
+//         1: invokestatic  #86                 // Method simula/runtime/RTS_COMMON.setRuntimeOptions:([Ljava/lang/String;)V
+
+//RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");			
+//         4: new           #8                  // class simulaTestPrograms/adHoc01
+//         7: dup
+//         8: getstatic     #92                 // Field _CTX:Lsimula/runtime/RTS_CLASS;
+//        11: invokespecial #96                 // Method "<init>":(Lsimula/runtime/RTS_RTObject;)V
+//        14: astore_1
+//TRY
+//        15: aload_1
+//        16: invokevirtual #97                 // Method simula/runtime/RTS_RTObject._STM:()Lsimula/runtime/RTS_RTObject;
+//        19: pop
+//        20: goto          29
+//CATCH
+//        23: astore_2
+//        24: aload_2
+//        25: aload_1
+//        26: invokestatic  #105                // Method simula/runtime/RTS_RTObject.treatUncaughtException:(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V
+//END
+//        29: return
+//      Exception table:
+//         from    to  target type
+//            15    20    23   Class java/lang/Throwable
     /**
      * Generate byteCode for the 'main' method.
      * <pre>
@@ -586,12 +610,27 @@ public abstract class BlockDeclaration extends DeclarationScope {
 							, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"));
 		}
 
-		// _STM();
+		//  try _STM(); catch(Throwable t) {   }
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder
-			.invokevirtual(pool.methodRefEntry(currentClassDesc()
-						, "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
-			.pop()
+			.astore(1)
+			.trying(
+				blockCodeBuilder -> {
+					blockCodeBuilder
+						.aload(1)
+						.invokevirtual(pool.methodRefEntry(currentClassDesc()
+								, "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
+						.pop();
+				},
+				catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_THROWABLE,
+					blockCodeBuilder -> {
+						blockCodeBuilder
+//							.astore(2)
+//							.aload(2)
+							.aload(1)
+							.invokestatic(CD.RTS_RTObject, "treatException",
+								MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));
+					}))
 			.return_()
 			.labelBinding(endScope);
 	}

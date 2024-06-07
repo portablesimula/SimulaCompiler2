@@ -1,23 +1,5 @@
 begin
 	integer i;
-
-      Simulation begin
-         ref(Car) car1;
-      
-         Process class Car(pname); text pname;
-         begin
-%            while true do
-%            begin
-%               hold (4);
-               outtext("goto EXIT_LABEL"); outimage;
-               goto EXIT_LABEL;
-%		    end;
-         end;
-      
-         car1:- new Car("Bil 1");
-         activate car1 at 4.0;
-         hold (12);
-EXIT_LABEL: outtext("++++++++++++++++++++++  At OUT"); outimage;
       
       end;
 end;

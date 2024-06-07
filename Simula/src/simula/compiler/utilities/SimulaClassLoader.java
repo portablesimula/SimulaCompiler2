@@ -11,12 +11,14 @@ import simula.runtime.RTS_EndProgram;
  * SEE: https://www.digitalocean.com/community/tutorials/java-classloader
  */
 public class SimulaClassLoader extends ClassLoader {
-	private final static boolean TESTING = false;
+	private final static boolean TESTING = false;//true;//false;
 	
 	/**
 	 * Default Constructor.
 	 */
-	public SimulaClassLoader() {}
+	public SimulaClassLoader() {
+//		System.out.println("NEW SimulaClassLoader: Parent="+this.getParent());
+	}
 	
 	public void loadClass(String name, byte[] bytes) {
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
@@ -24,6 +26,7 @@ public class SimulaClassLoader extends ClassLoader {
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " FAILED: " + clazz);
 //			Util.IERR();
 		} else {
+			if(TESTING) System.out.println("SimulaClassLoader.loadClass: TRY " + name);
 			clazz = Global.simulaClassLoader.defineClass(name, bytes, 0, bytes.length);
 			Global.simulaClassLoader.resolveClass(clazz);
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " SUCCESS");
@@ -54,7 +57,9 @@ public class SimulaClassLoader extends ClassLoader {
 				Throwable cause = e.getCause();
 				if(TESTING)	System.out.println("SimulaClassLoader.runClass: EXCEPTION-2 AFTER INVOKE cause = " + cause + ", clazz = " + clazz);
 				if(cause instanceof RTS_EndProgram) ; // OK
-				else Util.IERR(""+cause);
+				else if(cause instanceof RuntimeException err) throw err;
+				else Util.IERR("SimulaClassLoader.runClass: EXCEPTION AFTER INVOKE cause = "+cause);
+//				else throw new RuntimeException(cause);
 			}
 			if(TESTING) System.out.println("SimulaClassLoader.runClass: AFTER INVOKE clazz = " + clazz);
 			

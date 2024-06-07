@@ -55,6 +55,7 @@ import simula.compiler.utilities.Util;
 
 public class AttributeInputStream {
 	DataInputStream inpt;
+	public String jarFileName;
 	
 	/**
 	 * The Object Reference Table.
@@ -64,8 +65,9 @@ public class AttributeInputStream {
 	
 	private boolean TRACE = false; //true;
 
-    public AttributeInputStream(InputStream inpt) throws IOException {
+    public AttributeInputStream(InputStream inpt,String jarFileName) throws IOException {
     	this.inpt = new DataInputStream(inpt);
+    	this.jarFileName = jarFileName;
 		objectReference = new ObjectReferenceMap();
     }
 
@@ -187,6 +189,7 @@ public class AttributeInputStream {
 			case ObjectKind.CompoundStatement:			return MaybeBlockDeclaration.readObject(inpt);
 //			case ObjectKind.SubBlock:					return SubBlock.readObject(inpt);
 			case ObjectKind.Procedure:					return ProcedureDeclaration.readObject(inpt);
+//			case ObjectKind.Switch:						return SwitchDeclaration.readObject(inpt);
 //			case ObjectKind.MemberMethod:				return MemberMethod.readObject(inpt);
 //			case ObjectKind.ContextFreeMethod:			return ContextFreeMethod.readObject(inpt);
 			case ObjectKind.Class:						return ClassDeclaration.readObject(inpt);

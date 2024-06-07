@@ -29,6 +29,7 @@ public class CD {
 	
 	
 	public static final	ClassDesc JAVA_LANG_MATH  = ClassDesc.of("java.lang.Math");  
+	public static final	ClassDesc JAVA_LANG_THROWABLE  = ClassDesc.of("java.lang.Throwable");  
 	
 	public static ClassDesc RTS_ARRAY(Type type) {
 		return(ClassDesc.of("simula.runtime."+type.getArrayType()));

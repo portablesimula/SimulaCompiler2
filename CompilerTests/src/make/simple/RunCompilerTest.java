@@ -33,6 +33,7 @@ public final class RunCompilerTest {
 		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;

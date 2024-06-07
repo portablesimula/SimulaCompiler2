@@ -362,7 +362,7 @@ public final class ArrayDeclaration extends Declaration {
 		// 72: invokespecial #30                 // Method simula/runtime/RTS_INTEGER_ARRAY."<init>":(Lsimula/runtime/RTS_RTObject;[Lsimula/runtime/RTS_BOUNDS;)V
 		// 75: putfield      #7                  // Field A:Lsimula/runtime/RTS_INTEGER_ARRAY;
 
-//		System.out.println("ArrayDeclaration.buildDeclarationCode: "+arrType+" "+arrayIdent+" ++++++++++++++++++++++++++++++++++++++++++++++++++");
+//		System.out.println("ArrayDeclaration.buildDeclarationCode: "+this.type+" "+this.identifier+", declaredIn="+this.declaredIn+" ++++++++++++++++++++++++++++++++++++++++++++++++++");
 		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
 
 		codeBuilder
@@ -567,6 +567,10 @@ public final class ArrayDeclaration extends Declaration {
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 		oupt.writeShort(nDim);
+		for(BoundPair boundPair:boundPairList) {
+			oupt.writeObj(boundPair.LB);
+			oupt.writeObj(boundPair.UB);
+		}
 	}
 	
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
@@ -577,6 +581,12 @@ public final class ArrayDeclaration extends Declaration {
 		arr.externalIdent = inpt.readString();
 		arr.type = inpt.readType();
 		arr.nDim = inpt.readShort();
+		arr.boundPairList = new Vector<BoundPair>();
+		for(int i=0;i<arr.nDim;i++) {
+			Expression LB = (Expression) inpt.readObj();
+			Expression UB = (Expression) inpt.readObj();
+			arr.boundPairList.add(new BoundPair(LB,UB));
+		}
 		Util.TRACE_INPUT("Array: " + arr);
 		return(arr);
 	}

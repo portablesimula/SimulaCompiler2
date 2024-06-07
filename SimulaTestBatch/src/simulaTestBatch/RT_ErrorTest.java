@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 2
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri May 31 15:50:58 CEST 2024
+// Simula-2.0 Compiled at Fri Jun 07 09:54:25 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class RT_ErrorTest extends RTS_CLASS {
@@ -15,7 +15,7 @@ public class RT_ErrorTest extends RTS_CLASS {
     // JavaLine 15 <== SourceLine 9
     public boolean found_error=false;
     // JavaLine 17 <== SourceLine 11
-    public boolean verbose=false;
+    public final boolean verbose=(boolean)(false);
     // JavaLine 19 <== SourceLine 46
     public final RTS_TXT fullTitle;
     // Normal Constructor
@@ -33,7 +33,7 @@ public class RT_ErrorTest extends RTS_CLASS {
     @Override
     public RT_ErrorTest _STM() {
         // JavaLine 35 <== SourceLine 47
-        if(_VALUE(verbose)) {
+        if(_VALUE(false)) {
             {
                 // JavaLine 38 <== SourceLine 48
                 RTS_BASICIO.sysout().outtext(CONC(new RTS_TXT("--- START "),fullTitle));
@@ -59,7 +59,7 @@ public class RT_ErrorTest extends RTS_CLASS {
         }
         ;
         // JavaLine 61 <== SourceLine 57
-        if(_VALUE(verbose)) {
+        if(_VALUE(false)) {
             {
                 // JavaLine 64 <== SourceLine 58
                 RTS_BASICIO.sysout().outimage();

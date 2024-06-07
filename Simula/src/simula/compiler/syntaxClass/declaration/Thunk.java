@@ -99,6 +99,7 @@ public final class Thunk extends DeclarationScope {
 			    			case ObjectKind.Parameter ->  {} // OK
 				    		case ObjectKind.SimpleVariableDeclaration -> {} // OK
 				    		case ObjectKind.Procedure,
+//				    			 ObjectKind.Switch,
 			    		     	 ObjectKind.MemberMethod,
 				    		     ObjectKind.LabelDeclaration,
 				    		     ObjectKind.ContextFreeMethod -> writeableVariable = null;

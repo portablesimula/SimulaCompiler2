@@ -518,7 +518,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	public static void exit(int code) {
 		switch (code) {
 		case 0:
-			System.exit(0);
+			System.exit(-1);
 		case 1:
 			terminate_program();
 		case 2:

@@ -130,7 +130,7 @@ public final class RTS_COMMON {
 		int res = optionDialog(msg + "\nDo you want to continue ?", "Error", JOptionPane.YES_NO_OPTION,
 				JOptionPane.ERROR_MESSAGE, "Yes", "No");
 		if (res != JOptionPane.YES_OPTION)
-			System.exit(0);
+			throw new RTS_EndProgram("Simula - endProgram");
 	}
 
 	/**

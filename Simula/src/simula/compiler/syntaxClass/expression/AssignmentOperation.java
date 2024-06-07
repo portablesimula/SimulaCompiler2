@@ -283,6 +283,7 @@ public final class AssignmentOperation extends Expression {
 					}
 				}
 						
+//				case ObjectKind.Procedure, ObjectKind.Switch -> {
 				case ObjectKind.Procedure -> {
 					Meaning result=Global.getCurrentScope().findMeaning("_RESULT");
 					result.buildIdentifierAccess(false, codeBuilder);

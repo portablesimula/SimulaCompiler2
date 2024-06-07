@@ -147,8 +147,8 @@ public final class AttributeFileIO {
 			} else {
 				declarationList.add(module);
 				if (Option.verbose)
-					System.out.println("***       Read External " + module.declarationKind + ' ' + module.identifier + '[' + module.externalIdent + ']'
-							+"  ==>  "+declarationList.identifier);
+					System.out.println("***       Read External " + ObjectKind.edit(module.declarationKind) + ' ' + module.identifier
+							+ '[' + module.externalIdent + ']' +"  ==>  "+declarationList.identifier);
 			}
 //    		if(!Option.internal.USE_SimulaClassLoader) {
     			JarFileBuilder.addToIncludeQueue(jarFile);
@@ -161,9 +161,9 @@ public final class AttributeFileIO {
 		return (moduleType);
 	}
 	
-	public static BlockDeclaration buildSyntaxTree(String fileID,byte[] attrFile) throws IOException {
+	private static BlockDeclaration buildSyntaxTree(String fileID,byte[] attrFile) throws IOException {
 //		System.out.println("AttributeFileIO.buildSyntaxTree: size="+attrFile.length+", File="+fileID);
-		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile));
+		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile),fileID);
 
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + fileID);

@@ -90,6 +90,7 @@ public abstract class BuildCPF {
 						case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
 						case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
 						case ObjectKind.Procedure -> kind=Parameter.Kind.Procedure;
+//						case ObjectKind.Switch -> kind=Parameter.Kind.Procedure;
 						case ObjectKind.ContextFreeMethod -> kind=Parameter.Kind.Simple;
 						case ObjectKind.ArrayDeclaration -> kind=Parameter.Kind.Array;
 						case ObjectKind.LabelDeclaration -> kind=Parameter.Kind.Label;

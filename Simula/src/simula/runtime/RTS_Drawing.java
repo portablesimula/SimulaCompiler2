@@ -540,7 +540,7 @@ public class RTS_Drawing extends RTS_Simset {
 				if (DEBUG)
 					RTS_COMMON.println("windowClosing.WindowsEvent: " + e);
 				if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-					System.exit(0);
+					throw new RTS_EndProgram("Simula - endProgram");
 				}
 			}
 
@@ -582,7 +582,7 @@ public class RTS_Drawing extends RTS_Simset {
 				if (DEBUG)
 					RTS_COMMON.println("KEY " + c + " TYPED");
 				if (c == 'x')
-					System.exit(0);
+					throw new RTS_EndProgram("Simula - endProgram");
 			}
 
 			@Override

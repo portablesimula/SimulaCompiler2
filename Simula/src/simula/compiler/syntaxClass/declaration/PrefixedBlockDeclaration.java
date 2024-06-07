@@ -202,15 +202,18 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			GeneratedJavaClass.code("public static void main(String[] args) {");
 			GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
 			GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
-			StringBuilder s = new StringBuilder();
-			s.append("new " + getJavaIdentifier() + "(_CTX");
+			
+			StringBuilder sb = new StringBuilder();
+			sb.append("new " + getJavaIdentifier() + "(_CTX");
 			if (blockPrefix != null && blockPrefix.hasArguments()) {
 				for (Expression par : blockPrefix.checkedParams) {
-					s.append(',').append(par.toJavaCode());
+					sb.append(',').append(par.toJavaCode());
 				}
-			}
-			s.append(")._STM();");
-			GeneratedJavaClass.code("" + s);
+			} sb.append(");");
+			
+			GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
+			GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+			
 			GeneratedJavaClass.code("}", "End of main");
 		}
 		javaModule.codeProgramInfo();
@@ -289,7 +292,8 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	@Override
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock "+CD_ThisClass);
+		ClassDesc CD_SuperClass = superClassDesc();
+		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock " + CD_ThisClass + " extends " + CD_SuperClass);
 		
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
 		

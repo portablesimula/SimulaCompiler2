@@ -36,8 +36,8 @@ RT_ErrorTest("  1 --- ILLEGAL GOTO out of an operating Process and into the encl
          hold (12);
 EXIT_LABEL: outtext("At OUT"); outimage;
       
-      end;
-   end;
+      end Simulation;
+   end procedure p;
    
 %   integer iiii;
    
