@@ -286,6 +286,7 @@ public final class Global {
 	 * @param scope the new current scope
 	 */
 	public static void enterScope(DeclarationScope scope) {
+//		System.out.println("Global.enterScope: "+currentScope+"  ====>  "+scope);
 		scopeStack.push(currentScope);
 		currentScope = scope;
 		if (duringChecking) {
@@ -300,7 +301,9 @@ public final class Global {
 	 * During Checking and Coding: Exit declaration scope.
 	 */
 	public static void exitScope() {
+//		System.out.print("Global.enterScope: "+currentScope);
 		currentScope = scopeStack.pop();
+//		System.out.println("  ====>  "+currentScope);
 		if (duringChecking)
 			currentCTBlockLevel--;
 	}

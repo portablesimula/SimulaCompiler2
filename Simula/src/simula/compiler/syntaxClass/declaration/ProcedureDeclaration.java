@@ -160,7 +160,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		expectProcedureBody(proc);
 
 		proc.lastLineNumber = Global.sourceLineNumber;
-		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+proc.lineNumber+": ProcedureDeclaration: "+proc);
+		if (Option.internal.TRACE_PARSE)
+			Util.TRACE("Line "+proc.lineNumber+": ProcedureDeclaration: "+proc);
 		Global.setScope(proc.declaredIn);
 		return (proc);
 	}
@@ -427,7 +428,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
 			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-//		if ( ( declarationKind == ObjectKind.Procedure || declarationKind == ObjectKind.Switch ) && type != null) {
 		if ( declarationKind == ObjectKind.Procedure && type != null) {
 			GeneratedJavaClass.code("@Override");
 			GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
@@ -827,7 +827,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 							blockCodeBuilder -> {
 								build_SWITCH(blockCodeBuilder);
 							},
-							catchBuilder -> catchBuilder.catching(ClassDesc.of("java.lang.ClassCastException"),
+							catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_CLASSCAST_EXCEPTION,
 									blockCodeBuilder -> {
 										// throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
 										codeBuilder.astore(2);

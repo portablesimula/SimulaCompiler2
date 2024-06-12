@@ -1,15 +1,11 @@
 
-% Simulation
 begin
-	integer i;
+
+	integer procedure PPPPPP(FFFFFF); name FFFFFF; integer FFFFFF;
 	begin
-		i := 222;
-		begin
-			i := 444;
-		end;
-		i := 666;
+%		PPPPPP := FFFFFF
+%		PPPPPP := PPPPPP + 44;
+		PPPPPP := FFFFFF + PPPPPP(FFFFFF);
 	end;
 
-	i := 888;
-
-end
+ end;

@@ -75,7 +75,7 @@ public class BuildCPV {
 			    ProcedureDeclaration prc=(ProcedureDeclaration)meaning.declaredAs;
 				if(prc.type == null || variable.backLink == null)
 					codeBuilder.pop();
-	
+				
 		    } else {
 		        //  0: getstatic     #7                  // Field _CUR:Lsimula/runtime/RTS_RTObject;
 		        //  3: checkcast     #8                  // class simulaTestPrograms/adHoc000_PBLK20

@@ -1535,7 +1535,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
-		Util.TRACE_INPUT("BEGIN Write ClassDeclaration: " + identifier + ", Declared in: " + declaredIn);
+		Util.TRACE_OUTPUT("BEGIN Write ClassDeclaration: " + identifier + ", Declared in: " + declaredIn);
 		oupt.writeKind(declarationKind); // Mark: This is a ClassDeclaration
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);

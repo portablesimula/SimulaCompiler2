@@ -1,45 +1,9 @@
 
 begin
-	text TA;
-	
-	procedure P1(fP,TXT); procedure fP; text TXT; begin
-		R1(fP,TXT);
-	end;
-	
-	procedure R1(fP,TXT); procedure fP; text TXT; begin
-		fP(TXT);
-	end;
-	
-	procedure P2(fP,TXT); name fP, TXT; procedure fP; text TXT; begin
-		R2(fP,TXT);
-	end;
-	
-	procedure R2(fP,TXT); procedure fP; text TXT; begin
-		fP(TXT);
-	end;
-	
-	procedure P3(fP,TXT); name fP; value TXT; procedure fP; text TXT; begin
-		R3(fP,TXT);
-	end;
-	
-	procedure R3(fP,TXT); value TXT; procedure fP; text TXT; begin
-		fP(TXT);
-	end;
-	
-	procedure Q(TXT); text TXT; begin
-		outtext(TXT);
-		TXT :- TXT & "-CORR  ";
-	end;
-	
-	TA :- copy("AbraCaDab ");
-	
-	P1(Q,TA);
-		outtext(TA);
-	
-	P2(Q,TA);
-		outtext(TA);
-	
-	P3(Q,TA);
-		outtext(TA);
+
+		text procedure P_TXT2(par_T); text par_T; begin
+			text P_T;
+			P_T := P_TXT2 := "Abra";
+		end;
 
 end;

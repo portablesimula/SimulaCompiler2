@@ -290,9 +290,9 @@ public final class SimulaCompiler {
 				programModule.printTree(1);
 			}
 			if (Util.nError > 0) {
-				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError
-						+ " errors during semantic checking";
+				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during semantic checking";
 				Util.println(msg);
+				Thread.dumpStack();
 				throw new RuntimeException(msg);
 			}
 			// ***************************************************************
@@ -328,8 +328,7 @@ public final class SimulaCompiler {
 				}
 			}
 			if (Util.nError > 0) {
-				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError
-						+ " errors during code generation";
+				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during code generation";
 				Util.println(msg);
 				throw new RuntimeException(msg);
 			}

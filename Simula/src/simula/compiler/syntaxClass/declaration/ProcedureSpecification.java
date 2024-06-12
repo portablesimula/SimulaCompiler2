@@ -137,10 +137,12 @@ public final class ProcedureSpecification {
 		if (type != null)
 			type.doChecking(scope);
 		// Check parameters
-		for (Parameter par : parameterList)
-			par.doChecking();
+		if (parameterList != null) {
+			for (Parameter par : parameterList)
+				par.doChecking();
+		}
 	}
-
+	
 	@Override
 	public String toString() {
 		StringBuilder s = new StringBuilder();

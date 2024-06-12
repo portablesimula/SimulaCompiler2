@@ -23,6 +23,7 @@ import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -60,7 +61,9 @@ public final class CallProcedure {
 		// Generate Parameter Transmission
 		s.append(edProcedureParameters(variable,staticLink,procedure)); 
 		// Check if part of expression
-		if(decl.type!=null && variable.backLink!=null) s.append("._RESULT");
+		if(decl.type!=null && variable.backLink!=null) {
+			s.append("._RESULT");
+		}
 		return(s.toString());
 	}
 	
@@ -90,7 +93,9 @@ public final class CallProcedure {
 		String call="new "+procedure.getJavaIdentifier();
 		String staticLink=obj.get();	  
 		call=call+edProcedureParameters(func,staticLink,procedure);
-		if(procedure.type!=null && backLink!=null) call=call+"._RESULT";
+		if(procedure.type!=null && backLink!=null) {
+			call=call+"._RESULT";
+		}
 		return(call);
 	}
 

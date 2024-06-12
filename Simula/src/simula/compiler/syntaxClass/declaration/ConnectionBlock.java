@@ -7,8 +7,12 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
+
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -73,6 +77,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		declarationKind = ObjectKind.ConnectionBlock;
 		this.inspectedVariable = inspectedVariable;
 		this.whenClassIdentifier = whenClassIdentifier;
+//		Thread.dumpStack();
 	}
 
 	/**
@@ -235,22 +240,89 @@ public final class ConnectionBlock extends DeclarationScope {
 		return ("Inspect(" + inspectedVariable + ") do " + statement);
 	}
 
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-
-	/**
-	 * Create a new ConnectionBlock.
-	 */
-	public ConnectionBlock() {
-		super("");
-		this.whenClassIdentifier = "";
-		this.inspectedVariable = null;
-	}
+//	// ***********************************************************************************************
+//	// *** Externalization
+//	// ***********************************************************************************************
+//
+//	/**
+//	 * Create a new ConnectionBlock.
+//	 */
+//	public ConnectionBlock() {
+//		super("");
+//		this.whenClassIdentifier = "";
+//		this.inspectedVariable = null;
+//	}
 
 	@Override
 	public byte[] buildClassFile() {
 		return null;
 	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Attribute File I/O
+	 */
+	public ConnectionBlock(String identifier) {
+		super(identifier);
+		declarationKind = ObjectKind.ConnectionBlock;
+	}
+
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write ConnectionBlock: "+identifier);
+		oupt.writeKind(declarationKind); // Mark: This is a ConnectionBlock
+		oupt.writeString(identifier);
+		oupt.writeShort(SEQU);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
+		oupt.writeShort(rtBlockLevel);
+		oupt.writeBoolean(hasLocalClasses);
+
+//		oupt.writeShort(parameterList.size());
+//		for(Parameter par:parameterList) par.writeParameter(oupt);
+
+//		private Statement statement;
+//		private String whenClassIdentifier;
+//		public VariableExpression inspectedVariable;
+		oupt.writeObj(statement);
+		oupt.writeString(whenClassIdentifier);
+		oupt.writeObj(inspectedVariable);
+		
+		Util.TRACE_OUTPUT("END Write ConnectionBlock: "+identifier);
+	}
+
+	public static ConnectionBlock readObject(AttributeInputStream inpt) throws IOException {
+		String identifier = inpt.readString();
+		ConnectionBlock blk = new ConnectionBlock(identifier);
+		blk.SEQU = inpt.readSEQU(blk);
+		blk.externalIdent = inpt.readString();
+		blk.type=inpt.readType();
+		blk.rtBlockLevel = inpt.readShort();
+		blk.hasLocalClasses = inpt.readBoolean();
+		
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			blk.parameterList.add(Parameter.readParameter(inpt));
+
+		blk.statement = (Statement) inpt.readObj();
+		blk.whenClassIdentifier = inpt.readString();
+//		blk.inspectedVariable = (VariableExpression) inpt.readObj();
+		Expression expr = (Expression) inpt.readObj();
+		System.out.println("expr="+expr.getClass().getSimpleName()+" "+expr);
+		blk.inspectedVariable = (VariableExpression) expr;
+		Util.IERR();
+		
+		
+		if(!Option.internal.CREATE_JAVA_SOURCE)
+			blk.isPreCompiledFromFile = inpt.jarFileName;
+//		System.out.println("ConnectionBlock.readObject: "+identifier+", isPreCompiledFromFile="+blk.isPreCompiledFromFile);
+		
+		Util.TRACE_INPUT("END Read ConnectionBlock: "+identifier+", Declared in: "+blk.declaredIn);
+		Global.setScope(blk.declaredIn);
+		return(blk);
+	}
+
 
 }

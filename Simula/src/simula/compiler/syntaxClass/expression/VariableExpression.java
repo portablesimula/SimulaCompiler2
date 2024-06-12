@@ -34,6 +34,7 @@ import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
+import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
@@ -189,6 +190,13 @@ public final class VariableExpression extends Expression {
 	 */
 	public Meaning getMeaning() {
 		if (meaning == null) {
+			
+//			if(identifier.equals("fpar")) {
+//				DeclarationScope currentScope = Global.getCurrentScope();
+//				System.out.println("VariableExpression.getMeaning: currentScope="+currentScope.getClass().getSimpleName()+"  "+currentScope);
+//				DeclarationScope.printScopeChain(currentScope, "VariableExpression.getMeaning");
+//			}
+			
 			meaning = Global.getCurrentScope().findMeaning(identifier);
 		}
 		return (meaning);
@@ -214,8 +222,10 @@ public final class VariableExpression extends Expression {
 				Expression par = acceptExpression();
 				if (par == null)
 					Util.error("Missing procedure parameter");
-				else
+				else{
 					variable.params.add(par);
+					par.backLink = variable;
+				}
 			} while (Parse.accept(KeyWord.COMMA));
 			Parse.expect(KeyWord.ENDPAR);
 		}
@@ -234,6 +244,7 @@ public final class VariableExpression extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())
 			return;
+//		System.out.println("VariableExpression.doChecking: "+this);
 		Global.sourceLineNumber = lineNumber;
 		Declaration declaredAs = getMeaning().declaredAs;
 		if (declaredAs != null)
@@ -281,14 +292,13 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.Procedure:
 			case ObjectKind.ContextFreeMethod:
 			case ObjectKind.MemberMethod:
-//			case ObjectKind.Switch:
 				this.type = decl.type;
 				Type overloadedType = this.type;
-				Iterator<Parameter> formalIterator;
+				Iterator<Parameter> paramIterator;
 				if (decl instanceof ClassDeclaration cdecl)
-					formalIterator = cdecl.new ClassParameterIterator();
+					paramIterator = cdecl.new ClassParameterIterator();
 				else {
-					formalIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
+					paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
 					if(!Option.internal.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
@@ -303,20 +313,27 @@ public final class VariableExpression extends Expression {
 					}
 				}
 				if (params == null) {
-//					if(decl.declarationKind != ObjectKind.Procedure && decl.declarationKind != ObjectKind.Switch)
-					if(decl.declarationKind != ObjectKind.Procedure)
-					if (formalIterator.hasNext())
-						Util.error("Missing parameter(s) to " + decl.identifier);
+//					System.out.println("VariableExpression.doChecking: "+this.backLink);
+					if(decl.declarationKind != ObjectKind.Procedure) {
+//						System.out.println("VariableExpression.doChecking: NOT Procedure'backLink="+this.backLink);
+						if (paramIterator.hasNext())
+							Util.error("Missing parameter(s) to " + decl.identifier);
+					} else {
+						if(!(decl instanceof SwitchDeclaration)) {
+							if(backLink == null && paramIterator.hasNext())
+								Util.error("Missing parameter(s) to " + decl.identifier);
+						}
+					}
 				} else {
 					// Check parameters
 					checkedParams = new Vector<Expression>();
 					Iterator<Expression> actualIterator = params.iterator();
 					LOOP: while (actualIterator.hasNext()) {
-						if (!formalIterator.hasNext()) {
+						if (!paramIterator.hasNext()) {
 							Util.error("Too meny parameters to " + decl.identifier);
 							break LOOP;
 						}
-						Parameter formalParameter = (Parameter) formalIterator.next();
+						Parameter formalParameter = (Parameter) paramIterator.next();
 						Type formalType = formalParameter.type;
 						Expression actualParameter = actualIterator.next();
 						actualParameter.doChecking();
@@ -336,7 +353,7 @@ public final class VariableExpression extends Expression {
 						checkedParameter.backLink = this;
 						checkedParams.add(checkedParameter);
 					}
-					if (formalIterator.hasNext())
+					if (paramIterator.hasNext())
 						Util.error("Missing parameter(s) to " + decl.identifier);
 				}
 				if (type instanceof OverLoad)
@@ -514,6 +531,8 @@ public final class VariableExpression extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		Expression inspectedVariable = meaning.getInspectedExpression();
 		StringBuilder s;
+		
+//		System.out.println("VariableExpression.editVariable: "+ObjectKind.edit(decl.declarationKind)+" "+decl);
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:
@@ -601,22 +620,16 @@ public final class VariableExpression extends Expression {
 				// Standard Library Procedure
 				if (Util.equals(identifier, "sourceline"))
 					return ("" + Global.sourceLineNumber);
-				if (destination) {
-					return ("_RESULT=" + rightPart);
-				}
+				if (destination) return ("_RESULT=" + rightPart);
 				return (CallProcedure.asStaticMethod(this, true));
 	
 			case ObjectKind.MemberMethod:
-				if (destination) {
-					return ("_RESULT=" + rightPart);
-				}
+				if (destination) return ("_RESULT=" + rightPart);
 				return (CallProcedure.asNormalMethod(this));
 	
 			case ObjectKind.Procedure:
-//			case ObjectKind.Switch:
 				// This Variable is a Procedure-Identifier.
-				// When 'destination' it is a variable used to carry the resulting value until
-				// the final return.
+				// When 'destination' it is a variable used to carry the resulting value until the final return.
 				// otherwise; it is a ordinary procedure-call.
 				if (destination) { // return("_RESULT");
 					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
@@ -751,7 +764,7 @@ public final class VariableExpression extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
-
+		
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:

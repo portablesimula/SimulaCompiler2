@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+import simula.compiler.Simula;
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -32,11 +33,13 @@ public final class RunClassFileTest {
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
+//		Simula.setSelectors("ZDTW");
+		Simula.setSelectors("ZD");
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -52,14 +55,14 @@ public final class RunClassFileTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
 //		// Checker Trace Options
 //		Option.internal.TRACE_CHECKER=true;
 //		Option.internal.TRACE_CHECKER_OUTPUT=true;
-//		Option.internal.TRACE_FIND_MEANING=1;
+//		Option.internal.TRACE_FIND_MEANING=2;
 
 //		File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 		File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
@@ -108,8 +111,8 @@ public final class RunClassFileTest {
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
 //		 names.add("/simple/adHoc00.sim");
-		 names.add("/simple/adHoc01.sim");
-		// names.add("/simple/adHoc02.sim");
+//		 names.add("/simple/adHoc01.sim");
+		 names.add("/simple/adHoc02.sim");
 		// names.add("/simple/adHoc03.sim");
 		// names.add("/simple/adHoc30a.sim");
 		// names.add("/simple/adHoc04.sim");

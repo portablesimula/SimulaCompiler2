@@ -45,7 +45,7 @@ public final class RunSingleClassTest {
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -72,12 +72,13 @@ public final class RunSingleClassTest {
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = false;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-		RTOption.BLOCK_TRACING = true;
-		RTOption.GOTO_TRACING = true;
-		RTOption.QPS_TRACING = true;
-		RTOption.SML_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
+//		RTOption.QPS_TRACING = true;
+//		RTOption.SML_TRACING = true;
 		
 //		Option.internal.RUNTIME_USER_DIR = "C:/GitHub/SimulaCompiler2/TestBatch/";
     	//System.setProperty("file.encoding","UTF-8");
@@ -89,7 +90,7 @@ public final class RunSingleClassTest {
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 		
-//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
@@ -267,12 +268,14 @@ public final class RunSingleClassTest {
 //		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
+//		names.add("simtst151.sim"); // OK: Test multiple assignments
+		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		
-		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
-		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
-		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
-		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
+//		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
+//		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
+//		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 
 //		names.add("PrecompiledProcedure.sim"); // OK: Used by simerr04
 //		names.add("simerr04.sim"); // OK: Division by Zero in Precompiled Procedure
 //		names.add("simerr05.sim"); // OK: NumberFormatException

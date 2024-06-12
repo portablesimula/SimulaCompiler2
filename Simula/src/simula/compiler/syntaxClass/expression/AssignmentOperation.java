@@ -150,6 +150,7 @@ public final class AssignmentOperation extends Expression {
 	 */
 	private String doCodeTextValueAssignment() {
 		StringBuilder s = new StringBuilder();
+//		System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
 			if (value != null) {
@@ -223,6 +224,7 @@ public final class AssignmentOperation extends Expression {
 	 */
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+//		System.out.println("AssignmentOperation.buildEvaluation: type="+type+"  "+this);
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.textValueAssignment)
 			 buildTextValueAssignment(codeBuilder);
@@ -231,6 +233,7 @@ public final class AssignmentOperation extends Expression {
 
 
 	private void buildTextValueAssignment(CodeBuilder codeBuilder) {
+//		System.out.println("AssignmentOperation.buildTextValueAssignment: type="+type+"  "+this);
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
@@ -257,17 +260,17 @@ public final class AssignmentOperation extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(lhs instanceof VariableExpression var) {
 			Declaration decl = var.meaning.declaredAs;
-
 			switch(decl.declarationKind) {
 				case ObjectKind.SimpleVariableDeclaration -> {
 					var.buildIdentifierAccess(true,codeBuilder);
 					rhs.buildEvaluation(null,codeBuilder);
-						
+					
 					// Prepare for multiple assignment
 					if(this.backLink != null) {
-						if(this.type.keyWord == Type.T_LONG_REAL)
-							 codeBuilder.dup2_x1();
-						else codeBuilder.dup_x1();
+//						if(this.type.keyWord == Type.T_LONG_REAL)
+//							 codeBuilder.dup2_x1();
+//						else codeBuilder.dup_x1();
+						type.dup_x1(codeBuilder);
 					}
 					SimpleVariableDeclaration simplevar = (SimpleVariableDeclaration)decl;
 					codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
@@ -283,13 +286,19 @@ public final class AssignmentOperation extends Expression {
 					}
 				}
 						
-//				case ObjectKind.Procedure, ObjectKind.Switch -> {
 				case ObjectKind.Procedure -> {
 					Meaning result=Global.getCurrentScope().findMeaning("_RESULT");
 					result.buildIdentifierAccess(false, codeBuilder);
-						
 					ProcedureDeclaration proc = (ProcedureDeclaration)decl;
 					rhs.buildEvaluation(null,codeBuilder);
+					
+					// Prepare for multiple assignment
+					if(this.backLink != null) {
+//						if(this.type.keyWord == Type.T_LONG_REAL)
+//							 codeBuilder.dup2_x1();
+//						else codeBuilder.dup_x1();
+						type.dup_x1(codeBuilder);
+					}
 					codeBuilder.putfield(pool.fieldRefEntry(proc.getClassDesc(), "_RESULT", type.toClassDesc()));
 				}
 					
@@ -298,9 +307,10 @@ public final class AssignmentOperation extends Expression {
 					var.meaning.buildIdentifierAccess(false,codeBuilder);
 					arr.arrayPutElement(var,false,rhs,codeBuilder);
 					if(this.backLink == null) {
-						if(this.type.keyWord == Type.T_LONG_REAL)
-							 codeBuilder.pop2();
-						else codeBuilder.pop();
+//						if(this.type.keyWord == Type.T_LONG_REAL)
+//							 codeBuilder.pop2();
+//						else codeBuilder.pop();
+						type.pop(codeBuilder);
 					}
 				}
 				
@@ -313,9 +323,10 @@ public final class AssignmentOperation extends Expression {
 				rhs.buildEvaluation(null,codeBuilder);
 				// Prepare for multiple assignment
 				if(this.backLink != null) {
-					if(this.type.keyWord == Type.T_LONG_REAL)
-						 codeBuilder.dup2_x1();
-					else codeBuilder.dup_x1();
+//					if(this.type.keyWord == Type.T_LONG_REAL)
+//						 codeBuilder.dup2_x1();
+//					else codeBuilder.dup_x1();
+					type.dup_x1(codeBuilder);
 				}
 				codeBuilder.putfield(var.getFieldRefEntry(pool));
 			}
@@ -337,9 +348,10 @@ public final class AssignmentOperation extends Expression {
 			
 			// Prepare for multiple assignment
 			if(this.backLink == null) {
-				if(this.type.keyWord == Type.T_LONG_REAL)
-					codeBuilder.pop2();
-				else codeBuilder.pop();
+//				if(this.type.keyWord == Type.T_LONG_REAL)
+//					codeBuilder.pop2();
+//				else codeBuilder.pop();
+				type.pop(codeBuilder);
 			}
 			return(true);
 		}
@@ -359,6 +371,7 @@ public final class AssignmentOperation extends Expression {
 			codeBuilder
 				.invokevirtual(pool.methodRefEntry(CD.RTS_NAME
 					, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+			
 			// Prepare for multiple assignment
 			if(this.backLink == null) {
 				codeBuilder.pop();
@@ -373,9 +386,10 @@ public final class AssignmentOperation extends Expression {
 
 			// Prepare for multiple assignment
 			if(this.backLink != null) {
-				if(this.type.keyWord == Type.T_LONG_REAL)
-					 codeBuilder.dup2_x1();
-				else codeBuilder.dup_x1();
+//				if(this.type.keyWord == Type.T_LONG_REAL)
+//					 codeBuilder.dup2_x1();
+//				else codeBuilder.dup_x1();
+				type.dup_x1(codeBuilder);
 			}
 			codeBuilder.putfield(FDE);
 		}

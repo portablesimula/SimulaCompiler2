@@ -439,7 +439,7 @@ public abstract class RTS_RTObject {
 		int fromLength = U.LENGTH;
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
-					"RHS too long in text value assignment: RHS.length=" + T.LENGTH + ", LHS.length=" + fromLength));
+					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
 		for (int i = 0; i < fromLength; i++)
 			T.OBJ.MAIN[T.START + i] = U.OBJ.MAIN[U.START + i];
 		for (int i = fromLength; i < T.LENGTH; i++)
@@ -461,7 +461,7 @@ public abstract class RTS_RTObject {
 			fromLength = s.length();
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
-					"RHS too long in text value assignment: RHS.length=" + T.LENGTH + ", LHS.length=" + fromLength));
+					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
 		for (int i = 0; i < fromLength; i++)
 			T.OBJ.MAIN[T.START + i] = s.charAt(i);
 		for (int i = fromLength; i < T.LENGTH; i++)
@@ -630,35 +630,35 @@ public abstract class RTS_RTObject {
 		return (cond);
 	}
 
-	// ************************************************************
-	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering
-	// ************************************************************
-	/**
-	 * Method meant for Byte-Code Engineering.
-	 * <br>
-	 * During Byte-Code Engineering this method-call is used to signal the occurrence of a Simula Label.
-	 */
-	public static void _PRE_LABEL() {
-		// Local LABEL - Needs ByteCode Engineering.
-	}
+//	// ************************************************************
+//	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering
+//	// ************************************************************
+//	/**
+//	 * Method meant for Byte-Code Engineering.
+//	 * <br>
+//	 * During Byte-Code Engineering this method-call is used to signal the occurrence of a Simula Label.
+//	 */
+//	public static void _PRE_LABEL() {
+//		// Local LABEL - Needs ByteCode Engineering.
+//	}
 
-	// ************************************************************
-	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering -- TODO: OLD VERSION
-	// ************************************************************
-	/**
-	 * Method meant for Byte-Code Engineering.
-	 * <br>
-	 * During Byte-Code Engineering this method-call is used to signal the occurrence of a Simula Label.
-	 * The bytecode address is collected and some instruction are removed.
-	 * The parameter 'labelIndex' is the label's ordinal number.
-	 * <p>deprecated
-     * This method will be removed when java.lang.classfile becomes available.
-     * @param labelIndex the label's ordinal number.
-	 * @param ident the label's identifier
-	 */
-	public static void _LABEL(final int labelIndex, final String ident) {
-		// Local LABEL - Needs ByteCode Engineering.
-	}
+//	// ************************************************************
+//	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering -- TODO: OLD VERSION
+//	// ************************************************************
+//	/**
+//	 * Method meant for Byte-Code Engineering.
+//	 * <br>
+//	 * During Byte-Code Engineering this method-call is used to signal the occurrence of a Simula Label.
+//	 * The bytecode address is collected and some instruction are removed.
+//	 * The parameter 'labelIndex' is the label's ordinal number.
+//	 * <p>deprecated
+//     * This method will be removed when java.lang.classfile becomes available.
+//     * @param labelIndex the label's ordinal number.
+//	 * @param ident the label's identifier
+//	 */
+//	public static void _LABEL(final int labelIndex, final String ident) {
+//		// Local LABEL - Needs ByteCode Engineering.
+//	}
 
 	// ************************************************************
 	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering
@@ -675,15 +675,15 @@ public abstract class RTS_RTObject {
 		// Local LABEL - Needs ByteCode Engineering.
 	}
 
-	/**
-	 * Method meant for Byte-Code Engineering.
-	 * <br>
-	 * This method-call is a placeholder for where to put in a Jump-Table.
-	 * <br>
-	 * See <a href="doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
-	 * Sect. 6.1.2 Byte Code Engineering.
-	 */
-	public static void _PRE_TABLE() {}
+//	/**
+//	 * Method meant for Byte-Code Engineering.
+//	 * <br>
+//	 * This method-call is a placeholder for where to put in a Jump-Table.
+//	 * <br>
+//	 * See <a href="doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
+//	 * Sect. 6.1.2 Byte Code Engineering.
+//	 */
+//	public static void _PRE_TABLE() {}
 
 	/**
 	 * Method meant for Byte-Code Engineering.
@@ -708,18 +708,18 @@ public abstract class RTS_RTObject {
 		throw new RTS_SimulaRuntimeError(msg);
 	}
 	
-	// ************************************************************
-	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering --  TODO: OLD VERSION
-	// ************************************************************
-	/**
-	 * Method meant for Byte-Code Engineering.
-	 * <p>deprecated
-     * This method will be removed when java.lang.classfile becomes available.
-	 * @param labelIndex the label index
-	 */
-	public static void _JUMPTABLE(final int labelIndex) {
-		_JUMPTABLE(labelIndex,0);
-	}
+//	// ************************************************************
+//	// *** lOCAL JUMP/LABEL - Meant for Byte-Code Engineering --  TODO: OLD VERSION
+//	// ************************************************************
+//	/**
+//	 * Method meant for Byte-Code Engineering.
+//	 * <p>deprecated
+//     * This method will be removed when java.lang.classfile becomes available.
+//	 * @param labelIndex the label index
+//	 */
+//	public static void _JUMPTABLE(final int labelIndex) {
+//		_JUMPTABLE(labelIndex,0);
+//	}
 	
 
 	// ************************************************************
@@ -733,18 +733,18 @@ public abstract class RTS_RTObject {
 		if (RTS_Option.GOTO_TRACING) {
 			RTS_COMMON.TRACE("RTS_RTObject.GOTO: " + q);
 		
-			System.out.println("\nRTS_RTObject._GOTO: "+q.identifier + ", CUR="+_CUR);
-			System.out.println("RTS_RTObject._GOTO: "+q.identifier+" = "+q);
-	        new Exception("With Operating Chain:").printStackTrace(System.out);
+//			System.out.println("\nRTS_RTObject._GOTO: "+q.identifier + ", CUR="+_CUR);
+//			System.out.println("RTS_RTObject._GOTO: "+q.identifier+" = "+q);
+//	        new Exception("With Operating Chain:").printStackTrace(System.out);
 		}
 		throw q;
 	}
 
 	// ************************************************************
-	// *** GOTO: SET_CUR_TERMINATED
+	// *** GOTO: _TREAT_GOTO_CATCH_BLOCK
 	// ************************************************************
 	/**
-	 * Utility method to set current object terminated
+	 * Utility method to set current object terminated and re-throw the label.
 	 */
 	public static void _TREAT_GOTO_CATCH_BLOCK(RTS_RTObject _THIS, RTS_LABEL q) {
 //		System.out.println("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK: "+q);
@@ -784,7 +784,7 @@ public abstract class RTS_RTObject {
 	 * UncaughtExceptionHandler
 	 *
 	 */
-	public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {
+	public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {   // TODO: SKAL FJERNES !!!
 		/**
 		 * Current RTObject in which the exception occured.
 		 */
@@ -801,12 +801,12 @@ public abstract class RTS_RTObject {
 		@Override
 		public void uncaughtException(Thread thread, Throwable e) {
 			
-			if (RTS_Option.GOTO_TRACING) {
+//			if (RTS_Option.GOTO_TRACING) {
 				System.out.println("RTS_RTObject.uncaughtException: in "+obj+"  "+e);
 				System.out.println("RTS_RTObject.uncaughtException: IMPOSSIBLE ???????????????");
 				System.exit(-44);
-			}
-			treatException(e, obj);
+//			}
+//			treatException(e, obj);
 		}
 
 	}

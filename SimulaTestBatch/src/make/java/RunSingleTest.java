@@ -94,7 +94,7 @@ public final class RunSingleTest {
 //		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -269,9 +269,11 @@ public final class RunSingleTest {
 //		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
+//		names.add("simtst151.sim"); // OK: Test multiple assignments
+		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		
-		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
-		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
+//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+//		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
 //		names.add("simerr03.sim"); // OK: Division by Zero in Precompiled Class 

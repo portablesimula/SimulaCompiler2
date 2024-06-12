@@ -459,11 +459,13 @@ public final class Parameter extends Declaration {
 		StringBuilder s = new StringBuilder();
 		s.append('(');
 		boolean first = true;
-		for (Parameter par : parameterList) {
-			if (!first)
-				s.append(',');
-			s.append(par);
-			first = false;
+		if (parameterList != null) {
+			for (Parameter par : parameterList) {
+				if (!first)
+					s.append(',');
+				s.append(par);
+				first = false;
+			}
 		}
 		s.append(");");
 		return (s.toString());

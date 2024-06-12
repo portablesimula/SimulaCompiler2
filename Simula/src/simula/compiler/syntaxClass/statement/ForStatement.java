@@ -1032,16 +1032,15 @@ public final class ForStatement extends Statement {
 		Label stmLabel = codeBuilder.newLabel();
 		Label endLabel = codeBuilder.newLabel();
 		int index1 = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
-		ClassDesc CD_Iterator = ClassDesc.of("java.util.Iterator");
 		codeBuilder
 			.invokevirtual(pool.methodRefEntry(CD.FOR_List, "iterator", MethodTypeDesc.ofDescriptor("()Ljava/util/Iterator;")))
 			.astore(index1)
 			.labelBinding(contLabel)
 			.aload(index1)
-			.invokeinterface(CD_Iterator, "hasNext", MethodTypeDesc.ofDescriptor("()Z"))
+			.invokeinterface(CD.JAVA_UTIL_ITERATOR, "hasNext", MethodTypeDesc.ofDescriptor("()Z"))
 			.ifeq(endLabel)
 			.aload(index1)
-			.invokeinterface(CD_Iterator, "next", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"))
+			.invokeinterface(CD.JAVA_UTIL_ITERATOR, "next", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"))
 			.checkcast(ConstantDescs.CD_Boolean)
 			.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")))
 			.ifne(stmLabel)

@@ -141,7 +141,8 @@ public final class ConnectionStatement extends Statement {
 	 */
 	ConnectionStatement(final int line) {
 		super(line);
-		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ConnectionStatement");
+		if (Option.internal.TRACE_PARSE)
+			Parse.TRACE("Parse ConnectionStatement");
 		objectExpression = Expression.expectExpression();
 		objectExpression.backLink = this;
 		String ident = "_inspect_" + lineNumber + '_' + (SEQUX++);
@@ -159,7 +160,7 @@ public final class ConnectionStatement extends Statement {
 		if (Parse.accept(KeyWord.DO)) {
 			hasDoPart = true;
 			ConnectionBlock connectionBlock = new ConnectionBlock(inspectedVariable, null);
-			connectionBlock.declaredIn = scope;
+//			connectionBlock.declaredIn = scope;
 			Statement statement = Statement.expectStatement();
 			connectionPart.add(new DoPart(connectionBlock, statement));
 			connectionBlock.end();
@@ -168,7 +169,7 @@ public final class ConnectionStatement extends Statement {
 				String classIdentifier = Parse.expectIdentifier();
 				Parse.expect(KeyWord.DO);
 				ConnectionBlock connectionBlock = new ConnectionBlock(inspectedVariable, classIdentifier);
-				connectionBlock.declaredIn = scope;
+//				connectionBlock.declaredIn = scope;
 				hasWhenPart = true;
 				Statement statement = Statement.expectStatement();
 				connectionPart.add(new WhenPart(classIdentifier, connectionBlock, statement));
@@ -180,7 +181,8 @@ public final class ConnectionStatement extends Statement {
 		if (Parse.accept(KeyWord.OTHERWISE)) otherwise = Statement.expectStatement();
 		this.otherwise=otherwise;
 		this.hasWhenPart=hasWhenPart;
-		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+this.lineNumber+": ConnectionStatement: "+this);
+		if (Option.internal.TRACE_PARSE)
+			Util.TRACE("Line "+this.lineNumber+": ConnectionStatement: "+this);
 	}
 
 	/**
@@ -258,6 +260,7 @@ public final class ConnectionStatement extends Statement {
 
 		public void writeObject(AttributeOutputStream oupt) throws IOException {
 			Util.TRACE_OUTPUT("writeDoPart: " + this);
+			Thread.dumpStack();
 			oupt.writeShort(1);
 			oupt.writeObj(connectionBlock);
 		}

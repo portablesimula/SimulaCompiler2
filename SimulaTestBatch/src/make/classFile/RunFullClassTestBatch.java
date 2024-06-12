@@ -234,6 +234,8 @@ public final class RunFullClassTestBatch {
 		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
+//		names.add("simtst151.sim"); // OK: Test multiple assignments
+		names.add("simtst152.sim"); // OK: Test nested connection statements
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

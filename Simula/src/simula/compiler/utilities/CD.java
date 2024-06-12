@@ -18,7 +18,6 @@ public class CD {
 	public static final	ClassDesc RTS_NAME        = ClassDesc.of("simula.runtime.RTS_NAME"); 
 	public static final	ClassDesc RTS_PRCQNT      = ClassDesc.of("simula.runtime.RTS_PRCQNT");
 	
-	public static final	ClassDesc JAVA_LANG_RUNTIME_EXCEPTION = ClassDesc.of("java.lang.RuntimeException");
 	
 
 	public static final	ClassDesc FOR_List			= ClassDesc.of("simula.runtime.FOR_List");
@@ -28,8 +27,11 @@ public class CD {
 	public static final	ClassDesc FOR_StepUntil		= ClassDesc.of("simula.runtime.FOR_StepUntil");
 	
 	
-	public static final	ClassDesc JAVA_LANG_MATH  = ClassDesc.of("java.lang.Math");  
-	public static final	ClassDesc JAVA_LANG_THROWABLE  = ClassDesc.of("java.lang.Throwable");  
+	public static final	ClassDesc JAVA_LANG_MATH                = ClassDesc.of("java.lang.Math");  
+	public static final	ClassDesc JAVA_LANG_THROWABLE           = ClassDesc.of("java.lang.Throwable");  
+	public static final	ClassDesc JAVA_LANG_RUNTIME_EXCEPTION   = ClassDesc.of("java.lang.RuntimeException");
+	public static final	ClassDesc JAVA_LANG_CLASSCAST_EXCEPTION = ClassDesc.of("java.lang.ClassCastException");
+	public static final	ClassDesc JAVA_UTIL_ITERATOR            = ClassDesc.of("java.util.Iterator");
 	
 	public static ClassDesc RTS_ARRAY(Type type) {
 		return(ClassDesc.of("simula.runtime."+type.getArrayType()));

@@ -55,7 +55,8 @@ public class AttributeOutputStream {
 
     public void writeConstant(Object c) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
-		if(c instanceof Boolean b)			{ oupt.writeByte(Type.T_BOOLEAN);   oupt.writeBoolean(b);	}
+		if(c == null)						{ oupt.writeByte(Type.T_VOID); }
+		else if(c instanceof Boolean b)		{ oupt.writeByte(Type.T_BOOLEAN);   oupt.writeBoolean(b);	}
 		else if(c instanceof Integer i)		{ oupt.writeByte(Type.T_INTEGER);   oupt.writeShort(i);	}
 		else if(c instanceof Long li)		{ oupt.writeByte(Type.T_INTEGER);   oupt.writeShort(li.intValue()); }
 		else if(c instanceof Character k)	{ oupt.writeByte(Type.T_CHARACTER); oupt.writeChar(k); }

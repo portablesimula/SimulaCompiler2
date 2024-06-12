@@ -86,6 +86,9 @@ public abstract class DeclarationScope extends Declaration  {
 		super(ident);
 		declarationList = new DeclarationList(getClass().getSimpleName() + ':' + ident + ":Line=" + Global.sourceLineNumber);
 		declaredIn = Global.getCurrentScope();
+		
+//		System.out.println("NEW DeclarationScope: "+this.getClass().getSimpleName()+"  "+ident+", declaredIn="+declaredIn);
+		
 		Global.setScope(this);
 		if (declaredIn != null)
 			sourceBlockLevel = declaredIn.sourceBlockLevel + 1;

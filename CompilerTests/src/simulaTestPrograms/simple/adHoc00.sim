@@ -1,5 +1,25 @@
 begin
-	integer i;
-      
-      end;
-end;
+	character termstatus;
+	integer numerrfound, maxerrno;
+      procedure AbortCompilation;
+      begin
+% +D         giveintinfo(1,6);  !*** ensure that back-end is informed;
+            termstatus:='6';
+            outtext(if numerrfound>maxerrno
+                      then "*** COMPILATION STOPPED: Too many errors ***"
+                 else if numerrfound = 0
+                      then "*** COMPILATION ABORTED ***"
+                      else "*** COMPILATION CANNOT CONTINUE ***");
+% +Z         RTS_Utility(4,0);
+% +D         if option(rank('T'))<>NUL then sqrt(-1);
+%            ENDCOMP;
+     end;
+
+   procedure AP(i); integer i; begin end;
+
+   procedure P (F) ;  procedure F ; begin
+   end of procedure P ;
+
+   P (AP) ;
+
+end of program;

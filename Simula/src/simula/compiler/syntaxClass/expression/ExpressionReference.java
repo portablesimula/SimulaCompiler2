@@ -25,7 +25,7 @@ public final class ExpressionReference extends Expression {
 	
 	private int SEQU;
 	
-	private Expression EXPR; // Set bu doChecking
+	private Expression EXPR; // Set by doChecking
 
 	private ObjectReferenceMap objectReferenceMap;
 

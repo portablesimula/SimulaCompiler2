@@ -15,6 +15,7 @@ import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.*;
+import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
@@ -49,7 +50,9 @@ public abstract class BuildCP {
 		//    5: getstatic     #48                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
 		//    8: sipush        444
 		//   11: invokespecial #51                 // Method simulaTestPrograms/adHoc00_P."<init>":(Lsimula/runtime/RTS_RTObject;I)V
-		//-* 14: pop
+		//
+		// * 14: pop
+		// or
 		// * 14: getfield      #54                 // Field simulaTestPrograms/adHoc00_P._RESULT:I
 		ClassDesc CD_prc=prc.getClassDesc();
 		codeBuilder
@@ -65,10 +68,14 @@ public abstract class BuildCP {
 			}
 		}
 		codeBuilder.invokespecial(CD_prc, "<init>", prc.getConstructorMethodTypeDesc());
+		// Note: TOS points to the Procedure object.
 		SyntaxClass backLink = variable.backLink;
 		if(prc.type != null && backLink != null) {
+			// Using TOS to access TOS._RESULT
 			codeBuilder.getfield(prc.getResultFieldRefEntry(codeBuilder.constantPool()));
-		} else codeBuilder.pop();
+		} else {
+			codeBuilder.pop(); // Pop off TOS
+		}
 	}
 	
 	// ********************************************************************
@@ -159,7 +166,8 @@ public abstract class BuildCP {
 		ClassDesc owner=ClassDesc.of("simula.runtime."+pro.declaredIn.externalIdent);
 		codeBuilder.invokevirtual(pool.methodRefEntry(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams)));
 		if(pro.type != null && variable.backLink == null)
-			codeBuilder.pop();
+//			codeBuilder.pop();
+			pro.type.pop(codeBuilder);
 	}
 
 
@@ -198,7 +206,8 @@ public abstract class BuildCP {
 			codeBuilder
 				.invokevirtual(pool.methodRefEntry(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams)));
 			if(pro.type != null && variable.backLink == null)
-				codeBuilder.pop();
+//				codeBuilder.pop();
+				pro.type.pop(codeBuilder);
 		}
 	}
 
@@ -233,8 +242,10 @@ public abstract class BuildCP {
 		} else MTD = pro.getMethodTypeDesc(null,variable.checkedParams);
 		codeBuilder
 			.invokestatic(owner, pro.identifier, MTD);
-		if(pro.type != null && variable.backLink == null)
-			codeBuilder.pop();
+		if(pro.type != null && variable.backLink == null) {
+//			codeBuilder.pop();
+			pro.type.pop(codeBuilder);
+		}
 	}
 	
 	// ********************************************************************

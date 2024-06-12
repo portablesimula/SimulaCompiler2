@@ -645,6 +645,24 @@ public class Type extends SyntaxClass {
 		return ClassSignature.parseFrom(CSS);
 	}
 	
+	public void dup(CodeBuilder codeBuilder) {
+		if(keyWord == Type.T_LONG_REAL)
+			 codeBuilder.dup2();
+		else codeBuilder.dup();
+	}		
+	
+	public void dup_x1(CodeBuilder codeBuilder) {
+		if(keyWord == Type.T_LONG_REAL)
+			 codeBuilder.dup2_x1();
+		else codeBuilder.dup_x1();
+	}		
+	
+	public void pop(CodeBuilder codeBuilder) {
+		if(keyWord == Type.T_LONG_REAL)
+			 codeBuilder.pop2();
+		else codeBuilder.pop();
+	}		
+
 	public void checkCast(CodeBuilder codeBuilder) {
 		switch(keyWord) {
 		case Type.T_INTEGER   -> codeBuilder.checkcast(ConstantDescs.CD_Integer);

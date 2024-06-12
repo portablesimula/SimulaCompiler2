@@ -1,31 +1,29 @@
 
 begin
+	class brecord; begin
+		ref(quantity) favirt;
+		ref(quantity) fpar;
+	end;
+	
+	class quantity; begin
+		ref(quantity) next;
+	end;
 
-	procedure P1(fP,LAB); procedure fP; label LAB; begin
-		R1(fP,LAB);
-	end;
-	
-	procedure R1(fP,LAB); procedure fP; label LAB; begin
-		fP(LAB);
-	end;
-	
-	procedure P2(fP,LAB); name LAB; procedure fP; label LAB; begin
-		R2(fP,LAB);
-	end;
-	
-	procedure R2(fP,LAB); procedure fP; label LAB; begin
-		fP(LAB);
-	end;
-	
-	procedure Q(LAB); label LAB; begin
-		goto LAB;
-	end;
-	
-	P1(Q,L1);
-	
-	L1:
-	
-	P2(Q,L2);
-	
-	L2:
+      class L2Coder;
+      begin
+            ref(quantity) pq;
+            ref(brecord) cbrec;
+
+              inspect cbrec do begin
+                  inspect favirt do begin
+
+%                     pq:-fpar.next;
+                     pq:-fpar;
+                     
+                  end;
+              end inspect cbrec;
+
+      end L2Coder;
+
+
 end;

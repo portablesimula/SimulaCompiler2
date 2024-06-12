@@ -55,6 +55,7 @@ public final class RunFullTestBatch {
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		// Set RunTime Options and tracing.
+		RTOption.VERBOSE = false;
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;
@@ -233,6 +234,8 @@ public final class RunFullTestBatch {
 		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
+		names.add("simtst151.sim"); // OK: Test multiple assignments
+		names.add("simtst152.sim"); // OK: Test nested connection statements
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
@@ -285,36 +288,36 @@ public final class RunFullTestBatch {
 	// ***************************************************************
 	// *** LIST FILES
 	// ***************************************************************
-	private static void list(final String dirName) { list(new File(dirName)); }
-	private static void list(final File dir) {
-		try { System.out.println("------------  LIST "+dir+"  ------------");
-		list("",dir);
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static void list(String indent,final File dir) {
-		try {
-			//System.out.println("tmpClass: "+dir);
-			File[] elt = dir.listFiles();
-			if(elt==null || elt.length==0) {
-				System.out.println("Empty Directory: "+dir);
-				return; 
-			}
-			System.out.println("Elements: "+elt.length);
-			for (File f : elt) {
-				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
-				if(f.isDirectory()) list(indent+"   ",f);
-			}
-		} catch (Exception e) { e.printStackTrace(); }
-	}
-
-	private static String getModifiedTime(File file) {
-		try { Path path = Paths.get(file.toString());
-		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
-		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
-		} catch (IOException e) { e.printStackTrace(); }
-		return(null);
-	}
+//	private static void list(final String dirName) { list(new File(dirName)); }
+//	private static void list(final File dir) {
+//		try { System.out.println("------------  LIST "+dir+"  ------------");
+//		list("",dir);
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static void list(String indent,final File dir) {
+//		try {
+//			//System.out.println("tmpClass: "+dir);
+//			File[] elt = dir.listFiles();
+//			if(elt==null || elt.length==0) {
+//				System.out.println("Empty Directory: "+dir);
+//				return; 
+//			}
+//			System.out.println("Elements: "+elt.length);
+//			for (File f : elt) {
+//				System.out.println(indent+"- "+getModifiedTime(f)+"  "+f);
+//				if(f.isDirectory()) list(indent+"   ",f);
+//			}
+//		} catch (Exception e) { e.printStackTrace(); }
+//	}
+//
+//	private static String getModifiedTime(File file) {
+//		try { Path path = Paths.get(file.toString());
+//		BasicFileAttributes attr = Files.readAttributes(path, BasicFileAttributes.class);
+//		return(attr.lastModifiedTime().toString().substring(0,19).replace('T',' '));
+//		} catch (IOException e) { e.printStackTrace(); }
+//		return(null);
+//	}
 
 
 }

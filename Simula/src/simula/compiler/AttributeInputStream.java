@@ -108,6 +108,7 @@ public class AttributeInputStream {
     	if(TRACE) System.out.println("AttributeInputStream.readConstant: key=" + (int)key + " \"" + key +"\"");
     	Object res = null;
 		switch(key) {
+			case Type.T_VOID:		res = null; break;
 			case Type.T_BOOLEAN:	res = inpt.readBoolean(); break;
 			case Type.T_CHARACTER:	res = inpt.readChar(); break;
 			case Type.T_INTEGER:	res = inpt.readShort(); break;

@@ -426,7 +426,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					codeBuilder
 						.aconst_null()                 // TESTING_STACK_SIZE
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
-//					Util.buildSNAPSHOT(codeBuilder, "BEGIN _STM: "+this.identifier);
 				}
 				if (hasLabel())	
 //				if (this.labelList != null && !this.labelList.isEmpty())	
@@ -625,8 +624,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_THROWABLE,
 					blockCodeBuilder -> {
 						blockCodeBuilder
-//							.astore(2)
-//							.aload(2)
+						//	.astore(2)
+						//	.aload(2)
 							.aload(1)
 							.invokestatic(CD.RTS_RTObject, "treatException",
 								MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));

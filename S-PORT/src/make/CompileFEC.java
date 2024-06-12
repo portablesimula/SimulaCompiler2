@@ -16,6 +16,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.editor.RTOption;
 
 /**
  * Simula Test Batch donated by Simula as.
@@ -46,10 +47,11 @@ public final class CompileFEC {
 	public static void main(String[] args) {
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
-		names.add("COMMON.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\COMMON.jar
+//		names.add("COMMON.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\COMMON.jar
 //		names.add("ERRMSG.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
+//		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
 //		names.add("SCANNER.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANNER.jar
-//		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
+		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
 //		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
 //		names.add("PAS1INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS1INIT.jar
 //		names.add("BUILDER1.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER1.jar
@@ -76,11 +78,14 @@ public final class CompileFEC {
 		// Set options and tracing.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.SPORT=true;
-//		Option.verbose=true;
+		Option.verbose=true;
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
 //		Option.CASE_SENSITIVE=true;
-		Option.GNERATE_LINE_CALLS=true;
+//		Option.GNERATE_LINE_CALLS=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		Simula.setSelectors("ZDTW");
 		Option.noExecution=false;//true;
@@ -101,7 +106,7 @@ public final class CompileFEC {
 		System.out.println("SimulaRtsLib: "+Global.simulaRtsLib);
 		
 		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;//false;
+		RTOption.VERBOSE = true;//false;
 //		RTOption.internal.DEBUGGING = false;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;
