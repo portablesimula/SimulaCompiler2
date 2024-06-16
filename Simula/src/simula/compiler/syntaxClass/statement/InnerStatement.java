@@ -102,16 +102,28 @@ public final class InnerStatement extends Statement {
 		Util.TRACE_OUTPUT("writeInnerStatement: " + this);
 		oupt.writeKind(ObjectKind.InnerStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
+//		oupt.writeShort(lineNumber);
+		writeAttributes(oupt);
 	}
 
 	public static InnerStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readInnerStatement: ");
 		InnerStatement stm = new InnerStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
+//		stm.lineNumber = inpt.readShort();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("InnerStatement: " + stm);
 		return(stm);
 	}	
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+	}
 
 }

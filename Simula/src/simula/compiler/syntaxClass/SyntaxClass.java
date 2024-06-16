@@ -115,6 +115,7 @@ public abstract class SyntaxClass {
 	 */
 	protected SyntaxClass() {
 		lineNumber = Global.sourceLineNumber;
+//		System.out.println("SyntaxClass: NEW "+this.getClass().getSimpleName()+"  insertName="+insertName);
 	}
 
 	/**
@@ -249,6 +250,22 @@ public abstract class SyntaxClass {
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Util.IERR("Method 'readObject' needs a redefiniton");
 		return(null);
+	}
+
+	public static void writeAttributes(AttributeOutputStream oupt,SyntaxClass obj) throws IOException {
+		oupt.writeShort(obj.lineNumber);
+	}
+	
+	public static void readAttributes(AttributeInputStream inpt,SyntaxClass obj) throws IOException {
+		obj.lineNumber = inpt.readShort();
+	}
+
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		oupt.writeShort(lineNumber);
+	}
+	
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		lineNumber = inpt.readShort();
 	}
 
 

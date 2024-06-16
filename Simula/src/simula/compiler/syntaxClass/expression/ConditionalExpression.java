@@ -13,7 +13,6 @@ import java.lang.classfile.Label;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -140,26 +139,44 @@ public final class ConditionalExpression extends Expression {
 		Util.TRACE_OUTPUT("writeConditionalExpression: " + this);
 		oupt.writeKind(ObjectKind.ConditionalExpression);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
-		oupt.writeObj(condition);
-		oupt.writeObj(thenExpression);
-		oupt.writeObj(elseExpression);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//		oupt.writeObj(condition);
+//		oupt.writeObj(thenExpression);
+//		oupt.writeObj(elseExpression);
+		writeAttributes(oupt);
 	}
 	
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalExpression: ");
 		ConditionalExpression expr = new ConditionalExpression();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readShort();
-		expr.type = inpt.readType();
-		expr.backLink = (SyntaxClass) inpt.readObj();
-		expr.condition = (Expression) inpt.readObj();
-		expr.thenExpression = (Expression) inpt.readObj();
-		expr.elseExpression = (Expression) inpt.readObj();
+//		expr.lineNumber = inpt.readShort();
+//		expr.type = inpt.readType();
+//		expr.backLink = (SyntaxClass) inpt.readObj();
+//		expr.condition = (Expression) inpt.readObj();
+//		expr.thenExpression = (Expression) inpt.readObj();
+//		expr.elseExpression = (Expression) inpt.readObj();
+		expr.readAttributes(inpt);
 		Util.TRACE_INPUT("readConditionalExpression: " + expr);
 		return(expr);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(condition);
+		oupt.writeObj(thenExpression);
+		oupt.writeObj(elseExpression);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		condition = (Expression) inpt.readObj();
+		thenExpression = (Expression) inpt.readObj();
+		elseExpression = (Expression) inpt.readObj();
 	}
 
 }

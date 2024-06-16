@@ -10,7 +10,6 @@ package simula.compiler.syntaxClass.declaration;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
@@ -59,7 +58,8 @@ public final class ConnectionBlock extends DeclarationScope {
 	/**
 	 * The inspected variable.
 	 */
-	public VariableExpression inspectedVariable;
+//	public VariableExpression inspectedVariable;
+	public Expression inspectedVariable;
 
 	/**
 	 * The when class declaration. Set during checking.
@@ -72,11 +72,16 @@ public final class ConnectionBlock extends DeclarationScope {
 	 * @param inspectedVariable   the inspected variable
 	 * @param whenClassIdentifier the when class identifier
 	 */
-	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
+//	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
+	public ConnectionBlock(final Expression inspectedVariable, final String whenClassIdentifier) {
 		super("Connection block at line " + (Global.sourceLineNumber - 1));
 		declarationKind = ObjectKind.ConnectionBlock;
 		this.inspectedVariable = inspectedVariable;
 		this.whenClassIdentifier = whenClassIdentifier;
+		// Set External Identifier
+//		externalIdent = inspectedVariable.identifier;
+		VariableExpression var = (VariableExpression) inspectedVariable.getRealExpression();
+		externalIdent = var.identifier;
 //		Thread.dumpStack();
 	}
 
@@ -163,8 +168,8 @@ public final class ConnectionBlock extends DeclarationScope {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		// Set External Identifier
-		externalIdent = inspectedVariable.identifier;
+//		// Set External Identifier
+//		externalIdent = inspectedVariable.identifier;
 		Global.enterScope(this);
 		rtBlockLevel = currentRTBlockLevel;
 		if (whenClassIdentifier != null) {
@@ -231,8 +236,10 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public void printTree(final int indent) {
+		System.out.println(edTreeIndent(indent)+"CONNECTION "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
 		printDeclarationList(indent+1);
 		statement.printTree(indent + 1);
+		System.out.println(edTreeIndent(indent)+"END CONNECTION "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
 	}
 
 	@Override
@@ -275,21 +282,8 @@ public final class ConnectionBlock extends DeclarationScope {
 		oupt.writeKind(declarationKind); // Mark: This is a ConnectionBlock
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
-		oupt.writeString(externalIdent);
-		oupt.writeType(type);
-		oupt.writeShort(rtBlockLevel);
-		oupt.writeBoolean(hasLocalClasses);
-
-//		oupt.writeShort(parameterList.size());
-//		for(Parameter par:parameterList) par.writeParameter(oupt);
-
-//		private Statement statement;
-//		private String whenClassIdentifier;
-//		public VariableExpression inspectedVariable;
-		oupt.writeObj(statement);
-		oupt.writeString(whenClassIdentifier);
-		oupt.writeObj(inspectedVariable);
 		
+		writeAttributes(oupt);
 		Util.TRACE_OUTPUT("END Write ConnectionBlock: "+identifier);
 	}
 
@@ -297,31 +291,30 @@ public final class ConnectionBlock extends DeclarationScope {
 		String identifier = inpt.readString();
 		ConnectionBlock blk = new ConnectionBlock(identifier);
 		blk.SEQU = inpt.readSEQU(blk);
-		blk.externalIdent = inpt.readString();
-		blk.type=inpt.readType();
-		blk.rtBlockLevel = inpt.readShort();
-		blk.hasLocalClasses = inpt.readBoolean();
 		
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			blk.parameterList.add(Parameter.readParameter(inpt));
-
-		blk.statement = (Statement) inpt.readObj();
-		blk.whenClassIdentifier = inpt.readString();
-//		blk.inspectedVariable = (VariableExpression) inpt.readObj();
-		Expression expr = (Expression) inpt.readObj();
-		System.out.println("expr="+expr.getClass().getSimpleName()+" "+expr);
-		blk.inspectedVariable = (VariableExpression) expr;
-		Util.IERR();
-		
-		
-		if(!Option.internal.CREATE_JAVA_SOURCE)
-			blk.isPreCompiledFromFile = inpt.jarFileName;
-//		System.out.println("ConnectionBlock.readObject: "+identifier+", isPreCompiledFromFile="+blk.isPreCompiledFromFile);
-		
+		blk.readAttributes(inpt);
 		Util.TRACE_INPUT("END Read ConnectionBlock: "+identifier+", Declared in: "+blk.declaredIn);
 		Global.setScope(blk.declaredIn);
 		return(blk);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(statement);
+		oupt.writeString(whenClassIdentifier);
+		oupt.writeObj(inspectedVariable);
+	}
+
+//	writeAttributes(oupt);
+//	cls.readAttributes(inpt);
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		statement = (Statement) inpt.readObj();
+		whenClassIdentifier = inpt.readString();
+//		inspectedVariable = (VariableExpression) inpt.readObj();
+		inspectedVariable = (Expression) inpt.readObj();
 	}
 
 

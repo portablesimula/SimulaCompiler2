@@ -31,7 +31,6 @@ import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -1475,7 +1474,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void print(final int indent) {
-		Util.IERR();
+//		Util.IERR();
 		String spc = edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
 		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
@@ -1516,6 +1515,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		if (!protectedList.isEmpty())
 			for( ProtectedSpecification p:protectedList) p.printTree(indent+1);
 		printDeclarationList(indent+1);
+		for(Statement s:statements1) s.printTree(indent+1);
 		printStatementList(indent+1);
 	}
 
@@ -1539,13 +1539,141 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeKind(declarationKind); // Mark: This is a ClassDeclaration
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
-		oupt.writeString(externalIdent);
-		oupt.writeType(type);
 		
-		oupt.writeShort(rtBlockLevel);
+//		// ================ SyntaxClass =================
+//		oupt.writeShort(lineNumber);
+//		oupt.writeString(insertName);
+//
+//		// ================ Declaration =================
+////		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//
+//		// ================ DeclarationScope =================
+////		oupt.writeShort(ctBlockLevel);
+//		oupt.writeShort(rtBlockLevel);
+//		oupt.writeString(isPreCompiledFromFile);
+//		oupt.writeBoolean(hasLocalClasses);
+//
+//		LabelList.writeLabelList(labelList, oupt);
+//
+//		DeclarationList decls = prep(declarationList);
+//		oupt.writeShort(decls.size());
+//		for(Declaration decl:decls) oupt.writeObj(decl);
+//		
+//		
+//		// ================ BlockDeclaration =================
+//		if(statements != null) {
+//			oupt.writeShort(statements.size());
+//			for(Statement stm:statements) oupt.writeObj(stm);
+//		} else oupt.writeShort(0);
+//
+//		
+//		// ================ ClassDeclaration =================
+//		oupt.writeString(prefix);
+//		oupt.writeBoolean(detachUsed);
+//
+//		oupt.writeShort(parameterList.size());
+//		for(Parameter par:parameterList) par.writeParameter(oupt);
+//		
+//		oupt.writeShort(virtualSpecList.size());
+//		for(VirtualSpecification virt:virtualSpecList) VirtualSpecification.writeVirtSpec(virt, oupt);
+//
+//		oupt.writeShort(hiddenList.size());
+//		for(HiddenSpecification virt:hiddenList) virt.writeHiddenSpecification(oupt);
+//
+//		oupt.writeShort(protectedList.size());
+//		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
+//
+//		if(statements1 != null) {
+//			oupt.writeShort(statements1.size());
+//			for(Statement stm:statements1) oupt.writeObj(stm);
+//		} else oupt.writeShort(0);
+
+
+		writeAttributes(oupt);
+		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
+	}
+
+	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
+		String identifier = (String) inpt.readString();
+		ClassDeclaration cls = new ClassDeclaration(identifier);
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+		cls.declarationKind = ObjectKind.Class;
+		cls.SEQU = inpt.readSEQU(cls);
+		
+		
+//		// ================ SyntaxClass =================
+//		cls.lineNumber = inpt.readShort();
+//		cls.insertName = inpt.readString();
+//
+//		// ================ Declaration =================
+////		cls.identifier = inpt.readString();
+//		cls.externalIdent = inpt.readString();
+//		cls.type = inpt.readType();
+//
+//		// ================ DeclarationScope =================
+////		ctBlockLevel = inpt.readShort();
+//		cls.rtBlockLevel = inpt.readShort();
+//		cls.isPreCompiledFromFile = inpt.readString();
+//		cls.hasLocalClasses = inpt.readBoolean();
+//
+//		cls.labelList = LabelList.readLabelList(inpt);
+//
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++) {
+//			Declaration decl = (Declaration) inpt.readObj();
+//			cls.declarationList.add(decl);
+//		}
+//		
+//		// ================ BlockDeclaration =================		
+//		n = inpt.readShort();
+//		if(n > 0) {
+//			cls.statements = new Vector<Statement>();
+//			for(int i=0;i<n;i++) {
+//				Statement stm = (Statement) inpt.readObj();
+//				cls.statements.add(stm);
+//			}
+//		}
+//
+//		// ================ ClassDeclaration =================
+//
+//		cls.prefix = inpt.readString();
+//		cls.detachUsed = inpt.readBoolean();
+//
+//		n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			cls.parameterList.add(Parameter.readParameter(inpt));
+//
+//		n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			cls.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
+//		
+//		n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			cls.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
+//		
+//		n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
+//
+//		n = inpt.readShort();
+//		if(n > 0) cls.statements1 = new Vector<Statement>();
+//		for(int i=0;i<n;i++) {
+//			Statement stm = (Statement) inpt.readObj();
+//			cls.statements1.add(stm);
+//		}
+		
+		cls.readAttributes(inpt);
+		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
+		Global.setScope(cls.declaredIn);
+		return(cls);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
 		oupt.writeString(prefix);
-		oupt.writeString(isPreCompiledFromFile);
-		oupt.writeBoolean(hasLocalClasses);
 		oupt.writeBoolean(detachUsed);
 
 		oupt.writeShort(parameterList.size());
@@ -1560,80 +1688,42 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeShort(protectedList.size());
 		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
 
-		LabelList.writeLabelList(labelList, oupt);
-		
-		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
-
 		if(statements1 != null) {
 			oupt.writeShort(statements1.size());
 			for(Statement stm:statements1) oupt.writeObj(stm);
 		} else oupt.writeShort(0);
-
-		if(statements != null) {
-			oupt.writeShort(statements.size());
-			for(Statement stm:statements) oupt.writeObj(stm);
-		} else oupt.writeShort(0);
-
-		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
 
-	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
-		String identifier = (String) inpt.readString();
-		ClassDeclaration cls = new ClassDeclaration(identifier);
-		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
-		cls.declarationKind = ObjectKind.Class;
-		cls.SEQU = inpt.readSEQU(cls);
-		cls.externalIdent = inpt.readString();
-		cls.type = inpt.readType();
-		cls.rtBlockLevel = inpt.readShort();
-		cls.prefix = inpt.readString();
-		cls.isPreCompiledFromFile = inpt.readString();
-		cls.hasLocalClasses = inpt.readBoolean();
-		cls.detachUsed = inpt.readBoolean();
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		prefix = inpt.readString();
+		detachUsed = inpt.readBoolean();
 
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
-			cls.parameterList.add(Parameter.readParameter(inpt));
+			parameterList.add(Parameter.readParameter(inpt));
 
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
-			cls.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
+			virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
 		
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
-			cls.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
+			hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
 		
 		n = inpt.readShort();
 		for(int i=0;i<n;i++)
-			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
-
-		cls.labelList = LabelList.readLabelList(inpt);
+			protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
 
 		n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			cls.declarationList.add(decl);
-		}
-
-		n = inpt.readShort();
-		if(n > 0) cls.statements1 = new Vector<Statement>();
+		if(n > 0) statements1 = new Vector<Statement>();
 		for(int i=0;i<n;i++) {
 			Statement stm = (Statement) inpt.readObj();
-			cls.statements1.add(stm);
+			statements1.add(stm);
 		}
-		
-		n = inpt.readShort();
-		if(n > 0) cls.statements = new Vector<Statement>();
-		for(int i=0;i<n;i++) {
-			Statement stm = (Statement) inpt.readObj();
-			cls.statements.add(stm);
-		}
-		
-		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
-		Global.setScope(cls.declaredIn);
-		return(cls);
+//		isPreCompiledFromFile = inpt.jarFileName;
+//		System.out.println("ClassDeclaration.readAttributes: isPreCompiledFromFile="+isPreCompiledFromFile);
 	}
 	
 }

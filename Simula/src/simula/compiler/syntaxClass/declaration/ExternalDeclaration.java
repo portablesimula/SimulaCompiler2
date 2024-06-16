@@ -210,20 +210,31 @@ public final class ExternalDeclaration extends Declaration {
 		Util.TRACE_OUTPUT("writeExternalDeclaration: " + this);
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-		oupt.writeString(identifier);
-		oupt.writeString(externalIdent);
-		oupt.writeShort(lineNumber);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeShort(lineNumber);
+		writeAttributes(oupt);
 	}
 	
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readExternalDeclaration: ");
 		ExternalDeclaration ext = new ExternalDeclaration();
 		ext.SEQU = inpt.readSEQU(ext);
-		ext.identifier = inpt.readString();
-		ext.externalIdent = inpt.readString();
-		ext.lineNumber = inpt.readShort();
+//		ext.identifier = inpt.readString();
+//		ext.externalIdent = inpt.readString();
+//		ext.lineNumber = inpt.readShort();
+		ext.readAttributes(inpt);
 		Util.TRACE_INPUT("readExternalDeclaration: " + ext);
 		return(ext);
+	}
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
 	}
 
 }

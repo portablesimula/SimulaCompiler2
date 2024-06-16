@@ -78,6 +78,9 @@ public final class RTS_COMMON {
 				else if (arg.equalsIgnoreCase("-select"))				RTS_SPORT_Option.Selectors = args[++i];
 				else if (arg.equalsIgnoreCase("-listing"))				RTS_SPORT_Option.ListingFileName = args[++i];
 				else if (arg.equalsIgnoreCase("-trace"))				RTS_SPORT_Option.TraceLevel = Integer.decode(args[++i]);
+
+				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: Change when ClassFile API is released
+
 				else
 					error("Unknown option " + arg);
 			} else {
@@ -118,7 +121,7 @@ public final class RTS_COMMON {
 	 * @param msg the error message
 	 */
 	private static void error(final String msg) {
-		System.err.println("Simula: " + msg + "\n");
+		System.err.println("Simula runtime: " + msg + "\n");
 		popUpError(msg);
 	}
 

@@ -1,4 +1,4 @@
-Class COMMON;
+Class adHoc_COMMON;
 
 hidden protected EXC_NUMBER;
 
@@ -39,35 +39,6 @@ virtual: procedure COMMONerror
 
 % INSERT sportid.def
 %INSERT C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/SPORTID.DEF
-
-%+T		integer TRACE_ATTRIBUTE_OUTPUT=1;
-%+T		integer TRACE_ATTRIBUTE_INPUT=1;
-%+T		integer indent;
-
-% +T		text procedure edIndent; begin edIndent:-blanks(3*indent); end;
-
-%+T      procedure TRC(m1,line,m2); integer line; text m1,m2; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
-%+T			sysout.outtext(m1 & ".LINE " & edit(line) & ": TRC: ");
-%+T			sysout.outtext(m2);
-%+T			sysout.outimage;
-%+T		 --end;
-%+T    	 end;
-
-%+T      procedure QTRC(m1,line,m2,q); integer line; text m1,m2; ref(Quantity) q; begin
-%+T    	 --if(Option.TRACE_CODING > 1) begin
-%+T			text qid;
-%+T			qid:-if q==none then copy("NO-Q") else q.ident;
-%+T			sysout.image:=m1 & ".LINE " & edit(line) & ": QTRC: ";
-% +T			sysout.image.sub(32,90):=m2 & qid;
-% +T			sysout.image.sub(32,sysout.image.length-33):=m2;
-%+T			sysout.outimage;
-%+T			inspect q do begin
-%+T				quantDump("QTRC:");
-%+T				inspect descr do blockDump("QTRC:");
-%+T			end;
-%+T		 --end;
-%+T    	 end;
 
 
 %   **********   capacity parameters   ****************
@@ -441,119 +412,11 @@ virtual: procedure COMMONerror
 %         - const array in addition: fpar-list = values (not impl)
 %         named const:    (blnohi,blnolo) is const (string) index
 
-%page
-%+D      procedure outblno;
-%+D      begin sysout.outint(rank(blnohi)*256+rank(blnolo),4) end;
 
-                                         
-%+T      procedure blockDump(dmpmess); text dmpmess; begin
-%+TD           procedure outblno(brc); ref(brecord) brc;
-%+TD              if brc=/=none then begin outtext("#");
-%+TD                    brc.outblno;
-%+TD           end;
-%+TD		   ref(quantity) q;
-%+TD
-%+TD		   outtext(dmpmess & "BLK " &  " ");
-% +T		   outtext("xDump: " & dmpmess & "EXTBRECORD: status=" & edit(status));
-% +T		   outtext(", modul=""" & edSymbol(modulhi,modullo) & """");
-% +T		   outtext(", check=""" & edSymbol(checkhi,checklo) & """");
-% +T		   outimage 
-%+TD		   inspect declquant do begin
-%+TD			  outtext(K_code(kind)); outtext(" ");
-%+TD			  if symb =/= none then outtext(symb.symbol);
-%+TD              if prefqual=/=none then begin outtext(":");
-%+TD                 if prefqual.symb=/=none
-%+TD                 then outtext(prefqual.symb.symbol)
-%+TD                 else outblno(prefqual.encl);
-%+TD              end;
-%+TD			  outtext(" ");
-%+TD           end;
-% +TD            outblno;
-%+TD			   outtext(" blev=" & edit(rank(blev)) );
-%+TD            outtext(" rtblev=" & edit(rank(rtblev)) );
-%+TD            outtext(" npar=" & edit(npar) );
-% TD            if nloc<>0 then outtext(" nloc=" & edit(nloc) );
-%+TD            if navirt<>0 then outtext(" navirt=" & edit(navirt));
-%+TD            if connests<>0 then outtext(" connests=" & edit(connests));
-%+TD            if localclasses then outtext(" localclasses");
-%+TD            if thisused then outtext(" thisused");
-
-%+D            if dcltag>'!0!' then outtext(" D");
-%+D            if stmtag>'!0!' then outtext(" S");
-%+D            if inrtag>'!0!' then outtext(" I");
-%+TD           inspect this brecord when extbrecord do begin
-%+D               outimage; outtext("  EXTBRECORD ");
-%+D               outchar(status); outtext("  ");
-%+D               inspect cause do outtext(symb.symbol);
-%+D            end;
-%+D            if fpar=/=none then begin outimage;
-%+D               outtext(blanks(3*indent) & "*** PAR:"); q:-fpar;
-%+D               while q=/=none do begin q.quantDump(dmpmess); q:-q.next end;
-%+D            end;
-%+D            if favirt=/=none then begin outimage;
-%+D               outtext(blanks(3*indent) & "*** VIR:"); q:-favirt;
-%+D               while q=/=none do begin q.quantDump(dmpmess); q:-q.next end;
-%+D            end;
-
-%+TD           outimage;
-%+TD     end of brecord-blockDump;
-
-			    
-
-%+D      procedure dump(dmpmess); text dmpmess;
-%+D      begin ref(quantity)q; ref(extbrecord) extbrc;
-%+D            outtext("**********  "); outtext(dmpmess);
-%+D            outtext("  **********  "); outimage;
-%+D            inspect declquant do begin
-%+D               outtext(if kind=K_subbl then "BLOCK" else
-%+D                       if kind=K_prefbl then "PREFB" else
-%+D                       if symb==none then "NOSYMB" else
-%+D                       if symb.symbol==notext then "NONAME"
-%+D                       else symb.symbol);
-%+D               if prefqual=/=none and then prefqual=/=this quantity
-%+D               then begin
-%+D                  q:-prefqual.descr.declquant;
-%+D                  outchar(':');
-%+D                  if q=/=none and then symb=/=none
-%+D                  then outtext(q.symb.symbol)
-%+D                  else prefqual.descr.outblno;
-%+D            end end otherwise outtext("??????");
-%+D            outblno;
-%+D			   outtext(" blev=" & edit(rank(blev)) );
-%+D            outtext(" rtblev=" & edit(rank(rtblev)) );
-%+D			   outtext(" kind=" & K_code(kind) );
-%+D            outint(line1,5); ! not used  outint(line2,5);
-%+D            if npar<>0 then begin
-%+D               outtext(",NPAR:"); outint(npar,4); end;
-% D            if nloc<>0 then begin
-% D               outtext(",NLOC:"); outint(nloc,4); end;
-%+D            if navirt<>0 then begin
-%+D               outtext(",NVIR:"); outint(navirt,4); end;
-%+D            if connests<>0 then begin
-%+D               outtext(",Ncon:"); outint(connests,4); end;
-%+D            if localclasses then outtext(" LC");
-%+D            if thisused then outtext(" TU");
-%+D            if dcltag>'!0!' then outtext(" D");
-%+D            if stmtag>'!0!' then outtext(" S");
-%+D            if inrtag>'!0!' then outtext(" I");
-%+D            if this brecord is extbrecord then begin
-%+D               extbrc:-this brecord; outimage; outtext("  EXTBRECORD " &
-%+D                       nameof(extbrc.checkhi,extbrc.checklo) & "  ");
-%+D               outchar(extbrc.status); outtext("  ");
-%+D               inspect extbrc.cause do outtext(symb.symbol);
-%+D            end;
-%+D            if fpar=/=none then begin outimage;
-%+D               outtext("*** PAR:"); q:-fpar;
-%+D               while q=/=none do begin q.dump; q:-q.next end;
-%+D            end;
-%+D            if favirt=/=none then begin outimage;
-%+D               outtext("*** VIR:"); q:-favirt;
-%+D               while q=/=none do begin q.dump; q:-q.next end;
-%+D            end;
-%+D            outtext("*** END " & dmpmess); outimage;
-%+D      end of brecord-dump;
-   
       end of class brecord;
+      
+      
+      
 %title ***   Q U A N T I T Y   ***
 
       sembox class quantity;  ! 44 bytes ;
@@ -699,62 +562,6 @@ virtual: procedure COMMONerror
 %+TD              outimage;
 %+TD        end of quantity-quantDump;
 
-%+D         procedure dump;
-%+D         begin procedure outblno(brc); ref(brecord) brc;
-%+D               if brc=/=none then begin outtext("#");
-%+D                     brc.outblno;
-%+D               end;
-%+D               procedure NL;
-%+D               if linesh and pos>70 then begin
-%+D                  outimage; outtext("            "); linesh:=false;
-%+D               end;
-%+D               boolean linesh; linesh:=true;
-%+D               outtext(if kind=K_subbl then "BLOCK" else
-%+D                       if kind=K_prefbl then "PREFB" else
-%+D                       if symb==none then "NOSYMB" else
-%+D                       if symb.symbol==notext then "NONAME"
-%+D                       else symb.symbol);
-%+D               if prefqual=/=none then begin outtext(":");
-%+D                  if prefqual.symb=/=none
-%+D                  then outtext(prefqual.symb.symbol)
-%+D                  else outblno(prefqual.encl);
-%+D               end;
-%+D               outtext(" l."); outint(line,0); outblno(encl);
-%+D               outchar(' '); outtext(DB(rank(type )));
-%+D               outtext(" " & K_code(kind) & " " & C_code(categ));
-%+D               if plev<>0 then begin
-%+D                  outtext(" plev:"); outint(plev,0); end;
-%+D               if ftag<>0 then begin
-%+D                  outtext(" tag:"); outint(ftag,0); end;
-%+D               if dim<>0 then begin
-%+D                  outtext(" dim:"); outint(dim,0); end;
-%+D               if virtno<>0 then begin
-%+D                  outtext(" vir:"); outint(virtno,0); end;
-%+D               if protect='!1!' then outtext(" P");
-%+D               if visible<>'!0!' then begin
-%+D                  if protect='!0!' then outtext(" V");
-%+D                  outint(rank(visible),0) end;
-%+D               if match=/=none then begin NL;
-%+D                     outtext(" MATCH:"); if match.encl=/=none
-%+D                        and then match.encl.declquant=/=none
-%+D                     then outtext(match.encl.declquant.symb.symbol)
-%+D                     else outblno(match.encl);
-%+D               end;
-%+D               if descr=/=none then begin
-%+D                  if special<>'!0!' then outtext(" SPECIAL ");
-%+D                  if kind<>K_proc and kind<>K_class
-%+D                  then descr.dump(" DESCR ") else outblno(descr);
-%+D               end;
-%+D               inspect this quantity when extquantity do begin NL;
-%+D                     if module=/=none
-%+D                     then outtext(" MODUL:" &
-%+D                                  module.declquant.symb.symbol);
-%+D                     outtext(" Clf:" & Cl_code(clf));
-%+D                     if longindic<>'!0!' then begin outtext(" LIX:");
-%+D                        outint(rank(longindic),0) end;
-%+D               end;
-%+D               outimage;
-%+D         end of quantity-dump;
    
 %+S         Freq(44):=Freq(44)+1;
 %           visible:=true; !*** all quantities are born visible;
@@ -1117,8 +924,6 @@ virtual: procedure COMMONerror
                xkind:=char(rank(key)//8);
                xcateg:=char(mod(rank(key),8));
             end else xkind:=NUL;
-%+T			if TRACE_ATTRIBUTE_INPUT>3 then TRC("COMMON",sourceline,"fetchquant: xkind=" & edit(rank(xkind)));  
-%+T			if TRACE_ATTRIBUTE_INPUT>3 then TRC("COMMON",sourceline,"fetchquant: xcateg=" & edit(rank(xcateg)));  
 
             xtype:= loadchar(attrbuffer,p); p:=p+1;
 %+T			if TRACE_ATTRIBUTE_INPUT>3 then TRC("COMMON",sourceline,"fetchquant: xtype=" & edit(rank(xtype)));  

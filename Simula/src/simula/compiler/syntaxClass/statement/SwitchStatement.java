@@ -439,22 +439,40 @@ public final class SwitchStatement extends Statement {
 		Util.TRACE_OUTPUT("writeSwitchStatement: " + this);
 		oupt.writeKind(ObjectKind.SwitchStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeObj(lowKey);
-		oupt.writeObj(hiKey);
-		oupt.writeObj(switchKey);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(lowKey);
+//		oupt.writeObj(hiKey);
+//		oupt.writeObj(switchKey);
+		writeAttributes(oupt);
 	}
 
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readSwitchStatement: ");
 		SwitchStatement stm = new SwitchStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.lowKey = (Expression) inpt.readObj();
-		stm.hiKey = (Expression) inpt.readObj();
-		stm.switchKey = (Expression) inpt.readObj();
+//		stm.lineNumber = inpt.readShort();
+//		stm.lowKey = (Expression) inpt.readObj();
+//		stm.hiKey = (Expression) inpt.readObj();
+//		stm.switchKey = (Expression) inpt.readObj();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("SwitchStatement: " + stm);
 		return(stm);
+	}
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(lowKey);
+		oupt.writeObj(hiKey);
+		oupt.writeObj(switchKey);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		lowKey = (Expression) inpt.readObj();
+		hiKey = (Expression) inpt.readObj();
+		switchKey = (Expression) inpt.readObj();
 	}
  
 }

@@ -148,7 +148,23 @@ public final class Util {
 	private static String edLINE(String s) {		
 		String line = "LINE " + Global.sourceLineNumber + s;
 		if(Global.insertName!=null) line = Global.insertName + ':' + line;
+		
+//		System.out.println("Util.edLINE: Global.sourceName = "+Global.sourceName);
+//		System.out.println("Util.edLINE: CurrentScope'sourceFileName = "+Global.getCurrentScope().sourceFileName);
+		if(Global.getCurrentScope().sourceFileName!=null) {
+			String sourceName = getSimpleName(Global.getCurrentScope().sourceFileName);
+			line = sourceName + ':' + line;
+		}
+		
 		return(line);
+	}
+	
+	public static String getSimpleName(String name) {
+//		String name = file.getName();
+		int p=name.lastIndexOf(".");
+		if(p > 0)
+			name = name.substring(0, p);
+		return name;
 	}
 
 	/**

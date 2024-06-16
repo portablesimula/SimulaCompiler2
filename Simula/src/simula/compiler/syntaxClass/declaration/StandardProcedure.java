@@ -222,13 +222,4 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		return(pfx+"PROCEDURE "+identifier);
 	}
 
-
-	// ***********************************************************************************************
-	// *** Externalization
-	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
-	public StandardProcedure() {}
-
 }

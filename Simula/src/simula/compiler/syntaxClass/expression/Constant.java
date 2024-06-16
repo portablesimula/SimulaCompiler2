@@ -14,7 +14,6 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
@@ -329,22 +328,37 @@ public final class Constant extends Expression {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
 		oupt.writeKind(ObjectKind.Constant);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);		
-		oupt.writeConstant(value);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);		
+//		oupt.writeConstant(value);
+		writeAttributes(oupt);
 	}
 	
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Constant: ");
 		Constant cnst = new Constant();
 		cnst.SEQU = inpt.readSEQU(cnst);
-		cnst.lineNumber = inpt.readShort();
-		cnst.type = inpt.readType();
-		cnst.backLink = (SyntaxClass) inpt.readObj();
-		cnst.value=inpt.readConstant();
+//		cnst.lineNumber = inpt.readShort();
+//		cnst.type = inpt.readType();
+//		cnst.backLink = (SyntaxClass) inpt.readObj();
+//		cnst.value=inpt.readConstant();
+		cnst.readAttributes(inpt);
 		Util.TRACE_INPUT("Constant: "+cnst);
 		return(cnst);
+	}
+
+//	expr.readAttributes(inpt);
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeConstant(value);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		value=inpt.readConstant();
 	}
 
 }

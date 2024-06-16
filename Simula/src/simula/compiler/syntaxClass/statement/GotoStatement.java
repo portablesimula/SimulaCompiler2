@@ -22,6 +22,7 @@ import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
+import simula.compiler.syntaxClass.expression.ConditionalExpression;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
@@ -121,7 +122,17 @@ public final class GotoStatement extends Statement {
 			label.buildEvaluation(null,codeBuilder);
 			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
 					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
-		} else Util.IERR();
+		} else if(label instanceof ConditionalExpression expr) {
+			codeBuilder.aload(0);
+			expr.buildEvaluation(null, codeBuilder);
+			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
+		} else Util.IERR(""+label.getClass().getSimpleName()+"  "+label);
+
+//		codeBuilder.aload(0);
+//		label.buildEvaluation(null, codeBuilder);
+//		codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
+//				"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 	}
 
 	@Override
@@ -150,18 +161,32 @@ public final class GotoStatement extends Statement {
 		Util.TRACE_OUTPUT("writeGotoStatement: " + this);
 		oupt.writeKind(ObjectKind.GotoStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeObj(label);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(label);
+		writeAttributes(oupt);
 	}
 
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readGotoStatement: ");
 		GotoStatement stm = new GotoStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.label = (Expression) inpt.readObj();
+//		stm.lineNumber = inpt.readShort();
+//		stm.label = (Expression) inpt.readObj();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("GotoStatement: " + stm);
 		return(stm);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(label);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		label = (Expression) inpt.readObj();
 	}
 
 }

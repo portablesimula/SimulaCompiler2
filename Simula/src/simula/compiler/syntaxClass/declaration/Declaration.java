@@ -7,10 +7,13 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -264,6 +267,30 @@ public abstract class Declaration extends SyntaxClass {
 	public void buildDeclarationCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
 		// Default: No code
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		if(!(this instanceof DeclarationScope))
+			oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
+//		oupt.writeObj(declaredIn);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		if(!(this instanceof DeclarationScope))
+			identifier = inpt.readString();
+		externalIdent = inpt.readString();
+		type = inpt.readType();
+//		declaredIn = (DeclarationScope) inpt.readObj();
 	}
 
 }

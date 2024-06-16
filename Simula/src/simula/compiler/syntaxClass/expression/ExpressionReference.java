@@ -49,6 +49,12 @@ public final class ExpressionReference extends Expression {
 	}
 
 	@Override
+	public Expression getRealExpression() {
+		ASSERT_SEMANTICS_CHECKED();
+		return EXPR;
+	}
+
+	@Override
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		return EXPR.toJavaCode();

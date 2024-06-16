@@ -1,0 +1,9 @@
+external class adHoc_SCANNER;
+
+adHoc_SCANNER class adHoc_SCANINP;
+begin
+	integer iiii;
+	
+	iiii := 6666;
+
+end SCANINP;

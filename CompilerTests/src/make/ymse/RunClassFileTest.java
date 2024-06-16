@@ -213,7 +213,7 @@ public final class RunClassFileTest {
 		// *** SIMULA ERROR-TEST PROGRAMMER
 		// names.add("/error/ComplexQPS.sim"); //
 		// names.add("/error/VirtualThreadMegaTest.sim"); //
-		// names.add("/error/simerr01.sim"); // Syntax errors
+		 names.add("/error/simerr01.sim"); // Syntax errors
 		// names.add("/error/simerr02.sim"); // Syntax errors  TODO: MÅ SJEKKES - NumberFormatException - Illegal number: 1e
 		// names.add("/error/simerr03.sim"); // Wrong Number of parameters  
 		// names.add("/error/simerr04.sim"); // Type checking of Parameter Array 

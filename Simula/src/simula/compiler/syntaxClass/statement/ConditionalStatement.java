@@ -172,22 +172,40 @@ public final class ConditionalStatement extends Statement {
 		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
 		oupt.writeKind(ObjectKind.ConditionalStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeObj(condition);
-		oupt.writeObj(thenStatement);
-		oupt.writeObj(elseStatement);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(condition);
+//		oupt.writeObj(thenStatement);
+//		oupt.writeObj(elseStatement);
+		writeAttributes(oupt);
 	}
 
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readConditionalStatement: ");
 		ConditionalStatement stm = new ConditionalStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.condition = (Expression) inpt.readObj();
-		stm.thenStatement = (Statement) inpt.readObj();
-		stm.elseStatement = (Statement) inpt.readObj();
+//		stm.lineNumber = inpt.readShort();
+//		stm.condition = (Expression) inpt.readObj();
+//		stm.thenStatement = (Statement) inpt.readObj();
+//		stm.elseStatement = (Statement) inpt.readObj();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("ConditionalStatement: " + stm);
 		return(stm);
+	}
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(condition);
+		oupt.writeObj(thenStatement);
+		oupt.writeObj(elseStatement);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		condition = (Expression) inpt.readObj();
+		thenStatement = (Statement) inpt.readObj();
+		elseStatement = (Statement) inpt.readObj();
 	}
 
 }

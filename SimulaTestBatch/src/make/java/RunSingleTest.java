@@ -75,7 +75,7 @@ public final class RunSingleTest {
 //		Option.internal.TRACE_REPAIRING_OUTPUT=true;
 
 		Global.packetName="simulaTestBatch";
-//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		

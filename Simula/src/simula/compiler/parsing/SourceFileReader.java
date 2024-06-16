@@ -95,6 +95,7 @@ public final class SourceFileReader {
 			Reader reader = new InputStreamReader(new FileInputStream(file), Global._CHARSET);
 			nameStack.push(Global.insertName);
 			Global.insertName = file.getName();
+//			System.out.println("SourceFileReader.insert: Global.insertName="+Global.insertName);
 			stack.push(current);
 			current = reader;
 		} catch (IOException e) {

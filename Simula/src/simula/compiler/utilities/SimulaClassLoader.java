@@ -31,9 +31,17 @@ public class SimulaClassLoader extends ClassLoader {
 	}
 	
 	public void runClass(String name, final Vector<String> cmd) {
+		
+//		System.out.print("SimulaClassLoader.runClass: " + name);
+//		for(String s:cmd) System.out.print(" "+s); System.out.println("");
+		
 		String[] cmds = new String[cmd.size()];
 		cmd.copyInto(cmds);
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
+		
+//		Method[] methods = clazz.getMethods();
+//		for(Method method:methods) System.out.println(""+method);
+		
 		Class<?> argTypes[] = { (new String[0]).getClass() };
 		Method main = null;
 		try {

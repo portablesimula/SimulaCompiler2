@@ -7,6 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -16,13 +17,14 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Stack;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
@@ -223,28 +225,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		}
 	}
 
-	
-	/**
-	 * Prepare the declaration list for attribute output.
-	 * 
-	 * @param declarationList
-	 * @return
-	 */
-	protected DeclarationList prep(DeclarationList declarationList) {
-		DeclarationList res = new DeclarationList("");
-		for(Declaration decl:declarationList) {
-			switch(decl.declarationKind) {
-				case ObjectKind.ArrayDeclaration -> res.add(decl);
-				case ObjectKind.Class -> res.add(decl);
-				case ObjectKind.ExternalDeclaration -> res.add(decl);
-				case ObjectKind.LabelDeclaration -> res.add(decl);
-				case ObjectKind.Procedure -> res.add(decl);
-//				case ObjectKind.Switch -> res.add(decl);
-				case ObjectKind.SimpleVariableDeclaration -> res.add(decl);
-			}
-		}
-		return(res);
-	}
 	
 	// ***********************************************************************************************
 	// *** Coding Utility: AD'HOC Leading Label
@@ -644,6 +624,71 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	@Override
 	public String toString() {
 		return ("" + identifier + '[' + externalIdent + "] ObjectKind=" + declarationKind);
+	}
+
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+
+		switch(declarationKind) {
+			case ObjectKind.Class:
+			case ObjectKind.Procedure:
+			case ObjectKind.PrefixedBlock:
+			case ObjectKind.CompoundStatement:
+				oupt.writeBoolean(isMainModule);
+				if (statements != null) {
+					oupt.writeShort(statements.size());
+					for (Statement stm : statements)
+						oupt.writeObj(stm);
+				} else
+					oupt.writeShort(0);
+		}
+		
+//		if (declarationKind != ObjectKind.SubBlock) {
+//			oupt.writeBoolean(isMainModule);
+//			if (statements != null) {
+//				oupt.writeShort(statements.size());
+//				for (Statement stm : statements)
+//					oupt.writeObj(stm);
+//			} else
+//				oupt.writeShort(0);
+//		}
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		
+		switch(declarationKind) {
+			case ObjectKind.Class:
+			case ObjectKind.Procedure:
+			case ObjectKind.PrefixedBlock:
+			case ObjectKind.CompoundStatement:
+				isMainModule = inpt.readBoolean();
+				int n = inpt.readShort();
+				if (n > 0)
+					statements = new Vector<Statement>();
+				for (int i = 0; i < n; i++) {
+					Statement stm = (Statement) inpt.readObj();
+					statements.add(stm);
+				}
+		}
+
+//		if (declarationKind != ObjectKind.SubBlock) {
+//			isMainModule = inpt.readBoolean();
+//			int n = inpt.readShort();
+//			if (n > 0)
+//				statements = new Vector<Statement>();
+//			for (int i = 0; i < n; i++) {
+//				Statement stm = (Statement) inpt.readObj();
+//				statements.add(stm);
+//			}
+//		}
 	}
 
 }

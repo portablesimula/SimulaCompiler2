@@ -13,7 +13,6 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.CD;
@@ -189,26 +188,45 @@ public final class ObjectRelation extends Expression {
 		Util.TRACE_OUTPUT("writeObjectRelation: " + this);
 		oupt.writeKind(ObjectKind.ObjectRelation);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
-		oupt.writeObj(lhs);
-		oupt.writeShort(opr);
-		oupt.writeString(classIdentifier);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//		oupt.writeObj(lhs);
+//		oupt.writeShort(opr);
+//		oupt.writeString(classIdentifier);
+		writeAttributes(oupt);
 	}
 	
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readObjectRelation: ");
 		ObjectRelation expr = new ObjectRelation();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readShort();
-		expr.type = inpt.readType();
-		expr.backLink = (SyntaxClass) inpt.readObj();
-		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readShort();
-		expr.classIdentifier = inpt.readString();
+//		expr.lineNumber = inpt.readShort();
+//		expr.type = inpt.readType();
+//		expr.backLink = (SyntaxClass) inpt.readObj();
+//		expr.lhs = (Expression) inpt.readObj();
+//		expr.opr = inpt.readShort();
+//		expr.classIdentifier = inpt.readString();
+		expr.readAttributes(inpt);
 		Util.TRACE_INPUT("readObjectRelation: " + expr);
 		return(expr);
+	}
+
+//	expr.readAttributes(inpt);
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(lhs);
+		oupt.writeShort(opr);
+		oupt.writeString(classIdentifier);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		lhs = (Expression) inpt.readObj();
+		opr = inpt.readShort();
+		classIdentifier = inpt.readString();
 	}
 
 }

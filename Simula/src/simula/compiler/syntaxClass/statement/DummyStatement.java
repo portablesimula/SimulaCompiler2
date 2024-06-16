@@ -88,16 +88,28 @@ public final class DummyStatement extends Statement {
 		Util.TRACE_OUTPUT("writeDummyStatement: " + this);
 		oupt.writeKind(ObjectKind.DummyStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
+//		oupt.writeShort(lineNumber);
+		writeAttributes(oupt);
 	}
 
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readDummyStatement: ");
 		DummyStatement stm = new DummyStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
+//		stm.lineNumber = inpt.readShort();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("DummyStatement: " + stm);
 		return(stm);
+	}
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
 	}
 
 }

@@ -234,9 +234,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeShort(index);
-		oupt.writeObj(movedTo);
+		writeAttributes(oupt);
 	}
 	
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
@@ -244,11 +242,23 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		String identifier = inpt.readString();
 		LabelDeclaration lab = new LabelDeclaration(identifier);
 		lab.SEQU = inpt.readSEQU(lab);
-		lab.lineNumber = inpt.readShort();
-		lab.index = inpt.readShort();
-		lab.movedTo = (DeclarationScope) inpt.readObj();
+		lab.readAttributes(inpt);
 		Util.TRACE_INPUT("readLabelDeclaration: " + lab);
 		return(lab);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeShort(index);
+		oupt.writeObj(movedTo);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		index = inpt.readShort();
+		movedTo = (DeclarationScope) inpt.readObj();
 	}
 
 }

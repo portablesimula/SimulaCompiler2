@@ -563,32 +563,56 @@ public final class ArrayDeclaration extends Declaration {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-		oupt.writeString(identifier);
-		oupt.writeString(externalIdent);
-		oupt.writeType(type);
-		oupt.writeShort(nDim);
-		for(BoundPair boundPair:boundPairList) {
-			oupt.writeObj(boundPair.LB);
-			oupt.writeObj(boundPair.UB);
-		}
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeShort(nDim);
+//		for(BoundPair boundPair:boundPairList) {
+//			oupt.writeObj(boundPair.LB);
+//			oupt.writeObj(boundPair.UB);
+//		}
+		writeAttributes(oupt);
 	}
 	
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readArrayDeclaration: ");
 		ArrayDeclaration arr = new ArrayDeclaration();
 		arr.SEQU = inpt.readSEQU(arr);
-		arr.identifier = inpt.readString();
-		arr.externalIdent = inpt.readString();
-		arr.type = inpt.readType();
-		arr.nDim = inpt.readShort();
-		arr.boundPairList = new Vector<BoundPair>();
-		for(int i=0;i<arr.nDim;i++) {
-			Expression LB = (Expression) inpt.readObj();
-			Expression UB = (Expression) inpt.readObj();
-			arr.boundPairList.add(new BoundPair(LB,UB));
-		}
+//		arr.identifier = inpt.readString();
+//		arr.externalIdent = inpt.readString();
+//		arr.type = inpt.readType();
+//		arr.nDim = inpt.readShort();
+//		arr.boundPairList = new Vector<BoundPair>();
+//		for(int i=0;i<arr.nDim;i++) {
+//			Expression LB = (Expression) inpt.readObj();
+//			Expression UB = (Expression) inpt.readObj();
+//			arr.boundPairList.add(new BoundPair(LB,UB));
+//		}
+		arr.readAttributes(inpt);
 		Util.TRACE_INPUT("Array: " + arr);
 		return(arr);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeShort(nDim);
+		for(BoundPair boundPair:boundPairList) {
+			oupt.writeObj(boundPair.LB);
+			oupt.writeObj(boundPair.UB);
+		}
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		nDim = inpt.readShort();
+		boundPairList = new Vector<BoundPair>();
+		for(int i=0;i<nDim;i++) {
+			Expression LB = (Expression) inpt.readObj();
+			Expression UB = (Expression) inpt.readObj();
+			boundPairList.add(new BoundPair(LB,UB));
+		}
 	}
 	
 }

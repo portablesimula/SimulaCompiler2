@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 2
 package simulaTestBatch;
-// Simula-2.0 Compiled at Sat Jun 01 12:00:29 CEST 2024
+// Simula-2.0 Compiled at Sun Jun 16 07:55:32 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SimulaTest extends RTS_CLASS {
@@ -71,16 +71,14 @@ public class SimulaTest extends RTS_CLASS {
                         ;
                         RTS_BASICIO.sysout().outtext(p_title);
                         ;
-                        RTS_BASICIO.sysout().outimage();
-                        ;
-                        // JavaLine 76 <== SourceLine 27
+                        // JavaLine 74 <== SourceLine 27
                         RTS_ENVIRONMENT.error(CONC(CONC(new RTS_TXT("Test sample has "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" error(s)")));
                         ;
                     }
                 } else {
-                    // JavaLine 81 <== SourceLine 28
+                    // JavaLine 79 <== SourceLine 28
                     {
-                        // JavaLine 83 <== SourceLine 29
+                        // JavaLine 81 <== SourceLine 29
                         RTS_BASICIO.sysout().outtext(new RTS_TXT("--- NO ERRORS FOUND IN TEST"));
                         ;
                         RTS_BASICIO.sysout().outint(p_n,4);
@@ -92,10 +90,10 @@ public class SimulaTest extends RTS_CLASS {
                     }
                 }
                 ;
-                // JavaLine 95 <== SourceLine 32
+                // JavaLine 93 <== SourceLine 32
                 if(_VALUE(false)) {
                     {
-                        // JavaLine 98 <== SourceLine 33
+                        // JavaLine 96 <== SourceLine 33
                         RTS_BASICIO.sysout().outtext(new RTS_TXT("--- END Simula a.s. TEST"));
                         ;
                         RTS_BASICIO.sysout().outint(p_n,4);
@@ -111,5 +109,5 @@ public class SimulaTest extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","8 SimulaTest",1,2,12,5,14,6,16,7,18,8,32,16,35,17,42,18,45,19,53,22,57,24,62,25,65,26,76,27,81,28,83,29,95,32,98,33,113,37);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","8 SimulaTest",1,2,12,5,14,6,16,7,18,8,32,16,35,17,42,18,45,19,53,22,57,24,62,25,65,26,74,27,79,28,81,29,93,32,96,33,111,37);
 } // End of Class

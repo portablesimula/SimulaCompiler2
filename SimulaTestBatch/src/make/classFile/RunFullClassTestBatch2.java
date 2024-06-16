@@ -33,6 +33,7 @@ public final class RunFullClassTestBatch2 {
 	private static long startTimeMs = System.currentTimeMillis( );
 
 	public static void main(String[] args) {
+		System.out.println("RunFullClassTestBatch2.main: BEGIN");
 
 		// Set Compiler Options.
 //		Option.verbose=true;
@@ -236,6 +237,7 @@ public final class RunFullClassTestBatch2 {
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
 		names.add("simtst152.sim"); // OK: Test nested connection statements
+		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

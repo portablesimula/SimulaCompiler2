@@ -20,7 +20,6 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.OverLoad;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -959,9 +958,46 @@ public final class VariableExpression extends Expression {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 		oupt.writeKind(ObjectKind.VariableExpression);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//		oupt.writeString(identifier);
+//		oupt.writeBoolean(remotelyAccessed);
+//		
+//		if(params == null) {
+//			oupt.writeShort(0);			
+//		} else {
+//			oupt.writeShort(params.size());
+//			for(Expression par:params) oupt.writeObj(par);
+//		}
+		writeAttributes(oupt);
+	}
+	
+	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readVariableExpression: ");
+		VariableExpression var = new VariableExpression();
+		var.SEQU = inpt.readSEQU(var);
+//		var.lineNumber = inpt.readShort();
+//		var.type = inpt.readType();
+//		var.backLink = (SyntaxClass) inpt.readObj();
+//		var.identifier = inpt.readString();
+//		var.remotelyAccessed = inpt.readBoolean();
+//		
+//		int n = inpt.readShort();
+//		if(n > 0) {
+//			var.params = new Vector<Expression>();
+//			for(int i=0;i<n;i++)
+//				var.params.add((Expression) inpt.readObj());
+//		}
+		
+		var.readAttributes(inpt);
+		Util.TRACE_INPUT("readVariableExpression: " + var);
+		return(var);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
 		oupt.writeString(identifier);
 		oupt.writeBoolean(remotelyAccessed);
 		
@@ -972,26 +1008,19 @@ public final class VariableExpression extends Expression {
 			for(Expression par:params) oupt.writeObj(par);
 		}
 	}
-	
-	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readVariableExpression: ");
-		VariableExpression var = new VariableExpression();
-		var.SEQU = inpt.readSEQU(var);
-		var.lineNumber = inpt.readShort();
-		var.type = inpt.readType();
-		var.backLink = (SyntaxClass) inpt.readObj();
-		var.identifier = inpt.readString();
-		var.remotelyAccessed = inpt.readBoolean();
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		identifier = inpt.readString();
+		remotelyAccessed = inpt.readBoolean();
 		
 		int n = inpt.readShort();
 		if(n > 0) {
-			var.params = new Vector<Expression>();
+			params = new Vector<Expression>();
 			for(int i=0;i<n;i++)
-				var.params.add((Expression) inpt.readObj());
+				params.add((Expression) inpt.readObj());
 		}
-		
-		Util.TRACE_INPUT("readVariableExpression: " + var);
-		return(var);
 	}
 
 }

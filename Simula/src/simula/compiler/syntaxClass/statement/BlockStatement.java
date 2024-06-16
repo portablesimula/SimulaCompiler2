@@ -157,18 +157,32 @@ public final class BlockStatement extends Statement {
 		Util.TRACE_OUTPUT("writeBlockStatement: " + this);
 		oupt.writeKind(ObjectKind.BlockStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeObj(blockDeclaration);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(blockDeclaration);
+		writeAttributes(oupt);
 	}
 
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readBlockStatement: ");
 		BlockStatement stm = new BlockStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
+//		stm.lineNumber = inpt.readShort();
+//		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("BlockStatement: " + stm);
 		return(stm);
+	}
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(blockDeclaration);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		blockDeclaration = (BlockDeclaration) inpt.readObj();
 	}
 
 }

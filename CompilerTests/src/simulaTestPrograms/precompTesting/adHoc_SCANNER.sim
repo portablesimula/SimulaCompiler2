@@ -1,0 +1,36 @@
+% External class adHoc_ERRMSG;
+% 
+% adHoc_ERRMSG class adHoc_SCANNER;
+% External class adHoc_COMMON;
+
+% adHoc_COMMON
+
+class adHoc_SCANNER;
+begin
+
+      ref(recognizer) lexScanner;
+
+	  character EOL;
+
+
+%      class input(inserted); boolean inserted; begin end;
+
+
+%      input 
+      class SourceElt(fname); text fname; ! source file file name;
+      begin
+
+            inspect lexscanner do
+            begin
+               atom:=EOL;
+		    end;
+      end SourceElt;
+
+
+	class recognizer; begin
+		character atom;
+	end;
+
+
+
+end of SCANNER;

@@ -1,11 +1,12 @@
 
 begin
 
-	integer procedure PPPPPP(FFFFFF); name FFFFFF; integer FFFFFF;
-	begin
-%		PPPPPP := FFFFFF
-%		PPPPPP := PPPPPP + 44;
-		PPPPPP := FFFFFF + PPPPPP(FFFFFF);
-	end;
 
+	boolean b;
+	
+	goto if b then L1 else L2;
+	
+	L1:
+	
+	L2:
  end;

@@ -12,11 +12,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -33,6 +36,11 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 public abstract class DeclarationScope extends Declaration  {
+
+	/**
+	 * The source file name.
+	 */
+	public String sourceFileName;
 	
 	/**
 	 * Current Runtime Block level - Used during doChecking
@@ -84,6 +92,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
 	protected DeclarationScope(final String ident) {
 		super(ident);
+		sourceFileName = Global.sourceFileName;
 		declarationList = new DeclarationList(getClass().getSimpleName() + ':' + ident + ":Line=" + Global.sourceLineNumber);
 		declaredIn = Global.getCurrentScope();
 		
@@ -150,8 +159,11 @@ public abstract class DeclarationScope extends Declaration  {
 			meaning = declaredIn.findMeaning(identifier);
 		
 		if (meaning == null) {
-			if (!Global.duringParsing)
+			if (!Global.duringParsing) {
+//				DeclarationScope.printScopeChain(Global.getCurrentScope(),"");
 				Util.error("Undefined variable: " + identifier);
+//				Thread.dumpStack();
+			}
 			meaning = new Meaning(null, null); // Error Recovery: No Meaning
 		}
 		return (meaning);
@@ -459,7 +471,9 @@ public abstract class DeclarationScope extends Declaration  {
     			Global.jarFileBuilder.addJarEntry(entryName, bytes);
     		}
 
-   			if(Option.internal.LIST_GENERATED_CLASS_FILES)
+//    		System.out.println("DeclarationScope.loadOrAddClassFile: "+externalIdent);
+ 			if(Option.internal.LIST_GENERATED_CLASS_FILES)
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("SCANNER_SourceElt"))
    				listGeneratedClassFile(bytes);
     	}
     	
@@ -474,6 +488,75 @@ public abstract class DeclarationScope extends Declaration  {
 
         Util.doListClassFile("" + outputFile); // List generated .class file
         outputFile.delete();
+	}
+	
+	/**
+	 * Prepare the declaration list for attribute output.
+	 * 
+	 * @param declarationList
+	 * @return
+	 */
+	protected DeclarationList prep(DeclarationList declarationList) {
+		DeclarationList res = new DeclarationList("");
+		for(Declaration decl:declarationList) {
+			switch(decl.declarationKind) {
+				case ObjectKind.ArrayDeclaration -> res.add(decl);
+				case ObjectKind.Class -> res.add(decl);
+				case ObjectKind.ExternalDeclaration -> res.add(decl);
+				case ObjectKind.LabelDeclaration -> res.add(decl);
+				case ObjectKind.Procedure -> res.add(decl);
+//				case ObjectKind.Switch -> res.add(decl);
+				case ObjectKind.SimpleVariableDeclaration -> res.add(decl);
+			}
+		}
+		return(res);
+	}
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeString(sourceFileName);
+//		oupt.writeShort(ctBlockLevel);
+		oupt.writeShort(rtBlockLevel);
+		oupt.writeString(isPreCompiledFromFile);
+		oupt.writeBoolean(hasLocalClasses);
+
+		LabelList.writeLabelList(labelList, oupt);
+
+		DeclarationList decls = prep(declarationList);
+		oupt.writeShort(decls.size());
+		for(Declaration decl:decls) oupt.writeObj(decl);
+	}
+	
+//	protected static int currentRTBlockLevel = 0;
+//	public int sourceBlockLevel;
+//	public int ctBlockLevel;
+//	public int rtBlockLevel;
+//	public boolean hasLocalClasses = false;
+//	public String isPreCompiledFromFile;
+//	public DeclarationList declarationList;
+//	public LabelList labelList; // = new LabelList();
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		sourceFileName = inpt.readString();
+//		ctBlockLevel = inpt.readShort();
+		rtBlockLevel = inpt.readShort();
+		isPreCompiledFromFile = inpt.readString();
+		hasLocalClasses = inpt.readBoolean();
+
+		labelList = LabelList.readLabelList(inpt);
+
+		int n = inpt.readShort();
+		for(int i=0;i<n;i++) {
+			Declaration decl = (Declaration) inpt.readObj();
+			declarationList.add(decl);
+		}
 	}
 
 }

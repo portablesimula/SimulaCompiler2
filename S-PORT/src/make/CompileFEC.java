@@ -49,10 +49,10 @@ public final class CompileFEC {
 		Vector<String> names=new Vector<String>();
 //		names.add("COMMON.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\COMMON.jar
 //		names.add("ERRMSG.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
-//		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
 //		names.add("SCANNER.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANNER.jar
-		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
-//		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
+//		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
+//		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
+		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
 //		names.add("PAS1INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS1INIT.jar
 //		names.add("BUILDER1.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER1.jar
 //		names.add("BUILDER2.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER2.jar
@@ -81,22 +81,45 @@ public final class CompileFEC {
 		Option.verbose=true;
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
+//		Option.internal.CREATE_JAVA_SOURCE = true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 //		Option.CASE_SENSITIVE=true;
 //		Option.GNERATE_LINE_CALLS=true;
 //		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
-		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 		
 		Simula.setSelectors("ZDTW");
 		Option.noExecution=false;//true;
 //		Option.verbose=true;
+
+
+		// Overall TRACING Options
+//		Option.internal.TRACING=true;
+//		Option.internal.DEBUGGING=true;
+//
+//		// Scanner Trace Options
+//		Option.internal.TRACE_SCAN=true;
+//		Option.internal.TRACE_COMMENTS=true;
+//
+//		// Parser Trace Options
+//		Option.internal.TRACE_PARSE=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
+//
+//		// Checker Trace Options
+//		Option.internal.TRACE_CHECKER=true;
+//		Option.internal.TRACE_CHECKER_OUTPUT=true;
+//		Option.internal.TRACE_FIND_MEANING=2;
+
 		
-//		File userDir=new File("C:/GitHub/SimulaCompiler22/Simula");
-		File simulaDir=new File("C:/GitHub/SimulaCompiler22/Simula");
-		File userDir=new File("C:/GitHub/SimulaCompiler22/S-PORT");
+//		File userDir=new File("C:/GitHub/SimulaCompiler2/Simula");
+		File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
+//		File userDir=new File("C:/GitHub/SimulaCompiler2/S-PORT");
 		
 		
-//		Option.internal.keepJava=new File("C:/GitHub/SimulaCompiler22/javaCodeFEC"); // Generated .java Source is then found in project javaCodeFEC
+//		Option.internal.keepJava=new File("C:/GitHub/SimulaCompiler2/javaCodeFEC"); // Generated .java Source is then found in project javaCodeFEC
 		Global.packetName="simulaFEC";
 
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime
@@ -106,7 +129,8 @@ public final class CompileFEC {
 		System.out.println("SimulaRtsLib: "+Global.simulaRtsLib);
 		
 		// Set RunTime Options and tracing.
-		RTOption.VERBOSE = true;//false;
+		RTOption.VERBOSE = false;
+//		RTOption.VERBOSE = true;
 //		RTOption.internal.DEBUGGING = false;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;

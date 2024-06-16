@@ -269,7 +269,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
-		names.add("simtst152.sim"); // OK: Test nested connection statements
+//		names.add("simtst152.sim"); // OK: Test nested connection statements
+		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

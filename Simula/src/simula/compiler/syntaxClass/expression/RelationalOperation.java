@@ -15,7 +15,6 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.Global;
@@ -299,26 +298,44 @@ public final class RelationalOperation extends Expression {
 		Util.TRACE_OUTPUT("writeRelationalOperation: " + this);
 		oupt.writeKind(ObjectKind.RelationalOperation);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
-		oupt.writeObj(lhs);
-		oupt.writeShort(opr);
-		oupt.writeObj(rhs);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//		oupt.writeObj(lhs);
+//		oupt.writeShort(opr);
+//		oupt.writeObj(rhs);
+		writeAttributes(oupt);
 	}
 	
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readRelationalOperation: ");
 		RelationalOperation expr = new RelationalOperation();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readShort();
-		expr.type = inpt.readType();
-		expr.backLink = (SyntaxClass) inpt.readObj();
-		expr.lhs = (Expression) inpt.readObj();
-		expr.opr = inpt.readShort();
-		expr.rhs = (Expression) inpt.readObj();
+//		expr.lineNumber = inpt.readShort();
+//		expr.type = inpt.readType();
+//		expr.backLink = (SyntaxClass) inpt.readObj();
+//		expr.lhs = (Expression) inpt.readObj();
+//		expr.opr = inpt.readShort();
+//		expr.rhs = (Expression) inpt.readObj();
+		expr.readAttributes(inpt);
 		Util.TRACE_INPUT("readRelationalOperation: " + expr);
 		return(expr);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(lhs);
+		oupt.writeShort(opr);
+		oupt.writeObj(rhs);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		lhs = (Expression) inpt.readObj();
+		opr = inpt.readShort();
+		rhs = (Expression) inpt.readObj();
 	}
 
 }

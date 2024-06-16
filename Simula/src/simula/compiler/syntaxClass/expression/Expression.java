@@ -7,8 +7,11 @@
  */
 package simula.compiler.syntaxClass.expression;
 
+import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -548,7 +551,14 @@ public abstract class Expression extends SyntaxClass {
 		return(0);
 	}
 
-
+	/**
+	 * Redefined in ExpressionReference.
+	 * @return
+	 */
+	public Expression getRealExpression() {
+		return this;
+	}
+	
 	/**
 	 * Build Evaluation Code.
 	 */
@@ -562,6 +572,24 @@ public abstract class Expression extends SyntaxClass {
 	
 	@Override
 	public String toString() { return("NO EXPRESSION"); }
+
+	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+	}
+
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		type = inpt.readType();
+		backLink = (SyntaxClass) inpt.readObj();
+	}
 
 	    
 }

@@ -272,6 +272,7 @@ public final class Global {
 	 * @param scope the new scope
 	 */
 	public static void setScope(DeclarationScope scope) {
+//		System.out.println("Global.setScope: "+currentScope+"  ====>  "+scope);
 		currentScope = scope;
 	} // During Parsing
 

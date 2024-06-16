@@ -15,7 +15,6 @@ import java.lang.constant.ClassDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
@@ -173,10 +172,13 @@ public final class LocalObject extends Expression {
 		if (thisScope instanceof ConnectionBlock connectionBlock) {
 			//return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
 			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			Meaning meaning = connectionBlock.inspectedVariable.meaning;
+			VariableExpression inspectedVariable = (VariableExpression) connectionBlock.inspectedVariable.getRealExpression();
+//			Meaning meaning = connectionBlock.inspectedVariable.meaning;
+			Meaning meaning = inspectedVariable.meaning;
 			codeBuilder
 				.checkcast(meaning.declaredIn.getClassDesc())
-				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
+//				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
+				.getfield(inspectedVariable.getFieldRefEntry(pool));
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
 			String cast = classDeclaration.getJavaIdentifier();
@@ -204,22 +206,38 @@ public final class LocalObject extends Expression {
 		Util.TRACE_OUTPUT("writeLocalObject: " + this);
 		oupt.writeKind(ObjectKind.LocalObject);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
-		oupt.writeString(classIdentifier);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//		oupt.writeString(classIdentifier);
+		writeAttributes(oupt);
 	}
 	
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readLocalObject: ");
 		LocalObject expr = new LocalObject();
 		expr.SEQU = inpt.readSEQU(expr);
-		expr.lineNumber = inpt.readShort();
-		expr.type = inpt.readType();
-		expr.backLink = (SyntaxClass) inpt.readObj();
-		expr.classIdentifier = inpt.readString();
+//		expr.lineNumber = inpt.readShort();
+//		expr.type = inpt.readType();
+//		expr.backLink = (SyntaxClass) inpt.readObj();
+//		expr.classIdentifier = inpt.readString();
+		expr.readAttributes(inpt);
 		Util.TRACE_INPUT("readLocalObject: " + expr);
 		return(expr);
+	}
+
+//	writeAttributes(oupt);
+//	expr.readAttributes(inpt);
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeString(classIdentifier);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		classIdentifier = inpt.readString();
 	}
 
 }

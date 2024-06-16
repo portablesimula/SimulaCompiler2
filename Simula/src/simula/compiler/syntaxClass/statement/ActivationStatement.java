@@ -366,7 +366,33 @@ public final class ActivationStatement extends Statement {
 		Util.TRACE_OUTPUT("writeActivationStatement: " + this);
 		oupt.writeKind(ObjectKind.ActivationStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeBoolean(REAC);
+//		oupt.writeObj(object1);
+//		oupt.writeObj(object2);
+//		oupt.writeObj(time);
+//		oupt.writeBoolean(prior);
+		writeAttributes(oupt);
+	}
+
+	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
+		ActivationStatement stm = new ActivationStatement();
+		stm.SEQU = inpt.readSEQU(stm);
+//		stm.lineNumber = inpt.readShort();
+//		stm.REAC = inpt.readBoolean();
+//		stm.object1 = (Expression) inpt.readObj();
+//		stm.object2 = (Expression) inpt.readObj();
+//		stm.time = (Expression) inpt.readObj();
+//		stm.prior = inpt.readBoolean();
+		stm.readAttributes(inpt);
+		Util.TRACE_INPUT("ActivationStatement: " + stm);
+		return(stm);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
 		oupt.writeBoolean(REAC);
 		oupt.writeObj(object1);
 		oupt.writeObj(object2);
@@ -374,18 +400,14 @@ public final class ActivationStatement extends Statement {
 		oupt.writeBoolean(prior);
 	}
 
-	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readActivationStatement: ");
-		ActivationStatement stm = new ActivationStatement();
-		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.REAC = inpt.readBoolean();
-		stm.object1 = (Expression) inpt.readObj();
-		stm.object2 = (Expression) inpt.readObj();
-		stm.time = (Expression) inpt.readObj();
-		stm.prior = inpt.readBoolean();
-		Util.TRACE_INPUT("ActivationStatement: " + stm);
-		return(stm);
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		REAC = inpt.readBoolean();
+		object1 = (Expression) inpt.readObj();
+		object2 = (Expression) inpt.readObj();
+		time = (Expression) inpt.readObj();
+		prior = inpt.readBoolean();
 	}
 
 }

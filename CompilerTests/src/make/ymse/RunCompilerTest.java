@@ -30,7 +30,7 @@ public final class RunCompilerTest {
 		// Set Compiler Options.
 		Option.verbose=true;
 //		Option.EXTENSIONS=false;
-		Option.CaseSensitive=true;
+//		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
 
@@ -122,7 +122,7 @@ public final class RunCompilerTest {
 		// *** SIMULA PROGRAMMER FOR VIDERE UTVIKLING
 		// names.add("/simprogs/COUNTERACT.sim");  // Used by AirportDeparture
 		// names.add("/simprogs/AirportDeparture.sim");
-		// names.add("/simprogs/DEMOS.sim");
+		 names.add("/simprogs/DEMOS.sim");
 		// names.add("/simprogs/HegnaNRK.sim");
 		// names.add("/simprogs/LIFT90.sim");
 		// names.add("/simprogs/Matte.sim");

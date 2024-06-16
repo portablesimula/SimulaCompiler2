@@ -127,7 +127,7 @@ public class AttributeInputStream {
         	if(TRACE) System.out.println("AttributeInputStream.readString: null");
     		return null;
     	}
-		StringBuilder sb = new StringBuilder();
+    	StringBuilder sb = new StringBuilder();
 		for (int i = 0; i < lng; i++) sb.append(inpt.readChar());
     	String s = sb.toString();
     	if(TRACE) System.out.println("AttributeInputStream.readString: \""+s+'"');
@@ -187,8 +187,8 @@ public class AttributeInputStream {
 			
 			case ObjectKind.StandardClass:				return StandardClass.readObject(inpt);
 			case ObjectKind.ConnectionBlock:			return ConnectionBlock.readObject(inpt);
-			case ObjectKind.CompoundStatement:			return MaybeBlockDeclaration.readObject(inpt);
-//			case ObjectKind.SubBlock:					return SubBlock.readObject(inpt);
+			case ObjectKind.CompoundStatement:			return MaybeBlockDeclaration.readObject(inpt,ObjectKind.CompoundStatement);
+			case ObjectKind.SubBlock:					return MaybeBlockDeclaration.readObject(inpt,ObjectKind.SubBlock);
 			case ObjectKind.Procedure:					return ProcedureDeclaration.readObject(inpt);
 //			case ObjectKind.Switch:						return SwitchDeclaration.readObject(inpt);
 //			case ObjectKind.MemberMethod:				return MemberMethod.readObject(inpt);
@@ -237,7 +237,7 @@ public class AttributeInputStream {
 			case ObjectKind.VariableExpression:			return VariableExpression.readObject(inpt);
 
 		}	
-		Util.IERR("IMPOSSIBLE "+kind);
+		Util.IERR("IMPOSSIBLE "+ObjectKind.edit(kind));
 		return(null);
 	}
 

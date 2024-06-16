@@ -12,7 +12,6 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
@@ -1067,7 +1066,37 @@ public final class ForStatement extends Statement {
 		Util.TRACE_OUTPUT("writeForStatement: " + this);
 		oupt.writeKind(ObjectKind.ForStatement);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(controlVariable);
+//		oupt.writeShort(assignmentOperator);
+//		oupt.writeShort(forList.size());
+//		for(ForListElement ent:forList) ent.writeObject(oupt);
+//		oupt.writeObj(doStatement);
+		writeAttributes(oupt);
+	}
+
+	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
+		Util.TRACE_INPUT("BEGIN readForStatement: ");
+		ForStatement stm = new ForStatement();
+		stm.SEQU = inpt.readSEQU(stm);
+//		stm.lineNumber = inpt.readShort();
+//		stm.controlVariable = (VariableExpression) inpt.readObj();
+//		stm.assignmentOperator = inpt.readShort();
+//		int n = inpt.readShort();
+//		if(n > 0) {
+//			stm.forList = new Vector<ForListElement>();
+//			for(int i=0;i<n;i++)
+//				stm.forList.add(ForListElement.readObject(stm,inpt));
+//		}
+//		stm.doStatement = (Statement) inpt.readObj();
+		stm.readAttributes(inpt);
+		Util.TRACE_INPUT("ForStatement: " + stm);
+		return(stm);
+	}
+	
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
 		oupt.writeObj(controlVariable);
 		oupt.writeShort(assignmentOperator);
 		oupt.writeShort(forList.size());
@@ -1075,22 +1104,18 @@ public final class ForStatement extends Statement {
 		oupt.writeObj(doStatement);
 	}
 
-	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readForStatement: ");
-		ForStatement stm = new ForStatement();
-		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.controlVariable = (VariableExpression) inpt.readObj();
-		stm.assignmentOperator = inpt.readShort();
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		controlVariable = (VariableExpression) inpt.readObj();
+		assignmentOperator = inpt.readShort();
 		int n = inpt.readShort();
 		if(n > 0) {
-			stm.forList = new Vector<ForListElement>();
+			forList = new Vector<ForListElement>();
 			for(int i=0;i<n;i++)
-				stm.forList.add(ForListElement.readObject(stm,inpt));
+				forList.add(ForListElement.readObject(this,inpt));
 		}
-		stm.doStatement = (Statement) inpt.readObj();
-		Util.TRACE_INPUT("ForStatement: " + stm);
-		return(stm);
+		doStatement = (Statement) inpt.readObj();
 	}
 
 }

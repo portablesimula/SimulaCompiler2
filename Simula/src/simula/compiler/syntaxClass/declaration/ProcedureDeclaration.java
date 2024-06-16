@@ -867,7 +867,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			.isub()
 			.putfield(FRE_nParLeft)
 			
-			.lookupSwitchInstruction(defaultTarget, tableSwitchCases);
+			.lookupswitch(defaultTarget, tableSwitchCases);
 		
 		codeBuilder.labelBinding(defaultTarget);
 		Util.buildSimulaRuntimeError("Too many parameters", codeBuilder);
@@ -1064,14 +1064,36 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeShort(rtBlockLevel);
+//		oupt.writeBoolean(hasLocalClasses);
+//
+//		oupt.writeShort(parameterList.size());
+//		for(Parameter par:parameterList) par.writeParameter(oupt);
+
+		
+		// ================ SyntaxClass =================
+		oupt.writeShort(lineNumber);
+
+		// ================ Declaration =================
+//		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
-		oupt.writeShort(rtBlockLevel);
-		oupt.writeBoolean(hasLocalClasses);
 
+		// ================ DeclarationScope =================
+		oupt.writeString(sourceFileName);
+//		oupt.writeShort(ctBlockLevel);
+		oupt.writeShort(rtBlockLevel);
+//		oupt.writeString(isPreCompiledFromFile);
+		oupt.writeBoolean(hasLocalClasses);
+		
+		// ================ ProcedurekDeclaration =================
 		oupt.writeShort(parameterList.size());
 		for(Parameter par:parameterList) par.writeParameter(oupt);
+
 		
+//		writeAttributes(oupt);
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 
@@ -1079,22 +1101,61 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		String identifier = inpt.readString();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
 		pro.SEQU = inpt.readSEQU(pro);
+//		pro.externalIdent = inpt.readString();
+//		pro.type=inpt.readType();
+//		pro.rtBlockLevel = inpt.readShort();
+//		pro.hasLocalClasses = inpt.readBoolean();
+//		
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			pro.parameterList.add(Parameter.readParameter(inpt));
+
+		// ================ SyntaxClass =================
+		pro.lineNumber = inpt.readShort();
+
+		// ================ Declaration =================
+//		pro.identifier = inpt.readString();
 		pro.externalIdent = inpt.readString();
-		pro.type=inpt.readType();
+		pro.type = inpt.readType();
+
+		// ================ DeclarationScope =================
+		pro.sourceFileName = inpt.readString();
+//		ctBlockLevel = inpt.readShort();
 		pro.rtBlockLevel = inpt.readShort();
+//		pro.isPreCompiledFromFile = inpt.readString();
 		pro.hasLocalClasses = inpt.readBoolean();
 		
+		// ================ ProcedureDeclaration =================		
 		int n = inpt.readShort();
 		for(int i=0;i<n;i++)
 			pro.parameterList.add(Parameter.readParameter(inpt));
 
+		
+//		pro.readAttributes(inpt);
+		
 		if(!Option.internal.CREATE_JAVA_SOURCE)
 			pro.isPreCompiledFromFile = inpt.jarFileName;
 //		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
 		
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
 		Global.setScope(pro.declaredIn);
+//		pro.isPreCompiledFromFile = inpt.jarFileName;
 		return(pro);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeShort(parameterList.size());
+		for(Parameter par:parameterList) par.writeParameter(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		int n = inpt.readShort();
+		for(int i=0;i<n;i++)
+			parameterList.add(Parameter.readParameter(inpt));
 	}
 
 }

@@ -140,18 +140,32 @@ public final class StandaloneExpression extends Statement {
 		Util.TRACE_OUTPUT("writeStandaloneExpression: " + this);
 		oupt.writeKind(ObjectKind.StandaloneExpression);
 		oupt.writeShort(SEQU);
-		oupt.writeShort(lineNumber);
-		oupt.writeObj(expression);
+//		oupt.writeShort(lineNumber);
+//		oupt.writeObj(expression);
+		writeAttributes(oupt);
 	}
 
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		Util.TRACE_INPUT("BEGIN readStandaloneExpression: ");
 		StandaloneExpression stm = new StandaloneExpression();
 		stm.SEQU = inpt.readSEQU(stm);
-		stm.lineNumber = inpt.readShort();
-		stm.expression = (Expression) inpt.readObj();
+//		stm.lineNumber = inpt.readShort();
+//		stm.expression = (Expression) inpt.readObj();
+		stm.readAttributes(inpt);
 		Util.TRACE_INPUT("StandaloneExpression: " + stm);
 		return(stm);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+		oupt.writeObj(expression);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+		expression = (Expression) inpt.readObj();
 	}
 
 }

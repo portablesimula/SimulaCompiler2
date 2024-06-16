@@ -7,9 +7,12 @@
  */
 package simula.compiler.syntaxClass.statement;
 
+import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -152,5 +155,20 @@ public abstract class Statement extends SyntaxClass {
 		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName());
 	}
 
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+
+//	writeAttributes(oupt);
+//	expr.readAttributes(inpt);
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
+	}
 
 }

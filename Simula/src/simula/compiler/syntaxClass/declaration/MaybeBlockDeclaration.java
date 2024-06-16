@@ -26,7 +26,6 @@ import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
-import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -533,45 +532,32 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-		oupt.writeString(identifier);
-		oupt.writeString(externalIdent);
-		oupt.writeType(type);
-
-		LabelList.writeLabelList(labelList, oupt);
-		
-		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
-
-		oupt.writeShort(statements.size());
-		for(Statement stm:statements) oupt.writeObj(stm);
+		writeAttributes(oupt);
 	}
 	
-	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
+	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt,int declarationKind) throws IOException {
+		DeclarationScope scope = Global.getCurrentScope();
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
-		blk.declarationKind = ObjectKind.CompoundStatement;
+//		blk.declarationKind = ObjectKind.CompoundStatement;
+		blk.declarationKind = declarationKind;
 		Util.TRACE_INPUT("BEGIN Read "+blk);
 		blk.SEQU = inpt.readSEQU(blk);
-		blk.identifier = inpt.readString();
-		blk.externalIdent = inpt.readString();
-		blk.type = inpt.readType();
+		blk.readAttributes(inpt);
 
-		blk.labelList = LabelList.readLabelList(inpt);
-
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			blk.declarationList.add(decl);
-		}
-		
-		n = inpt.readShort();
-		if(n > 0) blk.statements = new Vector<Statement>();
-		for(int i=0;i<n;i++) {
-			Statement stm = (Statement) inpt.readObj();
-			blk.statements.add(stm);
-		}
+		Global.setScope(scope);
+//		blk.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
 		return(blk);
+	}
+
+	@Override
+	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+		super.writeAttributes(oupt);
+	}
+
+	@Override
+	public void readAttributes(AttributeInputStream inpt) throws IOException {
+		super.readAttributes(inpt);
 	}
 
 }
