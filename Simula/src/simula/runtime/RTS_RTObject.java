@@ -543,19 +543,14 @@ public abstract class RTS_RTObject {
 		int i; // Loop index.
 		int dif; // Difference between lengths.
 		int lng; // Length of common parts.
-		if (left == null)
-			left = NOTEXT;
-		if (right == null)
-			right = NOTEXT;
+		if (left == null)  left = NOTEXT;
+		if (right == null) right = NOTEXT;
 		lng = right.LENGTH;
 		dif = lng - left.LENGTH;
 		if (dif != 0) {
-			if (code == 2)
-				return (false);
-			if (code == 5)
-				return (true);
-			if (dif > 0)
-				lng = left.LENGTH;
+			if (code == 2) return (false);
+			if (code == 5) return (true);
+			if (dif > 0)   lng = left.LENGTH;
 		}
 		i = 0;
 		while (i < lng) {
@@ -568,20 +563,14 @@ public abstract class RTS_RTObject {
 			i = i + 1;
 		}
 		switch (code) {
-		case 1:
-			return (0 < dif);
-		case 2:
-			return (0 == dif);
-		case 3:
-			return (0 <= dif);
-		case 4:
-			return (0 > dif);
-		case 5:
-			return (0 != dif);
-		case 6:
-			return (0 >= dif);
-		default:
-			throw new RTS_SimulaRuntimeError("Internal Error");
+			case 1:	return (0 < dif);
+			case 2:	return (0 == dif);
+			case 3:	return (0 <= dif);
+			case 4:	return (0 > dif);
+			case 5:	return (0 != dif);
+			case 6:	return (0 >= dif);
+			default:
+				throw new RTS_SimulaRuntimeError("Internal Error");
 		}
 	}
 

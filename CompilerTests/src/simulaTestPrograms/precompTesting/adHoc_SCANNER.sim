@@ -8,29 +8,16 @@
 class adHoc_SCANNER;
 begin
 
-      ref(recognizer) lexScanner;
 
-	  character EOL;
+	class codebuffer; begin 
 
-
-%      class input(inserted); boolean inserted; begin end;
-
-
-%      input 
-      class SourceElt(fname); text fname; ! source file file name;
-      begin
-
-            inspect lexscanner do
-            begin
-               atom:=EOL;
-		    end;
-      end SourceElt;
-
-
-	class recognizer; begin
-		character atom;
+            class elt; begin end;
+            
 	end;
 
-
+	inspect new codebuffer do begin
+            inspect new elt do begin
+            end;
+	end;
 
 end of SCANNER;

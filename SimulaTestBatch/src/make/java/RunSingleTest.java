@@ -40,6 +40,7 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PUT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -82,10 +83,10 @@ public final class RunSingleTest {
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-		RTOption.BLOCK_TRACING = true;
-		RTOption.GOTO_TRACING = true;
-		RTOption.QPS_TRACING = true;
-		RTOption.SML_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
+//		RTOption.QPS_TRACING = true;
+//		RTOption.SML_TRACING = true;
 		
 		
 		Vector<String> names=new Vector<String>();
@@ -101,7 +102,7 @@ public final class RunSingleTest {
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
 //		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
-//		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
+		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
 //		names.add("simtst09.sim"); // OK:  Test relation operator and some Funtions
@@ -270,7 +271,8 @@ public final class RunSingleTest {
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
-		names.add("simtst152.sim"); // OK: Test nested connection statements
+//		names.add("simtst152.sim"); // OK: Test nested connection statements
+//		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

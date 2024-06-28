@@ -11,7 +11,7 @@
 external class SimulaTest;
 
 SimulaTest(151,"--- Test multiple assignments") begin
-   text array facit(0:13);
+   text array facit(0:15);
    integer traceCase;
    
    procedure trace(msg); text msg;
@@ -20,8 +20,8 @@ SimulaTest(151,"--- Test multiple assignments") begin
       	 begin outtext(msg); outimage; end;
       if msg ne facit(traceCase) then
       begin err("Case " & edit(traceCase));
-         outtext("Trace: " & msg); outimage;
-         outtext("Facit: " & facit(traceCase)); outimage;
+         outtext("Trace: """ & msg & """"); outimage;
+         outtext("Facit: """ & facit(traceCase) & """"); outimage;
       end;
       traceCase:=traceCase+1;
    end;
@@ -73,7 +73,10 @@ SimulaTest(151,"--- Test multiple assignments") begin
 		text procedure P_TXT2(par_T); text par_T; begin
 			text P_T;
 			P_TXT2 :- blanks(10);
-			P_T := P_TXT2 := par_T := A_T := "Abra";
+         outtext("Trace: """ & A_T & """"); outimage;
+			P_T := P_TXT2 := par_T := A_T := "Cadab";
+%			P_TXT2 := par_T := P_T := A_T := "Cadab";
+         outtext("Trace: """ & A_T & """"); outimage;
 			trace("P_T=" & P_T & ", par_T=" & par_T);
 		end;
 	end;
@@ -106,7 +109,10 @@ SimulaTest(151,"--- Test multiple assignments") begin
 	facit(11) :- "P_T=Abra, par_T=Abra";
 	facit(12) :- "x.A_T=Abra, t1=Abra";
 	
-	facit(13) :- "At END";
+	facit(13) :- "P_T=Cadab     , par_T=Cadab";
+	facit(14) :- "x.A_T=Cadab, t1=Cadab     ";
+	
+	facit(15) :- "At END";
 	
 % ========================================================
 
@@ -129,6 +135,9 @@ SimulaTest(151,"--- Test multiple assignments") begin
 	trace("x.A_L=" & edfix(x.A_L,2) & ", lr1=" & edfix(lr1,2));
 
 	t1 :- x.P_TXT1(t);
+	trace("x.A_T=" & x.A_T & ", t1=" & t1);
+
+	t1 :- x.P_TXT2(t);
 	trace("x.A_T=" & x.A_T & ", t1=" & t1);
 
 	trace("At END");

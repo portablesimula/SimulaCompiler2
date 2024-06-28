@@ -62,6 +62,7 @@ public final class Option {
 	public static class internal {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
 
+		public static boolean TESTING_PUT = false;
 		/**
 		 * Use the SimulaClassLoader instead of the executable jar file
 		 */

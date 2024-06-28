@@ -450,9 +450,17 @@ public final class VariableExpression extends Expression {
 	// *** Coding: put
 	// ******************************************************************
 	// Generate code for putting an value(expression) into this Variable
-	public String put(final String rightPart) {
+	@Override
+	public String OLD_put(final String rightPart) {
+	ASSERT_SEMANTICS_CHECKED();
+	String edited = this.editVariable(rightPart,null); // Is a Destination
+	return (edited);
+}
+	@Override
+	public String NEW_put(final Expression rhs) {
 		ASSERT_SEMANTICS_CHECKED();
-		String edited = this.editVariable(rightPart); // Is a Destination
+//		String edited = this.editVariable(rightPart); // Is a Destination
+		String edited = this.editVariable(rhs); // Is a Destination
 		return (edited);
 	}
 
@@ -460,9 +468,11 @@ public final class VariableExpression extends Expression {
 	// *** Coding: get
 	// ******************************************************************
 	// Generate code for getting the value of this Variable
+	@Override
 	public String get() {
 		ASSERT_SEMANTICS_CHECKED();
-		String result = this.editVariable(null); // Not a destination
+		String rightPart = null;
+		String result = this.editVariable(rightPart,null); // Not a destination
 		// System.out.println("Variable.get: RETURN "+result);
 		return (result);
 	}
@@ -524,7 +534,11 @@ public final class VariableExpression extends Expression {
 	 * @param rightPart When destination, this is the right part of the assignment
 	 * @return the resulting Java source code
 	 */
-	private String editVariable(final String rightPart) {
+	public String editVariable(final Expression rhs) {
+		String rightPart = (rhs==null)?null:rhs.toJavaCode();
+		return editVariable(rightPart,rhs);
+	}
+	private String editVariable(final String rightPart,final Expression rhs) {
 		boolean destination = (rightPart != null);
 		Declaration decl = meaning.declaredAs;
 		ASSERT_SEMANTICS_CHECKED();
@@ -630,6 +644,8 @@ public final class VariableExpression extends Expression {
 				// This Variable is a Procedure-Identifier.
 				// When 'destination' it is a variable used to carry the resulting value until the final return.
 				// otherwise; it is a ordinary procedure-call.
+//				System.out.println("VariableExpression.editVariable'Procedure: destination="+destination);
+//				Thread.dumpStack();
 				if (destination) { // return("_RESULT");
 					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
 					ProcedureDeclaration found = Global.getCurrentScope().findProcedure(proc.identifier);
@@ -645,8 +661,40 @@ public final class VariableExpression extends Expression {
 						Util.error("Can't assign to procedure " + proc.identifier);
 						res = proc.identifier; // Error recovery
 					}
-					if (rightPart != null)
+//					if (rightPart != null)
+					if(proc.type.keyWord != Type.T_TEXT) {
 						res = res + "=" + rightPart;
+					} else {
+						if(Option.internal.TESTING_PUT) {
+							res = res + "=" + rightPart;							
+//							Util.IERR(""+res); //   ENDRE rightPart til Expression
+							
+							String target = this.toJavaCode();
+							if(this.meaning.declaredAs.declarationKind == ObjectKind.Procedure ) {
+								target = "_RESULT";
+							}
+						
+							if (rhs instanceof Constant cnst) {
+								Object value = cnst.value;
+								if (value != null) {
+//									System.out.println("AssignmentOperation.editVariable'Procedure: lhs="+this.getClass().getSimpleName()+"  "+this);
+//									System.out.println("AssignmentOperation.editVariable'Procedure: rhs="+rhs.getClass().getSimpleName()+"  "+rhs);
+//									s.append("_ASGSTR(").append(lhs.toJavaCode()).append(",\"").append(value).append("\")");
+//									res = res + "_ASGSTR(" + target + ",\"" + value + "\")";
+									res = "_ASGSTR(" + target + ",\"" + value + "\")";
+									return (res);
+								}
+							}
+							if(rhs != null) {
+//								s.append("_ASGTXT(").append(lhs.toJavaCode()).append(',').append(rhs.toJavaCode()).append(')');
+//								res = res + "_ASGTXT(" + target + ',' + rhs.toJavaCode() + ')';
+								res = "_ASGTXT(" + target + ',' + rhs.toJavaCode() + ')';
+							}
+						} else {
+							res = res + "=" + rightPart;							
+						}
+						
+					}
 					return (res);
 				} else {
 					ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
@@ -767,7 +815,7 @@ public final class VariableExpression extends Expression {
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:
-				if (destination) Util.IERR();
+//				if (destination) Util.IERR();
 				ArrayDeclaration arr=(ArrayDeclaration)decl;
 				buildIdentifierAccess(false,codeBuilder);
 				if (this.hasArguments())
@@ -810,8 +858,14 @@ public final class VariableExpression extends Expression {
 
 			case ObjectKind.Procedure:
 //			case ObjectKind.Switch:
-				if (destination) Util.IERR();
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
+				if (destination) {
+					System.out.println("VariableExpression.buildEvaluation'Procedure: "+procedure.result);
+					codeBuilder
+						.aload(0)
+						.getfield(procedure.result.getFieldRefEntry(pool));
+					Util.IERR();
+				}
 				if (procedure.myVirtual != null)
 					 BuildCPV.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
 				else {
@@ -876,11 +930,13 @@ public final class VariableExpression extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 				
+//		System.out.println("VariableExpression.buildEvaluateParameter: "+par+"  kind="+Parameter.edKind(par.kind));
+		
 		switch (par.kind) {
 		case Parameter.Kind.Array: // Parameter Array
 			buildIdentifierAccess(destination,codeBuilder);
 			if (par.mode == Parameter.Mode.name) {
-				if (destination) Util.IERR();
+//				if (destination) Util.IERR();
 				codeBuilder
 					.getfield(par.getFieldRefEntry(pool))
 					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
@@ -916,6 +972,8 @@ public final class VariableExpression extends Expression {
 		case Parameter.Kind.Simple, Parameter.Kind.Label:
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
 			codeBuilder.getfield(par.getFieldRefEntry(pool));
+//			System.out.println("VariableExpression.buildEvaluateParameter'Simple: destination="+destination+", mode="+Parameter.edMode(par.mode));
+//			Thread.dumpStack();
 			
 			if (!destination && par.mode == Parameter.Mode.name) {
 				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_NAME,

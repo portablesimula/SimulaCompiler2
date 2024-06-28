@@ -208,10 +208,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)	return;
-		if (declarationKind == ObjectKind.CompoundStatement)
-			 doCompoundStatementCoding();
-		else doSubBlockCoding();
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+		} else {
+			if (declarationKind == ObjectKind.CompoundStatement)
+				 doCompoundStatementCoding();
+			else doSubBlockCoding();
+		}
 	}
 
 	// ***********************************************************************************************
@@ -430,15 +433,16 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)	return;
 		if (declarationKind == ObjectKind.CompoundStatement) {
 			build_STMS(codeBuilder);
 			return;
 		}
 		Global.enterScope(this);
-		try {
-			this.createJavaClassFile();
-		} catch (IOException e) { e.printStackTrace(); }
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier);			
+		} else {
+			try { createJavaClassFile(); } catch (IOException e) { e.printStackTrace();	}
+		}
 
 		//  0: new           #42                 // class simulaTestPrograms/adHoc12_SubBlock18
 		//  3: dup

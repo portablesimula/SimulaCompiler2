@@ -1,7 +1,7 @@
-external class prekomp;
 
-prekomp
 begin
-	integer i;
-
-end of program;
+	integer j,U;
+	
+    j := randint(0,4,U);
+	
+end;

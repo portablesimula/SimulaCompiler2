@@ -1,14 +1,6 @@
-% external class AdHoc_SimulaTest;
-
-% AdHoc_SimulaTest
- class MainSeparat(i); integer i; virtual: switch EXIT;
 begin
-   boolean TESTING=true;
-   integer traceCase;
-   text array facit(0:14);
-   integer IINT=45;
-   integer IREA=IINT+1;
-
- 
-end;
-		
+	integer i, U1;
+	
+        i:= randint (-10, 10, u1);
+        
+end of program;

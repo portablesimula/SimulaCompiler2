@@ -93,7 +93,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	/**
 	 * Result in case of Type Procedure 
 	 */
-	SimpleVariableDeclaration result;
+	public SimpleVariableDeclaration result;
 
 	/**
 	 * Parameter list.
@@ -371,11 +371,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)	return;
-		switch (declarationKind) {
-//			case ObjectKind.Procedure, ObjectKind.Switch -> doProcedureCoding();
-			case ObjectKind.Procedure -> doProcedureCoding();
-			default -> Util.IERR();
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+		} else {
+			switch (declarationKind) {
+				case ObjectKind.Procedure -> doProcedureCoding();
+				default -> Util.IERR();
+			}
 		}
 	}
 
@@ -418,7 +420,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	private void doProcedureCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)	return;
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doProcedureCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+			return;
+		}
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
 		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
@@ -579,17 +584,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					
 					for (Declaration decl : declarationList)
 						decl.buildField(classBuilder,this);
+					
+					if(parameterList.size() > 0)
+						classBuilder
+							.withMethod("setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;"), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildSetPar(codeBuilder))
+							.withMethod("<init>", MTD_Constructor(false), ClassFile.ACC_PUBLIC,
+								codeBuilder -> buildConstructor2(codeBuilder));
 
 					classBuilder
 						.withMethod("<init>", MTD_Constructor(true), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildConstructor(codeBuilder));
-					
-					if(parameterList.size() > 0)
-						classBuilder
-							.withMethod("<init>", MTD_Constructor(false), ClassFile.ACC_PUBLIC,
-								codeBuilder -> buildConstructor2(codeBuilder))
-							.withMethod("setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;"), ClassFile.ACC_PUBLIC,
-								codeBuilder -> buildSetPar(codeBuilder));
 					
 					classBuilder
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
@@ -641,6 +646,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			}
 		}
 		sb.append(")V");
+//		System.out.println("ProcedureDeclaration.edConstructorSignature: "+this+"  ===>  "+sb);
 		return(sb.toString());
 	}
 
@@ -1137,9 +1143,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			pro.isPreCompiledFromFile = inpt.jarFileName;
 //		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
 		
-		Util.TRACE_INPUT("END Read ProcedureDeclaration: "+identifier+", Declared in: "+pro.declaredIn);
+		Util.TRACE_INPUT("END Read ProcedureDeclaration: Procedure "+identifier+", Declared in: "+pro.declaredIn);
 		Global.setScope(pro.declaredIn);
-//		pro.isPreCompiledFromFile = inpt.jarFileName;
 		return(pro);
 	}
 

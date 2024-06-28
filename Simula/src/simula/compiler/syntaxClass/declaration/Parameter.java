@@ -484,7 +484,7 @@ public final class Parameter extends Declaration {
 		else
 			s = "NOTYPE";
 		if (mode != 0)
-			s = "" + mode + " " + type;
+			s = "" + edMode(mode) + " " + type;
 		if (kind == 0)
 			s = s + " NOKIND";
 		if (nDim > 0)

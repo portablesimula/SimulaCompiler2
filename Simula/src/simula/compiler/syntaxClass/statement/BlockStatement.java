@@ -125,6 +125,7 @@ public final class BlockStatement extends Statement {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
+//		System.out.println("BlockStatement.buildByteCode: "+blockDeclaration);
 		blockDeclaration.buildByteCode(codeBuilder);
 	}
 

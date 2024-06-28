@@ -152,6 +152,7 @@ public class SimpleVariableDeclaration extends Declaration {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
+//		System.out.println("SimpleVariableDeclaration.doChecking: LINE "+lineNumber+": "+identifier);
 		type.doChecking(Global.getCurrentScope());
 		if (constantElement != null) {
 			constantElement.doChecking();

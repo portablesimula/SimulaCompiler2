@@ -156,6 +156,10 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);	
+			return;
+		}
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
@@ -246,16 +250,17 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)	return;
-
-		try {
-			createJavaClassFile();
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose)
+				System.out.println("Skip  buildClassFile: "+this.identifier+" extends "+this.prefix+" -- It is read from "+isPreCompiledFromFile);		
+		} else {
+			try { createJavaClassFile(); } catch (IOException e) { e.printStackTrace(); }
 		}
-		ClassDesc CD_pblk=this.getClassDesc();
 
+		// ===================================================
 		//  new adHoc05_PBLK14((_CUR), par1, ...)._STM();
+		// ===================================================
+		ClassDesc CD_pblk=this.getClassDesc();
 		codeBuilder
 			.new_(CD_pblk)
 			.dup()
@@ -490,6 +495,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 //		}
 
 		pbl.readAttributes(inpt);
+		if(!Option.internal.CREATE_JAVA_SOURCE)
+			pbl.isPreCompiledFromFile = inpt.jarFileName;
+//		System.out.println("PrefixedBlockDeclaration.readObject: PrefixedBlock "+pbl.identifier+" isPreCompiledFromFile="+pbl.isPreCompiledFromFile);
 		Util.TRACE_INPUT("END Read PrefixedBlockDeclaration: " + pbl.identifier + ", Declared in: " + pbl.declaredIn);
 		Global.setScope(pbl.declaredIn);
 		return(pbl);

@@ -148,16 +148,58 @@ public final class AssignmentOperation extends Expression {
 	 * @return the resulting Java source code
 	 */
 	private String doCodeTextValueAssignment() {
+		System.out.println("AssignmentOperation.doCodeTextValueAssignment: "+this);
+		System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+		System.out.println("AssignmentOperation.doCodeTextValueAssignment: rhs="+rhs.getClass().getSimpleName()+"  "+rhs);
+		
+		if(Option.internal.TESTING_PUT) {
+//	        _ASGTXT(t2,t1);
+//			String res = lhs.NEW_put(rhs);
+//			String res = "_ASGTXT(" + lhs.toJavaCode() + ',' + rhs.toJavaCode() + ')';
+			if(lhs instanceof VariableExpression var) {
+//				String res = var.editVariable(rhs);
+				String res = "_ASGTXT(" + var.editVariable(null) + ',' + rhs.toJavaCode() + ')';				
+				return res;
+			} else {
+				String res = "_ASGTXT(" + lhs.toJavaCode() + ',' + rhs.toJavaCode() + ')';				
+				return res;
+			}
+		} else {
+			StringBuilder s = new StringBuilder();
+			
+			String target = lhs.toJavaCode();
+			
+			if (rhs instanceof Constant cnst) {
+				Object value = cnst.value;
+				if (value != null) {
+//					System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+//					s.append("_ASGSTR(").append(lhs.toJavaCode()).append(",\"").append(value).append("\")");
+					s.append("_ASGSTR(").append(target).append(",\"").append(value).append("\")");
+					return (s.toString());
+				}
+			}
+//			s.append("_ASGTXT(").append(lhs.toJavaCode()).append(',').append(rhs.toJavaCode()).append(')');
+			s.append("_ASGTXT(").append(target).append(',').append(rhs.toJavaCode()).append(')');
+			return (s.toString());			
+		}
+	}
+	private String OLD_doCodeTextValueAssignment() {
 		StringBuilder s = new StringBuilder();
-//		System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+		System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+		
+		String target = lhs.toJavaCode();
+		
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
 			if (value != null) {
-				s.append("_ASGSTR(").append(lhs.toJavaCode()).append(",\"").append(value).append("\")");
+				System.out.println("AssignmentOperation.doCodeTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+//				s.append("_ASGSTR(").append(lhs.toJavaCode()).append(",\"").append(value).append("\")");
+				s.append("_ASGSTR(").append(target).append(",\"").append(value).append("\")");
 				return (s.toString());
 			}
 		}
-		s.append("_ASGTXT(").append(lhs.toJavaCode()).append(',').append(rhs.toJavaCode()).append(')');
+//		s.append("_ASGTXT(").append(lhs.toJavaCode()).append(',').append(rhs.toJavaCode()).append(')');
+		s.append("_ASGTXT(").append(target).append(',').append(rhs.toJavaCode()).append(')');
 		return (s.toString());
 	}
 
@@ -190,7 +232,17 @@ public final class AssignmentOperation extends Expression {
 
 			}
 		}
-		s.append(lhs.put(rhs.get()));
+		if(Option.internal.TESTING_PUT) {
+			System.out.println("AssignmentOperation.doCodeAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
+			System.out.println("AssignmentOperation.doCodeAssignment: rhs="+rhs.getClass().getSimpleName()+"  "+rhs);
+			System.out.println("AssignmentOperation.doCodeAssignment: rhs.get()="+rhs.get());
+//			s.append(lhs.NEW_put(rhs));
+			s.append(lhs.OLD_put(rhs.get()));			
+			System.out.println("AssignmentOperation.doCodeAssignment: "+s);
+//			Util.IERR();
+		} else {
+			s.append(lhs.OLD_put(rhs.get()));			
+		}
 		return (s.toString());
 	}
 
@@ -227,7 +279,8 @@ public final class AssignmentOperation extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.textValueAssignment)
 			 buildTextValueAssignment(codeBuilder);
-		else buildAssignment(codeBuilder);
+		else
+			buildAssignment(codeBuilder);
 	}
 
 
@@ -237,7 +290,9 @@ public final class AssignmentOperation extends Expression {
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
 			if (value != null) {
+//				System.out.println("AssignmentOperation.buildTextValueAssignment: lhs="+lhs.getClass().getSimpleName()+"  "+lhs);
 				lhs.buildEvaluation(null,codeBuilder);
+//				lhs.buildEvaluation(this,codeBuilder);
 				codeBuilder.ldc(pool.stringEntry(value.toString()));
 
 				ClassDesc CD = BlockDeclaration.currentClassDesc();
@@ -247,7 +302,8 @@ public final class AssignmentOperation extends Expression {
 				return;
 			}
 		}
-		lhs.buildEvaluation(null,codeBuilder);
+//		lhs.buildEvaluation(null,codeBuilder);
+		lhs.buildEvaluation(this,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 		ClassDesc CD = BlockDeclaration.currentClassDesc();
 		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");

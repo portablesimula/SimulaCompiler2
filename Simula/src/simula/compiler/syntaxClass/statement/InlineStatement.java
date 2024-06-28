@@ -27,8 +27,8 @@ public final class InlineStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if(kind.equals("detach")) GeneratedJavaClass.code("detach();","Process'detach");
-		else if(kind.equals("terminate")) GeneratedJavaClass.code("terminate();","Process'terminate");
+		if(kind.equalsIgnoreCase("detach")) GeneratedJavaClass.code("detach();","Process'detach");
+		else if(kind.equalsIgnoreCase("terminate")) GeneratedJavaClass.code("terminate();","Process'terminate");
 		else if(kind.equals("try")) GeneratedJavaClass.code("try {");
 		else if(kind.equals("catch")) GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
 		else Util.IERR();
@@ -39,13 +39,14 @@ public final class InlineStatement extends Statement {
 		Global.sourceLineNumber=lineNumber;
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ASSERT_SEMANTICS_CHECKED();
-		if(kind.equals("detach")) {
+//		if(kind.equals("detach")) {
+		if(kind.equalsIgnoreCase("detach")) {
 			// GeneratedJavaClass.code("detach();","Process'detach");
 			codeBuilder
 					.aload(0)
 					.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),"detach", MethodTypeDesc.ofDescriptor("()V")));
 		}
-		else if(kind.equals("terminate")) {
+		else if(kind.equalsIgnoreCase("terminate")) {
 			// GeneratedJavaClass.code("terminate();","Process'terminate");
 			codeBuilder
 					.aload(0)

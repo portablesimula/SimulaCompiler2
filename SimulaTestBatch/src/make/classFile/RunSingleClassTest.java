@@ -31,7 +31,7 @@ public final class RunSingleClassTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-		Option.verbose=true;
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
@@ -45,7 +45,7 @@ public final class RunSingleClassTest {
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -98,7 +98,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
-//			names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
+//		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
 //		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
@@ -108,7 +108,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst11.sim"); // OK:  Text Attributes constant, start, length, pos and main
 //		names.add("simtst12.sim"); // OK:  Text value and reference relations.
 //		names.add("simtst13.sim"); // OK:  Text value assignment and text reference assigment.
-//			names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
+//		names.add("simtst14.sim"); // OK:  Text attributes: pos, setpos, more, getchar and putchar.
 //		names.add("simtst15.sim"); // OK:  Text generation procedures copy and blanks.
 //		names.add("simtst16.sim"); // OK:  Standard Text procedures sub and strip.
 //		names.add("simtst17.sim"); // OK:  Editing and De-editing
@@ -260,8 +260,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
-//		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
 //		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
 //		names.add("simtst147.sim"); // OK: Test virtual procedure by name
@@ -270,7 +270,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
-		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
+//		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

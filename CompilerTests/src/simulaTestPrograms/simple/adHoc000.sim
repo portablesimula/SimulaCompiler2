@@ -1,12 +1,15 @@
 
 begin
 
-
-	boolean b;
-	
-	goto if b then L1 else L2;
-	
-	L1:
-	
-	L2:
+	class A; begin
+		character cs, opt, opn, ICL, IIDN;
+		boolean b1,b2;
+                 
+%                     while opt=ICL and then cs=IIDN do begin
+                     while b1 and then b2 do begin
+%                          opn:=ICL;
+%                          call(coder);
+                          DETACH
+                     end;
+	end; 
  end;

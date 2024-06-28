@@ -1,0 +1,19 @@
+class adHoc_PRECOMP;
+begin
+	
+	class A; begin
+		integer N;
+		outtext("Begin A"); outimage;
+		N := 432;
+		outtext("End A"); outimage;
+	end;      
+
+	outtext("Begin PRECOMP"); outimage;
+	
+	A begin 
+		outtext("A Begin"); outimage;
+	end;
+	
+	outtext("End PRECOMP"); outimage;
+	
+end;

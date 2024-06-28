@@ -28,16 +28,17 @@ public final class RunCompilerTest {
     	//System.setProperty("file.encoding","UTF-8");
 
 		// Set Compiler Options.
-		Option.verbose=true;
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PUT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -54,7 +55,7 @@ public final class RunCompilerTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-//		Option.internal.PRINT_SYNTAX_TREE=true;
+		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -71,8 +72,6 @@ public final class RunCompilerTest {
 //		Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
 //		Option.internal.TRACE_BYTECODE_OUTPUT=true;
 //		Option.internal.DEBUGGING=true;
-		
-		Option.internal.TESTING_STACK_SIZE=true;
 
 //		File simulaHome=new File("C:/GitHub/SimulaCompiler2/TestBatch");
 		File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
@@ -80,7 +79,7 @@ public final class RunCompilerTest {
 		
 		
 		Global.packetName="simulaTestPrograms";
-//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //		Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");
@@ -119,17 +118,17 @@ public final class RunCompilerTest {
 
 		// names.add("/simple/p41.sim");
 		// names.add("/simple/adErr09.sim");
-		 names.add("/simple/adHoc000.sim");
+		// names.add("/simple/adHoc000.sim");
 		// names.add("/simple/adHoc00.sim");
-		// names.add("/simple/adHoc01.sim");
-		// names.add("/simple/adHoc02.sim");
-		// names.add("/simple/adHoc03.sim");
-		// names.add("/simple/adHoc30a.sim");
-		// names.add("/simple/adHoc04.sim");
-		
-		// names.add("/simple/adHoc05.sim");
-		// names.add("/simple/adHoc06.sim");
-		 
+//		 names.add("/simple/adHoc01.sim");
+//		 names.add("/simple/adHoc02.sim");
+		 names.add("/simple/adHoc03.sim");
+//		 names.add("/simple/adHoc30a.sim");
+//		 names.add("/simple/adHoc04.sim");
+//		
+//		 names.add("/simple/adHoc05.sim");
+//		 names.add("/simple/adHoc06.sim");
+//		 
 //			names.add("/simple/adHoc07.sim");
 //			names.add("/simple/adHoc08.sim");
 		// names.add("/simple/adHoc09.sim");

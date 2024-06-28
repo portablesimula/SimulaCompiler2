@@ -1,0 +1,7 @@
+external class adHoc_PRECOMP;
+
+adHoc_PRECOMP begin
+
+	outtext("adHoc_MAIN"); outimage;
+      
+end;

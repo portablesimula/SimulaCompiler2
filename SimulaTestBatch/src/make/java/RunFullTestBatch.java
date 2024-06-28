@@ -9,10 +9,6 @@ package make.java;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Vector;
 
 import simula.compiler.SimulaCompiler;
@@ -48,6 +44,7 @@ public final class RunFullTestBatch {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+//		Option.internal.TESTING_PUT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -236,6 +233,7 @@ public final class RunFullTestBatch {
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 		names.add("simtst151.sim"); // OK: Test multiple assignments
 		names.add("simtst152.sim"); // OK: Test nested connection statements
+		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

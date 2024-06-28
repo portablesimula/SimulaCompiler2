@@ -26,11 +26,11 @@ import simula.editor.RTOption;
  * @author Øystein Myhre Andersen
  *
  */
-public final class CompileFEC {
+public final class CompileFEC2 {
 	/**
 	 * Default Constructor.
 	 */
-	CompileFEC(){}
+	CompileFEC2(){}
 	
 	// The following files are created when Simuletta front-end compiling the RTS:
     // - "C:\Simuletta\Attrs\BEC\simulaRTS\RTS$INTERFACE.dat"
@@ -50,9 +50,9 @@ public final class CompileFEC {
 //		names.add("COMMON.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\COMMON.jar
 //		names.add("ERRMSG.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
 //		names.add("SCANNER.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANNER.jar
+//		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
 //		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
-//		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
-		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
+		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
 //		names.add("PAS1INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS1INIT.jar
 //		names.add("BUILDER1.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER1.jar
 //		names.add("BUILDER2.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER2.jar
@@ -82,7 +82,7 @@ public final class CompileFEC {
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
-		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 //		Option.CASE_SENSITIVE=true;
 //		Option.GNERATE_LINE_CALLS=true;
@@ -105,7 +105,7 @@ public final class CompileFEC {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //

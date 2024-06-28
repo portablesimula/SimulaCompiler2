@@ -497,11 +497,14 @@ public abstract class Expression extends SyntaxClass {
 
 	/**
 	 * Generate code for putting the value into this Expression
-	 * @param evaluated a evaluated expression.
+	 * @param rhs a evaluated expression.
 	 * @return the resulting Java code
 	 */
-	String put(String evaluated) {
-		return (this.toJavaCode() + '=' + evaluated);
+	String OLD_put(String rhs) {
+		return (this.toJavaCode() + '=' + rhs);
+	}
+	public String NEW_put(Expression rhs) {
+		return (this.toJavaCode() + '=' + rhs.toJavaCode());
 	}
 	
 	/**

@@ -39,7 +39,7 @@ public final class RunClassFileTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-//		Option.internal.USE_SimulaClassLoader = true;
+		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -92,11 +92,14 @@ public final class RunClassFileTest {
 
 		Vector<String> names=new Vector<String>();
 		
+		names.add("/precompTesting/adHoc_PRECOMP.sim");
+		names.add("/precompTesting/adHoc_MAIN.sim");
 
+		
 //		names.add("/precompTesting/adHoc_COMMON.sim");
 //		names.add("/precompTesting/adHoc_ERRMSG.sim");
 //		names.add("/precompTesting/adHoc_SCANNER.sim");
-		names.add("/precompTesting/adHoc01.sim");
+//		names.add("/precompTesting/adHoc01.sim");
 //		names.add("/precompTesting/SCANINP.sim");
 
 

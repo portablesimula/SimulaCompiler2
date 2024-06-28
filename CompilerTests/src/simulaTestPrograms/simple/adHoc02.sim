@@ -1,29 +1,14 @@
 
 begin
-	class brecord; begin
-		ref(quantity) favirt;
-		ref(quantity) fpar;
-	end;
-	
-	class quantity; begin
-		ref(quantity) next;
-	end;
 
-      class L2Coder;
-      begin
-            ref(quantity) pq;
-            ref(brecord) cbrec;
+text    t1;      -- Texts to take on the
+text    t2;      -- various values for the test.
+integer iii;
 
-              inspect cbrec do begin
-                  inspect favirt do begin
+t1 :- "abcdefghij";
+t2 :- blanks (15); t2 := t1;
+% if t2 <> "abcdefghij     " then outtext ("***  Equality betw. non empty texts not recognized (9).");
+if t2 <> "abcdefghij     " then iii := 666;
+% if t1 <> t2 then else outtext ("***  Non-eq. betw. non empty texts not recognized (2).");
 
-%                     pq:-fpar.next;
-                     pq:-fpar;
-                     
-                  end;
-              end inspect cbrec;
-
-      end L2Coder;
-
-
-end;
+end of program;

@@ -650,8 +650,8 @@ public final class SimulaCompiler {
 				Util.doListClassFile("" + classFile); // List generated .class file
 //			UUtil.analyse("" + classFile);
 		}
-		File xFile = new File("C:/GitHub/SimulaCompiler2/CompilerTests/bin/SimulaTestPrograms","adHocXX.class");
-		Util.doListClassFile(""+xFile); // List explicit .class file
+//		File xFile = new File("C:/GitHub/SimulaCompiler2/CompilerTests/bin/SimulaTestPrograms","adHocXX.class");
+//		Util.doListClassFile(""+xFile); // List explicit .class file
 	}
 
 

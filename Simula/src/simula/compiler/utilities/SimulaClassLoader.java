@@ -10,7 +10,7 @@ import simula.runtime.RTS_EndProgram;
  * SimulaClassLoader.
  */
 public class SimulaClassLoader extends ClassLoader {
-	private final static boolean TESTING = false;
+	private final static boolean TESTING = false;//true;//false;
 	
 	/**
 	 * Default Constructor.

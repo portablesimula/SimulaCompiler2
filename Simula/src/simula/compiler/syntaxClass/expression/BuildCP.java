@@ -256,13 +256,13 @@ public abstract class BuildCP {
 	 */
 	private static boolean checkForExtraParameter(VariableExpression variable) {
 		String id = variable.identifier;
-		if (id.equals("detach")) {
+		if (id.equalsIgnoreCase("detach")) {
 			variable.checkedParams = new Vector<Expression>();
 			// Push extra parameter 'sourceLineNumber'
 			Constant c = new Constant(Type.Integer, variable.lineNumber);
 			variable.checkedParams.add(c);
 			return true;
-		} else if( id.equals("call") | id.equals("resume")) {
+		} else if( id.equalsIgnoreCase("call") | id.equalsIgnoreCase("resume")) {
 			if(variable.checkedParams.size() == 1) {
 				// Push extra parameter 'sourceLineNumber'
 				Constant c = new Constant(Type.Integer, variable.lineNumber);

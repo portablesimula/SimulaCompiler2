@@ -107,11 +107,12 @@ public final class ConnectionBlock extends DeclarationScope {
 	}
 
 	/**
-	 * Set the Connected ClassDecleration.
+	 * Set the Connected ClassDeclaration.
 	 * 
-	 * @param classDeclaration the Connected ClassDecleration.
+	 * @param classDeclaration the Connected ClassDeclaration.
 	 */
 	public void setClassDeclaration(final ClassDeclaration classDeclaration) {
+//		System.out.println("ConnectionBlock.setClassDeclaration: "+identifier+"  classDeclaration="+classDeclaration);
 		this.classDeclaration = classDeclaration;
 	}
 
@@ -128,6 +129,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public Meaning findMeaning(final String identifier) {
 		if (classDeclaration == null && Global.duringParsing)
 			return (null); // Still in Pass1(Parser)
+//		System.out.println("ConnectionBlock.findMeaning: "+identifier+"  classDeclaration="+classDeclaration);
 		Meaning result = null;
 		if (classDeclaration != null)
 			result = classDeclaration.findRemoteAttributeMeaning(identifier);

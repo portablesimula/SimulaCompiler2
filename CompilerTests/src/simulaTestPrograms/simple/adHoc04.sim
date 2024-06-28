@@ -1,16 +1,13 @@
 
 begin
 
-inspect new Directfile("direct85") do begin
 
-   procedure check; begin
-		image := notext; 
-   end of procedure check;
+text    t1;      -- Texts to take on the
+text    t2;      -- various values for the test.
 
-
-	check;
-
-end of inspect Directfile;
+t1 :- copy("abcdefghij");
+t2 :- blanks (15); t2 := t1;
+if t2 <> "abcdefghij     " then outtext ("***  Equality betw. non empty texts not recognized (9).");
 
 
 end of program;

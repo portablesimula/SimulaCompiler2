@@ -918,8 +918,10 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null)
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);	
 			return;
+		}
 		Global.sourceLineNumber = lineNumber;
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
@@ -1447,6 +1449,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		}
 		if(statements1 != null) for (Statement stm : statements1) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+//			System.out.println("ClassDeclaration.buildStatementsBeforeInner: "+stm.getClass().getSimpleName()+"  "+stm);
 			stm.buildByteCode(codeBuilder);
 		}
 	}
@@ -1460,6 +1463,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	private void buildStatementsAfterInner(CodeBuilder codeBuilder) {
 		for (Statement stm : statements){
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+//			System.out.println("ClassDeclaration.buildStatementsAfterInner: "+stm.getClass().getSimpleName()+"  "+stm);
 			stm.buildByteCode(codeBuilder);
 		}
 		if (hasRealPrefix()) {
@@ -1722,8 +1726,9 @@ public class ClassDeclaration extends BlockDeclaration {
 			Statement stm = (Statement) inpt.readObj();
 			statements1.add(stm);
 		}
-//		isPreCompiledFromFile = inpt.jarFileName;
-//		System.out.println("ClassDeclaration.readAttributes: isPreCompiledFromFile="+isPreCompiledFromFile);
+		if(!Option.internal.CREATE_JAVA_SOURCE)
+			isPreCompiledFromFile = inpt.jarFileName;
+//		System.out.println("ClassDeclaration.readAttributes: Class "+identifier+" isPreCompiledFromFile="+isPreCompiledFromFile);
 	}
 	
 }

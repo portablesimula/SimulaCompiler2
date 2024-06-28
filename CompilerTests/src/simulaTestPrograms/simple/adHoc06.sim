@@ -1,27 +1,18 @@
+begin
 
-% external class AdHoc_SimulaTest;
-external class MainSeparat; 
-   
-% MainSeparat class SubSep; begin 
-% MainSeparat(55,"",77) begin 
-MainSeparat(55) begin 
-    integer ICHR=IINT + 4;
 
-%    procedure PP;
-%    begin integer i;
-%        ref(SubSep2) xx;
-%        external class MainSeparat; 
-%        MainSeparat class SubSep2;
-%        begin 
-%           trace("--- Start Statements of class SubSep2") ; 
-%           noMessage:=true;
-%        end;
-%        xx:-new SubSep2(99,"Title",15);
-%    end;
-    
-%    trace("--- Start Statements of class SubSep") ; 
-%    x :- new B; 
+   integer i, j ;
+   boolean b ;
 
-	outtext("ERROR: ICHR=" & edit(ICHR) & ", IINT=" & edit(IINT)); outimage
+   integer procedure P (f) ;
+      name f ;
+      integer f ;
+   begin
+      i := i+1 ;
+      if i = 10 then
+         P := f
+      else
+         P := f + P (f) ;
+   end ;
 
 end;

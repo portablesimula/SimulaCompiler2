@@ -1,19 +1,12 @@
 begin
 
-      class a;
-      begin
-%       L:   
-      end;
+   procedure P (tf); name tf; text tf; begin
+      tf := "tf" ;
+   end;
 
-    a class b;
-      begin
-       L: L3:
-      end;
+   text tv;
  
+   P(tv);
 
-    b class c;
-      begin
-       L: L5:
-      end;
 
-end
+end;

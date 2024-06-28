@@ -195,7 +195,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 			} else sb.append(par.type.toJVMType());
 		}
 		String id=identifier;
-		if(id.equals("detach") | id.equals("call") | id.equals("resume")) {
+		if(id.equalsIgnoreCase("detach") | id.equalsIgnoreCase("call") | id.equalsIgnoreCase("resume")) {
 			// Push extra parameter 'sourceLineNumber'
 			Parameter lno=new Parameter(id,Type.Integer,Parameter.Kind.Simple);
 			sb.append(lno.type.toJVMType());

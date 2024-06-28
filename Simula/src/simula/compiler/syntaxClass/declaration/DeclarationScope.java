@@ -162,7 +162,7 @@ public abstract class DeclarationScope extends Declaration  {
 			if (!Global.duringParsing) {
 //				DeclarationScope.printScopeChain(Global.getCurrentScope(),"");
 				Util.error("Undefined variable: " + identifier);
-//				Thread.dumpStack();
+				Thread.dumpStack();
 			}
 			meaning = new Meaning(null, null); // Error Recovery: No Meaning
 		}
@@ -397,39 +397,14 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @throws IOException 
 	 */
     public void createJavaClassFile() throws IOException {
-    	if (this.isPreCompiledFromFile != null)	return;
-    	if(CLASSFILE_ALREADY_GENERATED) return;
-    	CLASSFILE_ALREADY_GENERATED = true;
-    	
-//    	byte[] bytes;
-//    	if(this instanceof BlockDeclaration blk) {
-//    		blk.prevBlock = BlockDeclaration.currentBlock;
-//    		BlockDeclaration.currentBlock = blk;
-//    			bytes = buildClassFile();
-//    		BlockDeclaration.currentBlock = blk.prevBlock;
-//    	} else {
-//    		bytes = buildClassFile();
-//    	}
-//
-//    	if(bytes != null) {
-//    		if(Option.internal.USE_SimulaClassLoader) {
-//    			if(Global.simulaClassLoader != null) {
-//    				String name = Global.packetName + "." + externalIdent;
-//    				Global.simulaClassLoader.loadClass(name, bytes);
-//    			} else {
-//        			String entryName = Global.packetName + "/" + externalIdent + ".class";
-//        			Global.jarFileBuilder.addJarEntry(entryName, bytes);
-//    			}
-//    		} else {
-//    			String entryName = Global.packetName + "/" + externalIdent + ".class";
-//    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
-//    		}
-//
-//   			if(Option.internal.LIST_GENERATED_CLASS_FILES)
-//   				listGeneratedClassFile(bytes);
-//    	}
-
-    	buildAndLoadOrAddClassFile();
+    	if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);			
+    	} else if (CLASSFILE_ALREADY_GENERATED) {
+			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier+" -- It is already generated");			
+    	} else {
+    		CLASSFILE_ALREADY_GENERATED = true;
+    		buildAndLoadOrAddClassFile();
+    	}
     }
 	
     /**
@@ -437,7 +412,9 @@ public abstract class DeclarationScope extends Declaration  {
      * @throws IOException
      */
     protected void buildAndLoadOrAddClassFile() throws IOException {
-    	if(isPreCompiledFromFile == null) {
+		if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier);			
+		} else {
 	    	byte[] bytes = doBuildClassFile();
 	    	loadOrAddClassFile(bytes);
     	}
