@@ -447,37 +447,6 @@ public final class VariableExpression extends Expression {
 	}
 
 	// ******************************************************************
-	// *** Coding: put
-	// ******************************************************************
-	// Generate code for putting an value(expression) into this Variable
-	@Override
-	public String OLD_put(final String rightPart) {
-	ASSERT_SEMANTICS_CHECKED();
-	String edited = this.editVariable(rightPart,null); // Is a Destination
-	return (edited);
-}
-	@Override
-	public String NEW_put(final Expression rhs) {
-		ASSERT_SEMANTICS_CHECKED();
-//		String edited = this.editVariable(rightPart); // Is a Destination
-		String edited = this.editVariable(rhs); // Is a Destination
-		return (edited);
-	}
-
-	// ******************************************************************
-	// *** Coding: get
-	// ******************************************************************
-	// Generate code for getting the value of this Variable
-	@Override
-	public String get() {
-		ASSERT_SEMANTICS_CHECKED();
-		String rightPart = null;
-		String result = this.editVariable(rightPart,null); // Not a destination
-		// System.out.println("Variable.get: RETURN "+result);
-		return (result);
-	}
-
-	// ******************************************************************
 	// *** Coding: doGetELEMENT
 	// ******************************************************************
 	/**
@@ -527,6 +496,30 @@ public final class VariableExpression extends Expression {
 	}
 
 	// ******************************************************************
+	// *** Coding: put
+	// ******************************************************************
+	// Generate code for putting an value(expression) into this Variable
+	@Override
+	public String put(final String rightPart) {
+		ASSERT_SEMANTICS_CHECKED();
+		String edited = this.editVariable(rightPart); // Is a Destination
+		return (edited);
+	}
+
+	// ******************************************************************
+	// *** Coding: get
+	// ******************************************************************
+	// Generate code for getting the value of this Variable
+	@Override
+	public String get() {
+		ASSERT_SEMANTICS_CHECKED();
+		String rightPart = null;
+		String result = this.editVariable(rightPart); // Not a destination
+		// System.out.println("Variable.get: RETURN "+result);
+		return (result);
+	}
+
+	// ******************************************************************
 	// *** Coding: editVariable
 	// ******************************************************************
 	/**
@@ -534,11 +527,7 @@ public final class VariableExpression extends Expression {
 	 * @param rightPart When destination, this is the right part of the assignment
 	 * @return the resulting Java source code
 	 */
-	public String editVariable(final Expression rhs) {
-		String rightPart = (rhs==null)?null:rhs.toJavaCode();
-		return editVariable(rightPart,rhs);
-	}
-	private String editVariable(final String rightPart,final Expression rhs) {
+	private String editVariable(final String rightPart) {
 		boolean destination = (rightPart != null);
 		Declaration decl = meaning.declaredAs;
 		ASSERT_SEMANTICS_CHECKED();
@@ -633,93 +622,56 @@ public final class VariableExpression extends Expression {
 				// Standard Library Procedure
 				if (Util.equals(identifier, "sourceline"))
 					return ("" + Global.sourceLineNumber);
-				if (destination) return ("_RESULT=" + rightPart);
+				if (destination) {
+					Util.IERR();
+					return ("_RESULT=" + rightPart);
+				}
 				return (CallProcedure.asStaticMethod(this, true));
 	
 			case ObjectKind.MemberMethod:
-				if (destination) return ("_RESULT=" + rightPart);
+				if (destination) {
+					Util.IERR();
+					return ("_RESULT=" + rightPart);
+				}
 				return (CallProcedure.asNormalMethod(this));
 	
 			case ObjectKind.Procedure:
 				// This Variable is a Procedure-Identifier.
 				// When 'destination' it is a variable used to carry the resulting value until the final return.
 				// otherwise; it is a ordinary procedure-call.
-//				System.out.println("VariableExpression.editVariable'Procedure: destination="+destination);
-//				Thread.dumpStack();
 				if (destination) { // return("_RESULT");
 					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
-					ProcedureDeclaration found = Global.getCurrentScope().findProcedure(proc.identifier);
-					String res = null;
-					if (found != null) {
-						if (found.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
-							res = "_RESULT";
-						} else {
-							String cast = found.getJavaIdentifier();
-							res = "((" + cast + ")" + found.edCTX() + ")._RESULT";
-						}
+//					// ===================================  TESTING
+					if (proc.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
+						return "_RESULT" + "=" + rightPart;
 					} else {
-						Util.error("Can't assign to procedure " + proc.identifier);
-						res = proc.identifier; // Error recovery
+						String cast = proc.getJavaIdentifier();
+						return "((" + cast + ")" + proc.edCTX() + ")._RESULT" + "=" + rightPart;
 					}
-//					if (rightPart != null)
-					if(proc.type.keyWord != Type.T_TEXT) {
-						res = res + "=" + rightPart;
-					} else {
-						if(Option.internal.TESTING_PUT) {
-							res = res + "=" + rightPart;							
-//							Util.IERR(""+res); //   ENDRE rightPart til Expression
-							
-							String target = this.toJavaCode();
-							if(this.meaning.declaredAs.declarationKind == ObjectKind.Procedure ) {
-								target = "_RESULT";
-							}
-						
-							if (rhs instanceof Constant cnst) {
-								Object value = cnst.value;
-								if (value != null) {
-//									System.out.println("AssignmentOperation.editVariable'Procedure: lhs="+this.getClass().getSimpleName()+"  "+this);
-//									System.out.println("AssignmentOperation.editVariable'Procedure: rhs="+rhs.getClass().getSimpleName()+"  "+rhs);
-//									s.append("_ASGSTR(").append(lhs.toJavaCode()).append(",\"").append(value).append("\")");
-//									res = res + "_ASGSTR(" + target + ",\"" + value + "\")";
-									res = "_ASGSTR(" + target + ",\"" + value + "\")";
-									return (res);
-								}
-							}
-							if(rhs != null) {
-//								s.append("_ASGTXT(").append(lhs.toJavaCode()).append(',').append(rhs.toJavaCode()).append(')');
-//								res = res + "_ASGTXT(" + target + ',' + rhs.toJavaCode() + ')';
-								res = "_ASGTXT(" + target + ',' + rhs.toJavaCode() + ')';
-							}
-						} else {
-							res = res + "=" + rightPart;							
-						}
-						
-					}
-					return (res);
 				} else {
 					ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 					if (procedure.myVirtual != null)
-						return (CallProcedure.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed));
+						return CallProcedure.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed);
 					else
-						return (CallProcedure.normal(this));
+						return CallProcedure.normal(this);
 				}
 	
 			case ObjectKind.SimpleVariableDeclaration:
 				if (rightPart != null)
-					return (edIdentifierAccess(destination) + '=' + rightPart);
+					return edIdentifierAccess(destination) + '=' + rightPart;
 				else
-					return (edIdentifierAccess(destination));
+					return edIdentifierAccess(destination);
 	
 			case ObjectKind.VirtualSpecification:
 				if (rightPart != null)
 					Util.IERR();
 				VirtualSpecification virtual = (VirtualSpecification) decl;
-				return (CallProcedure.virtual(this, virtual, remotelyAccessed));
+				return CallProcedure.virtual(this, virtual, remotelyAccessed);
 	
 			default:
 				Util.IERR();
 		}
-		return (null);
+		return null;
 
 	}
 
@@ -865,7 +817,7 @@ public final class VariableExpression extends Expression {
 						.aload(0)
 						.getfield(procedure.result.getFieldRefEntry(pool));
 					Util.IERR();
-				}
+				} //else
 				if (procedure.myVirtual != null)
 					 BuildCPV.virtual(this, procedure.myVirtual.virtualSpec, remotelyAccessed, codeBuilder);
 				else {

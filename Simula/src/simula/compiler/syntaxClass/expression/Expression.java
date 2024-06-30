@@ -500,11 +500,8 @@ public abstract class Expression extends SyntaxClass {
 	 * @param rhs a evaluated expression.
 	 * @return the resulting Java code
 	 */
-	String OLD_put(String rhs) {
+	String put(String rhs) {
 		return (this.toJavaCode() + '=' + rhs);
-	}
-	public String NEW_put(Expression rhs) {
-		return (this.toJavaCode() + '=' + rhs.toJavaCode());
 	}
 	
 	/**

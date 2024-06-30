@@ -437,6 +437,9 @@ public abstract class RTS_RTObject {
 		if (U == null)
 			U = NOTEXT;
 		int fromLength = U.LENGTH;
+		
+//		System.out.println("RTS_RTObject: _ASGTXT \""+T.edText()+"\" <=== \""+U.edText()+'"');
+		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
 					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
@@ -459,6 +462,9 @@ public abstract class RTS_RTObject {
 		int fromLength = 0;
 		if (s != null)
 			fromLength = s.length();
+		
+//		System.out.println("RTS_RTObject: _ASGSTR \""+T.edText()+"\" <=== \""+s+'"');
+		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
 					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));

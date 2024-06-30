@@ -111,23 +111,23 @@ public final class RunClassFileTest {
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
 //		 names.add("/simple/adHoc00.sim");
-//		 names.add("/simple/adHoc01.sim");
+		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
-		// names.add("/simple/adHoc03.sim");
-		// names.add("/simple/adHoc30a.sim");
-		// names.add("/simple/adHoc04.sim");
-		
-		// names.add("/simple/adHoc05.sim");
-		// names.add("/simple/adHoc06.sim");
-		 
-			names.add("/simple/adHoc07.sim");
-//			names.add("/simple/adHoc08.sim");
-		// names.add("/simple/adHoc09.sim");
-		// names.add("/simple/adHoc10.sim");
-		// names.add("/simple/adHoc11.sim");
-		// names.add("/simple/adHoc12.sim");
-		// names.add("/simple/adHoc13.sim");
-		// names.add("/simple/adHoc14.sim");
+//		 names.add("/simple/adHoc03.sim");
+//		 names.add("/simple/adHoc30a.sim");
+//		 names.add("/simple/adHoc04.sim");
+//		
+//		 names.add("/simple/adHoc05.sim");
+//		 names.add("/simple/adHoc06.sim");
+//		 
+//		 names.add("/simple/adHoc07.sim");
+//		 names.add("/simple/adHoc08.sim");
+//		 names.add("/simple/adHoc09.sim");
+//		 names.add("/simple/adHoc10.sim");
+//		 names.add("/simple/adHoc11.sim");
+//		 names.add("/simple/adHoc12.sim");
+//		 names.add("/simple/adHoc13.sim");
+//		 names.add("/simple/adHoc14.sim");
 		
 		// names.add("/simple/adHocX01-NEW.sim");
 		// names.add("/simple/adHocX01.sim");

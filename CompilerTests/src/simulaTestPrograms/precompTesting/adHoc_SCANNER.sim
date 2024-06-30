@@ -16,8 +16,8 @@ begin
 	end;
 
 	inspect new codebuffer do begin
-            inspect new elt do begin
-            end;
+%            inspect new elt do begin end;
+			ref(elt) x;
 	end;
 
 end of SCANNER;

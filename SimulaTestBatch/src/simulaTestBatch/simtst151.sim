@@ -72,11 +72,12 @@ SimulaTest(151,"--- Test multiple assignments") begin
  
 		text procedure P_TXT2(par_T); text par_T; begin
 			text P_T;
+			par_T  :- blanks(10);
+			A_T    :- blanks(10);
+			P_T    :- blanks(10);
 			P_TXT2 :- blanks(10);
-         outtext("Trace: """ & A_T & """"); outimage;
 			P_T := P_TXT2 := par_T := A_T := "Cadab";
 %			P_TXT2 := par_T := P_T := A_T := "Cadab";
-         outtext("Trace: """ & A_T & """"); outimage;
 			trace("P_T=" & P_T & ", par_T=" & par_T);
 		end;
 	end;
@@ -109,8 +110,8 @@ SimulaTest(151,"--- Test multiple assignments") begin
 	facit(11) :- "P_T=Abra, par_T=Abra";
 	facit(12) :- "x.A_T=Abra, t1=Abra";
 	
-	facit(13) :- "P_T=Cadab     , par_T=Cadab";
-	facit(14) :- "x.A_T=Cadab, t1=Cadab     ";
+	facit(13) :- "P_T=Cadab     , par_T=Cadab     ";
+	facit(14) :- "x.A_T=Cadab     , t1=Cadab     ";
 	
 	facit(15) :- "At END";
 	

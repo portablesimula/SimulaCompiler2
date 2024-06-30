@@ -1,14 +1,17 @@
 
 begin
+	text T;
 
-text    t1;      -- Texts to take on the
-text    t2;      -- various values for the test.
-integer iii;
+		text procedure P_TXT2(par_T); text par_T; begin
+			text P_T;
+			
+			integer procedure P_INT; begin
+				P_TXT2 :- blanks(10);
+				P_TXT2 := "Abra";         !OK;
+			end;
+			
+			P_INT;
+		end;
 
-t1 :- "abcdefghij";
-t2 :- blanks (15); t2 := t1;
-% if t2 <> "abcdefghij     " then outtext ("***  Equality betw. non empty texts not recognized (9).");
-if t2 <> "abcdefghij     " then iii := 666;
-% if t1 <> t2 then else outtext ("***  Non-eq. betw. non empty texts not recognized (2).");
-
-end of program;
+	outtext(P_TXT2(T));
+end;

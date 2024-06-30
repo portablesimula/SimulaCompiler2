@@ -1,20 +1,11 @@
 
 begin
-	text T;
 
-		text procedure P_TXT2(par_T); text par_T; begin
-			text P_T;
+	text procedure P1(T); text T; begin
 			
-			P_TXT2 :- blanks(10);
-			
-%			P_T := P_TXT2 := "Abra";  !ERROR;
-%			P_T :- P_TXT2 :- "Abra";  !OK;
-			P_TXT2 := "Abra";         !ERROR;
-%			P_TXT2 :- "Abra";         !OK;
-		end;
+				P1 := "Abra" & T;
+	end;
+	
+	P1("cadabra");
 
-%	T := P_TXT2("CaDab");
-%	T := P_TXT2(T);
-
-	outtext(P_TXT2(T));
-end;
+ end;

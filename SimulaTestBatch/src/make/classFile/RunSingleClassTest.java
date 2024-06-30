@@ -260,17 +260,18 @@ public final class RunSingleClassTest {
 //		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 //		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
 //		names.add("simtst143.sim"); // OK: Simple test of utility procedure accum.
-		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
-		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
+//		names.add("Precompiled144.sim"); // OK: Precompile this for Simtst 144.
+//		names.add("simtst144.sim"); // OK: Test 'is', 'in', 'qua' and 'this' in precompiled attribute file
 //		names.add("simtst145.sim"); // OK: Test Label parameter to normal and formal procedure
 //		names.add("simtst146.sim"); // OK: Test text by value to formal and virtual procedure
 //		names.add("simtst147.sim"); // OK: Test virtual procedure by name
 //		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
-//		names.add("simtst151.sim"); // OK: Test multiple assignments
+		names.add("simtst151.sim"); // OK: Test multiple assignments
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
+//		names.add("simtst154.sim"); // OK: Test function result assignment
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

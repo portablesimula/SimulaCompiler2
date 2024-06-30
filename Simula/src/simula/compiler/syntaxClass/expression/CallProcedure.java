@@ -513,19 +513,9 @@ public final class CallProcedure {
 		    			//	   return (r = (double) x_);
 		    			//  }
 		    			// --------------------------------------------------
-		    			if(Option.internal.TESTING_PUT) {
-			    			System.out.println("CallProcedure.doSimpleParameter: Simple Type/Ref/Text by Name: return("+apar+" = "+rhs+");");
-//							public Integer put(Integer x_) {
-//								return (p_f.put((int) x_));
-//							}
-			    			s.append(" public "+javaTypeClass+" put("+javaTypeClass+" x_)"
-//			    					+" { return("+apar.put(rhs)+"); }");
-//			    					+" { return("+apar.toJavaCode()+" = "+rhs+"); }");		    				
-			    					+" { return("+apar+".put("+rhs+"); }");		    				
-		    			} else {
-		    				s.append(" public "+javaTypeClass+" put("+javaTypeClass+" x_)"
-		    						+" { return("+apar.OLD_put(rhs)+"); }");
-		    			}
+		    			s.append(" public "+javaTypeClass+" put("+javaTypeClass+" x_)"
+		    						+" { return("+apar.put(rhs)+"); }");
+		    			
 		    		}
 		    	}
 		    	s.append(" }");

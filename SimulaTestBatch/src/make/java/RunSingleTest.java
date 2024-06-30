@@ -40,7 +40,6 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.TESTING_PUT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -102,7 +101,7 @@ public final class RunSingleTest {
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
 //		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
-		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
+//		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
 //		names.add("simtst09.sim"); // OK:  Test relation operator and some Funtions
@@ -273,6 +272,7 @@ public final class RunSingleTest {
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
+		names.add("simtst154.sim"); // OK: Test function result assignment
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
