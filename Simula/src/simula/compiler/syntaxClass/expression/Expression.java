@@ -550,14 +550,6 @@ public abstract class Expression extends SyntaxClass {
 		Util.error("Expression: "+this+" is not a Constant");
 		return(0);
 	}
-
-	/**
-	 * Redefined in ExpressionReference.
-	 * @return
-	 */
-	public Expression getRealExpression() {
-		return this;
-	}
 	
 	/**
 	 * Build Evaluation Code.

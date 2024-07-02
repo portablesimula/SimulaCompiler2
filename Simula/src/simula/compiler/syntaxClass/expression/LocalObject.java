@@ -172,13 +172,10 @@ public final class LocalObject extends Expression {
 		if (thisScope instanceof ConnectionBlock connectionBlock) {
 			//return ("((" + cast + ")" + connectionBlock.inspectedVariable.toJavaCode() + ")");
 			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			VariableExpression inspectedVariable = (VariableExpression) connectionBlock.inspectedVariable.getRealExpression();
-//			Meaning meaning = connectionBlock.inspectedVariable.meaning;
-			Meaning meaning = inspectedVariable.meaning;
+			Meaning meaning = connectionBlock.inspectedVariable.meaning;
 			codeBuilder
 				.checkcast(meaning.declaredIn.getClassDesc())
-//				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
-				.getfield(inspectedVariable.getFieldRefEntry(pool));
+				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
 			String cast = classDeclaration.getJavaIdentifier();

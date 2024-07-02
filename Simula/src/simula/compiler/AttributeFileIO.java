@@ -182,6 +182,9 @@ public final class AttributeFileIO {
 		else Util.IERR();
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + fileID);
+		
+//		System.out.println("AttributeFileIO.buildSyntaxTree: =========== Resulting ObjectReference Map ================");
+//		inpt.objectReference.print();
 
 		module.isPreCompiledFromFile = fileID;
 		return module;

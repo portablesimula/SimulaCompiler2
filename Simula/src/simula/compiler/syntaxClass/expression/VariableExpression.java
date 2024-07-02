@@ -641,7 +641,6 @@ public final class VariableExpression extends Expression {
 				// otherwise; it is a ordinary procedure-call.
 				if (destination) { // return("_RESULT");
 					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
-//					// ===================================  TESTING
 					if (proc.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
 						return "_RESULT" + "=" + rightPart;
 					} else {

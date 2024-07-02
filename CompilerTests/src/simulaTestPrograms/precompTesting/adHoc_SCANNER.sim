@@ -10,14 +10,19 @@ begin
 
 
 	class codebuffer; begin 
-
-            class elt; begin end;
+		integer iiii;
+		class elt; begin
+			integer kkkk;
+		end;
             
 	end;
 
 	inspect new codebuffer do begin
-%            inspect new elt do begin end;
-			ref(elt) x;
+		iiii := 4444;
+		inspect new elt do begin
+			kkkk := 6666;
+		end;
+%			ref(elt) x;
 	end;
 
 end of SCANNER;

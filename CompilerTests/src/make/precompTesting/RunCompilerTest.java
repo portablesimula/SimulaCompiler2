@@ -55,8 +55,8 @@ public final class RunCompilerTest {
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
 		Option.internal.PRINT_SYNTAX_TREE=true;
-//		Option.TRACE_ATTRIBUTE_OUTPUT=true;
-//		Option.TRACE_ATTRIBUTE_INPUT=true;
+		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
 //		// Checker Trace Options
 //		Option.internal.TRACE_CHECKER=true;

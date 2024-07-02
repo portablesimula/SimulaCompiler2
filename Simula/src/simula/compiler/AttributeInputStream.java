@@ -8,7 +8,6 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
-import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
@@ -21,8 +20,6 @@ import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.BooleanExpression;
 import simula.compiler.syntaxClass.expression.ConditionalExpression;
 import simula.compiler.syntaxClass.expression.Constant;
-import simula.compiler.syntaxClass.expression.Expression;
-import simula.compiler.syntaxClass.expression.ExpressionReference;
 import simula.compiler.syntaxClass.expression.LocalObject;
 import simula.compiler.syntaxClass.expression.ObjectGenerator;
 import simula.compiler.syntaxClass.expression.ObjectRelation;
@@ -45,8 +42,6 @@ import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.LabeledStatement;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.syntaxClass.statement.StandaloneExpression;
-import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.syntaxClass.statement.StatementReference;
 import simula.compiler.syntaxClass.statement.SwitchStatement;
 import simula.compiler.syntaxClass.statement.WhileStatement;
 import simula.compiler.utilities.ObjectKind;
@@ -141,6 +136,7 @@ public class AttributeInputStream {
     	return SEQU;
 	}
     
+
 	public SyntaxClass readObj() throws IOException {
 		int kind = readKind();
 		switch(kind) {
@@ -150,31 +146,14 @@ public class AttributeInputStream {
 		case ObjectKind.ObjectReference:
 			int SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-			SyntaxClass obj = objectReference.get(SEQU);
-			if(obj == null) { objectReference.print(); Util.IERR(); }
+			SyntaxClass obj;
+			obj = objectReference.get(SEQU);
+			if(obj == null) Util.IERR();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: "+obj);
 			return(obj);
-		case ObjectKind.DeclarationReference:
-			SEQU = inpt.readShort();
-			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-			Declaration decl = (Declaration) objectReference.get(SEQU);
-			if(decl == null) { objectReference.print(); Util.IERR(); }
-			if(TRACE) System.out.println("AttributeInputStream.readObj: Declaration="+decl);
-			return(decl);
-		case ObjectKind.StatementReference:
-			SEQU = inpt.readShort();
-			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-			Statement stm = new StatementReference(SEQU,objectReference);
-			if(TRACE) System.out.println("AttributeInputStream.readObj: "+stm);
-			return(stm);
-		case ObjectKind.ExpressionReference:
-			SEQU = inpt.readShort();
-			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
-			Expression expr = new ExpressionReference(SEQU,objectReference);
-			if(TRACE) System.out.println("AttributeInputStream.readObj: "+expr);
-			return(expr);
 		default:
 			obj = readObj(kind,this);
-			if(obj.SEQU == 0) Util.IERR();
+			Util.ASSERT(obj.SEQU != 0, "Invariant");
 			objectReference.put(obj.SEQU, obj);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
 			return(obj);

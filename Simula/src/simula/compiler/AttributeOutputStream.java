@@ -6,9 +6,6 @@ import java.io.OutputStream;
 
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.expression.Expression;
-import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
@@ -81,13 +78,8 @@ public class AttributeOutputStream {
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: null");
 			writeKind(ObjectKind.NULL);
 		} else if(obj.SEQU != 0) {
-			int kind = 0;
-			if(obj instanceof Declaration)		kind = ObjectKind.DeclarationReference;
-			else if(obj instanceof Statement)	kind = ObjectKind.StatementReference;
-			else if(obj instanceof Expression)	kind = ObjectKind.ExpressionReference;
-			else 								kind = ObjectKind.ObjectReference;
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+ObjectKind.edit(kind)+" "+(obj.SEQU));
-			writeKind(kind);
+			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+(obj.SEQU));
+			writeKind(ObjectKind.ObjectReference);
 			oupt.writeShort(obj.SEQU);
 		} else {
 			obj.SEQU = Global.Object_SEQU++;

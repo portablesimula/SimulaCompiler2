@@ -12,7 +12,6 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -157,7 +156,6 @@ public final class AssignmentOperation extends Expression {
 			if(!var.hasArguments()) {
 				Declaration declaredAs = var.meaning.declaredAs;
 				if(declaredAs instanceof ProcedureDeclaration proc) {
-//					// ===================================  TESTING
 					if (proc.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
 						target = "_RESULT";
 					} else {
@@ -329,8 +327,6 @@ public final class AssignmentOperation extends Expression {
 						
 				case ObjectKind.Procedure -> {
 					ProcedureDeclaration proc = (ProcedureDeclaration) decl;
-					
-					// ===================================  TESTING
 					int diff = Global.getCurrentScope().rtBlockLevel - proc.rtBlockLevel;
 					codeBuilder.aload(0);
 					while((diff--) > 0)	codeBuilder.getfield(CD.RTS_RTObject, "_SL", CD.RTS_RTObject);

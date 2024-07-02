@@ -58,8 +58,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	/**
 	 * The inspected variable.
 	 */
-//	public VariableExpression inspectedVariable;
-	public Expression inspectedVariable;
+	public VariableExpression inspectedVariable;
 
 	/**
 	 * The when class declaration. Set during checking.
@@ -72,17 +71,13 @@ public final class ConnectionBlock extends DeclarationScope {
 	 * @param inspectedVariable   the inspected variable
 	 * @param whenClassIdentifier the when class identifier
 	 */
-//	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
-	public ConnectionBlock(final Expression inspectedVariable, final String whenClassIdentifier) {
+	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
 		super("Connection block at line " + (Global.sourceLineNumber - 1));
 		declarationKind = ObjectKind.ConnectionBlock;
 		this.inspectedVariable = inspectedVariable;
 		this.whenClassIdentifier = whenClassIdentifier;
 		// Set External Identifier
-//		externalIdent = inspectedVariable.identifier;
-		VariableExpression var = (VariableExpression) inspectedVariable.getRealExpression();
-		externalIdent = var.identifier;
-//		Thread.dumpStack();
+		externalIdent = inspectedVariable.identifier;
 	}
 
 	/**
@@ -129,7 +124,6 @@ public final class ConnectionBlock extends DeclarationScope {
 	public Meaning findMeaning(final String identifier) {
 		if (classDeclaration == null && Global.duringParsing)
 			return (null); // Still in Pass1(Parser)
-//		System.out.println("ConnectionBlock.findMeaning: "+identifier+"  classDeclaration="+classDeclaration);
 		Meaning result = null;
 		if (classDeclaration != null)
 			result = classDeclaration.findRemoteAttributeMeaning(identifier);
@@ -170,8 +164,6 @@ public final class ConnectionBlock extends DeclarationScope {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-//		// Set External Identifier
-//		externalIdent = inspectedVariable.identifier;
 		Global.enterScope(this);
 		rtBlockLevel = currentRTBlockLevel;
 		if (whenClassIdentifier != null) {
@@ -249,19 +241,6 @@ public final class ConnectionBlock extends DeclarationScope {
 		return ("Inspect(" + inspectedVariable + ") do " + statement);
 	}
 
-//	// ***********************************************************************************************
-//	// *** Externalization
-//	// ***********************************************************************************************
-//
-//	/**
-//	 * Create a new ConnectionBlock.
-//	 */
-//	public ConnectionBlock() {
-//		super("");
-//		this.whenClassIdentifier = "";
-//		this.inspectedVariable = null;
-//	}
-
 	@Override
 	public byte[] buildClassFile() {
 		return null;
@@ -308,15 +287,12 @@ public final class ConnectionBlock extends DeclarationScope {
 		oupt.writeObj(inspectedVariable);
 	}
 
-//	writeAttributes(oupt);
-//	cls.readAttributes(inpt);
 	@Override
 	public void readAttributes(AttributeInputStream inpt) throws IOException {
 		super.readAttributes(inpt);
 		statement = (Statement) inpt.readObj();
 		whenClassIdentifier = inpt.readString();
-//		inspectedVariable = (VariableExpression) inpt.readObj();
-		inspectedVariable = (Expression) inpt.readObj();
+		inspectedVariable = (VariableExpression) inpt.readObj();
 	}
 
 

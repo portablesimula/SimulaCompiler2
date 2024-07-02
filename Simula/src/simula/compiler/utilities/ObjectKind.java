@@ -70,9 +70,6 @@ public class ObjectKind {
 
 	/** Null */						public static final int NULL = 0;
 	/** Object Reference */			public static final int ObjectReference = 60;
-	/** Declaration Reference */	public static final int DeclarationReference = 61;
-	/** Statement Reference */		public static final int StatementReference = 62;
-	/** Expression Reference */		public static final int ExpressionReference = 63;
 
 	/** Max Value */				public static final int MAX_VALUE = 63;
 
@@ -81,9 +78,6 @@ public class ObjectKind {
 		switch(kind) {
 			case NULL:						return "null";
 			case ObjectReference:			return "ObjectReference";
-			case DeclarationReference:		return "DeclarationReference";
-			case StatementReference:		return "StatementReference";
-			case ExpressionReference:		return "ExpressionReference";
 
 			case StandardClass:				return "StandardClass";
 			case ConnectionBlock:			return "ConnectionBlock";

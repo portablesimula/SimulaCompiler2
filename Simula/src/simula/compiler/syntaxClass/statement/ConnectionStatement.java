@@ -30,6 +30,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -101,8 +102,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * Utility Variable to hold the evaluated object-expression.
 	 */
-//	private VariableExpression inspectedVariable;
-	private Expression inspectedVariable;
+	private VariableExpression inspectedVariable;
 	
 	/**
 	 * The inspected variable's declaration.
@@ -155,8 +155,10 @@ public final class ConnectionStatement extends Statement {
 		while (scope.declarationKind == 0 || scope instanceof ConnectionBlock) {
 			scope = scope.declaredIn;
 		}
+		
 		scope.declarationList.add(inspectVariableDeclaration);
 		inspectVariableDeclaration.declaredIn = scope;
+		
 
 		boolean hasDoPart=false;
 		boolean hasWhenPart=false;
@@ -407,12 +409,12 @@ public final class ConnectionStatement extends Statement {
 		inspectVariableDeclaration.type = exprType;
 		inspectedVariable.type = exprType;
 		inspectedVariable.doChecking();
+		
 		for(DoPart part:connectionPart) part.doChecking();
 		if (otherwise != null) otherwise.doChecking();
-//		inspectedVariable.identifier = inspectVariableDeclaration.getFieldIdentifier();
-		VariableExpression var = (VariableExpression) inspectedVariable.getRealExpression();
-		var.identifier = inspectVariableDeclaration.getFieldIdentifier();
-		inspectVariableDeclaration.identifier = var.identifier;
+		
+		inspectedVariable.identifier = inspectVariableDeclaration.getFieldIdentifier();
+		inspectVariableDeclaration.identifier = inspectedVariable.identifier;
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -445,9 +447,7 @@ public final class ConnectionStatement extends Statement {
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
-//		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
-		VariableExpression var = (VariableExpression) inspectedVariable.getRealExpression();
-		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),var.identifier, CD_type);
+		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
 
 		endLabel = codeBuilder.newLabel();
@@ -548,8 +548,6 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeObj(objectExpression);
 		oupt.writeObj(inspectedVariable);
 		oupt.writeObj(inspectVariableDeclaration);
-//		System.out.println("ConnectionStatement.writeAttributes: inspectedVariable="+inspectedVariable);
-//		System.out.println("ConnectionStatement.writeAttributes: inspectVariableDeclaration="+inspectVariableDeclaration);
 		oupt.writeShort(connectionPart.size());
 		for(DoPart part:connectionPart) part.writeObject(oupt);
 		oupt.writeObj(otherwise);
@@ -560,11 +558,11 @@ public final class ConnectionStatement extends Statement {
 	public void readAttributes(AttributeInputStream inpt) throws IOException {
 		super.readAttributes(inpt);
 		objectExpression = (Expression) inpt.readObj();
-//		inspectedVariable = (VariableExpression) inpt.readObj();
-		inspectedVariable = (Expression) inpt.readObj();
+		inspectedVariable = (VariableExpression) inpt.readObj();
 		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
-//		System.out.println("ConnectionStatement.readAttributes: inspectedVariable="+inspectedVariable);
-//		System.out.println("ConnectionStatement.readAttributes: inspectVariableDeclaration="+inspectVariableDeclaration);
+		
+		inspectVariableDeclaration.type = Type.Ref("RTObject");  // TESTING  --  MÅ VÆRE MED
+		
 		int n = inpt.readShort();
 		if(n > 0) {
 			connectionPart = new Vector<DoPart>();
@@ -574,5 +572,6 @@ public final class ConnectionStatement extends Statement {
 		otherwise = (Statement) inpt.readObj();
 		hasWhenPart = inpt.readBoolean();
 	}
+
 
 }

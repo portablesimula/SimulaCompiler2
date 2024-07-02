@@ -159,8 +159,6 @@ public abstract class Statement extends SyntaxClass {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
-//	writeAttributes(oupt);
-//	expr.readAttributes(inpt);
 	@Override
 	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
 		super.writeAttributes(oupt);
