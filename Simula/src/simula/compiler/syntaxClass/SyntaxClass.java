@@ -158,8 +158,10 @@ public abstract class SyntaxClass {
 			Util.error("FATAL error - Semantic checker not called: " + this.getClass().getName() + ", " + this);
 		}
 		if (this instanceof Declaration decl) {
-			if (decl.externalIdent == null)
-				Util.error("External Identifier is not set");
+			if (decl.externalIdent == null) {
+				Thread.dumpStack();
+				Util.error("External Identifier is not set -- "+this);
+			}
 		}
 	}
 

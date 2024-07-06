@@ -78,15 +78,16 @@ public class AttributeOutputStream {
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: null");
 			writeKind(ObjectKind.NULL);
 		} else if(obj.SEQU != 0) {
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: "+(obj.SEQU));
+			if(TRACE)
+				System.out.println("AttributeOutputStream.writeObj: ObjectReference "+(obj.SEQU));
 			writeKind(ObjectKind.ObjectReference);
 			oupt.writeShort(obj.SEQU);
 		} else {
 			obj.SEQU = Global.Object_SEQU++;
-			if(TRACE) System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
+			if(TRACE)
+				System.out.println("AttributeOutputStream.writeObj: SEQU="+obj.SEQU+": "+obj.getClass().getSimpleName()+"  "+obj);
 			obj.writeObject(this);
 		}
-
     }
 
 }

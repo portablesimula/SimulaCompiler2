@@ -308,10 +308,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (declarationKind == ObjectKind.ContextFreeMethod) externalIdent = this.identifier;
-		if (declarationKind == ObjectKind.MemberMethod) externalIdent = this.identifier;
-		else if (externalIdent == null)	externalIdent = edJavaClassName();
-
 		currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
@@ -1036,7 +1032,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	@Override
 	public void printTree(final int indent) {
 		String typeID=(type==null)?"":type.toString()+" ";
-		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier+"  BL="+this.rtBlockLevel);
+		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier+'['+externalIdent+"]  BL="+this.rtBlockLevel);
 		if(labelList != null) labelList.printTree(indent+1);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		printDeclarationList(indent+1);

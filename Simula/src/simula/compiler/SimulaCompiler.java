@@ -276,6 +276,27 @@ public final class SimulaCompiler {
 				Util.println(msg);
 				throw new RuntimeException(msg);
 			}
+			
+			// ***************************************************************
+			// *** Generate .java files or ClassFileBuilder -> jarFile
+			// ***************************************************************
+			if(Option.internal.USE_SimulaClassLoader) {
+				if (!programModule.isExecutable()) {
+					// Separate Compilation
+					Global.jarFileBuilder = new JarFileBuilder();
+					Global.jarFileBuilder.open(programModule);
+				} else {
+					Global.simulaClassLoader = new SimulaClassLoader();
+					JarFileBuilder.loadIncludeQueue();
+				}
+			} else {
+				Global.jarFileBuilder.open(programModule);
+			}
+			
+			if (Option.internal.TRACING)
+				Util.println("BEGIN Possible Generate AttributeFile");
+			AttributeFileIO.write(programModule);
+			
 			// ***************************************************************
 			// *** Semantic Checker
 			// ***************************************************************
@@ -299,21 +320,6 @@ public final class SimulaCompiler {
 				Thread.dumpStack();
 				throw new RuntimeException(msg);
 			}
-			// ***************************************************************
-			// *** Generate .java files or ClassFileBuilder -> jarFile
-			// ***************************************************************
-			if(Option.internal.USE_SimulaClassLoader) {
-				if (!programModule.isExecutable()) {
-					// Separate Compilation
-					Global.jarFileBuilder = new JarFileBuilder();
-					Global.jarFileBuilder.open(programModule);
-				} else {
-					Global.simulaClassLoader = new SimulaClassLoader();
-	    			JarFileBuilder.loadIncludeQueue();
-				}
-			} else {
-    			Global.jarFileBuilder.open(programModule);
-    		}
 			
 			if (!Option.internal.CREATE_JAVA_SOURCE) {
 				if (Option.internal.TRACING)
@@ -336,10 +342,6 @@ public final class SimulaCompiler {
 				Util.println(msg);
 				throw new RuntimeException(msg);
 			}
-
-			if (Option.internal.TRACING)
-				Util.println("BEGIN Possible Generate AttributeFile");
-			AttributeFileIO.write(programModule);
 
 			if(Option.internal.CREATE_JAVA_SOURCE) {
 				// ***************************************************************

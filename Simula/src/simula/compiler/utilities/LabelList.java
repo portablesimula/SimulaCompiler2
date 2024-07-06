@@ -65,8 +65,17 @@ public class LabelList {
 	public void add(LabelDeclaration lab) {
 		if(TRACING) System.out.println(ident()+".add: "+lab.identifier+'['+lab.externalIdent+']');
 		if(READY_FOR_CODING) Util.IERR("Can't add a new Label when LabelLisit is marked READY_FOR_CODING");
+//		if(get(lab.identifier) == null)
 		labels.add(lab);
 		if(TRACING) System.out.println(ident()+".add: DONE: LabelList = "+this);
+		
+//		System.out.println("LabelLisit.add: "+lab);
+//		Thread.dumpStack();
+	}
+	
+	private LabelDeclaration get(String identifier) {
+		for(LabelDeclaration lab:labels) if(lab.identifier.equals(identifier)) return lab;
+		return null;
 	}
 	
 	// Used by ClassDeclaration and PrefixedBlockDeclaration
@@ -192,11 +201,16 @@ public class LabelList {
 			DeclarationScope declaredIn = (DeclarationScope) inpt.readObj();
 			labelList = new LabelList(declaredIn);
 			int n = inpt.readShort();
-			if(TRACING) System.out.println("LabelList.readObject: Read Label List: "+n);
-			for(int i=0;i<n;i++)
-				labelList.add((LabelDeclaration) inpt.readObj());
+			if(TRACING)
+				System.out.println("LabelList.readLabelList: Read Label List: "+n);
+			for(int i=0;i<n;i++) {
+				LabelDeclaration lab = (LabelDeclaration) inpt.readObj();
+//				System.out.println("LabelList.readLabelList: Read Label: "+lab.identifier);
+				labelList.add(lab);
+			}
 		}
 		Util.TRACE_INPUT("LabelList: " + labelList);
+//		System.out.println("LabelList.readLabelList: " + labelList);
 		return(labelList);
 	}
 

@@ -13,6 +13,7 @@ import java.lang.classfile.CodeBuilder;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
@@ -72,7 +73,7 @@ public final class DummyStatement extends Statement {
 
 	@Override
 	public String toString() {
-		return ("DUMMY");
+		return ("DUMMY at Line "+lineNumber+" in "+Global.getCurrentScope().identifier);
 	}
 
 	// ***********************************************************************************************

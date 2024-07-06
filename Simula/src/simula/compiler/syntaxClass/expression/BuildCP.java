@@ -263,12 +263,15 @@ public abstract class BuildCP {
 			variable.checkedParams.add(c);
 			return true;
 		} else if( id.equalsIgnoreCase("call") | id.equalsIgnoreCase("resume")) {
+//			System.out.println("BuildCP.checkForExtraParameter: "+variable);
+//			System.out.println("BuildCP.checkForExtraParameter: nCheckedParams="+variable.checkedParams.size());
 			if(variable.checkedParams.size() == 1) {
 				// Push extra parameter 'sourceLineNumber'
 				Constant c = new Constant(Type.Integer, variable.lineNumber);
 				variable.checkedParams.add(c);
 				return true;
 			}
+			else if(variable.checkedParams.size() == 2) return true; // Precompiled
 		}
 		return false;
 	}

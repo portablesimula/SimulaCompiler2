@@ -45,7 +45,7 @@ public final class RunSingleClassTest {
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -73,7 +73,7 @@ public final class RunSingleClassTest {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -241,7 +241,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
-//		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
+		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
@@ -268,7 +268,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 //		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
 //		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
-		names.add("simtst151.sim"); // OK: Test multiple assignments
+//		names.add("simtst151.sim"); // OK: Test multiple assignments
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment

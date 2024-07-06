@@ -462,8 +462,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		if (externalIdent == null)
-			externalIdent = edJavaClassName();
 		currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);

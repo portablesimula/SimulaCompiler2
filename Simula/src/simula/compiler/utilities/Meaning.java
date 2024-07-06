@@ -167,6 +167,8 @@ public final class Meaning {
 				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), id, inspectedVariable.type.toClassDesc()));
 		}
 		else {
+//			System.out.println("Meaning.buildQualifiedStaticLink: "+this);
+//			System.out.println("Meaning.buildQualifiedStaticLink: declaredIn="+declaredIn);
 			boolean withFollowSL = declaredIn.buildCTX(codeBuilder);
 			if(withFollowSL) codeBuilder.checkcast(declaredIn.getClassDesc());
 		}

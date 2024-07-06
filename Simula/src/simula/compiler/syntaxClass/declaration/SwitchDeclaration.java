@@ -73,7 +73,6 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	@Override
 	public void doChecking() {
 		super.doChecking();
-		externalIdent = edJavaClassName();
 		for (Expression expr : switchList) {
 			expr.doChecking();
 			if(expr.type.keyWord != Type.T_LABEL) Util.error("Switch element "+expr+" is not a Label");

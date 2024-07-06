@@ -1,6 +1,7 @@
 package simula.compiler;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -49,6 +50,7 @@ import simula.compiler.utilities.ObjectReferenceMap;
 import simula.compiler.utilities.Util;
 
 public class AttributeInputStream {
+	String modID;
 	DataInputStream inpt;
 	public String jarFileName;
 	
@@ -60,10 +62,14 @@ public class AttributeInputStream {
 	
 	private boolean TRACE = false; //true;
 
-    public AttributeInputStream(InputStream inpt,String jarFileName) throws IOException {
+    public AttributeInputStream(InputStream inpt, String jarFileName) throws IOException {
     	this.inpt = new DataInputStream(inpt);
     	this.jarFileName = jarFileName;
 		objectReference = new ObjectReferenceMap();
+		
+		File file = new File(jarFileName);
+		String name = file.getName();
+		this.modID = name.substring(0, name.indexOf('.'));
     }
 
 	public void close() throws IOException { inpt.close(); }
@@ -148,14 +154,16 @@ public class AttributeInputStream {
 			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
 			SyntaxClass obj;
 			obj = objectReference.get(SEQU);
-			if(obj == null) Util.IERR();
+			Util.ASSERT(obj != null, "Invariant: SEQU="+modID+"#"+SEQU);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+obj);
 			return(obj);
 		default:
 			obj = readObj(kind,this);
 			Util.ASSERT(obj.SEQU != 0, "Invariant");
 			objectReference.put(obj.SEQU, obj);
-			if(TRACE) System.out.println("AttributeInputStream.readObj: obj="+obj);
+			obj.SEQU = 0;
+			if(TRACE)
+				System.out.println("AttributeInputStream.readObj: "+modID+"#"+obj.SEQU+" obj="+obj);
 			return(obj);
 		}	
 	}

@@ -102,6 +102,43 @@ public abstract class DeclarationScope extends Declaration  {
 		if (declaredIn != null)
 			sourceBlockLevel = declaredIn.sourceBlockLevel + 1;
 	}
+	
+	/**
+	 * Modify the identifier of this class, procedure, ...
+	 * 
+	 * @param newIdentifier the new identifier
+	 */
+	protected void modifyIdentifier(final String newIdentifier) {
+		this.identifier = newIdentifier;
+		checkAlreadyDefined();
+		if (declarationKind == ObjectKind.ContextFreeMethod) externalIdent = this.identifier;
+		else if (declarationKind == ObjectKind.MemberMethod) externalIdent = this.identifier;
+		else if (externalIdent == null)	externalIdent = edJavaClassName();
+	}
+
+	// ***********************************************************************************************
+	// *** Utility: edJavaClassName
+	// ***********************************************************************************************
+	/**
+	 * Utility to edit JavaClass'Name
+	 * 
+	 * @return the edited JavaClass'Name
+	 */
+	protected String edJavaClassName() {
+		DeclarationScope scope = this;
+		String id = null;
+		while (scope != null) {
+			if ((scope instanceof BlockDeclaration) && !(scope instanceof StandardClass)
+					&& !(scope instanceof StandardProcedure)) {
+				if (id == null)
+					id = scope.identifier;
+				else
+					id = scope.identifier + '_' + id;
+			}
+			scope = scope.declaredIn;
+		}
+		return (id);
+	}
 
 	// ***********************************************************************************************
 	// *** Utility: scopeID
@@ -261,6 +298,8 @@ public abstract class DeclarationScope extends Declaration  {
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
 		int curLevel = curScope.rtBlockLevel;
 		int ctxDiff = curLevel - endScope.rtBlockLevel - corr;
+//		System.out.println("DeclarationScope.buildCTX: curLevel="+curLevel);
+//		System.out.println("DeclarationScope.buildCTX: endScope.rtBlockLevel="+endScope.rtBlockLevel);
 		
 		codeBuilder.aload(0); // Current Object
 		
@@ -273,9 +312,15 @@ public abstract class DeclarationScope extends Declaration  {
 				.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
 				.checkcast(encl.getClassDesc());
 			ctxDiff = curScope.rtBlockLevel - rtBlockLevel;
+//			System.out.println("DeclarationScope.buildCTX(1): ctxDiff="+ctxDiff+", curScope="+curScope);
 		}
+		
+//		System.out.println("DeclarationScope.buildCTX(2): ctxDiff="+ctxDiff+", curScope="+curScope);
+//		printStaticChain("DeclarationScope.buildCTX: ",0);
+		
 		while ((ctxDiff--) > 0) {
 			curScope=curScope.declaredIn;
+//			System.out.println("DeclarationScope.buildCTX(3): ctxDiff="+ctxDiff+", curScope="+curScope);
 			codeBuilder.getfield(CD.RTS_RTObject,"_SL",CD.RTS_RTObject);
 			withFollowSL = true;			
 		}
@@ -309,7 +354,7 @@ public abstract class DeclarationScope extends Declaration  {
 	public static void printScopeChain(DeclarationScope scope,String title) {
 		System.out.println("\n   ================== Current Scope Chain: "+title+" ==================");
 		while(scope != null) {
-			System.out.println("   DeclarationScope.buildCTX: Scope: "+scope.externalIdent+"  rtBlockLevel="+scope.rtBlockLevel);
+//			System.out.println("   DeclarationScope.buildCTX: Scope: "+scope.externalIdent+"  rtBlockLevel="+scope.rtBlockLevel);
 			scope=scope.declaredIn;
 		}
 		System.out.println("   =========================================================");
@@ -332,51 +377,35 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
-	// *** Utility: edJavaClassName
-	// ***********************************************************************************************
-	/**
-	 * Utility to edit JavaClass'Name
-	 * 
-	 * @return the edited JavaClass'Name
-	 */
-	protected String edJavaClassName() {
-		DeclarationScope scope = this;
-		String id = null;
-		while (scope != null) {
-			if ((scope instanceof BlockDeclaration) && !(scope instanceof StandardClass)
-					&& !(scope instanceof StandardProcedure)) {
-				if (id == null)
-					id = scope.identifier;
-				else
-					id = scope.identifier + '_' + id;
-			}
-			scope = scope.declaredIn;
-		}
-		return (id);
-	}
-
-	// ***********************************************************************************************
 	// *** ByteCoding Utility: getClassDesc   -- Redefined in StandardClass and ConnectionBlock
 	// ***********************************************************************************************
 	public ClassDesc getClassDesc() {
 		return(ClassDesc.of(Global.packetName + '.' + externalIdent));
 	}
 	
-	public void printStaticChain(String title) {
+	public void printStaticChain(String title,int details) {
 		System.out.println("\nDeclarationScope.printStaticChain: **************** "+title+" ****************");
-		DeclarationScope scope=this.declaredIn;
+		DeclarationScope scope=this;//.declaredIn;
 		int lim = 5;//7;
 		for(int i=1;i<lim;i++) {
-			System.out.println("DeclarationScope.printStaticChain: " + scope.declarationKind + ' ' + scope.identifier + '[' + scope.externalIdent + ']');
-			for(Declaration decl:scope.declarationList) {
-				System.out.println("DeclarationScope.printStaticChain:                  "+decl);			
-			} scope=scope.declaredIn;
+			System.out.println("DeclarationScope.printStaticChain: " + scope.edScope());
+			if(details > 0) {
+				for(Declaration decl:scope.declarationList) {
+					System.out.println("DeclarationScope.printStaticChain:                  "+decl);			
+				}
+			}
+			scope=scope.declaredIn;
 		}
 	}
 	
 	protected void printDeclarationList(int indent) {
 		for(Declaration d:declarationList) d.printTree(indent);
 		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent);
+	}
+	
+	public String edScope() {
+		return "DeclarationScope: BL=" + rtBlockLevel + "  "
+				+ getClass().getSimpleName() + ' ' + identifier + '[' + externalIdent + "] declaredIn="+declaredIn;
 	}
 
 	// ***********************************************************************************************

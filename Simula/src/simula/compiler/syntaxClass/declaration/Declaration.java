@@ -21,6 +21,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -91,7 +92,7 @@ public abstract class Declaration extends SyntaxClass {
 	 */
 	protected Declaration(final String identifier) {
 		this.identifier = identifier;
-		this.externalIdent = identifier; // May be overwritten in doChecking()
+		this.externalIdent = identifier; // May be overwritten
 		declaredIn = Global.getCurrentScope();
 		checkAlreadyDefined();
 	}
@@ -106,19 +107,9 @@ public abstract class Declaration extends SyntaxClass {
 	} // May be redefined
 
 	/**
-	 * Modify the identifier of this class.
-	 * 
-	 * @param newIdentifier the new identifier
-	 */
-	protected void modifyIdentifier(final String newIdentifier) {
-		this.identifier = newIdentifier;
-		checkAlreadyDefined();
-	}
-
-	/**
 	 * Check if a declaration with this identifier is already defined.
 	 */
-	private void checkAlreadyDefined() {
+	protected void checkAlreadyDefined() {
 		boolean error = false;
 		boolean warning = false;
 		if (identifier == null)

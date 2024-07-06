@@ -70,6 +70,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 */
 	public MaybeBlockDeclaration(final String identifier) {
 		super(identifier);
+		if(identifier != null)
+			modifyIdentifier(identifier);
+		else modifyIdentifier("Block" + lineNumber);
 	}
 
 	// ***********************************************************************************************
@@ -123,10 +126,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		if (declarationKind != ObjectKind.SimulaProgram) {
 			if (!declarationList.isEmpty()) {
 				declarationKind = ObjectKind.SubBlock;
-				modifyIdentifier("SubBlock" + line);
 			} else {
 				declarationKind = ObjectKind.CompoundStatement;
-				modifyIdentifier("CompoundStatement" + Global.sourceLineNumber);
 				if (labelList != null && !labelList.isEmpty())
 					moveLabelsFrom(this); // Label is also declaration
 			}
@@ -170,7 +171,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (externalIdent == null) externalIdent = edJavaClassName();
 		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);

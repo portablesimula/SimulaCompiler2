@@ -75,8 +75,9 @@ public final class AttributeFileIO {
 		if(Option.internal.USE_SimulaClassLoader) {
 			if(Global.jarFileBuilder!=null) {
 				Global.jarFileBuilder.addJarEntry(entryName, bytes);
-			} else
-			Util.IERR();
+			}
+			else Util.IERR();
+			
 		} else {
 			Global.jarFileBuilder.addJarEntry(entryName, bytes);
 		}
@@ -163,7 +164,7 @@ public final class AttributeFileIO {
 	
 	private static BlockDeclaration buildSyntaxTree(String fileID,byte[] attrFile) throws IOException {
 //		System.out.println("AttributeFileIO.buildSyntaxTree: size="+attrFile.length+", File="+fileID);
-		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile),fileID);
+		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile), fileID);
 
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + fileID);

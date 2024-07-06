@@ -225,6 +225,7 @@ public final class ObjectGenerator extends Expression {
 		//  14: checkcast     #19                 // class simulaTestPrograms/adHoc07_A
 		//  17: putfield      #7                  // Field x_2:LsimulaTestPrograms/adHoc07_A;
 
+//		System.out.println("Object.buildEvaluation: "+this+", rightPart="+rightPart);
 		ClassDeclaration cls = (ClassDeclaration) meaning.declaredAs;
 		ClassDesc CD_cls=cls.getClassDesc();
 		codeBuilder

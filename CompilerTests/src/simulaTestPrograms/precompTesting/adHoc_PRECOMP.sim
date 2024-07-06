@@ -1,19 +1,32 @@
 class adHoc_PRECOMP;
 begin
-	
-	class A; begin
-		integer N;
-		outtext("Begin A"); outimage;
-		N := 432;
-		outtext("End A"); outimage;
-	end;      
+	boolean b;
+     while b do begin
+          goto SETem;
+      end;
+      SETem:
+end;
 
-	outtext("Begin PRECOMP"); outimage;
+
+SAVED:
+
+	text t, listname;
+	integer listlength; 
+	ref(Printfile) listfile;
 	
-	A begin 
-		outtext("A Begin"); outimage;
+	listname:-gettextinfo(2);
+	listlength:=sysout.image.length;
+	if listname=/=notext then begin
+         t:-copy(listname); t:-lowcase(t);
+         if t = "sysout" then listfile:-sysout
+         else inspect new printfile(listname) do begin
+              listlength:=getintinfo(7); t:-blanks(listlength);
+              if not open(t) then begin
+                 listlength:=0;
+%                 error1(-366,listname)
+              end
+              else listfile:-this printfile;
+         end;
 	end;
-	
-	outtext("End PRECOMP"); outimage;
 	
 end;

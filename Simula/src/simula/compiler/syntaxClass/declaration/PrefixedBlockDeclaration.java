@@ -75,8 +75,11 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	 * PrefixedBlock.
 	 * 
 	 */
-	private PrefixedBlockDeclaration() {
+	private PrefixedBlockDeclaration(boolean isMainModule) {
 		super(null);
+		if(isMainModule)
+			modifyIdentifier(Global.sourceName);
+		else modifyIdentifier("PBLK" + lineNumber);
 	}
 
 	// ***********************************************************************************************
@@ -89,7 +92,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	 * @return the resulting PrefixedBlockDeclaration
 	 */
 	public static PrefixedBlockDeclaration expectPrefixedBlock(final VariableExpression blockPrefix,boolean isMainModule) {
-		PrefixedBlockDeclaration block=new PrefixedBlockDeclaration();
+		PrefixedBlockDeclaration block=new PrefixedBlockDeclaration(isMainModule);
 		block.lineNumber=Parse.prevToken.lineNumber;
 		block.declarationKind=ObjectKind.PrefixedBlock;
 		Util.ASSERT(blockPrefix != null,"blockPrefix == null");
@@ -102,10 +105,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			Statement stm = Statement.expectStatement();
 			if (stm != null) block.statements.add(stm);
 		}
-		if(isMainModule)
-		     block.modifyIdentifier(Global.sourceName);
-		else block.modifyIdentifier("" + Global.sourceName + "_PBLK" + block.lineNumber);
-		block.externalIdent = block.identifier;
+//		block.externalIdent = block.identifier;
 		block.lastLineNumber = Global.sourceLineNumber;
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+block.lineNumber+": PrefixedBlockDeclaration: "+block);
 		Global.setScope(block.declaredIn);
@@ -119,7 +119,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (externalIdent == null) externalIdent = edJavaClassName();
 		currentRTBlockLevel++;
 		rtBlockLevel = currentRTBlockLevel;
 		Util.ASSERT(blockPrefix != null, "Invariant");
@@ -388,6 +387,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	private PrefixedBlockDeclaration() {
+		super(null);
+	}
 
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_INPUT("BEGIN Write PrefixedBlockDeclaration: " + identifier + ", Declared in: " + declaredIn);
