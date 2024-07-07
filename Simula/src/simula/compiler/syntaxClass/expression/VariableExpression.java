@@ -641,7 +641,7 @@ public final class VariableExpression extends Expression {
 				// otherwise; it is a ordinary procedure-call.
 				if (destination) { // return("_RESULT");
 					ProcedureDeclaration proc = (ProcedureDeclaration) meaning.declaredAs;
-					if (proc.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
+					if (proc.getRTBlockLevel() == Global.getCurrentScope().getRTBlockLevel()) {
 						return "_RESULT" + "=" + rightPart;
 					} else {
 						String cast = proc.getJavaIdentifier();
@@ -717,10 +717,10 @@ public final class VariableExpression extends Expression {
 		} else if (!(meaning.declaredIn.declarationKind == ObjectKind.ContextFreeMethod
 				|| meaning.declaredIn.declarationKind == ObjectKind.MemberMethod)) {
 			String cast = meaning.declaredIn.getJavaIdentifier();
-			int n = meaning.declaredIn.rtBlockLevel;
+			int n = meaning.declaredIn.getRTBlockLevel();
 			if (meaning.foundBehindInvisible)
 				cast = meaning.foundIn.getJavaIdentifier();
-			else if (n == Global.getCurrentScope().rtBlockLevel)
+			else if (n == Global.getCurrentScope().getRTBlockLevel())
 				return (id); // currentScope may be a sub-block
 			id = "((" + cast + ")" + meaning.declaredIn.edCTX() + ")." + id;
 		}

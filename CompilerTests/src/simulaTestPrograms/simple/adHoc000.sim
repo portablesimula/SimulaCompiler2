@@ -1,15 +1,6 @@
 
 begin
-
-	class A; begin
-		character cs, opt, opn, ICL, IIDN;
-		boolean b1,b2;
-                 
-%                     while opt=ICL and then cs=IIDN do begin
-                     while b1 and then b2 do begin
-%                          opn:=ICL;
-%                          call(coder);
-                          DETACH
-                     end;
-	end; 
+	integer i,u1;
+	
+	i:= randint (-10, 10, u1);
  end;

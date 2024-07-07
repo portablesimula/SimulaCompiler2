@@ -1,15 +1,5 @@
 class adHoc_PRECOMP;
 begin
-	boolean b;
-     while b do begin
-          goto SETem;
-      end;
-      SETem:
-end;
-
-
-SAVED:
-
 	text t, listname;
 	integer listlength; 
 	ref(Printfile) listfile;

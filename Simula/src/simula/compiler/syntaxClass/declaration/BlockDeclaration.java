@@ -65,12 +65,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * If true; all member methods are independent of context
 	 */
 	public boolean isContextFree;
-	
-	/**
-	 * Used for precompiled Class/Procedure to indicate whether the rtBlock level has been updated.
-	 * This is done in the doChecking method of the Class/Procedure
-	 */
-	public boolean isBlockLevelUpdated;
 
 	/**
 	 * Compiler state: Points to the BlockDeclaration whose Statements are being built.
@@ -152,23 +146,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		} while (Parse.accept(KeyWord.COMMA));
 		Parse.expect(KeyWord.ENDPAR);
 	}
-	
-	// ***********************************************************************************************
-	// *** Checking: updateBlockLevels
-	// ***********************************************************************************************
-	/**
-	 * Checking utility: updateBlockLevels in precompiles class or procedure.
-	 * @param enclRTBlockLevel enclosing block's rtBlock level
-	 */
-	protected void updateBlockLevels(int enclRTBlockLevel) {
-		this.rtBlockLevel = this.rtBlockLevel + enclRTBlockLevel;
-		this.isBlockLevelUpdated = true;
-		for(Declaration decl:declarationList) {
-			if(decl instanceof BlockDeclaration blk) {
-				if(!blk.isBlockLevelUpdated) blk.updateBlockLevels(enclRTBlockLevel);
-			}
-		}
-	}
 
 	// ***********************************************************************************************
 	// *** Checking: doCheckLabelList
@@ -178,12 +155,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * @param prefixClass possible prefix or null
 	 */
 	protected void doCheckLabelList(final ClassDeclaration prefixClass) {
-		if(prefixClass != null) {
-			currentRTBlockLevel--;
+		if(prefixClass != null)
 			prefixClass.doChecking();
-			currentRTBlockLevel++;
-		}
-		
 		if(labelList != null) labelList.setLabelIdexes();
 	}
 

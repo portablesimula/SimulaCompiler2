@@ -740,9 +740,9 @@ public class Type extends SyntaxClass {
 			case T_REF:			//return "Ref()";
 				if(declaredIn==null) {
 					if(qual==null) return("ref("+classIdent+')');
-					return("ref("+classIdent+") qualified by Class "+qual.identifier+" with block level "+qual.ctBlockLevel);
+					return("ref("+classIdent+") qualified by Class "+qual.identifier);
 				}
-				return("ref("+classIdent+") declared in "+declaredIn.identifier+" with block level "+declaredIn.ctBlockLevel);
+				return("ref("+classIdent+") declared in "+declaredIn.identifier);
 		}
 		return "UNKNOWN";
 	}

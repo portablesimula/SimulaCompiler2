@@ -34,11 +34,12 @@ public final class Thunk extends DeclarationScope {
 	private Thunk(int kind,Expression expr) {
 		super(Global.sourceName + "$THUNK$" + (++SEQU));
 		this.declarationKind = ObjectKind.Thunk;
-		this.rtBlockLevel = this.declaredIn.rtBlockLevel + 1;		this.kind = kind;
+		this.kind = kind;
 		this.expr = expr;
 		this.CD_ThisClass = this.getClassDesc();
 		if(this.declaredIn instanceof Thunk) Util.IERR();
 		Global.setScope(this.declaredIn);
+		this.CHECKED = true;
 	}
 
 	// ***********************************************************************************************
@@ -458,7 +459,7 @@ public final class Thunk extends DeclarationScope {
 	public String toString() {
 		StringBuilder s = new StringBuilder();
 		s.append(identifier).append("[externalIdent=").append(externalIdent).append("] Kind=").append(declarationKind);
-		s.append(", declaredIn="+declaredIn.externalIdent).append(", rtBlockLevel="+rtBlockLevel);
+		s.append(", declaredIn="+declaredIn.externalIdent);//.append(", rtBlockLevel="+getRTBlockLevel());
 		s.append(", QUAL=").append(this.getClass().getSimpleName()).append(", HashCode=").append(hashCode());
 		return (s.toString());
 	}

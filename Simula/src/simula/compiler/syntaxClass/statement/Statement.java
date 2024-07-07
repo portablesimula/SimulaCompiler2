@@ -16,6 +16,7 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
+import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;

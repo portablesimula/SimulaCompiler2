@@ -277,11 +277,6 @@ public final class Global {
 	} // During Parsing
 
 	/**
-	 * Current CompileTime Block level.
-	 */
-	private static int currentCTBlockLevel = 3;
-
-	/**
 	 * During Checking and Coding: Enter declaration scope.
 	 * 
 	 * @param scope the new current scope
@@ -290,12 +285,6 @@ public final class Global {
 //		System.out.println("Global.enterScope: "+currentScope+"  ====>  "+scope.edScope());
 		scopeStack.push(currentScope);
 		currentScope = scope;
-		if (duringChecking) {
-			currentCTBlockLevel++;
-			if (scope.ctBlockLevel == 0) {
-				scope.ctBlockLevel = currentCTBlockLevel;
-			}
-		}
 	}
 
 	/**
@@ -304,9 +293,6 @@ public final class Global {
 	public static void exitScope() {
 //		System.out.print("Global.exitScope: "+currentScope);
 		currentScope = scopeStack.pop();
-//		System.out.println("  ====>  "+currentScope.edScope());
-		if (duringChecking)
-			currentCTBlockLevel--;
 	}
 
 	/**

@@ -165,7 +165,6 @@ public final class ConnectionBlock extends DeclarationScope {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
-		rtBlockLevel = currentRTBlockLevel;
 		if (whenClassIdentifier != null) {
 			Meaning meaning = findMeaning(whenClassIdentifier);
 			whenClassDeclaration = meaning.declaredAs;
@@ -173,6 +172,14 @@ public final class ConnectionBlock extends DeclarationScope {
 		statement.doChecking();
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
+	}
+	
+	@Override
+	public int getRTBlockLevel() {
+//		ASSERT_SEMANTICS_CHECKED();
+		int rtBlockLevel = declaredIn.getRTBlockLevel();
+//		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
+		return rtBlockLevel;
 	}
 
 	@Override
@@ -214,7 +221,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public void print(final int indent) {
 		String spc = edIndent(indent);
 		StringBuilder s = new StringBuilder(indent);
-		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
+		s.append('[').append(sourceBlockLevel).append(':').append(getRTBlockLevel()).append("] ");
 		s.append(declarationKind).append(' ').append(identifier);
 		Util.println(s.toString());
 		String beg = "begin[" + edScopeChain() + ']';
@@ -230,10 +237,11 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"CONNECTION "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
+		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		System.out.println(edTreeIndent(indent) + "CONNECTION " + identifier + BL + "  PrefixLevel=" + prefixLevel());
 		printDeclarationList(indent+1);
 		statement.printTree(indent + 1);
-		System.out.println(edTreeIndent(indent)+"END CONNECTION "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
+		System.out.println(edTreeIndent(indent)+"END CONNECTION "+identifier);
 	}
 
 	@Override

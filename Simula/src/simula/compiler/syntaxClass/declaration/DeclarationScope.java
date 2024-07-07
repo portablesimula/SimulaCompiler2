@@ -41,26 +41,21 @@ public abstract class DeclarationScope extends Declaration  {
 	 * The source file name.
 	 */
 	public String sourceFileName;
-	
-	/**
-	 * Current Runtime Block level - Used during doChecking
-	 */
-	protected static int currentRTBlockLevel = 0;
 
 	/**
 	 * The source block level. Set during Parsing.
 	 */
 	public int sourceBlockLevel;
 
-	/**
-	 * The Compile time block level. Set during doChecking.
-	 */
-	public int ctBlockLevel;
-
-	/**
-	 * The Runtime block level. Set during doChecking.
-	 */
-	public int rtBlockLevel;
+//	/**
+//	 * The Compile time block level. Set during doChecking.
+//	 */
+//	public int ctBlockLevel;
+//
+//	/**
+//	 * The Runtime block level. Set during doChecking.
+//	 */
+//	public int rtBlockLevel;
 
 	/**
 	 * Indicate if this scope has local classes.
@@ -141,6 +136,21 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
+	// *** After Checking: getRTBlockLevel
+	// ***********************************************************************************************
+	/**
+	 * Utility: Get Runtime BlockLevel.
+	 */
+//	@Override
+	public int getRTBlockLevel() {
+//		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
+		ASSERT_SEMANTICS_CHECKED();
+		int rtBlockLevel = declaredIn.getRTBlockLevel() + 1;
+//		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
+		return rtBlockLevel;
+	}
+
+	// ***********************************************************************************************
 	// *** Utility: scopeID
 	// ***********************************************************************************************
 	/**
@@ -149,7 +159,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return a printable scope ID
 	 */
 	public String scopeID() {
-		if (rtBlockLevel > 1)
+		if (getRTBlockLevel() > 1)
 			return (declaredIn.scopeID() + '.' + identifier);
 		return identifier;
 	}
@@ -259,10 +269,10 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited context chain
 	 */
 	public String edCTX() {
-		if (rtBlockLevel == 0)
+		if (getRTBlockLevel() == 0)
 			return ("_CTX");
-		int curLevel = Global.getCurrentScope().rtBlockLevel;
-		int ctxDiff = curLevel - rtBlockLevel;
+		int curLevel = Global.getCurrentScope().getRTBlockLevel();
+		int ctxDiff = curLevel - getRTBlockLevel();
 		return (edCTX(ctxDiff));
 
 	}
@@ -296,10 +306,10 @@ public abstract class DeclarationScope extends Declaration  {
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
 		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
-		int curLevel = curScope.rtBlockLevel;
-		int ctxDiff = curLevel - endScope.rtBlockLevel - corr;
+		int curLevel = curScope.getRTBlockLevel();
+		int ctxDiff = curLevel - endScope.getRTBlockLevel() - corr;
 //		System.out.println("DeclarationScope.buildCTX: curLevel="+curLevel);
-//		System.out.println("DeclarationScope.buildCTX: endScope.rtBlockLevel="+endScope.rtBlockLevel);
+//		System.out.println("DeclarationScope.buildCTX: endScope.rtBlockLevel="+endScope.getRTBlockLevel());
 		
 		codeBuilder.aload(0); // Current Object
 		
@@ -311,7 +321,7 @@ public abstract class DeclarationScope extends Declaration  {
 			codeBuilder
 				.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
 				.checkcast(encl.getClassDesc());
-			ctxDiff = curScope.rtBlockLevel - rtBlockLevel;
+			ctxDiff = curScope.getRTBlockLevel() - getRTBlockLevel();
 //			System.out.println("DeclarationScope.buildCTX(1): ctxDiff="+ctxDiff+", curScope="+curScope);
 		}
 		
@@ -354,7 +364,7 @@ public abstract class DeclarationScope extends Declaration  {
 	public static void printScopeChain(DeclarationScope scope,String title) {
 		System.out.println("\n   ================== Current Scope Chain: "+title+" ==================");
 		while(scope != null) {
-//			System.out.println("   DeclarationScope.buildCTX: Scope: "+scope.externalIdent+"  rtBlockLevel="+scope.rtBlockLevel);
+//			System.out.println("   DeclarationScope.buildCTX: Scope: "+scope.externalIdent+"  rtBlockLevel="+scope.getRTBlockLevel());
 			scope=scope.declaredIn;
 		}
 		System.out.println("   =========================================================");
@@ -404,7 +414,7 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 	
 	public String edScope() {
-		return "DeclarationScope: BL=" + rtBlockLevel + "  "
+		return "DeclarationScope: BL=" + getRTBlockLevel() + "  "
 				+ getClass().getSimpleName() + ' ' + identifier + '[' + externalIdent + "] declaredIn="+declaredIn;
 	}
 
@@ -527,7 +537,7 @@ public abstract class DeclarationScope extends Declaration  {
 		super.writeAttributes(oupt);
 		oupt.writeString(sourceFileName);
 //		oupt.writeShort(ctBlockLevel);
-		oupt.writeShort(rtBlockLevel);
+//		oupt.writeShort(rtBlockLevel);
 		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 
@@ -552,7 +562,7 @@ public abstract class DeclarationScope extends Declaration  {
 		super.readAttributes(inpt);
 		sourceFileName = inpt.readString();
 //		ctBlockLevel = inpt.readShort();
-		rtBlockLevel = inpt.readShort();
+//		rtBlockLevel = inpt.readShort();
 		isPreCompiledFromFile = inpt.readString();
 		hasLocalClasses = inpt.readBoolean();
 

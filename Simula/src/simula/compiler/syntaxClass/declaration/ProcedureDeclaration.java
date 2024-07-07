@@ -303,13 +303,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void doChecking() {
-		if(isPreCompiledFromFile != null && !isBlockLevelUpdated)
-			updateBlockLevels(DeclarationScope.currentRTBlockLevel);
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		currentRTBlockLevel++;
-		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 			if(type != null) {
 				this.result = new SimpleVariableDeclaration(type, "_RESULT");
@@ -332,7 +328,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 				if (decl == virtualSpec.declaredIn) virtualSpec.hasDefaultMatch = true;
 			}
 		Global.exitScope();
-		currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -424,7 +419,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Global.enterScope(this);
 		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
 		GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_PROCEDURE {");
-		GeneratedJavaClass.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + rtBlockLevel
+		GeneratedJavaClass.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
 					+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
@@ -1016,7 +1011,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public void print(final int indent) {
     	String spc=edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
-		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
+		s.append('[').append(sourceBlockLevel).append(':').append(getRTBlockLevel()).append("] ");
 		s.append(declarationKind).append(' ').append(identifier);
 		s.append('[').append(externalIdent).append("] ");
 		s.append(Parameter.editParameterList(parameterList));
@@ -1031,12 +1026,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	
 	@Override
 	public void printTree(final int indent) {
-		String typeID=(type==null)?"":type.toString()+" ";
-		System.out.println(edTreeIndent(indent)+typeID+"PROCEDURE "+identifier+'['+externalIdent+"]  BL="+this.rtBlockLevel);
-		if(labelList != null) labelList.printTree(indent+1);
-		for(Parameter p:parameterList) p.printTree(indent+1);
-		printDeclarationList(indent+1);
-		printStatementList(indent+1);
+		String typeID = (type == null) ? "" : type.toString() + " ";
+		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		System.out.println(edTreeIndent(indent) + typeID + "PROCEDURE " + identifier + '[' + externalIdent + "]" + BL);
+		if (labelList != null) labelList.printTree(indent + 1);
+		for (Parameter p : parameterList) p.printTree(indent + 1);
+		printDeclarationList(indent + 1);
+		printStatementList(indent + 1);
 	}
 
 	@Override
@@ -1086,7 +1082,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		// ================ DeclarationScope =================
 		oupt.writeString(sourceFileName);
 //		oupt.writeShort(ctBlockLevel);
-		oupt.writeShort(rtBlockLevel);
+//		oupt.writeShort(rtBlockLevel);
 //		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		
@@ -1123,7 +1119,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		// ================ DeclarationScope =================
 		pro.sourceFileName = inpt.readString();
 //		ctBlockLevel = inpt.readShort();
-		pro.rtBlockLevel = inpt.readShort();
+//		pro.rtBlockLevel = inpt.readShort();
 //		pro.isPreCompiledFromFile = inpt.readString();
 		pro.hasLocalClasses = inpt.readBoolean();
 		

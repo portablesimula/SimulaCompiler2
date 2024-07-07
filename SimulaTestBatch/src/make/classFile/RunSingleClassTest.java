@@ -99,7 +99,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
 //		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
-//		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
+		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
 //		names.add("simtst09.sim"); // OK:  Test relation operator and some Funtions
@@ -241,7 +241,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst125.sim"); // OK: GOTO LABEL WITHIN NESTED COMPOUND STATEMENTS
 //		names.add("simtst126.sim"); // OK: GOTO SIMPLE SWITCH          AVHENGIG AV NYERE INNER IMPLEMENTERING (TROR JEG)
 //		names.add("simtst127.sim"); // OK: Switch (character) Statement
-		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
+//		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.

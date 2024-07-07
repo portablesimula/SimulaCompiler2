@@ -171,15 +171,22 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel++;
-		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 			for (Declaration dcl : declarationList)	dcl.doChecking();
 			for (Statement stm : statements) stm.doChecking();
 			doCheckLabelList(null);
 		Global.exitScope();
-		if (declarationKind != ObjectKind.CompoundStatement) currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
+	}
+	
+	@Override
+	public int getRTBlockLevel() {
+		ASSERT_SEMANTICS_CHECKED();
+		int rtBlockLevel = declaredIn.getRTBlockLevel();
+		if(declarationKind == ObjectKind.SubBlock)
+			rtBlockLevel = rtBlockLevel+1;
+//		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
+		return rtBlockLevel;
 	}
 
 	// ***********************************************************************************************
@@ -255,7 +262,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Global.duringSTM_Coding=false;
 		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
 		GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
-		GeneratedJavaClass.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + rtBlockLevel + ", firstLine="
+		GeneratedJavaClass.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel() + ", firstLine="
 				+ lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
 				+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 		if (isQPSystemBlock())
@@ -498,7 +505,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void print(final int indent) {
     	String spc=edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
-		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
+		s.append('[').append(sourceBlockLevel).append(':').append(getRTBlockLevel()).append("] ");
 		s.append(declarationKind).append(' ').append(identifier);
 		s.append('[').append(externalIdent).append("] ");
 		Util.println(s.toString());
@@ -511,7 +518,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"BLOCK "+identifier+"  BL="+this.rtBlockLevel);
+		String block = ObjectKind.edit(declarationKind);
+		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		System.out.println(edTreeIndent(indent) + block + " " + identifier + BL);
 		if(labelList != null) labelList.printTree(indent+1);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);

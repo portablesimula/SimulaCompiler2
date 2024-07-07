@@ -267,7 +267,7 @@ public abstract class Declaration extends SyntaxClass {
 	@Override
 	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
 		super.writeAttributes(oupt);
-		if(!(this instanceof DeclarationScope))
+//		if(!(this instanceof DeclarationScope))
 			oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
@@ -277,7 +277,7 @@ public abstract class Declaration extends SyntaxClass {
 	@Override
 	public void readAttributes(AttributeInputStream inpt) throws IOException {
 		super.readAttributes(inpt);
-		if(!(this instanceof DeclarationScope))
+//		if(!(this instanceof DeclarationScope))
 			identifier = inpt.readString();
 		externalIdent = inpt.readString();
 		type = inpt.readType();

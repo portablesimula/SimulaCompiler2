@@ -457,13 +457,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void doChecking() {
-		if(isPreCompiledFromFile != null && !isBlockLevelUpdated)
-			updateBlockLevels(DeclarationScope.currentRTBlockLevel);
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-		currentRTBlockLevel++;
-		rtBlockLevel = currentRTBlockLevel;
 		Global.enterScope(this);
 		
 		if (hasRealPrefix()) {
@@ -490,15 +486,12 @@ public class ClassDeclaration extends BlockDeclaration {
 		if(statements1 != null) 
 			for (Statement stm : statements1) 
 				stm.doChecking();  		
-			
-		
 		for (Statement stm : statements)
 			stm.doChecking();
 		checkProtectedList();
 		checkHiddenList();
 		doCheckLabelList(prefixClass);
 		Global.exitScope();
-		currentRTBlockLevel--;
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -927,7 +920,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		String line = "public class " + getJavaIdentifier();
 		line = line + " extends " + getPrefixClass().getJavaIdentifier();
 		GeneratedJavaClass.code(line + " {");
-		GeneratedJavaClass.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + rtBlockLevel
+		GeneratedJavaClass.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
 				+ ", PrefixLevel=" + prefixLevel() + ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber
 				+ ", hasLocalClasses=" + ((hasLocalClasses) ? "true" : "false") + ", System="
 				+ ((isQPSystemBlock()) ? "true" : "false") + ", detachUsed=" + ((detachUsed) ? "true" : "false"));
@@ -1479,7 +1472,7 @@ public class ClassDeclaration extends BlockDeclaration {
 //		Util.IERR();
 		String spc = edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
-		s.append('[').append(sourceBlockLevel).append(':').append(rtBlockLevel).append("] ");
+		s.append('[').append(sourceBlockLevel).append(':').append(getRTBlockLevel()).append("] ");
 		if (prefix != null)
 			s.append(prefix).append(' ');
 		s.append(declarationKind).append(' ').append(identifier);
@@ -1505,7 +1498,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	
 	@Override
 	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"CLASS "+identifier+"  BL="+this.rtBlockLevel+"  PrefixLevel="+prefixLevel());
+		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel());
 		if(labelList != null) labelList.printTree(indent+1);
 		for(Parameter p:parameterList) p.printTree(indent+1);
 		if (!virtualSpecList.isEmpty())

@@ -104,8 +104,10 @@ public final class TypeConversion extends Expression {
 		Type fromType=expression.type;
 		String qual=(fromType==null)?null:fromType.getRefIdent();
 		if(!Option.internal.SPORT && qual != null) {
-			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.ctBlockLevel : 0;
-			int lhsBL=(toType!=null && toType.declaredIn!=null)?toType.declaredIn.ctBlockLevel : 0;
+//			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.ctBlockLevel : 0;
+//			int lhsBL=(toType!=null && toType.declaredIn!=null)?toType.declaredIn.ctBlockLevel : 0;
+			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.getRTBlockLevel() : 0;
+			int lhsBL=(toType!=null && toType.declaredIn!=null)?toType.declaredIn.getRTBlockLevel() : 0;
 			if(rhsBL != 0 && lhsBL != 0 && rhsBL != lhsBL)
 				Util.error("Incompatible types: "+expression+" of type "+expression.type+" can't be converted to "+toType);
 		}

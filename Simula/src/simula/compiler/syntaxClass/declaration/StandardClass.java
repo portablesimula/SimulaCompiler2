@@ -1221,6 +1221,12 @@ public final class StandardClass extends ClassDeclaration {
 		this(prefix,className);
 		for(int i=0;i<param.length;i++) param[i].into(parameterList);
 	}
+	
+	@Override
+	public int getRTBlockLevel() {
+//		return this.rtBlockLevel;
+		return 0;
+	}
 
 	// ******************************************************************
 	// *** Lookup Meaning

@@ -145,7 +145,7 @@ public abstract class SyntaxClass {
 	 * 
 	 * @return true if semantic checking is done
 	 */
-	protected boolean IS_SEMANTICS_CHECKED() {
+	public boolean IS_SEMANTICS_CHECKED() {
 		return (CHECKED);
 	}
 

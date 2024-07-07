@@ -108,7 +108,6 @@ public final class ConditionalStatement extends Statement {
 			elseStatement.doChecking();
 		SET_SEMANTICS_CHECKED();
 	}
-
 	
 	@Override
 	public void doJavaCoding() {

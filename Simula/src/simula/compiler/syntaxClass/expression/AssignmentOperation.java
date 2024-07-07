@@ -156,7 +156,7 @@ public final class AssignmentOperation extends Expression {
 			if(!var.hasArguments()) {
 				Declaration declaredAs = var.meaning.declaredAs;
 				if(declaredAs instanceof ProcedureDeclaration proc) {
-					if (proc.rtBlockLevel == Global.getCurrentScope().rtBlockLevel) {
+					if (proc.getRTBlockLevel() == Global.getCurrentScope().getRTBlockLevel()) {
 						target = "_RESULT";
 					} else {
 						String cast = proc.getJavaIdentifier();
@@ -258,7 +258,7 @@ public final class AssignmentOperation extends Expression {
 				Declaration declaredAs = var.meaning.declaredAs;
 				if(declaredAs instanceof ProcedureDeclaration proc) {
 					isRESULT = true;
-					int diff = Global.getCurrentScope().rtBlockLevel - proc.rtBlockLevel;
+					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
 					codeBuilder
 						.aload(0);
 					while((diff--) > 0)	codeBuilder.getfield(CD.RTS_RTObject, "_SL", CD.RTS_RTObject);
@@ -327,7 +327,7 @@ public final class AssignmentOperation extends Expression {
 						
 				case ObjectKind.Procedure -> {
 					ProcedureDeclaration proc = (ProcedureDeclaration) decl;
-					int diff = Global.getCurrentScope().rtBlockLevel - proc.rtBlockLevel;
+					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
 					codeBuilder.aload(0);
 					while((diff--) > 0)	codeBuilder.getfield(CD.RTS_RTObject, "_SL", CD.RTS_RTObject);
 					codeBuilder.checkcast(proc.getClassDesc());

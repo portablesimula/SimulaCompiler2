@@ -220,9 +220,9 @@ public final class Meaning {
 	@Override
 	public String toString() {
 		if (declaredAs == null)	return ("NO MEANING");
+		String BL = (declaredIn.IS_SEMANTICS_CHECKED()) ? ", rtBlockLevel=" + declaredIn.getRTBlockLevel() : "";
 		return ("DeclaredAs " + declaredAs + ", foundBehindInvisible=" + foundBehindInvisible
-				+ "  (ctBlockLevel="+ declaredIn.ctBlockLevel + ", rtBlockLevel="+ declaredIn.rtBlockLevel
-				+ ",declaredIn=" + declaredIn + ",foundIn=" + foundIn + ')');
+				+ "  (" + BL + ",declaredIn=" + declaredIn + ",foundIn=" + foundIn + ')');
 	}
 
 }

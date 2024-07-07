@@ -20,6 +20,10 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.declaration.BlockDeclaration;
+import simula.compiler.syntaxClass.declaration.Declaration;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
 import simula.compiler.utilities.Global;
@@ -314,6 +318,7 @@ public final class SimulaCompiler {
 				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
 				programModule.printTree(1);
 			}
+			
 			if (Util.nError > 0) {
 				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during semantic checking";
 				Util.println(msg);
