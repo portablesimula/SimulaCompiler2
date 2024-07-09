@@ -269,7 +269,6 @@ public final class ConnectionStatement extends Statement {
 		}
 
 		public static DoPart readObject(ConnectionStatement x, AttributeInputStream inpt) throws IOException {
-			Util.TRACE_INPUT("BEGIN readDoPart: ");
 			int n = inpt.readShort();
 			switch(n) {
 			case 1:
@@ -500,7 +499,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public ConnectionStatement() {
+	private ConnectionStatement() {
 		super(0);
 	}
 
@@ -509,41 +508,11 @@ public final class ConnectionStatement extends Statement {
 		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
 		oupt.writeKind(ObjectKind.ConnectionStatement);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeObj(objectExpression);
-//		oupt.writeObj(inspectedVariable);
-//		oupt.writeObj(inspectVariableDeclaration);
-//		oupt.writeShort(connectionPart.size());
-//		for(DoPart part:connectionPart) part.writeObject(oupt);
-//		oupt.writeObj(otherwise);
-//		oupt.writeBoolean(hasWhenPart);
-		writeAttributes(oupt);
-	}
-
-	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readConnectionStatement: ");
-		ConnectionStatement stm = new ConnectionStatement();
-		stm.SEQU = inpt.readSEQU(stm);
-//		stm.lineNumber = inpt.readShort();
-//		stm.objectExpression = (Expression) inpt.readObj();
-//		stm.inspectedVariable = (VariableExpression) inpt.readObj();
-//		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
-//		int n = inpt.readShort();
-//		if(n > 0) {
-//			stm.connectionPart = new Vector<DoPart>();
-//			for(int i=0;i<n;i++)
-//				stm.connectionPart.add(DoPart.readObject(stm,inpt));
-//		}
-//		stm.otherwise = (Statement) inpt.readObj();
-//		stm.hasWhenPart = inpt.readBoolean();
-		stm.readAttributes(inpt);
-		Util.TRACE_INPUT("ConnectionStatement: " + stm);
-		return(stm);
-	}
-	
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		
+		// *** ConnectionStatement
 		oupt.writeObj(objectExpression);
 		oupt.writeObj(inspectedVariable);
 		oupt.writeObj(inspectVariableDeclaration);
@@ -553,24 +522,59 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeBoolean(hasWhenPart);
 	}
 
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		objectExpression = (Expression) inpt.readObj();
-		inspectedVariable = (VariableExpression) inpt.readObj();
-		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
+	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
+		ConnectionStatement stm = new ConnectionStatement();
+		stm.SEQU = inpt.readSEQU(stm);
 		
-		inspectVariableDeclaration.type = Type.Ref("RTObject");  // TESTING  --  MÅ VÆRE MED
+		// *** SyntaxClass
+		stm.lineNumber = inpt.readShort();
 		
+		// *** ConnectionStatement
+		stm.objectExpression = (Expression) inpt.readObj();
+		stm.inspectedVariable = (VariableExpression) inpt.readObj();
+		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
 		int n = inpt.readShort();
 		if(n > 0) {
-			connectionPart = new Vector<DoPart>();
+			stm.connectionPart = new Vector<DoPart>();
 			for(int i=0;i<n;i++)
-				connectionPart.add(DoPart.readObject(this,inpt));
+				stm.connectionPart.add(DoPart.readObject(stm,inpt));
 		}
-		otherwise = (Statement) inpt.readObj();
-		hasWhenPart = inpt.readBoolean();
+		stm.otherwise = (Statement) inpt.readObj();
+		stm.hasWhenPart = inpt.readBoolean();
+		Util.TRACE_INPUT("ConnectionStatement: " + stm);
+		return(stm);
 	}
+	
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(objectExpression);
+//		oupt.writeObj(inspectedVariable);
+//		oupt.writeObj(inspectVariableDeclaration);
+//		oupt.writeShort(connectionPart.size());
+//		for(DoPart part:connectionPart) part.writeObject(oupt);
+//		oupt.writeObj(otherwise);
+//		oupt.writeBoolean(hasWhenPart);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		objectExpression = (Expression) inpt.readObj();
+//		inspectedVariable = (VariableExpression) inpt.readObj();
+//		inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
+//		
+//		inspectVariableDeclaration.type = Type.Ref("RTObject");  // TESTING  --  MÅ VÆRE MED
+//		
+//		int n = inpt.readShort();
+//		if(n > 0) {
+//			connectionPart = new Vector<DoPart>();
+//			for(int i=0;i<n;i++)
+//				connectionPart.add(DoPart.readObject(this,inpt));
+//		}
+//		otherwise = (Statement) inpt.readObj();
+//		hasWhenPart = inpt.readBoolean();
+//	}
 
 
 }

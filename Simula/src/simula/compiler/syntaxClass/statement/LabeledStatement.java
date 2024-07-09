@@ -130,48 +130,49 @@ public final class LabeledStatement extends Statement {
 		Util.TRACE_OUTPUT("writeLabeledStatement: " + this);
 		oupt.writeKind(ObjectKind.LabeledStatement);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeObj(statement);
-//		oupt.writeShort(labels.size());
-//		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
-		writeAttributes(oupt);
-	}
-
-	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readLabeledStatement: ");
-		LabeledStatement stm = new LabeledStatement();
-		stm.SEQU = inpt.readSEQU(stm);
-//		stm.lineNumber = inpt.readShort();
-//		stm.statement = (Statement) inpt.readObj();
-//		int n = inpt.readShort();
-//		if(n > 0) {
-//			stm.labels = new Vector<LabelDeclaration>();
-//			for(int i=0;i<n;i++)
-//				stm.labels.add((LabelDeclaration) inpt.readObj());
-//		}
-		stm.readAttributes(inpt);
-		Util.TRACE_INPUT("LabeledStatement: " + stm);
-		return(stm);
-	}
-	
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** LabeledStatement
 		oupt.writeObj(statement);
 		oupt.writeShort(labels.size());
 		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
 	}
 
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		statement = (Statement) inpt.readObj();
+	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
+		LabeledStatement stm = new LabeledStatement();
+		stm.SEQU = inpt.readSEQU(stm);
+		// *** SyntaxClass
+		stm.lineNumber = inpt.readShort();
+		// *** LabeledStatement
+		stm.statement = (Statement) inpt.readObj();
 		int n = inpt.readShort();
 		if(n > 0) {
-			labels = new Vector<LabelDeclaration>();
+			stm.labels = new Vector<LabelDeclaration>();
 			for(int i=0;i<n;i++)
-				labels.add((LabelDeclaration) inpt.readObj());
+				stm.labels.add((LabelDeclaration) inpt.readObj());
 		}
+		Util.TRACE_INPUT("LabeledStatement: " + stm);
+		return(stm);
 	}
+	
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(statement);
+//		oupt.writeShort(labels.size());
+//		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		statement = (Statement) inpt.readObj();
+//		int n = inpt.readShort();
+//		if(n > 0) {
+//			labels = new Vector<LabelDeclaration>();
+//			for(int i=0;i<n;i++)
+//				labels.add((LabelDeclaration) inpt.readObj());
+//		}
+//	}
 
 }

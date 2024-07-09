@@ -67,7 +67,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	/**
 	 * Constant indicator. Is used to prevent assignment of a new value.
 	 */
-	private boolean constant;
+	protected boolean constant;
 
 	/**
 	 * The constant initial value.
@@ -268,42 +268,63 @@ public class SimpleVariableDeclaration extends Declaration {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeBoolean(constant);
-//		oupt.writeObj(constantElement);
-		writeAttributes(oupt);
+
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+
+		// *** Declaration
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);// Declaration
+//		oupt.writeObj(declaredIn);// Declaration
+		
+		// *** SimpleVariableDeclaration
+		oupt.writeBoolean(constant);
+		oupt.writeObj(constantElement);
 	}
 	
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readSimpleVariableDeclaration: ");
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
 		var.SEQU = inpt.readSEQU(var);
-//		var.identifier = inpt.readString();
-//		var.externalIdent = inpt.readString();
-//		var.type = inpt.readType();
-//		var.constant = inpt.readBoolean();
-//		var.constantElement = (Expression) inpt.readObj();
-		var.readAttributes(inpt);
+
+		// *** SyntaxClass
+		var.lineNumber = inpt.readShort();
+
+		// *** Declaration
+		var.identifier = inpt.readString();
+		var.externalIdent = inpt.readString();
+		var.type = inpt.readType();
+//		var.declaredIn = (DeclarationScope) inpt.readObj();
+		
+		// *** SimpleVariableDeclaration
+		var.constant = inpt.readBoolean();
+		var.constantElement = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("Variable: " + var.SEQU + " " + var);
 		return(var);
 	}
 
-//	writeAttributes(oupt);
-//	expr.readAttributes(inpt);
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeBoolean(constant);
-		oupt.writeObj(constantElement);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		constant = inpt.readBoolean();
-		constantElement = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeBoolean(constant);
+//		oupt.writeObj(constantElement);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//
+//		// *** Declaration
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObj();
+//		
+//		// *** SimpleVariableDeclaration
+//		constant = inpt.readBoolean();
+//		constantElement = (Expression) inpt.readObj();
+//	}
 
 }

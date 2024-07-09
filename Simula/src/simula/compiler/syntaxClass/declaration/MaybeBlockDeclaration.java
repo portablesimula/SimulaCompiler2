@@ -26,6 +26,7 @@ import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
+import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -545,7 +546,36 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(SEQU);
-		writeAttributes(oupt);
+//		writeAttributes(oupt);
+
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		
+		// *** Declaration
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);// Declaration
+//		oupt.writeObj(declaredIn);// Declaration
+		
+		// *** DeclarationScope
+		oupt.writeString(sourceFileName);
+		oupt.writeString(isPreCompiledFromFile);
+		oupt.writeBoolean(hasLocalClasses);
+		LabelList.writeLabelList(labelList, oupt);
+		DeclarationList decls = prep(declarationList);
+		oupt.writeShort(decls.size());
+		for(Declaration decl:decls) oupt.writeObj(decl);
+
+		// *** BlockDeclaration
+		if (declarationKind == ObjectKind.CompoundStatement) {
+			oupt.writeBoolean(isMainModule);
+			if (statements != null) {
+				oupt.writeShort(statements.size());
+				for (Statement stm : statements)
+					oupt.writeObj(stm);
+			} else
+				oupt.writeShort(0);
+		}
 	}
 	
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt,int declarationKind) throws IOException {
@@ -553,9 +583,38 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 //		blk.declarationKind = ObjectKind.CompoundStatement;
 		blk.declarationKind = declarationKind;
-		Util.TRACE_INPUT("BEGIN Read "+blk);
 		blk.SEQU = inpt.readSEQU(blk);
-		blk.readAttributes(inpt);
+		// *** SyntaxClass
+		blk.lineNumber = inpt.readShort();
+
+		// *** Declaration
+		blk.identifier = inpt.readString();
+		blk.externalIdent = inpt.readString();
+		blk.type = inpt.readType();
+//		blk.declaredIn = (DeclarationScope) inpt.readObj();
+
+		// *** DeclarationScope
+		blk.sourceFileName = inpt.readString();
+		blk.isPreCompiledFromFile = inpt.readString();
+		blk.hasLocalClasses = inpt.readBoolean();
+		blk.labelList = LabelList.readLabelList(inpt);
+		int n = inpt.readShort();
+		for(int i=0;i<n;i++) {
+			Declaration decl = (Declaration) inpt.readObj();
+			blk.declarationList.add(decl);
+		}
+
+		// *** BlockDeclaration
+		if (declarationKind == ObjectKind.CompoundStatement) {
+			blk.isMainModule = inpt.readBoolean();
+			n = inpt.readShort();
+			if (n > 0)
+				blk.statements = new Vector<Statement>();
+			for (int i = 0; i < n; i++) {
+				Statement stm = (Statement) inpt.readObj();
+				blk.statements.add(stm);
+			}
+		}
 
 		Global.setScope(scope);
 //		blk.isPreCompiledFromFile = inpt.jarFileName;
@@ -563,14 +622,71 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		return(blk);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		
+//		// *** Declaration
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);// Declaration
+////		oupt.writeObj(declaredIn);// Declaration
+//		
+//		// *** DeclarationScope
+//		oupt.writeString(sourceFileName);
+//		oupt.writeString(isPreCompiledFromFile);
+//		oupt.writeBoolean(hasLocalClasses);
+//		LabelList.writeLabelList(labelList, oupt);
+//		DeclarationList decls = prep(declarationList);
+//		oupt.writeShort(decls.size());
+//		for(Declaration decl:decls) oupt.writeObj(decl);
+//
+//		// *** BlockDeclaration
+//		if (declarationKind == ObjectKind.CompoundStatement) {
+//			oupt.writeBoolean(isMainModule);
+//			if (statements != null) {
+//				oupt.writeShort(statements.size());
+//				for (Statement stm : statements)
+//					oupt.writeObj(stm);
+//			} else
+//				oupt.writeShort(0);
+//		}
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//
+//		// *** Declaration
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObj();
+//
+//		// *** DeclarationScope
+//		sourceFileName = inpt.readString();
+//		isPreCompiledFromFile = inpt.readString();
+//		hasLocalClasses = inpt.readBoolean();
+//		labelList = LabelList.readLabelList(inpt);
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++) {
+//			Declaration decl = (Declaration) inpt.readObj();
+//			declarationList.add(decl);
+//		}
+//
+//		// *** BlockDeclaration
+//		if (declarationKind == ObjectKind.CompoundStatement) {
+//			isMainModule = inpt.readBoolean();
+//			n = inpt.readShort();
+//			if (n > 0)
+//				statements = new Vector<Statement>();
+//			for (int i = 0; i < n; i++) {
+//				Statement stm = (Statement) inpt.readObj();
+//				statements.add(stm);
+//			}
+//		}
+//	}
 
 }

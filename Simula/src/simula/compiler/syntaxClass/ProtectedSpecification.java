@@ -126,16 +126,25 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public ProtectedSpecification() {}
+	private ProtectedSpecification() {}
 
 	public void writeProtectedSpecification(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeProtectedSpecification: " + identifier);
+
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		
+		// *** ProtectedSpecification
 		oupt.writeString(identifier);
 	}
 	
 	public static ProtectedSpecification readProtectedSpecification(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readProtectedSpecification: ");
 		ProtectedSpecification spec = new ProtectedSpecification();
+
+		// *** SyntaxClass
+		spec.lineNumber = inpt.readShort();
+		
+		// *** ProtectedSpecification
 		spec.identifier = inpt.readString();
 		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);

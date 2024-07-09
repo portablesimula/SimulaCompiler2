@@ -13,6 +13,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.CD;
@@ -322,7 +323,7 @@ public final class ArithmeticExpression extends Expression {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public ArithmeticExpression() {
+	private ArithmeticExpression() {
 	}
 
 	@Override
@@ -330,44 +331,52 @@ public final class ArithmeticExpression extends Expression {
 		Util.TRACE_OUTPUT("writeArithmeticExpression: " + this);
 		oupt.writeKind(ObjectKind.ArithmeticExpression);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(lhs);
-//		oupt.writeShort(opr);
-//		oupt.writeObj(rhs);
-		writeAttributes(oupt);
-	}
-	
-	public static ArithmeticExpression readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readArithmeticExpression: ");
-		ArithmeticExpression expr = new ArithmeticExpression();
-		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.lhs = (Expression) inpt.readObj();
-//		expr.opr = inpt.readShort();
-//		expr.rhs = (Expression) inpt.readObj();
-		expr.readAttributes(inpt);
-		Util.TRACE_INPUT("readArithmeticExpression: " + expr);
-		return(expr);
-	}
-
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** ArithmeticExpression
 		oupt.writeObj(lhs);
 		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		lhs = (Expression) inpt.readObj();
-		opr = inpt.readShort();
-		rhs = (Expression) inpt.readObj();
+	
+	public static ArithmeticExpression readObject(AttributeInputStream inpt) throws IOException {
+		ArithmeticExpression expr = new ArithmeticExpression();
+		expr.SEQU = inpt.readSEQU(expr);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** ArithmeticExpression
+		expr.lhs = (Expression) inpt.readObj();
+		expr.opr = inpt.readShort();
+		expr.rhs = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("readArithmeticExpression: " + expr);
+		return(expr);
 	}
+
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		// *** Expression
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+////		super.writeAttributes(oupt);
+//		oupt.writeObj(lhs);
+//		oupt.writeShort(opr);
+//		oupt.writeObj(rhs);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		lhs = (Expression) inpt.readObj();
+//		opr = inpt.readShort();
+//		rhs = (Expression) inpt.readObj();
+//	}
 
 }

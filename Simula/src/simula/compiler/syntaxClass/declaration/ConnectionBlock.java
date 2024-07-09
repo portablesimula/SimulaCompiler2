@@ -18,7 +18,9 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
+import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -272,7 +274,29 @@ public final class ConnectionBlock extends DeclarationScope {
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
 		
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		
+		// *** Declaration
+		//oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);// Declaration
+//		oupt.writeObj(declaredIn);// Declaration
+		
+		// *** DeclarationScope
+		oupt.writeString(sourceFileName);
+		oupt.writeString(isPreCompiledFromFile);
+		oupt.writeBoolean(hasLocalClasses);
+		LabelList.writeLabelList(labelList, oupt);
+		DeclarationList decls = prep(declarationList);
+		oupt.writeShort(decls.size());
+		for(Declaration decl:decls) oupt.writeObj(decl);
+		
+		// *** ConnectionBlock
+		oupt.writeObj(statement);
+		oupt.writeString(whenClassIdentifier);
+		oupt.writeObj(inspectedVariable);
+
 		Util.TRACE_OUTPUT("END Write ConnectionBlock: "+identifier);
 	}
 
@@ -281,27 +305,51 @@ public final class ConnectionBlock extends DeclarationScope {
 		ConnectionBlock blk = new ConnectionBlock(identifier);
 		blk.SEQU = inpt.readSEQU(blk);
 		
-		blk.readAttributes(inpt);
+		// *** SyntaxClass
+		blk.lineNumber = inpt.readShort();
+
+		// *** Declaration
+		//blk.identifier = inpt.readString();
+		blk.externalIdent = inpt.readString();
+		blk.type = inpt.readType();
+//		blk.declaredIn = (DeclarationScope) inpt.readObj();
+
+		// *** DeclarationScope
+		blk.sourceFileName = inpt.readString();
+		blk.isPreCompiledFromFile = inpt.readString();
+		blk.hasLocalClasses = inpt.readBoolean();
+		blk.labelList = LabelList.readLabelList(inpt);
+		int n = inpt.readShort();
+		for(int i=0;i<n;i++) {
+			Declaration decl = (Declaration) inpt.readObj();
+			blk.declarationList.add(decl);
+		}
+		
+		// *** ConnectionBlock
+		blk.statement = (Statement) inpt.readObj();
+		blk.whenClassIdentifier = inpt.readString();
+		blk.inspectedVariable = (VariableExpression) inpt.readObj();
+
 		Util.TRACE_INPUT("END Read ConnectionBlock: "+identifier+", Declared in: "+blk.declaredIn);
 		Global.setScope(blk.declaredIn);
 		return(blk);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(statement);
-		oupt.writeString(whenClassIdentifier);
-		oupt.writeObj(inspectedVariable);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		statement = (Statement) inpt.readObj();
-		whenClassIdentifier = inpt.readString();
-		inspectedVariable = (VariableExpression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(statement);
+//		oupt.writeString(whenClassIdentifier);
+//		oupt.writeObj(inspectedVariable);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		statement = (Statement) inpt.readObj();
+//		whenClassIdentifier = inpt.readString();
+//		inspectedVariable = (VariableExpression) inpt.readObj();
+//	}
 
 
 }

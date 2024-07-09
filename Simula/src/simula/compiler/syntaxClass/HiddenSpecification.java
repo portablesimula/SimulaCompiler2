@@ -171,17 +171,26 @@ public final class HiddenSpecification extends SyntaxClass {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public HiddenSpecification() {
+	private HiddenSpecification() {
 	}
 
 	public void writeHiddenSpecification(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
+
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		
+		// *** HiddenSpecification
 		oupt.writeString(identifier);
 	}
 	
 	public static HiddenSpecification readHiddenSpecification(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readHiddenSpecification: ");
 		HiddenSpecification spec = new HiddenSpecification();
+
+		// *** SyntaxClass
+		spec.lineNumber = inpt.readShort();
+		
+		// *** HiddenSpecification
 		spec.identifier = inpt.readString();
 		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);

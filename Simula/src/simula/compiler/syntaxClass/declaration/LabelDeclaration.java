@@ -21,6 +21,7 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
+import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -234,31 +235,80 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
 		oupt.writeShort(SEQU);
-		writeAttributes(oupt);
+//		writeAttributes(oupt);
+//		super.writeAttributes(oupt);
+
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+
+		// *** Declaration
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);// Declaration
+//		oupt.writeObj(declaredIn);// Declaration
+		
+		// *** SimpleVariableDeclaration
+		oupt.writeBoolean(constant);
+		oupt.writeObj(constantElement);
+
+		// *** LabelDeclaration
+		oupt.writeShort(index);
+		oupt.writeObj(movedTo);
 	}
 	
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readLabelDeclaration: ");
 		String identifier = inpt.readString();
 		LabelDeclaration lab = new LabelDeclaration(identifier);
 		lab.SEQU = inpt.readSEQU(lab);
-		lab.readAttributes(inpt);
+
+		// *** SyntaxClass
+		lab.lineNumber = inpt.readShort();
+
+		// *** Declaration
+		lab.identifier = inpt.readString();
+		lab.externalIdent = inpt.readString();
+		lab.type = inpt.readType();
+//		lab.declaredIn = (DeclarationScope) inpt.readObj();
+		
+		// *** SimpleVariableDeclaration
+		lab.constant = inpt.readBoolean();
+		lab.constantElement = (Expression) inpt.readObj();
+
+		// *** LabelDeclaration
+		lab.index = inpt.readShort();
+		lab.movedTo = (DeclarationScope) inpt.readObj();
 		Util.TRACE_INPUT("readLabelDeclaration: " + lab);
 		return(lab);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeShort(index);
-		oupt.writeObj(movedTo);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		index = inpt.readShort();
-		movedTo = (DeclarationScope) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//
+//		// *** LabelDeclaration
+//		oupt.writeShort(index);
+//		oupt.writeObj(movedTo);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//
+//		// *** Declaration
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObj();
+//		
+//		// *** SimpleVariableDeclaration
+//		constant = inpt.readBoolean();
+//		constantElement = (Expression) inpt.readObj();
+//
+//		// *** LabelDeclaration
+//		index = inpt.readShort();
+//		movedTo = (DeclarationScope) inpt.readObj();
+//	}
 
 }

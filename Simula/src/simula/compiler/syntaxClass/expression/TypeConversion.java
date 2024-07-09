@@ -14,6 +14,7 @@ import java.lang.constant.MethodTypeDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.OverLoad;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
 import simula.compiler.utilities.CD;
@@ -267,36 +268,39 @@ public final class TypeConversion extends Expression {
 		Util.TRACE_OUTPUT("writeTypeConversion: " + this);
 		oupt.writeKind(ObjectKind.TypeConversion);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(expression);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** TypeConversion
+		oupt.writeObj(expression);
 	}
 	
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readTypeConversion: ");
 		TypeConversion expr = new TypeConversion();
 		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.expression = (Expression) inpt.readObj();
-		expr.readAttributes(inpt);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** TypeConversion
+		expr.expression = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readTypeConversion: " + expr);
 		return(expr);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(expression);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		expression = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(expression);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		expression = (Expression) inpt.readObj();
+//	}
 
 }

@@ -7,7 +7,6 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
-import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
@@ -17,8 +16,6 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Stack;
 import java.util.Vector;
 
-import simula.compiler.AttributeInputStream;
-import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
@@ -600,68 +597,104 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	}
 
 
-	// ***********************************************************************************************
-	// *** Attribute File I/O
-	// ***********************************************************************************************
-
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-
-		switch(declarationKind) {
-			case ObjectKind.Class:
-			case ObjectKind.Procedure:
-			case ObjectKind.PrefixedBlock:
-			case ObjectKind.CompoundStatement:
-				oupt.writeBoolean(isMainModule);
-				if (statements != null) {
-					oupt.writeShort(statements.size());
-					for (Statement stm : statements)
-						oupt.writeObj(stm);
-				} else
-					oupt.writeShort(0);
-		}
-		
-//		if (declarationKind != ObjectKind.SubBlock) {
-//			oupt.writeBoolean(isMainModule);
-//			if (statements != null) {
-//				oupt.writeShort(statements.size());
-//				for (Statement stm : statements)
-//					oupt.writeObj(stm);
-//			} else
-//				oupt.writeShort(0);
+//	// ***********************************************************************************************
+//	// *** Attribute File I/O
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		
+//		// *** Declaration
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);// Declaration
+////		oupt.writeObj(declaredIn);// Declaration
+//		
+//		// *** DeclarationScope
+//		oupt.writeString(sourceFileName);
+//		oupt.writeString(isPreCompiledFromFile);
+//		oupt.writeBoolean(hasLocalClasses);
+//		LabelList.writeLabelList(labelList, oupt);
+//		DeclarationList decls = prep(declarationList);
+//		oupt.writeShort(decls.size());
+//		for(Declaration decl:decls) oupt.writeObj(decl);
+//
+//		// *** BlockDeclaration
+//		switch(declarationKind) {
+//			case ObjectKind.Class:
+//			case ObjectKind.Procedure:
+//			case ObjectKind.PrefixedBlock:
+//			case ObjectKind.CompoundStatement:
+//				oupt.writeBoolean(isMainModule);
+//				if (statements != null) {
+//					oupt.writeShort(statements.size());
+//					for (Statement stm : statements)
+//						oupt.writeObj(stm);
+//				} else
+//					oupt.writeShort(0);
 //		}
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		
-		switch(declarationKind) {
-			case ObjectKind.Class:
-			case ObjectKind.Procedure:
-			case ObjectKind.PrefixedBlock:
-			case ObjectKind.CompoundStatement:
-				isMainModule = inpt.readBoolean();
-				int n = inpt.readShort();
-				if (n > 0)
-					statements = new Vector<Statement>();
-				for (int i = 0; i < n; i++) {
-					Statement stm = (Statement) inpt.readObj();
-					statements.add(stm);
-				}
-		}
-
-//		if (declarationKind != ObjectKind.SubBlock) {
-//			isMainModule = inpt.readBoolean();
-//			int n = inpt.readShort();
-//			if (n > 0)
-//				statements = new Vector<Statement>();
-//			for (int i = 0; i < n; i++) {
-//				Statement stm = (Statement) inpt.readObj();
-//				statements.add(stm);
-//			}
+//		
+////		if (declarationKind != ObjectKind.SubBlock) {
+////			oupt.writeBoolean(isMainModule);
+////			if (statements != null) {
+////				oupt.writeShort(statements.size());
+////				for (Statement stm : statements)
+////					oupt.writeObj(stm);
+////			} else
+////				oupt.writeShort(0);
+////		}
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//
+//		// *** Declaration
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObj();
+//
+//		// *** DeclarationScope
+//		sourceFileName = inpt.readString();
+//		isPreCompiledFromFile = inpt.readString();
+//		hasLocalClasses = inpt.readBoolean();
+//		labelList = LabelList.readLabelList(inpt);
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++) {
+//			Declaration decl = (Declaration) inpt.readObj();
+//			declarationList.add(decl);
 //		}
-	}
+//
+//		// *** BlockDeclaration
+//		switch(declarationKind) {
+//			case ObjectKind.Class:
+//			case ObjectKind.Procedure:
+//			case ObjectKind.PrefixedBlock:
+//			case ObjectKind.CompoundStatement:
+//				isMainModule = inpt.readBoolean();
+//				n = inpt.readShort();
+//				if (n > 0)
+//					statements = new Vector<Statement>();
+//				for (int i = 0; i < n; i++) {
+//					Statement stm = (Statement) inpt.readObj();
+//					statements.add(stm);
+//				}
+//		}
+//
+////		if (declarationKind != ObjectKind.SubBlock) {
+////			isMainModule = inpt.readBoolean();
+////			int n = inpt.readShort();
+////			if (n > 0)
+////				statements = new Vector<Statement>();
+////			for (int i = 0; i < n; i++) {
+////				Statement stm = (Statement) inpt.readObj();
+////				statements.add(stm);
+////			}
+////		}
+//	}
 
 }

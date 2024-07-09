@@ -14,6 +14,7 @@ import java.lang.classfile.constantpool.FieldRefEntry;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -307,41 +308,44 @@ public final class RemoteVariable extends Expression {
 		Util.TRACE_OUTPUT("writeRemoteVariable: " + this);
 		oupt.writeKind(ObjectKind.RemoteVariable);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(obj);
-//		oupt.writeObj(var);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** RemoteVariable
+		oupt.writeObj(obj);
+		oupt.writeObj(var);
 	}
 	
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readRemoteVariable: ");
 		RemoteVariable rem = new RemoteVariable();
 		rem.SEQU = inpt.readSEQU(rem);
-//		rem.lineNumber = inpt.readShort();
-//		rem.type = inpt.readType();
-//		rem.backLink = (SyntaxClass) inpt.readObj();
-//		rem.obj = (Expression) inpt.readObj();
-//		rem.var = (VariableExpression) inpt.readObj();
-		rem.readAttributes(inpt);
+		// *** SyntaxClass
+		rem.lineNumber = inpt.readShort();
+		// *** SyntaxClass
+		rem.type = inpt.readType();
+		rem.backLink = (SyntaxClass) inpt.readObj();
+		// *** RemoteVariable
+		rem.obj = (Expression) inpt.readObj();
+		rem.var = (VariableExpression) inpt.readObj();
 		Util.TRACE_INPUT("readRemoteVariable: " + rem);
 		return(rem);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(obj);
-		oupt.writeObj(var);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		obj = (Expression) inpt.readObj();
-		var = (VariableExpression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(obj);
+//		oupt.writeObj(var);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		obj = (Expression) inpt.readObj();
+//		var = (VariableExpression) inpt.readObj();
+//	}
 
 
 }

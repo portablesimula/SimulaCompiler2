@@ -128,36 +128,37 @@ public final class WhileStatement extends Statement {
 		Util.TRACE_OUTPUT("writeWhileStatement: " + this);
 		oupt.writeKind(ObjectKind.WhileStatement);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeObj(condition);
-//		oupt.writeObj(doStatement);
-		writeAttributes(oupt);
-	}
-
-	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readWhileStatement: ");
-		WhileStatement stm = new WhileStatement();
-		stm.SEQU = inpt.readSEQU(stm);
-//		stm.lineNumber = inpt.readShort();
-//		stm.condition  = (Expression) inpt.readObj();
-//		stm.doStatement = (Statement) inpt.readObj();
-		stm.readAttributes(inpt);
-		Util.TRACE_INPUT("WhileStatement: " + stm);
-		return(stm);
-	}
-	
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** WhileStatement
 		oupt.writeObj(condition);
 		oupt.writeObj(doStatement);
 	}
 
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		condition  = (Expression) inpt.readObj();
-		doStatement = (Statement) inpt.readObj();
+	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
+		WhileStatement stm = new WhileStatement();
+		stm.SEQU = inpt.readSEQU(stm);
+		// *** SyntaxClass
+		stm.lineNumber = inpt.readShort();
+		// *** WhileStatement
+		stm.condition  = (Expression) inpt.readObj();
+		stm.doStatement = (Statement) inpt.readObj();
+		Util.TRACE_INPUT("WhileStatement: " + stm);
+		return(stm);
 	}
+	
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(condition);
+//		oupt.writeObj(doStatement);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		condition  = (Expression) inpt.readObj();
+//		doStatement = (Statement) inpt.readObj();
+//	}
 	
 }

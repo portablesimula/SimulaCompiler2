@@ -12,8 +12,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
-import simula.compiler.AttributeInputStream;
-import simula.compiler.AttributeOutputStream;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -46,16 +44,6 @@ public abstract class DeclarationScope extends Declaration  {
 	 * The source block level. Set during Parsing.
 	 */
 	public int sourceBlockLevel;
-
-//	/**
-//	 * The Compile time block level. Set during doChecking.
-//	 */
-//	public int ctBlockLevel;
-//
-//	/**
-//	 * The Runtime block level. Set during doChecking.
-//	 */
-//	public int rtBlockLevel;
 
 	/**
 	 * Indicate if this scope has local classes.
@@ -528,51 +516,52 @@ public abstract class DeclarationScope extends Declaration  {
 		return(res);
 	}
 
-	// ***********************************************************************************************
-	// *** Attribute File I/O
-	// ***********************************************************************************************
-
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeString(sourceFileName);
-//		oupt.writeShort(ctBlockLevel);
-//		oupt.writeShort(rtBlockLevel);
-		oupt.writeString(isPreCompiledFromFile);
-		oupt.writeBoolean(hasLocalClasses);
-
-		LabelList.writeLabelList(labelList, oupt);
-
-		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
-	}
-	
-//	protected static int currentRTBlockLevel = 0;
-//	public int sourceBlockLevel;
-//	public int ctBlockLevel;
-//	public int rtBlockLevel;
-//	public boolean hasLocalClasses = false;
-//	public String isPreCompiledFromFile;
-//	public DeclarationList declarationList;
-//	public LabelList labelList; // = new LabelList();
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		sourceFileName = inpt.readString();
-//		ctBlockLevel = inpt.readShort();
-//		rtBlockLevel = inpt.readShort();
-		isPreCompiledFromFile = inpt.readString();
-		hasLocalClasses = inpt.readBoolean();
-
-		labelList = LabelList.readLabelList(inpt);
-
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			declarationList.add(decl);
-		}
-	}
+//	// ***********************************************************************************************
+//	// *** Attribute File I/O
+//	// ***********************************************************************************************
+//
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		
+//		// *** Declaration
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);// Declaration
+////		oupt.writeObj(declaredIn);// Declaration
+//		
+//		// *** DeclarationScope
+//		oupt.writeString(sourceFileName);
+//		oupt.writeString(isPreCompiledFromFile);
+//		oupt.writeBoolean(hasLocalClasses);
+//		LabelList.writeLabelList(labelList, oupt);
+//		DeclarationList decls = prep(declarationList);
+//		oupt.writeShort(decls.size());
+//		for(Declaration decl:decls) oupt.writeObj(decl);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//
+//		// *** Declaration
+//		identifier = inpt.readString();
+//		externalIdent = inpt.readString();
+//		type = inpt.readType();
+////		declaredIn = (DeclarationScope) inpt.readObj();
+//
+//		// *** DeclarationScope
+//		sourceFileName = inpt.readString();
+//		isPreCompiledFromFile = inpt.readString();
+//		hasLocalClasses = inpt.readBoolean();
+//		labelList = LabelList.readLabelList(inpt);
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++) {
+//			Declaration decl = (Declaration) inpt.readObj();
+//			declarationList.add(decl);
+//		}
+//	}
 
 }

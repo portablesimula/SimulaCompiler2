@@ -161,32 +161,33 @@ public final class GotoStatement extends Statement {
 		Util.TRACE_OUTPUT("writeGotoStatement: " + this);
 		oupt.writeKind(ObjectKind.GotoStatement);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeObj(label);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** GotoStatement
+		oupt.writeObj(label);
 	}
 
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readGotoStatement: ");
 		GotoStatement stm = new GotoStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-//		stm.lineNumber = inpt.readShort();
-//		stm.label = (Expression) inpt.readObj();
-		stm.readAttributes(inpt);
+		// *** SyntaxClass
+		stm.lineNumber = inpt.readShort();
+		// *** GotoStatement
+		stm.label = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("GotoStatement: " + stm);
 		return(stm);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(label);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		label = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(label);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		label = (Expression) inpt.readObj();
+//	}
 
 }

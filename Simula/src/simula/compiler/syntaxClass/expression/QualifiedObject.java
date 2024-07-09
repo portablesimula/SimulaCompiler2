@@ -12,6 +12,7 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
@@ -137,48 +138,50 @@ public final class QualifiedObject extends Expression {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public QualifiedObject() {
-	}
+	private QualifiedObject() {}
 
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeQualifiedObject: " + this);
 		oupt.writeKind(ObjectKind.QualifiedObject);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(lhs);
-//		oupt.writeString(classIdentifier);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** QualifiedObject
+		oupt.writeObj(lhs);
+		oupt.writeString(classIdentifier);
 	}
 	
 	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readQualifiedObject: ");
 		QualifiedObject expr = new QualifiedObject();
 		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.lhs = (Expression) inpt.readObj();
-//		expr.classIdentifier = inpt.readString();
-		expr.readAttributes(inpt);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** QualifiedObject
+		expr.lhs = (Expression) inpt.readObj();
+		expr.classIdentifier = inpt.readString();
 		Util.TRACE_INPUT("readQualifiedObject: " + expr);
 		return(expr);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(lhs);
-		oupt.writeString(classIdentifier);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		lhs = (Expression) inpt.readObj();
-		classIdentifier = inpt.readString();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(lhs);
+//		oupt.writeString(classIdentifier);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		lhs = (Expression) inpt.readObj();
+//		classIdentifier = inpt.readString();
+//	}
 
 }

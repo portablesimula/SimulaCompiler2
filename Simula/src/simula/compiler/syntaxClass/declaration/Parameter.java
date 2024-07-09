@@ -515,7 +515,6 @@ public final class Parameter extends Declaration {
 	}
 	
 	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readParameter: ");
 		Parameter par = new Parameter();
 		par.identifier = inpt.readString();
 		par.externalIdent = inpt.readString();

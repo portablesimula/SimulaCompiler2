@@ -14,6 +14,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
@@ -179,41 +180,43 @@ public final class TextExpression extends Expression {
 		Util.TRACE_OUTPUT("writeTextExpression: " + this);
 		oupt.writeKind(ObjectKind.TextExpression);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(lhs);
-//		oupt.writeObj(rhs);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** TextExpression
+		oupt.writeObj(lhs);
+		oupt.writeObj(rhs);
 	}
 	
 	public static TextExpression readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readTextExpression: ");
 		TextExpression expr = new TextExpression();
 		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.lhs = (Expression) inpt.readObj();
-//		expr.rhs = (Expression) inpt.readObj();
-		expr.readAttributes(inpt);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** TextExpression
+		expr.lhs = (Expression) inpt.readObj();
+		expr.rhs = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readTextExpression: " + expr);
 		return(expr);
 	}
 
-//	expr.readAttributes(inpt);
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(lhs);
-		oupt.writeObj(rhs);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		lhs = (Expression) inpt.readObj();
-		rhs = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(lhs);
+//		oupt.writeObj(rhs);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		lhs = (Expression) inpt.readObj();
+//		rhs = (Expression) inpt.readObj();
+//	}
 
 }

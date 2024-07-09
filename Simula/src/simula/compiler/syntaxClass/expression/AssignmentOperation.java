@@ -16,6 +16,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -472,46 +473,47 @@ public final class AssignmentOperation extends Expression {
 		Util.TRACE_OUTPUT("writeAssignmentOperation: " + this);
 		oupt.writeKind(ObjectKind.AssignmentOperation);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeObj(lhs);
-//		oupt.writeShort(opr);
-//		oupt.writeObj(rhs);
-		writeAttributes(oupt);
-	}
-	
-	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readAssignmentOperation: ");
-		AssignmentOperation expr = new AssignmentOperation();
-		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.lhs = (Expression) inpt.readObj();
-//		expr.opr = inpt.readShort();
-//		expr.rhs = (Expression) inpt.readObj();
-		expr.readAttributes(inpt);
-		Util.TRACE_INPUT("readAssignmentOperation: " + expr);
-		return(expr);
-	}
-
-//	writeAttributes(oupt);
-//	expr.readAttributes(inpt);
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** AssignmentOperation
 		oupt.writeObj(lhs);
 		oupt.writeShort(opr);
 		oupt.writeObj(rhs);
 	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		lhs = (Expression) inpt.readObj();
-		opr = inpt.readShort();
-		rhs = (Expression) inpt.readObj();
+	
+	public static AssignmentOperation readObject(AttributeInputStream inpt) throws IOException {
+		AssignmentOperation expr = new AssignmentOperation();
+		expr.SEQU = inpt.readSEQU(expr);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** AssignmentOperation
+		expr.lhs = (Expression) inpt.readObj();
+		expr.opr = inpt.readShort();
+		expr.rhs = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("readAssignmentOperation: " + expr);
+		return(expr);
 	}
+
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(lhs);
+//		oupt.writeShort(opr);
+//		oupt.writeObj(rhs);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		lhs = (Expression) inpt.readObj();
+//		opr = inpt.readShort();
+//		rhs = (Expression) inpt.readObj();
+//	}
 
 }

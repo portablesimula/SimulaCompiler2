@@ -13,6 +13,7 @@ import java.lang.classfile.Label;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
@@ -173,40 +174,43 @@ public final class UnaryOperation extends Expression {
 		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
 		oupt.writeKind(ObjectKind.UnaryOperation);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeShort(oprator);
-//		oupt.writeObj(operand);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** UnaryOperation
+		oupt.writeShort(oprator);
+		oupt.writeObj(operand);
 	}
 	
 	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readUnaryOperation: ");
 		UnaryOperation expr = new UnaryOperation();
 		expr.SEQU = inpt.readSEQU(expr);
-//		expr.lineNumber = inpt.readShort();
-//		expr.type = inpt.readType();
-//		expr.backLink = (SyntaxClass) inpt.readObj();
-//		expr.oprator = inpt.readShort();
-//		expr.operand = (Expression) inpt.readObj();
-		expr.readAttributes(inpt);
+		// *** SyntaxClass
+		expr.lineNumber = inpt.readShort();
+		// *** Expression
+		expr.type = inpt.readType();
+		expr.backLink = (SyntaxClass) inpt.readObj();
+		// *** UnaryOperation
+		expr.oprator = inpt.readShort();
+		expr.operand = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("readUnaryOperation: " + expr);
 		return(expr);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeShort(oprator);
-		oupt.writeObj(operand);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		oprator = inpt.readShort();
-		operand = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeShort(oprator);
+//		oupt.writeObj(operand);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		oprator = inpt.readShort();
+//		operand = (Expression) inpt.readObj();
+//	}
 
 }

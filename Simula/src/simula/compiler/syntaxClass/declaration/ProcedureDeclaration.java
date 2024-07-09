@@ -1140,19 +1140,19 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return(pro);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeShort(parameterList.size());
-		for(Parameter par:parameterList) par.writeParameter(oupt);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			parameterList.add(Parameter.readParameter(inpt));
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeShort(parameterList.size());
+//		for(Parameter par:parameterList) par.writeParameter(oupt);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		int n = inpt.readShort();
+//		for(int i=0;i<n;i++)
+//			parameterList.add(Parameter.readParameter(inpt));
+//	}
 
 }

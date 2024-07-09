@@ -256,21 +256,21 @@ public abstract class SyntaxClass {
 		return(null);
 	}
 
-	public static void writeAttributes(AttributeOutputStream oupt,SyntaxClass obj) throws IOException {
-		oupt.writeShort(obj.lineNumber);
-	}
-	
-	public static void readAttributes(AttributeInputStream inpt,SyntaxClass obj) throws IOException {
-		obj.lineNumber = inpt.readShort();
-	}
-
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		oupt.writeShort(lineNumber);
-	}
-	
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		lineNumber = inpt.readShort();
-	}
+//	public static void writeAttributes(AttributeOutputStream oupt,SyntaxClass obj) throws IOException {
+//		oupt.writeShort(obj.lineNumber);
+//	}
+//	
+//	public static void readAttributes(AttributeInputStream inpt,SyntaxClass obj) throws IOException {
+//		obj.lineNumber = inpt.readShort();
+//	}
+//
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException { // TODO: SKAL FJERNES
+//		oupt.writeShort(lineNumber);
+//	}
+//	
+//	public void readAttributes(AttributeInputStream inpt) throws IOException { // TODO: SKAL FJERNES
+//		lineNumber = inpt.readShort();
+//	}
 
 
 }

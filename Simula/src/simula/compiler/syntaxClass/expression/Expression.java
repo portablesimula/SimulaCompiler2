@@ -7,11 +7,8 @@
  */
 package simula.compiler.syntaxClass.expression;
 
-import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 
-import simula.compiler.AttributeInputStream;
-import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -567,21 +564,25 @@ public abstract class Expression extends SyntaxClass {
 
 	
 
-	// ***********************************************************************************************
-	// *** Attribute File I/O
-	// ***********************************************************************************************
-
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeType(type);
-		oupt.writeObj(backLink);
-	}
-
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		type = inpt.readType();
-		backLink = (SyntaxClass) inpt.readObj();
-	}
+//	// ***********************************************************************************************
+//	// *** Attribute File I/O
+//	// ***********************************************************************************************
+//
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		// *** Expression
+//		oupt.writeType(type);
+//		oupt.writeObj(backLink);
+//	}
+//
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		// *** SyntaxClass
+//		lineNumber = inpt.readShort();
+//		// *** Expression
+//		type = inpt.readType();
+//		backLink = (SyntaxClass) inpt.readObj();
+//	}
 
 	    
 }

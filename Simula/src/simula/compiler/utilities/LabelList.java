@@ -73,10 +73,10 @@ public class LabelList {
 //		Thread.dumpStack();
 	}
 	
-	private LabelDeclaration get(String identifier) {
-		for(LabelDeclaration lab:labels) if(lab.identifier.equals(identifier)) return lab;
-		return null;
-	}
+//	private LabelDeclaration get(String identifier) {
+//		for(LabelDeclaration lab:labels) if(lab.identifier.equals(identifier)) return lab;
+//		return null;
+//	}
 	
 	// Used by ClassDeclaration and PrefixedBlockDeclaration
 	public static void accumLabelList(ClassDeclaration cls) {
@@ -194,7 +194,6 @@ public class LabelList {
 	}
 
 	public static LabelList readLabelList(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN LabelList: ");
 		boolean present = inpt.readBoolean();
 		LabelList labelList = null;
 		if(present) {

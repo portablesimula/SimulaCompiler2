@@ -18,6 +18,7 @@ import java.util.Vector;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
@@ -277,50 +278,19 @@ public final class ObjectGenerator extends Expression {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public ObjectGenerator() {
-	}
+	private ObjectGenerator() {	}
 
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("ObjectGenerator: "+this);
 		oupt.writeKind(ObjectKind.ObjectGenerator);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeType(type);
-//		oupt.writeObj(backLink);
-//		oupt.writeString(classIdentifier);
-//		if(params == null) {
-//			oupt.writeShort(-1);			
-//		} else {
-//			oupt.writeShort(params.size());
-//			for(Expression par:params) oupt.writeObj(par);
-//		}
-		writeAttributes(oupt);
-	}
-	
-	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN ObjectGenerator: ");
-		ObjectGenerator gen = new ObjectGenerator();
-		gen.SEQU = inpt.readSEQU(gen);
-//		gen.lineNumber = inpt.readShort();
-//		gen.type = inpt.readType();
-//		gen.backLink = (SyntaxClass) inpt.readObj();
-//		gen.classIdentifier = inpt.readString();
-//		int n = inpt.readShort();
-//		if(n >= 0) {
-//			gen.params = new Vector<Expression>();
-//			for(int i=0;i<n;i++)
-//				gen.params.add((Expression) inpt.readObj());
-//		}
-		gen.readAttributes(inpt);
-		Util.TRACE_INPUT("ObjectGenerator: "+gen);
-		return(gen);
-	}
-
-//	expr.readAttributes(inpt);
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** Expression
+		oupt.writeType(type);
+		oupt.writeObj(backLink);
+		// *** ObjectGenerator
 		oupt.writeString(classIdentifier);
 		if(params == null) {
 			oupt.writeShort(-1);			
@@ -329,17 +299,49 @@ public final class ObjectGenerator extends Expression {
 			for(Expression par:params) oupt.writeObj(par);
 		}
 	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		classIdentifier = inpt.readString();
+	
+	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
+		ObjectGenerator gen = new ObjectGenerator();
+		gen.SEQU = inpt.readSEQU(gen);
+		// *** SyntaxClass
+		gen.lineNumber = inpt.readShort();
+		// *** Expression
+		gen.type = inpt.readType();
+		gen.backLink = (SyntaxClass) inpt.readObj();
+		// *** ObjectGenerator
+		gen.classIdentifier = inpt.readString();
 		int n = inpt.readShort();
 		if(n >= 0) {
-			params = new Vector<Expression>();
+			gen.params = new Vector<Expression>();
 			for(int i=0;i<n;i++)
-				params.add((Expression) inpt.readObj());
+				gen.params.add((Expression) inpt.readObj());
 		}
+		Util.TRACE_INPUT("ObjectGenerator: "+gen);
+		return(gen);
 	}
+
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeString(classIdentifier);
+//		if(params == null) {
+//			oupt.writeShort(-1);			
+//		} else {
+//			oupt.writeShort(params.size());
+//			for(Expression par:params) oupt.writeObj(par);
+//		}
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		classIdentifier = inpt.readString();
+//		int n = inpt.readShort();
+//		if(n >= 0) {
+//			params = new Vector<Expression>();
+//			for(int i=0;i<n;i++)
+//				params.add((Expression) inpt.readObj());
+//		}
+//	}
 
 }

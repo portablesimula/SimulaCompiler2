@@ -140,32 +140,33 @@ public final class StandaloneExpression extends Statement {
 		Util.TRACE_OUTPUT("writeStandaloneExpression: " + this);
 		oupt.writeKind(ObjectKind.StandaloneExpression);
 		oupt.writeShort(SEQU);
-//		oupt.writeShort(lineNumber);
-//		oupt.writeObj(expression);
-		writeAttributes(oupt);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** StandaloneExpression
+		oupt.writeObj(expression);
 	}
 
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readStandaloneExpression: ");
 		StandaloneExpression stm = new StandaloneExpression();
 		stm.SEQU = inpt.readSEQU(stm);
-//		stm.lineNumber = inpt.readShort();
-//		stm.expression = (Expression) inpt.readObj();
-		stm.readAttributes(inpt);
+		// *** SyntaxClass
+		stm.lineNumber = inpt.readShort();
+		// *** StandaloneExpression
+		stm.expression = (Expression) inpt.readObj();
 		Util.TRACE_INPUT("StandaloneExpression: " + stm);
 		return(stm);
 	}
 
-	@Override
-	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-		super.writeAttributes(oupt);
-		oupt.writeObj(expression);
-	}
-
-	@Override
-	public void readAttributes(AttributeInputStream inpt) throws IOException {
-		super.readAttributes(inpt);
-		expression = (Expression) inpt.readObj();
-	}
+//	@Override
+//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
+//		super.writeAttributes(oupt);
+//		oupt.writeObj(expression);
+//	}
+//
+//	@Override
+//	public void readAttributes(AttributeInputStream inpt) throws IOException {
+//		super.readAttributes(inpt);
+//		expression = (Expression) inpt.readObj();
+//	}
 
 }

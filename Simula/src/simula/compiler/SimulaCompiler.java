@@ -20,10 +20,6 @@ import javax.tools.JavaCompiler;
 import javax.tools.ToolProvider;
 
 import simula.compiler.parsing.Parse;
-import simula.compiler.syntaxClass.declaration.BlockDeclaration;
-import simula.compiler.syntaxClass.declaration.Declaration;
-import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
 import simula.compiler.utilities.Global;

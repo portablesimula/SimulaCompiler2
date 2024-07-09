@@ -179,7 +179,6 @@ public final class ProcedureSpecification {
 	}
 	
 	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readProcedureSpec: ");
 		boolean present = inpt.readBoolean();
 		if(!present) return(null);
 		ProcedureSpecification spec = new ProcedureSpecification();

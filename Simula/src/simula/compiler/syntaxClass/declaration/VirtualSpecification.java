@@ -317,7 +317,6 @@ public final class VirtualSpecification extends Declaration {
 	}
 
 	public static VirtualSpecification readVirtSpec(AttributeInputStream inpt) throws IOException {
-		Util.TRACE_INPUT("BEGIN readVirtSpec: ");
 		boolean present = inpt.readBoolean();
 		VirtualSpecification virt = null;
 		if(present) {
