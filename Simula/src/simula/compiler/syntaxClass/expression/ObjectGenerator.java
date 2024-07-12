@@ -284,7 +284,7 @@ public final class ObjectGenerator extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("ObjectGenerator: "+this);
 		oupt.writeKind(ObjectKind.ObjectGenerator);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -302,7 +302,7 @@ public final class ObjectGenerator extends Expression {
 	
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		ObjectGenerator gen = new ObjectGenerator();
-		gen.SEQU = inpt.readSEQU(gen);
+		gen.OBJECT_SEQU = inpt.readSEQU(gen);
 		// *** SyntaxClass
 		gen.lineNumber = inpt.readShort();
 		// *** Expression

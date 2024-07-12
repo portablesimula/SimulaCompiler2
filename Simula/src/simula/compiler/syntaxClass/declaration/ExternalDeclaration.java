@@ -209,7 +209,7 @@ public final class ExternalDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeExternalDeclaration: " + this);
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -223,7 +223,7 @@ public final class ExternalDeclaration extends Declaration {
 	
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		ExternalDeclaration ext = new ExternalDeclaration();
-		ext.SEQU = inpt.readSEQU(ext);
+		ext.OBJECT_SEQU = inpt.readSEQU(ext);
 
 		// *** SyntaxClass
 		ext.lineNumber = inpt.readShort();

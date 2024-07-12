@@ -1536,7 +1536,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write ClassDeclaration: " + identifier + ", Declared in: " + declaredIn);
 		oupt.writeKind(declarationKind); // Mark: This is a ClassDeclaration
 		oupt.writeString(identifier);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -1576,7 +1576,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		String identifier = (String) inpt.readString();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
 		cls.declarationKind = ObjectKind.Class;
-		cls.SEQU = inpt.readSEQU(cls);
+		cls.OBJECT_SEQU = inpt.readSEQU(cls);
 		
 		// *** SyntaxClass
 		cls.lineNumber = inpt.readShort();

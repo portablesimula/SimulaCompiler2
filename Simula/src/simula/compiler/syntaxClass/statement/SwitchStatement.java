@@ -438,7 +438,7 @@ public final class SwitchStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeSwitchStatement: " + this);
 		oupt.writeKind(ObjectKind.SwitchStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** SwitchStatement
@@ -449,7 +449,7 @@ public final class SwitchStatement extends Statement {
 
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		SwitchStatement stm = new SwitchStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		stm.lowKey = (Expression) inpt.readObj();

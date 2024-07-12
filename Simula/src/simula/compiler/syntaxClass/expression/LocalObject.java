@@ -203,7 +203,7 @@ public final class LocalObject extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLocalObject: " + this);
 		oupt.writeKind(ObjectKind.LocalObject);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -215,7 +215,7 @@ public final class LocalObject extends Expression {
 	
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		LocalObject expr = new LocalObject();
-		expr.SEQU = inpt.readSEQU(expr);
+		expr.OBJECT_SEQU = inpt.readSEQU(expr);
 		// *** SyntaxClass
 		expr.lineNumber = inpt.readShort();
 		// *** Expression

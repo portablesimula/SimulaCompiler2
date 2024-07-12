@@ -130,7 +130,7 @@ public final class LabeledStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeLabeledStatement: " + this);
 		oupt.writeKind(ObjectKind.LabeledStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** LabeledStatement
@@ -143,7 +143,7 @@ public final class LabeledStatement extends Statement {
 	@SuppressWarnings("unchecked")
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		LabeledStatement stm = new LabeledStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** LabeledStatement

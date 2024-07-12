@@ -305,7 +305,7 @@ public final class VirtualSpecification extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** VirtualSpecification
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
@@ -317,7 +317,7 @@ public final class VirtualSpecification extends Declaration {
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		VirtualSpecification virt = new VirtualSpecification();
-		virt.SEQU = inpt.readSEQU(virt);
+		virt.OBJECT_SEQU = inpt.readSEQU(virt);
 		// *** VirtualSpecification
 		virt.identifier = inpt.readString();
 		virt.externalIdent = inpt.readString();

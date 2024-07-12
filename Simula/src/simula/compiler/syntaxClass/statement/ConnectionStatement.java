@@ -299,7 +299,7 @@ public final class ConnectionStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConnectionStatement: " + this);
 		oupt.writeKind(ObjectKind.ConnectionStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ConnectionStatement
@@ -314,7 +314,7 @@ public final class ConnectionStatement extends Statement {
 	@SuppressWarnings("unchecked")
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionStatement stm = new ConnectionStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** ConnectionStatement

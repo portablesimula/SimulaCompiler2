@@ -234,7 +234,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		Util.TRACE_OUTPUT("writeLabelDeclaration: " + identifier);
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 //		writeAttributes(oupt);
 //		super.writeAttributes(oupt);
 
@@ -259,7 +259,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		LabelDeclaration lab = new LabelDeclaration(identifier);
-		lab.SEQU = inpt.readSEQU(lab);
+		lab.OBJECT_SEQU = inpt.readSEQU(lab);
 
 		// *** SyntaxClass
 		lab.lineNumber = inpt.readShort();

@@ -546,7 +546,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 //		writeAttributes(oupt);
 
 		// *** SyntaxClass
@@ -579,7 +579,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
 //		blk.declarationKind = ObjectKind.CompoundStatement;
 		blk.declarationKind = declarationKind;
-		blk.SEQU = inpt.readSEQU(blk);
+		blk.OBJECT_SEQU = inpt.readSEQU(blk);
 		// *** SyntaxClass
 		blk.lineNumber = inpt.readShort();
 

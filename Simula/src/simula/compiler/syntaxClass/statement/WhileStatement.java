@@ -127,7 +127,7 @@ public final class WhileStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeWhileStatement: " + this);
 		oupt.writeKind(ObjectKind.WhileStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** WhileStatement
@@ -137,7 +137,7 @@ public final class WhileStatement extends Statement {
 
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		WhileStatement stm = new WhileStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** WhileStatement

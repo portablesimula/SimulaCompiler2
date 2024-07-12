@@ -139,7 +139,7 @@ public final class StandaloneExpression extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeStandaloneExpression: " + this);
 		oupt.writeKind(ObjectKind.StandaloneExpression);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** StandaloneExpression
@@ -148,7 +148,7 @@ public final class StandaloneExpression extends Statement {
 
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		StandaloneExpression stm = new StandaloneExpression();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** StandaloneExpression

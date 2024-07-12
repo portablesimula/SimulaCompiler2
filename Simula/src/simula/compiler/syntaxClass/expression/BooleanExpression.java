@@ -276,7 +276,7 @@ public final class BooleanExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeBooleanExpression: " + this);
 		oupt.writeKind(ObjectKind.BooleanExpression);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -290,7 +290,7 @@ public final class BooleanExpression extends Expression {
 	
 	public static BooleanExpression readObject(AttributeInputStream inpt) throws IOException {
 		BooleanExpression expr = new BooleanExpression();
-		expr.SEQU = inpt.readSEQU(expr);
+		expr.OBJECT_SEQU = inpt.readSEQU(expr);
 		// *** SyntaxClass
 		expr.lineNumber = inpt.readShort();
 		// *** Expression

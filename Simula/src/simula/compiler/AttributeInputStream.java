@@ -150,10 +150,10 @@ public class AttributeInputStream {
 
 
     public int readSEQU(SyntaxClass obj) throws IOException {
-    	int SEQU = inpt.readShort();
-    	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + SEQU + "  ====>  " + obj.getClass().getSimpleName());
-		objectReference.put(SEQU, obj);
-    	return SEQU;
+    	int OBJECT_SEQU = inpt.readShort();
+    	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + OBJECT_SEQU + "  ====>  " + obj.getClass().getSimpleName());
+		objectReference.put(OBJECT_SEQU, obj);
+    	return OBJECT_SEQU;
 	}
     
 
@@ -164,20 +164,20 @@ public class AttributeInputStream {
 			if(TRACE) System.out.println("AttributeInputStream.readObj: null");
 			return null;
 		case ObjectKind.ObjectReference:
-			int SEQU = inpt.readShort();
-			if(TRACE) System.out.println("AttributeInputStream.readObj: SEQU="+SEQU);
+			int OBJECT_SEQU = inpt.readShort();
+			if(TRACE) System.out.println("AttributeInputStream.readObj: OBJECT_SEQU="+OBJECT_SEQU);
 			SyntaxClass obj;
-			obj = objectReference.get(SEQU);
-			Util.ASSERT(obj != null, "Invariant: SEQU="+modID+"#"+SEQU);
+			obj = objectReference.get(OBJECT_SEQU);
+			Util.ASSERT(obj != null, "Invariant: OBJECT_SEQU="+modID+"#"+OBJECT_SEQU);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+obj);
 			return(obj);
 		default:
 			obj = readObj(kind,this);
-			Util.ASSERT(obj.SEQU != 0, "Invariant: SEQU="+obj.SEQU);
-			objectReference.put(obj.SEQU, obj);
-			obj.SEQU = 0;
+			Util.ASSERT(obj.OBJECT_SEQU != 0, "Invariant: OBJECT_SEQU="+obj.OBJECT_SEQU);
+			objectReference.put(obj.OBJECT_SEQU, obj);
+			obj.OBJECT_SEQU = 0;
 			if(TRACE)
-				System.out.println("AttributeInputStream.readObj: "+modID+"#"+obj.SEQU+" obj="+obj);
+				System.out.println("AttributeInputStream.readObj: "+modID+"#"+obj.OBJECT_SEQU+" obj="+obj);
 			return(obj);
 		}	
 	}
@@ -216,9 +216,9 @@ public class AttributeInputStream {
 			case ObjectKind.ConnectionWhenPart:			return ConnectionWhenPart.readObject(inpt);
 			case ObjectKind.DummyStatement:				return DummyStatement.readObject(inpt);
 			case ObjectKind.ForStatement:				return ForStatement.readObject(inpt);
-//			case ObjectKind.ForListElement:				return ForListElement.readObject(inpt);
-//			case ObjectKind.ForWhileElement:			return ForWhileElement.readObject(inpt);
-//			case ObjectKind.StepUntilElement:			return StepUntilElement.readObject(inpt);
+			case ObjectKind.ForListElement:				return ForListElement.readObject(inpt);
+			case ObjectKind.ForWhileElement:			return ForWhileElement.readObject(inpt);
+			case ObjectKind.StepUntilElement:			return StepUntilElement.readObject(inpt);
 			case ObjectKind.GotoStatement:				return GotoStatement.readObject(inpt);
 //			case ObjectKind.InlineStatement:			return InlineStatement.readObject(inpt);
 			case ObjectKind.InnerStatement:				return InnerStatement.readObject(inpt);

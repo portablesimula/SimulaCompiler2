@@ -170,7 +170,7 @@ public final class ConditionalStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeConditionalStatement: " + this);
 		oupt.writeKind(ObjectKind.ConditionalStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ConditionalStatement
@@ -181,7 +181,7 @@ public final class ConditionalStatement extends Statement {
 
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		ConditionalStatement stm = new ConditionalStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** ConditionalStatement

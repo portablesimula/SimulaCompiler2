@@ -7,7 +7,6 @@ import java.lang.classfile.Label;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
@@ -114,18 +113,11 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 	 */
 	private ConnectionWhenPart() {}
 
-//	@Override
-//	public void writeObject(AttributeOutputStream oupt) throws IOException {
-//		Util.TRACE_OUTPUT("writeDoPart: " + this);
-//		oupt.writeShort(2);
-//		oupt.writeString(classIdentifier);
-//		oupt.writeObj(connectionBlock);
-//	}
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeWhenPart: " + this);
 		oupt.writeKind(ObjectKind.ConnectionWhenPart);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ConnectionWhenPart
@@ -136,7 +128,7 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 	
 	public static ConnectionDoPart readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionWhenPart whn = new ConnectionWhenPart();
-		whn.SEQU = inpt.readSEQU(whn);
+		whn.OBJECT_SEQU = inpt.readSEQU(whn);
 		// *** SyntaxClass
 		whn.lineNumber = inpt.readShort();
 		// *** ConnectionDoPart

@@ -33,7 +33,7 @@ public class ForWhileElement extends ForListElement {
 	/**
 	 * The second expression.
 	 */
-	final Expression expr2;
+	Expression expr2;
 
 	/**
 	 * Create a new WhileElement.
@@ -132,21 +132,43 @@ public class ForWhileElement extends ForListElement {
 				"(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
 		codeBuilder.invokespecial(CD.FOR_WhileElt, "<init>", MTD); // Invoke Constructor
 	}
+	
+	public String toString() {
+		return ("" + expr1 + " while " + expr2);
+	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Attribute File I/O
+	 */
+	private ForWhileElement() {}
 
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
-		Util.TRACE_OUTPUT("writeForListElement: " + this);
-		oupt.writeShort(2);
+		Util.TRACE_OUTPUT("ForWhileElement: " + this);
+		oupt.writeKind(ObjectKind.ForWhileElement);
+		oupt.writeShort(OBJECT_SEQU);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** ForListElement
 		oupt.writeObj(forStatement);
 		oupt.writeObj(expr1);
 		oupt.writeObj(expr2);
 	}
-
-	public String toString() {
-		return ("" + expr1 + " while " + expr2);
+	
+	public static ForWhileElement readObject(AttributeInputStream inpt) throws IOException {
+		ForWhileElement elt = new ForWhileElement();
+		elt.OBJECT_SEQU = inpt.readSEQU(elt);
+		// *** SyntaxClass
+		elt.lineNumber = inpt.readShort();
+		// *** ForListElement
+		elt.forStatement = (ForStatement) inpt.readObj();
+		elt.expr1 = (Expression) inpt.readObj();
+		elt.expr2 = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("ForWhileElement: " + elt);
+		return(elt);
 	}
+
 }

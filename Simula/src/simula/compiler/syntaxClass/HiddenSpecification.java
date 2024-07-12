@@ -178,7 +178,7 @@ public final class HiddenSpecification extends SyntaxClass {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
 		oupt.writeKind(ObjectKind.HiddenSpecification);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** HiddenSpecification
@@ -187,7 +187,7 @@ public final class HiddenSpecification extends SyntaxClass {
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		HiddenSpecification spec = new HiddenSpecification();
-		spec.SEQU = inpt.readSEQU(spec);
+		spec.OBJECT_SEQU = inpt.readSEQU(spec);
 		// *** SyntaxClass
 		spec.lineNumber = inpt.readShort();
 		// *** HiddenSpecification

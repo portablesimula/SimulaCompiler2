@@ -365,7 +365,7 @@ public final class ActivationStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeActivationStatement: " + this);
 		oupt.writeKind(ObjectKind.ActivationStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ActivationStatement
@@ -378,7 +378,7 @@ public final class ActivationStatement extends Statement {
 
 	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		ActivationStatement stm = new ActivationStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** ActivationStatement

@@ -967,7 +967,7 @@ public final class VariableExpression extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write VariableExpression: "+this);
 		oupt.writeKind(ObjectKind.VariableExpression);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -987,7 +987,7 @@ public final class VariableExpression extends Expression {
 	
 	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
 		VariableExpression var = new VariableExpression();
-		var.SEQU = inpt.readSEQU(var);
+		var.OBJECT_SEQU = inpt.readSEQU(var);
 		// *** SyntaxClass
 		var.lineNumber = inpt.readShort();
 		// *** Expression

@@ -21,7 +21,7 @@ import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 
 public class LabelList {
 	private static boolean TRACING = false;
-	private static int SEQU = 0;
+	private static int OBJECT_SEQU = 0;
 	private int sequ;
 	
 	public DeclarationScope declaredIn;
@@ -32,7 +32,7 @@ public class LabelList {
 
 	public LabelList(DeclarationScope declaredIn) {
 		if(TRACING) {
-			this.sequ = (SEQU++);
+			this.sequ = (OBJECT_SEQU++);
 			this.declaredIn = declaredIn;
 		}
 		this.labels = new Vector<LabelDeclaration>();

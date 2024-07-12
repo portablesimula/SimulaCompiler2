@@ -1063,7 +1063,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write ProcedureDeclaration: "+identifier);
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 //		oupt.writeString(externalIdent);
 //		oupt.writeType(type);
 //		oupt.writeShort(rtBlockLevel);
@@ -1098,7 +1098,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
-		pro.SEQU = inpt.readSEQU(pro);
+		pro.OBJECT_SEQU = inpt.readSEQU(pro);
 
 		// *** SyntaxClass
 		pro.lineNumber = inpt.readShort();

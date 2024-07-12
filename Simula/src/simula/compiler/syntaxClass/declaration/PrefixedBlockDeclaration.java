@@ -396,7 +396,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		Util.TRACE_OUTPUT("PrefixedBlockDeclaration: " + identifier + ", Declared in: " + declaredIn);
 		oupt.writeKind(declarationKind); // Mark: This is a PrefixedBlockDeclaration
 		oupt.writeString(identifier);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		
@@ -436,7 +436,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		PrefixedBlockDeclaration pbl = new PrefixedBlockDeclaration();
 		pbl.identifier = (String) inpt.readString();
 		pbl.declarationKind = ObjectKind.Class;
-		pbl.SEQU = inpt.readSEQU(pbl);
+		pbl.OBJECT_SEQU = inpt.readSEQU(pbl);
 		// *** SyntaxClass
 		pbl.lineNumber = inpt.readShort();
 

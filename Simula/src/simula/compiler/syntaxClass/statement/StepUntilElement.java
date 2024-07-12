@@ -3,12 +3,8 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
-import java.util.Vector;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
@@ -16,18 +12,12 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
-import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.CD;
-import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
-
-// ************************************************************************************
-// *** ForListElement -- Step Until Element
-// ************************************************************************************
 
 // ************************************************************************************
 // *** ForListElement -- Step Until Element
@@ -146,12 +136,12 @@ public class StepUntilElement extends ForListElement {
 	 *
 	 *
 	*/
-	private static int SEQU=0;
+	private static int DELTA_SEQU=0;
 	private void generalCase() {
 //		System.out.println("ForStatement.generalCase: "+this);
 		String cv = forStatement.controlVariable.toJavaCode();
 		String deltaType=expr2.type.toJavaType();
-		String deltaID = "DELTA_" + (SEQU++);
+		String deltaID = "DELTA_" + (DELTA_SEQU++);
 		GeneratedJavaClass.debug("// ForStatement:");
 		GeneratedJavaClass.code(deltaType + " " + deltaID + ';');
 		GeneratedJavaClass.code(cv + " = " + this.expr1.toJavaCode() + ";");
@@ -370,22 +360,45 @@ public class StepUntilElement extends ForListElement {
 		codeBuilder.invokespecial(CD.FOR_StepUntil, "<init>", MTD); // Invoke Constructor
 	}
 
+	@Override
+	public String toString() {
+		return ("" + expr1 + " step " + expr2 + " until " + expr3);
+	}
+
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Attribute File I/O
+	 */
+	private StepUntilElement() {}
 
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
-		Util.TRACE_OUTPUT("writeForListElement: " + this);
-		oupt.writeShort(3);
+		Util.TRACE_OUTPUT("StepUntilElement: " + this);
+		oupt.writeKind(ObjectKind.StepUntilElement);
+		oupt.writeShort(OBJECT_SEQU);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** ForListElement
 		oupt.writeObj(forStatement);
 		oupt.writeObj(expr1);
 		oupt.writeObj(expr2);
 		oupt.writeObj(expr3);
 	}
-
-	@Override
-	public String toString() {
-		return ("" + expr1 + " step " + expr2 + " until " + expr3);
+	
+	public static StepUntilElement readObject(AttributeInputStream inpt) throws IOException {
+		StepUntilElement elt = new StepUntilElement();
+		elt.OBJECT_SEQU = inpt.readSEQU(elt);
+		// *** SyntaxClass
+		elt.lineNumber = inpt.readShort();
+		// *** ForListElement
+		elt.forStatement = (ForStatement) inpt.readObj();
+		elt.expr1 = (Expression) inpt.readObj();
+		elt.expr2 = (Expression) inpt.readObj();
+		elt.expr3 = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("StepUntilElement: " + elt);
+		return(elt);
 	}
+	
 }

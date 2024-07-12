@@ -26,13 +26,13 @@ import simula.compiler.utilities.Util;
 
 public final class Thunk extends DeclarationScope {
 
-	private static int SEQU = 0;
+	private static int OBJECT_SEQU = 0;
 	private ClassDesc CD_ThisClass;
 	private int kind; //Parameter.Kind kind;
 	private Expression expr;
 	
 	private Thunk(int kind,Expression expr) {
-		super(Global.sourceName + "$THUNK$" + (++SEQU));
+		super(Global.sourceName + "$THUNK$" + (++OBJECT_SEQU));
 		this.declarationKind = ObjectKind.Thunk;
 		this.kind = kind;
 		this.expr = expr;

@@ -267,7 +267,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Variable: " + this);
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -285,7 +285,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
-		var.SEQU = inpt.readSEQU(var);
+		var.OBJECT_SEQU = inpt.readSEQU(var);
 
 		// *** SyntaxClass
 		var.lineNumber = inpt.readShort();
@@ -299,7 +299,7 @@ public class SimpleVariableDeclaration extends Declaration {
 		// *** SimpleVariableDeclaration
 		var.constant = inpt.readBoolean();
 		var.constantElement = (Expression) inpt.readObj();
-		Util.TRACE_INPUT("Variable: " + var.SEQU + " " + var);
+		Util.TRACE_INPUT("Variable: " + var.OBJECT_SEQU + " " + var);
 		return(var);
 	}
 

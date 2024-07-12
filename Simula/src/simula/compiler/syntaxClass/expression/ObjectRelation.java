@@ -187,7 +187,7 @@ public final class ObjectRelation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeObjectRelation: " + this);
 		oupt.writeKind(ObjectKind.ObjectRelation);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -201,7 +201,7 @@ public final class ObjectRelation extends Expression {
 	
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		ObjectRelation expr = new ObjectRelation();
-		expr.SEQU = inpt.readSEQU(expr);
+		expr.OBJECT_SEQU = inpt.readSEQU(expr);
 		expr.lineNumber = inpt.readShort();
 		expr.type = inpt.readType();
 		expr.backLink = (SyntaxClass) inpt.readObj();

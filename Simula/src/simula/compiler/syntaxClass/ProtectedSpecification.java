@@ -133,7 +133,7 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeProtectedSpecification: " + identifier);
 		oupt.writeKind(ObjectKind.ProtectedSpecification);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ProtectedSpecification
@@ -142,7 +142,7 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		ProtectedSpecification spec = new ProtectedSpecification();
-		spec.SEQU = inpt.readSEQU(spec);
+		spec.OBJECT_SEQU = inpt.readSEQU(spec);
 		// *** SyntaxClass
 		spec.lineNumber = inpt.readShort();
 		// *** ProtectedSpecification

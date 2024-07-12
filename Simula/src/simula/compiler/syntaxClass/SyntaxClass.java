@@ -103,7 +103,7 @@ public abstract class SyntaxClass {
 	 * During Attribute File Input it is index to the Object Reference Table.
 	 * See: Global.
 	 */
-	public int SEQU;
+	public int OBJECT_SEQU;
 	
 	/**
 	 * The source line number

@@ -160,7 +160,7 @@ public final class GotoStatement extends Statement {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeGotoStatement: " + this);
 		oupt.writeKind(ObjectKind.GotoStatement);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** GotoStatement
@@ -169,7 +169,7 @@ public final class GotoStatement extends Statement {
 
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
 		GotoStatement stm = new GotoStatement();
-		stm.SEQU = inpt.readSEQU(stm);
+		stm.OBJECT_SEQU = inpt.readSEQU(stm);
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		// *** GotoStatement

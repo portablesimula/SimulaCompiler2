@@ -28,7 +28,7 @@ import simula.compiler.utilities.Util;
 /**
  * Utility class ForListElement implementing a single value element.
  */
-public class ForListElement {
+public class ForListElement extends SyntaxClass {
 	/**
 	 * The For-statement
 	 */
@@ -156,39 +156,33 @@ public class ForListElement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Default constructor used by Attribute File I/O
+	 */
+	protected ForListElement() {}
 
+	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
-		Util.TRACE_OUTPUT("writeForListElement: " + this);
-		oupt.writeShort(1);
+		Util.TRACE_OUTPUT("ForListElement: " + this);
+		oupt.writeKind(ObjectKind.ForListElement);
+		oupt.writeShort(OBJECT_SEQU);
+		// *** SyntaxClass
+		oupt.writeShort(lineNumber);
+		// *** ForListElement
 		oupt.writeObj(forStatement);
 		oupt.writeObj(expr1);
 	}
-
-	public static ForListElement readObject(ForStatement x, AttributeInputStream inpt) throws IOException {
-		ForListElement stm = null;
-		int nExpr = inpt.readShort();
-		switch(nExpr) {
-		case 1:
-			ForStatement forStatement = (ForStatement) inpt.readObj();
-			Expression expr1 = (Expression) inpt.readObj();
-			stm = new ForListElement(forStatement,expr1);
-			break;
-		case 2: 
-			forStatement = (ForStatement) inpt.readObj();
-			Expression expr21 = (Expression) inpt.readObj();
-			Expression expr22 = (Expression) inpt.readObj();
-			stm = new ForWhileElement(forStatement,expr21,expr22);
-			break;
-		case 3: 
-			forStatement = (ForStatement) inpt.readObj();
-			Expression expr31 = (Expression) inpt.readObj();
-			Expression expr32 = (Expression) inpt.readObj();
-			Expression expr33 = (Expression) inpt.readObj();
-			stm = new StepUntilElement(forStatement,expr31,expr32,expr33);
-			break;
-		}
-		Util.TRACE_INPUT("ForListElement: " + stm);
-		return(stm);
+	
+	public static ForListElement readObject(AttributeInputStream inpt) throws IOException {
+		ForListElement elt = new ForListElement();
+		elt.OBJECT_SEQU = inpt.readSEQU(elt);
+		// *** SyntaxClass
+		elt.lineNumber = inpt.readShort();
+		// *** ForListElement
+		elt.forStatement = (ForStatement) inpt.readObj();
+		elt.expr1 = (Expression) inpt.readObj();
+		Util.TRACE_INPUT("ForListElement: " + elt);
+		return(elt);
 	}
 
 }

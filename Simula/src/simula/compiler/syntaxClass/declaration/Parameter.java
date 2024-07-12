@@ -510,7 +510,7 @@ public final class Parameter extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** Parameter
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
@@ -521,7 +521,7 @@ public final class Parameter extends Declaration {
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Parameter par = new Parameter();
-		par.SEQU = inpt.readSEQU(par);
+		par.OBJECT_SEQU = inpt.readSEQU(par);
 		// *** Parameter
 		par.identifier = inpt.readString();
 		par.externalIdent = inpt.readString();

@@ -89,18 +89,13 @@ public class ConnectionDoPart extends SyntaxClass {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	ConnectionDoPart() {}
+	protected ConnectionDoPart() {}
 
-//	public void writeObject(AttributeOutputStream oupt) throws IOException {
-//		Util.TRACE_OUTPUT("writeDoPart: " + this);
-//		oupt.writeShort(1);
-//		oupt.writeObj(connectionBlock);
-//	}
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeDoPart: " + this);
 		oupt.writeKind(ObjectKind.ConnectionDoPart);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** ConnectionDoPart
@@ -110,7 +105,7 @@ public class ConnectionDoPart extends SyntaxClass {
 	
 	public static ConnectionDoPart readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionDoPart dop = new ConnectionDoPart();
-		dop.SEQU = inpt.readSEQU(dop);
+		dop.OBJECT_SEQU = inpt.readSEQU(dop);
 		// *** SyntaxClass
 		dop.lineNumber = inpt.readShort();
 		// *** ConnectionDoPart
@@ -120,23 +115,5 @@ public class ConnectionDoPart extends SyntaxClass {
 		return(dop);
 	}
 	
-//	public static ConnectionDoPart readObject(ConnectionStatement x, AttributeInputStream inpt) throws IOException {
-//		int n = inpt.readShort();
-//		switch(n) {
-//		case 1:
-//			ConnectionDoPart stm = x.new ConnectionDoPart();
-//			stm.connectionBlock = (ConnectionBlock) inpt.readObj();
-//			Util.TRACE_INPUT("ConnectionDoPart: " + stm);
-//			return(stm);
-//		case 2:
-//			ConnectionWhenPart whn = x.new ConnectionWhenPart();
-//			whn.classIdentifier = inpt.readString();
-//			whn.connectionBlock = (ConnectionBlock) inpt.readObj();
-//			Util.TRACE_INPUT("ConnectionWhenPart: " + whn);
-//			return(whn);
-//		}
-//		Util.IERR();
-//		return(null);
-//	}
 }
 

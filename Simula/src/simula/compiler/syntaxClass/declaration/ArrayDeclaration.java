@@ -562,7 +562,7 @@ public final class ArrayDeclaration extends Declaration {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Array: " + type + ' ' + identifier + ", nDim=" + nDim);
 		oupt.writeKind(declarationKind);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -583,7 +583,7 @@ public final class ArrayDeclaration extends Declaration {
 	
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		ArrayDeclaration arr = new ArrayDeclaration();
-		arr.SEQU = inpt.readSEQU(arr);
+		arr.OBJECT_SEQU = inpt.readSEQU(arr);
 
 		// *** SyntaxClass
 		arr.lineNumber = inpt.readShort();

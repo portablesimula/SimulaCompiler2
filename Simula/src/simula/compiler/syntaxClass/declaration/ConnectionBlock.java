@@ -272,7 +272,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		Util.TRACE_OUTPUT("BEGIN Write ConnectionBlock: "+identifier);
 		oupt.writeKind(declarationKind); // Mark: This is a ConnectionBlock
 		oupt.writeString(identifier);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -302,7 +302,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public static ConnectionBlock readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		ConnectionBlock blk = new ConnectionBlock(identifier);
-		blk.SEQU = inpt.readSEQU(blk);
+		blk.OBJECT_SEQU = inpt.readSEQU(blk);
 		
 		// *** SyntaxClass
 		blk.lineNumber = inpt.readShort();

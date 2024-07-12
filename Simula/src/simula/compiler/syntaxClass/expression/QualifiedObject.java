@@ -144,7 +144,7 @@ public final class QualifiedObject extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeQualifiedObject: " + this);
 		oupt.writeKind(ObjectKind.QualifiedObject);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -157,7 +157,7 @@ public final class QualifiedObject extends Expression {
 	
 	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
 		QualifiedObject expr = new QualifiedObject();
-		expr.SEQU = inpt.readSEQU(expr);
+		expr.OBJECT_SEQU = inpt.readSEQU(expr);
 		// *** SyntaxClass
 		expr.lineNumber = inpt.readShort();
 		// *** Expression

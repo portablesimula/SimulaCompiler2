@@ -328,7 +328,7 @@ public final class Constant extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Constant: "+type+' '+value);
 		oupt.writeKind(ObjectKind.Constant);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -340,7 +340,7 @@ public final class Constant extends Expression {
 	
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Constant cnst = new Constant();
-		cnst.SEQU = inpt.readSEQU(cnst);
+		cnst.OBJECT_SEQU = inpt.readSEQU(cnst);
 		// *** SyntaxClass
 		cnst.lineNumber = inpt.readShort();
 		// *** Expression

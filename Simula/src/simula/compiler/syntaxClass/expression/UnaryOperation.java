@@ -173,7 +173,7 @@ public final class UnaryOperation extends Expression {
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeUnaryOperation: " + this);
 		oupt.writeKind(ObjectKind.UnaryOperation);
-		oupt.writeShort(SEQU);
+		oupt.writeShort(OBJECT_SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 		// *** Expression
@@ -186,7 +186,7 @@ public final class UnaryOperation extends Expression {
 	
 	public static UnaryOperation readObject(AttributeInputStream inpt) throws IOException {
 		UnaryOperation expr = new UnaryOperation();
-		expr.SEQU = inpt.readSEQU(expr);
+		expr.OBJECT_SEQU = inpt.readSEQU(expr);
 		// *** SyntaxClass
 		expr.lineNumber = inpt.readShort();
 		// *** Expression
