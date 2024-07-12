@@ -178,16 +178,4 @@ public final class GotoStatement extends Statement {
 		return(stm);
 	}
 
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(label);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		label = (Expression) inpt.readObj();
-//	}
-
 }

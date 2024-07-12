@@ -12,6 +12,7 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
@@ -171,30 +172,52 @@ public final class HiddenSpecification extends SyntaxClass {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	private HiddenSpecification() {
-	}
-
-	public void writeHiddenSpecification(AttributeOutputStream oupt) throws IOException {
+	private HiddenSpecification() {}
+	
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
-
+		oupt.writeKind(ObjectKind.HiddenSpecification);
+		oupt.writeShort(SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
-		
 		// *** HiddenSpecification
 		oupt.writeString(identifier);
 	}
-	
-	public static HiddenSpecification readHiddenSpecification(AttributeInputStream inpt) throws IOException {
-		HiddenSpecification spec = new HiddenSpecification();
 
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
+		HiddenSpecification spec = new HiddenSpecification();
+		spec.SEQU = inpt.readSEQU(spec);
 		// *** SyntaxClass
 		spec.lineNumber = inpt.readShort();
-		
 		// *** HiddenSpecification
 		spec.identifier = inpt.readString();
 		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
 		return(spec);
 	}
+
+//	public void writeHiddenSpecification(AttributeOutputStream oupt) throws IOException {
+//		Util.TRACE_OUTPUT("writeHiddenSpecification: " + identifier);
+//
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		
+//		// *** HiddenSpecification
+//		oupt.writeString(identifier);
+//	}
+//	
+//	public static HiddenSpecification readHiddenSpecification(AttributeInputStream inpt) throws IOException {
+//		HiddenSpecification spec = new HiddenSpecification();
+//
+//		// *** SyntaxClass
+//		spec.lineNumber = inpt.readShort();
+//		
+//		// *** HiddenSpecification
+//		spec.identifier = inpt.readString();
+//		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
+//		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
+//		return(spec);
+//	}
 
 }

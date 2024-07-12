@@ -40,6 +40,7 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -98,7 +99,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	/**
 	 * Parameter list.
 	 */
-	public Vector<Parameter> parameterList = new Vector<Parameter>();
+	public ObjectList<Parameter> parameterList = new ObjectList<Parameter>();
 	
 	/**
 	 * Virtual Match indicator. 
@@ -289,7 +290,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			while (Declaration.acceptDeclaration(proc)) {
 				Parse.accept(KeyWord.SEMICOLON);
 			}
-			Vector<Statement> stmList = proc.statements;
+//			Vector<Statement> stmList = proc.statements;
+			ObjectList<Statement> stmList = proc.statements;
 			while (!Parse.accept(KeyWord.END)) {
 				stm = Statement.expectStatement();
 				if (stm != null) stmList.add(stm);
@@ -1071,66 +1073,48 @@ public class ProcedureDeclaration extends BlockDeclaration {
 //		for(Parameter par:parameterList) par.writeParameter(oupt);
 
 		
-		// ================ SyntaxClass =================
+		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 
-		// ================ Declaration =================
+		// *** Declaration
 //		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 
-		// ================ DeclarationScope =================
+		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
 //		oupt.writeShort(ctBlockLevel);
 //		oupt.writeShort(rtBlockLevel);
 //		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		
-		// ================ ProcedurekDeclaration =================
-		oupt.writeShort(parameterList.size());
-		for(Parameter par:parameterList) par.writeParameter(oupt);
+		// *** ProcedurekDeclaration
+		oupt.writeObjectList(parameterList);
 
-		
-//		writeAttributes(oupt);
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		ProcedureDeclaration pro = new ProcedureDeclaration(identifier, ObjectKind.Procedure);
 		pro.SEQU = inpt.readSEQU(pro);
-//		pro.externalIdent = inpt.readString();
-//		pro.type=inpt.readType();
-//		pro.rtBlockLevel = inpt.readShort();
-//		pro.hasLocalClasses = inpt.readBoolean();
-//		
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			pro.parameterList.add(Parameter.readParameter(inpt));
 
-		// ================ SyntaxClass =================
+		// *** SyntaxClass
 		pro.lineNumber = inpt.readShort();
 
-		// ================ Declaration =================
+		// *** Declaration
 //		pro.identifier = inpt.readString();
 		pro.externalIdent = inpt.readString();
 		pro.type = inpt.readType();
 
-		// ================ DeclarationScope =================
+		// *** DeclarationScope
 		pro.sourceFileName = inpt.readString();
-//		ctBlockLevel = inpt.readShort();
-//		pro.rtBlockLevel = inpt.readShort();
-//		pro.isPreCompiledFromFile = inpt.readString();
 		pro.hasLocalClasses = inpt.readBoolean();
 		
-		// ================ ProcedureDeclaration =================		
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			pro.parameterList.add(Parameter.readParameter(inpt));
+		// *** ProcedurekDeclaration
+		pro.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
 
-		
-//		pro.readAttributes(inpt);
-		
 		if(!Option.internal.CREATE_JAVA_SOURCE)
 			pro.isPreCompiledFromFile = inpt.jarFileName;
 //		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
@@ -1139,20 +1123,5 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Global.setScope(pro.declaredIn);
 		return(pro);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeShort(parameterList.size());
-//		for(Parameter par:parameterList) par.writeParameter(oupt);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			parameterList.add(Parameter.readParameter(inpt));
-//	}
 
 }

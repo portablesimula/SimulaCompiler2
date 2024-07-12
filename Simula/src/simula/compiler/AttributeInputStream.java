@@ -4,6 +4,9 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+import simula.compiler.syntaxClass.HiddenSpecification;
+import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
@@ -12,10 +15,12 @@ import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
+import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
+import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.syntaxClass.expression.ArithmeticExpression;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.BooleanExpression;
@@ -34,16 +39,22 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.ActivationStatement;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.ConditionalStatement;
+import simula.compiler.syntaxClass.statement.ConnectionDoPart;
 import simula.compiler.syntaxClass.statement.ConnectionStatement;
+import simula.compiler.syntaxClass.statement.ConnectionWhenPart;
 import simula.compiler.syntaxClass.statement.DummyStatement;
+import simula.compiler.syntaxClass.statement.ForListElement;
 import simula.compiler.syntaxClass.statement.ForStatement;
+import simula.compiler.syntaxClass.statement.ForWhileElement;
 import simula.compiler.syntaxClass.statement.GotoStatement;
 import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.LabeledStatement;
 import simula.compiler.syntaxClass.statement.StandaloneExpression;
+import simula.compiler.syntaxClass.statement.StepUntilElement;
 import simula.compiler.syntaxClass.statement.SwitchStatement;
 import simula.compiler.syntaxClass.statement.WhileStatement;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.ObjectReferenceMap;
 import simula.compiler.utilities.Util;
 
@@ -133,6 +144,11 @@ public class AttributeInputStream {
     	return s;
     }
 
+	public ObjectList<?> readObjectList() throws IOException {
+		return ObjectList.read(this);
+	}
+
+
     public int readSEQU(SyntaxClass obj) throws IOException {
     	int SEQU = inpt.readShort();
     	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + SEQU + "  ====>  " + obj.getClass().getSimpleName());
@@ -157,7 +173,7 @@ public class AttributeInputStream {
 			return(obj);
 		default:
 			obj = readObj(kind,this);
-			Util.ASSERT(obj.SEQU != 0, "Invariant");
+			Util.ASSERT(obj.SEQU != 0, "Invariant: SEQU="+obj.SEQU);
 			objectReference.put(obj.SEQU, obj);
 			obj.SEQU = 0;
 			if(TRACE)
@@ -182,20 +198,27 @@ public class AttributeInputStream {
 			case ObjectKind.PrefixedBlock:				return PrefixedBlockDeclaration.readObject(inpt);
 //			case ObjectKind.SimulaProgram:				return SimulaProgram.readObject(inpt);
 			case ObjectKind.ArrayDeclaration:			return ArrayDeclaration.readObject(inpt);
-//			case ObjectKind.VirtualSpecification:		return VirtualSpecification.readObject(inpt);
+			case ObjectKind.VirtualSpecification:		return VirtualSpecification.readObject(inpt);
 //			case ObjectKind.VirtualMatch:				return VirtualMatch.readObject(inpt);
-//			case ObjectKind.Parameter:					return Parameter.readObject(inpt);
+			case ObjectKind.Parameter:					return Parameter.readObject(inpt);
 //			case ObjectKind.Thunk:						return Thunk.readObject(inpt);
 			case ObjectKind.LabelDeclaration:			return LabelDeclaration.readObject(inpt);
 			case ObjectKind.SimpleVariableDeclaration:	return SimpleVariableDeclaration.readObject(inpt);
 			case ObjectKind.ExternalDeclaration:		return ExternalDeclaration.readObject(inpt);
+			case ObjectKind.HiddenSpecification:		return HiddenSpecification.readObject(inpt);
+			case ObjectKind.ProtectedSpecification:		return ProtectedSpecification.readObject(inpt);
 
 			case ObjectKind.ActivationStatement:		return ActivationStatement.readObject(inpt);
 			case ObjectKind.BlockStatement:				return BlockStatement.readObject(inpt);
 			case ObjectKind.ConditionalStatement:		return ConditionalStatement.readObject(inpt);
 			case ObjectKind.ConnectionStatement:		return ConnectionStatement.readObject(inpt);
+			case ObjectKind.ConnectionDoPart:			return ConnectionDoPart.readObject(inpt);
+			case ObjectKind.ConnectionWhenPart:			return ConnectionWhenPart.readObject(inpt);
 			case ObjectKind.DummyStatement:				return DummyStatement.readObject(inpt);
 			case ObjectKind.ForStatement:				return ForStatement.readObject(inpt);
+//			case ObjectKind.ForListElement:				return ForListElement.readObject(inpt);
+//			case ObjectKind.ForWhileElement:			return ForWhileElement.readObject(inpt);
+//			case ObjectKind.StepUntilElement:			return StepUntilElement.readObject(inpt);
 			case ObjectKind.GotoStatement:				return GotoStatement.readObject(inpt);
 //			case ObjectKind.InlineStatement:			return InlineStatement.readObject(inpt);
 			case ObjectKind.InnerStatement:				return InnerStatement.readObject(inpt);
@@ -225,7 +248,6 @@ public class AttributeInputStream {
 		Util.IERR("IMPOSSIBLE "+ObjectKind.edit(kind));
 		return(null);
 	}
-
 
 
 }

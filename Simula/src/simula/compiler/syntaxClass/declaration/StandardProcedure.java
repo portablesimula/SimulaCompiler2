@@ -14,6 +14,7 @@ import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -109,7 +110,8 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	
 	public ProcedureSpecification getProcedureSpecification(String mtd) {
 		Type type = null;
-		Vector<Parameter> pList = new Vector<Parameter>();
+//		Vector<Parameter> pList = new Vector<Parameter>();
+		ObjectList<Parameter> pList = new ObjectList<Parameter>();
 		
 		boolean more = true;
 		int pos=0;

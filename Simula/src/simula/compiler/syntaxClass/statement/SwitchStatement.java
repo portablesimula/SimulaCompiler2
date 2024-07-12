@@ -101,7 +101,7 @@ public final class SwitchStatement extends Statement {
 	/**
 	 * The list of When parts
 	 */
-	private final Vector<WhenPart> switchCases=new Vector<WhenPart>();
+	private final Vector<ConnectionWhenPart> switchCases=new Vector<ConnectionWhenPart>();
 
 	
 	private	List<SwitchCase> lookupSwitchCases;
@@ -142,7 +142,7 @@ public final class SwitchStatement extends Statement {
 			Parse.expect(KeyWord.DO);
 			Statement statement = Statement.expectStatement();
 			Parse.accept(KeyWord.SEMICOLON);
-			switchCases.add(new WhenPart(caseKeyList, statement));
+			switchCases.add(new ConnectionWhenPart(caseKeyList, statement));
 		}
 		Parse.expect(KeyWord.END);
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+lineNumber+": SwitchStatement: "+this);
@@ -196,9 +196,9 @@ public final class SwitchStatement extends Statement {
     }
     
     /**
-     * Utility class WhenPart.
+     * Utility class ConnectionWhenPart.
      */
-    private class WhenPart {
+    private class ConnectionWhenPart {
     	
     	/**
     	 * The case key list.
@@ -211,14 +211,14 @@ public final class SwitchStatement extends Statement {
     	Statement statement;
     	
     	/**
-    	 * Create a new WhenPart.
+    	 * Create a new ConnectionWhenPart.
     	 * @param caseKeyList the case key list
     	 * @param statement the statement
     	 */
-    	private WhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
+    	private ConnectionWhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
     		this.caseKeyList=caseKeyList;
     		this.statement=statement;
-    		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW WhenPart: " + toString());
+    		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW ConnectionWhenPart: " + toString());
     	}
 	
     	/**
@@ -336,7 +336,7 @@ public final class SwitchStatement extends Statement {
 			switchKey=TypeConversion.testAndCreate(Type.Character,switchKey);
 		} else
 			switchKey=TypeConversion.testAndCreate(Type.Integer,switchKey);
-    	for(WhenPart when:switchCases) {
+    	for(ConnectionWhenPart when:switchCases) {
     		for(SwitchInterval casePair:when.caseKeyList)
 			if(casePair!=null) {
 				casePair.lowCase.doChecking();
@@ -358,7 +358,7 @@ public final class SwitchStatement extends Statement {
 	    sb.append(") throw new RTS_SimulaRuntimeError(\"Switch key outside key interval\");");
 	    GeneratedJavaClass.code(sb.toString());
         GeneratedJavaClass.code("switch("+switchKey.toJavaCode()+") { // BEGIN SWITCH STATEMENT");
-        for(WhenPart when:switchCases) when.doCoding(false);
+        for(ConnectionWhenPart when:switchCases) when.doCoding(false);
         GeneratedJavaClass.code("} // END SWITCH STATEMENT");
     }
 
@@ -367,7 +367,7 @@ public final class SwitchStatement extends Statement {
 		buildSwitchKeyTest(codeBuilder);
 		lookupSwitchCases = new Vector<SwitchCase>();
 		int index = 1;
-		for(WhenPart when:switchCases) {
+		for(ConnectionWhenPart when:switchCases) {
 			 index = when.initLookupSwitchCases(index,codeBuilder);
 		}
 
@@ -377,7 +377,7 @@ public final class SwitchStatement extends Statement {
 		switchKey.buildEvaluation(null, codeBuilder);
 		codeBuilder
 			.lookupswitch(defaultTarget, lookupSwitchCases);
-        for(WhenPart when:switchCases) {
+        for(ConnectionWhenPart when:switchCases) {
         	when.buildByteCode(codeBuilder);
         }
         if(!has_NONE_case) {
@@ -409,14 +409,14 @@ public final class SwitchStatement extends Statement {
     	String spc=edIndent(indent);
     	Util.println(spc+"SWITCH("+lowKey+':'+hiKey+") "+switchKey);
     	Util.println(spc+"BEGIN");
-    	for(WhenPart when:switchCases) when.print(indent+1);
+    	for(ConnectionWhenPart when:switchCases) when.print(indent+1);
         Util.println(spc+"END"); 
     }
 	
 	@Override
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+"SWITCH("+lowKey+':'+hiKey+") "+switchKey);
-		for (WhenPart when : switchCases) when.printTree(indent+1);
+		for (ConnectionWhenPart when : switchCases) when.printTree(indent+1);
 	}
 
 	@Override
@@ -458,21 +458,5 @@ public final class SwitchStatement extends Statement {
 		Util.TRACE_INPUT("SwitchStatement: " + stm);
 		return(stm);
 	}
-	
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(lowKey);
-//		oupt.writeObj(hiKey);
-//		oupt.writeObj(switchKey);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		lowKey = (Expression) inpt.readObj();
-//		hiKey = (Expression) inpt.readObj();
-//		switchKey = (Expression) inpt.readObj();
-//	}
  
 }

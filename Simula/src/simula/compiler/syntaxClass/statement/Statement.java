@@ -8,8 +8,6 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
-import java.util.Vector;
-
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
@@ -22,6 +20,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.LabelList;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -73,14 +72,14 @@ public abstract class Statement extends SyntaxClass {
 	 * @return the statement
 	 */
 	public static Statement expectStatement() {
-		Vector<LabelDeclaration> labels = null;
+		ObjectList<LabelDeclaration> labels = null;
 		int lineNumber=Parse.currentToken.lineNumber;
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Statement.doParse: LabeledStatement: lineNumber="+lineNumber+", current=" + Parse.currentToken	+ ", prev=" + Parse.prevToken);
 		String ident = Parse.acceptIdentifier();
 		while (Parse.accept(KeyWord.COLON)) {
 			if (ident != null) {
-				if (labels == null)	labels = new Vector<LabelDeclaration>();
+				if (labels == null)	labels = new ObjectList<LabelDeclaration>();
 				LabelDeclaration label = new LabelDeclaration(ident);
 				labels.add(label);
 				DeclarationScope scope = Global.getCurrentScope();
@@ -151,25 +150,5 @@ public abstract class Statement extends SyntaxClass {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName());
 	}
-
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//	}
 
 }

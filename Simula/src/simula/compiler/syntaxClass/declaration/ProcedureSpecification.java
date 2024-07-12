@@ -8,12 +8,11 @@
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
-import java.util.Vector;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -75,7 +74,8 @@ public final class ProcedureSpecification {
 	/**
 	 * The parameter list.
 	 */
-	public Vector<Parameter> parameterList;
+//	public Vector<Parameter> parameterList;
+	public ObjectList<Parameter> parameterList;
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
@@ -86,7 +86,8 @@ public final class ProcedureSpecification {
 	 * @param type procedure's type or null
 	 * @param pList the parameter lList
 	 */
-	public ProcedureSpecification(final String identifier, final Type type, final Vector<Parameter> pList) {
+//	public ProcedureSpecification(final String identifier, final Type type, final Vector<Parameter> pList) {
+	public ProcedureSpecification(final String identifier, final Type type, final ObjectList<Parameter> pList) {
 		this.identifier = identifier;
 		this.type = type;
 		this.parameterList = pList;
@@ -170,14 +171,16 @@ public final class ProcedureSpecification {
 			oupt.writeString(spec.identifier);
 			oupt.writeType(spec.type);
 
-			// oupt.writeObject(parameterList);
-			oupt.writeShort(spec.parameterList.size());
-			for(Parameter par:spec.parameterList) {
-				par.writeParameter(oupt);
-			}
+//			// oupt.writeObject(parameterList);
+//			oupt.writeShort(spec.parameterList.size());
+//			for(Parameter par:spec.parameterList) {
+//				par.writeParameter(oupt);
+//			}
+			oupt.writeObjectList(spec.parameterList);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();
 		if(!present) return(null);
@@ -185,13 +188,16 @@ public final class ProcedureSpecification {
 		spec.identifier = inpt.readString();
 		spec.type = inpt.readType();
 
-		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
-		int nPar = inpt.readShort();
-		if(nPar > 0) {
-			spec.parameterList = new Vector<Parameter>();
-			for(int i=0;i<nPar;i++)
-				spec.parameterList.add(Parameter.readParameter(inpt));
-		}
+//		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
+//		int nPar = inpt.readShort();
+//		if(nPar > 0) {
+////			spec.parameterList = new Vector<Parameter>();
+//			spec.parameterList = new ObjectList<Parameter>();
+//			for(int i=0;i<nPar;i++)
+//				spec.parameterList.add(Parameter.readParameter(inpt));
+//		}
+		spec.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
+		
 		Util.TRACE_INPUT("END Read ProcedureSpecification: " + spec.identifier);
 		return(spec);
 	}

@@ -147,18 +147,4 @@ public final class WhileStatement extends Statement {
 		return(stm);
 	}
 	
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(condition);
-//		oupt.writeObj(doStatement);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		condition  = (Expression) inpt.readObj();
-//		doStatement = (Statement) inpt.readObj();
-//	}
-	
 }

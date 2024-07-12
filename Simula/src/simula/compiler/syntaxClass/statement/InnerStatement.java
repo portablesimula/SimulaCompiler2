@@ -9,13 +9,12 @@ package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.util.Vector;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -46,7 +45,8 @@ public final class InnerStatement extends Statement {
 		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": InnerStatement: "+this);
 		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
 		cls.statements1 = cls.statements;
-		cls.statements = new Vector<Statement>();
+//		cls.statements = new Vector<Statement>();
+		cls.statements = new ObjectList<Statement>();
 //		System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENTS BEFORE INNER: "+cls.statements1);
 //		for(Statement stm:cls.statements1) {
 //			System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENT BEFORE INNER: "+stm);
@@ -114,15 +114,5 @@ public final class InnerStatement extends Statement {
 		Util.TRACE_INPUT("InnerStatement: " + stm);
 		return(stm);
 	}	
-	
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//	}
 
 }

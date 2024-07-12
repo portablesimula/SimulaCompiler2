@@ -7,8 +7,11 @@
  */
 package simula.compiler.utilities;
 
+import java.io.IOException;
 import java.util.Vector;
 
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.declaration.Declaration;
 
 /**
@@ -70,4 +73,30 @@ public final class DeclarationList extends Vector<Declaration> {
 		Util.println("DeclarationList: "+identifier+" -- "+title);
 		for(Declaration decl:this) Util.println(decl.toString());
 	}
+	
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	
+	public void writeObject(AttributeOutputStream oupt) throws IOException {  // TODO: TESTING_OBJECT_LIST
+		oupt.writeString(identifier);
+		oupt.writeShort(this.size());
+//		System.out.println("DeclarationList.writeObject: "+identifier+", n="+this.size());
+		for(Declaration dcl:this) oupt.writeObj(dcl);
+	}
+
+	public static DeclarationList readObject(AttributeInputStream inpt) throws IOException {  // TODO: TESTING_OBJECT_LIST
+		String identifier = inpt.readString();
+		DeclarationList list = new DeclarationList(identifier);
+		int n = inpt.readShort();
+//		System.out.println("DeclarationList.readObject: "+identifier+", n="+n);
+		if(n > 0) {
+			for (int i = 0; i < n; i++) {
+				Declaration dcl = (Declaration) inpt.readObj();
+				list.add(dcl);
+			}
+		}
+		return list;
+	}
+
 }

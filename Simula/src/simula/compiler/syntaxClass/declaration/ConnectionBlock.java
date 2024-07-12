@@ -289,8 +289,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
+		decls.writeObject(oupt);
 		
 		// *** ConnectionBlock
 		oupt.writeObj(statement);
@@ -319,11 +318,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		blk.isPreCompiledFromFile = inpt.readString();
 		blk.hasLocalClasses = inpt.readBoolean();
 		blk.labelList = LabelList.readLabelList(inpt);
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			blk.declarationList.add(decl);
-		}
+		blk.declarationList = DeclarationList.readObject(inpt);
 		
 		// *** ConnectionBlock
 		blk.statement = (Statement) inpt.readObj();

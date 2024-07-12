@@ -8,6 +8,7 @@ import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Util;
 
 public class AttributeOutputStream {
@@ -71,6 +72,10 @@ public class AttributeOutputStream {
 			oupt.writeShort(lng+1);
 			for(int i=0;i<lng;i++) oupt.writeChar(s.charAt(i));
 		}
+	}
+
+	public void writeObjectList(ObjectList<?> list) throws IOException {
+		ObjectList.write(list, this);
 	}
 
     public void writeObj(SyntaxClass obj) throws IOException {

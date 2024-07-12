@@ -32,6 +32,7 @@ import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -563,21 +564,16 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
+		decls.writeObject(oupt);
 
 		// *** BlockDeclaration
 		if (declarationKind == ObjectKind.CompoundStatement) {
 			oupt.writeBoolean(isMainModule);
-			if (statements != null) {
-				oupt.writeShort(statements.size());
-				for (Statement stm : statements)
-					oupt.writeObj(stm);
-			} else
-				oupt.writeShort(0);
+			oupt.writeObjectList(statements);
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt,int declarationKind) throws IOException {
 		DeclarationScope scope = Global.getCurrentScope();
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
@@ -598,22 +594,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		blk.isPreCompiledFromFile = inpt.readString();
 		blk.hasLocalClasses = inpt.readBoolean();
 		blk.labelList = LabelList.readLabelList(inpt);
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			blk.declarationList.add(decl);
-		}
+		blk.declarationList = DeclarationList.readObject(inpt);
 
 		// *** BlockDeclaration
 		if (declarationKind == ObjectKind.CompoundStatement) {
 			blk.isMainModule = inpt.readBoolean();
-			n = inpt.readShort();
-			if (n > 0)
-				blk.statements = new Vector<Statement>();
-			for (int i = 0; i < n; i++) {
-				Statement stm = (Statement) inpt.readObj();
-				blk.statements.add(stm);
-			}
+			blk.statements = (ObjectList<Statement>) inpt.readObjectList();
 		}
 
 		Global.setScope(scope);
@@ -621,72 +607,5 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
 		return(blk);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//		
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//		
-//		// *** DeclarationScope
-//		oupt.writeString(sourceFileName);
-//		oupt.writeString(isPreCompiledFromFile);
-//		oupt.writeBoolean(hasLocalClasses);
-//		LabelList.writeLabelList(labelList, oupt);
-//		DeclarationList decls = prep(declarationList);
-//		oupt.writeShort(decls.size());
-//		for(Declaration decl:decls) oupt.writeObj(decl);
-//
-//		// *** BlockDeclaration
-//		if (declarationKind == ObjectKind.CompoundStatement) {
-//			oupt.writeBoolean(isMainModule);
-//			if (statements != null) {
-//				oupt.writeShort(statements.size());
-//				for (Statement stm : statements)
-//					oupt.writeObj(stm);
-//			} else
-//				oupt.writeShort(0);
-//		}
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//
-//		// *** DeclarationScope
-//		sourceFileName = inpt.readString();
-//		isPreCompiledFromFile = inpt.readString();
-//		hasLocalClasses = inpt.readBoolean();
-//		labelList = LabelList.readLabelList(inpt);
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++) {
-//			Declaration decl = (Declaration) inpt.readObj();
-//			declarationList.add(decl);
-//		}
-//
-//		// *** BlockDeclaration
-//		if (declarationKind == ObjectKind.CompoundStatement) {
-//			isMainModule = inpt.readBoolean();
-//			n = inpt.readShort();
-//			if (n > 0)
-//				statements = new Vector<Statement>();
-//			for (int i = 0; i < n; i++) {
-//				Statement stm = (Statement) inpt.readObj();
-//				statements.add(stm);
-//			}
-//		}
-//	}
 
 }

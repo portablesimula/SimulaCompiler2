@@ -20,6 +20,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
@@ -500,22 +501,28 @@ public final class Parameter extends Declaration {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public Parameter() {
+	private Parameter() {
 		super(null);
 		this.declarationKind = ObjectKind.Parameter;
 	}
-
-	public void writeParameter(AttributeOutputStream oupt) throws IOException {
+	
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
+		oupt.writeKind(declarationKind);
+		oupt.writeShort(SEQU);
+		// *** Parameter
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 		oupt.writeShort(kind);
 		oupt.writeShort(mode);
 	}
-	
-	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
+
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Parameter par = new Parameter();
+		par.SEQU = inpt.readSEQU(par);
+		// *** Parameter
 		par.identifier = inpt.readString();
 		par.externalIdent = inpt.readString();
 		par.type = inpt.readType();
@@ -524,5 +531,25 @@ public final class Parameter extends Declaration {
 		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
 		return(par);
 	}
+
+//	public void writeParameter(AttributeOutputStream oupt) throws IOException {
+//		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
+//		oupt.writeString(identifier);
+//		oupt.writeString(externalIdent);
+//		oupt.writeType(type);
+//		oupt.writeShort(kind);
+//		oupt.writeShort(mode);
+//	}
+//	
+//	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
+//		Parameter par = new Parameter();
+//		par.identifier = inpt.readString();
+//		par.externalIdent = inpt.readString();
+//		par.type = inpt.readType();
+//		par.kind = inpt.readShort();
+//		par.mode = inpt.readShort();
+//		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
+//		return(par);
+//	}
 
 }

@@ -14,6 +14,7 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
+import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
@@ -127,28 +128,51 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 	 * Default constructor used by Attribute File I/O
 	 */
 	private ProtectedSpecification() {}
-
-	public void writeProtectedSpecification(AttributeOutputStream oupt) throws IOException {
+	
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeProtectedSpecification: " + identifier);
-
+		oupt.writeKind(ObjectKind.ProtectedSpecification);
+		oupt.writeShort(SEQU);
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
-		
 		// *** ProtectedSpecification
 		oupt.writeString(identifier);
 	}
-	
-	public static ProtectedSpecification readProtectedSpecification(AttributeInputStream inpt) throws IOException {
-		ProtectedSpecification spec = new ProtectedSpecification();
 
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
+		ProtectedSpecification spec = new ProtectedSpecification();
+		spec.SEQU = inpt.readSEQU(spec);
 		// *** SyntaxClass
 		spec.lineNumber = inpt.readShort();
-		
 		// *** ProtectedSpecification
 		spec.identifier = inpt.readString();
 		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
 		return(spec);
 	}
+
+//	public void writeProtectedSpecification(AttributeOutputStream oupt) throws IOException {
+//		Util.TRACE_OUTPUT("writeProtectedSpecification: " + identifier);
+//
+//		// *** SyntaxClass
+//		oupt.writeShort(lineNumber);
+//		
+//		// *** ProtectedSpecification
+//		oupt.writeString(identifier);
+//	}
+//	
+//	public static ProtectedSpecification readProtectedSpecification(AttributeInputStream inpt) throws IOException {
+//		ProtectedSpecification spec = new ProtectedSpecification();
+//
+//		// *** SyntaxClass
+//		spec.lineNumber = inpt.readShort();
+//		
+//		// *** ProtectedSpecification
+//		spec.identifier = inpt.readString();
+//		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
+//		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
+//		return(spec);
+//	}
 
 }

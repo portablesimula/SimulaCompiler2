@@ -157,16 +157,4 @@ public final class StandaloneExpression extends Statement {
 		return(stm);
 	}
 
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(expression);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		expression = (Expression) inpt.readObj();
-//	}
-
 }

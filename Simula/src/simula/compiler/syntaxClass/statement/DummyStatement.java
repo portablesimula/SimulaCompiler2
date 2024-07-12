@@ -82,14 +82,13 @@ public final class DummyStatement extends Statement {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public DummyStatement() { super(0); }
+	private DummyStatement() { super(0); }
 
 	@Override
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("writeDummyStatement: " + this);
 		oupt.writeKind(ObjectKind.DummyStatement);
 		oupt.writeShort(SEQU);
-		
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
 	}
@@ -97,21 +96,10 @@ public final class DummyStatement extends Statement {
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		DummyStatement stm = new DummyStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
 		Util.TRACE_INPUT("DummyStatement: " + stm);
 		return(stm);
 	}
-	
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//	}
 
 }

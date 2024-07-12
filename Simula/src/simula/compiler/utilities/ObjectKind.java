@@ -29,7 +29,8 @@ public class ObjectKind {
 	/** Label Declaration */		public static final int LabelDeclaration = 16;
 	/** Simple Variable */			public static final int SimpleVariableDeclaration = 17;
 	/** External Declaration */		public static final int ExternalDeclaration = 18;
-//	/** Switch Declaration */		public static final int Switch = 19;
+	/** Hidden Specification */		public static final int HiddenSpecification = 19;
+	/** Protected Specification */	public static final int ProtectedSpecification = 20;
 
 	// *** Statements:
 
@@ -37,16 +38,21 @@ public class ObjectKind {
 	/** BlockStatement */			public static final int BlockStatement = 22;
 	/** ConditionalStatement */		public static final int ConditionalStatement = 23;
 	/** ConnectionStatement */		public static final int ConnectionStatement = 24;
-	/** DummyStatement */			public static final int DummyStatement = 25;
-	/** ForStatement */				public static final int ForStatement = 26;
-	/** GotoStatement */			public static final int GotoStatement = 27;
-	/** InlineStatement */			public static final int InlineStatement = 28;
-	/** InnerStatement */			public static final int InnerStatement = 29;
-	/** LabeledStatement */			public static final int LabeledStatement = 30;
-	/** ProgramModule */			public static final int ProgramModule = 31;
-	/** StandaloneExpression */		public static final int StandaloneExpression = 32;
-	/** SwitchStatement */			public static final int SwitchStatement = 33;
-	/** WhileStatement */			public static final int WhileStatement = 34;
+	/** ConnectionDoPart */			public static final int ConnectionDoPart = 25;
+	/** ConnectionWhenPart */		public static final int ConnectionWhenPart = 26;
+	/** DummyStatement */			public static final int DummyStatement = 27;
+	/** ForStatement */				public static final int ForStatement = 28;
+	/** ForWhileElement */			public static final int ForListElement = 29;
+	/** ForStatement */				public static final int ForWhileElement = 30;
+	/** StepUntilElement */			public static final int StepUntilElement = 31;
+	/** GotoStatement */			public static final int GotoStatement = 32;
+	/** InlineStatement */			public static final int InlineStatement = 33;
+	/** InnerStatement */			public static final int InnerStatement = 34;
+	/** LabeledStatement */			public static final int LabeledStatement = 35;
+	/** ProgramModule */			public static final int ProgramModule = 36;
+	/** StandaloneExpression */		public static final int StandaloneExpression = 37;
+	/** SwitchStatement */			public static final int SwitchStatement = 38;
+	/** WhileStatement */			public static final int WhileStatement = 39;
 
 	// *** Expressions:
 
@@ -97,13 +103,20 @@ public class ObjectKind {
 			case LabelDeclaration:			return "LabelDeclaration";
 			case SimpleVariableDeclaration:	return "SimpleVariableDeclaration";
 			case ExternalDeclaration:		return "ExternalDeclaration";
+			case HiddenSpecification:		return "HiddenSpecification";
+			case ProtectedSpecification:	return "ProtectedSpecification";
 			
 			case ActivationStatement:		return "ActivationStatement";
 			case BlockStatement:			return "BlockStatement";
 			case ConditionalStatement:		return "ConditionalStatement";
 			case ConnectionStatement:		return "ConnectionStatement";
+			case ConnectionDoPart:			return "ConnectionDoPart";
+			case ConnectionWhenPart:		return "ConnectionWhenPart";
 			case DummyStatement:			return "DummyStatement";
 			case ForStatement:				return "ForStatement";
+			case ForListElement:			return "ForListElement";
+			case ForWhileElement:			return "ForWhileElement";
+			case StepUntilElement:			return "StepUntilElement";
 			case GotoStatement:				return "GotoStatement";
 			case InlineStatement:			return "InlineStatement";
 			case InnerStatement:			return "InnerStatement";

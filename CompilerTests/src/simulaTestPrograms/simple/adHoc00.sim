@@ -1,25 +1,11 @@
 begin
-	character termstatus;
-	integer numerrfound, maxerrno;
-      procedure AbortCompilation;
-      begin
-% +D         giveintinfo(1,6);  !*** ensure that back-end is informed;
-            termstatus:='6';
-            outtext(if numerrfound>maxerrno
-                      then "*** COMPILATION STOPPED: Too many errors ***"
-                 else if numerrfound = 0
-                      then "*** COMPILATION ABORTED ***"
-                      else "*** COMPILATION CANNOT CONTINUE ***");
-% +Z         RTS_Utility(4,0);
-% +D         if option(rank('T'))<>NUL then sqrt(-1);
-%            ENDCOMP;
-     end;
+   integer i,j,n;
 
-   procedure AP(i); integer i; begin end;
+   n := 1 ;
 
-   procedure P (F) ;  procedure F ; begin
-   end of procedure P ;
-
-   P (AP) ;
+   for i:= 1 step 1 until 2, j do         ! Complex For ;
+   begin
+   	  outtext("Value  " & edit(i)); outimage;
+   end ;
 
 end of program;

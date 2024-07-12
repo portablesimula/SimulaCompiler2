@@ -9,14 +9,13 @@ package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.util.Vector;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -44,7 +43,8 @@ public final class LabeledStatement extends Statement {
 	 * The list of labels.
 	 */
 //	private final Vector<String> labels;
-	private Vector<LabelDeclaration> labels;
+//	private Vector<LabelDeclaration> labels;
+	private ObjectList<LabelDeclaration> labels;
 	
 	/**
 	 * The statement
@@ -57,7 +57,8 @@ public final class LabeledStatement extends Statement {
 	 * @param labels the label identifiers
 	 * @param statement the labeled statement
 	 */
-	LabeledStatement(final int line,final Vector<LabelDeclaration> labels,final Statement statement) {
+//	LabeledStatement(final int line,final Vector<LabelDeclaration> labels,final Statement statement) {
+	LabeledStatement(final int line,final ObjectList<LabelDeclaration> labels,final Statement statement) {
 		super(line);
 		this.labels = labels;
 		this.statement = statement;
@@ -134,10 +135,12 @@ public final class LabeledStatement extends Statement {
 		oupt.writeShort(lineNumber);
 		// *** LabeledStatement
 		oupt.writeObj(statement);
-		oupt.writeShort(labels.size());
-		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
+//		oupt.writeShort(labels.size());
+//		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
+		oupt.writeObjectList(labels);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		LabeledStatement stm = new LabeledStatement();
 		stm.SEQU = inpt.readSEQU(stm);
@@ -145,34 +148,15 @@ public final class LabeledStatement extends Statement {
 		stm.lineNumber = inpt.readShort();
 		// *** LabeledStatement
 		stm.statement = (Statement) inpt.readObj();
-		int n = inpt.readShort();
-		if(n > 0) {
-			stm.labels = new Vector<LabelDeclaration>();
-			for(int i=0;i<n;i++)
-				stm.labels.add((LabelDeclaration) inpt.readObj());
-		}
+//		int n = inpt.readShort();
+//		if(n > 0) {
+//			stm.labels = new Vector<LabelDeclaration>();
+//			for(int i=0;i<n;i++)
+//				stm.labels.add((LabelDeclaration) inpt.readObj());
+//		}
+		stm.labels = (ObjectList<LabelDeclaration>) inpt.readObjectList();
 		Util.TRACE_INPUT("LabeledStatement: " + stm);
 		return(stm);
 	}
-	
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(statement);
-//		oupt.writeShort(labels.size());
-//		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		statement = (Statement) inpt.readObj();
-//		int n = inpt.readShort();
-//		if(n > 0) {
-//			labels = new Vector<LabelDeclaration>();
-//			for(int i=0;i<n;i++)
-//				labels.add((LabelDeclaration) inpt.readObj());
-//		}
-//	}
 
 }

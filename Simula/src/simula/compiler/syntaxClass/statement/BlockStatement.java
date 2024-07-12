@@ -158,10 +158,8 @@ public final class BlockStatement extends Statement {
 		Util.TRACE_OUTPUT("writeBlockStatement: " + this);
 		oupt.writeKind(ObjectKind.BlockStatement);
 		oupt.writeShort(SEQU);
-		
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
-
 		// *** BlockStatement
 		oupt.writeObj(blockDeclaration);
 	}
@@ -169,10 +167,8 @@ public final class BlockStatement extends Statement {
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		BlockStatement stm = new BlockStatement();
 		stm.SEQU = inpt.readSEQU(stm);
-		
 		// *** SyntaxClass
 		stm.lineNumber = inpt.readShort();
-
 		// *** BlockStatement
 		stm.blockDeclaration = (BlockDeclaration) inpt.readObj();
 

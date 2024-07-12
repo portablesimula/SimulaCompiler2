@@ -9,12 +9,11 @@ package simula.compiler.syntaxClass.declaration;
 
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 import java.lang.constant.ClassDesc;
-import java.util.Vector;
-
 import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -974,7 +973,8 @@ public final class StandardClass extends ClassDeclaration {
 		Process=new StandardClass("Link","Process");
 		Simulation.addStandardClass(Process);  // Declared in Simulation
 		Process.detachUsed=true;
-		Process.statements1=new Vector<Statement>();
+//		Process.statements1=new Vector<Statement>();
+		Process.statements1=new ObjectList<Statement>();
 		Process.statements1.add(new InlineStatement("detach")); // Statements before inner 
 		Process.statements.add(new InlineStatement("terminate")); // Statements after inner 				
 		//	    ref(EVENT_NOTICE) EVENT;
@@ -1018,7 +1018,8 @@ public final class StandardClass extends ClassDeclaration {
 		CatchingErrors=new StandardClass("CLASS","CatchingErrors");
 		ENVIRONMENT.addStandardClass(CatchingErrors);  // Declared in ENVIRONMENT
 		CatchingErrors.virtualSpecList.add(new VirtualSpecification("onError",null,VirtualSpecification.Kind.Procedure,CatchingErrors.prefixLevel(),null));
-		CatchingErrors.statements1=new Vector<Statement>();
+//		CatchingErrors.statements1=new Vector<Statement>();
+		CatchingErrors.statements1=new ObjectList<Statement>();
 		CatchingErrors.statements1.add(new InlineStatement("try")); // Statements before inner 
 		CatchingErrors.statements.add(new InlineStatement("catch")); // Statements after inner 				
 	}  

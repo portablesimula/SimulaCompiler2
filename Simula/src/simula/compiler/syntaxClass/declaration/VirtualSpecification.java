@@ -296,40 +296,68 @@ public final class VirtualSpecification extends Declaration {
 	/**
 	 * Default constructor used by Attribute File I/O
 	 */
-	public VirtualSpecification() {
+	private VirtualSpecification() {
 		super(null);
 		this.declarationKind = ObjectKind.VirtualSpecification;
 	}
-
-	public static void writeVirtSpec(VirtualSpecification virt,AttributeOutputStream oupt) throws IOException {
-		if(virt == null) {
-			oupt.writeBoolean(false);
-		} else {
-			oupt.writeBoolean(true);
-			Util.TRACE_OUTPUT("VirtualSpec: " + virt.type + ' ' + virt.identifier + ' ' + virt.kind);
-			oupt.writeString(virt.identifier);
-			oupt.writeString(virt.externalIdent);
-			oupt.writeType(virt.type);
-			oupt.writeShort(virt.kind);
-			oupt.writeShort(virt.prefixLevel);
-			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
-		}
+	
+	@Override
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("VirtualSpec: " + type + ' ' + identifier + ' ' + kind);
+		oupt.writeKind(declarationKind);
+		oupt.writeShort(SEQU);
+		// *** VirtualSpecification
+		oupt.writeString(identifier);
+		oupt.writeString(externalIdent);
+		oupt.writeType(type);
+		oupt.writeShort(kind);
+		oupt.writeShort(prefixLevel);
+		ProcedureSpecification.writeProcedureSpec(procedureSpec,oupt);
 	}
 
-	public static VirtualSpecification readVirtSpec(AttributeInputStream inpt) throws IOException {
-		boolean present = inpt.readBoolean();
-		VirtualSpecification virt = null;
-		if(present) {
-			virt = new VirtualSpecification();
-			virt.identifier = inpt.readString();
-			virt.externalIdent = inpt.readString();
-			virt.type = inpt.readType();
-			virt.kind = inpt.readShort();
-			virt.prefixLevel = inpt.readShort();
-			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
-		}
+	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
+		VirtualSpecification virt = new VirtualSpecification();
+		virt.SEQU = inpt.readSEQU(virt);
+		// *** VirtualSpecification
+		virt.identifier = inpt.readString();
+		virt.externalIdent = inpt.readString();
+		virt.type = inpt.readType();
+		virt.kind = inpt.readShort();
+		virt.prefixLevel = inpt.readShort();
+		virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
 		Util.TRACE_INPUT("VirtualSpec: " + virt);
 		return(virt);
 	}
+
+//	public static void writeVirtSpec(VirtualSpecification virt,AttributeOutputStream oupt) throws IOException {
+//		if(virt == null) {
+//			oupt.writeBoolean(false);
+//		} else {
+//			oupt.writeBoolean(true);
+//			Util.TRACE_OUTPUT("VirtualSpec: " + virt.type + ' ' + virt.identifier + ' ' + virt.kind);
+//			oupt.writeString(virt.identifier);
+//			oupt.writeString(virt.externalIdent);
+//			oupt.writeType(virt.type);
+//			oupt.writeShort(virt.kind);
+//			oupt.writeShort(virt.prefixLevel);
+//			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
+//		}
+//	}
+//
+//	public static VirtualSpecification readVirtSpec(AttributeInputStream inpt) throws IOException {
+//		boolean present = inpt.readBoolean();
+//		VirtualSpecification virt = null;
+//		if(present) {
+//			virt = new VirtualSpecification();
+//			virt.identifier = inpt.readString();
+//			virt.externalIdent = inpt.readString();
+//			virt.type = inpt.readType();
+//			virt.kind = inpt.readShort();
+//			virt.prefixLevel = inpt.readShort();
+//			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
+//		}
+//		Util.TRACE_INPUT("VirtualSpec: " + virt);
+//		return(virt);
+//	}
 
 }

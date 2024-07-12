@@ -25,6 +25,7 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -51,7 +52,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	/**
 	 * The statements belonging to this block.
 	 */
-	public Vector<Statement> statements = new Vector<Statement>();
+	public ObjectList<Statement> statements = new ObjectList<Statement>();
 
 	/**
 	 * Last source line number
@@ -293,6 +294,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	protected void codeStatements() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=true;
+//		for (Statement stm : statements) stm.doJavaCoding();
 		for (Statement stm : statements) stm.doJavaCoding();
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
@@ -586,115 +588,13 @@ public abstract class BlockDeclaration extends DeclarationScope {
     
 	
 	protected void printStatementList(int indent) {
+//		for(Statement s:statements) s.printTree(indent);
 		for(Statement s:statements) s.printTree(indent);
 	}
 	
-
-
 	@Override
 	public String toString() {
 		return ("" + identifier + '[' + externalIdent + "] ObjectKind=" + declarationKind);
 	}
-
-
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//		
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//		
-//		// *** DeclarationScope
-//		oupt.writeString(sourceFileName);
-//		oupt.writeString(isPreCompiledFromFile);
-//		oupt.writeBoolean(hasLocalClasses);
-//		LabelList.writeLabelList(labelList, oupt);
-//		DeclarationList decls = prep(declarationList);
-//		oupt.writeShort(decls.size());
-//		for(Declaration decl:decls) oupt.writeObj(decl);
-//
-//		// *** BlockDeclaration
-//		switch(declarationKind) {
-//			case ObjectKind.Class:
-//			case ObjectKind.Procedure:
-//			case ObjectKind.PrefixedBlock:
-//			case ObjectKind.CompoundStatement:
-//				oupt.writeBoolean(isMainModule);
-//				if (statements != null) {
-//					oupt.writeShort(statements.size());
-//					for (Statement stm : statements)
-//						oupt.writeObj(stm);
-//				} else
-//					oupt.writeShort(0);
-//		}
-//		
-////		if (declarationKind != ObjectKind.SubBlock) {
-////			oupt.writeBoolean(isMainModule);
-////			if (statements != null) {
-////				oupt.writeShort(statements.size());
-////				for (Statement stm : statements)
-////					oupt.writeObj(stm);
-////			} else
-////				oupt.writeShort(0);
-////		}
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//
-//		// *** DeclarationScope
-//		sourceFileName = inpt.readString();
-//		isPreCompiledFromFile = inpt.readString();
-//		hasLocalClasses = inpt.readBoolean();
-//		labelList = LabelList.readLabelList(inpt);
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++) {
-//			Declaration decl = (Declaration) inpt.readObj();
-//			declarationList.add(decl);
-//		}
-//
-//		// *** BlockDeclaration
-//		switch(declarationKind) {
-//			case ObjectKind.Class:
-//			case ObjectKind.Procedure:
-//			case ObjectKind.PrefixedBlock:
-//			case ObjectKind.CompoundStatement:
-//				isMainModule = inpt.readBoolean();
-//				n = inpt.readShort();
-//				if (n > 0)
-//					statements = new Vector<Statement>();
-//				for (int i = 0; i < n; i++) {
-//					Statement stm = (Statement) inpt.readObj();
-//					statements.add(stm);
-//				}
-//		}
-//
-////		if (declarationKind != ObjectKind.SubBlock) {
-////			isMainModule = inpt.readBoolean();
-////			int n = inpt.readShort();
-////			if (n > 0)
-////				statements = new Vector<Statement>();
-////			for (int i = 0; i < n; i++) {
-////				Statement stm = (Statement) inpt.readObj();
-////				statements.add(stm);
-////			}
-////		}
-//	}
 
 }

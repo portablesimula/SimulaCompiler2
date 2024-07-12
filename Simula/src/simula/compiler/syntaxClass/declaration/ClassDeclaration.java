@@ -37,6 +37,7 @@ import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
@@ -114,12 +115,12 @@ public class ClassDeclaration extends BlockDeclaration {
 	/**
 	 * The parameter list.
 	 */
-	Vector<Parameter> parameterList = new Vector<Parameter>();
+	ObjectList<Parameter> parameterList = new ObjectList<Parameter>();
 
 	/**
 	 * The virtual spec list.
 	 */
-	protected Vector<VirtualSpecification> virtualSpecList = new Vector<VirtualSpecification>();
+	protected ObjectList<VirtualSpecification> virtualSpecList = new ObjectList<VirtualSpecification>();
 
 	/**
 	 * The virtual match list.
@@ -129,18 +130,18 @@ public class ClassDeclaration extends BlockDeclaration {
 	/**
 	 * The protected list.
 	 */
-	Vector<ProtectedSpecification> protectedList = new Vector<ProtectedSpecification>();
+	ObjectList<ProtectedSpecification> protectedList = new ObjectList<ProtectedSpecification>();
 
 	/**
 	 * The hidden list.
 	 */
-	public Vector<HiddenSpecification> hiddenList = new Vector<HiddenSpecification>();
+	public ObjectList<HiddenSpecification> hiddenList = new ObjectList<HiddenSpecification>();
 
 	/**
 	 * Possible statements before inner.
 	 * If this is non-null then 'statements' contains the statements after inner
 	 */
-	public Vector<Statement> statements1; // Statement code before inner
+	public ObjectList<Statement> statements1; // Statement code before inner
 
 	/**
 	 * Class Prefix in case of a SubClass or Prefixed Block.
@@ -1552,41 +1553,25 @@ public class ClassDeclaration extends BlockDeclaration {
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
-		oupt.writeShort(decls.size());
-		for(Declaration decl:decls) oupt.writeObj(decl);
+		decls.writeObject(oupt);
 
 		// *** BlockDeclaration
 		oupt.writeBoolean(isMainModule);
-		if (statements != null) {
-			oupt.writeShort(statements.size());
-			for (Statement stm : statements)
-				oupt.writeObj(stm);
-		} else
-			oupt.writeShort(0);
+//		oupt.writeObjectList(statements, oupt);
+		oupt.writeObjectList(statements);
 		
 		// *** ClassDeclaration
 		oupt.writeString(prefix);
 		oupt.writeBoolean(detachUsed);
-
-		oupt.writeShort(parameterList.size());
-		for(Parameter par:parameterList) par.writeParameter(oupt);
-		
-		oupt.writeShort(virtualSpecList.size());
-		for(VirtualSpecification virt:virtualSpecList) VirtualSpecification.writeVirtSpec(virt, oupt);
-
-		oupt.writeShort(hiddenList.size());
-		for(HiddenSpecification virt:hiddenList) virt.writeHiddenSpecification(oupt);
-
-		oupt.writeShort(protectedList.size());
-		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
-
-		if(statements1 != null) {
-			oupt.writeShort(statements1.size());
-			for(Statement stm:statements1) oupt.writeObj(stm);
-		} else oupt.writeShort(0);
+		oupt.writeObjectList(parameterList);
+		oupt.writeObjectList(virtualSpecList);
+		oupt.writeObjectList(hiddenList);
+		oupt.writeObjectList(protectedList);
+		oupt.writeObjectList(statements1);
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
 
+	@SuppressWarnings("unchecked")
 	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
@@ -1607,168 +1592,25 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.isPreCompiledFromFile = inpt.readString();
 		cls.hasLocalClasses = inpt.readBoolean();
 		cls.labelList = LabelList.readLabelList(inpt);
-		int n = inpt.readShort();
-		for(int i=0;i<n;i++) {
-			Declaration decl = (Declaration) inpt.readObj();
-			cls.declarationList.add(decl);
-		}
+		cls.declarationList = DeclarationList.readObject(inpt);
 
 		// *** BlockDeclaration
 		cls.isMainModule = inpt.readBoolean();
-		n = inpt.readShort();
-		if (n > 0)
-			cls.statements = new Vector<Statement>();
-		for (int i = 0; i < n; i++) {
-			Statement stm = (Statement) inpt.readObj();
-			cls.statements.add(stm);
-		}
+		cls.statements = (ObjectList<Statement>) inpt.readObjectList();
 		
 		// *** ClassDeclaration
 		cls.prefix = inpt.readString();
 		cls.detachUsed = inpt.readBoolean();
-
-		n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			cls.parameterList.add(Parameter.readParameter(inpt));
-
-		n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			cls.virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
-		
-		n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			cls.hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
-		
-		n = inpt.readShort();
-		for(int i=0;i<n;i++)
-			cls.protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
-
-		n = inpt.readShort();
-		if(n > 0) cls.statements1 = new Vector<Statement>();
-		for(int i=0;i<n;i++) {
-			Statement stm = (Statement) inpt.readObj();
-			cls.statements1.add(stm);
-		}
+		cls.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
+		cls.virtualSpecList = (ObjectList<VirtualSpecification>) inpt.readObjectList();
+		cls.hiddenList = (ObjectList<HiddenSpecification>) inpt.readObjectList();
+		cls.protectedList = (ObjectList<ProtectedSpecification>) inpt.readObjectList();
+		cls.statements1 = (ObjectList<Statement>) inpt.readObjectList();
 		if(!Option.internal.CREATE_JAVA_SOURCE)
 			cls.isPreCompiledFromFile = inpt.jarFileName;
-//		System.out.println("ClassDeclaration.readAttributes: Class "+identifier+" isPreCompiledFromFile="+isPreCompiledFromFile);
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		Global.setScope(cls.declaredIn);
 		return(cls);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException { // TODO: SKAL FJERNES
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//		
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//		
-//		// *** DeclarationScope
-//		oupt.writeString(sourceFileName);
-//		oupt.writeString(isPreCompiledFromFile);
-//		oupt.writeBoolean(hasLocalClasses);
-//		LabelList.writeLabelList(labelList, oupt);
-//		DeclarationList decls = prep(declarationList);
-//		oupt.writeShort(decls.size());
-//		for(Declaration decl:decls) oupt.writeObj(decl);
-//
-//		// *** BlockDeclaration
-//		oupt.writeBoolean(isMainModule);
-//		if (statements != null) {
-//			oupt.writeShort(statements.size());
-//			for (Statement stm : statements)
-//				oupt.writeObj(stm);
-//		} else
-//			oupt.writeShort(0);
-//		
-//		// *** ClassDeclaration
-//		oupt.writeString(prefix);
-//		oupt.writeBoolean(detachUsed);
-//
-//		oupt.writeShort(parameterList.size());
-//		for(Parameter par:parameterList) par.writeParameter(oupt);
-//		
-//		oupt.writeShort(virtualSpecList.size());
-//		for(VirtualSpecification virt:virtualSpecList) VirtualSpecification.writeVirtSpec(virt, oupt);
-//
-//		oupt.writeShort(hiddenList.size());
-//		for(HiddenSpecification virt:hiddenList) virt.writeHiddenSpecification(oupt);
-//
-//		oupt.writeShort(protectedList.size());
-//		for(ProtectedSpecification spec:protectedList) spec.writeProtectedSpecification(oupt);
-//
-//		if(statements1 != null) {
-//			oupt.writeShort(statements1.size());
-//			for(Statement stm:statements1) oupt.writeObj(stm);
-//		} else oupt.writeShort(0);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException { // TODO: SKAL FJERNES
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//
-//		// *** DeclarationScope
-//		sourceFileName = inpt.readString();
-//		isPreCompiledFromFile = inpt.readString();
-//		hasLocalClasses = inpt.readBoolean();
-//		labelList = LabelList.readLabelList(inpt);
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++) {
-//			Declaration decl = (Declaration) inpt.readObj();
-//			declarationList.add(decl);
-//		}
-//
-//		// *** BlockDeclaration
-//		isMainModule = inpt.readBoolean();
-//		n = inpt.readShort();
-//		if (n > 0)
-//			statements = new Vector<Statement>();
-//		for (int i = 0; i < n; i++) {
-//			Statement stm = (Statement) inpt.readObj();
-//			statements.add(stm);
-//		}
-//		
-//		// *** ClassDeclaration
-//		prefix = inpt.readString();
-//		detachUsed = inpt.readBoolean();
-//
-//		n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			parameterList.add(Parameter.readParameter(inpt));
-//
-//		n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			virtualSpecList.add(VirtualSpecification.readVirtSpec(inpt));
-//		
-//		n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			hiddenList.add(HiddenSpecification.readHiddenSpecification(inpt));
-//		
-//		n = inpt.readShort();
-//		for(int i=0;i<n;i++)
-//			protectedList.add(ProtectedSpecification.readProtectedSpecification(inpt));
-//
-//		n = inpt.readShort();
-//		if(n > 0) statements1 = new Vector<Statement>();
-//		for(int i=0;i<n;i++) {
-//			Statement stm = (Statement) inpt.readObj();
-//			statements1.add(stm);
-//		}
-//		if(!Option.internal.CREATE_JAVA_SOURCE)
-//			isPreCompiledFromFile = inpt.jarFileName;
-////		System.out.println("ClassDeclaration.readAttributes: Class "+identifier+" isPreCompiledFromFile="+isPreCompiledFromFile);
-//	}
 	
 }
