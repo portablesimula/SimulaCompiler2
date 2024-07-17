@@ -21,7 +21,7 @@ import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 
 public class LabelList {
 	private static boolean TRACING = false;
-	private static int OBJECT_SEQU = 0;
+	private static int LABEL_SEQU = 0;
 	private int sequ;
 	
 	public DeclarationScope declaredIn;
@@ -32,7 +32,7 @@ public class LabelList {
 
 	public LabelList(DeclarationScope declaredIn) {
 		if(TRACING) {
-			this.sequ = (OBJECT_SEQU++);
+			this.sequ = (LABEL_SEQU++);
 			this.declaredIn = declaredIn;
 		}
 		this.labels = new Vector<LabelDeclaration>();
@@ -40,6 +40,7 @@ public class LabelList {
 	}
 	
 	private String ident() {
+		if(declaredIn == null) return "LabelList["+sequ+"]";
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
 	}
 	
@@ -168,8 +169,9 @@ public class LabelList {
 		String sep = " ";
 		if(tableSize() > 0) {
 			for(LabelDeclaration lab:labels) {
-				s = s + sep + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']';
-				sep = ", ";
+				s = s + sep + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']';				
+				s = s + "  " + lab.lineNumber;
+				sep = "\n";
 			}
 		} else s = s + " With no labels";
 		return(s);

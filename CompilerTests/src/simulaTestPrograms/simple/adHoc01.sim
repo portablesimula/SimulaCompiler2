@@ -1,11 +1,36 @@
 
 begin
+	integer x,y;
 
-	text procedure P1(T); text T; begin
-			
-				P1 := "Abra" & T;
-	end;
+	class AA; begin
+		class A; begin
+			L1:
+		end;
 	
-	P1("cadabra");
+		A class B; begin
+			L2:
+		end;
+	end;
 
- end;
+	AA class BB; begin
+		class A; begin
+			L1:
+		end;
+	
+		A class B; begin
+			L2:
+		end;
+		
+		switch(0:44) x begin
+        	when 2 do begin
+				switch(0:44) x begin
+        			when 2 do begin
+        			end;
+        			when none do begin end;
+				end;
+        	end;
+        	when none do begin end;
+		end;
+	end;
+
+end;
