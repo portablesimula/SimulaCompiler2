@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 110
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:29 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:19 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class COMMON_LOOKUPid extends RTS_PROCEDURE {
@@ -10,7 +10,7 @@ public Object _RESULT() { return(_RESULT); }
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 12 <== SourceLine 129
-    final RTS_LABEL _LABEL_COMMON_LOOKUPid_CompoundStatement130_F_0=new RTS_LABEL(this,0,1,"F"); // Local Label #1=F At PrefixLevel 0
+    final RTS_LABEL _LABEL_COMMON_LOOKUPid_Block117_F_0=new RTS_LABEL(this,0,1,"F"); // Local Label #1=F At PrefixLevel 0
     // Declare locals as attributes
     // JavaLine 15 <== SourceLine 111
     public char idlen=0;
@@ -58,7 +58,7 @@ public Object _RESULT() { return(_RESULT); }
                                     {
                                         // JavaLine 59 <== SourceLine 123
                                         if(_VALUE((cursym.next==(null)))) {
-                                            _GOTO(_LABEL_COMMON_LOOKUPid_CompoundStatement130_F_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_COMMON_LOOKUPid_Block117_F_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                         // JavaLine 64 <== SourceLine 124

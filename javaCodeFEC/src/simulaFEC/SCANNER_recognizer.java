@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 522
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SCANNER_recognizer extends COMMON_component {
@@ -17,49 +17,49 @@ public boolean isDetachUsed() { return(true); }
     // JavaLine 17 <== SourceLine 1068
     final RTS_LABEL _LABEL_SCANNER_recognizer_ASSESS_1=new RTS_LABEL(this,1,4,"ASSESS"); // Local Label #4=ASSESS At PrefixLevel 1
     // JavaLine 19 <== SourceLine 1186
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1227_QUOTE_0=new RTS_LABEL(this,1,5,"QUOTE"); // Local Label #5=QUOTE At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1184_QUOTE_0=new RTS_LABEL(this,1,5,"QUOTE"); // Local Label #5=QUOTE At PrefixLevel 1
     // JavaLine 21 <== SourceLine 1188
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1227_QREP1_0=new RTS_LABEL(this,1,6,"QREP1"); // Local Label #6=QREP1 At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1184_QREP1_0=new RTS_LABEL(this,1,6,"QREP1"); // Local Label #6=QREP1 At PrefixLevel 1
     // JavaLine 23 <== SourceLine 1202
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1227_CompoundStatement1204_QWARN_0=new RTS_LABEL(this,1,7,"QWARN"); // Local Label #7=QWARN At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1184_Block1190_QWARN_0=new RTS_LABEL(this,1,7,"QWARN"); // Local Label #7=QWARN At PrefixLevel 1
     // JavaLine 25 <== SourceLine 1251
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1287_numr_0=new RTS_LABEL(this,1,8,"numr"); // Local Label #8=numr At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1251_numr_0=new RTS_LABEL(this,1,8,"numr"); // Local Label #8=numr At PrefixLevel 1
     // JavaLine 27 <== SourceLine 1255
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1259_ndot_0=new RTS_LABEL(this,1,9,"ndot"); // Local Label #9=ndot At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1251_Block1253_ndot_0=new RTS_LABEL(this,1,9,"ndot"); // Local Label #9=ndot At PrefixLevel 1
     // JavaLine 29 <== SourceLine 1262
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1283_nampsand_0=new RTS_LABEL(this,1,10,"nampsand"); // Local Label #10=nampsand At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1251_Block1260_nampsand_0=new RTS_LABEL(this,1,10,"nampsand"); // Local Label #10=nampsand At PrefixLevel 1
     // JavaLine 31 <== SourceLine 1277
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1283_CompoundStatement1282_numERR_0=new RTS_LABEL(this,1,11,"numERR"); // Local Label #11=numERR At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1251_Block1260_Block1277_numERR_0=new RTS_LABEL(this,1,11,"numERR"); // Local Label #11=numERR At PrefixLevel 1
     // JavaLine 33 <== SourceLine 1295
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_idscan_0=new RTS_LABEL(this,1,12,"idscan"); // Local Label #12=idscan At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_idscan_0=new RTS_LABEL(this,1,12,"idscan"); // Local Label #12=idscan At PrefixLevel 1
     // JavaLine 35 <== SourceLine 1297
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_idloop_0=new RTS_LABEL(this,1,13,"idloop"); // Local Label #13=idloop At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_idloop_0=new RTS_LABEL(this,1,13,"idloop"); // Local Label #13=idloop At PrefixLevel 1
     // JavaLine 37 <== SourceLine 1304
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_Lidi_0=new RTS_LABEL(this,1,14,"Lidi"); // Local Label #14=Lidi At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Lidi_0=new RTS_LABEL(this,1,14,"Lidi"); // Local Label #14=Lidi At PrefixLevel 1
     // JavaLine 39 <== SourceLine 1310
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1312_idterm_0=new RTS_LABEL(this,1,15,"idterm"); // Local Label #15=idterm At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1310_idterm_0=new RTS_LABEL(this,1,15,"idterm"); // Local Label #15=idterm At PrefixLevel 1
     // JavaLine 41 <== SourceLine 1356
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_IdentifierFound_0=new RTS_LABEL(this,1,16,"IdentifierFound"); // Local Label #16=IdentifierFound At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_IdentifierFound_0=new RTS_LABEL(this,1,16,"IdentifierFound"); // Local Label #16=IdentifierFound At PrefixLevel 1
     // JavaLine 43 <== SourceLine 1357
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_SAWRID_0=new RTS_LABEL(this,1,17,"SAWRID"); // Local Label #17=SAWRID At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1357_SAWRID_0=new RTS_LABEL(this,1,17,"SAWRID"); // Local Label #17=SAWRID At PrefixLevel 1
     // JavaLine 45 <== SourceLine 1359
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_RESKW_0=new RTS_LABEL(this,1,18,"RESKW"); // Local Label #18=RESKW At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1357_RESKW_0=new RTS_LABEL(this,1,18,"RESKW"); // Local Label #18=RESKW At PrefixLevel 1
     // JavaLine 47 <== SourceLine 1360
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_OPERAND_0=new RTS_LABEL(this,1,19,"OPERAND"); // Local Label #19=OPERAND At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1357_OPERAND_0=new RTS_LABEL(this,1,19,"OPERAND"); // Local Label #19=OPERAND At PrefixLevel 1
     // JavaLine 49 <== SourceLine 1361
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_OPERAND2_0=new RTS_LABEL(this,1,20,"OPERAND2"); // Local Label #20=OPERAND2 At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1357_OPERAND2_0=new RTS_LABEL(this,1,20,"OPERAND2"); // Local Label #20=OPERAND2 At PrefixLevel 1
     // JavaLine 51 <== SourceLine 1370
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1376_SawComment_0=new RTS_LABEL(this,1,21,"SawComment"); // Local Label #21=SawComment At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1370_SawComment_0=new RTS_LABEL(this,1,21,"SawComment"); // Local Label #21=SawComment At PrefixLevel 1
     // JavaLine 53 <== SourceLine 1459
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_FindEnd_0=new RTS_LABEL(this,1,22,"FindEnd"); // Local Label #22=FindEnd At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_FindEnd_0=new RTS_LABEL(this,1,22,"FindEnd"); // Local Label #22=FindEnd At PrefixLevel 1
     // JavaLine 55 <== SourceLine 1460
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_CompoundStatement1466_SawSMCL_0=new RTS_LABEL(this,1,23,"SawSMCL"); // Local Label #23=SawSMCL At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_Block1460_SawSMCL_0=new RTS_LABEL(this,1,23,"SawSMCL"); // Local Label #23=SawSMCL At PrefixLevel 1
     // JavaLine 57 <== SourceLine 1498
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_TESTENDCOUNT_0=new RTS_LABEL(this,1,24,"TESTENDCOUNT"); // Local Label #24=TESTENDCOUNT At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_TESTENDCOUNT_0=new RTS_LABEL(this,1,24,"TESTENDCOUNT"); // Local Label #24=TESTENDCOUNT At PrefixLevel 1
     // JavaLine 59 <== SourceLine 1509
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1542_SawKeyW_0=new RTS_LABEL(this,1,25,"SawKeyW"); // Local Label #25=SawKeyW At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1295_SawKeyW_0=new RTS_LABEL(this,1,25,"SawKeyW"); // Local Label #25=SawKeyW At PrefixLevel 1
     // JavaLine 61 <== SourceLine 1546
-    final RTS_LABEL _LABEL_SCANNER_recognizer_CompoundStatement1546_Mill_0=new RTS_LABEL(this,1,26,"Mill"); // Local Label #26=Mill At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_recognizer_Block1546_Mill_0=new RTS_LABEL(this,1,26,"Mill"); // Local Label #26=Mill At PrefixLevel 1
     // Declare locals as attributes
     // JavaLine 64 <== SourceLine 528
     public boolean skipzeroes_1=false;
@@ -322,7 +322,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 324 <== SourceLine 1101
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1259_ndot_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1251_Block1253_ndot_0); // GOTO EVALUATED LABEL
                             }
                         }
                         ;
@@ -337,7 +337,7 @@ public boolean isDetachUsed() { return(true); }
                     // JavaLine 337 <== SourceLine 1104
                     {
                         // JavaLine 339 <== SourceLine 1105
-                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1376_SawComment_0); // GOTO EVALUATED LABEL
+                        _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1370_SawComment_0); // GOTO EVALUATED LABEL
                     }
                     break;
                     case 38: 
@@ -356,7 +356,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 358 <== SourceLine 1114
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1283_nampsand_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1251_Block1260_nampsand_0); // GOTO EVALUATED LABEL
                             }
                         }
                         ;
@@ -588,7 +588,7 @@ public boolean isDetachUsed() { return(true); }
                                         textpos_1=(textpos_1+(1));
                                         ;
                                         // JavaLine 590 <== SourceLine 1193
-                                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1227_QREP1_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_Block1184_QREP1_0); // GOTO EVALUATED LABEL
                                     }
                                 }
                                 ;
@@ -607,7 +607,7 @@ public boolean isDetachUsed() { return(true); }
                                         ;
                                         // JavaLine 608 <== SourceLine 1199
                                         if(_VALUE(((atom_1==(')'))|((atom_1==(';')))))) {
-                                            _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1227_CompoundStatement1204_QWARN_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_recognizer_Block1184_Block1190_QWARN_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                         // JavaLine 613 <== SourceLine 1200
@@ -638,7 +638,7 @@ public boolean isDetachUsed() { return(true); }
                                         textpos_1=(textpos_1+(1));
                                         ;
                                         // JavaLine 640 <== SourceLine 1209
-                                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1227_QUOTE_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_Block1184_QUOTE_0); // GOTO EVALUATED LABEL
                                     }
                                 }
                                 ;
@@ -662,7 +662,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 664 <== SourceLine 1216
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1227_QUOTE_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1184_QUOTE_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                         }
@@ -698,7 +698,7 @@ public boolean isDetachUsed() { return(true); }
                         }
                         ;
                         // JavaLine 700 <== SourceLine 1227
-                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_OPERAND2_0); // GOTO EVALUATED LABEL
+                        _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1357_OPERAND2_0); // GOTO EVALUATED LABEL
                     }
                     break;
                     case 39: 
@@ -764,7 +764,7 @@ public boolean isDetachUsed() { return(true); }
                         }
                         ;
                         // JavaLine 766 <== SourceLine 1246
-                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_OPERAND_0); // GOTO EVALUATED LABEL
+                        _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1357_OPERAND_0); // GOTO EVALUATED LABEL
                     }
                     break;
                     case 48: 
@@ -812,7 +812,7 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 // JavaLine 813 <== SourceLine 1257
                                 if(_VALUE((InputClass.getELEMENT(RTS_ENVIRONMENT.rank(atom_1))!=(((char)2))))) {
-                                    _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1287_CompoundStatement1283_CompoundStatement1282_numERR_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_recognizer_Block1251_Block1260_Block1277_numERR_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                                 // JavaLine 818 <== SourceLine 1258
@@ -917,7 +917,7 @@ public boolean isDetachUsed() { return(true); }
                         // JavaLine 917 <== SourceLine 1286
                         ((SCANNER)(_CUR._SL)).parser.cs='[';
                         ;
-                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_OPERAND_0); // GOTO EVALUATED LABEL
+                        _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1357_OPERAND_0); // GOTO EVALUATED LABEL
                         ;
                     }
                     break;
@@ -926,7 +926,7 @@ public boolean isDetachUsed() { return(true); }
                     {
                         // JavaLine 927 <== SourceLine 1291
                         if(_VALUE((((SCANNER)(_CUR._SL)).option.getELEMENT(RTS_ENVIRONMENT.rank('X'))!=(((char)0))))) {
-                            _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_idscan_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_recognizer_Block1295_idscan_0); // GOTO EVALUATED LABEL
                         }
                         ;
                         // JavaLine 932 <== SourceLine 1292
@@ -1075,7 +1075,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1075 <== SourceLine 1301
                                 linepos_1=(linepos_1+(1));
                                 ;
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_idloop_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_idloop_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1264,11 +1264,11 @@ public boolean isDetachUsed() { return(true); }
                             {
                                 // JavaLine 1265 <== SourceLine 1307
                                 if(_VALUE((linepos_1!=((linelength_1-(1)))))) {
-                                    _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_Lidi_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_recognizer_Block1295_Lidi_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                                 // JavaLine 1270 <== SourceLine 1308
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1312_idterm_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1310_idterm_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             default:
@@ -1424,7 +1424,7 @@ public boolean isDetachUsed() { return(true); }
                                         ;
                                         eqopt_1=RTS_ENVIRONMENT.rank(((char)147));
                                         ;
-                                        _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_SawKeyW_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_Block1295_SawKeyW_0); // GOTO EVALUATED LABEL
                                         ;
                                     }
                                 }
@@ -1514,7 +1514,7 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 curidlo_1='K';
                                 ;
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_SAWRID_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1357_SAWRID_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 54: 
@@ -1554,7 +1554,7 @@ public boolean isDetachUsed() { return(true); }
                                 ((SCANNER)(_CUR._SL)).optx=(((curidlo_1==('A')))?(((char)8)):((((curidlo_1==('@')))?(((char)7)):(((char)1)))));
                                 ;
                                 // JavaLine 1556 <== SourceLine 1435
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1362_RESKW_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1357_RESKW_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1671,7 +1671,7 @@ public boolean isDetachUsed() { return(true); }
                                                             ;
                                                             // JavaLine 1672 <== SourceLine 1474
                                                             if(_VALUE((atom_1==(';')))) {
-                                                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_CompoundStatement1466_SawSMCL_0); // GOTO EVALUATED LABEL
+                                                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_Block1460_SawSMCL_0); // GOTO EVALUATED LABEL
                                                             }
                                                             ;
                                                         }
@@ -1701,7 +1701,7 @@ public boolean isDetachUsed() { return(true); }
                                                                             ((SCANNER)(_CUR._SL)).opt='%';
                                                                         } else {
                                                                             // JavaLine 1703 <== SourceLine 1487
-                                                                            _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_FindEnd_0); // GOTO EVALUATED LABEL
+                                                                            _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_FindEnd_0); // GOTO EVALUATED LABEL
                                                                         }
                                                                     }
                                                                 }
@@ -1725,7 +1725,7 @@ public boolean isDetachUsed() { return(true); }
                                                             }
                                                             ;
                                                             // JavaLine 1727 <== SourceLine 1495
-                                                            _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_CompoundStatement1505_CompoundStatement1504_FindEnd_0); // GOTO EVALUATED LABEL
+                                                            _GOTO(_LABEL_SCANNER_recognizer_Block1295_Block1445_Block1446_FindEnd_0); // GOTO EVALUATED LABEL
                                                             ;
                                                         }
                                                     }
@@ -1867,7 +1867,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1867 <== SourceLine 1530
                                 optpos_1=startpos_1;
                                 ;
-                                _GOTO(_LABEL_SCANNER_recognizer_CompoundStatement1542_IdentifierFound_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_Block1295_IdentifierFound_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                         }

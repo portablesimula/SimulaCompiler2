@@ -1,0 +1,50 @@
+// JavaLine 1 <== SourceLine 2142
+package simulaFEC;
+// Simula-2.0 Compiled at Wed Jul 17 09:58:32 CEST 2024
+import simula.runtime.*;
+@SuppressWarnings("unchecked")
+public final class CHECKER1_semchecker1_index_emit extends RTS_PROCEDURE {
+    // ProcedureDeclaration: Kind=5, BlockLevel=4, firstLine=2142, lastLine=2150, hasLocalClasses=false, System=false
+    // Declare parameters as attributes
+    // Declare locals as attributes
+    // Normal Constructor
+    public CHECKER1_semchecker1_index_emit(RTS_RTObject _SL) {
+        super(_SL);
+        // Parameter assignment to locals
+        BBLK();
+        // Declaration Code
+        _STM();
+    }
+    // Procedure Statements
+    @Override
+    public CHECKER1_semchecker1_index_emit _STM() {
+        // JavaLine 21 <== SourceLine 2143
+        ((CHECKER1_semchecker1_index)(_CUR._SL)).p_actual.cl=((char)1);
+        ;
+        ((CHECKER1_semchecker1_index)(_CUR._SL)).p_actual.emit_0().CPF();
+        ;
+        // JavaLine 26 <== SourceLine 2144
+        if(_VALUE((((CHECKER1_semchecker1_index)(_CUR._SL)).p_actual.type!=(((char)4))))) {
+            // JavaLine 28 <== SourceLine 2145
+            new CHECKER1_semchecker1_MaybeConvert((_CUR._SL._SL),((char)4),((CHECKER1_semchecker1_index)(_CUR._SL)).p_actual.type);
+        }
+        ;
+        // JavaLine 32 <== SourceLine 2146
+        if(_VALUE((((CHECKER1_semchecker1_index)(_CUR._SL)).nextarg!=(null)))) {
+            {
+                // JavaLine 35 <== SourceLine 2147
+                ((CHECKER1)(_CUR._SL._SL._SL)).opc_6='N';
+                ;
+                call(((CHECKER1)(_CUR._SL._SL._SL)).coder,2147);
+                ;
+                // JavaLine 40 <== SourceLine 2148
+                ((CHECKER1_semchecker1_index)(_CUR._SL)).nextarg.emit_0().CPF();
+                ;
+            }
+        }
+        ;
+        EBLK();
+        return(this);
+    } // End of Procedure BODY
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CHECKER1.sim","5 emit",1,2142,21,2143,26,2144,28,2145,32,2146,35,2147,40,2148,48,2150);
+} // End of Procedure

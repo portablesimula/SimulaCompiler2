@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 638
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
@@ -8,19 +8,19 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 10 <== SourceLine 681
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement685_SELPLUS_0=new RTS_LABEL(this,0,1,"SELPLUS"); // Local Label #1=SELPLUS At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block681_SELPLUS_0=new RTS_LABEL(this,0,1,"SELPLUS"); // Local Label #1=SELPLUS At PrefixLevel 0
     // JavaLine 12 <== SourceLine 687
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement697_SELMINUS_0=new RTS_LABEL(this,0,2,"SELMINUS"); // Local Label #2=SELMINUS At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block687_SELMINUS_0=new RTS_LABEL(this,0,2,"SELMINUS"); // Local Label #2=SELMINUS At PrefixLevel 0
     // JavaLine 14 <== SourceLine 692
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement697_CompoundStatement695_CompoundStatement694_SELECTED_0=new RTS_LABEL(this,0,3,"SELECTED"); // Local Label #3=SELECTED At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block687_Block688_Block691_SELECTED_0=new RTS_LABEL(this,0,3,"SELECTED"); // Local Label #3=SELECTED At PrefixLevel 0
     // JavaLine 16 <== SourceLine 709
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement715_PG_0=new RTS_LABEL(this,0,4,"PG"); // Local Label #4=PG At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block709_PG_0=new RTS_LABEL(this,0,4,"PG"); // Local Label #4=PG At PrefixLevel 0
     // JavaLine 18 <== SourceLine 760
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement771_CompoundStatement760_LOADD_0=new RTS_LABEL(this,0,5,"LOADD"); // Local Label #5=LOADD At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block759_Block760_LOADD_0=new RTS_LABEL(this,0,5,"LOADD"); // Local Label #5=LOADD At PrefixLevel 0
     // JavaLine 20 <== SourceLine 767
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement771_ENDP_0=new RTS_LABEL(this,0,6,"ENDP"); // Local Label #6=ENDP At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block759_ENDP_0=new RTS_LABEL(this,0,6,"ENDP"); // Local Label #6=ENDP At PrefixLevel 0
     // JavaLine 22 <== SourceLine 798
-    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_CompoundStatement798_DIRWARN_0=new RTS_LABEL(this,0,7,"DIRWARN"); // Local Label #7=DIRWARN At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_directive_Block798_DIRWARN_0=new RTS_LABEL(this,0,7,"DIRWARN"); // Local Label #7=DIRWARN At PrefixLevel 0
     // JavaLine 24 <== SourceLine 799
     final RTS_LABEL _LABEL_SCANNER_recognizer_directive_SKIPLINE_0=new RTS_LABEL(this,0,8,"SKIPLINE"); // Local Label #8=SKIPLINE At PrefixLevel 0
     // JavaLine 26 <== SourceLine 801
@@ -68,7 +68,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 69 <== SourceLine 681
                         {
-                            _SIM_LABEL(1); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                            _SIM_LABEL(1); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                             while(((((SCANNER_recognizer)(_CUR._SL)).atom_1==('+'))||(((SCANNER)(_CUR._SL._SL)).selector.getELEMENT(RTS_ENVIRONMENT.isorank(((SCANNER_recognizer)(_CUR._SL)).atom_1))))) {
                                 // JavaLine 73 <== SourceLine 682
                                 new SCANNER_recognizer_directive_nextChar((_CUR));
@@ -77,7 +77,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                         ;
                         // JavaLine 78 <== SourceLine 683
                         if(_VALUE((((SCANNER_recognizer)(_CUR._SL)).atom_1==(((char)32))))) {
-                            _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement697_CompoundStatement695_CompoundStatement694_SELECTED_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_recognizer_directive_Block687_Block688_Block691_SELECTED_0); // GOTO EVALUATED LABEL
                         }
                         ;
                         // JavaLine 83 <== SourceLine 684
@@ -93,7 +93,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 94 <== SourceLine 687
                         {
-                            _SIM_LABEL(2); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                            _SIM_LABEL(2); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                             while(((((SCANNER_recognizer)(_CUR._SL)).atom_1==('-'))||((!(((SCANNER)(_CUR._SL._SL)).selector.getELEMENT(RTS_ENVIRONMENT.rank(((SCANNER_recognizer)(_CUR._SL)).atom_1))))))) {
                                 {
                                     // JavaLine 99 <== SourceLine 688
@@ -101,7 +101,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                     ;
                                     // JavaLine 102 <== SourceLine 689
                                     if(_VALUE((((SCANNER_recognizer)(_CUR._SL)).atom_1==('+')))) {
-                                        _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement685_SELPLUS_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_directive_Block681_SELPLUS_0); // GOTO EVALUATED LABEL
                                     }
                                     ;
                                     // JavaLine 107 <== SourceLine 690
@@ -109,7 +109,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                         {
                                             // JavaLine 110 <== SourceLine 691
                                             {
-                                                _SIM_LABEL(3); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                                                _SIM_LABEL(3); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                                                 // JavaLine 113 <== SourceLine 692
                                                 if(_VALUE((((SCANNER_recognizer)(_CUR._SL)).linepos_1>=(((SCANNER_recognizer)(_CUR._SL)).linelength_1)))) {
                                                     _GOTO(_LABEL_SCANNER_recognizer_directive_SKIPLINE_0); // GOTO EVALUATED LABEL
@@ -151,7 +151,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                         ((SCANNER_recognizer)(_CUR._SL)).curtitle_1=CONC(CONC(new RTS_TXT("S-port 108.1"),new RTS_TXT(" ")),((SCANNER_recognizer)(_CUR._SL)).curtitle_1);
                         ;
                         // JavaLine 153 <== SourceLine 705
-                        _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement715_PG_0); // GOTO EVALUATED LABEL
+                        _GOTO(_LABEL_SCANNER_recognizer_directive_Block709_PG_0); // GOTO EVALUATED LABEL
                         ;
                     }
                 }
@@ -161,7 +161,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 162 <== SourceLine 709
                         {
-                            _SIM_LABEL(4); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                            _SIM_LABEL(4); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                             if(_VALUE(((SCANNER)(_CUR._SL._SL)).listingon)) {
                                 {
                                     // BEGIN INSPECTION 
@@ -202,7 +202,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                             t=new SCANNER_recognizer_directive_linefield((_CUR))._RESULT;
                             ;
                             if(_VALUE(TRF_EQ(t,null))) {
-                                _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement798_DIRWARN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_directive_Block798_DIRWARN_0); // GOTO EVALUATED LABEL
                             }
                             ;
                             // JavaLine 208 <== SourceLine 717
@@ -321,7 +321,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                                                         new SCANNER_recognizer_directive_nextChar((_CUR));
                                                                         ;
                                                                         {
-                                                                            _SIM_LABEL(5); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                                                                            _SIM_LABEL(5); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                                                                             d=((SCANNER_recognizer)(_CUR._SL)).atom_1;
                                                                         }
                                                                     }
@@ -337,12 +337,12 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                                                                 ;
                                                                                 // JavaLine 338 <== SourceLine 763
                                                                                 if(_VALUE(((((SCANNER_recognizer)(_CUR._SL)).atom_1==('+'))|((((SCANNER_recognizer)(_CUR._SL)).atom_1==('-')))))) {
-                                                                                    _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement771_CompoundStatement760_LOADD_0); // GOTO EVALUATED LABEL
+                                                                                    _GOTO(_LABEL_SCANNER_recognizer_directive_Block759_Block760_LOADD_0); // GOTO EVALUATED LABEL
                                                                                 }
                                                                                 ;
                                                                                 // JavaLine 343 <== SourceLine 764
                                                                                 if(_VALUE(((((SCANNER_recognizer)(_CUR._SL)).atom_1==(((char)7)))||((((SCANNER_recognizer)(_CUR._SL)).atom_1==(((char)32))))))) {
-                                                                                    _GOTO(_LABEL_SCANNER_recognizer_directive_CompoundStatement771_ENDP_0); // GOTO EVALUATED LABEL
+                                                                                    _GOTO(_LABEL_SCANNER_recognizer_directive_Block759_ENDP_0); // GOTO EVALUATED LABEL
                                                                                 }
                                                                                 ;
                                                                                 // JavaLine 348 <== SourceLine 765
@@ -356,7 +356,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                                                 ;
                                                                 // JavaLine 357 <== SourceLine 767
                                                                 {
-                                                                    _SIM_LABEL(6); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                                                                    _SIM_LABEL(6); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                                                                     for(i=0;i<=95;i++) {
                                                                         // JavaLine 361 <== SourceLine 768
                                                                         RTS_TXT.putchar(((SCANNER)(_CUR._SL._SL)).simsymbol,((SCANNER)(_CUR._SL._SL)).option.getELEMENT(i));
@@ -454,7 +454,7 @@ public final class SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 455 <== SourceLine 798
                         {
-                            _SIM_LABEL(7); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=60055669
+                            _SIM_LABEL(7); // DeclaredIn: directive -> directive[externalIdent=SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=493310435
                             if(_VALUE(((SCANNER)(_CUR._SL._SL)).GiveNotes)) {
                                 new SCANNER_P1warn((_CUR._SL._SL),278);
                             }

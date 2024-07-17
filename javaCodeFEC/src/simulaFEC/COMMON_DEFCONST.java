@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 202
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:29 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:19 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class COMMON_DEFCONST extends RTS_PROCEDURE {
@@ -8,7 +8,7 @@ public final class COMMON_DEFCONST extends RTS_PROCEDURE {
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 10 <== SourceLine 220
-    final RTS_LABEL _LABEL_COMMON_DEFCONST_CompoundStatement240_F_0=new RTS_LABEL(this,0,1,"F"); // Local Label #1=F At PrefixLevel 0
+    final RTS_LABEL _LABEL_COMMON_DEFCONST_Block208_F_0=new RTS_LABEL(this,0,1,"F"); // Local Label #1=F At PrefixLevel 0
     // Declare locals as attributes
     // JavaLine 13 <== SourceLine 203
     public int i=0;
@@ -56,7 +56,7 @@ public final class COMMON_DEFCONST extends RTS_PROCEDURE {
                                     {
                                         // JavaLine 57 <== SourceLine 215
                                         if(_VALUE((cursym.next==(null)))) {
-                                            _GOTO(_LABEL_COMMON_DEFCONST_CompoundStatement240_F_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_COMMON_DEFCONST_Block208_F_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                         // JavaLine 62 <== SourceLine 216
@@ -74,7 +74,7 @@ public final class COMMON_DEFCONST extends RTS_PROCEDURE {
                         } else {
                             // JavaLine 75 <== SourceLine 220
                             {
-                                _SIM_LABEL(1); // DeclaredIn: DEFCONST -> DEFCONST[externalIdent=COMMON_DEFCONST] Kind=5, QUAL=ProcedureDeclaration, HashCode=2101440631
+                                _SIM_LABEL(1); // DeclaredIn: DEFCONST -> DEFCONST[externalIdent=COMMON_DEFCONST] Kind=5, QUAL=ProcedureDeclaration, HashCode=1277181601
                                 {
                                     // BEGIN INSPECTION 
                                     _inspect_220_4445=new COMMON_constsymbol((_CUR._SL))._STM();

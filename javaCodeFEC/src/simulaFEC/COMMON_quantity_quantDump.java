@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 671
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:29 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:19 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class COMMON_quantity_quantDump extends RTS_PROCEDURE {

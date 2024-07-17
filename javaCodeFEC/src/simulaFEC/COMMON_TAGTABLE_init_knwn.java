@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 597
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:29 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:19 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class COMMON_TAGTABLE_init_knwn extends RTS_PROCEDURE {

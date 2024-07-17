@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1558
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SCANNER_L2Coder extends COMMON_outcodefile {
@@ -9,47 +9,47 @@ public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 11 <== SourceLine 1745
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0=new RTS_LABEL(this,4,1,"NEXTOPN"); // Local Label #1=NEXTOPN At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0=new RTS_LABEL(this,4,1,"NEXTOPN"); // Local Label #1=NEXTOPN At PrefixLevel 4
     // JavaLine 13 <== SourceLine 1755
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CheckNxt_0=new RTS_LABEL(this,4,2,"CheckNxt"); // Local Label #2=CheckNxt At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_CheckNxt_0=new RTS_LABEL(this,4,2,"CheckNxt"); // Local Label #2=CheckNxt At PrefixLevel 4
     // JavaLine 15 <== SourceLine 1790
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0=new RTS_LABEL(this,4,3,"OPNOUT"); // Local Label #3=OPNOUT At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0=new RTS_LABEL(this,4,3,"OPNOUT"); // Local Label #3=OPNOUT At PrefixLevel 4
     // JavaLine 17 <== SourceLine 1798
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0=new RTS_LABEL(this,4,4,"OPDOUT"); // Local Label #4=OPDOUT At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0=new RTS_LABEL(this,4,4,"OPDOUT"); // Local Label #4=OPDOUT At PrefixLevel 4
     // JavaLine 19 <== SourceLine 1851
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1856_CompoundStatement1852_SINGLE_0=new RTS_LABEL(this,4,5,"SINGLE"); // Local Label #5=SINGLE At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1844_Block1850_SINGLE_0=new RTS_LABEL(this,4,5,"SINGLE"); // Local Label #5=SINGLE At PrefixLevel 4
     // JavaLine 21 <== SourceLine 1872
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1873_SetQual_0=new RTS_LABEL(this,4,6,"SetQual"); // Local Label #6=SetQual At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1870_SetQual_0=new RTS_LABEL(this,4,6,"SetQual"); // Local Label #6=SetQual At PrefixLevel 4
     // JavaLine 23 <== SourceLine 1900
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1901_BLOCKOUT_0=new RTS_LABEL(this,4,7,"BLOCKOUT"); // Local Label #7=BLOCKOUT At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1899_BLOCKOUT_0=new RTS_LABEL(this,4,7,"BLOCKOUT"); // Local Label #7=BLOCKOUT At PrefixLevel 4
     // JavaLine 25 <== SourceLine 1939
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1940_NXTVIRT_0=new RTS_LABEL(this,4,8,"NXTVIRT"); // Local Label #8=NXTVIRT At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1912_NXTVIRT_0=new RTS_LABEL(this,4,8,"NXTVIRT"); // Local Label #8=NXTVIRT At PrefixLevel 4
     // JavaLine 27 <== SourceLine 1942
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_EXvloop_0=new RTS_LABEL(this,4,9,"EXvloop"); // Local Label #9=EXvloop At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_EXvloop_0=new RTS_LABEL(this,4,9,"EXvloop"); // Local Label #9=EXvloop At PrefixLevel 4
     // JavaLine 29 <== SourceLine 1950
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1988_CompoundStatement1983_L1_0=new RTS_LABEL(this,4,10,"L1"); // Local Label #10=L1 At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1945_Block1947_L1_0=new RTS_LABEL(this,4,10,"L1"); // Local Label #10=L1 At PrefixLevel 4
     // JavaLine 31 <== SourceLine 1983
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1988_CompoundStatement1983_FOUND_0=new RTS_LABEL(this,4,11,"FOUND"); // Local Label #11=FOUND At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1945_Block1947_FOUND_0=new RTS_LABEL(this,4,11,"FOUND"); // Local Label #11=FOUND At PrefixLevel 4
     // JavaLine 33 <== SourceLine 2002
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2002_btout_0=new RTS_LABEL(this,4,12,"btout"); // Local Label #12=btout At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2002_btout_0=new RTS_LABEL(this,4,12,"btout"); // Local Label #12=btout At PrefixLevel 4
     // JavaLine 35 <== SourceLine 2025
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2027_Qfound_0=new RTS_LABEL(this,4,13,"Qfound"); // Local Label #13=Qfound At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2014_Qfound_0=new RTS_LABEL(this,4,13,"Qfound"); // Local Label #13=Qfound At PrefixLevel 4
     // JavaLine 37 <== SourceLine 2038
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2043_genlab_0=new RTS_LABEL(this,4,14,"genlab"); // Local Label #14=genlab At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2037_genlab_0=new RTS_LABEL(this,4,14,"genlab"); // Local Label #14=genlab At PrefixLevel 4
     // JavaLine 39 <== SourceLine 2115
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2124_lidclp_0=new RTS_LABEL(this,4,15,"lidclp"); // Local Label #15=lidclp At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2115_lidclp_0=new RTS_LABEL(this,4,15,"lidclp"); // Local Label #15=lidclp At PrefixLevel 4
     // JavaLine 41 <== SourceLine 2117
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2124_genbrc_0=new RTS_LABEL(this,4,16,"genbrc"); // Local Label #16=genbrc At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2115_genbrc_0=new RTS_LABEL(this,4,16,"genbrc"); // Local Label #16=genbrc At PrefixLevel 4
     // JavaLine 43 <== SourceLine 2211
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2222_CompoundStatement2221_CompoundStatement2220_CompoundStatement2219_CompoundStatement2217_CompoundStatement2212_Nspec_0=new RTS_LABEL(this,4,17,"Nspec"); // Local Label #17=Nspec At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2183_Block2186_Block2199_Block2201_Block2204_Block2211_Nspec_0=new RTS_LABEL(this,4,17,"Nspec"); // Local Label #17=Nspec At PrefixLevel 4
     // JavaLine 45 <== SourceLine 2235
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2257_LIFWHN_0=new RTS_LABEL(this,4,18,"LIFWHN"); // Local Label #18=LIFWHN At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2235_LIFWHN_0=new RTS_LABEL(this,4,18,"LIFWHN"); // Local Label #18=LIFWHN At PrefixLevel 4
     // JavaLine 47 <== SourceLine 2254
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2257_QBLOCKOUT_0=new RTS_LABEL(this,4,19,"QBLOCKOUT"); // Local Label #19=QBLOCKOUT At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2235_QBLOCKOUT_0=new RTS_LABEL(this,4,19,"QBLOCKOUT"); // Local Label #19=QBLOCKOUT At PrefixLevel 4
     // JavaLine 49 <== SourceLine 2332
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_LIHIDD_0=new RTS_LABEL(this,4,20,"LIHIDD"); // Local Label #20=LIHIDD At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_LIHIDD_0=new RTS_LABEL(this,4,20,"LIHIDD"); // Local Label #20=LIHIDD At PrefixLevel 4
     // JavaLine 51 <== SourceLine 2368
-    final RTS_LABEL _LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2369_NonLoc_0=new RTS_LABEL(this,4,21,"NonLoc"); // Local Label #21=NonLoc At PrefixLevel 4
+    final RTS_LABEL _LABEL_SCANNER_L2Coder_Block1744_Block2348_NonLoc_0=new RTS_LABEL(this,4,21,"NonLoc"); // Local Label #21=NonLoc At PrefixLevel 4
     // Declare locals as attributes
     // JavaLine 54 <== SourceLine 1566
     public boolean notok_4=false;
@@ -153,7 +153,7 @@ public boolean isDetachUsed() { return(true); }
                 // JavaLine 153 <== SourceLine 1739
                 ((SCANNER)(_CUR._SL)).L2codebuffer=L2buf_4=RTS_ENVIRONMENT.blanks(256);
                 ;
-                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CheckNxt_0); // GOTO EVALUATED LABEL
+                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_CheckNxt_0); // GOTO EVALUATED LABEL
                 ;
                 // JavaLine 158 <== SourceLine 1742
                 while(true) {
@@ -340,7 +340,7 @@ public boolean isDetachUsed() { return(true); }
                                 L2p_4=(L2p_4+(1));
                                 ;
                                 // JavaLine 342 <== SourceLine 1791
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -377,7 +377,7 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 ;
                                 // JavaLine 379 <== SourceLine 1802
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -391,7 +391,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_storecharint((_CUR),((SCANNER)(_CUR._SL)).opn,lastlinenr_4);
                                 ;
                                 // JavaLine 393 <== SourceLine 1809
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -414,7 +414,7 @@ public boolean isDetachUsed() { return(true); }
                                 cqual_4=0;
                                 ;
                                 // JavaLine 416 <== SourceLine 1817
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -425,7 +425,7 @@ public boolean isDetachUsed() { return(true); }
                                 ckind_4=((char)2);
                                 ;
                                 // JavaLine 427 <== SourceLine 1821
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -436,7 +436,7 @@ public boolean isDetachUsed() { return(true); }
                                 ckind_4=((char)1);
                                 ;
                                 // JavaLine 438 <== SourceLine 1824
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -447,7 +447,7 @@ public boolean isDetachUsed() { return(true); }
                                 ckind_4=((char)5);
                                 ;
                                 // JavaLine 449 <== SourceLine 1828
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -458,7 +458,7 @@ public boolean isDetachUsed() { return(true); }
                                 ckind_4=((char)7);
                                 ;
                                 // JavaLine 460 <== SourceLine 1832
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -482,7 +482,7 @@ public boolean isDetachUsed() { return(true); }
                                         L2p_4=(L2p_4+(2));
                                         ;
                                         // JavaLine 484 <== SourceLine 1848
-                                        _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                     }
                                     break;
                                     case 3: 
@@ -504,7 +504,7 @@ public boolean isDetachUsed() { return(true); }
                                         L2p_4=(L2p_4+(3));
                                         ;
                                         // JavaLine 506 <== SourceLine 1852
-                                        _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                     }
                                     break;
                                     default:
@@ -514,7 +514,7 @@ public boolean isDetachUsed() { return(true); }
                                 } // END SWITCH STATEMENT
                                 ;
                                 // JavaLine 516 <== SourceLine 1856
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 47: 
@@ -531,7 +531,7 @@ public boolean isDetachUsed() { return(true); }
                                 cqual_4=0;
                                 ;
                                 // JavaLine 533 <== SourceLine 1863
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -539,7 +539,7 @@ public boolean isDetachUsed() { return(true); }
                             // JavaLine 539 <== SourceLine 1866
                             {
                                 // JavaLine 541 <== SourceLine 1867
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1873_SetQual_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1870_SetQual_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -559,7 +559,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 561 <== SourceLine 1873
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -572,7 +572,7 @@ public boolean isDetachUsed() { return(true); }
                                 lanlo_4=((SCANNER)(_CUR._SL)).opdlo;
                                 ;
                                 // JavaLine 574 <== SourceLine 1877
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -606,7 +606,7 @@ public boolean isDetachUsed() { return(true); }
                                 p_or_c_qt_4.ftag_1=(-(cqual_4));
                                 ;
                                 // JavaLine 608 <== SourceLine 1890
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1901_BLOCKOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1899_BLOCKOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 32: 
@@ -618,7 +618,7 @@ public boolean isDetachUsed() { return(true); }
                                 cbrec_4.stmtag=cbrec_4.inrtag=((char)2);
                                 ;
                                 // JavaLine 620 <== SourceLine 1895
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1901_BLOCKOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1899_BLOCKOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 92: 
@@ -634,7 +634,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 636 <== SourceLine 1901
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -669,7 +669,7 @@ public boolean isDetachUsed() { return(true); }
                                                                         {
                                                                             // JavaLine 670 <== SourceLine 1912
                                                                             if(_VALUE((_inspect_1909_4484_4.kind_1!=(((char)1))))) {
-                                                                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1940_NXTVIRT_0); // GOTO EVALUATED LABEL
+                                                                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1912_NXTVIRT_0); // GOTO EVALUATED LABEL
                                                                             }
                                                                             ;
                                                                             // JavaLine 675 <== SourceLine 1913
@@ -681,7 +681,7 @@ public boolean isDetachUsed() { return(true); }
                                                                                     // JavaLine 681 <== SourceLine 1915
                                                                                     if(_VALUE((pq_4.symb_1==(_inspect_1909_4484_4.symb_1)))) {
                                                                                         // JavaLine 683 <== SourceLine 1916
-                                                                                        _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1940_NXTVIRT_0); // GOTO EVALUATED LABEL
+                                                                                        _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1912_NXTVIRT_0); // GOTO EVALUATED LABEL
                                                                                     }
                                                                                     ;
                                                                                     // JavaLine 687 <== SourceLine 1917
@@ -783,7 +783,7 @@ public boolean isDetachUsed() { return(true); }
                                                                 }
                                                                 else { // OTHERWISE 
                                                                     // JavaLine 785 <== SourceLine 1940
-                                                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_EXvloop_0); // GOTO EVALUATED LABEL
+                                                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_EXvloop_0); // GOTO EVALUATED LABEL
                                                                 } // END OTHERWISE 
                                                             } // END INSPECTION
                                                             if(_CTX==null) break; // Ad'Hoc to prevent JAVAC error: 'dead code' and terminate
@@ -829,7 +829,7 @@ public boolean isDetachUsed() { return(true); }
                                                                                             ;
                                                                                             // JavaLine 830 <== SourceLine 1954
                                                                                             if(_VALUE(locals_4)) {
-                                                                                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1988_CompoundStatement1983_FOUND_0); // GOTO EVALUATED LABEL
+                                                                                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1945_Block1947_FOUND_0); // GOTO EVALUATED LABEL
                                                                                             }
                                                                                             ;
                                                                                             // JavaLine 835 <== SourceLine 1956
@@ -852,7 +852,7 @@ public boolean isDetachUsed() { return(true); }
                                                                                 ;
                                                                                 pq_4=((COMMON_quantity)(_inspect_1907_4483_4.fpar.next));
                                                                                 ;
-                                                                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1998_CompoundStatement1991_CompoundStatement1990_CompoundStatement1988_CompoundStatement1983_L1_0); // GOTO EVALUATED LABEL
+                                                                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1905_Block1907_Block1908_Block1945_Block1947_L1_0); // GOTO EVALUATED LABEL
                                                                             }
                                                                         }
                                                                         ;
@@ -933,7 +933,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_storecharint((_CUR),'Y',lastlinenr_4);
                                 ;
                                 // JavaLine 935 <== SourceLine 1998
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2002_btout_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2002_btout_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 126: 
@@ -948,7 +948,7 @@ public boolean isDetachUsed() { return(true); }
                                     new SCANNER_L2Coder_brecterm((_CUR));
                                 }
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 26: 
@@ -966,7 +966,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 966 <== SourceLine 2010
                                 cbrec_4.inrtag=((char)2);
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 56: 
@@ -1000,7 +1000,7 @@ public boolean isDetachUsed() { return(true); }
                                         ;
                                         // JavaLine 1001 <== SourceLine 2020
                                         if(_VALUE((cquant_4.symb_1==(new COMMON_boxof((_CUR._SL),((SCANNER)(_CUR._SL)).opdhi,((SCANNER)(_CUR._SL)).opdlo)._RESULT)))) {
-                                            _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2027_Qfound_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2014_Qfound_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                     }
@@ -1029,11 +1029,11 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 // JavaLine 1030 <== SourceLine 2026
                                 if(_VALUE((ctype_4==(((char)11))))) {
-                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                                 // JavaLine 1035 <== SourceLine 2027
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1049,7 +1049,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1049 <== SourceLine 2033
                                 ckind_4=((char)4);
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2043_genlab_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2037_genlab_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 77: 
@@ -1079,7 +1079,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 1081 <== SourceLine 2043
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 94: 
@@ -1091,7 +1091,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_NewQuant((_CUR),((char)3));
                                 ;
                                 // JavaLine 1093 <== SourceLine 2048
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1102,7 +1102,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1102 <== SourceLine 2058
                                 dimcount_4=(dimcount_4+(1));
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 143: 
@@ -1112,7 +1112,7 @@ public boolean isDetachUsed() { return(true); }
                                 cquant_4.dim_1=dimcount_4;
                                 ;
                                 // JavaLine 1114 <== SourceLine 2063
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 140: 
@@ -1141,7 +1141,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1141 <== SourceLine 2071
                                 new SCANNER_L2Coder_brecterm((_CUR));
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 97: 
@@ -1177,7 +1177,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1177 <== SourceLine 2080
                                 ((SCANNER)(_CUR._SL)).opn='f';
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 109: 
@@ -1199,7 +1199,7 @@ public boolean isDetachUsed() { return(true); }
                                 cbrec_4.dcltag=((char)2);
                                 ;
                                 // JavaLine 1201 <== SourceLine 2087
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 99: 
@@ -1227,7 +1227,7 @@ public boolean isDetachUsed() { return(true); }
                                         }
                                         else { // OTHERWISE 
                                             // JavaLine 1229 <== SourceLine 2094
-                                            _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                                         } // END OTHERWISE 
                                     } // END INSPECTION
                                     if(_CTX==null) break; // Ad'Hoc to prevent JAVAC error: 'dead code' and terminate
@@ -1239,7 +1239,7 @@ public boolean isDetachUsed() { return(true); }
                             // JavaLine 1239 <== SourceLine 2097
                             {
                                 // JavaLine 1241 <== SourceLine 2100
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1261,7 +1261,7 @@ public boolean isDetachUsed() { return(true); }
                                 cquant_4.ftag_1=(-(cqual_4));
                                 ;
                                 // JavaLine 1263 <== SourceLine 2111
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2124_genbrc_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2115_genbrc_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 112: 
@@ -1291,7 +1291,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_store3chars((_CUR),((SCANNER)(_CUR._SL)).opn,((SCANNER)(_CUR._SL)).nextblhi,((SCANNER)(_CUR._SL)).nextbllo);
                                 ;
                                 // JavaLine 1293 <== SourceLine 2123
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1331,7 +1331,7 @@ public boolean isDetachUsed() { return(true); }
                                 } // END INSPECTION
                                 ;
                                 // JavaLine 1333 <== SourceLine 2137
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1342,7 +1342,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_brecterm((_CUR));
                                 ;
                                 // JavaLine 1344 <== SourceLine 2142
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1361,7 +1361,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_NewQuant((_CUR),((char)0));
                                 ;
                                 // JavaLine 1363 <== SourceLine 2149
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1393,7 +1393,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 1395 <== SourceLine 2161
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1448,7 +1448,7 @@ public boolean isDetachUsed() { return(true); }
                                 } // END INSPECTION
                                 ;
                                 // JavaLine 1450 <== SourceLine 2179
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1511,7 +1511,7 @@ public boolean isDetachUsed() { return(true); }
                                                                 {
                                                                     // JavaLine 1512 <== SourceLine 2202
                                                                     if(_VALUE((pq_4.categ_1!=(((char)2))))) {
-                                                                        _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2222_CompoundStatement2221_CompoundStatement2220_CompoundStatement2219_CompoundStatement2217_CompoundStatement2212_Nspec_0); // GOTO EVALUATED LABEL
+                                                                        _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2183_Block2186_Block2199_Block2201_Block2204_Block2211_Nspec_0); // GOTO EVALUATED LABEL
                                                                     }
                                                                 }
                                                             } else {
@@ -1520,7 +1520,7 @@ public boolean isDetachUsed() { return(true); }
                                                                     {
                                                                         // JavaLine 1521 <== SourceLine 2204
                                                                         if(_VALUE((pq_4.kind_1==(((char)2))))) {
-                                                                            _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2222_CompoundStatement2221_CompoundStatement2220_CompoundStatement2219_CompoundStatement2217_CompoundStatement2212_Nspec_0); // GOTO EVALUATED LABEL
+                                                                            _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2183_Block2186_Block2199_Block2201_Block2204_Block2211_Nspec_0); // GOTO EVALUATED LABEL
                                                                         }
                                                                         ;
                                                                         // JavaLine 1526 <== SourceLine 2205
@@ -1584,7 +1584,7 @@ public boolean isDetachUsed() { return(true); }
                                 }
                                 ;
                                 // JavaLine 1586 <== SourceLine 2222
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1595,7 +1595,7 @@ public boolean isDetachUsed() { return(true); }
                                 new SCANNER_L2Coder_NewQuant((_CUR),((char)6));
                                 ;
                                 // JavaLine 1597 <== SourceLine 2227
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1605,7 +1605,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1605 <== SourceLine 2231
                                 new SCANNER_L2Coder_brecterm((_CUR));
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2257_LIFWHN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2235_LIFWHN_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 105: 
@@ -1654,7 +1654,7 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 // JavaLine 1655 <== SourceLine 2253
                                 if(_VALUE((((SCANNER)(_CUR._SL)).opn==('i')))) {
-                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1901_BLOCKOUT_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1899_BLOCKOUT_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                                 // JavaLine 1660 <== SourceLine 2254
@@ -1672,7 +1672,7 @@ public boolean isDetachUsed() { return(true); }
                                 L2p_4=(L2p_4+(2));
                                 ;
                                 // JavaLine 1674 <== SourceLine 2257
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_NEXTOPN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_NEXTOPN_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1682,7 +1682,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1682 <== SourceLine 2261
                                 new SCANNER_L2Coder_brecinit((_CUR),((char)11));
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2257_QBLOCKOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2235_QBLOCKOUT_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;
@@ -1695,7 +1695,7 @@ public boolean isDetachUsed() { return(true); }
                                 cbrec_4.stmtag=cbrec_4.inrtag=((char)2);
                                 ;
                                 // JavaLine 1697 <== SourceLine 2266
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement2257_QBLOCKOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block2235_QBLOCKOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 88: 
@@ -1779,7 +1779,7 @@ public boolean isDetachUsed() { return(true); }
                                     ((SCANNER)(_CUR._SL)).opn=((SCANNER)(_CUR._SL)).opdlo;
                                 }
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 51: 
@@ -1799,7 +1799,7 @@ public boolean isDetachUsed() { return(true); }
                                 ((SCANNER)(_CUR._SL)).opdlo=cquant_4.symb_1.idlo;
                                 ;
                                 // JavaLine 1801 <== SourceLine 2315
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 124: 
@@ -1818,7 +1818,7 @@ public boolean isDetachUsed() { return(true); }
                                 // JavaLine 1818 <== SourceLine 2321
                                 ((SCANNER)(_CUR._SL)).opn=((SCANNER)(_CUR._SL)).opdlo;
                                 ;
-                                _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1792_OPNOUT_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1790_OPNOUT_0); // GOTO EVALUATED LABEL
                             }
                             break;
                             case 136: 
@@ -1830,7 +1830,7 @@ public boolean isDetachUsed() { return(true); }
                                 ;
                                 // JavaLine 1831 <== SourceLine 2326
                                 if(_VALUE((((SCANNER)(_CUR._SL)).opn==(((char)136))))) {
-                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_LIHIDD_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_LIHIDD_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                             }
@@ -1913,7 +1913,7 @@ public boolean isDetachUsed() { return(true); }
                                             {
                                                 // JavaLine 1914 <== SourceLine 2356
                                                 if(_VALUE((pq_4.symb_1==(symx_4)))) {
-                                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                                                 }
                                                 ;
                                                 // JavaLine 1919 <== SourceLine 2357
@@ -1936,7 +1936,7 @@ public boolean isDetachUsed() { return(true); }
                                                         }
                                                         ;
                                                         // JavaLine 1938 <== SourceLine 2363
-                                                        _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CompoundStatement1803_OPDOUT_0); // GOTO EVALUATED LABEL
+                                                        _GOTO(_LABEL_SCANNER_L2Coder_Block1744_Block1798_OPDOUT_0); // GOTO EVALUATED LABEL
                                                     }
                                                 }
                                                 ;
@@ -1953,7 +1953,7 @@ public boolean isDetachUsed() { return(true); }
                                 {
                                     _SIM_LABEL(21); // DeclaredIn: L2Coder -> L2Coder[SCANNER_L2Coder] DeclarationKind=Class
                                     // JavaLine 1955 <== SourceLine 2368
-                                    _GOTO(_LABEL_SCANNER_L2Coder_CompoundStatement2380_CheckNxt_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_L2Coder_Block1744_CheckNxt_0); // GOTO EVALUATED LABEL
                                 }
                                 ;
                             }

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1095
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:29 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:19 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class COMMON_attrfile_fetchquant extends RTS_PROCEDURE {
@@ -10,15 +10,15 @@ public Object _RESULT() { return(_RESULT); }
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 12 <== SourceLine 1161
-    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_CompoundStatement1165_CompoundStatement1163_SETID_0=new RTS_LABEL(this,0,1,"SETID"); // Local Label #1=SETID At PrefixLevel 0
+    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_Block1151_Block1160_SETID_0=new RTS_LABEL(this,0,1,"SETID"); // Local Label #1=SETID At PrefixLevel 0
     // JavaLine 14 <== SourceLine 1165
     final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_SETDID_0=new RTS_LABEL(this,0,2,"SETDID"); // Local Label #2=SETDID At PrefixLevel 0
     // JavaLine 16 <== SourceLine 1169
     final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_CHCKMARK_0=new RTS_LABEL(this,0,3,"CHCKMARK"); // Local Label #3=CHCKMARK At PrefixLevel 0
     // JavaLine 18 <== SourceLine 1204
-    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_CompoundStatement1266_CompoundStatement1207_CompoundStatement1205_GETARR_0=new RTS_LABEL(this,0,4,"GETARR"); // Local Label #4=GETARR At PrefixLevel 0
+    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_Block1172_Block1195_Block1204_GETARR_0=new RTS_LABEL(this,0,4,"GETARR"); // Local Label #4=GETARR At PrefixLevel 0
     // JavaLine 20 <== SourceLine 1217
-    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_CompoundStatement1266_CompoundStatement1223_xyMark_0=new RTS_LABEL(this,0,5,"xyMark"); // Local Label #5=xyMark At PrefixLevel 0
+    final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_Block1172_Block1211_xyMark_0=new RTS_LABEL(this,0,5,"xyMark"); // Local Label #5=xyMark At PrefixLevel 0
     // JavaLine 22 <== SourceLine 1288
     final RTS_LABEL _LABEL_COMMON_attrfile_fetchquant_NOMORE_0=new RTS_LABEL(this,0,6,"NOMORE"); // Local Label #6=NOMORE At PrefixLevel 0
     // Declare locals as attributes
@@ -201,7 +201,7 @@ public Object _RESULT() { return(_RESULT); }
                                 // JavaLine 201 <== SourceLine 1157
                                 new COMMON_DEFIDENT((_CUR._SL._SL));
                                 ;
-                                _GOTO(_LABEL_COMMON_attrfile_fetchquant_CompoundStatement1165_CompoundStatement1163_SETID_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_COMMON_attrfile_fetchquant_Block1151_Block1160_SETID_0); // GOTO EVALUATED LABEL
                             }
                         }
                         ;
@@ -213,7 +213,7 @@ public Object _RESULT() { return(_RESULT); }
                                 ;
                                 // JavaLine 214 <== SourceLine 1161
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=2109957412
+                                    _SIM_LABEL(1); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=41903949
                                     _RESULT=true;
                                 }
                                 ;
@@ -350,7 +350,7 @@ public Object _RESULT() { return(_RESULT); }
                                     {
                                         // JavaLine 351 <== SourceLine 1204
                                         {
-                                            _SIM_LABEL(4); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=2109957412
+                                            _SIM_LABEL(4); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=41903949
                                             new COMMON_attrfile_gettext((_CUR._SL));
                                         }
                                         ;
@@ -393,7 +393,7 @@ public Object _RESULT() { return(_RESULT); }
                                 ;
                                 // JavaLine 394 <== SourceLine 1216
                                 {
-                                    _SIM_LABEL(5); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=2109957412
+                                    _SIM_LABEL(5); // DeclaredIn: fetchquant -> fetchquant[externalIdent=COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=41903949
                                     // JavaLine 397 <== SourceLine 1217
                                     new COMMON_attrfile_gettext((_CUR._SL));
                                 }
@@ -420,7 +420,7 @@ public Object _RESULT() { return(_RESULT); }
                             // JavaLine 420 <== SourceLine 1225
                             {
                                 // JavaLine 422 <== SourceLine 1226
-                                _GOTO(_LABEL_COMMON_attrfile_fetchquant_CompoundStatement1266_CompoundStatement1223_xyMark_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_COMMON_attrfile_fetchquant_Block1172_Block1211_xyMark_0); // GOTO EVALUATED LABEL
                                 ;
                             }
                             break;

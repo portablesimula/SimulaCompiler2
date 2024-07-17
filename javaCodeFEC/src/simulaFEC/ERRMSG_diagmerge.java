@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 87
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class ERRMSG_diagmerge extends RTS_PROCEDURE {
@@ -11,7 +11,7 @@ public Object _RESULT() { return(_RESULT); }
     public int p_n;
     // Declare local labels
     // JavaLine 13 <== SourceLine 111
-    final RTS_LABEL _LABEL_ERRMSG_diagmerge_CompoundStatement115_CompoundStatement113_CONCAT_0=new RTS_LABEL(this,0,1,"CONCAT"); // Local Label #1=CONCAT At PrefixLevel 0
+    final RTS_LABEL _LABEL_ERRMSG_diagmerge_Block91_Block92_CONCAT_0=new RTS_LABEL(this,0,1,"CONCAT"); // Local Label #1=CONCAT At PrefixLevel 0
     // JavaLine 15 <== SourceLine 116
     final RTS_LABEL _LABEL_ERRMSG_diagmerge_EX_0=new RTS_LABEL(this,0,2,"EX"); // Local Label #2=EX At PrefixLevel 0
     // Declare locals as attributes
@@ -115,7 +115,7 @@ public Object _RESULT() { return(_RESULT); }
                                             t=RTS_TXT.sub(t,RTS_TXT.pos(t),((RTS_TXT.length(t)-(RTS_TXT.pos(t)))+(1)));
                                             ;
                                             // JavaLine 117 <== SourceLine 107
-                                            _GOTO(_LABEL_ERRMSG_diagmerge_CompoundStatement115_CompoundStatement113_CONCAT_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_ERRMSG_diagmerge_Block91_Block92_CONCAT_0); // GOTO EVALUATED LABEL
                                             ;
                                         }
                                     }
@@ -128,7 +128,7 @@ public Object _RESULT() { return(_RESULT); }
                                 ;
                                 // JavaLine 129 <== SourceLine 110
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: diagmerge -> diagmerge[externalIdent=ERRMSG_diagmerge] Kind=5, QUAL=ProcedureDeclaration, HashCode=1322057909, Protected by diagmerge defined in ERRMSG
+                                    _SIM_LABEL(1); // DeclaredIn: diagmerge -> diagmerge[externalIdent=ERRMSG_diagmerge] Kind=5, QUAL=ProcedureDeclaration, HashCode=222250245, Protected by diagmerge defined in ERRMSG
                                     // JavaLine 132 <== SourceLine 111
                                     result=CONC(CONC(result,t2),((ERRMSG)(_CUR._SL)).diag.getELEMENT(i));
                                 }

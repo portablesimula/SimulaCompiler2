@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 119
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class ERRMSG_errmsg extends RTS_PROCEDURE {
@@ -11,7 +11,7 @@ public Object _RESULT() { return(_RESULT); }
     public int p_i;
     // Declare local labels
     // JavaLine 13 <== SourceLine 123
-    final RTS_LABEL _LABEL_ERRMSG_errmsg_CompoundStatement125_SETNUM_0=new RTS_LABEL(this,0,1,"SETNUM"); // Local Label #1=SETNUM At PrefixLevel 0
+    final RTS_LABEL _LABEL_ERRMSG_errmsg_Block123_SETNUM_0=new RTS_LABEL(this,0,1,"SETNUM"); // Local Label #1=SETNUM At PrefixLevel 0
     // Declare locals as attributes
     // JavaLine 16 <== SourceLine 120
     public RTS_TXT t=null;
@@ -58,7 +58,7 @@ public Object _RESULT() { return(_RESULT); }
                         {
                             // JavaLine 59 <== SourceLine 123
                             {
-                                _SIM_LABEL(1); // DeclaredIn: errmsg -> errmsg[externalIdent=ERRMSG_errmsg] Kind=5, QUAL=ProcedureDeclaration, HashCode=278166606
+                                _SIM_LABEL(1); // DeclaredIn: errmsg -> errmsg[externalIdent=ERRMSG_errmsg] Kind=5, QUAL=ProcedureDeclaration, HashCode=1051890381
                                 _RESULT=t=RTS_ENVIRONMENT.copy(copy(new RTS_TXT(" ERROR ... ")));
                             }
                             ;
@@ -104,7 +104,7 @@ public Object _RESULT() { return(_RESULT); }
                                                 // JavaLine 104 <== SourceLine 139
                                                 ((ERRMSG)(_CUR._SL)).ERRnotopen_1=true;
                                                 ;
-                                                _GOTO(_LABEL_ERRMSG_errmsg_CompoundStatement125_SETNUM_0); // GOTO EVALUATED LABEL
+                                                _GOTO(_LABEL_ERRMSG_errmsg_Block123_SETNUM_0); // GOTO EVALUATED LABEL
                                                 ;
                                             }
                                         }
@@ -121,7 +121,7 @@ public Object _RESULT() { return(_RESULT); }
                                                 new ERRMSG_printDiag((_CUR._SL),new RTS_TXT("*** INCOMPATIBLE DIAGNOSTICS FILE ***"));
                                                 ;
                                                 // JavaLine 123 <== SourceLine 149
-                                                _GOTO(_LABEL_ERRMSG_errmsg_CompoundStatement125_SETNUM_0); // GOTO EVALUATED LABEL
+                                                _GOTO(_LABEL_ERRMSG_errmsg_Block123_SETNUM_0); // GOTO EVALUATED LABEL
                                                 ;
                                             }
                                         }

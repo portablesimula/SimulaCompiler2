@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 393
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SCANNER_SourceElt extends SCANNER_input {
@@ -10,11 +10,11 @@ public boolean isDetachUsed() { return(true); }
     public RTS_TXT p1_fname;
     // Declare local labels
     // JavaLine 12 <== SourceLine 425
-    final RTS_LABEL _LABEL_SCANNER_SourceElt_CompoundStatement459_NEXTIMAGE_0=new RTS_LABEL(this,1,1,"NEXTIMAGE"); // Local Label #1=NEXTIMAGE At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_SourceElt_Block424_NEXTIMAGE_0=new RTS_LABEL(this,1,1,"NEXTIMAGE"); // Local Label #1=NEXTIMAGE At PrefixLevel 1
     // JavaLine 14 <== SourceLine 427
-    final RTS_LABEL _LABEL_SCANNER_SourceElt_CompoundStatement459_CompoundStatement439_INRL_0=new RTS_LABEL(this,1,2,"INRL"); // Local Label #2=INRL At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_SourceElt_Block424_Block427_INRL_0=new RTS_LABEL(this,1,2,"INRL"); // Local Label #2=INRL At PrefixLevel 1
     // JavaLine 16 <== SourceLine 458
-    final RTS_LABEL _LABEL_SCANNER_SourceElt_CompoundStatement459_EXIT_0=new RTS_LABEL(this,1,3,"EXIT"); // Local Label #3=EXIT At PrefixLevel 1
+    final RTS_LABEL _LABEL_SCANNER_SourceElt_Block424_EXIT_0=new RTS_LABEL(this,1,3,"EXIT"); // Local Label #3=EXIT At PrefixLevel 1
     // Declare locals as attributes
     // JavaLine 19 <== SourceLine 396
     public RTS_Infile sf_1=null;
@@ -135,7 +135,7 @@ public boolean isDetachUsed() { return(true); }
                                     ;
                                     // JavaLine 136 <== SourceLine 428
                                     if(_VALUE(sf_1.inrecord())) {
-                                        _GOTO(_LABEL_SCANNER_SourceElt_CompoundStatement459_CompoundStatement439_INRL_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_SourceElt_Block424_Block427_INRL_0); // GOTO EVALUATED LABEL
                                     }
                                     ;
                                     // JavaLine 141 <== SourceLine 429
@@ -184,7 +184,7 @@ public boolean isDetachUsed() { return(true); }
                                             linlen=4;
                                             ;
                                             // JavaLine 186 <== SourceLine 443
-                                            _GOTO(_LABEL_SCANNER_SourceElt_CompoundStatement459_EXIT_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_SourceElt_Block424_EXIT_0); // GOTO EVALUATED LABEL
                                             ;
                                         }
                                     }
@@ -230,7 +230,7 @@ public boolean isDetachUsed() { return(true); }
                         ;
                         // JavaLine 231 <== SourceLine 455
                         if(_VALUE((linlen==(0)))) {
-                            _GOTO(_LABEL_SCANNER_SourceElt_CompoundStatement459_NEXTIMAGE_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_SourceElt_Block424_NEXTIMAGE_0); // GOTO EVALUATED LABEL
                         }
                         ;
                         // JavaLine 236 <== SourceLine 456

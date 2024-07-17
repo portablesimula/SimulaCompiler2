@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 806
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
@@ -10,9 +10,9 @@ public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
     // JavaLine 10 <== SourceLine 810
     final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_SCN1_0=new RTS_LABEL(this,0,1,"SCN1"); // Local Label #1=SCN1 At PrefixLevel 0
     // JavaLine 12 <== SourceLine 825
-    final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_CompoundStatement830_L1_0=new RTS_LABEL(this,0,2,"L1"); // Local Label #2=L1 At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_Block824_L1_0=new RTS_LABEL(this,0,2,"L1"); // Local Label #2=L1 At PrefixLevel 0
     // JavaLine 14 <== SourceLine 832
-    final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_CompoundStatement835_SCAN_0=new RTS_LABEL(this,0,3,"SCAN"); // Local Label #3=SCAN At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_Block832_SCAN_0=new RTS_LABEL(this,0,3,"SCAN"); // Local Label #3=SCAN At PrefixLevel 0
     // JavaLine 16 <== SourceLine 838
     final RTS_LABEL _LABEL_SCANNER_recognizer_ScanPastFormat_EXIT_0=new RTS_LABEL(this,0,4,"EXIT"); // Local Label #4=EXIT At PrefixLevel 0
     // Declare locals as attributes
@@ -58,7 +58,7 @@ public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
                             }
                             ;
                             // JavaLine 60 <== SourceLine 818
-                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_CompoundStatement835_SCAN_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_Block832_SCAN_0); // GOTO EVALUATED LABEL
                         }
                         break;
                         case 1: 
@@ -82,14 +82,14 @@ public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
                             }
                             ;
                             // JavaLine 84 <== SourceLine 823
-                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_CompoundStatement830_L1_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_Block824_L1_0); // GOTO EVALUATED LABEL
                         }
                         break;
                         case 5: 
                         // JavaLine 89 <== SourceLine 824
                         {
                             {
-                                _SIM_LABEL(2); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=304494063
+                                _SIM_LABEL(2); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=757436159
                                 // JavaLine 93 <== SourceLine 825
                                 while((((SCANNER_recognizer)(_CUR._SL)).atom_1!=(';'))) {
                                     {
@@ -111,7 +111,7 @@ public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
                             }
                             ;
                             // JavaLine 113 <== SourceLine 830
-                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_CompoundStatement835_SCAN_0); // GOTO EVALUATED LABEL
+                            _GOTO(_LABEL_SCANNER_recognizer_ScanPastFormat_Block832_SCAN_0); // GOTO EVALUATED LABEL
                         }
                         break;
                         case 9: 
@@ -120,7 +120,7 @@ public final class SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
                         {
                             // JavaLine 121 <== SourceLine 832
                             {
-                                _SIM_LABEL(3); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=304494063
+                                _SIM_LABEL(3); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=757436159
                                 ((SCANNER_recognizer)(_CUR._SL)).atom_1=RTS_ENVIRONMENT.loadChar(((SCANNER_recognizer)(_CUR._SL)).line_1,((SCANNER_recognizer)(_CUR._SL)).linepos_1);
                             }
                             ;

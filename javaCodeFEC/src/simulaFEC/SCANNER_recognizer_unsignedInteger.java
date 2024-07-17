@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 937
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SCANNER_recognizer_unsignedInteger extends RTS_CLASS {
@@ -9,9 +9,9 @@ public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 11 <== SourceLine 983
-    final RTS_LABEL _LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_CompoundStatement1000_CompoundStatement985_digit_0=new RTS_LABEL(this,0,1,"digit"); // Local Label #1=digit At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_unsignedInteger_Block948_Block950_Block981_digit_0=new RTS_LABEL(this,0,1,"digit"); // Local Label #1=digit At PrefixLevel 0
     // JavaLine 13 <== SourceLine 1002
-    final RTS_LABEL _LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0=new RTS_LABEL(this,0,2,"nterm"); // Local Label #2=nterm At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_unsignedInteger_Block948_nterm_0=new RTS_LABEL(this,0,2,"nterm"); // Local Label #2=nterm At PrefixLevel 0
     // Declare locals as attributes
     // JavaLine 16 <== SourceLine 941
     public char radix=0;
@@ -232,7 +232,7 @@ public boolean isDetachUsed() { return(true); }
                                     {
                                         // JavaLine 233 <== SourceLine 961
                                         if(_VALUE((((SCANNER_recognizer)(_CUR._SL)).linepos_1==(((SCANNER_recognizer)(_CUR._SL)).linelength_1)))) {
-                                            _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_nterm_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                         // JavaLine 238 <== SourceLine 962
@@ -262,7 +262,7 @@ public boolean isDetachUsed() { return(true); }
                                                         // JavaLine 262 <== SourceLine 971
                                                         ((SCANNER_recognizer)(_CUR._SL)).atom_1='R';
                                                         ;
-                                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_CompoundStatement1000_CompoundStatement985_digit_0); // GOTO EVALUATED LABEL
+                                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_Block950_Block981_digit_0); // GOTO EVALUATED LABEL
                                                         ;
                                                     }
                                                 }
@@ -270,7 +270,7 @@ public boolean isDetachUsed() { return(true); }
                                         }
                                         ;
                                         // JavaLine 272 <== SourceLine 973
-                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_nterm_0); // GOTO EVALUATED LABEL
                                     }
                                     break;
                                     case 48: 
@@ -336,7 +336,7 @@ public boolean isDetachUsed() { return(true); }
                                     {
                                         // JavaLine 337 <== SourceLine 988
                                         if(_VALUE((radix!=('@')))) {
-                                            _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
+                                            _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_nterm_0); // GOTO EVALUATED LABEL
                                         }
                                         ;
                                         // JavaLine 342 <== SourceLine 989
@@ -345,12 +345,12 @@ public boolean isDetachUsed() { return(true); }
                                         }
                                         ;
                                         // JavaLine 347 <== SourceLine 990
-                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_CompoundStatement1000_CompoundStatement985_digit_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_Block950_Block981_digit_0); // GOTO EVALUATED LABEL
                                     }
                                     break;
                                     default:
                                     // JavaLine 352 <== SourceLine 993
-                                    _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_recognizer_unsignedInteger_Block948_nterm_0); // GOTO EVALUATED LABEL
                                     break;
                                 } // END SWITCH STATEMENT
                                 ;
@@ -384,7 +384,7 @@ public boolean isDetachUsed() { return(true); }
                         } else {
                             // JavaLine 385 <== SourceLine 1005
                             if(_VALUE((radix!=(':')))) {
-                                new SCANNER_recognizer_unsignedInteger_CompoundStatement1044_SubBlock1005((_CUR))._STM();
+                                new SCANNER_recognizer_unsignedInteger_Block948_Block1006((_CUR))._STM();
                             }
                         }
                         ;

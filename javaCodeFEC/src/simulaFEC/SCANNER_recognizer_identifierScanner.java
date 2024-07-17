@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 900
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class SCANNER_recognizer_identifierScanner extends RTS_CLASS {
@@ -9,11 +9,11 @@ public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
     // JavaLine 11 <== SourceLine 912
-    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_TEST_0=new RTS_LABEL(this,0,1,"TEST"); // Local Label #1=TEST At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_Block909_TEST_0=new RTS_LABEL(this,0,1,"TEST"); // Local Label #1=TEST At PrefixLevel 0
     // JavaLine 13 <== SourceLine 915
-    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_CompoundStatement918_SCAN_0=new RTS_LABEL(this,0,2,"SCAN"); // Local Label #2=SCAN At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_Block909_Block914_SCAN_0=new RTS_LABEL(this,0,2,"SCAN"); // Local Label #2=SCAN At PrefixLevel 0
     // JavaLine 15 <== SourceLine 926
-    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_idterm_0=new RTS_LABEL(this,0,3,"idterm"); // Local Label #3=idterm At PrefixLevel 0
+    final RTS_LABEL _LABEL_SCANNER_recognizer_identifierScanner_Block909_idterm_0=new RTS_LABEL(this,0,3,"idterm"); // Local Label #3=idterm At PrefixLevel 0
     // Declare locals as attributes
     // JavaLine 18 <== SourceLine 903
     public char atomcl=0;
@@ -77,7 +77,7 @@ public boolean isDetachUsed() { return(true); }
                                     }
                                     ;
                                     // JavaLine 79 <== SourceLine 917
-                                    _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_TEST_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_Block909_TEST_0); // GOTO EVALUATED LABEL
                                     ;
                                 }
                                 break;
@@ -87,24 +87,24 @@ public boolean isDetachUsed() { return(true); }
                                 {
                                     // JavaLine 88 <== SourceLine 920
                                     if(_VALUE((((SCANNER_recognizer)(_CUR._SL)).linepos_1==(((SCANNER_recognizer)(_CUR._SL)).linelength_1)))) {
-                                        _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_idterm_0); // GOTO EVALUATED LABEL
+                                        _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_Block909_idterm_0); // GOTO EVALUATED LABEL
                                     }
                                     ;
                                     // JavaLine 93 <== SourceLine 921
                                     new SCANNER_recognizer_illegalChar((_CUR._SL));
                                     ;
-                                    _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_CompoundStatement918_SCAN_0); // GOTO EVALUATED LABEL
+                                    _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_Block909_Block914_SCAN_0); // GOTO EVALUATED LABEL
                                 }
                                 break;
                                 case 5: 
                                 case 4: 
                                 case 6: 
                                 // JavaLine 102 <== SourceLine 922
-                                _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_idterm_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_Block909_idterm_0); // GOTO EVALUATED LABEL
                                 break;
                                 default:
                                 // JavaLine 106 <== SourceLine 923
-                                _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_CompoundStatement931_CompoundStatement918_SCAN_0); // GOTO EVALUATED LABEL
+                                _GOTO(_LABEL_SCANNER_recognizer_identifierScanner_Block909_Block914_SCAN_0); // GOTO EVALUATED LABEL
                                 break;
                             } // END SWITCH STATEMENT
                         }

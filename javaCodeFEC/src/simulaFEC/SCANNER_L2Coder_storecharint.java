@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1700
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SCANNER_L2Coder_storecharint extends RTS_PROCEDURE {

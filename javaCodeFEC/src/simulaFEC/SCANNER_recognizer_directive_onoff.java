@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 669
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Jun 14 09:55:32 CEST 2024
+// Simula-2.0 Compiled at Wed Jul 17 09:58:22 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SCANNER_recognizer_directive_onoff extends RTS_PROCEDURE {
@@ -35,7 +35,7 @@ public Object _RESULT() { return(_RESULT); }
         } else {
             // JavaLine 36 <== SourceLine 672
             if(_VALUE(_TXTREL_NE(t,new RTS_TXT("off")))) {
-                _GOTO(((SCANNER_recognizer_directive)(_CUR._SL))._LABEL_SCANNER_recognizer_directive_CompoundStatement798_DIRWARN_0); // GOTO EVALUATED LABEL
+                _GOTO(((SCANNER_recognizer_directive)(_CUR._SL))._LABEL_SCANNER_recognizer_directive_Block798_DIRWARN_0); // GOTO EVALUATED LABEL
             }
         }
         ;
