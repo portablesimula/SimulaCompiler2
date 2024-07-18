@@ -618,8 +618,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 
 	public FieldRefEntry getResultFieldRefEntry(ConstantPoolBuilder pool) {
-		String className=Global.packetName+"."+this.getJavaIdentifier();
-		return(pool.fieldRefEntry(ClassDesc.of(className), "_RESULT", type.toClassDesc()));
+		return(pool.fieldRefEntry(CD.classDesc(this.getJavaIdentifier()), "_RESULT", type.toClassDesc()));
 	}
 	
 	// ***********************************************************************************************

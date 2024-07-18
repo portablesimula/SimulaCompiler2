@@ -37,4 +37,10 @@ public class CD {
 		return(ClassDesc.of("simula.runtime."+type.getArrayType()));
 	}
 	
+	public static ClassDesc classDesc(String name) {
+//		if(name.startsWith("RTS_")) Util.IERR(""+name);
+		
+		return(ClassDesc.of(Global.packetName,name));
+	}
+	
 }

@@ -21,6 +21,7 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -179,9 +180,8 @@ public final class LocalObject extends Expression {
 				.getfield(connectionBlock.inspectedVariable.getFieldRefEntry(pool));
 		} else {
 			//return ("((" + cast + ")" + DeclarationScope.edCTX(ctxDiff) + ")");
-			String cast = classDeclaration.getJavaIdentifier();
 			codeBuilder
-				.checkcast(ClassDesc.of(Global.packetName,cast));
+				.checkcast(classDeclaration.getClassDesc());
 		}
 	}
 

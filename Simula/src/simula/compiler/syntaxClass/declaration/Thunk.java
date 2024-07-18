@@ -397,7 +397,7 @@ public final class Thunk extends DeclarationScope {
 				DeclarationScope curScope=Global.getCurrentScope();
 				// The current scope. In case of Thunk one level up to Thunk.ENV
 				if(curScope instanceof Thunk) curScope = curScope.declaredIn;
-				ClassDesc CD_ENV = ClassDesc.of(Global.packetName,curScope.externalIdent);
+				ClassDesc CD_ENV = CD.classDesc(curScope.externalIdent);
 				codeBuilder
 					.aload(0)
 					.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
@@ -423,7 +423,7 @@ public final class Thunk extends DeclarationScope {
 						.dup();
 					var.buildIdentifierAccess(false, codeBuilder);
 					codeBuilder
-						.ldc(ClassDesc.of(Global.packetName+"."+procIdent))
+						.ldc(CD.classDesc(procIdent))
 						.invokespecial(pool.methodRefEntry(CD.RTS_PRCQNT,
 								"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V")));
 				}

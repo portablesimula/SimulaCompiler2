@@ -82,7 +82,7 @@ public final class CompileFEC2 {
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
-//		Option.internal.USE_SimulaClassLoader = true;
+		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 //		Option.CASE_SENSITIVE=true;
 //		Option.GNERATE_LINE_CALLS=true;

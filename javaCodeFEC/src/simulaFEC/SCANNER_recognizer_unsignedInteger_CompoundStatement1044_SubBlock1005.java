@@ -31,7 +31,7 @@ public final class SCANNER_recognizer_unsignedInteger_CompoundStatement1044_SubB
                 ;
                 ((SCANNER_recognizer_unsignedInteger)(_CUR._SL)).radix=':';
                 ;
-                _GOTO(((SCANNER_recognizer_unsignedInteger)(_CUR._SL))._LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
+//                _GOTO(((SCANNER_recognizer_unsignedInteger)(_CUR._SL))._LABEL_SCANNER_recognizer_unsignedInteger_CompoundStatement1044_nterm_0); // GOTO EVALUATED LABEL
                 ;
             }
         }

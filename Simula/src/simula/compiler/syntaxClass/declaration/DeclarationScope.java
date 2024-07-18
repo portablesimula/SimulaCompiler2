@@ -378,7 +378,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** ByteCoding Utility: getClassDesc   -- Redefined in StandardClass and ConnectionBlock
 	// ***********************************************************************************************
 	public ClassDesc getClassDesc() {
-		return(ClassDesc.of(Global.packetName + '.' + externalIdent));
+		return(CD.classDesc(externalIdent));
 	}
 	
 	public void printStaticChain(String title,int details) {
@@ -477,7 +477,7 @@ public abstract class DeclarationScope extends Declaration  {
 
 //    		System.out.println("DeclarationScope.loadOrAddClassFile: "+externalIdent);
  			if(Option.internal.LIST_GENERATED_CLASS_FILES)
-// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("SCANNER_SourceElt"))
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("FECMAIN_PBLK28"))
    				listGeneratedClassFile(bytes);
     	}
     	
