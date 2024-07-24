@@ -1972,6 +1972,8 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 			return (new RTS_TXT(listingFileName)); // listname i.e. Listing File Name
 		case 4:
 			String sCodeFileName = RTS_SPORT_Option.getSCodeFileName();
+			RTS_SPORT_Option.print_SPORT_Options();
+			System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+sCodeFileName);
 			return (new RTS_TXT(sCodeFileName));
 		case 7:
 			String scratchFileName = RTS_SPORT_Option.getScratchFileName();

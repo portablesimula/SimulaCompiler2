@@ -49,6 +49,15 @@ public class RTS_SPORT_Option {
 	 * The S-PORT listing file
 	 */
 	static String ListingFileName = "#sysout";
+	
+	public static void print_SPORT_Options() {
+		System.out.println("print_SPORT_Options: ModuleName:             " + getModuleName());
+		System.out.println("print_SPORT_Options: SourceDirName:          " + SourceDirName);
+		System.out.println("print_SPORT_Options: SPORT_SourceFileName:   " + SPORT_SourceFileName);
+		System.out.println("print_SPORT_Options: SPORT_SysInsertDirName: " + SPORT_SysInsertDirName);
+		System.out.println("print_SPORT_Options: ListingFileName:        " + ListingFileName);
+		System.out.println("print_SPORT_Options: SCodeFileName():        " + getSCodeFileName());
+	}
 
 	/**
 	 * Returns the S-Code file name.

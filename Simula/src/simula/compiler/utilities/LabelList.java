@@ -26,6 +26,7 @@ public class LabelList {
 	
 	public DeclarationScope declaredIn;
 	public Vector<LabelDeclaration> labels;
+	private Label defaultTarget; // beginning of the default handler block. Set by MAKE_READY_FOR_CODING
 	private Vector<SwitchCase> tableSwitchCases; // Set by MAKE_READY_FOR_CODING
 	
 	private boolean READY_FOR_CODING;
@@ -111,6 +112,7 @@ public class LabelList {
 		if(READY_FOR_CODING) return;
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
 		if(tableSize() > 0) {
+			defaultTarget = codeBuilder.newLabel();
 			tableSwitchCases = new Vector<SwitchCase>();
 			if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: nLabels="+tableSize());
 			for (int i = 1; i <= tableSize(); i++) {
@@ -137,9 +139,18 @@ public class LabelList {
 		//
 		// *******************************************************************************
 		// Build the TableSwitch Instruction
-		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
+//		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		int lowValue = 1;            // the minimum key value.
 		int highValue = tableSize(); // the maximum key value.
+		
+		
+		System.out.println("Build TableSwitch Instruction: " + lowValue + " -> " + highValue);
+		System.out.println("defaultTarget = " + defaultTarget);
+		for(int i=0;i<tableSwitchCases.size();i++) {
+			System.out.println("TableSwitchCases("+i+") = " + getTableSwitchCases(codeBuilder).get(i));
+		}
+		
+		
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder

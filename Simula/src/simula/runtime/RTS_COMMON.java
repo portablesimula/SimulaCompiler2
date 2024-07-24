@@ -62,6 +62,7 @@ public final class RTS_COMMON {
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
+			System.out.println("RTS_COMMON.setRuntimeOptions: arg = "+arg);
 			if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();
@@ -74,7 +75,11 @@ public final class RTS_COMMON {
 				else if (arg.equalsIgnoreCase("-userDir"))			RTS_Option.RUNTIME_USER_DIR = args[++i];
 
 				// Spesial S-Port Simula and Simuletta Options. Used by get/give ... info routines
-				else if (arg.equalsIgnoreCase("-SPORT_SOURCE_FILE"))	RTS_SPORT_Option.SPORT_SourceFileName = args[++i];
+				else if (arg.equalsIgnoreCase("-SPORT_SOURCE_FILE")) {
+					RTS_SPORT_Option.SPORT_SourceFileName = args[++i];
+					File sourceFile = new File(RTS_SPORT_Option.SPORT_SourceFileName);
+					RTS_SPORT_Option.SourceDirName = sourceFile.getParent();
+				}
 				else if (arg.equalsIgnoreCase("-select"))				RTS_SPORT_Option.Selectors = args[++i];
 				else if (arg.equalsIgnoreCase("-listing"))				RTS_SPORT_Option.ListingFileName = args[++i];
 				else if (arg.equalsIgnoreCase("-trace"))				RTS_SPORT_Option.TraceLevel = Integer.decode(args[++i]);
@@ -94,6 +99,7 @@ public final class RTS_COMMON {
 		if (RTS_Option.VERBOSE) {
 			RTS_COMMON.println("Begin Execution of Simula Program using " + getJavaID());
 			listRuntimeOptions();
+			RTS_SPORT_Option.print_SPORT_Options();
 		}
 	}
 

@@ -1,22 +1,9 @@
 class adHoc_PRECOMP;
 begin
-	text t, listname;
-	integer listlength; 
-	ref(Printfile) listfile;
-	
-	listname:-gettextinfo(2);
-	listlength:=sysout.image.length;
-	if listname=/=notext then begin
-         t:-copy(listname); t:-lowcase(t);
-         if t = "sysout" then listfile:-sysout
-         else inspect new printfile(listname) do begin
-              listlength:=getintinfo(7); t:-blanks(listlength);
-              if not open(t) then begin
-                 listlength:=0;
-%                 error1(-366,listname)
-              end
-              else listfile:-this printfile;
-         end;
-	end;
-	
+	ref(semchecker) checker0;
+	ref(semchecker) checker;
+
+	class semchecker; begin
+		integer lowplev;
+	end;	
 end;
