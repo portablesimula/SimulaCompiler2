@@ -350,10 +350,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 					if(labelList != null)
 						for (LabelDeclaration lab : labelList.labels)
-							lab.buildField(classBuilder,this);
+							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)
-						decl.buildField(classBuilder,this);
+						decl.buildDeclaration(classBuilder,this);
 					
 					if (isQPSystemBlock())
 						classBuilder

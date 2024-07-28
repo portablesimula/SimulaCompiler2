@@ -240,6 +240,8 @@ public final class RunFullClassTestBatch2 {
 		names.add("simtst152.sim"); // OK: Test nested connection statements
 		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 		names.add("simtst154.sim"); // OK: Test function result assignment
+		names.add("Precompiled155.sim"); // OK: Precompile this for Simtst 155.
+		names.add("simtst155.sim"); // OK: Test
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

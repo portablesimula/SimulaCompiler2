@@ -418,7 +418,7 @@ public abstract class DeclarationScope extends Declaration  {
      * Indicator used to prevent multiple ClassFile generation.
      * This situation may occur during the class body concatenation process.
      */
-    private boolean CLASSFILE_ALREADY_GENERATED;
+    protected boolean CLASSFILE_ALREADY_GENERATED;
 	/**
 	 * Create Java ClassFile.
 	 * @throws IOException 
@@ -428,8 +428,10 @@ public abstract class DeclarationScope extends Declaration  {
 			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);			
     	} else if (CLASSFILE_ALREADY_GENERATED) {
 			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier+" -- It is already generated");			
+//    		System.out.println("DeclarationScope.createJavaClassFile: "+this.externalIdent+"   CLASSFILE_ALREADY_GENERATED == TRUE");
     	} else {
     		CLASSFILE_ALREADY_GENERATED = true;
+//    		System.out.println("DeclarationScope.createJavaClassFile: "+this.externalIdent+"   CLASSFILE_ALREADY_GENERATED <- TRUE");
     		buildAndLoadOrAddClassFile();
     	}
     }

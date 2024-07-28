@@ -1,9 +1,7 @@
-class adHoc_PRECOMP;
-begin
-	ref(semchecker) checker0;
-	ref(semchecker) checker;
 
-	class semchecker; begin
-		integer lowplev;
-	end;	
+class adHoc_PRECOMP; begin
+
+	class A; begin
+	end;
+		
 end;

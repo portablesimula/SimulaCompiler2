@@ -306,13 +306,13 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 					// Add Fields (Attributes and parameters)
 					if(labelList != null)
 						for (LabelDeclaration lab : labelList.labels)
-							lab.buildField(classBuilder,this);
+							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)
-						decl.buildField(classBuilder,this);
+						decl.buildDeclaration(classBuilder,this);
 					
 					for(Parameter par:parameterList)
-						par.buildField(classBuilder,this);
+						par.buildDeclaration(classBuilder,this);
 					
 					for (VirtualSpecification virtual : virtualSpecList)
 						if (!virtual.hasDefaultMatch)

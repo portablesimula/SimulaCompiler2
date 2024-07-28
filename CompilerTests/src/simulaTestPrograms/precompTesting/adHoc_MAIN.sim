@@ -1,7 +1,8 @@
-external class adHoc_PRECOMP2;
+external class adHoc_PRECOMP;
 
-adHoc_PRECOMP2 begin
-
-%	outtext("adHoc_MAIN"); outimage;
-      
+adHoc_PRECOMP begin
+	ref(A) x;
+	
+	x :- new A;
+	
 end;

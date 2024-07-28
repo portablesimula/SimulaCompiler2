@@ -1,0 +1,55 @@
+% ==============================================================================
+%
+%  Precompiled for simtst155
+%
+% ==============================================================================
+
+external class SimulaTest;
+
+SimulaTest class Pre155;
+begin
+	text array facit(0:14);
+	integer traceCase;
+	   
+   procedure trace(msg); text msg;
+   begin
+%      if verbose then
+      	 begin outtext(msg); outimage; end;
+      if msg ne facit(traceCase) then
+      begin err("Case " & edit(traceCase));
+         outtext("Trace: " & msg); outimage;
+         outtext("Facit: " & facit(traceCase)); outimage;
+      end;
+      traceCase:=traceCase+1;
+   end;
+	ref(XXXX) checker0,checker;
+
+	class XXXX; begin
+		integer iiii = 444;
+		detach;
+	end;
+	
+%	XXXX class YYYY; begin detach; end;
+
+	!** Svarer til PAS2INIT/codegeneratorinit;
+%	codegenerator4
+	 class INIT; begin
+		sysout.outtext("adHoc_PAS2INIT: BEGIN class PAS2INIT/codegeneratorinit STATEMENTS"); sysout.outimage;
+
+		begin
+			integer dummy;
+			!***   B U I L D E R I N I T   ***;
+			inspect new XXXX do begin
+				sysout.outtext("PAS2INIT.main: "); outimage;
+%				checker0:-checker:- this XXXX;
+				checker:- this XXXX;
+				checker0:-checker;
+				outtext("" & edit(checker0.iiii) ); outimage;
+			end;
+		end;
+		
+	end;
+	
+%	trace("At END");
+	
+end;

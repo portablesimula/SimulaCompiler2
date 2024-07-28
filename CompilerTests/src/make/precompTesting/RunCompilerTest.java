@@ -33,7 +33,7 @@ public final class RunCompilerTest {
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
@@ -105,15 +105,15 @@ public final class RunCompilerTest {
 //		names.add("/precompTesting/p40b.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("/precompTesting/p40a.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("/precompTesting/p40c.sim");     // OK:  Precompile this for Simtst 40.
-		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
+//		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
-//		names.add("/precompTesting/adHoc_PRECOMP.sim");
+		names.add("/precompTesting/adHoc_PRECOMP.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP2.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP3.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP4.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP5.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP6.sim");
-//		names.add("/precompTesting/adHoc_MAIN.sim");
+		names.add("/precompTesting/adHoc_MAIN.sim");
 
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");

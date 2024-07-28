@@ -569,14 +569,14 @@ public class ProcedureDeclaration extends BlockDeclaration {
 								codeBuilder -> buildMethod_RESULT(codeBuilder));
 					
 					for (Parameter par:parameterList)
-						par.buildField(classBuilder,this);
+						par.buildDeclaration(classBuilder,this);
 					
 					if(labelList != null)
 						for (LabelDeclaration lab : labelList.labels)
-							lab.buildField(classBuilder,this);
+							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)
-						decl.buildField(classBuilder,this);
+						decl.buildDeclaration(classBuilder,this);
 					
 					if(parameterList.size() > 0)
 						classBuilder
@@ -951,7 +951,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 		
 	@Override
-	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		try {
 			this.createJavaClassFile();

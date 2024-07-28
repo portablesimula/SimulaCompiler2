@@ -212,7 +212,7 @@ public class SimpleVariableDeclaration extends Declaration {
 	}
 
 	@Override
-	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		ClassDesc CD=type.toClassDesc();
 		classBuilder.withField(getFieldIdentifier(), CD, ClassFile.ACC_PUBLIC);
 	}

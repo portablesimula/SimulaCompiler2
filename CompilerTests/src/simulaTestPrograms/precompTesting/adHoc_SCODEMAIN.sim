@@ -1,0 +1,11 @@
+external class adHoc_PAS2INIT;
+
+adHoc_PAS2INIT class adHoc_SCODEMAIN;
+begin
+
+	!** Svarer til SCODMAIN/codegenerator;
+	codegeneratorinit class codegenerator; begin
+		sysout.outtext("adHoc_SCODEMAIN: BEGIN class SCODMAIN/codegenerator STATEMENTS"); sysout.outimage;
+	end;
+	
+end;

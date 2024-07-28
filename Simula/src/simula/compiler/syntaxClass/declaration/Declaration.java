@@ -228,8 +228,8 @@ public abstract class Declaration extends SyntaxClass {
 	/**
 	 * Output Java ByteCode. Treat Declaration.
 	 */
-	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
-		Util.IERR("Method buildField need a redefinition in "+this.getClass().getSimpleName());
+	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
+		Util.IERR("Method buildDeclaration need a redefinition in "+this.getClass().getSimpleName());
 	}
 
 	/**

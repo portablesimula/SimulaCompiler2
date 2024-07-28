@@ -28,7 +28,7 @@ public final class RunClassFileTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-//		Option.verbose=true;
+		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
@@ -55,7 +55,7 @@ public final class RunClassFileTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=true;
+//		Option.internal.PRINT_SYNTAX_TREE=true;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -81,7 +81,7 @@ public final class RunClassFileTest {
 		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
-		RTOption.GOTO_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
 
@@ -110,8 +110,9 @@ public final class RunClassFileTest {
 		// names.add("/simple/p41.sim");
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
+		 names.add("/simple/adHoc001.sim");
 //		 names.add("/simple/adHoc00.sim");
-		 names.add("/simple/adHoc01.sim");
+//		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");

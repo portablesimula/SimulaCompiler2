@@ -1,11 +1,3 @@
 begin
-   integer i,j,n;
-
-   n := 1 ;
-
-   for i:= 1 step 1 until 2, j do         ! Complex For ;
-   begin
-   	  outtext("Value  " & edit(i)); outimage;
-   end ;
-
-end of program;
+	outtext(""); outimage;
+end;      

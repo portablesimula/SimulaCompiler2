@@ -1,0 +1,31 @@
+% external class adHoc_SCODER4;
+
+% adHoc_SCODER4
+	 class adHoc_PAS2INIT;
+begin
+	ref(precheck0) checker0,checker;
+
+	class precheck0; begin
+	end;
+	
+	precheck0 class semchecker; begin
+		detach;
+	end;
+
+	!** Svarer til PAS2INIT/codegeneratorinit;
+%	codegenerator4
+	 class codegeneratorinit; begin
+		sysout.outtext("adHoc_PAS2INIT: BEGIN class PAS2INIT/codegeneratorinit STATEMENTS"); sysout.outimage;
+
+		begin
+			integer dummy;
+			!***   B U I L D E R I N I T   ***;
+			inspect new semchecker do begin
+				sysout.outtext("PAS2INIT.main: "); outimage;
+				checker0:-checker:- this semchecker;
+			end;
+		end;
+		
+	end;
+		
+end;

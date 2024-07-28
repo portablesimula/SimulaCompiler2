@@ -67,8 +67,10 @@ public final class CompileFEC2 {
 //		names.add("SCODER4.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER4.jar
 //		
 //		names.add("PAS2INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS2INIT.jar 
-		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
-//		names.add("SCODMAIN_SAVED.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODMAIN.jar
+		
+//		names.add("adHoc_PAS2INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS2INIT.jar 
+//		names.add("adHoc_SCODMAIN.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
+		
 //		names.add("SCODMAIN.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODMAIN.jar
 
 //		names.add("GENMSG.sim");            // WILL GENERATE FILE MessageGenerator.sim
@@ -82,7 +84,7 @@ public final class CompileFEC2 {
 		Option.verbose=true;
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
-		Option.internal.CREATE_JAVA_SOURCE = true;
+//		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 //		Option.CASE_SENSITIVE=true;
@@ -121,7 +123,7 @@ public final class CompileFEC2 {
 //		File userDir=new File("C:/GitHub/SimulaCompiler2/S-PORT");
 		
 		
-		Option.internal.keepJava=new File("C:/GitHub/SimulaCompiler2/javaCodeFEC"); // Generated .java Source is then found in project javaCodeFEC
+//		Option.internal.keepJava=new File("C:/GitHub/SimulaCompiler2/javaCodeFEC"); // Generated .java Source is then found in project javaCodeFEC
 		Global.packetName="simulaFEC";
 
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime
@@ -135,7 +137,7 @@ public final class CompileFEC2 {
 		RTOption.VERBOSE = true;
 //		RTOption.internal.DEBUGGING = false;
 //		RTOption.USE_CONSOLE=false;
-		RTOption.BLOCK_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = false;
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;

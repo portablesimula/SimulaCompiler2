@@ -393,7 +393,7 @@ public final class Parameter extends Declaration {
 	}
 
 	@Override
-	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		String ident = getFieldIdentifier();
 		if (mode == Parameter.Mode.name) {
 			if (kind == Parameter.Kind.Procedure) {

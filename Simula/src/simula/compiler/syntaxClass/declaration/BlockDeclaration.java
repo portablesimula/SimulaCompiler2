@@ -369,6 +369,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			Label checkStackSize = null; // TESTING_STACK_SIZE
+			if(labelList != null) labelList.clear();
 			codeBuilder
 				.labelBinding(begScope)
 				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
@@ -380,8 +381,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
 				}
 				if (hasLabel())	
-//				if (this.labelList != null && !this.labelList.isEmpty())	
-					build_TRY_CATCH(codeBuilder, begScope, endScope);
+					 build_TRY_CATCH(codeBuilder, begScope, endScope);
 				else build_STM_BODY(codeBuilder, begScope, endScope);
 				codeBuilder
 					.aload(0)

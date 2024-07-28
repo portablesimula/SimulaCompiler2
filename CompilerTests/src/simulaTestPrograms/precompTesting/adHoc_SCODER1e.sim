@@ -1,0 +1,11 @@
+external class adHoc_SCODER1;
+
+adHoc_SCODER1 class adHoc_SCODER1e;
+begin
+
+	!** Svarer til SCODER1e/codegenerator1e;
+	codegenerator1 class codegenerator1e; begin
+		sysout.outtext("adHoc_SCODER1e: BEGIN class SCODER1e/codegenerator1e STATEMENTS"); sysout.outimage;
+	end;
+	
+end;

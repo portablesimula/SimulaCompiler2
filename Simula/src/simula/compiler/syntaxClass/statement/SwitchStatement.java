@@ -101,7 +101,7 @@ public final class SwitchStatement extends Statement {
 	/**
 	 * The list of When parts
 	 */
-	private final Vector<ConnectionWhenPart> switchCases=new Vector<ConnectionWhenPart>();
+	private final Vector<SwitchWhenPart> switchCases=new Vector<SwitchWhenPart>();
 
 	
 	private	List<SwitchCase> lookupSwitchCases;
@@ -142,7 +142,7 @@ public final class SwitchStatement extends Statement {
 			Parse.expect(KeyWord.DO);
 			Statement statement = Statement.expectStatement();
 			Parse.accept(KeyWord.SEMICOLON);
-			switchCases.add(new ConnectionWhenPart(caseKeyList, statement));
+			switchCases.add(new SwitchWhenPart(caseKeyList, statement));
 		}
 		Parse.expect(KeyWord.END);
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+lineNumber+": SwitchStatement: "+this);
@@ -196,9 +196,9 @@ public final class SwitchStatement extends Statement {
     }
     
     /**
-     * Utility class ConnectionWhenPart.
+     * Utility class SwitchWhenPart.
      */
-    private class ConnectionWhenPart {
+    private class SwitchWhenPart {
     	
     	/**
     	 * The case key list.
@@ -211,14 +211,14 @@ public final class SwitchStatement extends Statement {
     	Statement statement;
     	
     	/**
-    	 * Create a new ConnectionWhenPart.
+    	 * Create a new SwitchWhenPart.
     	 * @param caseKeyList the case key list
     	 * @param statement the statement
     	 */
-    	private ConnectionWhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
+    	private SwitchWhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
     		this.caseKeyList=caseKeyList;
     		this.statement=statement;
-    		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW ConnectionWhenPart: " + toString());
+    		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW SwitchWhenPart: " + toString());
     	}
 	
     	/**
@@ -336,7 +336,7 @@ public final class SwitchStatement extends Statement {
 			switchKey=TypeConversion.testAndCreate(Type.Character,switchKey);
 		} else
 			switchKey=TypeConversion.testAndCreate(Type.Integer,switchKey);
-    	for(ConnectionWhenPart when:switchCases) {
+    	for(SwitchWhenPart when:switchCases) {
     		for(SwitchInterval casePair:when.caseKeyList)
 			if(casePair!=null) {
 				casePair.lowCase.doChecking();
@@ -358,7 +358,7 @@ public final class SwitchStatement extends Statement {
 	    sb.append(") throw new RTS_SimulaRuntimeError(\"Switch key outside key interval\");");
 	    GeneratedJavaClass.code(sb.toString());
         GeneratedJavaClass.code("switch("+switchKey.toJavaCode()+") { // BEGIN SWITCH STATEMENT");
-        for(ConnectionWhenPart when:switchCases) when.doCoding(false);
+        for(SwitchWhenPart when:switchCases) when.doCoding(false);
         GeneratedJavaClass.code("} // END SWITCH STATEMENT");
     }
 
@@ -367,23 +367,39 @@ public final class SwitchStatement extends Statement {
 		buildSwitchKeyTest(codeBuilder);
 		lookupSwitchCases = new Vector<SwitchCase>();
 		int index = 1;
-		for(ConnectionWhenPart when:switchCases) {
+		for(SwitchWhenPart when:switchCases) {
 			 index = when.initLookupSwitchCases(index,codeBuilder);
 		}
 
 		// Build the LookupSwitch Instruction
 		defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		endLabel = codeBuilder.newLabel();
+
+//		System.out.println("\nSwitchStatement.buildByteCode: Build LookupSwitch Instruction: ");
+//		System.out.println("SwitchStatement.buildByteCode: defaultTarget = " + defaultTarget);
+//		System.out.println("SwitchStatement.buildByteCode: endLabel = " + endLabel);
+//		for(int i=0;i<switchCases.size();i++) {
+//			System.out.println("SwitchStatement.buildByteCode: LookupSwitchCases("+i+") = " + lookupSwitchCases.get(i));
+//		}
+		
+
 		switchKey.buildEvaluation(null, codeBuilder);
 		codeBuilder
 			.lookupswitch(defaultTarget, lookupSwitchCases);
-        for(ConnectionWhenPart when:switchCases) {
+        for(SwitchWhenPart when:switchCases) {
         	when.buildByteCode(codeBuilder);
         }
         if(!has_NONE_case) {
 			codeBuilder.labelBinding(defaultTarget);
         }
 		codeBuilder.labelBinding(endLabel);
+		
+//		System.out.println("SwitchStatement.buildByteCode: defaultTarget = " + defaultTarget);
+//		System.out.println("SwitchStatement.buildByteCode: endLabel = " + endLabel);
+//		for(int i=0;i<switchCases.size();i++) {
+//			System.out.println("SwitchStatement.buildByteCode: LookupSwitchCases("+i+") = " + lookupSwitchCases.get(i));
+//		}
+
 	}
 	
 	private void buildSwitchKeyTest(CodeBuilder codeBuilder) {
@@ -409,14 +425,14 @@ public final class SwitchStatement extends Statement {
     	String spc=edIndent(indent);
     	Util.println(spc+"SWITCH("+lowKey+':'+hiKey+") "+switchKey);
     	Util.println(spc+"BEGIN");
-    	for(ConnectionWhenPart when:switchCases) when.print(indent+1);
+    	for(SwitchWhenPart when:switchCases) when.print(indent+1);
         Util.println(spc+"END"); 
     }
 	
 	@Override
 	public void printTree(final int indent) {
 		System.out.println(edTreeIndent(indent)+"SWITCH("+lowKey+':'+hiKey+") "+switchKey);
-		for (ConnectionWhenPart when : switchCases) when.printTree(indent+1);
+		for (SwitchWhenPart when : switchCases) when.printTree(indent+1);
 	}
 
 	@Override

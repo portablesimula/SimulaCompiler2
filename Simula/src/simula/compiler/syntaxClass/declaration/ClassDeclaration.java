@@ -1171,13 +1171,13 @@ public class ClassDeclaration extends BlockDeclaration {
 
 					if(labelList != null)
 						for (LabelDeclaration lab : labelList.labels)
-							lab.buildField(classBuilder,this);
+							lab.buildDeclaration(classBuilder,this);
 
 					for (Declaration decl : declarationList)
-						decl.buildField(classBuilder,this);
+						decl.buildDeclaration(classBuilder,this);
 					
 					for (Parameter par : parameterList)
-						par.buildField(classBuilder,this);
+						par.buildDeclaration(classBuilder,this);
 					
 					for (VirtualSpecification virtual : virtualSpecList) 
 						if (!virtual.hasDefaultMatch) 
@@ -1327,9 +1327,10 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 	
 	@Override
-	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		try {
+			System.out.println("ClassDeclaration.buildDeclaration: "+this.externalIdent+", encloser="+encloser);
 			this.createJavaClassFile();
 		} catch (IOException e) {
 			e.printStackTrace();

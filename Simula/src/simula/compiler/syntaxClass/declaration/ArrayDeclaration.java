@@ -282,7 +282,7 @@ public final class ArrayDeclaration extends Declaration {
 
 	
 	@Override
-	public void buildField(ClassBuilder classBuilder, BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		classBuilder.withField(identifier, CD.RTS_ARRAY(type), fieldBuilder -> {

@@ -116,7 +116,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	}
 
 	@Override
-	public void buildField(ClassBuilder classBuilder,BlockDeclaration encloser) {
+	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		String ident = getFieldIdentifier();
 		int prefixLevel = getPrefixLevel();
 		

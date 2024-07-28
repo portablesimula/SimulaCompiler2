@@ -40,6 +40,11 @@ public class LabelList {
 		if(TRACING) System.out.println("NEW " + this);
 	}
 	
+	public void clear() {
+		tableSwitchCases = null;
+		READY_FOR_CODING = false;
+	}
+	
 	private String ident() {
 		if(declaredIn == null) return "LabelList["+sequ+"]";
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
@@ -142,15 +147,6 @@ public class LabelList {
 //		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		int lowValue = 1;            // the minimum key value.
 		int highValue = tableSize(); // the maximum key value.
-		
-		
-		System.out.println("Build TableSwitch Instruction: " + lowValue + " -> " + highValue);
-		System.out.println("defaultTarget = " + defaultTarget);
-		for(int i=0;i<tableSwitchCases.size();i++) {
-			System.out.println("TableSwitchCases("+i+") = " + getTableSwitchCases(codeBuilder).get(i));
-		}
-		
-		
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder
@@ -164,7 +160,7 @@ public class LabelList {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
 		LabelList currentList = labelContext.labelList;
-		if(TRACING) System.out.println(ident()+".labelBinding: labelContext="+labelContext);
+		if(TRACING) System.out.println(ident()+".labelBinding: labelContext="+labelContext+", codeBuilder="+codeBuilder);
 		if(TRACING) System.out.println(ident()+".labelBinding: currentList="+currentList);
 		SwitchCase switchCase=currentList.tableSwitchCases.get(label.index-1);
 		if(TRACING) System.out.println(ident()+".labelBinding: "+label+"   SwitchCase="+switchCase);

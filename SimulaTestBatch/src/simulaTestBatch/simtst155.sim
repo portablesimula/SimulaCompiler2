@@ -1,0 +1,39 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 155
+%
+%  PURPOSE:     Test 
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class Pre155;
+
+Pre155(155,"--- Test ") begin
+
+	procedure ENDCOMP; goto FINI;
+
+
+	facit(0) :- "At START";
+	
+	
+	facit(4) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+
+
+	sysout.outimage; sysout.outtext("FECMAIN.main: =================== PASS 2 BEGIN"); sysout.outimage;
+	sysout.outtext("FECMAIN.main: =================== new ZZZZ(nscodename)"); sysout.outimage;
+
+	new INIT; 
+%	call(checker0);
+	call(checker);
+
+FINI:
+	
+	trace("At END");
+
+ end;
