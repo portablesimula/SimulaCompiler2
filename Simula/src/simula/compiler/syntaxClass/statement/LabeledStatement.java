@@ -103,12 +103,12 @@ public final class LabeledStatement extends Statement {
 	}
 
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.print(edTreeIndent(indent)+"LABELED_STATEMENT ");
 		for (LabelDeclaration lab:labels)
 			System.out.print(" "+lab+":");
 		System.out.println("");
-		statement.printTree(indent+1);
+		statement.printTree(indent+1,this);
 	}
 
 	@Override

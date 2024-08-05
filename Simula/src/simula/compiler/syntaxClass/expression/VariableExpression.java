@@ -28,6 +28,7 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.InspectVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
@@ -244,6 +245,8 @@ public final class VariableExpression extends Expression {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())
 			return;
+		if (Option.internal.TRACE_CHECKER)
+			Util.TRACE("BEGIN Variable(" + identifier + ").doChecking: type=" + type);
 //		System.out.println("VariableExpression.doChecking: "+this);
 		Global.sourceLineNumber = lineNumber;
 		Declaration declaredAs = getMeaning().declaredAs;
@@ -399,6 +402,7 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.SimpleVariableDeclaration:
+			case ObjectKind.InspectVariableDeclaration:
 			case ObjectKind.LabelDeclaration:
 				break;
 				
@@ -847,6 +851,24 @@ public final class VariableExpression extends Expression {
 				}
 				break;
 
+			case ObjectKind.InspectVariableDeclaration:
+				InspectVariableDeclaration ivar=(InspectVariableDeclaration)decl;
+				if(inspectedVariable != null) {
+					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
+					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
+					if(withFollowSL)
+						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
+					
+					codeBuilder
+						.getfield(inspectedVariable.getFieldRefEntry(pool))
+						.checkcast( ((DeclarationScope)ivar.declaredIn).getClassDesc())
+						.getfield(ivar.getFieldRefEntry(pool));
+				} else {
+					buildIdentifierAccess(destination,codeBuilder);
+					codeBuilder.getfield(ivar.getFieldRefEntry(pool));
+				}
+				break;
+
 			case ObjectKind.VirtualSpecification:
 				VirtualSpecification virtual = (VirtualSpecification) decl;
 				BuildCPV.virtual(this, virtual, remotelyAccessed,codeBuilder);
@@ -862,6 +884,7 @@ public final class VariableExpression extends Expression {
 	// *** JVM CODING: getFieldRefEntry
 	// ***************************************************************************************
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
+//		System.out.println("VariableExpression.getFieldRefEntry: "+this.identifier);
 		ClassDesc owner=meaning.declaredIn.getClassDesc();
 		Declaration declaredAs = meaning.declaredAs;
 		return(pool.fieldRefEntry(owner, declaredAs.getJavaIdentifier(), declaredAs.type.toClassDesc()));
@@ -939,7 +962,7 @@ public final class VariableExpression extends Expression {
 	}
 
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println(edTreeIndent(indent)+this);
 	}
 

@@ -115,7 +115,7 @@ public abstract class Statement extends SyntaxClass {
 		    case KeyWord.INSPECT:    Parse.nextToken(); return (new ConnectionStatement(lineNumber));
 		    case KeyWord.SWITCH:	 if(Option.EXTENSIONS) {
 		    							 Parse.nextToken(); return (new SwitchStatement(lineNumber));
-		    						 }
+		    						 } break;
 		    case KeyWord.ACTIVATE:   Parse.nextToken(); return (new ActivationStatement(lineNumber));
 		    case KeyWord.REACTIVATE: Parse.nextToken(); return (new ActivationStatement(lineNumber));
 		    case KeyWord.INNER:      Parse.nextToken(); return (new InnerStatement(lineNumber));

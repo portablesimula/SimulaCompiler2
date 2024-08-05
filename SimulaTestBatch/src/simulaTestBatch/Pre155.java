@@ -1,48 +1,44 @@
-// JavaLine 1 <== SourceLine 2
+// JavaLine 1 <== SourceLine 9
 package simulaTestBatch;
-// Simula-2.0 Compiled at Tue Jul 30 09:27:10 CEST 2024
+// Simula-2.0 Compiled at Tue Jul 30 09:27:11 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
-public class SimulaTest extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=0, firstLine=2, lastLine=37, hasLocalClasses=false, System=false, detachUsed=false
+public class Pre155 extends SimulaTest {
+    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=1, firstLine=9, lastLine=55, hasLocalClasses=true, System=false, detachUsed=false
     // Declare parameters as attributes
-    public int p_n;
-    public RTS_TXT p_title;
     // Declare locals as attributes
-    // JavaLine 12 <== SourceLine 5
-    public boolean found_error=false;
-    // JavaLine 14 <== SourceLine 6
-    public int nFailed=0;
-    // JavaLine 16 <== SourceLine 7
-    public final boolean verbose=(boolean)(false);
-    // JavaLine 18 <== SourceLine 8
-    public boolean noMessage=false;
+    // JavaLine 10 <== SourceLine 11
+    public RTS_TEXT_ARRAY facit=null;
+    // JavaLine 12 <== SourceLine 12
+    public int traceCase_1=0;
+    // JavaLine 14 <== SourceLine 25
+    public Pre155_XXXX checker0_1=null;
+    public Pre155_XXXX checker_1=null;
     // Normal Constructor
-    public SimulaTest(RTS_RTObject staticLink,int sp_n,RTS_TXT sp_title) {
-        super(staticLink);
+    public Pre155(RTS_RTObject staticLink,int sp_n,RTS_TXT sp_title) {
+        super(staticLink,sp_n,sp_title);
         // Parameter assignment to locals
-        this.p_n = sp_n;
-        this.p_title = sp_title;
-        BBLK(); // Iff no prefix
         // Declaration Code
+        // JavaLine 22 <== SourceLine 11
+        facit=new RTS_TEXT_ARRAY(new RTS_BOUNDS(0,14));
     }
     // Class Statements
     @Override
-    public SimulaTest _STM() {
-        // JavaLine 32 <== SourceLine 16
+    public Pre155 _STM() {
+        // JavaLine 28 <== SourceLine 16
         if(_VALUE(false)) {
             {
-                // JavaLine 35 <== SourceLine 17
+                // JavaLine 31 <== SourceLine 17
                 RTS_BASICIO.sysout().outtext(new RTS_TXT("--- START Simula a.s. TEST"));
                 ;
                 RTS_BASICIO.sysout().outint(p_n,4);
                 ;
                 RTS_BASICIO.sysout().outimage();
                 ;
-                // JavaLine 42 <== SourceLine 18
+                // JavaLine 38 <== SourceLine 18
                 RTS_BASICIO.sysout().outtext(p_title);
                 ;
-                // JavaLine 45 <== SourceLine 19
+                // JavaLine 41 <== SourceLine 19
                 RTS_BASICIO.sysout().outimage();
                 ;
                 RTS_BASICIO.sysout().outimage();
@@ -50,19 +46,22 @@ public class SimulaTest extends RTS_CLASS {
             }
         }
         ;
-        // JavaLine 53 <== SourceLine 22
+        // JavaLine 49 <== SourceLine 22
+        // BEGIN INNER PART
+        // JavaLine 51 <== SourceLine 55
         // BEGIN INNER PART
         // ENDOF INNER PART
+        // ENDOF INNER PART
         ;
-        // JavaLine 57 <== SourceLine 24
+        // JavaLine 56 <== SourceLine 24
         if(_VALUE(noMessage)) {
             ;
         } else {
             {
-                // JavaLine 62 <== SourceLine 25
+                // JavaLine 61 <== SourceLine 25
                 if(_VALUE(found_error)) {
                     {
-                        // JavaLine 65 <== SourceLine 26
+                        // JavaLine 64 <== SourceLine 26
                         RTS_BASICIO.sysout().outtext(CONC(CONC(new RTS_TXT("--- "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" ERROR(S) FOUND IN TEST")));
                         ;
                         RTS_BASICIO.sysout().outint(p_n,4);
@@ -71,14 +70,14 @@ public class SimulaTest extends RTS_CLASS {
                         ;
                         RTS_BASICIO.sysout().outtext(p_title);
                         ;
-                        // JavaLine 74 <== SourceLine 27
+                        // JavaLine 73 <== SourceLine 27
                         RTS_ENVIRONMENT.error(CONC(CONC(new RTS_TXT("Test sample has "),RTS_ENVIRONMENT.edit(nFailed)),new RTS_TXT(" error(s)")));
                         ;
                     }
                 } else {
-                    // JavaLine 79 <== SourceLine 28
+                    // JavaLine 78 <== SourceLine 28
                     {
-                        // JavaLine 81 <== SourceLine 29
+                        // JavaLine 80 <== SourceLine 29
                         RTS_BASICIO.sysout().outtext(new RTS_TXT("--- NO ERRORS FOUND IN TEST"));
                         ;
                         RTS_BASICIO.sysout().outint(p_n,4);
@@ -90,10 +89,10 @@ public class SimulaTest extends RTS_CLASS {
                     }
                 }
                 ;
-                // JavaLine 93 <== SourceLine 32
+                // JavaLine 92 <== SourceLine 32
                 if(_VALUE(false)) {
                     {
-                        // JavaLine 96 <== SourceLine 33
+                        // JavaLine 95 <== SourceLine 33
                         RTS_BASICIO.sysout().outtext(new RTS_TXT("--- END Simula a.s. TEST"));
                         ;
                         RTS_BASICIO.sysout().outint(p_n,4);
@@ -109,5 +108,5 @@ public class SimulaTest extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("SimulaTest.sim","8 SimulaTest",1,2,12,5,14,6,16,7,18,8,32,16,35,17,42,18,45,19,53,22,57,24,62,25,65,26,74,27,79,28,81,29,93,32,96,33,111,37);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("Pre155.sim","8 Pre155",1,9,10,11,12,12,14,25,22,11,28,16,31,17,38,18,41,19,49,22,51,55,56,24,61,25,64,26,73,27,78,28,80,29,92,32,95,33,110,55);
 } // End of Class

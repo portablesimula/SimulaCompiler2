@@ -31,7 +31,7 @@ public final class RunSingleClassTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-//		Option.verbose=true;
+		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
@@ -41,6 +41,7 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PRECOMP = true;
 		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
@@ -56,7 +57,7 @@ public final class RunSingleClassTest {
 
 		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-//		Option.internal.PRINT_SYNTAX_TREE=true;
+		Option.internal.PRINT_SYNTAX_TREE=1;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
@@ -98,7 +99,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.
-//		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
+		names.add("simtst05.sim"); // OK:  Test Aritmetisk Relations
 //		names.add("simtst06.sim"); // OK:  Test Mathematical Functions
 //		names.add("simtst07.sim"); // OK:  Test Mathematical Library
 //		names.add("simtst08.sim"); // OK:  Test Scope of Variables.
@@ -272,8 +273,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment
-		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
-		names.add("simtst155.sim"); // OK: Test
+//		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
+//		names.add("simtst155.sim"); // OK: Test
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

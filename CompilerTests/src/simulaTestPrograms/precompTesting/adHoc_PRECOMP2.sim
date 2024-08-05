@@ -1,0 +1,8 @@
+external class adHoc_PRECOMP;
+
+adHoc_PRECOMP class adHoc_PRECOMP2;
+begin
+
+	sysout.outtext("adHoc_PRECOMP2:  BEGIN STATEMENTS"); sysout.outimage;
+	
+end;

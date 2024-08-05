@@ -39,11 +39,13 @@ public final class RunClassFileTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-//		Option.internal.USE_SimulaClassLoader = true;
+//		Option.internal.TESTING_PRECOMP = true;
+//		Option.internal.TESTING_PRECOMP_INSPECT = true;
+		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -55,7 +57,7 @@ public final class RunClassFileTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-//		Option.internal.PRINT_SYNTAX_TREE=true;
+		Option.internal.PRINT_SYNTAX_TREE=3;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -110,8 +112,8 @@ public final class RunClassFileTest {
 		// names.add("/simple/p41.sim");
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
-		 names.add("/simple/adHoc001.sim");
-//		 names.add("/simple/adHoc00.sim");
+//		 names.add("/simple/adHoc001.sim");
+		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");

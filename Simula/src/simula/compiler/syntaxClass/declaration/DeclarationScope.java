@@ -75,7 +75,6 @@ public abstract class DeclarationScope extends Declaration  {
 	 */
 	protected DeclarationScope(final String ident) {
 		super(ident);
-		sourceFileName = Global.sourceFileName;
 		declarationList = new DeclarationList(getClass().getSimpleName() + ':' + ident + ":Line=" + Global.sourceLineNumber);
 		declaredIn = Global.getCurrentScope();
 		
@@ -132,7 +131,7 @@ public abstract class DeclarationScope extends Declaration  {
 //	@Override
 	public int getRTBlockLevel() {
 //		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
-		ASSERT_SEMANTICS_CHECKED();
+//		ASSERT_SEMANTICS_CHECKED();
 		int rtBlockLevel = declaredIn.getRTBlockLevel() + 1;
 //		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
 		return rtBlockLevel;
@@ -397,8 +396,8 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 	
 	protected void printDeclarationList(int indent) {
-		for(Declaration d:declarationList) d.printTree(indent);
-		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent);
+		for(Declaration d:declarationList) d.printTree(indent,this);
+		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent,this);
 	}
 	
 	public String edScope() {
@@ -462,12 +461,18 @@ public abstract class DeclarationScope extends Declaration  {
     	return bytes;
     }
     
+    protected byte[] getBytesFromFile() {  // TODO: TESTING
+    	System.out.println("DeclarationScope.getBytesFromFile: ");
+    	Util.IERR();
+    	return null;
+    }
+    
     protected void loadOrAddClassFile(byte[] bytes) throws IOException {  // TODO: TESTING
     	if(bytes != null) {
     		if(Option.internal.USE_SimulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
     				String name = Global.packetName + "." + externalIdent;
-    				Global.simulaClassLoader.loadClass(name, bytes);
+    				Global.simulaClassLoader.loadClass(name, bytes, "SourceFile " + Global.sourceFileName);
     			} else {
         			String entryName = Global.packetName + "/" + externalIdent + ".class";
         			Global.jarFileBuilder.addJarEntry(entryName, bytes);
@@ -508,16 +513,21 @@ public abstract class DeclarationScope extends Declaration  {
 			switch(decl.declarationKind) {
 				case ObjectKind.ArrayDeclaration -> res.add(decl);
 				case ObjectKind.Class -> res.add(decl);
+//				case ObjectKind.PrefixedBlock -> res.add(decl);
 				case ObjectKind.ExternalDeclaration -> res.add(decl);
 				case ObjectKind.LabelDeclaration -> res.add(decl);
 				case ObjectKind.Procedure -> res.add(decl);
 //				case ObjectKind.Switch -> res.add(decl);
+				case ObjectKind.ConnectionBlock -> res.add(decl);
+//				case ObjectKind.CompoundStatement -> res.add(decl);
+//				case ObjectKind.SubBlock -> res.add(decl);
 				case ObjectKind.SimpleVariableDeclaration -> res.add(decl);
+				case ObjectKind.InspectVariableDeclaration -> res.add(decl);
 			}
 		}
 		return(res);
 	}
-
+	
 //	// ***********************************************************************************************
 //	// *** Attribute File I/O
 //	// ***********************************************************************************************

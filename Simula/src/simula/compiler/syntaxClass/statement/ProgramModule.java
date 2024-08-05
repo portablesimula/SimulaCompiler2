@@ -179,13 +179,13 @@ public final class ProgramModule extends Statement {
 	public void print(final int indent) { module.print(0); }
 
 	@Override
-	public void printTree(int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println("BASICIO");
 		System.out.println("    ... Standard Classes and Procedures");
 		for(Declaration decl:StandardClass.BASICIO.declarationList) {
 			if(decl instanceof StandardProcedure) ; // Nothing
 			else if(decl instanceof StandardClass) ; // Nothing
-			else decl.printTree(1);
+			else decl.printTree(1,this);
 		}
 		System.out.println("=================================================================");
 	}

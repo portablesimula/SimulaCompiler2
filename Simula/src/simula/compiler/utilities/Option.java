@@ -61,7 +61,7 @@ public final class Option {
 	 */
 	public static class internal {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
-		public static boolean TESTING_OBJECT_LIST = false;
+		public static boolean TESTING_PRECOMP = false;
 
 		/**
 		 * Use the SimulaClassLoader instead of the executable jar file
@@ -110,7 +110,7 @@ public final class Option {
 
 		// Parser Trace Options
 		/** Debug option */	public static boolean TRACE_PARSE=false;
-		/** Debug option */	public static boolean PRINT_SYNTAX_TREE=false;
+		/** Debug option */	public static int PRINT_SYNTAX_TREE=0;
 		/** Debug option */	public static boolean TRACE_ATTRIBUTE_OUTPUT=false;
 		/** Debug option */	public static boolean TRACE_ATTRIBUTE_INPUT=false;
 

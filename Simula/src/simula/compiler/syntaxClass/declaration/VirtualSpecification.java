@@ -222,6 +222,14 @@ public final class VirtualSpecification extends Declaration {
 			return (null);
 		ClassDeclaration scope = (ClassDeclaration) decl.declaredIn;
 		VirtualSpecification virtSpec = scope.searchVirtualSpecList(decl.identifier);
+		
+		
+		if(scope.prefix.equals("ERRMSG")) {
+			System.out.println("VirtualSpecification.getVirtualSpecification: decl="+decl);
+			System.out.println("VirtualSpecification.getVirtualSpecification: scope="+scope+"   PREFIX="+scope.prefix);
+			
+		}
+		
 		if (virtSpec != null)
 			return (virtSpec);
 		scope = scope.getPrefixClass();
@@ -272,7 +280,7 @@ public final class VirtualSpecification extends Declaration {
 	}
 
 
-	public void printTree(int indent) {
+	public void printTree(int indent, final Object head) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);
 	}
 

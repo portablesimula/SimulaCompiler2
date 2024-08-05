@@ -136,9 +136,9 @@ public final class GotoStatement extends Statement {
 	}
 
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println(edTreeIndent(indent)+"GOTO "+label);
-		label.printTree(indent+1);
+		label.printTree(indent+1,this);
 	}
 
 	@Override

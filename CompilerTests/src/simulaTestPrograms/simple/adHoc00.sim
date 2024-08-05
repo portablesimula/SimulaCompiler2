@@ -1,3 +1,5 @@
 begin
-	outtext(""); outimage;
-end;      
+
+begin inspect sysout do begin image:=notext; setpos(1) end end
+	
+end;

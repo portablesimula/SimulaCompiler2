@@ -293,6 +293,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock " + CD_ThisClass + " extends " + CD_SuperClass);
+		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass + " extends " + CD_SuperClass);
 		
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, this.superClassDesc());
 		
@@ -371,11 +372,12 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
 		System.out.println(edTreeIndent(indent) + blockPrefix + " begin" + BL);
-		if(labelList != null) labelList.printTree(indent+1);
-		for(Parameter p : parameterList) p.printTree(indent+1);
+		if(labelList != null) labelList.printTree(indent+1,this);
+		for(Parameter p : parameterList) p.printTree(indent+1,this);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
 	}

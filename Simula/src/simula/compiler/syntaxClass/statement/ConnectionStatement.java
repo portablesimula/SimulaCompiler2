@@ -21,7 +21,8 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
-import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
+import simula.compiler.syntaxClass.declaration.InspectVariableDeclaration;
+import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
@@ -104,7 +105,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * The inspected variable's declaration.
 	 */
-	SimpleVariableDeclaration inspectVariableDeclaration;
+	InspectVariableDeclaration inspectVariableDeclaration;
 	
 	/**
 	 * The connection parts. A ConnectionDoPart or a list of WhenParts.
@@ -145,25 +146,31 @@ public final class ConnectionStatement extends Statement {
 		objectExpression.backLink = this;
 		String ident = "_inspect_" + lineNumber + '_' + (SEQUX++);
 		inspectedVariable = new VariableExpression(ident);
-		inspectVariableDeclaration = new SimpleVariableDeclaration(Type.Ref("RTObject"), ident);
+		DeclarationScope scope = Global.getCurrentScope();
+		inspectVariableDeclaration = new InspectVariableDeclaration(Type.Ref("RTObject"), ident, scope, this);
 //		System.out.println("NEW ConnectionStatement: inspectedVariable="+inspectedVariable);
 //		System.out.println("NEW ConnectionStatement: inspectVariableDeclaration="+inspectVariableDeclaration);
-		DeclarationScope scope = Global.getCurrentScope();
-		while (scope.declarationKind == 0 || scope instanceof ConnectionBlock) {
+		
+		
+//		DeclarationScope scope = Global.getCurrentScope();
+		while (scope instanceof ConnectionBlock
+				|| (scope instanceof MaybeBlockDeclaration && scope.declarationList.size() == 0 )) {
 			scope = scope.declaredIn;
 		}
-		
 		scope.declarationList.add(inspectVariableDeclaration);
 		inspectVariableDeclaration.declaredIn = scope;
-		
 
 		boolean hasDoPart=false;
 		boolean hasWhenPart=false;
 		if (Parse.accept(KeyWord.DO)) {
 			hasDoPart = true;
 			ConnectionBlock connectionBlock = new ConnectionBlock(inspectedVariable, null);
-//			connectionBlock.declaredIn = scope;
+			DeclarationScope prevScope = Global.getCurrentScope();
+			Global.setScope(connectionBlock);
 			Statement statement = Statement.expectStatement();
+			Global.setScope(prevScope);
+			
+			System.out.println("NEW ConnectionStatement(3): CurrentScope = "+Global.getCurrentScope());
 			connectionPart.add(new ConnectionDoPart(this,connectionBlock, statement));
 			connectionBlock.end();
 		} else {
@@ -192,7 +199,7 @@ public final class ConnectionStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
 		if (Option.internal.TRACE_CHECKER)
-			Util.TRACE("BEGIN ConnectionStatement(" + toString() + ").doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
+			Util.TRACE("BEGIN ConnectionStatement(" + toString() + ").doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());		
 		objectExpression.doChecking();
 		Type exprType = objectExpression.type;
 		exprType.doChecking(Global.getCurrentScope());
@@ -238,6 +245,8 @@ public final class ConnectionStatement extends Statement {
 		objectExpression.buildEvaluation(null,codeBuilder);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
+//		ClassDesc owner = inspectVariableDeclaration.declaredIn.getClassDesc();
+//		FieldRefEntry FRE=pool.fieldRefEntry(owner,inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
 
 		endLabel = codeBuilder.newLabel();
@@ -258,12 +267,12 @@ public final class ConnectionStatement extends Statement {
 
 	
 	@Override
-	public void printTree(final int indent) {
-		System.out.println(edTreeIndent(indent)+"INSPECT " + inspectedVariable);
-		for (ConnectionDoPart doPart : connectionPart) doPart.printTree(indent+1);
+	public void printTree(final int indent, final Object head) {
+		System.out.println(edTreeIndent(indent)+"INSPECT " + inspectedVariable + " = " + objectExpression);
+		for (ConnectionDoPart doPart : connectionPart) doPart.printTree(indent+1,this);
 		if(otherwise != null) {
 			System.out.println(edTreeIndent(indent)+"OTHERWISE");
-			otherwise.printTree(indent+1);
+			otherwise.printTree(indent+1,this);
 		}
 	}
 
@@ -274,8 +283,8 @@ public final class ConnectionStatement extends Statement {
 	public void print(final int indent) {
     	String spc=edIndent(indent);
 		// if(assignment!=null) assignment.print(indent);
-		Util.println(spc + "INSPECT " + inspectedVariable);
-		for (ConnectionDoPart doPart : connectionPart) doPart.printTree(indent);
+		Util.println(spc + "INSPECT " + inspectedVariable + " = " + objectExpression);
+		for (ConnectionDoPart doPart : connectionPart) doPart.printTree(indent,this);
 		if (otherwise != null) Util.println(spc + "   OTHERWISE " + otherwise + ';');
 	}
 
@@ -320,7 +329,7 @@ public final class ConnectionStatement extends Statement {
 		// *** ConnectionStatement
 		stm.objectExpression = (Expression) inpt.readObj();
 		stm.inspectedVariable = (VariableExpression) inpt.readObj();
-		stm.inspectVariableDeclaration = (SimpleVariableDeclaration) inpt.readObj();
+		stm.inspectVariableDeclaration = (InspectVariableDeclaration) inpt.readObj();
 		stm.connectionPart = (ObjectList<ConnectionDoPart>) inpt.readObjectList();
 		stm.otherwise = (Statement) inpt.readObj();
 		stm.hasWhenPart = inpt.readBoolean();

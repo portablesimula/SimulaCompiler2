@@ -1,28 +1,12 @@
-% External class adHoc_ERRMSG;
-% 
-% adHoc_ERRMSG class adHoc_SCANNER;
-% External class adHoc_COMMON;
-
-% adHoc_COMMON
-
-class adHoc_SCANNER;
+External class adHoc_ERRMSG;
+ 
+adHoc_ERRMSG class SCANNER;
 begin
 
 
-	class codebuffer; begin 
-		integer iiii;
-		class elt; begin
-			integer kkkk;
-		end;
-            
-	end;
+      short integer extid;
 
-	inspect new codebuffer do begin
-		iiii := 4444;
-		inspect new elt do begin
-			kkkk := 6666;
-		end;
-%			ref(elt) x;
-	end;
+      procedure setP1line; begin end;
+
 
 end of SCANNER;

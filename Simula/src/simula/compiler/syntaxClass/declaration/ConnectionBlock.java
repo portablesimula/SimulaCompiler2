@@ -17,6 +17,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
+import simula.compiler.syntaxClass.statement.ConnectionDoPart;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -47,7 +48,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	/**
 	 * The Connection Statement.
 	 */
-	private Statement statement;
+	public Statement statement;
 	/**
 	 * When clause class identifier.
 	 */
@@ -146,9 +147,11 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	@Override
 	public Meaning findVisibleAttributeMeaning(final String ident) {
-		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("BEGIN Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0)
+			Util.println("BEGIN Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
 		for (Declaration declaration : declarationList) {
-			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Local "+declaration);
+			if(Option.internal.TRACE_FIND_MEANING>1)
+				Util.println("Checking Local "+declaration);
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
@@ -157,7 +160,8 @@ public final class ConnectionBlock extends DeclarationScope {
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
 		}
-		if(Option.internal.TRACE_FIND_MEANING>0) Util.println("ENDOF Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
+		if(Option.internal.TRACE_FIND_MEANING>0)
+			Util.println("ENDOF Checking ConnectionBlock for "+ident+" ================================== "+identifier+" ==================================");
 		return (null);
 	}
 
@@ -238,17 +242,18 @@ public final class ConnectionBlock extends DeclarationScope {
 	// *** Printing Utility: printTree
 	// ***********************************************************************************************
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + "CONNECTION " + identifier + BL + "  PrefixLevel=" + prefixLevel());
+		System.out.println(edTreeIndent(indent) + "CONNECTION " + identifier + BL + "  PrefixLevel=" + prefixLevel() + "  declaredIn="+this.declaredIn);
 		printDeclarationList(indent+1);
-		statement.printTree(indent + 1);
+		statement.printTree(indent + 1, this);
 		System.out.println(edTreeIndent(indent)+"END CONNECTION "+identifier);
 	}
 
 	@Override
 	public String toString() {
-		return ("Inspect(" + inspectedVariable + ") do " + statement);
+		return ("ConnectionBlock: Inspect(" + inspectedVariable + ") do " + statement);
 	}
 
 	@Override
@@ -281,7 +286,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		//oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
+		oupt.writeObj(declaredIn);// Declaration  // TODO: NOTE: TESTING
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
@@ -311,7 +316,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		//blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();
-//		blk.declaredIn = (DeclarationScope) inpt.readObj();
+		blk.declaredIn = (DeclarationScope) inpt.readObj();  // TODO: NOTE: TESTING
 
 		// *** DeclarationScope
 		blk.sourceFileName = inpt.readString();
@@ -329,22 +334,6 @@ public final class ConnectionBlock extends DeclarationScope {
 		Global.setScope(blk.declaredIn);
 		return(blk);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(statement);
-//		oupt.writeString(whenClassIdentifier);
-//		oupt.writeObj(inspectedVariable);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		statement = (Statement) inpt.readObj();
-//		whenClassIdentifier = inpt.readString();
-//		inspectedVariable = (VariableExpression) inpt.readObj();
-//	}
 
 
 }

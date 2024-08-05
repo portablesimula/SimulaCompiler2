@@ -28,7 +28,7 @@ public final class RunClassFileTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-//		Option.verbose=true;
+		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
@@ -39,6 +39,7 @@ public final class RunClassFileTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PRECOMP = true;
 //		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
@@ -55,7 +56,7 @@ public final class RunClassFileTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=true;
+		Option.internal.PRINT_SYNTAX_TREE=3;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -78,7 +79,7 @@ public final class RunClassFileTest {
 		
 		
 		// Set RunTime Options and tracing.
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -97,7 +98,21 @@ public final class RunClassFileTest {
 //		names.add("/precompTesting/p40c.sim");     // OK:  Precompile this for Simtst 40.
 //		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
+
+//		names.add("/precompTesting/adHoc_PRECOMP.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP2.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP3.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP4.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP5.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP6.sim");
+//		names.add("/precompTesting/adHoc_MAIN.sim");
+
+
 //		names.add("/precompTesting/adHoc_COMMON.sim");
+//		names.add("/precompTesting/adHoc_ERRMSG.sim");
+		names.add("/precompTesting/adHoc_SCANNER.sim");
+//		names.add("/precompTesting/adHoc_SCANINP.sim");
+		
 //		names.add("/precompTesting/adHoc_BUILDER1.sim");
 //		names.add("/precompTesting/adHoc_SCODER0.sim");
 //		names.add("/precompTesting/adHoc_SCODER1.sim");
@@ -105,9 +120,9 @@ public final class RunClassFileTest {
 //		names.add("/precompTesting/adHoc_SCODER2.sim");
 //		names.add("/precompTesting/adHoc_SCODER3.sim");
 //		names.add("/precompTesting/adHoc_SCODER4.sim");
-		names.add("/precompTesting/adHoc_PAS2INIT.sim");
-		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
-		names.add("/precompTesting/adHoc_FECMAIN.sim");
+//		names.add("/precompTesting/adHoc_PAS2INIT.sim");
+//		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
+//		names.add("/precompTesting/adHoc_FECMAIN.sim");
 
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");

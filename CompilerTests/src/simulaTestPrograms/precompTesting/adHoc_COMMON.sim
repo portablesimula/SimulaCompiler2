@@ -1,11 +1,4 @@
 class adHoc_COMMON;
 begin
 
-	!** Svarer til  COMMON/outcodefile;
-	outbytefile class outcodefile; begin 
-            
-              EXMTAB:
-		sysout.outtext("adHoc_COMMON:   BEGIN class COMMON/outcodefile STATEMENTS"); sysout.outimage;
-
-	end;
 end;

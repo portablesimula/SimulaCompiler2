@@ -21,6 +21,7 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
@@ -75,6 +76,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		if(identifier != null)
 			modifyIdentifier(identifier);
 		else modifyIdentifier("Block" + lineNumber);
+//		System.out.println("NEW MaybeBlockDeclaration: "+this.identifier+", declaredIn="+this.declaredIn+", CurrentScope="+Global.getCurrentScope());
 	}
 
 	// ***********************************************************************************************
@@ -135,8 +137,14 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			}
 		}
 		this.lastLineNumber = Global.sourceLineNumber;
-		Global.setScope(declaredIn);
-		return (new BlockStatement(this));
+		if(Option.internal.TESTING_PRECOMP) {
+			BlockStatement blk = new BlockStatement(this);
+			Global.setScope(declaredIn);
+			return (blk);
+		} else {
+			Global.setScope(declaredIn);
+			return (new BlockStatement(this));
+		}
 	}
 
 	/**
@@ -339,6 +347,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_BASICIO);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
@@ -519,11 +528,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		String block = ObjectKind.edit(declarationKind);
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + block + " " + identifier + BL);
-		if(labelList != null) labelList.printTree(indent+1);
+		System.out.println(edTreeIndent(indent) + block + " " + identifier + BL + "  declaredIn="+this.declaredIn);
+		if(labelList != null) labelList.printTree(indent+1,this);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
 	}
@@ -556,7 +566,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
+		oupt.writeObj(declaredIn);// Declaration  // TODO: NOTE: TESTING
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
@@ -587,7 +597,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();
-//		blk.declaredIn = (DeclarationScope) inpt.readObj();
+		blk.declaredIn = (DeclarationScope) inpt.readObj();  // TODO: NOTE: TESTING
 
 		// *** DeclarationScope
 		blk.sourceFileName = inpt.readString();

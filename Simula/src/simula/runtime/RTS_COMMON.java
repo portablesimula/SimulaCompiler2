@@ -62,7 +62,7 @@ public final class RTS_COMMON {
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			System.out.println("RTS_COMMON.setRuntimeOptions: arg = "+arg);
+//			System.out.println("RTS_COMMON.setRuntimeOptions: arg = "+arg);
 			if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();

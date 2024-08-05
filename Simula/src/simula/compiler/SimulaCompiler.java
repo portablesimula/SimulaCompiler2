@@ -22,6 +22,7 @@ import javax.tools.ToolProvider;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -90,6 +91,7 @@ public final class SimulaCompiler {
 	 * @param reader        Reader in case of SimulaEditor
 	 */
 	public SimulaCompiler(final String inputFileName, Reader reader) {
+		if(Option.internal.TESTING_PRECOMP) System.out.println("\nNEW SimulaCompiler: Compile "+inputFileName);
 		Global.initiate();
 		if (reader == null) {
 			try {
@@ -267,9 +269,9 @@ public final class SimulaCompiler {
 			}
 			Parse.close();
 			Global.duringParsing = false;
-			if(Option.internal.PRINT_SYNTAX_TREE) {
+			if(Option.internal.PRINT_SYNTAX_TREE > 1) {
 				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Parsing ================");
-				programModule.printTree(1);
+				programModule.printTree(1,this);
 			}
 			if (Util.nError > 0) {
 				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during parsing";
@@ -295,7 +297,10 @@ public final class SimulaCompiler {
 			
 			if (Option.internal.TRACING)
 				Util.println("BEGIN Possible Generate AttributeFile");
-			AttributeFileIO.write(programModule);
+			
+			if(! Option.internal.TESTING_PRECOMP) {
+				AttributeFileIO.writeAttributeFile(programModule);
+			}
 			
 			// ***************************************************************
 			// *** Semantic Checker
@@ -310,9 +315,9 @@ public final class SimulaCompiler {
 					programModule.print(0);
 			}
 			Global.duringChecking = false;
-			if(Option.internal.PRINT_SYNTAX_TREE) {
+			if(Option.internal.PRINT_SYNTAX_TREE > 0) {
 				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
-				programModule.printTree(1);
+				programModule.printTree(1,this);
 			}
 			
 			if (Util.nError > 0) {
@@ -354,6 +359,10 @@ public final class SimulaCompiler {
 				doByteCodeEngineering();
 				if(Option.internal.LIST_GENERATED_CLASS_FILES)
 					listGeneratedClassFiles();
+			}
+
+			if(Option.internal.TESTING_PRECOMP) {
+				AttributeFileIO.writeAttributeFile(programModule);
 			}
 
 			// ***************************************************************

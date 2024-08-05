@@ -243,9 +243,9 @@ public class Type extends SyntaxClass {
 	 */
 	public boolean isValueType() {
 		switch(keyWord) {
-		case T_INTEGER,T_REAL,T_LONG_REAL,T_BOOLEAN,T_CHARACTER: return true;
-		default: return false;
-	}
+			case T_INTEGER,T_REAL,T_LONG_REAL,T_BOOLEAN,T_CHARACTER: return true;
+			default: return false;
+		}
 	}
   
 	/**

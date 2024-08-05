@@ -78,14 +78,14 @@ public final class DeclarationList extends Vector<Declaration> {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	
-	public void writeObject(AttributeOutputStream oupt) throws IOException {  // TODO: TESTING_OBJECT_LIST
+	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		oupt.writeString(identifier);
 		oupt.writeShort(this.size());
 //		System.out.println("DeclarationList.writeObject: "+identifier+", n="+this.size());
 		for(Declaration dcl:this) oupt.writeObj(dcl);
 	}
 
-	public static DeclarationList readObject(AttributeInputStream inpt) throws IOException {  // TODO: TESTING_OBJECT_LIST
+	public static DeclarationList readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		DeclarationList list = new DeclarationList(identifier);
 		int n = inpt.readShort();

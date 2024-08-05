@@ -1,8 +1,8 @@
-external class adHoc_PRECOMP;
+external class adHoc_PRECOMP2;
 
-adHoc_PRECOMP begin
+adHoc_PRECOMP2 begin
 	ref(A) x;
 	
-	x :- new A;
+	x :- new A("FileName");;
 	
 end;

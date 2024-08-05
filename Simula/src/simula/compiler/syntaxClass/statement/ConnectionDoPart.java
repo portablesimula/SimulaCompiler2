@@ -25,7 +25,7 @@ public class ConnectionDoPart extends SyntaxClass {
 	/**
 	 * The associated connection block.
 	 */
-	ConnectionBlock connectionBlock;
+	public ConnectionBlock connectionBlock;
 
 	/**
 	 * Create a new do-part.
@@ -72,10 +72,10 @@ public class ConnectionDoPart extends SyntaxClass {
 	 * Utility print method.
 	 * @param indent the indent
 	 */
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
     	String spc=edTreeIndent(indent);
-		Util.println(spc + "DO ");
-		connectionBlock.printTree(indent);
+		Util.println(spc + "DO " + connectionBlock.statement);
+		connectionBlock.printTree(indent, head);
 	}
 
 	@Override

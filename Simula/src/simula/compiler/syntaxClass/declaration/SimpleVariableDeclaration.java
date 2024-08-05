@@ -152,7 +152,6 @@ public class SimpleVariableDeclaration extends Declaration {
 		if (IS_SEMANTICS_CHECKED())
 			return;
 		Global.sourceLineNumber = lineNumber;
-//		System.out.println("SimpleVariableDeclaration.doChecking: LINE "+lineNumber+": "+identifier);
 		type.doChecking(Global.getCurrentScope());
 		if (constantElement != null) {
 			constantElement.doChecking();
@@ -238,7 +237,8 @@ public class SimpleVariableDeclaration extends Declaration {
 
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		System.out.println(edTreeIndent(indent)+this);
 	}
 
@@ -276,7 +276,7 @@ public class SimpleVariableDeclaration extends Declaration {
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
+		oupt.writeObj(declaredIn);// Declaration
 		
 		// *** SimpleVariableDeclaration
 		oupt.writeBoolean(constant);
@@ -294,7 +294,7 @@ public class SimpleVariableDeclaration extends Declaration {
 		var.identifier = inpt.readString();
 		var.externalIdent = inpt.readString();
 		var.type = inpt.readType();
-//		var.declaredIn = (DeclarationScope) inpt.readObj();
+		var.declaredIn = (DeclarationScope) inpt.readObj();
 		
 		// *** SimpleVariableDeclaration
 		var.constant = inpt.readBoolean();

@@ -24,6 +24,7 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -62,7 +63,7 @@ public final class AttributeFileIO {
 	 * @param program the program module
 	 * @throws IOException if an output operation fail
 	 */
-	static void write(final ProgramModule program) throws IOException {
+	static void writeAttributeFile(final ProgramModule program) throws IOException {
 		String relativeAttributeFileName = program.getRelativeAttributeFileName();
 		if (relativeAttributeFileName == null) return;
 		File file = new File(Global.tempClassFileDir,relativeAttributeFileName);
@@ -94,7 +95,11 @@ public final class AttributeFileIO {
 		AttributeOutputStream oupt = new AttributeOutputStream(byteArrayOutputStream);
 		// writeVersion:
 		oupt.writeString(version);
-		
+
+		if(Option.internal.TESTING_PRECOMP) {
+			ClassHierarchy.writeObject(oupt);
+		}
+
 		// Write External Head
 		if(program.externalHead != null) {
 			for(ExternalDeclaration xdecl:program.externalHead) {
@@ -168,7 +173,12 @@ public final class AttributeFileIO {
 
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + fileID);
-		
+
+
+		if(Option.internal.TESTING_PRECOMP) {
+			ClassHierarchy.readObject(inpt);
+		}
+
 		// Read External Head ?
 		int declarationKind = inpt.readKind();
 		while(declarationKind == ObjectKind.ExternalDeclaration) {

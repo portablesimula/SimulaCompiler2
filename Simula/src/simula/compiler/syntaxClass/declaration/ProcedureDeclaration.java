@@ -148,6 +148,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 */
 	public static ProcedureDeclaration expectProcedureDeclaration(final Type type) {
 		ProcedureDeclaration proc = new ProcedureDeclaration(null, ObjectKind.Procedure);
+		proc.sourceFileName = Global.sourceFileName;
 		proc.lineNumber=Parse.prevToken.lineNumber;
 		proc.type = type;
 		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ProcedureDeclaration, type=" + type);
@@ -309,6 +310,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
+//			System.out.println("PrpcedureDeclaration.doChecking: "+this);
 			if(type != null) {
 				this.result = new SimpleVariableDeclaration(type, "_RESULT");
 				declarationList.add(result);
@@ -552,6 +554,14 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public byte[] buildClassFile() {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.internal.TESTING_PRECOMP) {
+//			System.out.println("Begin buildClassFile: Procedure "+CD_ThisClass);
+//			System.out.println("Begin buildClassFile: isPreCompiledFromFile="+this.isPreCompiledFromFile);
+			if(isPreCompiledFromFile != null) {
+				byte[] bytes = getBytesFromFile();
+				return(bytes);
+			}
+		}
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_PROCEDURE);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
@@ -1026,12 +1036,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		String typeID = (type == null) ? "" : type.toString() + " ";
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
 		System.out.println(edTreeIndent(indent) + typeID + "PROCEDURE " + identifier + '[' + externalIdent + "]" + BL);
-		if (labelList != null) labelList.printTree(indent + 1);
-		for (Parameter p : parameterList) p.printTree(indent + 1);
+		if (labelList != null) labelList.printTree(indent + 1, this);
+		for (Parameter p : parameterList) p.printTree(indent + 1, this);
 		printDeclarationList(indent + 1);
 		printStatementList(indent + 1);
 	}

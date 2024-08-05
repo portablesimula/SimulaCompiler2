@@ -38,6 +38,8 @@ public final class RunCompilerTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+//		Option.internal.TESTING_PRECOMP = true;
+//		Option.internal.TESTING_PRECOMP_INSPECT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -54,7 +56,7 @@ public final class RunCompilerTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=true;
+		Option.internal.PRINT_SYNTAX_TREE=3;
 //		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -117,8 +119,8 @@ public final class RunCompilerTest {
 
 //		 names.add("/simple/p41.sim");
 //		 names.add("/simple/adErr09.sim");
-		 names.add("/simple/adHoc000.sim");
-//		 names.add("/simple/adHoc00.sim");
+//		 names.add("/simple/adHoc000.sim");
+		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");

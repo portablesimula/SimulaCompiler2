@@ -116,8 +116,8 @@ public final class StandaloneExpression extends Statement {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
-		expression.printTree(indent);
+	public void printTree(final int indent, final Object head) {
+		expression.printTree(indent,this);
 	}
 
 	@Override

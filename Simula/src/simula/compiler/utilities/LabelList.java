@@ -167,8 +167,12 @@ public class LabelList {
 		codeBuilder.labelBinding(switchCase.target());
 	}
 
-	public void printTree(final int indent) {
-		System.out.println(SyntaxClass.edIndent(indent)+this);
+	public void printTree(final int indent, final Object head) {
+		if(Option.internal.PRINT_SYNTAX_TREE > 2) {
+			System.out.println(SyntaxClass.edIndent(indent)+this);
+		} else {
+			System.out.println(SyntaxClass.edIndent(indent) + "LabelList with " + (labels.size()) + " Labels ...");
+		}
 	}
 	
 	public String toString() {

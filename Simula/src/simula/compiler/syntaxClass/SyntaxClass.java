@@ -155,7 +155,7 @@ public abstract class SyntaxClass {
 	protected void ASSERT_SEMANTICS_CHECKED() {
 		if (!CHECKED) {
 			Thread.dumpStack();
-			Util.error("FATAL error - Semantic checker not called: " + this.getClass().getName() + ", " + this);
+			Util.error("FATAL error - Semantic checker not called: " + this.getClass().getName() + ", " + this + "  HashCode=" + this.hashCode());
 		}
 		if (this instanceof Declaration decl) {
 			if (decl.externalIdent == null) {
@@ -210,7 +210,7 @@ public abstract class SyntaxClass {
 	 * 
 	 * @param indent number of spaces leading the lines
 	 */
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		Util.IERR("Method printTree need a redefinition in "+this.getClass().getSimpleName());
 	}
 

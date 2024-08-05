@@ -1,7 +1,25 @@
 
 class adHoc_PRECOMP; begin
 
-	class A; begin
+	class codebuffer; begin                     
+		ref(elt) stepexpr;
+
+		class elt; begin
+			ref(elt)next;
+		end;
+
 	end;
+
+%	class forstat; begin
+		ref(codebuffer) forcoder;
+
+		inspect forcoder do begin
+			inspect stepexpr.next do begin
+%                  if curelt=/=this elt then ;
+			end;
+		
+		end inspect forcoder;
+
+%	end forstat;
 		
 end;

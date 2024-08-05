@@ -13,6 +13,7 @@ import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
 import simula.compiler.syntaxClass.declaration.ExternalDeclaration;
+import simula.compiler.syntaxClass.declaration.InspectVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.MaybeBlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
@@ -204,6 +205,7 @@ public class AttributeInputStream {
 //			case ObjectKind.Thunk:						return Thunk.readObject(inpt);
 			case ObjectKind.LabelDeclaration:			return LabelDeclaration.readObject(inpt);
 			case ObjectKind.SimpleVariableDeclaration:	return SimpleVariableDeclaration.readObject(inpt);
+			case ObjectKind.InspectVariableDeclaration:	return InspectVariableDeclaration.readObject(inpt);
 			case ObjectKind.ExternalDeclaration:		return ExternalDeclaration.readObject(inpt);
 			case ObjectKind.HiddenSpecification:		return HiddenSpecification.readObject(inpt);
 			case ObjectKind.ProtectedSpecification:		return ProtectedSpecification.readObject(inpt);

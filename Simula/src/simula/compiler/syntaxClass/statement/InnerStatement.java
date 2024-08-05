@@ -78,7 +78,7 @@ public final class InnerStatement extends Statement {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println(edTreeIndent(indent)+"INNER ");
 	}
 

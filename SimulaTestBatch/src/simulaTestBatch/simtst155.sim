@@ -2,7 +2,7 @@
 % ===============================================   Main   program =============
 %  PROGRAM NAME:   SIMULA TEST NO 155
 %
-%  PURPOSE:     Test 
+%  PURPOSE:     Test inspection in SubBlock in Precompiled iner class
 %
 %  METHOD:      Try it and see if it work as expected.
 %
@@ -29,8 +29,7 @@ Pre155(155,"--- Test ") begin
 	sysout.outtext("FECMAIN.main: =================== new ZZZZ(nscodename)"); sysout.outimage;
 
 	new INIT; 
-%	call(checker0);
-	call(checker);
+	call(x);
 
 FINI:
 	

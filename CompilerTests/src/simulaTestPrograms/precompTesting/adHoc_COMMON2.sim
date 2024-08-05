@@ -1,0 +1,68 @@
+class adHoc_COMMON;
+virtual: procedure COMMONerror is procedure COMMONerror(n); short integer n; ;
+         procedure ENDCOMP is procedure ENDCOMP; ;
+begin
+	text array diag(0:5);
+      character NUL = '!0!';
+      ref(printfile) listfile;
+      integer linenr;
+      integer messageLinenr;     ! line number for diagnostic message;
+      short integer numerrfound;
+      boolean listingon,GiveNotes;
+      ref(brecord)  unknowns;
+ 
+      character     currentpass; ! number of current pass;
+      character     termstatus;  ! Reported to env. at termination;
+
+      text procedure leftint(i); integer i; begin
+%            leftintbuf.putint(i); i:=11;
+%            while loadChar(leftintbuf,i)<>' ' do i:=i-1;
+%            leftint:-copy(leftintbuf.sub(i+2,11-i));
+      end;
+
+	class brecord; begin
+         ref(quantity) fpar;
+	end;
+	
+	class quantity; begin
+		character type,kind,categ,special;        ! - see below;
+		short integer line;                       ! - see below;
+		ref(symbolbox) symb;
+		ref(quantity) next;
+		short integer virtno;                     ! - see below;
+	end;
+	
+	class SYMBOLBOX; begin
+		text symbol;           ! textual repr. of symbol;
+		short integer virtno;                     ! - see below;
+	end;
+
+      SymbolBox class Constsymbol; ;
+
+      SymbolBox class IdentSymbol;
+      begin
+% -A         ref(SemBox ) curmeaning;
+      end;
+	
+%title ***   c a t e g    c o d e s   ***
+
+    character
+               C_unspec=  '!0!',  !corresponds to RTS 'm_ref';
+               C_value =  '!1!',  !corresponds to RTS 'm_value';
+               C_name  =  '!2!',  !corresponds to RTS 'm_name';
+               C_local =  '!3!',  !corresponds to RTS 'm_local';
+               C_extnal=  '!4!',  !corresponds to RTS 'm_extr';
+               C_unknwn=  '!5!',
+               C_virt  =  '!6!',
+               C_block =  '!7!',
+
+               C_max   =  '!7!';  !NB *** must be < 8;
+
+	!** Svarer til  COMMON/outcodefile;
+	outbytefile class outcodefile; begin 
+            
+              EXMTAB:
+		sysout.outtext("adHoc_COMMON:   BEGIN class COMMON/outcodefile STATEMENTS"); sysout.outimage;
+
+	end;
+end;

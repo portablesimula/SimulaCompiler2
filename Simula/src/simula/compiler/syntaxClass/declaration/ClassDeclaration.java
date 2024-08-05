@@ -199,6 +199,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	public static ClassDeclaration expectClassDeclaration(final String prefix) {
 		ClassDeclaration cls = new ClassDeclaration(null);
+		cls.sourceFileName = Global.sourceFileName;
 		cls.lineNumber = Parse.prevToken.lineNumber;
 		cls.prefix = prefix;
 		cls.declaredIn.hasLocalClasses = true;
@@ -463,9 +464,11 @@ public class ClassDeclaration extends BlockDeclaration {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
+		if(Option.internal.TRACE_CHECKER) Util.TRACE("BEGIN ClassDeclaration("+this.identifier+").doChecking");
 		
 		if (hasRealPrefix()) {
 			prefixClass = getPrefixClass();
+//			System.out.println("ClassDeclaration.doChecking: "+this+"   PREFIX="+prefixClass);
 			prefixClass.doChecking();
 			
 			LabelList.accumLabelList(this);
@@ -494,6 +497,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		checkHiddenList();
 		doCheckLabelList(prefixClass);
 		Global.exitScope();
+		if(Option.internal.TRACE_CHECKER) Util.TRACE("END ClassDeclaration("+this.identifier+").doChecking");
 		SET_SEMANTICS_CHECKED();
 	}
 
@@ -779,7 +783,10 @@ public class ClassDeclaration extends BlockDeclaration {
 			prefixClass = cls;
 			return (cls);
 		}
-		Util.error("Prefix " + prefix + " is not a Class");
+		Thread.dumpStack();
+		Util.error("Prefix " + prefix + " is not a Class but " + decl.getClass().getSimpleName()
+				+ " Declared in " + this.sourceFileName + " at line " + decl.lineNumber);
+		printStaticChain("",0);
 		return (null);
 	}
 	
@@ -1147,6 +1154,14 @@ public class ClassDeclaration extends BlockDeclaration {
 				prefix.buildAndLoadOrAddClassFile();
 			}
 		}
+		
+		if(Option.internal.TESTING_PRECOMP) {
+//			System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: "+this.identifier+", isLoaded="+isLoaded+", isPreCompiledFromFile="+this.isPreCompiledFromFile);
+			if(isPreCompiledFromFile != null) {
+				return;
+			}
+//			Thread.dumpStack();
+		}
     	byte[] bytes = doBuildClassFile();
     	loadOrAddClassFile(bytes);
     	this.isLoaded = true;
@@ -1160,6 +1175,14 @@ public class ClassDeclaration extends BlockDeclaration {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
+		if(Option.internal.TESTING_PRECOMP) {
+			System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
+			System.out.println("Begin buildClassFile: isPreCompiledFromFile="+this.isPreCompiledFromFile);
+			if(isPreCompiledFromFile != null) {
+				byte[] bytes = getBytesFromFile();
+				return(bytes);
+			}
+		}
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
@@ -1500,21 +1523,24 @@ public class ClassDeclaration extends BlockDeclaration {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
+		verifyTree(head);
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel());
-		if(labelList != null) labelList.printTree(indent+1);
-		for(Parameter p:parameterList) p.printTree(indent+1);
+		String prfx = (prefix==null) ? "" : "  extends " + prefix;
+		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel() + prfx);
+		if(labelList != null) labelList.printTree(indent+1,this);
+		for(Parameter p:parameterList) p.printTree(indent+1,this);
 		if (!virtualSpecList.isEmpty())
-			for( VirtualSpecification v:virtualSpecList) v.printTree(indent+1);
+			for( VirtualSpecification v:virtualSpecList) v.printTree(indent+1,this);
 		if (!virtualMatchList.isEmpty())
-			for( VirtualMatch m:virtualMatchList) m.printTree(indent+1);
+			for( VirtualMatch m:virtualMatchList) m.printTree(indent+1,this);
 		if (!hiddenList.isEmpty())
-			for( HiddenSpecification h:hiddenList) h.printTree(indent+1);
+			for( HiddenSpecification h:hiddenList) h.printTree(indent+1,this);
 		if (!protectedList.isEmpty())
-			for( ProtectedSpecification p:protectedList) p.printTree(indent+1);
+			for( ProtectedSpecification p:protectedList) p.printTree(indent+1,this);
 		printDeclarationList(indent+1);
-		for(Statement s:statements1) s.printTree(indent+1);
+		if(Option.internal.PRINT_SYNTAX_TREE > 2)
+			for(Statement s:statements1) s.printTree(indent+1,this);
 		printStatementList(indent+1);
 	}
 

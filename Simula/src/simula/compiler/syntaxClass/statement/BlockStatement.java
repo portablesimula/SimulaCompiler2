@@ -13,6 +13,7 @@ import java.lang.classfile.CodeBuilder;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
@@ -135,8 +136,8 @@ public final class BlockStatement extends Statement {
 	}
 	
 	@Override
-	public void printTree(final int indent) {
-		blockDeclaration.printTree(indent);
+	public void printTree(final int indent, final Object head) {
+		blockDeclaration.printTree(indent,head);
 	}
 
 	@Override

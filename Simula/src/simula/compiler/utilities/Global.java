@@ -229,6 +229,8 @@ public final class Global {
 		Object_SEQU = 8001;
 		jarFileBuilder = null;
 		simulaClassLoader = null;
+		includeQueue = null;
+		ClassHierarchy.init();
 		duringParsing = true;
 		duringChecking = false;
 		duringSTM_Coding = false;

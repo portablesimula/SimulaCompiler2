@@ -316,6 +316,21 @@ public final class AssignmentOperation extends Expression {
 					codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
 				}
 					
+				case ObjectKind.InspectVariableDeclaration -> {
+					var.buildIdentifierAccess(true,codeBuilder);
+					rhs.buildEvaluation(null,codeBuilder);
+					
+					// Prepare for multiple assignment
+					if(this.backLink != null) {
+//						if(this.type.keyWord == Type.T_LONG_REAL)
+//							 codeBuilder.dup2_x1();
+//						else codeBuilder.dup_x1();
+						type.dup_x1(codeBuilder);
+					}
+					SimpleVariableDeclaration simplevar = (SimpleVariableDeclaration)decl;
+					codeBuilder.putfield(simplevar.getFieldRefEntry(pool));
+				}
+					
 				case ObjectKind.Parameter -> {
 					Parameter par = (Parameter)decl;
 					boolean assignRef = opr==KeyWord.ASSIGNREF;

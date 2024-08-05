@@ -9,10 +9,13 @@ import java.nio.file.attribute.FileTime;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Set;
 import java.util.Vector;
+import java.util.Map.Entry;
 import java.util.jar.Attributes;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -21,6 +24,7 @@ import java.util.jar.Manifest;
 
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.statement.ProgramModule;
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.SimulaClassLoader;
@@ -132,14 +136,19 @@ public class JarFileBuilder {
 	}
 
 	/**
-	 * Add the jarFile to the includeQueue in reverse order.
+	 * Add the jarFile to the includeQueue in reverse order.  // TODO: TESTING_PRECOMP - SJEKK OM includeQueue KAN FJERNES
 	 * @param jarFile
 	 * @throws IOException if something went wrong
 	 */
 	public static void addToIncludeQueue(final JarFile jarFile) throws IOException {
 		if(Global.includeQueue == null) Global.includeQueue = new LinkedList<JarFile>();
-		if(TESTING) System.out.println("JarFileBuilder.addToIncludeQueue: includeQueue.add: "+jarFile.getName());
-		Global.includeQueue.addFirst(jarFile);
+//		if(TESTING)
+			System.out.println("JarFileBuilder.addToIncludeQueue: includeQueue.add: "+jarFile.getName());
+		if(Option.internal.TESTING_PRECOMP) {
+			Global.includeQueue.add(jarFile);			
+		} else {
+			Global.includeQueue.addFirst(jarFile);
+		}
 	}
 	
 	/**
@@ -165,11 +174,13 @@ public class JarFileBuilder {
 			Util.warning("No execution - Separate Compiled " + kind + id + " is written to: \"" + outputJarFile + "\"");
 		}
 		
-		if(Global.includeQueue != null) {
-			for(JarFile jarFile:Global.includeQueue) {
-				if(TESTING) System.out.println("new JarFileBuilder: includeQueue'addJarEntries: "+jarFile);
-				addJarEntries(jarFile);		
-				jarFile.close();
+		if(! Option.internal.TESTING_PRECOMP) {
+			if(Global.includeQueue != null) {
+				for(JarFile jarFile:Global.includeQueue) {
+					if(TESTING) System.out.println("new JarFileBuilder: includeQueue'addJarEntries: "+jarFile);
+					addJarEntries(jarFile);		
+					jarFile.close();
+				}
 			}
 		}
 
@@ -329,6 +340,8 @@ public class JarFileBuilder {
 		if (Option.verbose)
 			Util.println("---------  INCLUDE .jar File: " + jarFile.getName() + "  ---------");
 		Enumeration<JarEntry> entries = jarFile.entries();
+		Map<String,InputStream> delayedLoadings = null;
+
 		LOOP: while (entries.hasMoreElements()) {
 			JarEntry inputEntry = entries.nextElement();
 
@@ -336,23 +349,77 @@ public class JarFileBuilder {
 			if (!entryName.startsWith(Global.packetName))	continue LOOP;
 			if (!entryName.endsWith(".class"))				continue LOOP;
 
-//			if(!entryPresent(entryName)) {
-				InputStream inputStream = null;
-				try {
-					inputStream = jarFile.getInputStream(inputEntry);
+			InputStream inputStream = null;
+			try {
+				inputStream = jarFile.getInputStream(inputEntry);
+				String name = entryName.substring(0, entryName.length() - 6).replace('/', '.');
+
+				if(Option.internal.TESTING_PRECOMP) {
+//					ClassHierarchy.print();
+					String supClassName = ClassHierarchy.getRealPrefix(name);
+					boolean readyToLoad = true;
+					if(supClassName != null) {
+						boolean prefixLoaded = loader.isClassLoaded(supClassName);
+						if(TESTING) System.out.println("JarFileBuilder.loadJarEntries: supClassName="+supClassName+", prefixLoaded="+prefixLoaded);
+						if(! prefixLoaded) {
+							readyToLoad = false;
+							if(delayedLoadings == null) delayedLoadings = new HashMap<String,InputStream>();
+							delayedLoadings.put(name, inputStream);
+							inputStream = null;
+						}
+					}
+					if(readyToLoad) {
+						byte[] bytes = inputStream.readAllBytes();
+						loader.loadClass(name, bytes, jarFile.getName());
+					}
+				} else {
 					byte[] bytes = inputStream.readAllBytes();
-					
-//					addJarEntry(entryName, bytes);
-					String name = entryName.substring(0, entryName.length() - 6).replace('/', '.');
-//					System.out.println("JarFileBuilder.loadJarEntries: name="+name);
-					loader.loadClass(name, bytes);
-//					Util.IERR();
-					
-				} finally {	if (inputStream != null) inputStream.close(); }
+					loader.loadClass(name, bytes, jarFile.getName());
+				}
+
+			} finally {	if (inputStream != null) inputStream.close(); }
+		}
+
+		int NNN = 4000;
+		while(delayedLoadings != null) {
+			if(--NNN < 0) Util.IERR();
+//			if(TESTING)
+				System.out.println("\nJarFileBuilder.loadJarEntries: delayedLoadings +++++++++++++++++++");
+			Vector<String> loaded = new Vector<String>();
+
+			for (Entry<String, InputStream> entry : delayedLoadings.entrySet()) {
+				String name = entry.getKey();
+				InputStream inputStream = entry.getValue();
+				String supClassName = ClassHierarchy.getRealPrefix(name);
+//				if(TESTING)
+					System.out.println("JarFileBuilder.loadJarEntries: Check Class: "+name+" extends "+supClassName);
+				boolean readyToLoad = true;
+				if(supClassName != null) {
+					boolean prefixLoaded = loader.isClassLoaded(supClassName);
+					if(! prefixLoaded) readyToLoad = false;
+				}
+				if(readyToLoad) {
+					try {
+//						if(TESTING)
+							System.out.println("JarFileBuilder.loadJarEntries: Load Class: "+name);
+						byte[] bytes = inputStream.readAllBytes();
+						loader.loadClass(name, bytes, jarFile.getName());
+						loaded.add(name);
+					} finally {	if (inputStream != null) inputStream.close(); }
+				}
 			}
-//		}
-//		if (Option.verbose)
-//			Util.println("---------  END INCLUDE .jar File, " + (jarEntryNames.size()) + " Entries Added  ---------");
+
+			if(loaded.size() == 0) Util.IERR();
+			for(String name:loaded) {
+//				if(TESTING)
+					System.out.println("JarFileBuilder.loadJarEntries: Remove: "+name);
+				delayedLoadings.remove(name);
+				if(delayedLoadings.size() == 0) delayedLoadings = null;
+			}
+			//			Util.IERR();
+		}
+		//		if (Option.verbose)
+		//			Util.println("---------  END INCLUDE .jar File, " + (jarEntryNames.size()) + " Entries Added  ---------");
 	}
 
 	

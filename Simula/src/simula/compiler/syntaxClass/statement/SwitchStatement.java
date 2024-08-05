@@ -18,6 +18,7 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
@@ -314,9 +315,9 @@ public final class SwitchStatement extends Statement {
     		return(s.toString());
     	}
     	
-    	public void printTree(final int indent) {
+    	public void printTree(final int indent, final Object head) {
     		System.out.println(edTreeIndent(indent)+edWhen());
-    		statement.printTree(indent+1);
+    		statement.printTree(indent+1,this);
     	}
 	
     	@Override
@@ -430,9 +431,9 @@ public final class SwitchStatement extends Statement {
     }
 	
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println(edTreeIndent(indent)+"SWITCH("+lowKey+':'+hiKey+") "+switchKey);
-		for (SwitchWhenPart when : switchCases) when.printTree(indent+1);
+		for (SwitchWhenPart when : switchCases) when.printTree(indent+1,this);
 	}
 
 	@Override

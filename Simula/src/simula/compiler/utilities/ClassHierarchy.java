@@ -1,10 +1,18 @@
 package simula.compiler.utilities;
 
+import java.io.IOException;
 import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.constant.ClassDesc;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
+import java.util.TreeSet;
+
+import simula.compiler.AttributeInputStream;
+import simula.compiler.AttributeOutputStream;
+import simula.compiler.syntaxClass.SyntaxClass;
+
 import java.util.Vector;
 
 /**
@@ -44,9 +52,16 @@ import java.util.Vector;
  * ClassHierarchyInfo.ofInterface() : ClassHierarchyInfo.ofClass(ClassDesc superClass))`
  */
 public abstract class ClassHierarchy {
-	private static Map<ClassDesc, ClassDesc> classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
-	private static Collection<ClassDesc> interfaces = new Vector<ClassDesc>();
+//	private static Map<ClassDesc, ClassDesc> classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
+//	private static Collection<ClassDesc> interfaces = new Vector<ClassDesc>();
+	private static Map<ClassDesc, ClassDesc> classToSuperClass;
+	private static Collection<ClassDesc> interfaces;
 
+	public static void init() {
+		classToSuperClass = new HashMap<ClassDesc, ClassDesc>(); // TESTING_PRECOMP
+		interfaces = new Vector<ClassDesc>();		
+	}
+	
 	public static ClassHierarchyResolver getResolver() {
 		ClassHierarchyResolver res = ClassHierarchyResolver.defaultResolver()
 				.orElse(ClassHierarchyResolver.of(interfaces, classToSuperClass));
@@ -56,4 +71,112 @@ public abstract class ClassHierarchy {
 	public static void addClassToSuperClass(ClassDesc cld, ClassDesc sup) {
 		classToSuperClass.put(cld, sup);
 	}
+	
+	public static ClassDesc getRealSuper(ClassDesc sub) {
+		ClassDesc sup = classToSuperClass.get(sub);
+		if(sup == null) return null;
+		if(sup.equals(CD.RTS_CLASS) || sup.equals(CD.RTS_PROCEDURE)) return null;
+		return sup;
+	}
+	
+	public static String getRealPrefix(String sub) {
+		ClassDesc sup = classToSuperClass.get(ClassDesc.of(sub));
+		if(sup == null) return null;
+		String packageName = sup.packageName();
+		if(packageName.equals("simula.runtime")) return null;
+		return packageName+'.'+sup.displayName();
+	}
+	
+	public static void xprint() {
+		System.out.println("\n================= ClassHierarchy.print =================");
+        for (Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
+            ClassDesc sub = entry.getKey();
+            ClassDesc sup = entry.getValue();
+//            if(! sup.displayName().startsWith("RTS_")) {
+	    		String subClass = sub.packageName() + '.' + sub.displayName();
+	    		while(subClass.length() < 50) subClass = subClass + ' ';
+	    		String superClass = sup.packageName() + '.' + sup.displayName();
+	    		System.out.println("class " + subClass + " extends " + superClass);
+//            }
+        }
+	}
+
+	// ***********************************************************************************************
+	// *** ClassHierarchy print tree
+	// ***********************************************************************************************
+	private static Vector<Node> allNodes;
+	
+	public static void print() {
+		allNodes = new Vector<Node>();
+		Node top = lookup("_TOP");
+		top.children.add(lookup("simula.runtime.RTS_CLASS"));
+		top.children.add(lookup("simula.runtime.RTS_PROCEDURE"));
+        for (Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
+            ClassDesc sub = entry.getKey();
+            ClassDesc sup = entry.getValue();
+    		Node supNode = lookup(sup.packageName() + '.' + sup.displayName());
+    		Node subNode = lookup(sub.packageName() + '.' + sub.displayName());
+    		supNode.children.add(subNode);
+        }
+		System.out.println("\n================= ClassHierarchy.print =================");
+		lookup("simula.runtime.RTS_CLASS").print(1);
+		System.out.println("\n================= Procedure List =================");
+		lookup("simula.runtime.RTS_PROCEDURE").print(1);
+	}
+	
+	private static class Node implements Comparable<Node> {
+		String name;
+		TreeSet<Node> children = new TreeSet<Node>();
+		
+		void print(int indent) {
+			System.out.println(SyntaxClass.edIndent(indent) + this.name);
+			for(Node child:children) child.print(indent + 1);
+		}
+
+		@Override
+		public int compareTo(Node node) {
+			return name.compareToIgnoreCase(node.name);
+		}
+	}
+	
+	private static Node lookup(String name) {
+		for(Node node:allNodes) if(node.name.equals(name)) return(node);
+		Node n = new Node(); n.name = name;
+		allNodes.add(n);
+		return n;
+	}
+	
+
+	// ***********************************************************************************************
+	// *** Attribute File I/O
+	// ***********************************************************************************************
+	private static final String mark = "]END ClassHierarchy";
+	
+	public static void writeObject(AttributeOutputStream oupt) throws IOException {
+		Util.TRACE_OUTPUT("BEGIN Write ClassHierarchy: ");
+        for (Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
+            ClassDesc sub = entry.getKey();
+            ClassDesc sup = entry.getValue();
+    		oupt.writeString(sub.packageName());
+    		oupt.writeString(sub.displayName());
+    		oupt.writeString(sup.packageName());
+    		oupt.writeString(sup.displayName());
+        }
+		oupt.writeString(mark);
+	}
+
+	public static void readObject(AttributeInputStream inpt) throws IOException {
+		String next = inpt.readString();
+//		while(next != null) {
+		while(! next.equals(mark)) {
+			ClassDesc sub = ClassDesc.of(next+'.'+inpt.readString());
+			ClassDesc sup = ClassDesc.of(inpt.readString()+'.'+inpt.readString());
+			addClassToSuperClass(sub, sup);
+			next = inpt.readString();
+		}
+		Util.TRACE_OUTPUT("END Read ClassHierarchy: ");
+		print();
+	}
+	
+	
 }

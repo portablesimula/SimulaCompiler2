@@ -15,6 +15,7 @@ import java.lang.constant.MethodTypeDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
+import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -334,10 +335,10 @@ public final class ActivationStatement extends Statement {
 
 
 	@Override
-	public void printTree(final int indent) {
+	public void printTree(final int indent, final Object head) {
 		System.out.println(edTreeIndent(indent)+this);
-		object1.printTree(indent+1);
-		if(object2 != null) object2.printTree(indent+1);
+		object1.printTree(indent+1,this);
+		if(object2 != null) object2.printTree(indent+1,this);
 	}
 
 	@Override

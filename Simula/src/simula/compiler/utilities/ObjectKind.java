@@ -28,13 +28,13 @@ public class ObjectKind {
 	/** Thunk */					public static final int Thunk = 15;
 	/** Label Declaration */		public static final int LabelDeclaration = 16;
 	/** Simple Variable */			public static final int SimpleVariableDeclaration = 17;
-	/** External Declaration */		public static final int ExternalDeclaration = 18;
-	/** Hidden Specification */		public static final int HiddenSpecification = 19;
-	/** Protected Specification */	public static final int ProtectedSpecification = 20;
+	/** Inspect Variable */			public static final int InspectVariableDeclaration = 18;
+	/** External Declaration */		public static final int ExternalDeclaration = 19;
+	/** Hidden Specification */		public static final int HiddenSpecification = 20;
+	/** Protected Specification */	public static final int ProtectedSpecification = 21;
 
 	// *** Statements:
 
-	/** ActivationStatement */		public static final int ActivationStatement = 21;
 	/** BlockStatement */			public static final int BlockStatement = 22;
 	/** ConditionalStatement */		public static final int ConditionalStatement = 23;
 	/** ConnectionStatement */		public static final int ConnectionStatement = 24;
@@ -53,6 +53,7 @@ public class ObjectKind {
 	/** StandaloneExpression */		public static final int StandaloneExpression = 37;
 	/** SwitchStatement */			public static final int SwitchStatement = 38;
 	/** WhileStatement */			public static final int WhileStatement = 39;
+	/** ActivationStatement */		public static final int ActivationStatement = 40;
 
 	// *** Expressions:
 
@@ -102,6 +103,7 @@ public class ObjectKind {
 			case Thunk:						return "Thunk";
 			case LabelDeclaration:			return "LabelDeclaration";
 			case SimpleVariableDeclaration:	return "SimpleVariableDeclaration";
+			case InspectVariableDeclaration:return "InspectVariableDeclaration";
 			case ExternalDeclaration:		return "ExternalDeclaration";
 			case HiddenSpecification:		return "HiddenSpecification";
 			case ProtectedSpecification:	return "ProtectedSpecification";
