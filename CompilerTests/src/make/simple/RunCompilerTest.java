@@ -33,13 +33,12 @@ public final class RunCompilerTest {
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
 //		Option.internal.TESTING_PRECOMP = true;
-//		Option.internal.TESTING_PRECOMP_INSPECT = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -47,7 +46,7 @@ public final class RunCompilerTest {
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
 		// Overall TRACING Options
-//		Option.internal.TRACING=true;
+		Option.internal.TRACING=true;
 //		Option.internal.DEBUGGING=true;
 //
 //		// Scanner Trace Options
@@ -56,7 +55,7 @@ public final class RunCompilerTest {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=3;
+//		Option.internal.PRINT_SYNTAX_TREE=3;
 //		Option.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.TRACE_ATTRIBUTE_INPUT=true;
 //
@@ -69,7 +68,7 @@ public final class RunCompilerTest {
 //		Option.TRACE_CODING=true;
 //		Option.GNERATE_LINE_CALLS=true;
 //		
-//		Option.internal.TRACE_REPAIRING=true;
+		Option.internal.TRACE_REPAIRING=true;
 //		Option.LIST_REPAIRED_INSTRUCTION_LIST=true;
 //		Option.internal.TRACE_BYTECODE_OUTPUT=true;
 //		Option.internal.DEBUGGING=true;
@@ -80,7 +79,7 @@ public final class RunCompilerTest {
 		
 		
 		Global.packetName="simulaTestPrograms";
-		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //		Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");
@@ -120,8 +119,8 @@ public final class RunCompilerTest {
 //		 names.add("/simple/p41.sim");
 //		 names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
-		 names.add("/simple/adHoc00.sim");
-//		 names.add("/simple/adHoc01.sim");
+//		 names.add("/simple/adHoc00.sim");
+		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");

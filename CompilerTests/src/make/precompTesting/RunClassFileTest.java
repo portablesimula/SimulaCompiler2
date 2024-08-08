@@ -57,7 +57,7 @@ public final class RunClassFileTest {
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
 		Option.internal.PRINT_SYNTAX_TREE=3;
-//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
 //		// Checker Trace Options
@@ -99,18 +99,19 @@ public final class RunClassFileTest {
 //		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
 
-//		names.add("/precompTesting/adHoc_PRECOMP.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP2.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP3.sim");
+
+		names.add("/precompTesting/adHoc_PRECOMP.sim");
+		names.add("/precompTesting/adHoc_PRECOMP2.sim");
+		names.add("/precompTesting/adHoc_PRECOMP3.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP4.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP5.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP6.sim");
-//		names.add("/precompTesting/adHoc_MAIN.sim");
+		names.add("/precompTesting/adHoc_MAIN.sim");
 
 
 //		names.add("/precompTesting/adHoc_COMMON.sim");
 //		names.add("/precompTesting/adHoc_ERRMSG.sim");
-		names.add("/precompTesting/adHoc_SCANNER.sim");
+//		names.add("/precompTesting/adHoc_SCANNER.sim");
 //		names.add("/precompTesting/adHoc_SCANINP.sim");
 		
 //		names.add("/precompTesting/adHoc_BUILDER1.sim");

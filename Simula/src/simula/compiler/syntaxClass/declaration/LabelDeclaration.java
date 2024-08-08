@@ -38,7 +38,7 @@ import simula.compiler.utilities.Util;
  */
 public final class LabelDeclaration extends SimpleVariableDeclaration {
 	/**
-	 * The label index. Set by BlockDeclaration.doCheckLabelList.
+	 * The label index. Set by BlockDeclaration.doAccumLabels.
 	 */
 	public int index;
 
@@ -63,6 +63,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		super(Type.Label, identifier);
 		this.externalIdent = "_LABEL_" + identifier;
 		this.declarationKind = ObjectKind.LabelDeclaration;
+//		System.out.println("NEW LabelDeclaration: "+this);
+//		Thread.dumpStack();
 	}
 
 	@Override
@@ -134,7 +136,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	}
 	
 	private boolean isLatestVirtualLabel(DeclarationScope encloser) {
-		LabelDeclaration last = encloser.labelList.getLastLabel(this.identifier);
+		LabelDeclaration last = encloser.labelList.getLastDeclaredLabel(this.identifier);
 		if(this.index == last.index) {
 			return true;
 		}
@@ -280,35 +282,5 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		Util.TRACE_INPUT("readLabelDeclaration: " + lab);
 		return(lab);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//
-//		// *** LabelDeclaration
-//		oupt.writeShort(index);
-//		oupt.writeObj(movedTo);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//		
-//		// *** SimpleVariableDeclaration
-//		constant = inpt.readBoolean();
-//		constantElement = (Expression) inpt.readObj();
-//
-//		// *** LabelDeclaration
-//		index = inpt.readShort();
-//		movedTo = (DeclarationScope) inpt.readObj();
-//	}
 
 }

@@ -131,8 +131,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			ClassDeclaration prefix=this.getPrefixClass();
 			if(prefix!=null) {
 				prefix.doChecking();
-				LabelList.accumLabelList(this);
+//				LabelList.accumLabelList(this);
 			}
+			LabelList.accumLabelList(this);
 			Global.exitScope();
 		}
 		Global.enterScope(this);
@@ -143,7 +144,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 
 		for (Declaration dcl : declarationList)	dcl.doChecking();
 		for (Statement stm : statements) stm.doChecking();
-		doCheckLabelList(this.getPrefixClass());
+//		doCheckLabelList(this.getPrefixClass());
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -161,61 +162,62 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		}
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
-		boolean duringSTM_Coding=Global.duringSTM_Coding;
-		Global.duringSTM_Coding=false;
-		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-		String line = "public final class " + getJavaIdentifier();
-		if (prefix != null)
-			 line = line + " extends " + getPrefixClass().getJavaIdentifier();
-		else line = line + " extends RTS_BASICIO";
-		GeneratedJavaClass.code(line + " {");
-		GeneratedJavaClass.debug("// PrefixedBlockDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
-				+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
-				+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false")
-				+ ", detachUsed=" + ((detachUsed) ? "true" : "false"));
-		if (isQPSystemBlock())
-			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (isDetachUsed())
-			GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
-		GeneratedJavaClass.debug("// Declare parameters as attributes");
-		for (Parameter par : parameterList) {
-			String tp = par.toJavaType();
-			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
-		}
-		if (this.hasLabel()) {
-			GeneratedJavaClass.debug("// Declare local labels");
-			for (LabelDeclaration lab : labelList.labels)
-				lab.declareLocalLabel(this);
-		}
-		GeneratedJavaClass.debug("// Declare locals as attributes");
-		for (Declaration decl : declarationList) decl.doJavaCoding();
-		for (VirtualMatch match : virtualMatchList)	match.doJavaCoding();
-		doCodeConstructor();
-		Global.duringSTM_Coding=true;
-		codeClassStatements();
-		Global.duringSTM_Coding=duringSTM_Coding;
-
-		if (this.isMainModule) {
-			GeneratedJavaClass.code("");
-			GeneratedJavaClass.code("public static void main(String[] args) {");
-			GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-			GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
-			
-			StringBuilder sb = new StringBuilder();
-			sb.append("new " + getJavaIdentifier() + "(_CTX");
-			if (blockPrefix != null && blockPrefix.hasArguments()) {
-				for (Expression par : blockPrefix.checkedParams) {
-					sb.append(',').append(par.toJavaCode());
-				}
-			} sb.append(");");
-			
-			GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
-			GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
-			
-			GeneratedJavaClass.code("}", "End of main");
-		}
-		javaModule.codeProgramInfo();
-		GeneratedJavaClass.code("}", "End of Class");
+			labelList.setLabelIdexes();
+			boolean duringSTM_Coding=Global.duringSTM_Coding;
+			Global.duringSTM_Coding=false;
+			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			String line = "public final class " + getJavaIdentifier();
+			if (prefix != null)
+				 line = line + " extends " + getPrefixClass().getJavaIdentifier();
+			else line = line + " extends RTS_BASICIO";
+			GeneratedJavaClass.code(line + " {");
+			GeneratedJavaClass.debug("// PrefixedBlockDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+					+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
+					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false")
+					+ ", detachUsed=" + ((detachUsed) ? "true" : "false"));
+			if (isQPSystemBlock())
+				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+			if (isDetachUsed())
+				GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
+			GeneratedJavaClass.debug("// Declare parameters as attributes");
+			for (Parameter par : parameterList) {
+				String tp = par.toJavaType();
+				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+			}
+			if(this.hasAccumLabel()) {
+				GeneratedJavaClass.debug("// Declare local labels");
+				for (LabelDeclaration lab : labelList.getAccumLabels())
+					lab.declareLocalLabel(this);
+			}
+			GeneratedJavaClass.debug("// Declare locals as attributes");
+			for (Declaration decl : declarationList) decl.doJavaCoding();
+			for (VirtualMatch match : virtualMatchList)	match.doJavaCoding();
+			doCodeConstructor();
+			Global.duringSTM_Coding=true;
+			codeClassStatements();
+			Global.duringSTM_Coding=duringSTM_Coding;
+	
+			if (this.isMainModule) {
+				GeneratedJavaClass.code("");
+				GeneratedJavaClass.code("public static void main(String[] args) {");
+				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+				GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
+				
+				StringBuilder sb = new StringBuilder();
+				sb.append("new " + getJavaIdentifier() + "(_CTX");
+				if (blockPrefix != null && blockPrefix.hasArguments()) {
+					for (Expression par : blockPrefix.checkedParams) {
+						sb.append(',').append(par.toJavaCode());
+					}
+				} sb.append(");");
+				
+				GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
+				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+				
+				GeneratedJavaClass.code("}", "End of main");
+			}
+			javaModule.codeProgramInfo();
+			GeneratedJavaClass.code("}", "End of Class");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -290,6 +292,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
+		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: PrefixecBlock " + CD_ThisClass + " extends " + CD_SuperClass);
@@ -305,8 +308,8 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 						.withSuperclass(this.superClassDesc());
 
 					// Add Fields (Attributes and parameters)
-					if(labelList != null)
-						for (LabelDeclaration lab : labelList.labels)
+					if(this.hasAccumLabel())
+						for (LabelDeclaration lab : labelList.getAccumLabels())
 							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)

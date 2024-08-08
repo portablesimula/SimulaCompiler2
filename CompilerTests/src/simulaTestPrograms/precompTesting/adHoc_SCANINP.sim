@@ -1,6 +1,6 @@
-external class SCANNER;
+external class adHoc_SCANNER;
 
-SCANNER class SCANINP;
+adHoc_SCANNER class adHoc_SCANINP;
 begin
 
 end SCANINP;

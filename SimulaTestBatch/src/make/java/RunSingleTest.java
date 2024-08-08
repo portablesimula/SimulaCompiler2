@@ -75,7 +75,7 @@ public final class RunSingleTest {
 //		Option.internal.TRACE_REPAIRING_OUTPUT=true;
 
 		Global.packetName="simulaTestBatch";
-		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
@@ -208,7 +208,7 @@ public final class RunSingleTest {
 //		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 //		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 //		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 //		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 //		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.  Uses GOTO/LABEL
 //
@@ -272,7 +272,7 @@ public final class RunSingleTest {
 //		names.add("simtst151.sim"); // OK: Test multiple assignments
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
-		names.add("simtst154.sim"); // OK: Test function result assignment
+//		names.add("simtst154.sim"); // OK: Test function result assignment
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

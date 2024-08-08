@@ -24,19 +24,20 @@ public class LabelList {
 	private static int LABEL_SEQU = 0;
 	private int sequ;
 	
-	public DeclarationScope declaredIn;
-	public Vector<LabelDeclaration> labels;
-	private Label defaultTarget; // beginning of the default handler block. Set by MAKE_READY_FOR_CODING
-	private Vector<SwitchCase> tableSwitchCases; // Set by MAKE_READY_FOR_CODING
+	private DeclarationScope declaredIn;
+	private Vector<LabelDeclaration> declaredLabels;
 	
 	private boolean READY_FOR_CODING;
+	private Vector<LabelDeclaration> accumLabels; // Set by MAKE_READY_FOR_CODING  or  accumLabelList
+	private Label defaultTarget; // beginning of the default handler block. Set by MAKE_READY_FOR_CODING
+	private Vector<SwitchCase> tableSwitchCases;  // Set by MAKE_READY_FOR_CODING
+	
 
 	public LabelList(DeclarationScope declaredIn) {
-		if(TRACING) {
-			this.sequ = (LABEL_SEQU++);
-			this.declaredIn = declaredIn;
-		}
-		this.labels = new Vector<LabelDeclaration>();
+		if(declaredIn == null) Util.IERR();
+		this.sequ = (LABEL_SEQU++);
+		this.declaredIn = declaredIn;
+		this.declaredLabels = new Vector<LabelDeclaration>();
 		if(TRACING) System.out.println("NEW " + this);
 	}
 	
@@ -46,23 +47,31 @@ public class LabelList {
 	}
 	
 	private String ident() {
-		if(declaredIn == null) return "LabelList["+sequ+"]";
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
 	}
 	
-	public int tableSize() {
-		return (labels == null)?0:labels.size();
-	}
-
-	public boolean isEmpty() {
-		return tableSize() == 0;
+	public Vector<LabelDeclaration> getDeclaredLabels(){
+		return declaredLabels;
 	}
 	
-	public LabelDeclaration getLastLabel(String ident) {
-		int n = tableSize();
+	public Vector<LabelDeclaration> getAccumLabels(){
+		return accumLabels;
+	}
+	
+	public int accumLabelSize() {
+		return (accumLabels == null)?0:accumLabels.size();
+	}
+	
+	public int declaredLabelSize() {
+		return (declaredLabels == null)?0:declaredLabels.size();
+	}
+	
+	public LabelDeclaration getLastDeclaredLabel(String ident) {
+//		int n = tableSize();
+		int n = declaredLabelSize();
 		if(n > 0) {
 			for(int i=n-1;i>=0;i--) {
-				LabelDeclaration lab = labels.get(i);
+				LabelDeclaration lab = declaredLabels.get(i);
 				if(lab.identifier.equalsIgnoreCase(ident)) return lab;
 			}
 		}
@@ -72,37 +81,30 @@ public class LabelList {
 	public void add(LabelDeclaration lab) {
 		if(TRACING) System.out.println(ident()+".add: "+lab.identifier+'['+lab.externalIdent+']');
 		if(READY_FOR_CODING) Util.IERR("Can't add a new Label when LabelLisit is marked READY_FOR_CODING");
-//		if(get(lab.identifier) == null)
-		labels.add(lab);
+		declaredLabels.add(lab);
 		if(TRACING) System.out.println(ident()+".add: DONE: LabelList = "+this);
-		
-//		System.out.println("LabelLisit.add: "+lab);
-//		Thread.dumpStack();
 	}
 	
-//	private LabelDeclaration get(String identifier) {
-//		for(LabelDeclaration lab:labels) if(lab.identifier.equals(identifier)) return lab;
-//		return null;
-//	}
-	
-	// Used by ClassDeclaration and PrefixedBlockDeclaration
-	public static void accumLabelList(ClassDeclaration cls) {
-		if(cls.prefixClass != null) {
-			LabelList newList = new LabelList(cls);
-			if(cls.prefixClass.labelList != null) 
-				for(LabelDeclaration lab:cls.prefixClass.labelList.labels)
-					newList.add(lab);
-			
-			if(cls.labelList != null) 
-				for(LabelDeclaration lab:cls.labelList.labels) newList.add(lab);
-			
-			cls.labelList = newList;				
+	// Used when generating .java source
+	public static void accumLabelList(BlockDeclaration blk) {
+		Vector<LabelDeclaration> accumLabels = new Vector<LabelDeclaration>();
+		if(blk instanceof ClassDeclaration cls) {
+			ClassDeclaration prefix = cls.prefixClass;
+			while(prefix != null) {
+				if(prefix.labelList != null) { 
+					for(LabelDeclaration lab:prefix.labelList.declaredLabels)
+						accumLabels.add(lab);
+				}
+				prefix = prefix.prefixClass;
+			}
 		}
-	}
-	
-	public void setLabelIdexes() {
-		int nextIndex = 1;
-		for (LabelDeclaration label : labels) label.index = nextIndex++;
+		if(blk.labelList != null) 
+			for(LabelDeclaration lab:blk.labelList.declaredLabels)
+				accumLabels.add(lab);
+		if(accumLabels != null) {
+			if(blk.labelList == null) blk.labelList = new LabelList(blk);
+			blk.labelList.accumLabels = accumLabels;
+		}					
 	}
 	
 	public List<SwitchCase> getTableSwitchCases(CodeBuilder codeBuilder) {
@@ -112,21 +114,35 @@ public class LabelList {
 		if(tableSwitchCases == null) Util.IERR();
 		return tableSwitchCases;
 	}
+
+	public void setLabelIdexes() {
+		if(accumLabels != null) {
+			int nextIndex = 1;
+			for (LabelDeclaration label : accumLabels) label.index = nextIndex++;
+		}
+		print("setLabelIdexes: Testing");
+	}
 	
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {
 		if(READY_FOR_CODING) return;
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
-		if(tableSize() > 0) {
+//		Vector<LabelDeclaration> accumLabels = doAccumLabels(declaredIn);
+//		accumLabels = doAccumLabels(declaredIn);
+		if(accumLabelSize() > 0) {
 			defaultTarget = codeBuilder.newLabel();
 			tableSwitchCases = new Vector<SwitchCase>();
-			if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: nLabels="+tableSize());
-			for (int i = 1; i <= tableSize(); i++) {
+			if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: nLabels="+accumLabels.size());
+			for (int i = 1; i <= accumLabels.size(); i++) {
 				Label lab = codeBuilder.newLabel();
 				tableSwitchCases.add(SwitchCase.of(i, lab));
-				if(TRACING) System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  "+labels.get(i-1).identifier+" = "+lab);
+//					if(TRACING)
+					LabelDeclaration labelDecl = accumLabels.get(i-1);
+					System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
 			}
-		}
+		}			
 		READY_FOR_CODING = true;
+		print("READY_FOR_CODING: Testing");
+//		Util.IERR();
 	}
 	
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
@@ -146,7 +162,7 @@ public class LabelList {
 		// Build the TableSwitch Instruction
 //		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		int lowValue = 1;            // the minimum key value.
-		int highValue = tableSize(); // the maximum key value.
+		int highValue = accumLabelSize(); // the maximum key value.
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder
@@ -171,18 +187,45 @@ public class LabelList {
 		if(Option.internal.PRINT_SYNTAX_TREE > 2) {
 			System.out.println(SyntaxClass.edIndent(indent)+this);
 		} else {
-			System.out.println(SyntaxClass.edIndent(indent) + "LabelList with " + (labels.size()) + " Labels ...");
+			System.out.println(SyntaxClass.edIndent(indent) + "LabelList with " + (declaredLabels.size()) + " DeclaredLabels ...");
 		}
+	}
+	
+	public void print(String title) {
+		System.out.println("\n************ BEGIN LabelList[" +sequ + "]: "+title+" ************");
+		System.out.println("*** DeclaredIn: "+declaredIn.identifier+"  READY_FOR_CODING="+READY_FOR_CODING);
+		System.out.print("*** DeclaredLabels:");
+		if(declaredLabelSize() > 0) {
+			for(LabelDeclaration lab:getDeclaredLabels()) {
+				System.out.print(" " + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']' + "atLine:" + lab.lineNumber);
+			}
+			System.out.println("");
+		} else System.out.println(" NONE");
+		System.out.print("*** AccumLabels:   ");
+		if(accumLabelSize() > 0) {
+			for(LabelDeclaration lab:getAccumLabels()) {
+				System.out.print(" " + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']' + "atLine:" + lab.lineNumber);
+			}
+			System.out.println("");
+		} else System.out.println(" NONE");
+		System.out.println("*** DefaultTarget:  "+defaultTarget);
+		if(tableSwitchCases != null) {
+			for(SwitchCase swc:tableSwitchCases) {
+				System.out.println("*** SwitchCase:     "+swc);
+			}
+		}
+		System.out.println("************ ENDOF LabelList[" +sequ + "]: "+title+" ************\n");
 	}
 	
 	public String toString() {
 		String s = "LabelList[" +sequ + "]:";
 		String sep = " ";
-		if(tableSize() > 0) {
-			for(LabelDeclaration lab:labels) {
+		if(declaredLabelSize() > 0) {
+			for(LabelDeclaration lab:declaredLabels) {
 				s = s + sep + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']';				
-				s = s + "  " + lab.lineNumber;
-				sep = "\n";
+				s = s + "atLine:" + lab.lineNumber;
+//				sep = "\n";
+				sep = " ";
 			}
 		} else s = s + " With no labels";
 		return(s);
@@ -194,15 +237,18 @@ public class LabelList {
 	// ***********************************************************************************************
 
 	public static void writeLabelList(LabelList labelList,AttributeOutputStream oupt) throws IOException {
-//		Util.IERR();
 		if(labelList == null) {
+//		if(labelList == null || labelList.initialList == null) {
 			oupt.writeBoolean(false);
 		} else {
 			oupt.writeBoolean(true);
 			Util.TRACE_OUTPUT(""+labelList);
 			oupt.writeObj(labelList.declaredIn);
-			oupt.writeShort(labelList.tableSize());			
-			for(LabelDeclaration lab:labelList.labels) oupt.writeObj(lab);
+			oupt.writeShort(labelList.declaredLabelSize());			
+			for(LabelDeclaration lab:labelList.declaredLabels) {
+				System.out.println("LabelList.writeLabelList: "+lab+", declaredIn="+lab.declaredIn+"   labelList.declaredIn="+labelList.declaredIn);
+				oupt.writeObj(lab);
+			}
 		}
 	}
 

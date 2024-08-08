@@ -40,7 +40,6 @@ public final class RunClassFileTest {
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
 //		Option.internal.TESTING_PRECOMP = true;
-//		Option.internal.TESTING_PRECOMP_INSPECT = true;
 		Option.internal.USE_SimulaClassLoader = true;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
@@ -113,8 +112,8 @@ public final class RunClassFileTest {
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
 //		 names.add("/simple/adHoc001.sim");
-		 names.add("/simple/adHoc00.sim");
-//		 names.add("/simple/adHoc01.sim");
+//		 names.add("/simple/adHoc00.sim");
+		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");

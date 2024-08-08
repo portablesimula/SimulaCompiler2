@@ -213,7 +213,7 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return the resulting Meaning
 	 */
 	public Meaning findLabelMeaning(final String identifier) {
-		for (LabelDeclaration dcl : labelList.labels)
+		for (LabelDeclaration dcl : labelList.getDeclaredLabels())
 			if (Util.equals(dcl.identifier, identifier))
 				return (new Meaning(dcl, this, this, false));
 		
@@ -397,7 +397,7 @@ public abstract class DeclarationScope extends Declaration  {
 	
 	protected void printDeclarationList(int indent) {
 		for(Declaration d:declarationList) d.printTree(indent,this);
-		if(labelList != null) for(LabelDeclaration d:labelList.labels) d.printTree(indent,this);
+		if(labelList != null) for(LabelDeclaration d:labelList.getDeclaredLabels()) d.printTree(indent,this);
 	}
 	
 	public String edScope() {

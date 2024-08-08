@@ -145,18 +145,18 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Parse.expect(KeyWord.ENDPAR);
 	}
 
-	// ***********************************************************************************************
-	// *** Checking: doCheckLabelList
-	// ***********************************************************************************************
-	/**
-	 * Checking utility: doCheckLabelList.
-	 * @param prefixClass possible prefix or null
-	 */
-	protected void doCheckLabelList(final ClassDeclaration prefixClass) {
-		if(prefixClass != null)
-			prefixClass.doChecking();
-		if(labelList != null) labelList.setLabelIdexes();
-	}
+//	// ***********************************************************************************************
+//	// *** Checking: doCheckLabelList
+//	// ***********************************************************************************************
+//	/**
+//	 * Checking utility: doCheckLabelList.
+//	 * @param prefixClass possible prefix or null
+//	 */
+//	protected void doCheckLabelList(final ClassDeclaration prefixClass) {
+//		if(prefixClass != null)
+//			prefixClass.doChecking();
+//		if(labelList != null) labelList.setLabelIdexes();
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding: isBlockWithLocalClasses
@@ -214,17 +214,41 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		this.labelcodeList.add(labelcode);
 	}
 
+//	// ***********************************************************************************************
+//	// *** Coding Utility: hasLabel
+//	// ***********************************************************************************************
+//	/**
+//	 * Returns true if this block has one ore more labels.
+//	 * @return true if this block has one ore more labels.
+//	 */
+//	protected boolean hasLabel() {
+//		// Needs redefinition for ClassDeclaration
+//		ASSERT_SEMANTICS_CHECKED();
+//		return (labelList != null && !labelList.isEmpty());
+//	}
+
 	// ***********************************************************************************************
-	// *** Coding Utility: hasLabel
+	// *** Coding Utility: hasDeclaredLabel
 	// ***********************************************************************************************
 	/**
-	 * Returns true if this block has one ore more labels.
-	 * @return true if this block has one ore more labels.
+	 * Returns true if this block has one ore more local declared labels.
+	 * @return true if this block has one ore more local declared labels.
 	 */
-	protected boolean hasLabel() {
-		// Needs redefinition for ClassDeclaration
+	protected boolean hasDeclaredLabel() {
 		ASSERT_SEMANTICS_CHECKED();
-		return (labelList != null && !labelList.isEmpty());
+		return (labelList != null && labelList.declaredLabelSize() > 0);
+	}
+
+	// ***********************************************************************************************
+	// *** Coding Utility: hasAccumLabel
+	// ***********************************************************************************************
+	/**
+	 * Returns true if this block has one ore more accumulated labels.
+	 * @return true if this block has one ore more accumulated labels.
+	 */
+	protected boolean hasAccumLabel() {
+		ASSERT_SEMANTICS_CHECKED();
+		return (labelList != null && labelList.accumLabelSize() > 0);
 	}
 
 	// ***********************************************************************************************
@@ -243,19 +267,19 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		return (null);
 	}
 
-	// ***********************************************************************************************
-	// *** Coding Utility: getNlabels
-	// ***********************************************************************************************
-	/**
-	 * Returns the number of labels in this block.
-	 * <p>
-	 * Redefined in ClassDeclaration
-	 * 
-	 * @return the number of labels in this class
-	 */
-	public int getNlabels() {
-		return (labelList.tableSize());
-	}
+//	// ***********************************************************************************************
+//	// *** Coding Utility: getNlabels
+//	// ***********************************************************************************************
+//	/**
+//	 * Returns the number of labels in this block.
+//	 * <p>
+//	 * Redefined in ClassDeclaration
+//	 * 
+//	 * @return the number of labels in this class
+//	 */
+//	public int getNlabels() {
+//		return (labelList.declaredLabelSize());
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: codeSTMBody
@@ -264,15 +288,16 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * Coding utility: Code STM body
 	 */
 	protected void codeSTMBody() {
-		if (hasLabel()) {
+		if (hasAccumLabel()) {
 			GeneratedJavaClass.code(externalIdent + " _THIS=(" + externalIdent + ")_CUR;");
 			GeneratedJavaClass.code("_LOOP:while(_JTX>=0) {");
 			GeneratedJavaClass.code("try {");
-			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
+//			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
+			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+labelList.accumLabelSize()+");","For ByteCode Engineering");			
 			Global.currentJavaModule.mustDoByteCodeEngineering=true;
 		}
 		codeStatements();
-		if (hasLabel()) {
+		if (hasAccumLabel()) {
 			GeneratedJavaClass.code("break _LOOP;");
 			GeneratedJavaClass.code("}");
 			GeneratedJavaClass.code("catch(RTS_LABEL q) {");
@@ -380,7 +405,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 						.aconst_null()                 // TESTING_STACK_SIZE
 						.if_nonnull(checkStackSize);   // TESTING_STACK_SIZE
 				}
-				if (hasLabel())	
+				if (hasAccumLabel())	
 					 build_TRY_CATCH(codeBuilder, begScope, endScope);
 				else build_STM_BODY(codeBuilder, begScope, endScope);
 				codeBuilder

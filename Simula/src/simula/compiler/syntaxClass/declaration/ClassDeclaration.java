@@ -470,14 +470,13 @@ public class ClassDeclaration extends BlockDeclaration {
 			prefixClass = getPrefixClass();
 //			System.out.println("ClassDeclaration.doChecking: "+this+"   PREFIX="+prefixClass);
 			prefixClass.doChecking();
-			
-			LabelList.accumLabelList(this);
-			
 			if (prefixClass.declarationKind != ObjectKind.StandardClass) {
 				if (sourceBlockLevel != prefixClass.sourceBlockLevel)
 					Util.warning("Subclass on a deeper block level not allowed.");
 			}
 		}
+		LabelList.accumLabelList(this);
+		
 		if(type != null) type.doChecking(declaredIn);
 		int prfx = prefixLevel();
 		for (Parameter par : this.parameterList)
@@ -495,7 +494,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			stm.doChecking();
 		checkProtectedList();
 		checkHiddenList();
-		doCheckLabelList(prefixClass);
+//		doCheckLabelList(prefixClass);
 		Global.exitScope();
 		if(Option.internal.TRACE_CHECKER) Util.TRACE("END ClassDeclaration("+this.identifier+").doChecking");
 		SET_SEMANTICS_CHECKED();
@@ -583,7 +582,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, declaration.identifier))
 				return (declaration);
 		}
-		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+		if(labelList != null) for (LabelDeclaration label : labelList.getDeclaredLabels()) {
 			if (Option.internal.TRACE_FIND_MEANING > 1)
 				Util.println("Checking Label " + label);
 			if (Util.equals(ident, label.identifier))
@@ -925,42 +924,43 @@ public class ClassDeclaration extends BlockDeclaration {
 		Global.sourceLineNumber = lineNumber;
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
-		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-		String line = "public class " + getJavaIdentifier();
-		line = line + " extends " + getPrefixClass().getJavaIdentifier();
-		GeneratedJavaClass.code(line + " {");
-		GeneratedJavaClass.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
-				+ ", PrefixLevel=" + prefixLevel() + ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber
-				+ ", hasLocalClasses=" + ((hasLocalClasses) ? "true" : "false") + ", System="
-				+ ((isQPSystemBlock()) ? "true" : "false") + ", detachUsed=" + ((detachUsed) ? "true" : "false"));
-		if (isQPSystemBlock())
-			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (isDetachUsed())
-			GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
-		GeneratedJavaClass.debug("// Declare parameters as attributes");
-		for (Parameter par : parameterList) {
-			String tp = par.toJavaType();
-			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
-		}
-		if (labelList != null && !labelList.isEmpty()) {
-			GeneratedJavaClass.debug("// Declare local labels");
-			for (LabelDeclaration lab : labelList.labels)
-				lab.declareLocalLabel(this);
-		}
-		GeneratedJavaClass.debug("// Declare locals as attributes");
-		for (Declaration decl : declarationList)
-			decl.doJavaCoding();
-
-		for (VirtualSpecification virtual : virtualSpecList) {
-			if (!virtual.hasDefaultMatch)
-				virtual.doJavaCoding();
-		}
-		for (VirtualMatch match : virtualMatchList)
-			match.doJavaCoding();
-		doCodeConstructor();
-		codeClassStatements();
-		javaModule.codeProgramInfo();
-		GeneratedJavaClass.code("}", "End of Class");
+			labelList.setLabelIdexes();
+			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			String line = "public class " + getJavaIdentifier();
+			line = line + " extends " + getPrefixClass().getJavaIdentifier();
+			GeneratedJavaClass.code(line + " {");
+			GeneratedJavaClass.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+					+ ", PrefixLevel=" + prefixLevel() + ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber
+					+ ", hasLocalClasses=" + ((hasLocalClasses) ? "true" : "false") + ", System="
+					+ ((isQPSystemBlock()) ? "true" : "false") + ", detachUsed=" + ((detachUsed) ? "true" : "false"));
+			if (isQPSystemBlock())
+				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+			if (isDetachUsed())
+				GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
+			GeneratedJavaClass.debug("// Declare parameters as attributes");
+			for (Parameter par : parameterList) {
+				String tp = par.toJavaType();
+				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+			}
+			if(this.hasAccumLabel()) {
+				GeneratedJavaClass.debug("// Declare local labels");
+				for (LabelDeclaration lab : labelList.getAccumLabels())
+					lab.declareLocalLabel(this);
+			}
+			GeneratedJavaClass.debug("// Declare locals as attributes");
+			for (Declaration decl : declarationList)
+				decl.doJavaCoding();
+	
+			for (VirtualSpecification virtual : virtualSpecList) {
+				if (!virtual.hasDefaultMatch)
+					virtual.doJavaCoding();
+			}
+			for (VirtualMatch match : virtualMatchList)
+				match.doJavaCoding();
+			doCodeConstructor();
+			codeClassStatements();
+			javaModule.codeProgramInfo();
+			GeneratedJavaClass.code("}", "End of Class");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -1018,35 +1018,35 @@ public class ClassDeclaration extends BlockDeclaration {
 		return (s.toString());
 	}
 
-	// ***********************************************************************************************
-	// *** Utility: hasLabel
-	// ***********************************************************************************************
-	@Override
-	protected boolean hasLabel() {
-		if (labelList != null && !labelList.isEmpty())
-			return (true);
-		if (hasRealPrefix()) {
-			ClassDeclaration prfx = this.getPrefixClass();
-			if (prfx != null)
-				return (prfx.hasLabel());
-		}
-		return (false);
-	}
+//	// ***********************************************************************************************
+//	// *** Utility: hasLabel
+//	// ***********************************************************************************************
+//	@Override
+//	protected boolean hasLabel() {
+//		if (labelList != null && !labelList.isEmpty())
+//			return (true);
+//		if (hasRealPrefix()) {
+//			ClassDeclaration prfx = this.getPrefixClass();
+//			if (prfx != null)
+//				return (prfx.hasLabel());
+//		}
+//		return (false);
+//	}
 
-	// ***********************************************************************************************
-	// *** Utility: getNlabels
-	// ***********************************************************************************************
-	/**
-	 * Returns the number of labels in this class.
-	 * 
-	 * @return the number of labels in this class
-	 */
-	@Override
-	public int getNlabels() {
-		ASSERT_SEMANTICS_CHECKED();
-		int size = (labelList==null)?0:labelList.tableSize();
-		return size;
-	}
+//	// ***********************************************************************************************
+//	// *** Utility: getNlabels
+//	// ***********************************************************************************************
+//	/**
+//	 * Returns the number of labels in this class.
+//	 * 
+//	 * @return the number of labels in this class
+//	 */
+//	@Override
+//	public int getNlabels() {
+//		ASSERT_SEMANTICS_CHECKED();
+//		int size = (labelList==null)?0:labelList.declaredLabelSize();
+//		return size;
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: codeStatements
@@ -1069,7 +1069,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (prfx != null) prfx.codeStatementsBeforeInner();
 		}
 		if(statements1 != null) for (Statement stm : statements1) stm.doJavaCoding();
-		GeneratedJavaClass.code("// BEGIN INNER PART");
+		GeneratedJavaClass.code("// BEGIN "+identifier+" INNER PART");
 	}
 
 	// ***********************************************************************************************
@@ -1079,7 +1079,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Coding utility: codeStatementsAfterInner
 	 */
 	private void codeStatementsAfterInner() {
-		GeneratedJavaClass.code("// ENDOF INNER PART");
+		GeneratedJavaClass.code("// ENDOF "+identifier+" INNER PART");
 		for (Statement stm : statements) stm.doJavaCoding();
 		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
@@ -1172,6 +1172,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
+		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
@@ -1192,8 +1193,8 @@ public class ClassDeclaration extends BlockDeclaration {
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
 						.withSuperclass(CD_SuperClass);
 
-					if(labelList != null)
-						for (LabelDeclaration lab : labelList.labels)
+					if(this.hasAccumLabel())
+						for (LabelDeclaration lab : labelList.getAccumLabels())
 							lab.buildDeclaration(classBuilder,this);
 
 					for (Declaration decl : declarationList)
@@ -1310,8 +1311,8 @@ public class ClassDeclaration extends BlockDeclaration {
 			codeBuilder
 				.invokespecial(pool.methodRefEntry(this.superClassDesc(),"<init>", MTD_Super));
 
-			if(hasLabel()) // Declare local labels
-				for (LabelDeclaration lab : labelList.labels)
+			if(hasDeclaredLabel()) // Declare local labels
+				for (LabelDeclaration lab : labelList.getDeclaredLabels())
 					lab.buildInitAttribute(codeBuilder);
 			
 			// Add and Initialize attributes
@@ -1375,6 +1376,19 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
+
+		
+		int nStat = this.statements.size();
+		if(statements1 != null) nStat = nStat + this.statements1.size();
+		System.out.println("ClassDeclaration.build_STM_BODY: " + this.externalIdent + " Number of Statements = " + nStat);
+		ClassDeclaration prefix = this.getPrefixClass();
+		while(prefix != null) {
+			nStat = prefix.statements.size();
+			if(prefix.statements1 != null) nStat = nStat + prefix.statements1.size();
+			System.out.println("ClassDeclaration.build_STM_BODY: Prefix: " + prefix.externalIdent + " Number of Statements = " + nStat);
+			prefix = prefix.getPrefixClass();
+		}
+		
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		clearLabelList();
 		stmStack.push(labelContext);
@@ -1402,7 +1416,10 @@ public class ClassDeclaration extends BlockDeclaration {
 	
 	private void clearLabelList() {
 //		System.out.println("ClassDeclaration.clearLabelList: ");
-		if(labelList != null) for(LabelDeclaration lab:this.labelList.labels) lab.isBinded = false;
+		if(labelList != null) {
+			if(labelList.accumLabelSize() > 0)
+			for(LabelDeclaration lab:labelList.getAccumLabels()) lab.isBinded = false;
+		}
 		if(prefixClass != null) prefixClass.clearLabelList();
 	}
 

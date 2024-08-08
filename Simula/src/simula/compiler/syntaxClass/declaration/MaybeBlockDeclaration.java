@@ -132,7 +132,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				declarationKind = ObjectKind.SubBlock;
 			} else {
 				declarationKind = ObjectKind.CompoundStatement;
-				if (labelList != null && !labelList.isEmpty())
+				if (labelList != null && labelList.declaredLabelSize() != 0)
 					moveLabelsFrom(this); // Label is also declaration
 			}
 		}
@@ -158,7 +158,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 */
 	static void moveLabelsFrom(DeclarationScope block) {
 		DeclarationScope declaredIn = block.declaredIn;
-		Vector<LabelDeclaration> labelList = block.labelList.labels;
+		Vector<LabelDeclaration> labelList = block.labelList.getDeclaredLabels();
 		DeclarationScope enc = declaredIn;
 		while (enc.declarationKind == ObjectKind.CompoundStatement
 				&& enc.declarationKind == ObjectKind.ConnectionBlock
@@ -182,9 +182,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
+			LabelList.accumLabelList(this);
 			for (Declaration dcl : declarationList)	dcl.doChecking();
 			for (Statement stm : statements) stm.doChecking();
-			doCheckLabelList(null);
+//			doCheckLabelList(null);
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -210,7 +211,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
-		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+		if(labelList != null) for (LabelDeclaration label : labelList.getDeclaredLabels()) {
 			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
@@ -244,7 +245,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		Util.ASSERT(declarationList.isEmpty(), "Invariant");
-		Util.ASSERT(labelList == null || labelList.isEmpty(), "Invariant");
+		Util.ASSERT(labelList == null || labelList.declaredLabelSize() == 0, "Invariant");
 		Global.enterScope(this);
 		GeneratedJavaClass.code("{");
 		if(labelcodeList!=null) {
@@ -268,41 +269,42 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		ASSERT_SEMANTICS_CHECKED();
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
-		boolean duringSTM_Coding=Global.duringSTM_Coding;
-		Global.duringSTM_Coding=false;
-		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-		GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
-		GeneratedJavaClass.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel() + ", firstLine="
-				+ lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
-				+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
-		if (isQPSystemBlock())
-			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if (hasLabel()) {
-			GeneratedJavaClass.debug("// Declare local labels");
-			for (LabelDeclaration lab : labelList.labels)
-				lab.declareLocalLabel(this);
-		}
-		GeneratedJavaClass.debug("// Declare locals as attributes");
-		for (Declaration decl : declarationList) decl.doJavaCoding();
-		doCodeConstructor();
-		Global.duringSTM_Coding=true;
-		doCodeStatements();
-		Global.duringSTM_Coding=duringSTM_Coding;
-		if (this.isMainModule) {
-			GeneratedJavaClass.code("");
-			GeneratedJavaClass.code("public static void main(String[] args) {");
-			GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-			GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
-			
-//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
-			
-			GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
-			GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
-
-			GeneratedJavaClass.code("}", "End of main");
-		}
-		javaModule.codeProgramInfo();
-		GeneratedJavaClass.code("}", "End of SubBlock");
+			labelList.setLabelIdexes();
+			boolean duringSTM_Coding=Global.duringSTM_Coding;
+			Global.duringSTM_Coding=false;
+			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
+			GeneratedJavaClass.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel() + ", firstLine="
+					+ lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
+					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
+			if (isQPSystemBlock())
+				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+			if(this.hasAccumLabel()) {
+				GeneratedJavaClass.debug("// Declare local labels");
+				for (LabelDeclaration lab : labelList.getAccumLabels())
+					lab.declareLocalLabel(this);
+			}
+			GeneratedJavaClass.debug("// Declare locals as attributes");
+			for (Declaration decl : declarationList) decl.doJavaCoding();
+			doCodeConstructor();
+			Global.duringSTM_Coding=true;
+			doCodeStatements();
+			Global.duringSTM_Coding=duringSTM_Coding;
+			if (this.isMainModule) {
+				GeneratedJavaClass.code("");
+				GeneratedJavaClass.code("public static void main(String[] args) {");
+				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+				GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
+				
+	//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
+				
+				GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
+				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+	
+				GeneratedJavaClass.code("}", "End of main");
+			}
+			javaModule.codeProgramInfo();
+			GeneratedJavaClass.code("}", "End of SubBlock");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -345,6 +347,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
+		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass);
@@ -357,8 +360,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_FINAL + ClassFile.ACC_SUPER)
 						.withSuperclass(CD.RTS_BASICIO);
 
-					if(labelList != null)
-						for (LabelDeclaration lab : labelList.labels)
+					if(this.hasAccumLabel())
+						for (LabelDeclaration lab : labelList.getAccumLabels())
 							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)
@@ -418,8 +421,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				.invokespecial(pool.methodRefEntry(CD.RTS_BASICIO
 						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
 
-			if (hasLabel()) // Declare local labels
-				for (LabelDeclaration lab : labelList.labels)
+			if (hasDeclaredLabel()) // Declare local labels
+				for (LabelDeclaration lab : labelList.getDeclaredLabels())
 					lab.buildInitAttribute(codeBuilder);
 			
 			// Add and Initialize attributes

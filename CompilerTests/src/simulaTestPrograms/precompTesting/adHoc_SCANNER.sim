@@ -1,6 +1,6 @@
 External class adHoc_ERRMSG;
  
-adHoc_ERRMSG class SCANNER;
+adHoc_ERRMSG class adHoc_SCANNER;
 begin
 
 

@@ -3,6 +3,10 @@ external class adHoc_PRECOMP;
 adHoc_PRECOMP class adHoc_PRECOMP2;
 begin
 
+%	go to L;
+	
 	sysout.outtext("adHoc_PRECOMP2:  BEGIN STATEMENTS"); sysout.outimage;
+	
+%	L:L1:L2:
 	
 end;

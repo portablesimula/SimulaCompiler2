@@ -99,7 +99,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	public void end() {
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ConnectionBlock: " + this.edScopeChain());
-		if (labelList != null && !labelList.isEmpty())
+		if (labelList != null && labelList.declaredLabelSize() != 0)
 			MaybeBlockDeclaration.moveLabelsFrom(this); // Label is also declaration
 		Global.setScope(declaredIn);
 	}
@@ -155,7 +155,7 @@ public final class ConnectionBlock extends DeclarationScope {
 			if (Util.equals(ident, declaration.identifier))
 				return (new Meaning(declaration, this, this, false));
 		}
-		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+		if(labelList != null) for (LabelDeclaration label : labelList.getDeclaredLabels()) {
 			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));

@@ -80,7 +80,7 @@ public final class RunCompilerTest {
 		
 		
 		Global.packetName="simulaTestPrograms";
-		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
+//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestPrograms
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Option.outputDir=new File("C:/GitHub/SimulaCompiler2/Simula/src/simulaTestPrograms/samples/simula/bin");
 //		Global.outputDir=new File("C:/GitHub/SimulaCompiler2/TestBatch/src/simulaTestPrograms/samples/simula/bin");
@@ -108,8 +108,8 @@ public final class RunCompilerTest {
 //		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
 		names.add("/precompTesting/adHoc_PRECOMP.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP2.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP3.sim");
+		names.add("/precompTesting/adHoc_PRECOMP2.sim");
+		names.add("/precompTesting/adHoc_PRECOMP3.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP4.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP5.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP6.sim");

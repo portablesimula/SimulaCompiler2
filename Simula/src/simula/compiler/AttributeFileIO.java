@@ -158,7 +158,17 @@ public final class AttributeFileIO {
 			}
 //    		if(!Option.internal.USE_SimulaClassLoader) {
     			JarFileBuilder.addToIncludeQueue(jarFile);
+//    			JarFileBuilder.loadJarEntries(jarFile, Global.simulaClassLoader);	
 //    		}
+    			
+//        	if(Option.internal.USE_SimulaClassLoader) {
+//        		JarFileBuilder.addToIncludeQueue(jarFile);
+////        		JarFileBuilder.loadJarEntries(jarFile, Global.simulaClassLoader);	
+//        	} else {
+//        		Global.jarFileBuilder.addJarEntries(jarFile);
+//        		Util.IERR();
+//        	}
+    			
 		} catch (IOException e) {
 			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);
 			Util.warning("It may be necessary to recompile '" + identifier + "'");

@@ -38,6 +38,7 @@ import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
+import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.ObjectList;
@@ -311,6 +312,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
 //			System.out.println("PrpcedureDeclaration.doChecking: "+this);
+			LabelList.accumLabelList(this);
 			if(type != null) {
 				this.result = new SimpleVariableDeclaration(type, "_RESULT");
 				declarationList.add(result);
@@ -322,7 +324,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			for (Declaration par : this.parameterList) par.doChecking();
 			for (Declaration dcl : declarationList)	dcl.doChecking();
 			for (Statement stm : statements) stm.doChecking();
-			doCheckLabelList(null);
+//			doCheckLabelList(null);
 			VirtualSpecification virtualSpec = VirtualSpecification.getVirtualSpecification(this);
 			if (virtualSpec != null) {
 				// This Procedure is a Virtual Match
@@ -351,7 +353,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, parameter.identifier))
 				return (new Meaning(parameter, this, this, false));
 		}
-		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+//		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
+		if(labelList != null) for (LabelDeclaration label : labelList.getDeclaredLabels()) {
 			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
 				return (new Meaning(label, this, this, false));
@@ -421,36 +424,37 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		}
 		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
 		Global.enterScope(this);
-		GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-		GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_PROCEDURE {");
-		GeneratedJavaClass.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
-					+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
-					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
-		if (isQPSystemBlock())
-			GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
-		if ( declarationKind == ObjectKind.Procedure && type != null) {
-			GeneratedJavaClass.code("@Override");
-			GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
-		}
-		GeneratedJavaClass.debug("// Declare parameters as attributes");
-		boolean hasParameter = false;
-		for (Parameter par : parameterList) {
-			String tp = par.toJavaType();
-			hasParameter = true;
-			GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
-		}
-		if (this.hasLabel()) {
-			GeneratedJavaClass.debug("// Declare local labels");
-			for (LabelDeclaration lab : labelList.labels)
-				lab.declareLocalLabel(this);
-		}
-		GeneratedJavaClass.debug("// Declare locals as attributes");
-		for (Declaration decl : declarationList) decl.doJavaCoding();
-		if (declarationKind == ObjectKind.Procedure && hasParameter) doCodePrepareFormal();
-		doCodeConstructor();
-		codeProcedureBody();
-		javaModule.codeProgramInfo();
-		GeneratedJavaClass.code("}", "End of Procedure");
+			labelList.setLabelIdexes();
+			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_PROCEDURE {");
+			GeneratedJavaClass.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+						+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
+						+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
+			if (isQPSystemBlock())
+				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+			if ( declarationKind == ObjectKind.Procedure && type != null) {
+				GeneratedJavaClass.code("@Override");
+				GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
+			}
+			GeneratedJavaClass.debug("// Declare parameters as attributes");
+			boolean hasParameter = false;
+			for (Parameter par : parameterList) {
+				String tp = par.toJavaType();
+				hasParameter = true;
+				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+			}
+			if(this.hasAccumLabel()) {
+				GeneratedJavaClass.debug("// Declare local labels");
+				for (LabelDeclaration lab : labelList.getAccumLabels())
+					lab.declareLocalLabel(this);
+			}
+			GeneratedJavaClass.debug("// Declare locals as attributes");
+			for (Declaration decl : declarationList) decl.doJavaCoding();
+			if (declarationKind == ObjectKind.Procedure && hasParameter) doCodePrepareFormal();
+			doCodeConstructor();
+			codeProcedureBody();
+			javaModule.codeProgramInfo();
+			GeneratedJavaClass.code("}", "End of Procedure");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -552,6 +556,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public byte[] buildClassFile() {
+		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		if(Option.internal.TESTING_PRECOMP) {
@@ -581,8 +586,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					for (Parameter par:parameterList)
 						par.buildDeclaration(classBuilder,this);
 					
-					if(labelList != null)
-						for (LabelDeclaration lab : labelList.labels)
+					if(this.hasAccumLabel())
+						for (LabelDeclaration lab : labelList.getAccumLabels())
 							lab.buildDeclaration(classBuilder,this);
 					
 					for (Declaration decl : declarationList)
@@ -698,9 +703,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 						.invokespecial(pool.methodRefEntry(CD.RTS_PROCEDURE
 								,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
 		
-					if (this.hasLabel()) {
+					if (this.hasDeclaredLabel()) {
 						// Declare local labels
-						for (LabelDeclaration lab : labelList.labels)
+						for (LabelDeclaration lab : labelList.getDeclaredLabels())
 							lab.buildInitAttribute(codeBuilder);
 					}
 					// Add and Initialize attributes

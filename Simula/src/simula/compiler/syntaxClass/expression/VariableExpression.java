@@ -661,6 +661,7 @@ public final class VariableExpression extends Expression {
 				}
 	
 			case ObjectKind.SimpleVariableDeclaration:
+			case ObjectKind.InspectVariableDeclaration:
 				if (rightPart != null)
 					return edIdentifierAccess(destination) + '=' + rightPart;
 				else
@@ -673,7 +674,7 @@ public final class VariableExpression extends Expression {
 				return CallProcedure.virtual(this, virtual, remotelyAccessed);
 	
 			default:
-				Util.IERR();
+				Util.IERR(""+ObjectKind.edit(decl.declarationKind));
 		}
 		return null;
 
@@ -972,7 +973,7 @@ public final class VariableExpression extends Expression {
 	@Override
 	public String toString() {
 		if (params == null)
-			return ("" + identifier); // + "  backLink=" + this.backLink);
+			return ("" + identifier + "  type=" + this.type);
 		else
 			return (("" + identifier + params).replace('[', '(').replace(']', ')') );// + "  backLink=" + this.backLink);
 	}
@@ -1030,33 +1031,5 @@ public final class VariableExpression extends Expression {
 		Util.TRACE_INPUT("readVariableExpression: " + var);
 		return(var);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeString(identifier);
-//		oupt.writeBoolean(remotelyAccessed);
-//		
-//		if(params == null) {
-//			oupt.writeShort(0);			
-//		} else {
-//			oupt.writeShort(params.size());
-//			for(Expression par:params) oupt.writeObj(par);
-//		}
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		identifier = inpt.readString();
-//		remotelyAccessed = inpt.readBoolean();
-//		
-//		int n = inpt.readShort();
-//		if(n > 0) {
-//			params = new Vector<Expression>();
-//			for(int i=0;i<n;i++)
-//				params.add((Expression) inpt.readObj());
-//		}
-//	}
 
 }

@@ -79,7 +79,7 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	public byte[] buildClassFile() {
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass+" declaredIn="+this.declaredIn);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_NAME);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,

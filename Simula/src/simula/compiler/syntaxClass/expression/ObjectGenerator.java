@@ -320,28 +320,4 @@ public final class ObjectGenerator extends Expression {
 		return(gen);
 	}
 
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeString(classIdentifier);
-//		if(params == null) {
-//			oupt.writeShort(-1);			
-//		} else {
-//			oupt.writeShort(params.size());
-//			for(Expression par:params) oupt.writeObj(par);
-//		}
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		classIdentifier = inpt.readString();
-//		int n = inpt.readShort();
-//		if(n >= 0) {
-//			params = new Vector<Expression>();
-//			for(int i=0;i<n;i++)
-//				params.add((Expression) inpt.readObj());
-//		}
-//	}
-
 }
