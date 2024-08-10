@@ -137,14 +137,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			}
 		}
 		this.lastLineNumber = Global.sourceLineNumber;
-		if(Option.internal.TESTING_PRECOMP) {
-			BlockStatement blk = new BlockStatement(this);
-			Global.setScope(declaredIn);
-			return (blk);
-		} else {
-			Global.setScope(declaredIn);
-			return (new BlockStatement(this));
-		}
+		BlockStatement blk = new BlockStatement(this);
+		Global.setScope(declaredIn);
+		return (blk);
 	}
 
 	/**
@@ -350,7 +345,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		if(Option.internal.TESTING_PRECOMP) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_BASICIO);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,

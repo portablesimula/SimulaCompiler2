@@ -559,14 +559,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		if(Option.internal.TESTING_PRECOMP) {
-//			System.out.println("Begin buildClassFile: Procedure "+CD_ThisClass);
-//			System.out.println("Begin buildClassFile: isPreCompiledFromFile="+this.isPreCompiledFromFile);
-			if(isPreCompiledFromFile != null) {
-				byte[] bytes = getBytesFromFile();
-				return(bytes);
-			}
-		}
+		if(isPreCompiledFromFile != null) return getBytesFromFile();
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_PROCEDURE);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,

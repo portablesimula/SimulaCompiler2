@@ -23,22 +23,6 @@ public final class Pre155_INIT_Block40 extends RTS_BASICIO {
             if(((Pre155_INIT)(_CUR._SL))._inspect_42_4444!=null) { // INSPECT _inspect_42_4444
                 {
                     {
-                        // JavaLine 26 <== SourceLine 43
-                        RTS_BASICIO.sysout().outtext(new RTS_TXT("PAS2INIT.main: "));
-                        ;
-                        RTS_BASICIO.sysout().outimage();
-                        ;
-                        // JavaLine 31 <== SourceLine 45
-                        ((Pre155)(_CUR._SL._SL)).checker_1=((Pre155_XXXX)((Pre155_INIT)(_CUR._SL))._inspect_42_4444);
-                        ;
-                        // JavaLine 34 <== SourceLine 46
-                        ((Pre155)(_CUR._SL._SL)).checker0_1=((Pre155)(_CUR._SL._SL)).checker_1;
-                        ;
-                        // JavaLine 37 <== SourceLine 47
-                        RTS_BASICIO.sysout().outtext(CONC(new RTS_TXT(""),RTS_ENVIRONMENT.edit(444)));
-                        ;
-                        RTS_BASICIO.sysout().outimage();
-                        ;
                     }
                 }
             }

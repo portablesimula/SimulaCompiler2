@@ -45,26 +45,6 @@ public final class Pre155_trace extends RTS_PROCEDURE {
         }
         ;
         // JavaLine 47 <== SourceLine 18
-        if(_VALUE(_TXTREL_NE(p_msg,((Pre155)(_CUR._SL)).facit.getELEMENT(((Pre155)(_CUR._SL)).traceCase_1)))) {
-            // JavaLine 49 <== SourceLine 19
-            {
-                new SimulaTest_err((_CUR._SL),CONC(new RTS_TXT("Case "),RTS_ENVIRONMENT.edit(((Pre155)(_CUR._SL)).traceCase_1)));
-                ;
-                // JavaLine 53 <== SourceLine 20
-                RTS_BASICIO.sysout().outtext(CONC(new RTS_TXT("Trace: "),p_msg));
-                ;
-                RTS_BASICIO.sysout().outimage();
-                ;
-                // JavaLine 58 <== SourceLine 21
-                RTS_BASICIO.sysout().outtext(CONC(new RTS_TXT("Facit: "),((Pre155)(_CUR._SL)).facit.getELEMENT(((Pre155)(_CUR._SL)).traceCase_1)));
-                ;
-                RTS_BASICIO.sysout().outimage();
-                ;
-            }
-        }
-        ;
-        // JavaLine 66 <== SourceLine 23
-        ((Pre155)(_CUR._SL)).traceCase_1=(((Pre155)(_CUR._SL)).traceCase_1+(1));
         ;
         EBLK();
         return(this);

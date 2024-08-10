@@ -475,11 +475,11 @@ public abstract class DeclarationScope extends Declaration  {
     				Global.simulaClassLoader.loadClass(name, bytes, "SourceFile " + Global.sourceFileName);
     			} else {
         			String entryName = Global.packetName + "/" + externalIdent + ".class";
-        			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+        			Global.jarFileBuilder.writeJarEntry(entryName, bytes);
     			}
     		} else {
     			String entryName = Global.packetName + "/" + externalIdent + ".class";
-    			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+    			Global.jarFileBuilder.writeJarEntry(entryName, bytes);
     		}
 
 //    		System.out.println("DeclarationScope.loadOrAddClassFile: "+externalIdent);

@@ -102,18 +102,18 @@ public final class RunCompilerTest {
 
 		Vector<String> names=new Vector<String>();
 		
-//		names.add("/precompTesting/p40b.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("/precompTesting/p40a.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("/precompTesting/p40c.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
+		names.add("/precompTesting/p40b.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("/precompTesting/p40a.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("/precompTesting/p40c.sim");     // OK:  Precompile this for Simtst 40.
+		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
-		names.add("/precompTesting/adHoc_PRECOMP.sim");
-		names.add("/precompTesting/adHoc_PRECOMP2.sim");
-		names.add("/precompTesting/adHoc_PRECOMP3.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP4.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP5.sim");
-//		names.add("/precompTesting/adHoc_PRECOMP6.sim");
-		names.add("/precompTesting/adHoc_MAIN.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP2.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP3.sim");
+////		names.add("/precompTesting/adHoc_PRECOMP4.sim");
+////		names.add("/precompTesting/adHoc_PRECOMP5.sim");
+////		names.add("/precompTesting/adHoc_PRECOMP6.sim");
+//		names.add("/precompTesting/adHoc_MAIN.sim");
 
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");

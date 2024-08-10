@@ -95,7 +95,7 @@ public final class RunSingleTest {
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
-//		names.add("simtst00.sim"); // OK:  Empty test
+		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
@@ -208,7 +208,7 @@ public final class RunSingleTest {
 //		names.add("simtst95.sim"); // OK:  Test Environment Interface.
 //		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 //		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
-		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
+//		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 //		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
 //		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.  Uses GOTO/LABEL
 //

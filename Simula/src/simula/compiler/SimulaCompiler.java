@@ -91,7 +91,6 @@ public final class SimulaCompiler {
 	 * @param reader        Reader in case of SimulaEditor
 	 */
 	public SimulaCompiler(final String inputFileName, Reader reader) {
-		if(Option.internal.TESTING_PRECOMP) System.out.println("\nNEW SimulaCompiler: Compile "+inputFileName);
 		Global.initiate();
 		if (reader == null) {
 			try {
@@ -293,14 +292,11 @@ public final class SimulaCompiler {
 				}
 			} else {
 				Global.jarFileBuilder.open(programModule);
+				Global.jarFileBuilder.addIncludeQueue();
 			}
 			
 			if (Option.internal.TRACING)
 				Util.println("BEGIN Possible Generate AttributeFile");
-			
-			if(! Option.internal.TESTING_PRECOMP) {
-				AttributeFileIO.writeAttributeFile(programModule);
-			}
 			
 			// ***************************************************************
 			// *** Semantic Checker
@@ -360,10 +356,7 @@ public final class SimulaCompiler {
 				if(Option.internal.LIST_GENERATED_CLASS_FILES)
 					listGeneratedClassFiles();
 			}
-
-			if(Option.internal.TESTING_PRECOMP) {
-				AttributeFileIO.writeAttributeFile(programModule);
-			}
+			AttributeFileIO.writeAttributeFile(programModule);
 
 			// ***************************************************************
 			// *** CRERATE .jar FILE INLINE
@@ -704,9 +697,9 @@ public final class SimulaCompiler {
     		}
 			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
-		if(outputJarFile != null) {
-			JarFileBuilder.listJarFile(outputJarFile);
-		}
+//		if(outputJarFile != null) {
+//			JarFileBuilder.listJarFile(outputJarFile);
+//		}
 	}
 
 }

@@ -101,10 +101,10 @@ public class LabelList {
 		if(blk.labelList != null) 
 			for(LabelDeclaration lab:blk.labelList.declaredLabels)
 				accumLabels.add(lab);
-		if(accumLabels != null) {
+//		if(accumLabels != null) {
 			if(blk.labelList == null) blk.labelList = new LabelList(blk);
 			blk.labelList.accumLabels = accumLabels;
-		}					
+//		}					
 	}
 	
 	public List<SwitchCase> getTableSwitchCases(CodeBuilder codeBuilder) {
@@ -120,7 +120,7 @@ public class LabelList {
 			int nextIndex = 1;
 			for (LabelDeclaration label : accumLabels) label.index = nextIndex++;
 		}
-		print("setLabelIdexes: Testing");
+//		print("setLabelIdexes: Testing");
 	}
 	
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {

@@ -175,7 +175,7 @@ public abstract class ClassHierarchy {
 			next = inpt.readString();
 		}
 		Util.TRACE_OUTPUT("END Read ClassHierarchy: ");
-		print();
+//		print();
 	}
 	
 	

@@ -75,12 +75,12 @@ public final class AttributeFileIO {
 //		if(Option.internal.USE_SimulaClassLoader && Global.simulaClassLoader != null) {
 		if(Option.internal.USE_SimulaClassLoader) {
 			if(Global.jarFileBuilder!=null) {
-				Global.jarFileBuilder.addJarEntry(entryName, bytes);
+				Global.jarFileBuilder.writeJarEntry(entryName, bytes);
 			}
 			else Util.IERR();
 			
 		} else {
-			Global.jarFileBuilder.addJarEntry(entryName, bytes);
+			Global.jarFileBuilder.writeJarEntry(entryName, bytes);
 		}
 		if (Option.verbose)	Util.TRACE("*** ENDOF Generate SimulaAttributeFile: " + file);
 	}
@@ -96,9 +96,7 @@ public final class AttributeFileIO {
 		// writeVersion:
 		oupt.writeString(version);
 
-		if(Option.internal.TESTING_PRECOMP) {
-			ClassHierarchy.writeObject(oupt);
-		}
+		ClassHierarchy.writeObject(oupt);
 
 		// Write External Head
 		if(program.externalHead != null) {
@@ -157,6 +155,7 @@ public final class AttributeFileIO {
 							+ '[' + module.externalIdent + ']' +"  ==>  "+declarationList.identifier);
 			}
 //    		if(!Option.internal.USE_SimulaClassLoader) {
+    		if(!Option.internal.USE_SimulaClassLoader)
     			JarFileBuilder.addToIncludeQueue(jarFile);
 //    			JarFileBuilder.loadJarEntries(jarFile, Global.simulaClassLoader);	
 //    		}
@@ -184,10 +183,7 @@ public final class AttributeFileIO {
 		String vers = inpt.readString();
 		if(!(vers.equals(version))) Util.error("Malformed SimulaAttributeFile: " + fileID);
 
-
-		if(Option.internal.TESTING_PRECOMP) {
-			ClassHierarchy.readObject(inpt);
-		}
+		ClassHierarchy.readObject(inpt);
 
 		// Read External Head ?
 		int declarationKind = inpt.readKind();

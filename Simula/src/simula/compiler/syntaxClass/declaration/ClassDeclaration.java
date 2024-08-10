@@ -1155,13 +1155,8 @@ public class ClassDeclaration extends BlockDeclaration {
 			}
 		}
 		
-		if(Option.internal.TESTING_PRECOMP) {
-//			System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: "+this.identifier+", isLoaded="+isLoaded+", isPreCompiledFromFile="+this.isPreCompiledFromFile);
-			if(isPreCompiledFromFile != null) {
-				return;
-			}
-//			Thread.dumpStack();
-		}
+		if(isPreCompiledFromFile != null) return;
+			
     	byte[] bytes = doBuildClassFile();
     	loadOrAddClassFile(bytes);
     	this.isLoaded = true;
@@ -1176,14 +1171,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
-		if(Option.internal.TESTING_PRECOMP) {
-			System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
-			System.out.println("Begin buildClassFile: isPreCompiledFromFile="+this.isPreCompiledFromFile);
-			if(isPreCompiledFromFile != null) {
-				byte[] bytes = getBytesFromFile();
-				return(bytes);
-			}
-		}
+		if(isPreCompiledFromFile != null) return getBytesFromFile();
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
@@ -1376,16 +1364,12 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
-
-		
 		int nStat = this.statements.size();
 		if(statements1 != null) nStat = nStat + this.statements1.size();
-		System.out.println("ClassDeclaration.build_STM_BODY: " + this.externalIdent + " Number of Statements = " + nStat);
 		ClassDeclaration prefix = this.getPrefixClass();
 		while(prefix != null) {
 			nStat = prefix.statements.size();
 			if(prefix.statements1 != null) nStat = nStat + prefix.statements1.size();
-			System.out.println("ClassDeclaration.build_STM_BODY: Prefix: " + prefix.externalIdent + " Number of Statements = " + nStat);
 			prefix = prefix.getPrefixClass();
 		}
 		

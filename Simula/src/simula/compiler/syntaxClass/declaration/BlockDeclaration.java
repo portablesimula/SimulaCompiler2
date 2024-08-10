@@ -571,7 +571,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			// new adHoc06(_CTX)._STM();
 			.new_(currentClassDesc())
 			.dup()
-			.getstatic(currentClassDesc(),"_CTX",CD.RTS_CLASS);
+//			.getstatic(currentClassDesc(),"_CTX",CD.RTS_CLASS);
+			.getstatic(CD.RTS_RTObject,"_CTX",CD.RTS_BASICIO);
 
 		if(this instanceof PrefixedBlockDeclaration pblk) {
 			//  new adHoc05_PBLK14(_CUR,p1,...)._STM();
