@@ -95,7 +95,7 @@ public final class RunClassFileTest {
 		names.add("/precompTesting/p40b.sim");     // OK:  Precompile this for Simtst 40.
 		names.add("/precompTesting/p40a.sim");     // OK:  Precompile this for Simtst 40.
 		names.add("/precompTesting/p40c.sim");     // OK:  Precompile this for Simtst 40.
-//		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
+		names.add("/precompTesting/adHoc_simtst40.sim"); // OK:  Test separate compilation of procedures.
 
 
 

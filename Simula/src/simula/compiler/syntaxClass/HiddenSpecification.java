@@ -183,6 +183,7 @@ public final class HiddenSpecification extends SyntaxClass {
 		oupt.writeShort(lineNumber);
 		// *** HiddenSpecification
 		oupt.writeString(identifier);
+		oupt.writeObj(definedIn);
 	}
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
@@ -192,8 +193,8 @@ public final class HiddenSpecification extends SyntaxClass {
 		spec.lineNumber = inpt.readShort();
 		// *** HiddenSpecification
 		spec.identifier = inpt.readString();
-		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
-		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
+		spec.definedIn = (ClassDeclaration) inpt.readObj();
+		Util.TRACE_INPUT("HiddenSpecification: " + spec.identifier);
 		return(spec);
 	}
 

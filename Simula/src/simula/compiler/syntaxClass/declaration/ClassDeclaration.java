@@ -1342,7 +1342,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		try {
-			System.out.println("ClassDeclaration.buildDeclaration: "+this.externalIdent+", encloser="+encloser);
+//			System.out.println("ClassDeclaration.buildDeclaration: "+this.externalIdent+", encloser="+encloser);
 			this.createJavaClassFile();
 		} catch (IOException e) {
 			e.printStackTrace();

@@ -57,7 +57,7 @@ public class JarFileBuilder {
 	 */
 	private JarOutputStream jarOutputStream;
 
-	private final static boolean TESTING = true;//false;
+	private final static boolean TESTING = false;
 	
 	/**
 	 * Construct a new JarFileBuilder.
@@ -108,11 +108,11 @@ public class JarFileBuilder {
 	 * @param entryName the entry name
 	 * @param bytes the bytes, may be null
 	 */
-	private void putMapEntry(String entryName, byte[] bytes) {
+	public void putMapEntry(String entryName, byte[] bytes) {
 		if(TESTING)	System.out.println("JarOutputSet.putMapEntry: "+entryName);
 		byte[] prev = classFileMap.put(entryName,bytes);
 		if(prev != null) {
-			System.out.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED in " + outputJarFile.getName());
+			System.out.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED");
 		}
 	}
 	
@@ -123,7 +123,7 @@ public class JarFileBuilder {
 	 * @throws IOException if something went wrong
 	 */
 	public void writeJarEntry(String entryName, byte[] bytes) throws IOException {
-		if(TESTING)	System.out.println("JarFileBuilder.writeJarEntry: "+entryName);
+		if(TESTING) System.out.println("JarFileBuilder.writeJarEntry: "+entryName);
 		JarEntry entry = new JarEntry(entryName);
 		jarOutputStream.putNextEntry(entry);
 		if(bytes != null) jarOutputStream.write(bytes);
@@ -137,6 +137,7 @@ public class JarFileBuilder {
 	 */
 	public File close() throws IOException {
 		// Write the actual .jar file
+		if(TESTING) printClassFileMap("END JarFileBuilder.close");
         for (Entry<String, byte[]> entry : classFileMap.entrySet()) {
             String entryName = entry.getKey();
             byte[] bytes = entry.getValue();
@@ -230,7 +231,7 @@ public class JarFileBuilder {
 	 * @param jarFile the .jar file to read
 	 * @throws IOException if something went wrong
 	 */
-	private void expandJarFile(final JarFile jarFile) throws IOException {
+	public void expandJarFile(final JarFile jarFile) throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.expandJarFile: JarFileName="+jarFile.getName());
 		if (Option.verbose)
 			Util.println("---------  INCLUDE .jar File: " + jarFile.getName() + "  ---------");
@@ -249,6 +250,17 @@ public class JarFileBuilder {
 				putMapEntry(entryName, bytes);
 			} finally {	if (inputStream != null) inputStream.close(); }
 		}
+		if(TESTING) printClassFileMap("END JarFileBuilder.expandJarFile");
+	}
+	
+	private void printClassFileMap(String title) {
+		System.out.println("============================== printClassFileMap: "+title+" ==============================");
+        for (Entry<String, byte[]> entry : classFileMap.entrySet()) {
+            String entryName = entry.getKey();
+            byte[] bytes = entry.getValue();
+            System.out.println("JarFileBuilder.printClassFileMap: "+entryName+"   Size="+((bytes==null)?0:bytes.length));
+        }		
+		System.out.println("END ========================== printClassFileMap: "+title+" ==============================");
 	}
 
 

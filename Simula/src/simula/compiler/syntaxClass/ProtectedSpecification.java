@@ -138,6 +138,7 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 		oupt.writeShort(lineNumber);
 		// *** ProtectedSpecification
 		oupt.writeString(identifier);
+		oupt.writeObj(definedIn);
 	}
 
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
@@ -147,7 +148,7 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 		spec.lineNumber = inpt.readShort();
 		// *** ProtectedSpecification
 		spec.identifier = inpt.readString();
-		spec.definedIn = (ClassDeclaration) Global.getCurrentScope();
+		spec.definedIn = (ClassDeclaration) inpt.readObj();
 		Util.TRACE_INPUT("ProtectedSpecification: " + spec.identifier);
 		return(spec);
 	}

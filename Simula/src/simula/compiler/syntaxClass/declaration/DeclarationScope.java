@@ -479,7 +479,7 @@ public abstract class DeclarationScope extends Declaration  {
     			}
     		} else {
     			String entryName = Global.packetName + "/" + externalIdent + ".class";
-    			Global.jarFileBuilder.writeJarEntry(entryName, bytes);
+    			Global.jarFileBuilder.putMapEntry(entryName, bytes);    				
     		}
 
 //    		System.out.println("DeclarationScope.loadOrAddClassFile: "+externalIdent);

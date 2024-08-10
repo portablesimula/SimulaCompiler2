@@ -154,20 +154,13 @@ public final class AttributeFileIO {
 					System.out.println("***       Read External " + ObjectKind.edit(module.declarationKind) + ' ' + module.identifier
 							+ '[' + module.externalIdent + ']' +"  ==>  "+declarationList.identifier);
 			}
-//    		if(!Option.internal.USE_SimulaClassLoader) {
-    		if(!Option.internal.USE_SimulaClassLoader)
-    			JarFileBuilder.addToIncludeQueue(jarFile);
-//    			JarFileBuilder.loadJarEntries(jarFile, Global.simulaClassLoader);	
-//    		}
     			
-//        	if(Option.internal.USE_SimulaClassLoader) {
-//        		JarFileBuilder.addToIncludeQueue(jarFile);
-////        		JarFileBuilder.loadJarEntries(jarFile, Global.simulaClassLoader);	
-//        	} else {
-//        		Global.jarFileBuilder.addJarEntries(jarFile);
-//        		Util.IERR();
-//        	}
-    			
+			if(Option.internal.USE_SimulaClassLoader) {
+				JarFileBuilder.addToIncludeQueue(jarFile);
+			} else {
+				Global.jarFileBuilder.expandJarFile(jarFile);
+			}
+
 		} catch (IOException e) {
 			Util.error("Unable to read Attribute File: " + file + " caused by: " + e);
 			Util.warning("It may be necessary to recompile '" + identifier + "'");

@@ -137,11 +137,11 @@ public class LabelList {
 				tableSwitchCases.add(SwitchCase.of(i, lab));
 //					if(TRACING)
 					LabelDeclaration labelDecl = accumLabels.get(i-1);
-					System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
+//					System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
 			}
 		}			
 		READY_FOR_CODING = true;
-		print("READY_FOR_CODING: Testing");
+//		print("READY_FOR_CODING: Testing");
 //		Util.IERR();
 	}
 	
@@ -246,7 +246,7 @@ public class LabelList {
 			oupt.writeObj(labelList.declaredIn);
 			oupt.writeShort(labelList.declaredLabelSize());			
 			for(LabelDeclaration lab:labelList.declaredLabels) {
-				System.out.println("LabelList.writeLabelList: "+lab+", declaredIn="+lab.declaredIn+"   labelList.declaredIn="+labelList.declaredIn);
+//				System.out.println("LabelList.writeLabelList: "+lab+", declaredIn="+lab.declaredIn+"   labelList.declaredIn="+labelList.declaredIn);
 				oupt.writeObj(lab);
 			}
 		}

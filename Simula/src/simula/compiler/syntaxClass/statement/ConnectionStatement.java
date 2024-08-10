@@ -170,7 +170,7 @@ public final class ConnectionStatement extends Statement {
 			Statement statement = Statement.expectStatement();
 			Global.setScope(prevScope);
 			
-			System.out.println("NEW ConnectionStatement(3): CurrentScope = "+Global.getCurrentScope());
+//			System.out.println("NEW ConnectionStatement(3): CurrentScope = "+Global.getCurrentScope());
 			connectionPart.add(new ConnectionDoPart(this,connectionBlock, statement));
 			connectionBlock.end();
 		} else {
