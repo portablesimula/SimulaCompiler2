@@ -722,6 +722,7 @@ public final class VariableExpression extends Expression {
 			}
 		} else if (!(meaning.declaredIn.declarationKind == ObjectKind.ContextFreeMethod
 				|| meaning.declaredIn.declarationKind == ObjectKind.MemberMethod)) {
+			
 			String cast = meaning.declaredIn.getJavaIdentifier();
 			int n = meaning.declaredIn.getRTBlockLevel();
 			if (meaning.foundBehindInvisible)

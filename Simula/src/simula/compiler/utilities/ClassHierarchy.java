@@ -174,7 +174,7 @@ public abstract class ClassHierarchy {
 			addClassToSuperClass(sub, sup);
 			next = inpt.readString();
 		}
-		Util.TRACE_OUTPUT("END Read ClassHierarchy: ");
+		Util.TRACE_INPUT("END Read ClassHierarchy: ");
 //		print();
 	}
 	

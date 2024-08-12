@@ -105,9 +105,12 @@ public final class AttributeFileIO {
 			}
 		}
 		
-		if(program.module instanceof ProcedureDeclaration pro)  pro.writeObject(oupt);
-		else if(program.module instanceof ClassDeclaration cls) cls.writeObject(oupt);
-		else Util.IERR();
+//		if(program.module instanceof ProcedureDeclaration pro)  pro.writeObject(oupt);
+//		else if(program.module instanceof ClassDeclaration cls) cls.writeObject(oupt);
+//		else Util.IERR();
+		
+		oupt.writeObj(program.module);
+
 		oupt.close();
 		return(byteArrayOutputStream.toByteArray());
 	}
@@ -138,7 +141,7 @@ public final class AttributeFileIO {
 				Util.IERR("No Attribute File found in "+file);
 
 			DeclarationList declarationList=enclosure.declarationList;
-			if (Option.verbose)	Util.TRACE("*** BEGIN Read SimulaAttributeFile: " + file);
+			Util.TRACE_INPUT("*** BEGIN Read SimulaAttributeFile: " + file);
 
 			InputStream inputStream = jarFile.getInputStream(zipEntry);
 			byte[] bytes = inputStream.readAllBytes(); inputStream.close();

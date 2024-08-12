@@ -1528,7 +1528,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		verifyTree(head);
 		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
 		String prfx = (prefix==null) ? "" : "  extends " + prefix;
-		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel() + prfx);
+		String declIn = " declaredIn " + this.declaredIn.identifier;
+		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel() + prfx + declIn);
 		if(labelList != null) labelList.printTree(indent+1,this);
 		for(Parameter p:parameterList) p.printTree(indent+1,this);
 		if (!virtualSpecList.isEmpty())
@@ -1553,12 +1554,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
-	public ClassDeclaration() {
-		super(null);
-	}
 
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ClassDeclaration: " + identifier + ", Declared in: " + declaredIn);
@@ -1603,6 +1598,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();
 		ClassDeclaration cls = new ClassDeclaration(identifier);
+		Util.TRACE_INPUT("BEGIN Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		cls.declarationKind = ObjectKind.Class;
 		cls.OBJECT_SEQU = inpt.readSEQU(cls);
 		

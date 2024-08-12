@@ -1,7 +1,8 @@
-external class adHoc_PRECOMP3;
+external class adHoc_PRECOMP2;
 
-adHoc_PRECOMP3 begin
+adHoc_PRECOMP2 begin
 
 	outtext(" ++++++++++++ MAIN");
+	new tester1;
 		
 end;

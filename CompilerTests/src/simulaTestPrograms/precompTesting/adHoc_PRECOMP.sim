@@ -1,12 +1,12 @@
 
 class adHoc_PRECOMP; begin
-	integer i;
+	boolean ReuseProc;
 
-	goto E;
+	class tester0; begin
 	
-	E:
-%	E1:E2:
-
-	i := 444;
+		reuseProc:=true;
+	
+	end;
+		
 			
 end;
