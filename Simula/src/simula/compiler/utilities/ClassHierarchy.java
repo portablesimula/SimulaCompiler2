@@ -75,7 +75,7 @@ public abstract class ClassHierarchy {
 	public static ClassDesc getRealSuper(ClassDesc sub) {
 		ClassDesc sup = classToSuperClass.get(sub);
 		if(sup == null) return null;
-		if(sup.equals(CD.RTS_CLASS) || sup.equals(CD.RTS_PROCEDURE)) return null;
+		if(sup.equals(RTS.CD.RTS_CLASS) || sup.equals(RTS.CD.RTS_PROCEDURE)) return null;
 		return sup;
 	}
 	

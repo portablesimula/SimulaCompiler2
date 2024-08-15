@@ -1,17 +1,14 @@
 
 begin
-	text T;
-
-		text procedure P_TXT2(par_T); text par_T; begin
-			text P_T;
-			
-			integer procedure P_INT; begin
-				P_TXT2 :- blanks(10);
-				P_TXT2 := "Abra";         !OK;
-			end;
-			
-			P_INT;
-		end;
-
-	outtext(P_TXT2(T));
+	short integer nxtindex;
+	ref(module) array moduletab(0:20);
+	ref(module) X;
+	
+	class module; begin end;
+         
+	ref(module) procedure regnewmodule; begin
+		regnewmodule :- moduletab(nxtindex) :- new module;
+	end;
+	
+	X :- regnewmodule;
 end;

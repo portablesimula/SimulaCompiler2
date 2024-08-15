@@ -16,10 +16,10 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -276,10 +276,10 @@ public final class Constant extends Expression {
 					
 			case Type.T_TEXT -> {
 				codeBuilder
-					.new_(CD.RTS_TXT)
+					.new_(RTS.CD.RTS_TXT)
 					.dup()
 					.ldc(pool.stringEntry((String) value))
-					.invokespecial(pool.methodRefEntry(CD.RTS_TXT, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
+					.invokespecial(RTS.CD.RTS_TXT, "<init>", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"));
 			}
 				
 			default -> Util.IERR();

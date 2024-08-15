@@ -29,6 +29,7 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -120,19 +121,12 @@ public final class GotoStatement extends Statement {
 				codeBuilder.aload(0);
 			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName());
 			label.buildEvaluation(null,codeBuilder);
-			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
+			RTS.invokevirtual_RTS_GOTO(codeBuilder);
 		} else if(label instanceof ConditionalExpression expr) {
 			codeBuilder.aload(0);
 			expr.buildEvaluation(null, codeBuilder);
-			codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-					"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
+			RTS.invokevirtual_RTS_GOTO(codeBuilder);
 		} else Util.IERR(""+label.getClass().getSimpleName()+"  "+label);
-
-//		codeBuilder.aload(0);
-//		label.buildEvaluation(null, codeBuilder);
-//		codeBuilder.invokevirtual(pool.methodRefEntry(BlockDeclaration.currentClassDesc(),
-//				"_GOTO", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)V")));
 	}
 
 	@Override

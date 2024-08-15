@@ -25,6 +25,7 @@ import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
@@ -254,13 +255,11 @@ public final class ActivationStatement extends Statement {
 //        7: aload_0
 //        8: getfield      #7                  // Field bil1_2:LsimulaTestPrograms/adHoc000_Car;
 //       11: invokevirtual #51                 // Method ActivateDirect:(ZLsimula/runtime/RTS_Process;)V
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateDirect");
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
-		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
-				"ActivateDirect", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;)V")));
+		RTS.invokevirtual_RTS_ActivateDirect(codeBuilder);
 	}
 
 	/**
@@ -276,15 +275,13 @@ public final class ActivationStatement extends Statement {
 //        40: ldc2_w        #66                 // double 7.449999809265137d
 //        43: iconst_0
 //        44: invokevirtual #68                 // Method ActivateAt:(ZLsimula/runtime/RTS_Process;DZ)V
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateAt");
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		time.buildEvaluation(null, codeBuilder);
 		Constant.buildIntConst(codeBuilder, prior);
-		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
-				"ActivateAt", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V")));
+		RTS.invokevirtual_RTS_ActivateAt(codeBuilder);
 	}
 
 	/**
@@ -292,15 +289,13 @@ public final class ActivationStatement extends Statement {
 	 * @return the resulting Java source code
 	 */
 	private void buildActivateDelay(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateDelay");
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		time.buildEvaluation(null, codeBuilder);
 		Constant.buildIntConst(codeBuilder, prior);
-		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
-				"ActivateDelay", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V")));
+		RTS.invokevirtual_RTS_ActivateDelay(codeBuilder);
 	}
 
 	/**
@@ -308,14 +303,12 @@ public final class ActivationStatement extends Statement {
 	 * @return the resulting Java source code
 	 */
 	private void buildActivateBefore(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateBefore");
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		object2.buildEvaluation(null, codeBuilder);
-		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
-				"ActivateBefore", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V")));
+		RTS.invokevirtual_RTS_ActivateBefore(codeBuilder);
 	}
 
 	/**
@@ -323,14 +316,12 @@ public final class ActivationStatement extends Statement {
 	 * @return the resulting Java source code
 	 */
 	private void buildActivateAfter(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateAfter");
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		object2.buildEvaluation(null, codeBuilder);
-		codeBuilder.invokevirtual(pool.methodRefEntry(activate1.declaredIn.getClassDesc(),
-				"ActivateAfter", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V")));
+		RTS.invokevirtual_RTS_ActivateAfter(codeBuilder);
 	}
 
 

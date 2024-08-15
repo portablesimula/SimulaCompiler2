@@ -15,8 +15,8 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 // ************************************************************************************
@@ -264,24 +264,7 @@ public class StepUntilElement extends ForListElement {
 		//      imul
 		//      ifle          16  // STM
 		codeBuilder.labelBinding(tstLabel);
-		switch(forStatement.controlVariable.type.keyWord) {
-			case Type.T_INTEGER -> {
-				codeBuilder
-					.iload(DELTA)
-					.invokestatic(BlockDeclaration.currentClassDesc(), "isign", MethodTypeDesc.ofDescriptor("(I)I"));
-			}
-			case Type.T_REAL -> {
-				codeBuilder
-					.fload(DELTA)
-					.invokestatic(BlockDeclaration.currentClassDesc(), "fsign", MethodTypeDesc.ofDescriptor("(F)F"));
-			}
-			case Type.T_LONG_REAL -> {
-				codeBuilder
-					.dload(DELTA)
-					.invokestatic(BlockDeclaration.currentClassDesc(), "dsign", MethodTypeDesc.ofDescriptor("(D)D"));
-			}
-			default -> Util.IERR();
-		}
+		RTS.invokestatic_RTS_sign(forStatement.controlVariable.type, DELTA, codeBuilder);
 		forStatement.controlVariable.buildIdentifierAccess(true, codeBuilder);
 		codeBuilder.getfield(CTRL);
 
@@ -348,7 +331,7 @@ public class StepUntilElement extends ForListElement {
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
 		codeBuilder
-			.new_(CD.FOR_StepUntil)
+			.new_(RTS.CD.FOR_StepUntil)
 			.dup();
 		Parameter.buildNameParam(codeBuilder,controlVariable);
 		Parameter.buildNameParam(codeBuilder,expr1); // PARAMETER: RTS_NAME<T> init
@@ -357,7 +340,7 @@ public class StepUntilElement extends ForListElement {
 
 		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor(
 				"(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
-		codeBuilder.invokespecial(CD.FOR_StepUntil, "<init>", MTD); // Invoke Constructor
+		codeBuilder.invokespecial(RTS.CD.FOR_StepUntil, "<init>", MTD); // Invoke Constructor
 	}
 
 	@Override

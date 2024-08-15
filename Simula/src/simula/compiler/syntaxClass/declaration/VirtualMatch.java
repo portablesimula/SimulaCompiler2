@@ -14,8 +14,8 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.SyntaxClass;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.RTS;
 
 /**
  * Virtual match.
@@ -68,11 +68,11 @@ public final class VirtualMatch extends Declaration {
 				codeBuilder -> {
 					ConstantPoolBuilder pool=codeBuilder.constantPool();
 					codeBuilder
-						.new_(CD.RTS_PRCQNT)
+						.new_(RTS.CD.RTS_PRCQNT)
 						.dup()
 						.aload(0)
 						.ldc(pool.classEntry(match.getClassDesc()))
-						.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"))
+						.invokespecial(RTS.CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"))
 						.areturn();	
 				});
 	}

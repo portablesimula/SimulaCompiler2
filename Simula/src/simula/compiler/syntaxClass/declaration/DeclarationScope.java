@@ -11,9 +11,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
+import java.lang.classfile.constantpool.ConstantPoolBuilder;
+import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.Meaning;
@@ -256,8 +258,11 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited context chain
 	 */
 	public String edCTX() {
-		if (getRTBlockLevel() == 0)
-			return ("_CTX");
+		if(Option.internal.TESTING_CTX) {
+			if (getRTBlockLevel() == 0)	return ("_USR");			
+		} else {
+			if (getRTBlockLevel() == 0)	return ("_CTX");
+		}
 		int curLevel = Global.getCurrentScope().getRTBlockLevel();
 		int ctxDiff = curLevel - getRTBlockLevel();
 		return (edCTX(ctxDiff));
@@ -291,10 +296,19 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 	
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
-		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
+		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
+		int endLevel = endScope.getRTBlockLevel();
+		if(Option.internal.TESTING_CTX) {
+			if(endLevel == 0) {
+				codeBuilder.getstatic(RTS.FRE.RTObject_USR(pool));
+				return(true);
+			}
+		}
+		
+		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		int curLevel = curScope.getRTBlockLevel();
-		int ctxDiff = curLevel - endScope.getRTBlockLevel() - corr;
+		int ctxDiff = curLevel - endLevel - corr;
 //		System.out.println("DeclarationScope.buildCTX: curLevel="+curLevel);
 //		System.out.println("DeclarationScope.buildCTX: endScope.rtBlockLevel="+endScope.getRTBlockLevel());
 		
@@ -306,7 +320,8 @@ public abstract class DeclarationScope extends Declaration  {
 			DeclarationScope encl = curScope;
 			while(encl instanceof ConnectionBlock) encl = encl.declaredIn;
 			codeBuilder
-				.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
+//				.getfield(RTS.CD.RTS_NAME,"_CUR",RTS.CD.RTS_RTObject)
+				.getfield(RTS.FRE.NAME_CUR(pool))
 				.checkcast(encl.getClassDesc());
 			ctxDiff = curScope.getRTBlockLevel() - getRTBlockLevel();
 //			System.out.println("DeclarationScope.buildCTX(1): ctxDiff="+ctxDiff+", curScope="+curScope);
@@ -318,7 +333,8 @@ public abstract class DeclarationScope extends Declaration  {
 		while ((ctxDiff--) > 0) {
 			curScope=curScope.declaredIn;
 //			System.out.println("DeclarationScope.buildCTX(3): ctxDiff="+ctxDiff+", curScope="+curScope);
-			codeBuilder.getfield(CD.RTS_RTObject,"_SL",CD.RTS_RTObject);
+//			codeBuilder.getfield(RTS.CD.RTS_RTObject,"_SL",RTS.CD.RTS_RTObject);
+			codeBuilder.getfield(RTS.FRE.RTObject_SL(pool));
 			withFollowSL = true;			
 		}
 		return(withFollowSL);
@@ -336,14 +352,16 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited context chain
 	 */
 	public static boolean buildCTX2(int ctxDiff,CodeBuilder codeBuilder) {
+		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		DeclarationScope curScope=Global.getCurrentScope();
 		boolean withFollowSL = false;
-		ClassDesc CD_RTObject=CD.RTS_RTObject;
+//		ClassDesc CD_RTObject=RTS.CD.RTS_RTObject;
 		codeBuilder.aload(0);
 		while ((ctxDiff--) > 0) {
 			curScope=curScope.declaredIn;
 			withFollowSL = true;			
-			codeBuilder.getfield(CD_RTObject,"_SL",CD_RTObject);
+//			codeBuilder.getfield(CD_RTObject,"_SL",CD_RTObject);
+			codeBuilder.getfield(RTS.FRE.RTObject_SL(pool));
 		}
 		return(withFollowSL);
 	}
@@ -377,7 +395,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** ByteCoding Utility: getClassDesc   -- Redefined in StandardClass and ConnectionBlock
 	// ***********************************************************************************************
 	public ClassDesc getClassDesc() {
-		return(CD.classDesc(externalIdent));
+		return(RTS.CD.classDesc(externalIdent));
 	}
 	
 	public void printStaticChain(String title,int details) {

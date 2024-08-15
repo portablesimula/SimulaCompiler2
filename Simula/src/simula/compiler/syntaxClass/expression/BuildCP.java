@@ -136,7 +136,6 @@ public abstract class BuildCP {
 	 *
 	 */
 	private static void callRemoteStandardProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		System.out.println("BuildCP.callRemoteStandardProcedure: "+beforeDot);
 		if (beforeDot instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
@@ -147,7 +146,7 @@ public abstract class BuildCP {
 					case ObjectKind.MemberMethod -> {
 						var.buildIdentifierAccess(false, codeBuilder);
 						codeBuilder
-							.invokevirtual(pool.methodRefEntry(owner, prx.identifier, prx.getMethodTypeDesc(null,variable.checkedParams)));
+							.invokevirtual(owner, prx.identifier, prx.getMethodTypeDesc(null,variable.checkedParams));
 					}
 					case ObjectKind.ContextFreeMethod -> {
 						codeBuilder
@@ -163,7 +162,7 @@ public abstract class BuildCP {
 			par.buildEvaluation(null,codeBuilder);
 		}
 		ClassDesc owner=ClassDesc.of("simula.runtime."+pro.declaredIn.externalIdent);
-		codeBuilder.invokevirtual(pool.methodRefEntry(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams)));
+		codeBuilder.invokevirtual(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams));
 		if(pro.type != null && variable.backLink == null)
 //			codeBuilder.pop();
 			pro.type.pop(codeBuilder);
@@ -178,7 +177,6 @@ public abstract class BuildCP {
 	 *
 	 */
 	static void normalStandardProcedure(final VariableExpression variable,CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
 		if (meaning.isConnected()) {
@@ -203,7 +201,7 @@ public abstract class BuildCP {
 			}
 			ClassDesc owner = meaning.declaredIn.getClassDesc();
 			codeBuilder
-				.invokevirtual(pool.methodRefEntry(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams)));
+				.invokevirtual(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams));
 			if(pro.type != null && variable.backLink == null)
 //				codeBuilder.pop();
 				pro.type.pop(codeBuilder);
@@ -312,7 +310,7 @@ public abstract class BuildCP {
 //			ClassDesc CD_prc=procedure.getClassDesc();
 //			codeBuilder.new_(CD_prc);
 //			if(variable.backLink != null) codeBuilder.dup();
-//			codeBuilder.getstatic(CD.RTS_RTObject,"_CUR",CD.RTS_RTObject);
+//			codeBuilder.getstatic(RTS.CD.RTS_RTObject,"_CUR",RTS.CD.RTS_RTObject);
 //
 //			// Push parameters
 //			for(Expression expr:variable.checkedParams)

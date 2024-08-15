@@ -22,6 +22,7 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -263,21 +264,24 @@ public final class RelationalOperation extends Expression {
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
 
-		String textRelMethod=null;
-		switch (opr) {
-			case KeyWord.GE -> textRelMethod="_TXTREL_GE";
-			case KeyWord.NE -> textRelMethod="_TXTREL_NE";
-			case KeyWord.GT -> textRelMethod="_TXTREL_GT";
-			case KeyWord.LE -> textRelMethod="_TXTREL_LE";
-			case KeyWord.EQ -> textRelMethod="_TXTREL_EQ";
-			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
-			case KeyWord.EQR -> textRelMethod="TRF_EQ";
-			case KeyWord.NER -> textRelMethod="TRF_NE";
-			default -> Util.IERR();
-		}
-		ClassDesc CD = BlockDeclaration.currentClassDesc();
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
-		codeBuilder.invokestatic(CD, textRelMethod, MTD);
+//		String textRelMethod=null;
+//		switch (opr) {
+//			case KeyWord.GE -> textRelMethod="_TXTREL_GE";
+//			case KeyWord.NE -> textRelMethod="_TXTREL_NE";
+//			case KeyWord.GT -> textRelMethod="_TXTREL_GT";
+//			case KeyWord.LE -> textRelMethod="_TXTREL_LE";
+//			case KeyWord.EQ -> textRelMethod="_TXTREL_EQ";
+//			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
+//			case KeyWord.EQR -> textRelMethod="TRF_EQ";
+//			case KeyWord.NER -> textRelMethod="TRF_NE";
+//			default -> Util.IERR();
+//		}
+////		ClassDesc CD = BlockDeclaration.currentClassDesc();
+//		ClassDesc CD = RTS.CD.RTS_RTObject;
+//		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
+//		codeBuilder.invokestatic(CD, textRelMethod, MTD);
+		
+		RTS.buildInvokeTextRel(opr, codeBuilder);
 	}
 
 

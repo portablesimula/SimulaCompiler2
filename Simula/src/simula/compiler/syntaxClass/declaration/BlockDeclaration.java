@@ -21,7 +21,7 @@ import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.utilities.CD;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
@@ -390,7 +390,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	protected void buildMethod_STM(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
-			ConstantPoolBuilder pool = codeBuilder.constantPool();
 			Label begScope = codeBuilder.newLabel();
 			Label endScope = codeBuilder.newLabel();
 			Label checkStackSize = null; // TESTING_STACK_SIZE
@@ -408,9 +407,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				if (hasAccumLabel())	
 					 build_TRY_CATCH(codeBuilder, begScope, endScope);
 				else build_STM_BODY(codeBuilder, begScope, endScope);
-				codeBuilder
-					.aload(0)
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")));
+				codeBuilder.aload(0);
+				RTS.invokevirtual_RTObject_EBLK(codeBuilder);
 					
 				if(Option.internal.TESTING_STACK_SIZE) {
 					codeBuilder.labelBinding(checkStackSize);  // TESTING_STACK_SIZE
@@ -459,8 +457,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		
 		local_THIS = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
 		local_LABEL_q = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
-		codeBuilder.localVariable(local_THIS,"_THIS",CD.RTS_RTObject,begScope,endScope);
-		codeBuilder.localVariable(local_LABEL_q,"label_q",CD.RTS_LABEL,begScope,endScope);
+		codeBuilder.localVariable(local_THIS,"_THIS",RTS.CD.RTS_RTObject,begScope,endScope);
+		codeBuilder.localVariable(local_LABEL_q,"label_q",RTS.CD.RTS_LABEL,begScope,endScope);
 		
 	    // adHoc000 _THIS=(adHoc000)_CUR;
 		codeBuilder
@@ -471,7 +469,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		codeBuilder
 			.labelBinding(loopWhile)
 			.aload(0)
-			.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+//			.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+			.getfield(RTS.FRE.RTObject_JTX(pool))
 			.iflt(loopEnd);
 		
 		codeBuilder.trying(
@@ -481,7 +480,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					// break _LOOP;
 					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
 				},
-				catchBuilder -> catchBuilder.catching(CD.RTS_LABEL,
+				catchBuilder -> catchBuilder.catching(RTS.CD.RTS_LABEL,
 						blockCodeBuilder -> buildCatchBlock(blockCodeBuilder,loopWhile)));
 		codeBuilder.labelBinding(loopEnd);
 	}
@@ -500,15 +499,17 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			.astore(local_LABEL_q)
 			.aload(local_THIS)
 			.aload(local_LABEL_q)
-			.invokestatic(CD.RTS_RTObject,
+			.invokestatic(RTS.CD.RTS_RTObject,
 					"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
 
 		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
 		codeBuilder
 			.aload(0)
 			.aload(local_LABEL_q)
-			.getfield(pool.fieldRefEntry(CD.RTS_LABEL,"index", ConstantDescs.CD_int))
-			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+//			.getfield(pool.fieldRefEntry(RTS.CD.RTS_LABEL,"index", ConstantDescs.CD_int))
+//			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+			.getfield(RTS.FRE.LABEL_index(pool))
+			.putfield(RTS.FRE.RTObject_JTX(pool))
 			.goto_(contLabel);
 	}
 	
@@ -558,6 +559,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	void buildMethodMain(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
 
 		codeBuilder
 				.localVariable(0,"argv",ConstantDescs.CD_String.arrayType(),begScope,endScope)
@@ -571,8 +573,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			// new adHoc06(_CTX)._STM();
 			.new_(currentClassDesc())
 			.dup()
-//			.getstatic(currentClassDesc(),"_CTX",CD.RTS_CLASS);
-			.getstatic(CD.RTS_RTObject,"_CTX",CD.RTS_BASICIO);
+//			.getstatic(currentClassDesc(),"_CTX",RTS.CD.RTS_CLASS);
+//			.getstatic(RTS.CD.RTS_RTObject,"_CTX",RTS.CD.RTS_BASICIO);
+			.getstatic(RTS.FRE.RTObject_CTX(pool));
 
 		if(this instanceof PrefixedBlockDeclaration pblk) {
 			//  new adHoc05_PBLK14(_CUR,p1,...)._STM();
@@ -588,25 +591,19 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		}
 
 		//  try _STM(); catch(Throwable t) {   }
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder
 			.astore(1)
 			.trying(
 				blockCodeBuilder -> {
 					blockCodeBuilder
 						.aload(1)
-						.invokevirtual(pool.methodRefEntry(currentClassDesc()
-								, "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;")))
+						.invokevirtual(currentClassDesc(), "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"))
 						.pop();
 				},
-				catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_THROWABLE,
+				catchBuilder -> catchBuilder.catching(RTS.CD.JAVA_LANG_THROWABLE,
 					blockCodeBuilder -> {
-						blockCodeBuilder
-						//	.astore(2)
-						//	.aload(2)
-							.aload(1)
-							.invokestatic(CD.RTS_RTObject, "treatException",
-								MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));
+						blockCodeBuilder.aload(1); // Throwable
+						RTS.invokestatic_RTS_treatException(blockCodeBuilder);
 					}))
 			.return_()
 			.labelBinding(endScope);

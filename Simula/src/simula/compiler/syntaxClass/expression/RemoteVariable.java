@@ -24,11 +24,11 @@ import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -284,7 +284,7 @@ public final class RemoteVariable extends Expression {
 			for(Expression expr:variable.checkedParams)
 				expr.buildEvaluation(null,codeBuilder);
 
-		codeBuilder.invokestatic(CD.RTS_TXT, pro.identifier, pro.getMethodTypeDesc(beforeDot,variable.checkedParams));
+		codeBuilder.invokestatic(RTS.CD.RTS_TXT, pro.identifier, pro.getMethodTypeDesc(beforeDot,variable.checkedParams));
 		if(pro.type != null && backLink == null) {
 			codeBuilder.pop();
 		}

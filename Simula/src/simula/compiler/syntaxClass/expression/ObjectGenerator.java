@@ -23,12 +23,12 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -241,12 +241,14 @@ public final class ObjectGenerator extends Expression {
 			Parameter formalParameter = formalIterator.next();
 			if (formalParameter.mode == Parameter.Mode.value) {
 				if (par.type.keyWord == Type.T_TEXT) {
-					codeBuilder.invokestatic(CD.RTS_RTObject,
-								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+//					codeBuilder.invokestatic(RTS.CD.RTS_RTObject,
+//								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+					RTS.invokestatic_RTS_TXT_copy(codeBuilder);
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
-					codeBuilder.invokevirtual(CD.RTS_ARRAY,
-							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
+//					codeBuilder.invokevirtual(RTS.CD.RTS_ARRAY,
+//							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
+					RTS.invokevirtual_ARRAY_copy(codeBuilder);
 				}
 			}
 		}
@@ -257,10 +259,10 @@ public final class ObjectGenerator extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(cls.isDetachUsed()) {
 			String resultType="Lsimula/runtime/RTS_RTObject;";
-			codeBuilder.invokevirtual(pool.methodRefEntry(CD_cls, "_START", MethodTypeDesc.ofDescriptor("()" + resultType)));
+			codeBuilder.invokevirtual(CD_cls, "_START", MethodTypeDesc.ofDescriptor("()" + resultType));
 		} else {
 			String resultType="Lsimula/runtime/RTS_RTObject;";
-			codeBuilder.invokevirtual(pool.methodRefEntry(CD_cls, "_STM", MethodTypeDesc.ofDescriptor("()" + resultType)));
+			codeBuilder.invokevirtual(CD_cls, "_STM", MethodTypeDesc.ofDescriptor("()" + resultType));
 		}
 		if(backLink == null) codeBuilder.pop();
 		else codeBuilder.checkcast(CD_cls);

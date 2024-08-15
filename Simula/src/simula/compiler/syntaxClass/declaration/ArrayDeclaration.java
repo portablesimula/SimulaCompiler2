@@ -30,13 +30,13 @@ import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -285,7 +285,7 @@ public final class ArrayDeclaration extends Declaration {
 	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		classBuilder.withField(identifier, CD.RTS_ARRAY(type), fieldBuilder -> {
+		classBuilder.withField(identifier, RTS.CD.RTS_ARRAY(type), fieldBuilder -> {
 			fieldBuilder
 				.withFlags(ClassFile.ACC_PUBLIC)
 				.with(SignatureAttribute.of(type.toArrayClassSignature()));
@@ -296,7 +296,7 @@ public final class ArrayDeclaration extends Declaration {
 	@Override
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
 		String arrayIdent = this.getJavaIdentifier();
-		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
+		ClassDesc CD_ArrayType=RTS.CD.RTS_ARRAY(type);
 		codeBuilder
 			.aload(0)
 			.aconst_null()
@@ -309,7 +309,7 @@ public final class ArrayDeclaration extends Declaration {
 	}
 
 	public static ClassDesc getClassDesc(Type type) {
-		return(CD.RTS_ARRAY(type));
+		return(RTS.CD.RTS_ARRAY(type));
 	}
 
 	@Override
@@ -363,26 +363,26 @@ public final class ArrayDeclaration extends Declaration {
 		// 75: putfield      #7                  // Field A:Lsimula/runtime/RTS_INTEGER_ARRAY;
 
 //		System.out.println("ArrayDeclaration.buildDeclarationCode: "+this.type+" "+this.identifier+", declaredIn="+this.declaredIn+" ++++++++++++++++++++++++++++++++++++++++++++++++++");
-		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
+		ClassDesc CD_ArrayType=RTS.CD.RTS_ARRAY(type);
 
 		codeBuilder
 				.aload(0)
 				.new_(CD_ArrayType)
 				.dup();
 		Constant.buildIntConst(codeBuilder, boundPairList.size());
-		codeBuilder.anewarray(CD.RTS_BOUNDS);
+		codeBuilder.anewarray(RTS.CD.RTS_BOUNDS);
 
 		for(int i=0;i<boundPairList.size();i++) {
 			BoundPair bp = boundPairList.get(i);
 			codeBuilder.dup();
 			Constant.buildIntConst(codeBuilder, i);
 			codeBuilder
-				.new_(CD.RTS_BOUNDS)
+				.new_(RTS.CD.RTS_BOUNDS)
 				.dup();
 			bp.LB.buildEvaluation(null,codeBuilder);
 			bp.UB.buildEvaluation(null,codeBuilder);
 			codeBuilder
-				.invokespecial(CD.RTS_BOUNDS, "<init>", MethodTypeDesc.ofDescriptor("(II)V"))
+				.invokespecial(RTS.CD.RTS_BOUNDS, "<init>", MethodTypeDesc.ofDescriptor("(II)V"))
 				.aastore();
 		}
 		codeBuilder
@@ -397,9 +397,9 @@ public final class ArrayDeclaration extends Declaration {
 	private static void buildGetArrayField(Type type,Meaning meaning,DeclarationScope declaredIn,String arrayIdent,boolean isParameter,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		System.out.println("ArrayDeclaration.buildGetArrayField: type="+type+", isParameter="+isParameter);
-		ClassDesc CD_Type=CD.RTS_ARRAY(type);
+		ClassDesc CD_Type=RTS.CD.RTS_ARRAY(type);
 		if(isParameter) {
-			FieldRefEntry FRE_Arr1=pool.fieldRefEntry(declaredIn.getClassDesc(), arrayIdent, CD.RTS_ARRAY);
+			FieldRefEntry FRE_Arr1=pool.fieldRefEntry(declaredIn.getClassDesc(), arrayIdent, RTS.CD.RTS_ARRAY);
 			codeBuilder
 				.getfield(FRE_Arr1)
 				.checkcast(CD_Type);					
@@ -471,16 +471,14 @@ public final class ArrayDeclaration extends Declaration {
 	}
 
 	public static void arrayPutElement2(Meaning meaning,Vector<Expression> checkedParams, Expression rhs, CodeBuilder codeBuilder) {
-		Type type=meaning.declaredAs.type;
-		ClassDesc CD_ArrayType=CD.RTS_ARRAY(type);
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
 		prepIndexing(checkedParams,codeBuilder);
-		codeBuilder.invokevirtual(pool.methodRefEntry(CD_ArrayType, "index", MethodTypeDesc.ofDescriptor("([I)I")));
+		
+		Type type=meaning.declaredAs.type;
+		RTS.invokevirtual_ARRAY_index(type, codeBuilder);
 		
 		rhs.buildEvaluation(null,codeBuilder);
-		String eltType = (type.isRefClassType())?"Ljava/lang/Object;":type.toJVMType();
-		codeBuilder.invokevirtual(pool.methodRefEntry(CD_ArrayType, "putELEMENT", MethodTypeDesc.ofDescriptor("(I"+eltType+")"+eltType)));
+		RTS.invokevirtual_ARRAY_putELEMENT(type, codeBuilder);
 	}
 	
 	
@@ -522,14 +520,8 @@ public final class ArrayDeclaration extends Declaration {
 	}
 	
 	public static void arrayGetElement2(Type type,String arrayIdent,Vector<Expression> checkedParams, CodeBuilder codeBuilder) {
-		String eltType = type.toJVMType();
-		MethodTypeDesc MTD=(type.isRefClassType())?MethodTypeDesc.ofDescriptor("([I)Ljava/lang/Object;")
-		                                          :MethodTypeDesc.ofDescriptor("([I)"+eltType);
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		prepIndexing(checkedParams,codeBuilder);
-		codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_ARRAY(type), "getELEMENT", MTD));
-		if(type.isReferenceType())
-			codeBuilder.checkcast(type.toClassDesc());
+		RTS.invokevirtual_ARRAY_getELEMENT(type, codeBuilder);
 	}
 
 

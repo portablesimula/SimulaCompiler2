@@ -16,8 +16,8 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
@@ -79,14 +79,14 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	public byte[] buildClassFile() {
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_NAME);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, RTS.CD.RTS_NAME);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER + ClassFile.ACC_FINAL)
-						.withSuperclass(CD.RTS_NAME)
+						.withSuperclass(RTS.CD.RTS_NAME)
 						.with(SignatureAttribute.of(ClassSignature.parseFrom("Lsimula/runtime/RTS_NAME<"+Type.toJVMClassType(expr.type,kind)+">;")))
 						.withMethodBody("<init>", MethodTypeDesc.ofDescriptor("("+BlockDeclaration.currentClassDesc().descriptorString()+")V"), 0,
 							codeBuilder -> buildConstructor(codeBuilder))
@@ -152,19 +152,18 @@ public final class Thunk extends DeclarationScope {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	private void buildConstructor(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();
 		codeBuilder
 			.labelBinding(begScope)
 			.localVariable(0,"this",CD_ThisClass,begScope,endScope)
-			.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+			.localVariable(1,"staticLink",RTS.CD.RTS_RTObject,begScope,endScope);
 
 		// super(staticLink);
 		codeBuilder
 			.aload(0)
-			.invokespecial(pool.methodRefEntry(CD.RTS_NAME,"<init>", MethodTypeDesc.ofDescriptor("()V")));
+			.invokespecial(RTS.CD.RTS_NAME,"<init>", MethodTypeDesc.ofDescriptor("()V"));
 
 		codeBuilder
 			.return_()
@@ -192,7 +191,7 @@ public final class Thunk extends DeclarationScope {
 
 			if(kind==0) {
 				expr.buildEvaluation(null,codeBuilder);
-	        	expr.type.buildObjectValueOf(codeBuilder);
+				expr.type.buildObjectValueOf(codeBuilder);
 			} else {
 				switch(kind) { // Parameter.Kind
 					case Parameter.Kind.Array ->		expr.buildEvaluation(null,codeBuilder);
@@ -202,7 +201,7 @@ public final class Thunk extends DeclarationScope {
 														expr.type.buildObjectValueOf(codeBuilder); }
 					default -> {
 						expr.buildEvaluation(null,codeBuilder);
-			        	expr.type.buildObjectValueOf(codeBuilder);
+						expr.type.buildObjectValueOf(codeBuilder);
 					}
 				}
 			}
@@ -236,7 +235,7 @@ public final class Thunk extends DeclarationScope {
 			codeBuilder
 				.labelBinding(begScope)
 				.localVariable(0,"this",CD_ThisClass,begScope,endScope)
-				.localVariable(1,"parameter_x",CD.RTS_RTObject,begScope,endScope);
+				.localVariable(1,"parameter_x",RTS.CD.RTS_RTObject,begScope,endScope);
 			
 			if(Option.internal.TESTING_STACK_SIZE) {
 				checkStackSize = codeBuilder.newLabel();
@@ -292,9 +291,8 @@ public final class Thunk extends DeclarationScope {
 
 			if(nameParameter != null) {
 				expr.type.buildObjectValueOf(codeBuilder);
-				codeBuilder
-					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")))
-					.pop();
+				RTS.invokevirtual_NAME_put(codeBuilder);
+				codeBuilder.pop();
 			} else {
 				DeclarationScope declaredIn = meaning.declaredIn;
 				ClassDesc owner = declaredIn.getClassDesc();
@@ -320,50 +318,48 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_put2    Build syntetic bridge to the 'put' method
 	// ***********************************************************************************************
-	void buildMethod_put2(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
+	private void buildMethod_put2(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();
 		codeBuilder
 			.labelBinding(begScope)
 			.localVariable(0,"this",CD_ThisClass,begScope,endScope)
-			.localVariable(1,"parameter_x",CD.RTS_RTObject,begScope,endScope)
+			.localVariable(1,"parameter_x",RTS.CD.RTS_RTObject,begScope,endScope)
 			.aload(0)
 			.aload(1); // Parameter x			
-		
+		ClassDesc owner = CD_ThisClass;
 		switch(expr.type.keyWord) {
 			case Type.T_INTEGER -> 
 				codeBuilder
 					.checkcast(ConstantDescs.CD_Integer)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Integer;)Ljava/lang/Integer;")));
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Integer;)Ljava/lang/Integer;"));
 			case Type.T_REAL ->
 				codeBuilder
 					.checkcast(ConstantDescs.CD_Float)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Float;)Ljava/lang/Float;")));
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Float;)Ljava/lang/Float;"));
 			case Type.T_LONG_REAL ->
 				codeBuilder
 					.checkcast(ConstantDescs.CD_Double)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Double;)Ljava/lang/Double;")));
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Double;)Ljava/lang/Double;"));
 			case Type.T_BOOLEAN ->
 				codeBuilder
 					.checkcast(ConstantDescs.CD_Boolean)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Boolean;)Ljava/lang/Boolean;")));
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Boolean;)Ljava/lang/Boolean;"));
 			case Type.T_CHARACTER ->
 				codeBuilder
 					.checkcast(ConstantDescs.CD_Character)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;")));
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Character;)Ljava/lang/Character;"));
 			case Type.T_LABEL ->
 				codeBuilder
-					.checkcast(CD.RTS_LABEL)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put",
-							MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;")));
+					.checkcast(RTS.CD.RTS_LABEL)
+					.invokevirtual(owner, "put", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_LABEL;)Lsimula/runtime/RTS_LABEL;"));
 			case Type.T_TEXT, Type.T_REF -> {
 				ClassDesc CD=expr.type.toClassDesc();
 				String CDS=CD.descriptorString();
 				MethodTypeDesc MTD_put=MethodTypeDesc.ofDescriptor("("+CDS+')'+CDS);
 				codeBuilder
 					.checkcast(CD)
-					.invokevirtual(pool.methodRefEntry(CD_ThisClass, "put", MTD_put));
+					.invokevirtual(owner, "put", MTD_put);
 			}
 			default -> Util.IERR();
 		}
@@ -397,16 +393,15 @@ public final class Thunk extends DeclarationScope {
 				DeclarationScope curScope=Global.getCurrentScope();
 				// The current scope. In case of Thunk one level up to Thunk.ENV
 				if(curScope instanceof Thunk) curScope = curScope.declaredIn;
-				ClassDesc CD_ENV = CD.classDesc(curScope.externalIdent);
+				ClassDesc CD_ENV = RTS.CD.classDesc(curScope.externalIdent);
 				codeBuilder
 					.aload(0)
-					.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
+					.getfield(RTS.FRE.NAME_CUR(pool))
 					.checkcast(CD_ENV)
 					.getfield(par.getFieldRefEntry(pool));
 				if (par.mode == Parameter.Mode.name) {
-					codeBuilder
-						.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
-						.checkcast(CD.RTS_PRCQNT);
+					RTS.invokevirtual_NAME_get(codeBuilder);
+					codeBuilder.checkcast(RTS.CD.RTS_PRCQNT);
 				}
 			} else if (decl instanceof ProcedureDeclaration procedure) {
 				if(procedure.myVirtual!=null) {
@@ -419,13 +414,12 @@ public final class Thunk extends DeclarationScope {
 
 				} else {
 					codeBuilder
-						.new_(CD.RTS_PRCQNT)
+						.new_(RTS.CD.RTS_PRCQNT)
 						.dup();
 					var.buildIdentifierAccess(false, codeBuilder);
 					codeBuilder
-						.ldc(CD.classDesc(procIdent))
-						.invokespecial(pool.methodRefEntry(CD.RTS_PRCQNT,
-								"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V")));
+						.ldc(RTS.CD.classDesc(procIdent))
+						.invokespecial(RTS.CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
 				}
 			} else Util.IERR();
 			
@@ -440,12 +434,12 @@ public final class Thunk extends DeclarationScope {
 					vir.buildCallMethod(owner, codeBuilder);
     	    	} else {
     				codeBuilder
-    					.new_(CD.RTS_PRCQNT)
+    					.new_(RTS.CD.RTS_PRCQNT)
     					.dup();
     				// Check for <ObjectExpression> DOT <Variable>
     				rem.obj.buildEvaluation(null,codeBuilder);
     				codeBuilder.ldc(procedure.getClassDesc());
-    				codeBuilder.invokespecial(CD.RTS_PRCQNT
+    				codeBuilder.invokespecial(RTS.CD.RTS_PRCQNT
     						, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
     	    	}
 			} else Util.IERR();

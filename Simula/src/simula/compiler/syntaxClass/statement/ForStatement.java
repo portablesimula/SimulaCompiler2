@@ -26,12 +26,12 @@ import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 
@@ -338,7 +338,6 @@ public final class ForStatement extends Statement {
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if (forList.size() == 1) {
 			ForListElement singleElement = forList.firstElement();
 			singleElement.doSingleElementByteCoding(codeBuilder);
@@ -361,11 +360,11 @@ public final class ForStatement extends Statement {
 		ASSERT_SEMANTICS_CHECKED();
 		
 		codeBuilder
-			.new_(CD.FOR_List)
+			.new_(RTS.CD.FOR_List)
 			.dup();
 		Constant.buildIntConst(codeBuilder, this.forList.size());
 		codeBuilder
-			.anewarray(CD.FOR_Element)
+			.anewarray(RTS.CD.FOR_Element)
 			.dup();
 
 		int n = this.forList.size();
@@ -378,23 +377,23 @@ public final class ForStatement extends Statement {
 			if(i<(n-1)) codeBuilder.dup();
 		}
 		MethodTypeDesc MTD = MethodTypeDesc.ofDescriptor("([Lsimula/runtime/FOR_Element;)V");
-		codeBuilder.invokespecial(CD.FOR_List, "<init>", MTD); // Invoke ForList'Constructor
+		codeBuilder.invokespecial(RTS.CD.FOR_List, "<init>", MTD); // Invoke ForList'Constructor
 		
 		Label contLabel = codeBuilder.newLabel();
 		Label stmLabel = codeBuilder.newLabel();
 		Label endLabel = codeBuilder.newLabel();
 		int index1 = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+		RTS.invokevirtual_FOR_List_iterator(codeBuilder);
 		codeBuilder
-			.invokevirtual(pool.methodRefEntry(CD.FOR_List, "iterator", MethodTypeDesc.ofDescriptor("()Ljava/util/Iterator;")))
 			.astore(index1)
 			.labelBinding(contLabel)
 			.aload(index1)
-			.invokeinterface(CD.JAVA_UTIL_ITERATOR, "hasNext", MethodTypeDesc.ofDescriptor("()Z"))
+			.invokeinterface(RTS.CD.JAVA_UTIL_ITERATOR, "hasNext", MethodTypeDesc.ofDescriptor("()Z"))
 			.ifeq(endLabel)
 			.aload(index1)
-			.invokeinterface(CD.JAVA_UTIL_ITERATOR, "next", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"))
+			.invokeinterface(RTS.CD.JAVA_UTIL_ITERATOR, "next", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"))
 			.checkcast(ConstantDescs.CD_Boolean)
-			.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")))
+			.invokevirtual(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"))
 			.ifne(stmLabel)
 			.goto_(contLabel)
 			.labelBinding(stmLabel);

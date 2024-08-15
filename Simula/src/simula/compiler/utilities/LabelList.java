@@ -135,9 +135,9 @@ public class LabelList {
 			for (int i = 1; i <= accumLabels.size(); i++) {
 				Label lab = codeBuilder.newLabel();
 				tableSwitchCases.add(SwitchCase.of(i, lab));
-//					if(TRACING)
-					LabelDeclaration labelDecl = accumLabels.get(i-1);
-//					System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
+//				if(TRACING)
+//				LabelDeclaration labelDecl = accumLabels.get(i-1);
+//				System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
 			}
 		}			
 		READY_FOR_CODING = true;
@@ -164,10 +164,11 @@ public class LabelList {
 		int lowValue = 1;            // the minimum key value.
 		int highValue = accumLabelSize(); // the maximum key value.
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
+//		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder
 			.aload(0)
-			.getfield(FDE_JTX)
+//			.getfield(FDE_JTX)
+			.getfield(RTS.FRE.RTObject_JTX(pool))
 			.tableswitch(lowValue, highValue, defaultTarget, this.getTableSwitchCases(codeBuilder))
 			.labelBinding(defaultTarget);
 	}

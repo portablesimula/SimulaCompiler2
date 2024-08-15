@@ -24,7 +24,7 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
-import simula.compiler.utilities.CD;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
@@ -259,13 +259,17 @@ public final class AssignmentOperation extends Expression {
 				Declaration declaredAs = var.meaning.declaredAs;
 				if(declaredAs instanceof ProcedureDeclaration proc) {
 					isRESULT = true;
-					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
-					codeBuilder
-						.aload(0);
-					while((diff--) > 0)	codeBuilder.getfield(CD.RTS_RTObject, "_SL", CD.RTS_RTObject);
-					codeBuilder
-						.checkcast(proc.getClassDesc())
-						.getfield(proc.getClassDesc(), "_RESULT", proc.type.toClassDesc());
+					
+//					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
+//					codeBuilder.aload(0);
+////				while((diff--) > 0)	codeBuilder.getfield(RTS.CD.RTS_RTObject, "_SL", RTS.CD.RTS_RTObject);
+//					while((diff--) > 0)	codeBuilder.getfield(FRE.SL(pool));
+//					codeBuilder.checkcast(proc.getClassDesc());
+					
+					boolean withFollowSL = proc.buildCTX(codeBuilder);
+					if(withFollowSL) codeBuilder.checkcast(proc.getClassDesc());
+
+					codeBuilder.getfield(proc.getClassDesc(), "_RESULT", proc.type.toClassDesc());
 				}
 			}
 		}
@@ -278,21 +282,23 @@ public final class AssignmentOperation extends Expression {
 					lhs.buildEvaluation(null,codeBuilder);
 				codeBuilder.ldc(pool.stringEntry(value.toString()));
 
-				ClassDesc CD = BlockDeclaration.currentClassDesc();
-				MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
-				codeBuilder.invokestatic(CD, "_ASGSTR", MTD);
+//				ClassDesc CD = BlockDeclaration.currentClassDesc();
+//				MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
+//				codeBuilder.invokestatic(CD, "_ASGSTR", MTD);
+				RTS.invokestatic_RTS_ASGSTR(codeBuilder);
 				if(this.backLink == null) codeBuilder.pop();
 				return;
 			}
 		}
 		
-		if(!isRESULT)
+		if(! isRESULT)
 			lhs.buildEvaluation(this,codeBuilder);
 		
 		rhs.buildEvaluation(null,codeBuilder);
-		ClassDesc CD = BlockDeclaration.currentClassDesc();
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
-		codeBuilder.invokestatic(CD, "_ASGTXT", MTD);
+//		ClassDesc CD = BlockDeclaration.currentClassDesc();
+//		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
+//		codeBuilder.invokestatic(CD, "_ASGTXT", MTD);
+		RTS.invokestatic_RTS_ASGTXT(codeBuilder);
 		if(this.backLink == null) codeBuilder.pop();
 	}
 
@@ -343,10 +349,15 @@ public final class AssignmentOperation extends Expression {
 						
 				case ObjectKind.Procedure -> {
 					ProcedureDeclaration proc = (ProcedureDeclaration) decl;
-					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
-					codeBuilder.aload(0);
-					while((diff--) > 0)	codeBuilder.getfield(CD.RTS_RTObject, "_SL", CD.RTS_RTObject);
-					codeBuilder.checkcast(proc.getClassDesc());
+					
+//					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
+//					codeBuilder.aload(0);
+////				while((diff--) > 0)	codeBuilder.getfield(RTS.CD.RTS_RTObject, "_SL", RTS.CD.RTS_RTObject);
+//					while((diff--) > 0)	codeBuilder.getfield(FRE.SL(pool));
+//					codeBuilder.checkcast(proc.getClassDesc());
+
+					boolean withFollowSL = proc.buildCTX(codeBuilder);
+					if(withFollowSL) codeBuilder.checkcast(proc.getClassDesc());
 
 					rhs.buildEvaluation(null,codeBuilder);
 					
@@ -409,17 +420,14 @@ public final class AssignmentOperation extends Expression {
 	
 	private void buildSimpleParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		FieldRefEntry FDE=par.getFieldRefEntry(pool);
+		FieldRefEntry FRE_par = par.getFieldRefEntry(pool);
 		if(par.mode == Parameter.Mode.name) {
 			codeBuilder
 				.aload(0)
-				.getfield(FDE);
+				.getfield(FRE_par);
 			rhs.buildEvaluation(null,codeBuilder); // Result may be int,float, ...		
         	par.type.buildObjectValueOf(codeBuilder);
-
-			codeBuilder
-				.invokevirtual(pool.methodRefEntry(CD.RTS_NAME
-					, "put", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Ljava/lang/Object;")));
+			RTS.invokevirtual_NAME_put(codeBuilder);
 			
 			// Prepare for multiple assignment
 			if(this.backLink == null) {
@@ -440,7 +448,7 @@ public final class AssignmentOperation extends Expression {
 //				else codeBuilder.dup_x1();
 				type.dup_x1(codeBuilder);
 			}
-			codeBuilder.putfield(FDE);
+			codeBuilder.putfield(FRE_par);
 		}
 	}
 	
@@ -458,9 +466,10 @@ public final class AssignmentOperation extends Expression {
 
 			codeBuilder
 				.aload(0)
-				.getfield(par.getFieldRefEntry(pool))
-				.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
-				.checkcast(CD.RTS_ARRAY(par.type))
+				.getfield(par.getFieldRefEntry(pool));
+			RTS.invokevirtual_NAME_get(codeBuilder);
+			codeBuilder
+				.checkcast(RTS.CD.RTS_ARRAY(par.type))
 				.dup();
 			ArrayDeclaration.arrayPutElement2(var.meaning,var.checkedParams,rhs,codeBuilder);
 		} else {

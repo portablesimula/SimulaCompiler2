@@ -21,13 +21,12 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.parsing.Parse;
-import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -345,14 +344,14 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
-		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD.RTS_BASICIO);
+		ClassHierarchy.addClassToSuperClass(CD_ThisClass, RTS.CD.RTS_BASICIO);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
 				classBuilder -> {
 					classBuilder
 						.with(SourceFileAttribute.of(Global.sourceFileName))
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_FINAL + ClassFile.ACC_SUPER)
-						.withSuperclass(CD.RTS_BASICIO);
+						.withSuperclass(RTS.CD.RTS_BASICIO);
 
 					if(this.hasAccumLabel())
 						for (LabelDeclaration lab : labelList.getAccumLabels())
@@ -406,14 +405,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			codeBuilder
 				.labelBinding(begScope)
 				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
-				.localVariable(1,"staticLink", CD.RTS_RTObject,begScope,endScope);
+				.localVariable(1,"staticLink", RTS.CD.RTS_RTObject,begScope,endScope);
 
 			// super(staticLink);
 			codeBuilder
 				.aload(0)
 				.aload(1)
-				.invokespecial(pool.methodRefEntry(CD.RTS_BASICIO
-						,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V")));
+				.invokespecial(RTS.CD.RTS_BASICIO,"<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"));
 
 			if (hasDeclaredLabel()) // Declare local labels
 				for (LabelDeclaration lab : labelList.getDeclaredLabels())
@@ -424,16 +422,16 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				decl.buildInitAttribute(codeBuilder);
 			
 			// BBLK();
-			codeBuilder.aload(0)
-				.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
+			codeBuilder.aload(0);
+			RTS.invokevirtual_RTObject_BBLK(codeBuilder);
 
-			if (declarationKind == ObjectKind.SimulaProgram) 
+			if (declarationKind == ObjectKind.SimulaProgram) {
 				// BPRG("adHoc06");
 				codeBuilder
 					.aload(0)
-					.ldc(pool.stringEntry(this.edJavaClassName()))
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
-
+					.ldc(pool.stringEntry(this.edJavaClassName()));
+					RTS.invokevirtual_RTObject_BPRG(codeBuilder);  // TODO: RART AT DETTE IKKE VIRKER
+			}
 			// Add Declaration Code to Constructor
 			for (Declaration decl : declarationList)
 				decl.buildDeclarationCode(codeBuilder);
@@ -465,19 +463,20 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		//  7: invokespecial #48                 // Method simulaTestPrograms/adHoc12_SubBlock18."<init>":(Lsimula/runtime/RTS_RTObject;)V
 		// 10: invokevirtual #49                 // Method simulaTestPrograms/adHoc12_SubBlock18._STM:()Lsimula/runtime/RTS_RTObject;
 		// 13: pop
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ClassDesc CD_cls=this.getClassDesc();
 		codeBuilder
 			.new_(CD_cls)
 			.dup()
-			.getstatic(BlockDeclaration.currentClassDesc(),"_CUR",CD.RTS_RTObject);
+//			.getstatic(BlockDeclaration.currentClassDesc(),"_CUR",RTS.CD.RTS_RTObject);
+			.getstatic(RTS.FRE.RTObject_CUR(pool));
 
 		codeBuilder.invokespecial(CD_cls, "<init>", this.getConstructorMethodTypeDesc());
 
 		// _STM();
 		String resultType="Lsimula/runtime/RTS_RTObject;";
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder
-			.invokevirtual(pool.methodRefEntry(CD_cls,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType)))
+			.invokevirtual(CD_cls,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType))
 			.pop();
 		Global.exitScope();
 	}

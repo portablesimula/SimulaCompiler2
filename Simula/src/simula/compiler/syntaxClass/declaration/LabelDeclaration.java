@@ -22,9 +22,9 @@ import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -131,7 +131,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 						codeBuilder -> buildVirtualMatchMethodBody(prefixLevel,codeBuilder));
 			}
 		} else {
-			classBuilder.withField(ident, CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
+			classBuilder.withField(ident, RTS.CD.RTS_LABEL, ClassFile.ACC_PUBLIC);
 		}
 	}
 	
@@ -159,14 +159,14 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		// public RTS_LABEL " + virtSpec.getVirtualIdentifier()
 		// { return(new RTS_LABEL(this, prefixLevel, index, "identifier")); }
 		codeBuilder
-			.new_(CD.RTS_LABEL)
+			.new_(RTS.CD.RTS_LABEL)
 			.dup()
 			.aload(0); // this
 		Constant.buildIntConst(codeBuilder, prefixLevel);
 		Constant.buildIntConst(codeBuilder, index);
 		codeBuilder.ldc(pool.stringEntry(this.identifier));
 		codeBuilder
-			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
+			.invokespecial(RTS.CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"))
 			.areturn();
 	}
 
@@ -175,7 +175,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		DeclarationScope declaredIn = (movedTo != null)? movedTo : this.declaredIn;
 		ClassDesc owner=declaredIn.getClassDesc();
-		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD.RTS_LABEL));
+		return(pool.fieldRefEntry(owner, getFieldIdentifier(), RTS.CD.RTS_LABEL));
 	}
 	
 	@Override
@@ -210,14 +210,14 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		// new RTS_LABEL(this,0,1,"L1"); // Local Label #1=L1 At PrefixLevel 0
 		codeBuilder
 			.aload(0)
-			.new_(CD.RTS_LABEL)
+			.new_(RTS.CD.RTS_LABEL)
 			.dup()
 			.aload(0); // this
 		Constant.buildIntConst(codeBuilder, prefixLevel);
 		Constant.buildIntConst(codeBuilder, index);
 		codeBuilder
 			.ldc(codeBuilder.constantPool().stringEntry(identifier))
-			.invokespecial(CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"));
+			.invokespecial(RTS.CD.RTS_LABEL, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;IILjava/lang/String;)V"));
 	}
 	
 	@Override

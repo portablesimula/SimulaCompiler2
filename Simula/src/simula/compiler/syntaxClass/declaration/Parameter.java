@@ -25,9 +25,9 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.RemoteVariable;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 	
 /**
@@ -300,10 +300,9 @@ public final class Parameter extends Declaration {
 		} else switch (kind) {
 			case Kind.Array -> {
 				expr.buildEvaluation(null,codeBuilder);
-				if(mode == Parameter.Mode.value) {
-					codeBuilder
-						.invokevirtual(CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
-				}}
+				if(mode == Parameter.Mode.value)
+					RTS.invokevirtual_ARRAY_copy(codeBuilder);
+				}
 			case Kind.Label -> Util.IERR();
 				
 			case Kind.Procedure -> {
@@ -327,7 +326,7 @@ public final class Parameter extends Declaration {
 				if(decl instanceof ProcedureDeclaration proc) {
 					// Declared Procedure: new RTS_PRCQNT
 					codeBuilder
-						.new_(CD.RTS_PRCQNT)
+						.new_(RTS.CD.RTS_PRCQNT)
 						.dup();
 					if(beforeDot == null) {
 						codeBuilder
@@ -336,7 +335,7 @@ public final class Parameter extends Declaration {
 					} else beforeDot.buildEvaluation(null, codeBuilder);
 					codeBuilder
 						.ldc(pool.loadableConstantEntry(proc.getClassDesc()))
-						.invokespecial(CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
+						.invokespecial(RTS.CD.RTS_PRCQNT, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Ljava/lang/Class;)V"));
 					
 				} else if(decl instanceof Parameter par) {
 					// Parameter Procedure: 
@@ -348,9 +347,8 @@ public final class Parameter extends Declaration {
 						.aload(0)
 						.getfield(par.getFieldRefEntry(pool));
 					if(par.mode == Parameter.Mode.name) {
-						codeBuilder
-							.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
-							.checkcast(CD.RTS_PRCQNT);
+						RTS.invokevirtual_NAME_get(codeBuilder);
+						codeBuilder.checkcast(RTS.CD.RTS_PRCQNT);
 					}
 					
 				} else Util.IERR();
@@ -359,8 +357,9 @@ public final class Parameter extends Declaration {
 			case Kind.Simple ->  {
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value && type.keyWord == Type.T_TEXT) {
-					codeBuilder.invokestatic(CD.RTS_ENVIRONMENT,
-							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+//					codeBuilder.invokestatic(RTS.CD.RTS_ENVIRONMENT,
+//							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+					RTS.invokestatic_RTS_TXT_copy(codeBuilder);
 				}
 			}
 		}
@@ -397,19 +396,19 @@ public final class Parameter extends Declaration {
 		String ident = getFieldIdentifier();
 		if (mode == Parameter.Mode.name) {
 			if (kind == Parameter.Kind.Procedure) {
-				classBuilder.withField(ident, CD.RTS_NAME, ClassFile.ACC_PUBLIC);
+				classBuilder.withField(ident, RTS.CD.RTS_NAME, ClassFile.ACC_PUBLIC);
 			} else {			
 				classBuilder
-					.withField(ident, CD.RTS_NAME, fieldBuilder -> {
+					.withField(ident, RTS.CD.RTS_NAME, fieldBuilder -> {
 						fieldBuilder
 							.withFlags(ClassFile.ACC_PUBLIC)
 							.with(SignatureAttribute.of(type.toNameClassSignature()));
 					});
 			}
 		} else if (kind == Parameter.Kind.Array) {
-			classBuilder.withField(ident, CD.RTS_ARRAY, ClassFile.ACC_PUBLIC);
+			classBuilder.withField(ident, RTS.CD.RTS_ARRAY, ClassFile.ACC_PUBLIC);
 		} else if (kind == Parameter.Kind.Procedure) {
-			classBuilder.withField(ident, CD.RTS_PRCQNT, ClassFile.ACC_PUBLIC);
+			classBuilder.withField(ident, RTS.CD.RTS_PRCQNT, ClassFile.ACC_PUBLIC);
 		} else {
 			ClassDesc CD=type.toClassDesc(kind,mode);
 			classBuilder.withField(ident, CD, ClassFile.ACC_PUBLIC);

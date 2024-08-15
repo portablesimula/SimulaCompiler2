@@ -20,10 +20,10 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.StandardClass;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -571,20 +571,20 @@ public class Type extends SyntaxClass {
 			case T_INTEGER:		return(ConstantDescs.CD_int);
 			case T_REAL:		return(ConstantDescs.CD_float);
 			case T_LONG_REAL:	return(ConstantDescs.CD_double);
-			case T_TEXT:		return(CD.RTS_TXT);
+			case T_TEXT:		return(RTS.CD.RTS_TXT);
 			case T_REF:			return(this.getQual().getClassDesc());
-			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
-			case T_LABEL:		return(CD.RTS_LABEL);
+			case T_PROCEDURE:	return(RTS.CD.RTS_PRCQNT);
+			case T_LABEL:		return(RTS.CD.RTS_LABEL);
 			default: Util.IERR(); return null;
 		}
 	}
 
 	public ClassDesc toClassDesc(int kind,int mode) {
-		if (mode == Parameter.Mode.name) return(CD.RTS_NAME);
+		if (mode == Parameter.Mode.name) return(RTS.CD.RTS_NAME);
 		else switch(kind) { // Parameter.Kind
-			case Parameter.Kind.Array:			 return(CD.RTS_ARRAY);
-			case Parameter.Kind.Label:           return(CD.RTS_LABEL);
-			case Parameter.Kind.Procedure:       return(CD.RTS_PRCQNT);
+			case Parameter.Kind.Array:			 return(RTS.CD.RTS_ARRAY);
+			case Parameter.Kind.Label:           return(RTS.CD.RTS_LABEL);
+			case Parameter.Kind.Procedure:       return(RTS.CD.RTS_PRCQNT);
 			case Parameter.Kind.Simple: default: return(this.toClassDesc(declaredIn));
 		}
 	}
@@ -597,10 +597,10 @@ public class Type extends SyntaxClass {
 			case T_INTEGER:		return(ConstantDescs.CD_Integer);
 			case T_REAL:		return(ConstantDescs.CD_Float);
 			case T_LONG_REAL:	return(ConstantDescs.CD_Double);
-			case T_TEXT:		return(CD.RTS_TXT);
+			case T_TEXT:		return(RTS.CD.RTS_TXT);
 			case T_REF:			return(this.getQual().getClassDesc());
-			case T_PROCEDURE:	return(CD.RTS_PRCQNT);
-			case T_LABEL:		return(CD.RTS_LABEL);
+			case T_PROCEDURE:	return(RTS.CD.RTS_PRCQNT);
+			case T_LABEL:		return(RTS.CD.RTS_LABEL);
 			default: Util.IERR(); return null;
 		}
 	}
@@ -670,8 +670,8 @@ public class Type extends SyntaxClass {
 		case Type.T_LONG_REAL -> codeBuilder.checkcast(ConstantDescs.CD_Double);
 		case Type.T_BOOLEAN   -> codeBuilder.checkcast(ConstantDescs.CD_Boolean);
 		case Type.T_CHARACTER -> codeBuilder.checkcast(ConstantDescs.CD_Character);
-		case Type.T_TEXT      -> codeBuilder.checkcast(CD.RTS_TXT);
-		case Type.T_LABEL     -> codeBuilder.checkcast(CD.RTS_LABEL);
+		case Type.T_TEXT      -> codeBuilder.checkcast(RTS.CD.RTS_TXT);
+		case Type.T_LABEL     -> codeBuilder.checkcast(RTS.CD.RTS_LABEL);
 		case Type.T_REF       -> codeBuilder.checkcast(this.toClassDesc());
 		default -> Util.IERR();
 	}
@@ -686,33 +686,12 @@ public class Type extends SyntaxClass {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		// Object TOS value ==> Primitive type
 		switch(keyWord) {
-			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z")));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C")));
-			case Type.T_INTEGER   -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I")));
-			case Type.T_REAL      -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F")));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(pool.methodRefEntry(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D")));
+			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(ConstantDescs.CD_Character, "charValue", MethodTypeDesc.ofDescriptor("()C"));
+			case Type.T_INTEGER   -> codeBuilder.invokevirtual(ConstantDescs.CD_Integer, "intValue", MethodTypeDesc.ofDescriptor("()I"));
+			case Type.T_REAL      -> codeBuilder.invokevirtual(ConstantDescs.CD_Float, "floatValue", MethodTypeDesc.ofDescriptor("()F"));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(ConstantDescs.CD_Double, "doubleValue", MethodTypeDesc.ofDescriptor("()D"));
 		}
-	}
-	
-	/**
-	 * Convert a Runtime Object to a primitive type value.
-	 * <p>
-	 * If the input Object is a name parameter or a parameter procedure it evaluated before the conversion.
-	 * @param codeBuilder the CodeBuilder to use
-	 * @return true if the value is converted; otherwise false
-	 */
-	public boolean objectToPrimitiveType(CodeBuilder codeBuilder) {
-		// Object TOS value ==> possibleEvaluation ==> Primitive type
-		ClassDesc owner = CD.RTS_RTObject;
-		switch(keyWord) {
-			case Type.T_INTEGER   -> codeBuilder.invokevirtual(owner,"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I"));
-			case Type.T_REAL      -> codeBuilder.invokevirtual(owner,"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F"));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(owner,"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D"));
-			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(owner,"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(owner,"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C"));
-			default               -> { return false; }
-		}
-		return true;
 	}
 	
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {

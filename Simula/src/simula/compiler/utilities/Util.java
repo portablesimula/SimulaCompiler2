@@ -408,35 +408,5 @@ public final class Util {
 		codeBuilder.lineNumber(stx.lineNumber);
 	}
 
-	public static void buildSNAPSHOT(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
-	}
-
-	public static void buildSNAPSHOT2(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.dup()
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;ILjava/lang/String;)V"));
-	}
-
-
-	public static void buildSNAPSHOT2F(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.dup()
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(FILjava/lang/String;)V"));
-	}
-
   
 }

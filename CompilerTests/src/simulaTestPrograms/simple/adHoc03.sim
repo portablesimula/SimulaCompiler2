@@ -1,7 +1,19 @@
 
+% begin integer jjj;
 begin
-	integer j,U;
+	short integer nxtindex;
+	ref(module) array moduletab(0:20);
+	ref(module) X;
 	
-    j := randint(0,4,U);
+	class module; begin
+		nxtindex := 444;
+	end;
+         
+	ref(module) procedure regnewmodule; begin
+%		regnewmodule :- moduletab(nxtindex) :- new module;
+%		nxtindex := 444;
+	end;
 	
+	X :- regnewmodule;
+end;
 end;

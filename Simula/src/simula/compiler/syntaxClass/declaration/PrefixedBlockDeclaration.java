@@ -23,9 +23,9 @@ import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -261,11 +261,12 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		// ===================================================
 		//  new adHoc05_PBLK14((_CUR), par1, ...)._STM();
 		// ===================================================
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ClassDesc CD_pblk=this.getClassDesc();
 		codeBuilder
 			.new_(CD_pblk)
 			.dup()
-			.getstatic(BlockDeclaration.currentClassDesc(),"_CUR",CD.RTS_RTObject);
+			.getstatic(RTS.FRE.RTObject_CUR(pool));
 
 		// Push parameters
 		if(blockPrefix.checkedParams != null)
@@ -276,15 +277,12 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 
 		// _STM();
 		//         new adHoc00_PBLK4((_CUR))._START();
-
-		String resultType="Lsimula/runtime/RTS_RTObject;";
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		String name = (isDetachUsed())? "_START" : "_STM";
-		codeBuilder
-//			.invokevirtual(pool.methodRefEntry(CD_pblk,"_STM", MethodTypeDesc.ofDescriptor("()"+resultType)))
-			.invokevirtual(pool.methodRefEntry(CD_pblk,name, MethodTypeDesc.ofDescriptor("()"+resultType)))
-			.pop()
-		;
+		if(isDetachUsed()) {
+			RTS.invokevirtual_CLASS_START(codeBuilder);
+		} else {
+			codeBuilder.invokevirtual(CD_pblk,"_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"));
+		}
+		codeBuilder.pop();			
 	}
 
 	// ***********************************************************************************************

@@ -17,10 +17,10 @@ import simula.compiler.syntaxClass.OverLoad;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.Type.ConversionKind;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -75,7 +75,7 @@ public final class TypeConversion extends Expression {
 				} break;
 			case Type.T_REAL:
 				switch(toType.keyWord) {
-					case Type.T_INTEGER:	codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I")); break;
+					case Type.T_INTEGER:	codeBuilder.invokestatic(RTS.CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I")); break;
 
 					case Type.T_REAL:		break; // Nothing
 					case Type.T_LONG_REAL:	codeBuilder.f2d(); break;
@@ -84,7 +84,7 @@ public final class TypeConversion extends Expression {
 			case Type.T_LONG_REAL:
 				switch(toType.keyWord) {
 					case Type.T_INTEGER:	codeBuilder
-												.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+												.invokestatic(RTS.CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
 												.l2i();
 											break;
 					case Type.T_REAL:		codeBuilder.d2f(); break;
@@ -214,11 +214,11 @@ public final class TypeConversion extends Expression {
 			case Type.T_INTEGER: 
 				switch(fromType.keyWord) {
 					case Type.T_REAL:
-						codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
+						codeBuilder.invokestatic(RTS.CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(F)I"));
 						break;
 					case Type.T_LONG_REAL:
 						codeBuilder
-							.invokestatic(CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
+							.invokestatic(RTS.CD.JAVA_LANG_MATH, "round", MethodTypeDesc.ofDescriptor("(D)J"))
 							.l2i();
 						break;
 				} break;

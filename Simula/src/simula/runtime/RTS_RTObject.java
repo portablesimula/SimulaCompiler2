@@ -73,7 +73,11 @@ public abstract class RTS_RTObject {
 	 * Outmost Block Instance
 	 */
 	public static final RTS_BASICIO _CTX = new RTS_BASICIO(null);
-//	public static final RTS_CLASS _CTX = new RTS_CLASS(null) {};
+
+	/**
+	 * Outmost user Block Instance
+	 */
+	public static RTS_BASICIO _USR;       // TODO: IF RTS_Option.TESTING_CTX
 	
 	/**
 	 * Current Block Instance
@@ -938,6 +942,9 @@ public abstract class RTS_RTObject {
 	 * @param ident the program identifier
 	 */
 	public void BPRG(final String ident) {
+		if(RTS_Option.TESTING_CTX) {
+			_USR = (RTS_BASICIO) this;
+		}
 		RTS_Coroutine.INIT();
 		RTS_COMMON.numberOfEditOverflows = 0;
 		startTimeMs = System.currentTimeMillis();
@@ -974,7 +981,7 @@ public abstract class RTS_RTObject {
 		_CORUT = _DL._CORUT;
 		_STATE = OperationalState.attached;
 		if (RTS_Option.BLOCK_TRACING)
-			RTS_COMMON.TRACE("BEGIN " + edObjectAttributes());
+		RTS_COMMON.TRACE("BEGIN " + edObjectAttributes());
 		if (_SL == null) {
 //			Thread.dumpStack();
 			throw new RTS_SimulaRuntimeError("NONE-CHECK FAILED: Remote Call on Procedure x.proc, x==none");
@@ -1358,7 +1365,7 @@ public abstract class RTS_RTObject {
 	private static void endProgram(final int exitValue) {
 		// _SYSIN.close();
 		// _SYSOUT.close();
-		_SYSOUT.outimage();
+		RTS_BASICIO._SYSOUT.outimage();
 		long timeUsed = System.currentTimeMillis() - startTimeMs;
 		if (RTS_Option.VERBOSE) {
 			RTS_COMMON.println("\nEnd program: " + RTS_COMMON.progamIdent);

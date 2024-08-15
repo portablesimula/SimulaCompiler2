@@ -16,11 +16,11 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -254,12 +254,13 @@ public final class ArithmeticExpression extends Expression {
 			lhs.buildEvaluation(null,codeBuilder);
 			if(type.keyWord == Type.T_INTEGER) {
 				rhs.buildEvaluation(null,codeBuilder);
-				codeBuilder.invokestatic(BlockDeclaration.currentClassDesc(), "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
+//				codeBuilder.invokestatic(BlockDeclaration.currentClassDesc(), "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
+				RTS.invokestatic_RTS_IPOW(codeBuilder);
 			} else {
 				if(type.keyWord == Type.T_REAL) codeBuilder.f2d();
 				rhs.buildEvaluation(null,codeBuilder);
 				if(type.keyWord == Type.T_REAL) codeBuilder.f2d();
-				codeBuilder.invokestatic(CD.JAVA_LANG_MATH, "pow", MethodTypeDesc.ofDescriptor("(DD)D"));
+				codeBuilder.invokestatic(RTS.CD.JAVA_LANG_MATH, "pow", MethodTypeDesc.ofDescriptor("(DD)D"));
 				if(type.keyWord == Type.T_REAL) codeBuilder.d2f();
 			}
 			return;

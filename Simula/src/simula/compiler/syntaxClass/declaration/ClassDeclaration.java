@@ -29,9 +29,9 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.statement.DummyStatement;
 import simula.compiler.syntaxClass.statement.InnerStatement;
 import simula.compiler.syntaxClass.statement.Statement;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.DeclarationList;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.LabelList;
 import simula.compiler.utilities.KeyWord;
@@ -1132,7 +1132,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	public ClassDesc superClassDesc() {
 		if(hasRealPrefix())
 			return getPrefixClass().getClassDesc();
-		return CD.RTS_CLASS;
+		return RTS.CD.RTS_CLASS;
 	}
 	
 	
@@ -1272,7 +1272,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			codeBuilder
 				.labelBinding(begScope)
 				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
-				.localVariable(1,"staticLink",CD.RTS_RTObject,begScope,endScope);
+				.localVariable(1,"staticLink",RTS.CD.RTS_RTObject,begScope,endScope);
 			Iterator<Parameter> parameterIterator = this.parameterIterator();
 			int npar=2;
 			while(parameterIterator.hasNext()) {
@@ -1297,7 +1297,7 @@ public class ClassDeclaration extends BlockDeclaration {
 				}
 			}
 			codeBuilder
-				.invokespecial(pool.methodRefEntry(this.superClassDesc(),"<init>", MTD_Super));
+				.invokespecial(this.superClassDesc(),"<init>", MTD_Super);
 
 			if(hasDeclaredLabel()) // Declare local labels
 				for (LabelDeclaration lab : labelList.getDeclaredLabels())
@@ -1315,19 +1315,20 @@ public class ClassDeclaration extends BlockDeclaration {
 				codeBuilder.putfield(par.getFieldRefEntry(pool));
 			}
 
-			if (this.isMainModule) // E.g. Main program is Prefixed Block
+			if (this.isMainModule) { // E.g. Main program is Prefixed Block
 				// GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
 				codeBuilder
 					.aload(0)
-					.ldc(pool.stringEntry(this.edJavaClassName()))
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V")));
+					.ldc(pool.stringEntry(this.edJavaClassName()));
+				RTS.invokevirtual_RTObject_BPRG(codeBuilder);
+			}
 
 			// BBLK(); // Iff no prefix
-			if (!hasRealPrefix())
-				codeBuilder
-					.aload(0)
-					.invokevirtual(pool.methodRefEntry(currentClassDesc(),"BBLK", MethodTypeDesc.ofDescriptor("()V")));
-
+			if (!hasRealPrefix()) {
+				codeBuilder.aload(0);
+				RTS.invokevirtual_RTObject_BBLK(codeBuilder);
+			}
+			
 			// Add Declaration Code to Constructor
 			for (Declaration decl : declarationList)
 				decl.buildDeclarationCode(codeBuilder);
@@ -1372,8 +1373,6 @@ public class ClassDeclaration extends BlockDeclaration {
 			if(prefix.statements1 != null) nStat = nStat + prefix.statements1.size();
 			prefix = prefix.getPrefixClass();
 		}
-		
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		clearLabelList();
 		stmStack.push(labelContext);
 		labelContext = this;
@@ -1391,11 +1390,9 @@ public class ClassDeclaration extends BlockDeclaration {
 		}
 		labelContext = stmStack.pop();
 
-		codeBuilder
-			.aload(0)
-			.invokevirtual(pool.methodRefEntry(currentClassDesc(),"EBLK", MethodTypeDesc.ofDescriptor("()V")))
-			.aload(0)
-			.areturn();
+		codeBuilder.aload(0);
+		RTS.invokevirtual_RTObject_EBLK(codeBuilder);
+		codeBuilder.aload(0).areturn();
 	}
 	
 	private void clearLabelList() {
@@ -1422,14 +1419,14 @@ public class ClassDeclaration extends BlockDeclaration {
 				buildStatementsBeforeInner(tryCodeBuilder);
 				buildStatementsAfterInner(tryCodeBuilder);
 			},
-			catchBuilder -> catchBuilder.catching(CD.JAVA_LANG_RUNTIME_EXCEPTION,
+			catchBuilder -> catchBuilder.catching(RTS.CD.JAVA_LANG_RUNTIME_EXCEPTION,
 				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder, begScope, endScope)));
 	}
 
 	private void buildMyCatchBlock(CodeBuilder  codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		int local_EXEPTN = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
-		codeBuilder.localVariable(local_EXEPTN,"exception",CD.JAVA_LANG_RUNTIME_EXCEPTION,begScope,endScope);
+		codeBuilder.localVariable(local_EXEPTN,"exception",RTS.CD.JAVA_LANG_RUNTIME_EXCEPTION,begScope,endScope);
 		// catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }
         //  astore_1
         //  aload_0
@@ -1443,15 +1440,16 @@ public class ClassDeclaration extends BlockDeclaration {
 		codeBuilder
 			.astore(local_EXEPTN)  // The caught exception will be on top of the operand stack when the catch block is entered.
 			.aload(0)
-			.putstatic(pool.fieldRefEntry(currentClassDesc(), "_CUR", CD.RTS_RTObject))
+//			.putstatic(pool.fieldRefEntry(currentClassDesc(), "_CUR", RTS.CD.RTS_RTObject))
+			.putstatic(RTS.FRE.RTObject_CUR(pool))
 			.aload(0)
 			.aload(local_EXEPTN)
 			.aload(0)
-			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-				"onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")))
-			.invokevirtual(pool.methodRefEntry(currentClassDesc(),
-				"_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V")));
-		;
+			.invokevirtual(currentClassDesc(), "onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"))
+//			.invokevirtual(currentClassDesc(), "_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V"))
+			;
+//		RTS.invokevirtual_CatchingErrors_onError_0(codeBuilder);
+		RTS.invokevirtual_CatchingErrors_onError(codeBuilder);
 	}
 
 	// ***********************************************************************************************

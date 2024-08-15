@@ -15,7 +15,7 @@ import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.Thunk;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
-import simula.compiler.utilities.CD;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 
@@ -45,7 +45,7 @@ public class BuildCPV {
 			variable.buildIdentifierAccess(false, codeBuilder);
 			codeBuilder
 //				.aload(0)
-				.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;")));
+				.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;"));
 
 	    } else {
 		    Meaning meaning = variable.meaning;
@@ -64,7 +64,7 @@ public class BuildCPV {
 				codeBuilder
 //					.aload(0)
 					.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), inspectedVariable.getJavaIdentifier(), inspectedVariable.type.toClassDesc()))
-					.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
+					.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"));
 //			    BuildCPF.buildCPF(variable,virtual.procedureSpec,codeBuilder);
 				if(virtual.procedureSpec != null) {
 					BuildCPV.buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
@@ -86,7 +86,7 @@ public class BuildCPV {
 				if(withFollowSL) codeBuilder.checkcast(meaning.declaredIn.getClassDesc());
 		    	ClassDesc owner = meaning.declaredIn.getClassDesc();
 				codeBuilder
-					.invokevirtual(pool.methodRefEntry(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
+					.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"));
 				
 				if(virtual.procedureSpec != null)
 					 buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
@@ -110,18 +110,10 @@ public class BuildCPV {
 	 */
 	static void remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual,final SyntaxClass backLink,CodeBuilder codeBuilder) {
 		//return("<Object>.<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
-
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
 	    String ident=virtual.getSimpleVirtualIdentifier();
-	    
 		prepareForValueType(variable, codeBuilder);
-
 		obj.buildEvaluation(null, codeBuilder);
-		
-		codeBuilder
-			.invokevirtual(pool.methodRefEntry(obj.type.toClassDesc(),
-				ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;")));
-		
+		codeBuilder.invokevirtual(obj.type.toClassDesc(),ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"));
 		if(virtual.procedureSpec != null)
 			 buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
 		else BuildCPF.buildCPF(variable, codeBuilder);
@@ -155,10 +147,7 @@ public class BuildCPV {
 //        50: checkcast     #71                 // class simula/runtime/RTS_File
 
 		
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PRCQNT,
-				"CPF", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PROCEDURE;")));
-
+		RTS.invokevirtual_PRCQNT_CPF(codeBuilder);
 		if (variable.hasArguments()) {
 			Iterator<Parameter> formalIterator = procedureSpec.parameterList.iterator();
 			Iterator<Expression> actualIterator = variable.checkedParams.iterator();
@@ -169,14 +158,11 @@ public class BuildCPV {
 				actualParameter = TypeConversion.testAndCreate(formalType, actualParameter);
 				actualParameter.buildEvaluation(null, codeBuilder);
 				formalType.buildObjectValueOf(codeBuilder);
-
 				// s.append(".setPar(");
-				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PROCEDURE,
-						"setPar", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Lsimula/runtime/RTS_PROCEDURE;")));
+				RTS.invokevirtual_PROCEDURE_setpar(codeBuilder);
 			}
 			// s.append("._ENT()"); // Only when any parameter
-			codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_PROCEDURE,
-					"_ENT", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PROCEDURE;")));
+			RTS.invokevirtual_PROCEDURE_ENT(codeBuilder);
 		}
 		BuildCPF.maybeBuildLoad_RESULT(variable, codeBuilder);
 	}
@@ -190,8 +176,10 @@ public class BuildCPV {
 		if(decl.type != null && decl.type.isValueType() && variable.backLink != null) {
 			codeBuilder.aload(0);
 			if(Global.getCurrentScope() instanceof Thunk thunk) {
+				ConstantPoolBuilder pool=codeBuilder.constantPool();
 				codeBuilder
-					.getfield(CD.RTS_NAME,"_CUR",CD.RTS_RTObject)
+//					.getfield(RTS.CD.RTS_NAME,"_CUR",RTS.CD.RTS_RTObject)
+					.getfield(RTS.FRE.NAME_CUR(pool))
 					.checkcast(thunk.declaredIn.getClassDesc());
 			}
 		}

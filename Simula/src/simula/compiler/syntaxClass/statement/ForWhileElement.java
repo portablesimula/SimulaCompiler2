@@ -15,11 +15,11 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 // ************************************************************************************
@@ -122,7 +122,7 @@ public class ForWhileElement extends ForListElement {
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
 		codeBuilder
-			.new_(CD.FOR_WhileElt)
+			.new_(RTS.CD.FOR_WhileElt)
 			.dup();
 		Parameter.buildNameParam(codeBuilder,controlVariable);
 		Parameter.buildNameParam(codeBuilder,expr1); // PARAMETER: RTS_NAME<T> expr
@@ -130,7 +130,7 @@ public class ForWhileElement extends ForListElement {
 
 		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor(
 				"(Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;Lsimula/runtime/RTS_NAME;)V");
-		codeBuilder.invokespecial(CD.FOR_WhileElt, "<init>", MTD); // Invoke Constructor
+		codeBuilder.invokespecial(RTS.CD.FOR_WhileElt, "<init>", MTD); // Invoke Constructor
 	}
 	
 	public String toString() {

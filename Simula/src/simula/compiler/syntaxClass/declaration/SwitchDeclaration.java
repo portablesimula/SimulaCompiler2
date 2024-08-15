@@ -20,11 +20,11 @@ import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -148,7 +148,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 			expr.buildEvaluation(null,codeBuilder);
 			
 			codeBuilder
-				.putfield(pool.fieldRefEntry(currentClassDesc(), "_RESULT", CD.RTS_LABEL)) // _RESULT
+				.putfield(pool.fieldRefEntry(currentClassDesc(), "_RESULT", RTS.CD.RTS_LABEL)) // _RESULT
 				.goto_(endLabel);
 			
 		}

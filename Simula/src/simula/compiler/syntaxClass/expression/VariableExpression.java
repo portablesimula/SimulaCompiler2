@@ -37,12 +37,12 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -913,11 +913,9 @@ public final class VariableExpression extends Expression {
 		case Parameter.Kind.Array: // Parameter Array
 			buildIdentifierAccess(destination,codeBuilder);
 			if (par.mode == Parameter.Mode.name) {
-//				if (destination) Util.IERR();
-				codeBuilder
-					.getfield(par.getFieldRefEntry(pool))
-					.invokevirtual(pool.methodRefEntry(CD.RTS_NAME, "get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")))
-					.checkcast(CD.RTS_ARRAY(type));
+				codeBuilder.getfield(par.getFieldRefEntry(pool));
+				RTS.invokevirtual_NAME_get(codeBuilder);
+				codeBuilder.checkcast(RTS.CD.RTS_ARRAY(type));
 				if(checkedParams != null)
 					ArrayDeclaration.arrayGetElement2(type,par.getFieldIdentifier(),checkedParams,codeBuilder);
 			} else {
@@ -930,7 +928,7 @@ public final class VariableExpression extends Expression {
 					ClassDesc owner = (inspectedVariable == null)
 							? BlockDeclaration.currentClassDesc()
 									: inspectedVariable.type.getQual().getClassDesc();
-					codeBuilder.getfield(owner, par.getFieldIdentifier(), CD.RTS_ARRAY);
+					codeBuilder.getfield(owner, par.getFieldIdentifier(), RTS.CD.RTS_ARRAY);
 				}
 			}
 			break;
@@ -953,8 +951,7 @@ public final class VariableExpression extends Expression {
 //			Thread.dumpStack();
 			
 			if (!destination && par.mode == Parameter.Mode.name) {
-				codeBuilder.invokevirtual(pool.methodRefEntry(CD.RTS_NAME,
-						"get", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;")));
+				RTS.invokevirtual_NAME_get(codeBuilder);
 				par.type.checkCast(codeBuilder);
 				par.type.valueToPrimitiveType(codeBuilder);
 

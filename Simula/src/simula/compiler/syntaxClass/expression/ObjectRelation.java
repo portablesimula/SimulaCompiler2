@@ -16,11 +16,11 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
-import simula.compiler.utilities.CD;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
 /**
@@ -161,9 +161,10 @@ public final class ObjectRelation extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		if(opr == KeyWord.IS) {
 			lhs.buildEvaluation(null,codeBuilder);
-			codeBuilder
-				.ldc(classDeclaration.getClassDesc())
-				.invokestatic(CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
+//			codeBuilder
+//				.ldc(classDeclaration.getClassDesc())
+//				.invokestatic(RTS.CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
+			RTS.invokestatic_RTS_IS(classDeclaration.getClassDesc(), codeBuilder);
 		} else if(opr == KeyWord.IN) {
 			lhs.buildEvaluation(null,codeBuilder);
 			codeBuilder.instanceof_(classDeclaration.getClassDesc());
