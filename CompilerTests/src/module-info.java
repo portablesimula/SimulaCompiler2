@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module CompilerTests {
+	requires Simula;
+}
