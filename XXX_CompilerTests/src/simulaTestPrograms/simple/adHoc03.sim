@@ -1,0 +1,20 @@
+
+% begin integer jjj;
+begin
+	short integer nxtindex;
+	ref(module) array moduletab(0:20);
+	ref(module) X;
+	
+	class module; begin
+		nxtindex := 444;
+		nxtindex := nxtindex ** 2;
+	end;
+         
+	ref(module) procedure regnewmodule; begin
+%		regnewmodule :- moduletab(nxtindex) :- new module;
+%		nxtindex := 444;
+	end;
+	
+	X :- regnewmodule;
+end;
+end;

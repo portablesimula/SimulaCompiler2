@@ -1,0 +1,46 @@
+external class adHoc_PRECOMP;
+
+adHoc_PRECOMP(4,"--- Test reading numbers from source text") begin
+
+text               txt;             ! text to use the editing and;
+                                    ! de-editing procedures on.  ;
+
+integer            intr;             ! To be used in the procedures;
+short integer      sho;             ! To be used in the procedures;
+real               rea;             ! To be used in the procedures;
+long real          lon;             ! To be used in the procedures;
+
+integer            realprecision;   ! To contain the precision for;
+integer            longprecision;   ! reals and long reals       ;
+                                    ! respectively.              ;
+
+procedure test(msg,result,expected); text msg,result,expected;
+begin
+if result <> expected then  !*** NOTE 5 ***;
+   begin
+      err ("*** error :  In " & msg);
+      outtext (" - the following result is wrong: ");
+      outchar('"'); outtext (txt); outchar('"'); outimage;
+      outtext (" -               expected result: ");
+      outchar('"'); outtext (expected); outchar('"'); outimage;
+--   found_error := true;
+   end;
+end;
+
+
+txt :- blanks (30);
+
+realprecision := 7;                  !********* NOTE 1 ************;
+                                     ! Fill in expected precision ;
+                                     ! (no of digits) for reals...;
+longprecision := 16;                 !      ... and for long reals.;
+
+txt.putint (realprecision);
+test("integer operation (1).",txt,"                             7");
+
+txt.putint (longprecision);
+
+test("integer operation (2).",txt,"                            16");
+
+
+end of program;

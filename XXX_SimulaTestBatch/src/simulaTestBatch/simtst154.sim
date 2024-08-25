@@ -1,0 +1,61 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA A/S - SIMULA TEST NO 154
+%
+%  PURPOSE:     Test function result assignment
+%
+%  METHOD:      Try some examples and see if they work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(154,"--- Test function result assignment") begin
+	text array facit(0:15);
+	integer traceCase;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+	text procedure P1(T); text T; begin
+			
+		integer procedure P2; begin
+			
+			real procedure P3; begin
+				P1 := "Abra" & T;
+				P2 := 4444;
+				P3 := 3.14;
+			end;
+			
+			P1 :- blanks(4+T.length);
+			trace("P3=" & edfix(P3,2));
+		end;
+			
+		trace("P2=" & edit(P2));
+	end;
+
+	facit(0) :- "At START";
+	
+	facit(1) :- "P3=3.14";
+	facit(2) :- "P2=4444";
+	facit(3) :- "P1(T)=Abracadabra";
+	
+	facit(4) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+
+	trace("P1(T)=" & P1("cadabra"));
+	
+	trace("At END");
+
+ end;

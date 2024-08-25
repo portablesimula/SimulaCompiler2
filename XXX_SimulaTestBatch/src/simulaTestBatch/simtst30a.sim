@@ -1,0 +1,101 @@
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 130
+%
+%  PURPOSE: Simple test of Arrays.
+%
+%  WRITTEN BY:  MYH 
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(30,"--- Simple test of Arrays.") begin
+% *** Ref(A) array by default, value and name
+
+	ref(A)  array ARR(1:10);
+	text    array tARR(1:10);
+	integer array iARR(1:10);
+	integer i;
+	text t;
+
+	class A(i); integer i; begin end;
+
+	procedure P1(pARR); ref(A) array pARR; begin
+		ref(A) x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P2(pARR); name pARR; ref(A) array pARR; begin
+		ref(A) x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+	
+	% **********************************************
+	% *** Text array by default, value and name
+	% **********************************************
+
+	procedure P3(pARR); text array pARR; begin
+		text x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P4(pARR); name pARR; text array pARR; begin
+		text x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	
+	% **********************************************
+	% *** Integer array by default, value and name
+	% **********************************************
+
+	procedure P5(pARR); integer array pARR; begin
+		integer x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P6(pARR); name pARR; integer array pARR; begin
+		integer x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+
+	% **********************************************
+	% *** Statements -- ref(A) array
+	% **********************************************
+	ARR(1) :- new A(444);
+	P1(ARR);
+	if ARR(2).i ne 444 then err(" ERROR 1");
+
+	ARR(1).i := 666;	
+	P2(ARR);
+	if ARR(2).i ne 666 then err(" ERROR 2");
+	
+	% **********************************************
+	% *** Statements -- Text array
+	% **********************************************
+	tARR(1) :- copy("444");
+	P3(tARR);
+	if tARR(2) ne "444" then err(" ERROR 3");
+
+	tARR(1) := "666";	
+	P4(tARR);
+	if tARR(2) ne "666" then err(" ERROR 4");
+	
+	% **********************************************
+	% *** Statements Integer array
+	% **********************************************
+	iARR(1) := 444;
+	P5(iARR);
+	if iARR(2) ne 444 then err(" ERROR 5");
+
+	iARR(1) := 666;	
+	P6(iARR);
+	if iARR(2) ne 666 then err(" ERROR 6");
+	
+
+end;

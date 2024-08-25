@@ -1,0 +1,16 @@
+Simulation begin
+    ref(Head) idleQueue;
+
+    ----------------------------------
+    --- Process: Elevator
+    ----------------------------------
+    Process class Elevator(no); integer no; begin
+    end class Elevator;
+
+	ref(Process) lift;
+	for lift:-idleQueue.first, lift.suc while lift =/= none do begin
+%		if lift qua Elevator.no = 44 then goto E;
+	end;
+
+% E:
+end Simulation;

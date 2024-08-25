@@ -1,0 +1,9 @@
+/**
+ * 
+ */
+/**
+ * 
+ */
+module SimulaTestBatch {
+	requires Simula;
+}

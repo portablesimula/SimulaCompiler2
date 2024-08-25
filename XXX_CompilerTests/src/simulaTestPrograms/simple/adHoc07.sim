@@ -1,0 +1,12 @@
+begin
+
+   procedure P (tf); name tf; text tf; begin
+      tf := "tf" ;
+   end;
+
+   text tv;
+ 
+   P(tv);
+
+
+end;

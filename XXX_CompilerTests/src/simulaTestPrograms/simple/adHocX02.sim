@@ -1,0 +1,7 @@
+external class SimulaTest;
+
+SimulaTest(5,"--- Test arithm. relations")
+ begin
+       inspect sysout do begin image:=notext; setpos(1) end
+
+end of program;

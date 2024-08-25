@@ -1,0 +1,6 @@
+ 
+class SimulaTest(n,title); integer n; text title;
+begin
+		outtext ("--- START Simula a.s. TEST");
+
+end;

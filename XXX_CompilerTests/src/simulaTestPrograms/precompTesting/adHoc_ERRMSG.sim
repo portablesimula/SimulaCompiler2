@@ -1,0 +1,7 @@
+External class adHoc_COMMON;
+
+adHoc_COMMON class adHoc_ERRMSG; begin
+
+      text procedure adHoc_errmsg(i); short integer i; begin end;
+
+end ERRMSG;

@@ -1,0 +1,13 @@
+ 
+begin
+	integer k, n2, MAX;
+	boolean array bArray( 0 : 50000 );  
+	
+	MAX := 50000;
+	n2  := 49729;
+	
+	for k := n2 step n2 until MAX do begin
+              bArray(k) := false;
+	end;
+	  
+end; 

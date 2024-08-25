@@ -1,0 +1,24 @@
+begin
+
+	class A; begin
+		integer j;
+	end;
+	
+	A class B; begin
+		integer j;
+	end;
+	
+	ref(B) x;
+	integer k;
+	
+	x :- new B;
+	
+	x qua A.j := 444;
+	
+	inspect x do begin
+		begin integer i;
+			k := this A.j;
+		end;
+	end;
+
+end;

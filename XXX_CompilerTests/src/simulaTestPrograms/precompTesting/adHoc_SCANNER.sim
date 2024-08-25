@@ -1,0 +1,12 @@
+External class adHoc_ERRMSG;
+ 
+adHoc_ERRMSG class adHoc_SCANNER;
+begin
+
+
+      short integer extid;
+
+      procedure setP1line; begin end;
+
+
+end of SCANNER;

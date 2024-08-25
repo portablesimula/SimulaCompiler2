@@ -9,4 +9,8 @@
 module Simula {
 	requires java.desktop;
 	requires java.compiler;
+	exports simula.compiler;
+	exports simula.compiler.utilities;
+	exports simula.editor;
+	exports simula.runtime;
 }

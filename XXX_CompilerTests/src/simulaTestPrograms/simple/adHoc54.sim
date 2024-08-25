@@ -1,0 +1,10 @@
+Simulation Begin
+
+   ref(Car) bil1,bil2;
+
+   Process Class Car; Begin
+   End;
+
+   bil1:- New Car;
+   
+End;

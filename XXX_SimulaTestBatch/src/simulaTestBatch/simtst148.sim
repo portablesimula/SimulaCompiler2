@@ -1,0 +1,112 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA A/S - SIMULA TEST NO 148
+%
+%  PURPOSE:     Test procedure min and max with arguments of all types.
+%
+%  METHOD:      Try some examples and see if they work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(148,"--- Test procedure min and max with arguments of all types") begin
+   text array facit(0:23);
+   integer traceCase;
+   
+   procedure trace(msg); text msg;
+   begin
+      if verbose then
+      	 begin outtext(msg); outimage; end;
+      if msg ne facit(traceCase) then
+      begin err("Case " & edit(traceCase));
+         outtext("Trace: " & msg); outimage;
+         outtext("Facit: " & facit(traceCase)); outimage;
+      end;
+      traceCase:=traceCase+1;
+   end;
+
+	integer i,j; real r,x,y; character c;
+    long real lx,ly; text t;
+	
+	
+	facit(0) :- "At START";
+	facit(1) :- "min(i,j)  => 1234.0000";
+	facit(2) :- "min(i,y)  => 33.1300";
+	facit(3) :- "min(i,ly) => 3.1416";
+	
+	facit(4) :- "min(r,j)  => 845.1860";
+	facit(5) :- "min(r,y)  => 33.1300";
+	facit(6) :- "min(r,ly) => 3.1416";
+	
+	facit(7) :- "min(lx,j)   => 15.9870";
+	facit(8) :- "min(lx,y)   => 15.9870";
+	facit(9) :- "min(lx,ly)  => 3.1416";
+	
+	facit(10) :- "min(A,B) => A";
+	facit(11) :- "min(AAA,BBB) => AAA";
+	
+	facit(12) :- "max(i,j)  => 4321.0000";
+	facit(13) :- "max(i,y)  => 1234.0000";	
+	facit(14) :- "max(i,ly) => 1234.0000";
+	
+	facit(15) :- "max(r,j)  => 4321.0000";
+	facit(16) :- "max(r,y)  => 845.1860";
+	facit(17) :- "max(r,ly) => 845.1860";
+	
+	facit(18) :- "max(lx,j)   => 4321.0000";
+	facit(19) :- "max(lx,y)   => 33.1300";
+	facit(20) :- "max(lx,ly)  => 15.9870";
+	
+	facit(21) :- "max(A,B) => B";
+	facit(22) :- "max(AAA,BBB) => BBB";
+	
+	facit(23) :- "At END";
+
+% ========================================================
+
+	trace("At START");
+
+	i := 1234;
+	j := 4321;
+	r := 845.186;
+	y := 33.13;
+	lx := 15.987;
+	ly := 3.14159;
+
+	x := min(i,j);  trace("min(i,j)  => " & edfix(x,4));
+	x := min(i,y);  trace("min(i,y)  => " & edfix(x,4));
+    x := min(i,ly);	trace("min(i,ly) => " & edfix(x,4));
+
+    x := min(r,j);	trace("min(r,j)  => " & edfix(x,4));
+    x := min(r,y);	trace("min(r,y)  => " & edfix(x,4));
+    x := min(r,ly);	trace("min(r,ly) => " & edfix(x,4));
+
+    x := min(lx,j);	 trace("min(lx,j)   => " & edfix(x,4));
+    x := min(lx,y);  trace("min(lx,y)   => " & edfix(x,4));
+    x := min(lx,ly); trace("min(lx,ly)  => " & edfix(x,4));
+       
+    c := min('A','B');trace("min(A,B) => " & edit(c));
+	t :- min("AAA","BBB"); trace("min(AAA,BBB) => " & t);
+
+% ========================================================
+
+	x := max(i,j);  trace("max(i,j)  => " & edfix(x,4));
+	x := max(i,y);  trace("max(i,y)  => " & edfix(x,4));
+    x := max(i,ly);	trace("max(i,ly) => " & edfix(x,4));
+
+    x := max(r,j);	trace("max(r,j)  => " & edfix(x,4));
+    x := max(r,y);	trace("max(r,y)  => " & edfix(x,4));
+    x := max(r,ly);	trace("max(r,ly) => " & edfix(x,4));
+
+    x := max(lx,j);	 trace("max(lx,j)   => " & edfix(x,4));
+    x := max(lx,y);  trace("max(lx,y)   => " & edfix(x,4));
+    x := max(lx,ly); trace("max(lx,ly)  => " & edfix(x,4));
+       
+    c := max('A','B');trace("max(A,B) => " & edit(c));
+	t :- max("AAA","BBB"); trace("max(AAA,BBB) => " & t);
+
+
+	trace("At END");
+
+ end;
