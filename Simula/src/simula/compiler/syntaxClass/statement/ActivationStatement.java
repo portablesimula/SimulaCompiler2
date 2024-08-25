@@ -259,7 +259,7 @@ public final class ActivationStatement extends Statement {
 		activate1.buildQualifiedStaticLink(codeBuilder);
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
-		RTS.invokevirtual_RTS_ActivateDirect(codeBuilder);
+		RTS.invokevirtual_Simulation_ActivateDirect(codeBuilder);
 	}
 
 	/**
@@ -281,7 +281,7 @@ public final class ActivationStatement extends Statement {
 		object1.buildEvaluation(null, codeBuilder);
 		time.buildEvaluation(null, codeBuilder);
 		Constant.buildIntConst(codeBuilder, prior);
-		RTS.invokevirtual_RTS_ActivateAt(codeBuilder);
+		RTS.invokevirtual_Simulation_ActivateAt(codeBuilder);
 	}
 
 	/**
@@ -295,7 +295,7 @@ public final class ActivationStatement extends Statement {
 		object1.buildEvaluation(null, codeBuilder);
 		time.buildEvaluation(null, codeBuilder);
 		Constant.buildIntConst(codeBuilder, prior);
-		RTS.invokevirtual_RTS_ActivateDelay(codeBuilder);
+		RTS.invokevirtual_Simulation_ActivateDelay(codeBuilder);
 	}
 
 	/**
@@ -308,7 +308,7 @@ public final class ActivationStatement extends Statement {
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		object2.buildEvaluation(null, codeBuilder);
-		RTS.invokevirtual_RTS_ActivateBefore(codeBuilder);
+		RTS.invokevirtual_Simulation_ActivateBefore(codeBuilder);
 	}
 
 	/**
@@ -321,7 +321,7 @@ public final class ActivationStatement extends Statement {
 		Constant.buildIntConst(codeBuilder, REAC);
 		object1.buildEvaluation(null, codeBuilder);
 		object2.buildEvaluation(null, codeBuilder);
-		RTS.invokevirtual_RTS_ActivateAfter(codeBuilder);
+		RTS.invokevirtual_Simulation_ActivateAfter(codeBuilder);
 	}
 
 

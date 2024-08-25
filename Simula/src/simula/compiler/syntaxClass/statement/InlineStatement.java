@@ -1,11 +1,7 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.constant.MethodTypeDesc;
-
 import simula.compiler.GeneratedJavaClass;
-import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
@@ -45,7 +41,7 @@ public final class InlineStatement extends Statement {
 		}
 		else if(kind.equalsIgnoreCase("terminate")) {
 			codeBuilder.aload(0);
-			RTS.invokevirtual_RTS_terminate(codeBuilder);
+			RTS.invokevirtual_Process_terminate(codeBuilder);
 		}
 		else if(kind.equals("try")) ;   // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH
 		else if(kind.equals("catch")) ; // Nothing. Treated by ClassDeclaration.buildMethod_CatchingErrors_TRY_CATCH

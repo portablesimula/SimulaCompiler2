@@ -283,7 +283,7 @@ public class RTS_Drawing extends RTS_Simset {
 	 */
 	public void setFontSize(final float size) {
 		if (DEBUG)
-			RTS_COMMON.println("SetFontSize: size=" + size + ", OldFont=" + currentFont);
+			RTS_UTIL.println("SetFontSize: size=" + size + ", OldFont=" + currentFont);
 		currentFont = currentFont.deriveFont(size);
 	}
 
@@ -519,10 +519,10 @@ public class RTS_Drawing extends RTS_Simset {
 		canvas.setSize(width, height);
 		currentFont = new Font(Font.SERIF, 12, Font.PLAIN);
 		if (DEBUG)
-			RTS_COMMON.println("Init: Current Font=" + currentFont);
+			RTS_UTIL.println("Init: Current Font=" + currentFont);
 		setFontSize(12);
 		if (DEBUG)
-			RTS_COMMON.println("Init: Current Font=" + currentFont);
+			RTS_UTIL.println("Init: Current Font=" + currentFont);
 		frame.add(canvas);
 		frame.pack();
 		frame.setVisible(true);
@@ -532,13 +532,13 @@ public class RTS_Drawing extends RTS_Simset {
 			@Override
 			public void windowOpened(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowOpened.WindowsEvent: " + e);
+					RTS_UTIL.println("windowOpened.WindowsEvent: " + e);
 			}
 
 			@Override
 			public void windowClosing(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowClosing.WindowsEvent: " + e);
+					RTS_UTIL.println("windowClosing.WindowsEvent: " + e);
 				if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 					throw new RTS_EndProgram("Simula - endProgram");
 				}
@@ -547,31 +547,31 @@ public class RTS_Drawing extends RTS_Simset {
 			@Override
 			public void windowClosed(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowClosed.WindowsEvent: " + e);
+					RTS_UTIL.println("windowClosed.WindowsEvent: " + e);
 			}
 
 			@Override
 			public void windowIconified(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowIconified.WindowsEvent: " + e);
+					RTS_UTIL.println("windowIconified.WindowsEvent: " + e);
 			}
 
 			@Override
 			public void windowDeiconified(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowDeiconified.WindowsEvent: " + e);
+					RTS_UTIL.println("windowDeiconified.WindowsEvent: " + e);
 			}
 
 			@Override
 			public void windowActivated(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowActivated.WindowsEvent: " + e);
+					RTS_UTIL.println("windowActivated.WindowsEvent: " + e);
 			}
 
 			@Override
 			public void windowDeactivated(WindowEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("windowClosing.WindowsEvent: " + e);
+					RTS_UTIL.println("windowClosing.WindowsEvent: " + e);
 			}
 		});
 		canvas.setFocusable(true);
@@ -580,7 +580,7 @@ public class RTS_Drawing extends RTS_Simset {
 			public void keyTyped(KeyEvent e) {
 				char c = e.getKeyChar();
 				if (DEBUG)
-					RTS_COMMON.println("KEY " + c + " TYPED");
+					RTS_UTIL.println("KEY " + c + " TYPED");
 				if (c == 'x')
 					throw new RTS_EndProgram("Simula - endProgram");
 			}
@@ -588,13 +588,13 @@ public class RTS_Drawing extends RTS_Simset {
 			@Override
 			public void keyPressed(KeyEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("KEY " + e.getKeyChar() + " PRESSED");
+					RTS_UTIL.println("KEY " + e.getKeyChar() + " PRESSED");
 			}
 
 			@Override
 			public void keyReleased(KeyEvent e) {
 				if (DEBUG)
-					RTS_COMMON.println("KEY " + e.getKeyChar() + " RELEASE");
+					RTS_UTIL.println("KEY " + e.getKeyChar() + " RELEASE");
 			}
 		});
 	}

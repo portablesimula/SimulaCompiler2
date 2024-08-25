@@ -92,11 +92,11 @@ public abstract class RTS_CatchingErrors extends RTS_CLASS {
 		if (e instanceof RTS_LABEL)
 			throw (e);
 		try {
-			String message = getErrorMessage(e);
+			String message = RTS_UTIL.getErrorMessage(e);
 			if (RTS_Option.VERBOSE) {
 //				System.out.println("RTS_CatchingErrors._onError: GOT _SimulaRuntimeError:" + message);
 				e.printStackTrace(System.out);
-				RTS_COMMON.printSimulaStackTrace(1);
+				RTS_UTIL.printSimulaStackTrace(1);
 			}
 //			System.out.println("RTS_CatchingErrors._onError: match="+match);
 			match.CPF().setPar(new RTS_NAME<RTS_TXT>() {
@@ -107,7 +107,7 @@ public abstract class RTS_CatchingErrors extends RTS_CLASS {
 		} catch (RTS_LABEL q) {
 			throw (q);
 		} catch (RuntimeException x) {
-			System.out.println("RuntimeException within onError: " + getErrorMessage(e));
+			System.out.println("RuntimeException within onError: " + RTS_UTIL.getErrorMessage(e));
 			e.printStackTrace(System.out);
 			System.exit(-1);
 		}

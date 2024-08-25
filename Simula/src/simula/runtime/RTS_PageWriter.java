@@ -338,7 +338,7 @@ public class RTS_PageWriter extends Writer {
 			msg1 = (printService == null) ? "" : "to " + printService;
 			String msg2 = e.getMessage();
 			msg2 = (msg2 == null) ? "" : "\n" + msg2;
-			int res = RTS_COMMON.optionDialog("Attempt to print " + msg1 + " - FAILED" + msg2 + "\nDo you want to retry ?",
+			int res = RTS_UTIL.optionDialog("Attempt to print " + msg1 + " - FAILED" + msg2 + "\nDo you want to retry ?",
 					"Error", JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, "Yes", "No");
 			if (res == JOptionPane.YES_OPTION)
 				return (true);

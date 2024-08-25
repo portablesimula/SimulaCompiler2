@@ -359,7 +359,7 @@ public final class Parameter extends Declaration {
 				if(mode == Parameter.Mode.value && type.keyWord == Type.T_TEXT) {
 //					codeBuilder.invokestatic(RTS.CD.RTS_ENVIRONMENT,
 //							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
-					RTS.invokestatic_RTS_TXT_copy(codeBuilder);
+					RTS.invokestatic_ENVIRONMENT_copy(codeBuilder);
 				}
 			}
 		}

@@ -97,7 +97,7 @@ public final class GotoStatement extends Statement {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 //		public void _GOTO(final RTS_LABEL q) {
 //			if (Option.GOTO_TRACING)
-//				RTS_COMMON.TRACE("_RTObject.GOTO: " + q);
+//				RTS_UTIL.TRACE("_RTObject.GOTO: " + q);
 //			throw (q);
 //		}
 //        32: aload_0

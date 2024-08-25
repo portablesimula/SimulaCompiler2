@@ -149,7 +149,7 @@ public final class ObjectRelation extends Expression {
 			return (lhs.get() + KeyWord.toJavaCode(opr) + classDeclaration.getJavaIdentifier());
 		} else if (opr == KeyWord.IS) {
 			if (!checkCompatibility(lhs, classIdentifier)) return ("false"); // warning("IS is always FALSE
-			return ("_IS(" + lhs.get() + "," + classDeclaration.getJavaIdentifier() + ".class)");
+			return ("RTS_UTIL._IS(" + lhs.get() + "," + classDeclaration.getJavaIdentifier() + ".class)");
 		} else {
 			Util.IERR();
 			return ("");
@@ -164,7 +164,7 @@ public final class ObjectRelation extends Expression {
 //			codeBuilder
 //				.ldc(classDeclaration.getClassDesc())
 //				.invokestatic(RTS.CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
-			RTS.invokestatic_RTS_IS(classDeclaration.getClassDesc(), codeBuilder);
+			RTS.invokestatic_UTIL_IS(classDeclaration.getClassDesc(), codeBuilder);
 		} else if(opr == KeyWord.IN) {
 			lhs.buildEvaluation(null,codeBuilder);
 			codeBuilder.instanceof_(classDeclaration.getClassDesc());

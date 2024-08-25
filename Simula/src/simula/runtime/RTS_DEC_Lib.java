@@ -55,8 +55,8 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	 * @param mess a descriptive message
 	 */
 	public static void abort(RTS_TXT mess) {
-		RTS_COMMON.println(mess.edText());
-		RTS_RTObject.terminate_program();
+		RTS_UTIL.println(mess.edText());
+		RTS_UTIL.endProgram(0);
 	}
 
 	/** DEC_Lib Procedure change.
@@ -134,7 +134,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 			master.put(Master);
 		} else {
 			RTS_TXT subt = RTS_TXT.sub(Master, 1, newMaster.length());
-			RTS_RTObject._ASGSTR(subt, newMaster);
+			RTS_UTIL._ASGSTR(subt, newMaster);
 			Master.POS = P + newt.length();
 			Master.LENGTH = Master.LENGTH + diff; // Note: diff is negative
 			master.put(Master);
@@ -485,7 +485,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	public static void enterdebug(boolean maycontinue) {
 //		if(SIMOB.isPresent) _RT.NOT_IMPLEMENTED("DECLIB: enterdebug");
 		if (!maycontinue)
-			terminate_program();
+			RTS_UTIL.endProgram(0);
 	}
 
 	/** DEC_Lib Procedure exit.
@@ -520,13 +520,13 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 		case 0:
 			System.exit(-1);
 		case 1:
-			terminate_program();
+			RTS_UTIL.endProgram(0);
 		case 2:
 			enterdebug(true);
-			terminate_program();
+			RTS_UTIL.endProgram(0);
 		default:
-			RTS_COMMON.println("Parameter to exit out of range (0,2)");
-			terminate_program();
+			RTS_UTIL.println("Parameter to exit out of range (0,2)");
+			RTS_UTIL.endProgram(0);
 		}
 	}
 
@@ -904,7 +904,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	 */
 	public static char insinglechar() {
 		try {
-			return (RTS_COMMON.console.read());
+			return (RTS_UTIL.console.read());
 		} catch (Exception e) {
 			throw new RTS_SimulaRuntimeError(
 					"Procedure insinglechar is undefined: re-run program with Runtime Option USE_CONSOLE=true");
@@ -973,7 +973,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	 */
 	public static RTS_TXT maketext(final char c, final int n) {
 		if (n <= 0)
-			return (NOTEXT);
+			return (RTS_UTIL.NOTEXT);
 		RTS_TXT textRef = new RTS_TXT();
 		RTS_TEXTOBJ textObj = new RTS_TEXTOBJ(n, false);
 		textObj.fill(c);
@@ -1017,7 +1017,7 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	public static boolean puttext(RTS_NAME<RTS_TXT> oldstring, RTS_TXT newstring) {
 		RTS_TXT s = oldstring.get();
 		if (s.POS + newstring.LENGTH <= s.LENGTH & !RTS_TXT.constant(s)) {
-			_ASGTXT(RTS_TXT.sub(s, s.POS + 1, newstring.LENGTH), newstring);
+			RTS_UTIL._ASGTXT(RTS_TXT.sub(s, s.POS + 1, newstring.LENGTH), newstring);
 			RTS_TXT.setpos(s, s.POS + 1 + newstring.LENGTH);
 			oldstring.put(s);
 			return (true);

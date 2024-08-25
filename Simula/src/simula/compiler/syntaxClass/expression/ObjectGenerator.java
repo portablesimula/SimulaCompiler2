@@ -243,7 +243,7 @@ public final class ObjectGenerator extends Expression {
 				if (par.type.keyWord == Type.T_TEXT) {
 //					codeBuilder.invokestatic(RTS.CD.RTS_RTObject,
 //								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
-					RTS.invokestatic_RTS_TXT_copy(codeBuilder);
+					RTS.invokestatic_ENVIRONMENT_copy(codeBuilder);
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
 //					codeBuilder.invokevirtual(RTS.CD.RTS_ARRAY,

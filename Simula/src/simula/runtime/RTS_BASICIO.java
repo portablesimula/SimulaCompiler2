@@ -114,9 +114,16 @@ public class RTS_BASICIO extends RTS_ENVIRONMENT {
 		super(staticLink);
 	}
 
-//	procedure terminate_program;
-//	begin ... ;  goto STOP  end terminate_program;
-//	DEFINED IN _RTObject	
+	// ************************************************************
+	// *** Procedure terminate_program;
+	// *** begin ... ; goto STOP end terminate_program;
+	// ************************************************************
+	/**
+	 * Implementation of Simula's Procedure terminate_program.
+	 */
+	public static void terminate_program() {
+		RTS_UTIL.endProgram(0);
+	}
 
 	@Override
 	public String toString() {

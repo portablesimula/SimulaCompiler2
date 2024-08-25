@@ -11,6 +11,7 @@ import simula.compiler.syntaxClass.Type;
 public class RTS {
 	
 	public class CD {
+		public static final ClassDesc RTS_UTIL		 = ClassDesc.of("simula.runtime.RTS_UTIL");
 		public static final ClassDesc RTS_RTObject       = ClassDesc.of("simula.runtime.RTS_RTObject");
 		public static final	ClassDesc RTS_ENVIRONMENT    = ClassDesc.of("simula.runtime.RTS_ENVIRONMENT"); 
 		public static final	ClassDesc RTS_BASICIO        = ClassDesc.of("simula.runtime.RTS_BASICIO");
@@ -63,8 +64,9 @@ public class RTS {
 
 	}
 
-	
+	// ********************************************************************************************
 	// *** OWNER: RTS_NAME
+	// ********************************************************************************************
 	
 	public static void invokevirtual_NAME_put(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_NAME;
@@ -77,35 +79,49 @@ public class RTS {
 	}
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_Simulation
+	// ********************************************************************************************
 	
-	public static void invokevirtual_RTS_ActivateDirect(CodeBuilder codeBuilder) {
+	public static void invokevirtual_Simulation_ActivateDirect(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_Simulation;
 		codeBuilder.invokevirtual(owner, "ActivateDirect", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;)V"));
 	}
 
-	public static void invokevirtual_RTS_ActivateAt(CodeBuilder codeBuilder) {
+	public static void invokevirtual_Simulation_ActivateAt(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_Simulation;
 		codeBuilder.invokevirtual(owner, "ActivateAt", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V"));
 	}
 
-	public static void invokevirtual_RTS_ActivateDelay(CodeBuilder codeBuilder) {
+	public static void invokevirtual_Simulation_ActivateDelay(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_Simulation;
 		codeBuilder.invokevirtual(owner, "ActivateDelay", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;DZ)V"));
 	}
 
-	public static void invokevirtual_RTS_ActivateBefore(CodeBuilder codeBuilder) {
+	public static void invokevirtual_Simulation_ActivateBefore(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_Simulation;
 		codeBuilder.invokevirtual(owner, "ActivateBefore", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V"));
 	}
 
-	public static void invokevirtual_RTS_ActivateAfter(CodeBuilder codeBuilder) {
+	public static void invokevirtual_Simulation_ActivateAfter(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_Simulation;
 		codeBuilder.invokevirtual(owner, "ActivateAfter", MethodTypeDesc.ofDescriptor("(ZLsimula/runtime/RTS_Process;Lsimula/runtime/RTS_Process;)V"));
 	}
 
 	
+	// ********************************************************************************************
+	// *** OWNER: RTS_Process
+	// ********************************************************************************************
+	
+	public static void invokevirtual_Process_terminate(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_Process;
+		codeBuilder.invokevirtual(owner,"terminate", MethodTypeDesc.ofDescriptor("()V"));
+	}
+
+	
+	// ********************************************************************************************
 	// *** OWNER: FOR_List
+	// ********************************************************************************************
 	
 	public static void invokevirtual_FOR_List_iterator(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.FOR_List;
@@ -113,7 +129,9 @@ public class RTS {
 	}
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_CLASS
+	// ********************************************************************************************
 	
 	public static void invokevirtual_CLASS_START(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_CLASS;
@@ -121,7 +139,9 @@ public class RTS {
 	}
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_PROCEDURE
+	// ********************************************************************************************
 	
 	public static void invokevirtual_PROCEDURE_setpar(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_PROCEDURE;
@@ -139,7 +159,9 @@ public class RTS {
 	}
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_PRCQNT
+	// ********************************************************************************************
 	
 	public static void invokevirtual_PRCQNT_CPF(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_PRCQNT;
@@ -147,7 +169,9 @@ public class RTS {
 	}
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_ARRAY
+	// ********************************************************************************************
 	
 	public static void invokevirtual_ARRAY_copy(CodeBuilder codeBuilder) {
 		codeBuilder.invokevirtual(RTS.CD.RTS_ARRAY, "COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
@@ -173,8 +197,114 @@ public class RTS {
 			codeBuilder.checkcast(type.toClassDesc());
 	}
 
+
+	// ********************************************************************************************
+	// *** OWNER: RTS_ENVIRONMENT
+	// ********************************************************************************************
+
+	public static void invokestatic_ENVIRONMENT_copy(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_ENVIRONMENT;
+		codeBuilder.invokestatic(owner, "copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
+	}
+
+
+	// ********************************************************************************************
+	// *** OWNER: RTS_UTIL
+	// ********************************************************************************************
+
+	public static void invokestatic_UTIL_ASGTXT(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
+		codeBuilder.invokestatic(owner, "_ASGTXT", MTD);
+	}
+
+	public static void invokestatic_UTIL_ASGSTR(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
+		codeBuilder.invokestatic(owner, "_ASGSTR", MTD);
+	}
 	
+	public static void buildInvokeTextRel(int opr, CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		String textRelMethod=null;
+		switch (opr) {
+			case KeyWord.GE -> textRelMethod="_TXTREL_GE";
+			case KeyWord.NE -> textRelMethod="_TXTREL_NE";
+			case KeyWord.GT -> textRelMethod="_TXTREL_GT";
+			case KeyWord.LE -> textRelMethod="_TXTREL_LE";
+			case KeyWord.EQ -> textRelMethod="_TXTREL_EQ";
+			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
+			case KeyWord.EQR -> textRelMethod="TRF_EQ";
+			case KeyWord.NER -> textRelMethod="TRF_NE";
+			default -> Util.IERR();
+		}
+		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
+		codeBuilder.invokestatic(owner, textRelMethod, MTD);
+	}
+
+
+	public static void invokestatic_UTIL_treatException(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "treatException",
+				MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));
+	}
+
+	public static void invokestatic_UTIL_IPOW(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
+	}
+	
+	public static void invokestatic_UTIL_IS(ClassDesc classDesc, CodeBuilder codeBuilder) {
+		codeBuilder
+			.ldc(classDesc)
+			.invokestatic(CD.RTS_UTIL, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
+	}
+	
+	public static void invokestatic_UTIL_sign(Type type, int DELTA, CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		switch(type.keyWord) {
+			case Type.T_INTEGER   -> { codeBuilder.iload(DELTA).invokestatic(owner, "isign", MethodTypeDesc.ofDescriptor("(I)I")); }
+			case Type.T_REAL      -> { codeBuilder.fload(DELTA).invokestatic(owner, "fsign", MethodTypeDesc.ofDescriptor("(F)F")); }
+			case Type.T_LONG_REAL -> { codeBuilder.dload(DELTA).invokestatic(owner, "dsign", MethodTypeDesc.ofDescriptor("(D)D")); }
+			default -> Util.IERR();
+		}
+	}
+
+	public static void buildSNAPSHOT(CodeBuilder codeBuilder, String stx) {
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_UTIL"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
+	}
+
+	public static void buildSNAPSHOT2(CodeBuilder codeBuilder, String stx) {
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.dup()
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_UTIL"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;ILjava/lang/String;)V"));
+	}
+
+
+	public static void buildSNAPSHOT2F(CodeBuilder codeBuilder, String stx) {
+		// SnapShot
+		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		codeBuilder
+			.dup()
+			.sipush(0)
+			.ldc(pool.stringEntry(stx.toString()))
+			.invokestatic(ClassDesc.of("simula.runtime.RTS_UTIL"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(FILjava/lang/String;)V"));
+	}
+	
+	
+	
+	// ********************************************************************************************
 	// *** OWNER: RTS_CatchingErrors
+	// ********************************************************************************************
 	
 //	public static void invokevirtual_CatchingErrors_onError_0(CodeBuilder codeBuilder) {
 //		ClassDesc owner = CD.RTS_CatchingErrors;
@@ -184,11 +314,33 @@ public class RTS {
 	public static void invokevirtual_CatchingErrors_onError(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_CatchingErrors;
 		codeBuilder.invokevirtual(owner, "_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V"));
-	}
-	
+	}	
 
 	
+	// ********************************************************************************************
 	// *** OWNER: RTS_RTOBJECT
+	// ********************************************************************************************
+	
+	/**
+	 * Convert a Runtime Object to a primitive type value.
+	 * <p>
+	 * If the input Object is a name parameter or a parameter procedure it evaluated before the conversion.
+	 * @param codeBuilder the CodeBuilder to use
+	 * @return true if the value is converted; otherwise false
+	 */
+	public static boolean objectToPrimitiveType(Type type, CodeBuilder codeBuilder) {
+		// Object TOS value ==> possibleEvaluation ==> Primitive type
+		ClassDesc owner = RTS.CD.RTS_RTObject;
+		switch(type.keyWord) {
+			case Type.T_INTEGER   -> codeBuilder.invokevirtual(owner,"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I"));
+			case Type.T_REAL      -> codeBuilder.invokevirtual(owner,"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F"));
+			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(owner,"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D"));
+			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(owner,"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"));
+			case Type.T_CHARACTER -> codeBuilder.invokevirtual(owner,"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C"));
+			default               -> { return false; }
+		}
+		return true;
+	}
 	
 	public static void invokevirtual_RTObject_BPRG(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_RTObject;
@@ -234,126 +386,6 @@ public class RTS {
 	public static void invokevirtual_RTS_detach(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_RTObject;
 		codeBuilder.invokevirtual(owner,"detach", MethodTypeDesc.ofDescriptor("()V"));
-	}
-
-	public static void invokevirtual_RTS_terminate(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_Process;
-		codeBuilder.invokevirtual(owner,"terminate", MethodTypeDesc.ofDescriptor("()V"));
-	}
-
-	public static void invokestatic_RTS_IPOW(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_ENVIRONMENT;
-		codeBuilder.invokestatic(owner, "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
-	}
-
-	public static void invokestatic_RTS_ASGTXT(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_RTObject;
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
-		codeBuilder.invokestatic(owner, "_ASGTXT", MTD);
-	}
-
-	public static void invokestatic_RTS_ASGSTR(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_RTObject;
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
-		codeBuilder.invokestatic(owner, "_ASGSTR", MTD);
-	}
-
-	public static void invokestatic_RTS_TXT_copy(CodeBuilder codeBuilder) {
-		codeBuilder.invokestatic(CD.RTS_RTObject,
-				"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
-	}
-	
-	public static void invokestatic_RTS_IS(ClassDesc classDesc, CodeBuilder codeBuilder) {
-		codeBuilder
-			.ldc(classDesc)
-			.invokestatic(CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
-	}
-	
-	public static void invokestatic_RTS_sign(Type type, int DELTA, CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_ENVIRONMENT;
-		switch(type.keyWord) {
-			case Type.T_INTEGER   -> { codeBuilder.iload(DELTA).invokestatic(owner, "isign", MethodTypeDesc.ofDescriptor("(I)I")); }
-			case Type.T_REAL      -> { codeBuilder.fload(DELTA).invokestatic(owner, "fsign", MethodTypeDesc.ofDescriptor("(F)F")); }
-			case Type.T_LONG_REAL -> { codeBuilder.dload(DELTA).invokestatic(owner, "dsign", MethodTypeDesc.ofDescriptor("(D)D")); }
-			default -> Util.IERR();
-		}
-	}
-
-
-	public static void invokestatic_RTS_treatException(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_RTObject;
-		codeBuilder.invokestatic(owner, "treatException",
-				MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));
-	}
-	
-	/**
-	 * Convert a Runtime Object to a primitive type value.
-	 * <p>
-	 * If the input Object is a name parameter or a parameter procedure it evaluated before the conversion.
-	 * @param codeBuilder the CodeBuilder to use
-	 * @return true if the value is converted; otherwise false
-	 */
-	public static boolean objectToPrimitiveType(Type type, CodeBuilder codeBuilder) {
-		// Object TOS value ==> possibleEvaluation ==> Primitive type
-		ClassDesc owner = RTS.CD.RTS_RTObject;
-		switch(type.keyWord) {
-			case Type.T_INTEGER   -> codeBuilder.invokevirtual(owner,"intValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)I"));
-			case Type.T_REAL      -> codeBuilder.invokevirtual(owner,"floatValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)F"));
-			case Type.T_LONG_REAL -> codeBuilder.invokevirtual(owner,"doubleValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)D"));
-			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(owner,"booleanValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)Z"));
-			case Type.T_CHARACTER -> codeBuilder.invokevirtual(owner,"charValue", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;)C"));
-			default               -> { return false; }
-		}
-		return true;
-	}
-	
-	public static void buildInvokeTextRel(int opr, CodeBuilder codeBuilder) {
-		String textRelMethod=null;
-		switch (opr) {
-			case KeyWord.GE -> textRelMethod="_TXTREL_GE";
-			case KeyWord.NE -> textRelMethod="_TXTREL_NE";
-			case KeyWord.GT -> textRelMethod="_TXTREL_GT";
-			case KeyWord.LE -> textRelMethod="_TXTREL_LE";
-			case KeyWord.EQ -> textRelMethod="_TXTREL_EQ";
-			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
-			case KeyWord.EQR -> textRelMethod="TRF_EQ";
-			case KeyWord.NER -> textRelMethod="TRF_NE";
-			default -> Util.IERR();
-		}
-		ClassDesc owner = RTS.CD.RTS_RTObject;
-		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
-		codeBuilder.invokestatic(owner, textRelMethod, MTD);
-		
-	}
-
-	public static void buildSNAPSHOT(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(ILjava/lang/String;)V"));
-	}
-
-	public static void buildSNAPSHOT2(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.dup()
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;ILjava/lang/String;)V"));
-	}
-
-
-	public static void buildSNAPSHOT2F(CodeBuilder codeBuilder, String stx) {
-		// SnapShot
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		codeBuilder
-			.dup()
-			.sipush(0)
-			.ldc(pool.stringEntry(stx.toString()))
-			.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON"), "_SNAPSHOT", MethodTypeDesc.ofDescriptor("(FILjava/lang/String;)V"));
 	}
 
 }

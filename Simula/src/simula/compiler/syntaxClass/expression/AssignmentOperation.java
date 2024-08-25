@@ -170,11 +170,11 @@ public final class AssignmentOperation extends Expression {
 		if (rhs instanceof Constant cnst) {
 			Object value = cnst.value;
 			if (value != null) {
-				s.append("_ASGSTR(").append(target).append(",\"").append(value).append("\")");
+				s.append("RTS_UTIL._ASGSTR(").append(target).append(",\"").append(value).append("\")");
 				return (s.toString());
 			}
 		}
-		s.append("_ASGTXT(").append(target).append(',').append(rhs.toJavaCode()).append(')');
+		s.append("RTS_UTIL._ASGTXT(").append(target).append(',').append(rhs.toJavaCode()).append(')');
 		return (s.toString());			
 
 	}
@@ -285,7 +285,7 @@ public final class AssignmentOperation extends Expression {
 //				ClassDesc CD = BlockDeclaration.currentClassDesc();
 //				MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Ljava/lang/String;)Lsimula/runtime/RTS_TXT;");
 //				codeBuilder.invokestatic(CD, "_ASGSTR", MTD);
-				RTS.invokestatic_RTS_ASGSTR(codeBuilder);
+				RTS.invokestatic_UTIL_ASGSTR(codeBuilder);
 				if(this.backLink == null) codeBuilder.pop();
 				return;
 			}
@@ -298,7 +298,7 @@ public final class AssignmentOperation extends Expression {
 //		ClassDesc CD = BlockDeclaration.currentClassDesc();
 //		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;");
 //		codeBuilder.invokestatic(CD, "_ASGTXT", MTD);
-		RTS.invokestatic_RTS_ASGTXT(codeBuilder);
+		RTS.invokestatic_UTIL_ASGTXT(codeBuilder);
 		if(this.backLink == null) codeBuilder.pop();
 	}
 

@@ -52,7 +52,7 @@ public abstract class RTS_RTObject {
 	/**
 	 * Execution stat time in millis
 	 */
-	private static long startTimeMs;
+	static long startTimeMs;
 
 
 	/**
@@ -338,43 +338,6 @@ public abstract class RTS_RTObject {
 		throw new ClassCastException("Incompatible Types: character," + par.getClass().getSimpleName());
 	}
 
-
-	// *****************************************
-	// *** Text utilities ***
-	// *****************************************
-	/**
-	 * Utility constant NOTEXT
-	 */
-	public final static RTS_TXT NOTEXT = new RTS_TXT();
-
-	/**
-	 * <pre>
-	 * text procedure copy(T); text T;
-	 *            if T =/= notext
-	 *            then begin text U;
-	 *               U.OBJ    :- new TEXTOBJ(T.LENGTH,false);
-	 *               U.START  := 1;
-	 *               U.LENGTH := T.LENGTH;
-	 *               U.POS    := 1;
-	 *               U        := T;
-	 *               copy     :- U
-	 *            end copy;
-	 * </pre>
-	 * 
-	 * "copy(T)", with T =/= notext, references a new alterable main frame which
-	 * contains a text value identical to that of T.
-	 * 
-	 * @param T the text object to be copied
-	 * @return a copy of T
-	 */
-	public static RTS_TXT copy(final RTS_TXT T) {
-		if (T == null)
-			return (null);
-		RTS_TXT U = blanks(T.LENGTH);
-		_ASGTXT(U, T);
-		return (U);
-	}
-
 	/**
 	 * The operator &amp; permits text concatenation.
 	 * 
@@ -384,237 +347,13 @@ public abstract class RTS_RTObject {
 	 */
 	public RTS_TXT CONC(RTS_TXT T1, RTS_TXT T2) {
 		if (T1 == null)
-			T1 = NOTEXT;
+			T1 = RTS_UTIL.NOTEXT;
 		if (T2 == null)
-			T2 = NOTEXT;
-		RTS_TXT U = blanks(RTS_TXT.length(T1) + RTS_TXT.length(T2));
-		_ASGTXT(RTS_TXT.sub(U, 1, RTS_TXT.length(T1)), T1);
-		_ASGTXT(RTS_TXT.sub(U, 1 + RTS_TXT.length(T1), RTS_TXT.length(T2)), T2);
+			T2 = RTS_UTIL.NOTEXT;
+		RTS_TXT U = RTS_ENVIRONMENT.blanks(RTS_TXT.length(T1) + RTS_TXT.length(T2));
+		RTS_UTIL._ASGTXT(RTS_TXT.sub(U, 1, RTS_TXT.length(T1)), T1);
+		RTS_UTIL._ASGTXT(RTS_TXT.sub(U, 1 + RTS_TXT.length(T1), RTS_TXT.length(T2)), T2);
 		return (U);
-	}
-
-	/**
-	 * <pre>
-	 * text procedure blanks(n); integer n;
-	 *            if        n &lt; 0 then error("..." ! Parm. to blanks &lt; 0;)
-	 *            else if   n > 0
-	 *            then begin text T;
-	 *               T.OBJ    :- new TEXTOBJ(n,false);
-	 *               T.START  := 1;
-	 *               T.LENGTH := n;
-	 *               T.POS    := 1;
-	 *               T        := notext;    ! blank-fill, see 4.1.2;
-	 *               blanks   :- T
-	 *            end blanks;
-	 * </pre>
-	 * 
-	 * "blanks(n)", with n > 0, references a new alterable main frame of length n,
-	 * containing only blank characters. "blanks(0)" references notext.
-	 * 
-	 * @param n the number of space characters
-	 * @return a text object conraining n space characters
-	 */
-	public static RTS_TXT blanks(final int n) {
-		if (n < 0)
-			throw new RTS_SimulaRuntimeError("Parmameter to blanks < 0");
-		if (n == 0)
-			return (NOTEXT);
-		RTS_TXT textRef = new RTS_TXT();
-		RTS_TEXTOBJ textObj = new RTS_TEXTOBJ(n, false);
-		textObj.fill(' ');
-		textRef.START = 0; // Note: Counting from zero in this implementation
-		textRef.LENGTH = n;
-		textRef.POS = 0; // Note: Counting from zero in this implementation
-		textRef.OBJ = textObj;
-		return (textRef);
-	}
-
-	/**
-	 * Text value assignment.
-	 * @param T the from text
-	 * @param U the target text
-	 * @return the resulting text
-	 */
-	public static RTS_TXT _ASGTXT(RTS_TXT T, RTS_TXT U) {
-		if (T == null)
-			T = NOTEXT;
-		if (U == null)
-			U = NOTEXT;
-		int fromLength = U.LENGTH;
-		
-//		System.out.println("RTS_RTObject: _ASGTXT \""+T.edText()+"\" <=== \""+U.edText()+'"');
-		
-		if (fromLength > T.LENGTH)
-			throw (new RTS_SimulaRuntimeError(
-					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
-		for (int i = 0; i < fromLength; i++)
-			T.OBJ.MAIN[T.START + i] = U.OBJ.MAIN[U.START + i];
-		for (int i = fromLength; i < T.LENGTH; i++)
-			T.OBJ.MAIN[T.START + i] = ' ';
-		return (T);
-	}
-
-	/**
-	 * Text value assignment from String.
-	 * @param T the from text
-	 * @param s the target text
-	 * @return the resulting text
-	 */
-	public static RTS_TXT _ASGSTR(RTS_TXT T, final String s) {
-		if (T == null)
-			T = NOTEXT;
-		int fromLength = 0;
-		if (s != null)
-			fromLength = s.length();
-		
-//		System.out.println("RTS_RTObject: _ASGSTR \""+T.edText()+"\" <=== \""+s+'"');
-		
-		if (fromLength > T.LENGTH)
-			throw (new RTS_SimulaRuntimeError(
-					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
-		for (int i = 0; i < fromLength; i++)
-			T.OBJ.MAIN[T.START + i] = s.charAt(i);
-		for (int i = fromLength; i < T.LENGTH; i++)
-			T.OBJ.MAIN[T.START + i] = ' ';
-		return (T);
-	}
-
-	// **************************************************************
-	// *** TXTREL - Text value relations
-	// **************************************************************
-	/**
-	 * Text value relation - LT
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_LT(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 1));
-	}
-
-	/**
-	 * Text value relation - EQ
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_EQ(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 2));
-	}
-
-	/**
-	 * Text value relation - LE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_LE(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 3));
-	}
-
-	/**
-	 * Text value relation - GT
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_GT(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 4));
-	}
-
-	/**
-	 * Text value relation - NE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_NE(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 5));
-	}
-
-	/**
-	 * Text value relation - GE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean _TXTREL_GE(final RTS_TXT left, final RTS_TXT right) {
-		return (TXTREL(left, right, 6));
-	}
-
-	/**
-	 * Text value relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @param code relational code
-	 * @return true if relation holds
-	 */
-	private static boolean TXTREL(RTS_TXT left, RTS_TXT right, int code) {
-		int i; // Loop index.
-		int dif; // Difference between lengths.
-		int lng; // Length of common parts.
-		if (left == null)  left = NOTEXT;
-		if (right == null) right = NOTEXT;
-		lng = right.LENGTH;
-		dif = lng - left.LENGTH;
-		if (dif != 0) {
-			if (code == 2) return (false);
-			if (code == 5) return (true);
-			if (dif > 0)   lng = left.LENGTH;
-		}
-		i = 0;
-		while (i < lng) {
-			int rightChar = right.OBJ.MAIN[right.START + i];
-			int leftChar = left.OBJ.MAIN[left.START + i];
-			if (rightChar != leftChar) {
-				dif = rightChar - leftChar;
-				break;
-			}
-			i = i + 1;
-		}
-		switch (code) {
-			case 1:	return (0 < dif);
-			case 2:	return (0 == dif);
-			case 3:	return (0 <= dif);
-			case 4:	return (0 > dif);
-			case 5:	return (0 != dif);
-			case 6:	return (0 >= dif);
-			default:
-				throw new RTS_SimulaRuntimeError("Internal Error");
-		}
-	}
-
-	// **************************************************************
-	// *** TXTREL - Text reference relations. == =/=
-	// **************************************************************
-	/**
-	 * Text reference equal relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean TRF_EQ(RTS_TXT left, RTS_TXT right) {
-		if (left == null)
-			left = NOTEXT;
-		if (right == null)
-			right = NOTEXT;
-		if (left.LENGTH != right.LENGTH)
-			return (false);
-		if (left.START != right.START)
-			return (false);
-		if (left.OBJ != right.OBJ)
-			return (false);
-		return (true);
-	}
-
-	/**
-	 * Text reference not equal relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
-	public static boolean TRF_NE(final RTS_TXT left, final RTS_TXT right) {
-		return (!TRF_EQ(left, right));
 	}
 
 	// **************************************************************
@@ -698,12 +437,12 @@ public abstract class RTS_RTObject {
 	public static void _JUMPTABLE(final int labelIndex,final int tableSize) {
 		// Local GOTO - Needs ByteCode Engineering.
 		if (RTS_Option.GOTO_TRACING)
-			RTS_COMMON.TRACE("_RTObject._JUMPTABLE: labelIndex=" + labelIndex);
+			RTS_UTIL.TRACE("_RTObject._JUMPTABLE: labelIndex=" + labelIndex);
 		String msg = "FATAL ERROR: Local GOTO LABEL#" + labelIndex + " Needs ByteCode Engineering.";
-		RTS_COMMON.println(msg);
+		RTS_UTIL.println(msg);
 		if (labelIndex == 0)
 			return;
-		RTS_COMMON.println(msg);
+		RTS_UTIL.println(msg);
 		throw new RTS_SimulaRuntimeError(msg);
 	}
 	
@@ -730,7 +469,7 @@ public abstract class RTS_RTObject {
 	 */
 	public void _GOTO(final RTS_LABEL q) {
 		if (RTS_Option.GOTO_TRACING) {
-			RTS_COMMON.TRACE("RTS_RTObject.GOTO: " + q);
+			RTS_UTIL.TRACE("RTS_RTObject.GOTO: " + q);
 		
 //			System.out.println("\nRTS_RTObject._GOTO: "+q.identifier + ", CUR="+_CUR);
 //			System.out.println("RTS_RTObject._GOTO: "+q.identifier+" = "+q);
@@ -768,7 +507,7 @@ public abstract class RTS_RTObject {
 	 * @param label the label quant
 	 */
 	public static void TRACE_GOTO(final String msg, final RTS_LABEL label) {
-		RTS_COMMON.TRACE(msg + " GOTO " + label);
+		RTS_UTIL.TRACE(msg + " GOTO " + label);
 		
 		System.out.println("\nRTS_RTObject.TRACE_GOTO: "+label.identifier + ", CUR="+_CUR);
         new Exception("With Operating Chain:").printStackTrace(System.out);
@@ -809,128 +548,6 @@ public abstract class RTS_RTObject {
 		}
 
 	}
-	
-	public static void treatException(final Throwable e, final RTS_RTObject obj) {
-		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
-		if (RTS_Option.GOTO_TRACING) {
-			RTS_COMMON.println("\nRTS_RTObject.treatException: In "+ threadID + e);
-			e.printStackTrace(System.out);
-		}
-		
-		if (e instanceof RTS_LABEL) {
-			if (RTS_Option.GOTO_TRACING) {
-//				System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
-				RTS_COMMON.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
-			}
-			RTS_RTObject DL = obj._DL;
-			if (DL != null && DL != _CTX) {
-				if (RTS_Option.GOTO_TRACING) {
-					System.err.println("DL=" + DL.edObjectAttributes());
-					RTS_COMMON.println("DL=" + DL.edObjectAttributes());
-				}
-				RTS_Coroutine._PENDING_EXCEPTION = (RuntimeException) e;
-				DL._CORUT.run();
-			} else {
-				String msg = "Illegal GOTO " + ((RTS_LABEL) e).identifier;
-//				System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
-				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
-					callExceptionHandler(msg);
-				} else {
-					RTS_COMMON.println(threadID + "SIMULA RUNTIME(1) ERROR: " + msg);
-					if (RTS_Option.VERBOSE)
-						e.printStackTrace();
-					
-					if (RTS_Option.GOTO_TRACING) {
-						System.out.println("RTS_RTObject.treatException: Return after 'Illege GOTO' message");
-					}
-					System.exit(-1);
-				}
-			}
-		} else if (e instanceof RTS_EndProgram) {
-			if (RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.treatException: RTS_EndProgram EXIT");
-			}
-			// NOTHING
-		} else if (e instanceof RuntimeException) {
-			String msg = getErrorMessage(e);
-			msg = msg.replace("RTS_SimulaRuntimeError: ", "");
-//			System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
-			if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
-				callExceptionHandler(msg);
-			} else {
-				RTS_COMMON.printError(threadID + "SIMULA RUNTIME(2) ERROR: " + msg);
-				if (RTS_Option.VERBOSE)
-					e.printStackTrace();
-				RTS_COMMON.printSimulaStackTrace(e, 0);
-				System.exit(-1);
-			}
-			
-		} else if (e instanceof Error) {
-			String msg = e.getClass().getSimpleName();
-			RTS_COMMON.printError(threadID + "SIMULA RUNTIME(3) ERROR: " + msg);
-			RTS_COMMON.printSimulaStackTrace(e, 0);
-			if (RTS_Option.VERBOSE)
-				e.printStackTrace();
-			System.exit(-1);				
-		} else {
-			RTS_COMMON.printError(threadID + "UNCAUGHT EXCEPTION: " + e.getMessage());
-			e.printStackTrace();
-			System.exit(-1);				
-		}
-		if (RTS_Option.GOTO_TRACING)
-			RTS_COMMON.printThreadList();
-		
-	}
-	
-	/**
-	 * Utility: Treat Runtime error
-	 * @param msg the message
-	 */
-	private static void callExceptionHandler(String msg) {
-		RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
-//		System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
-		try {
-			RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
-//			RTS_ENVIRONMENT.IN_EXCEPTION_HANDLER = true;
-//			System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
-			erh.CPF().setPar(new RTS_TXT(msg))._ENT();
-		} catch (RTS_EndProgram e) {
-			if(RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.callExceptionHandler: callExceptionHandler returned with exception: "+e);
-			}
-			// NOTHING
-		} catch (Throwable t) {
-			RTS_COMMON.printError("EXCEPTION IN SIMULA EXCEPTION_HANDLER: " + t);
-//			Thread.dumpStack();
-			RTS_COMMON.printError("EXCEPTION_HANDLER: " + erh);
-			t.printStackTrace();
-		}
-	}
-
-	/**
-	 * Utility to convert a Throwable message to Simula message.
-	 * @param e a Throwable
-	 * @return converted message
-	 */
-	public static String getErrorMessage(Throwable e) {
-		String msg = e.getMessage();
-		if (e instanceof NullPointerException)
-			msg = "NONE-CHECK Failed";
-		else if (e instanceof ArrayIndexOutOfBoundsException)
-			msg = "ArrayIndexOutOfBounds";
-		return (e.getClass().getSimpleName() + ": " + msg);
-	}
-
-	// ************************************************************
-	// *** Procedure terminate_program;
-	// *** begin ... ; goto STOP end terminate_program;
-	// ************************************************************
-	/**
-	 * Implementation of Simula's Procedure terminate_program.
-	 */
-	public static void terminate_program() {
-		endProgram(0);
-	}
 
 	// ************************************************************
 	// *** BPRG -- Begin Program
@@ -946,21 +563,21 @@ public abstract class RTS_RTObject {
 			_USR = (RTS_BASICIO) this;
 		}
 		RTS_Coroutine.INIT();
-		RTS_COMMON.numberOfEditOverflows = 0;
+		RTS_UTIL.numberOfEditOverflows = 0;
 		startTimeMs = System.currentTimeMillis();
 		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
-		RTS_COMMON.progamIdent = ident;
+		RTS_UTIL.progamIdent = ident;
 		if (RTS_Option.BLOCK_TRACING)
-			RTS_COMMON.TRACE("Begin Execution of Simula Program: " + ident);
+			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
 		if (_SYSIN == null) {
 			if (RTS_Option.USE_CONSOLE) {
-				RTS_COMMON.console = new RTS_ConsolePanel();
-				RTS_COMMON.console.popup("Runtime Console");
+				RTS_UTIL.console = new RTS_ConsolePanel();
+				RTS_UTIL.console.popup("Runtime Console");
 			}
 			_SYSIN = new RTS_Infile(this, new RTS_TXT("#sysin"));
 			_SYSOUT = new RTS_Printfile(this, new RTS_TXT("#sysout"));
-			_SYSIN.open(blanks(_INPUT_LINELENGTH));
-			_SYSOUT.open(blanks(_OUTPUT_LINELENGTH));
+			_SYSIN.open(RTS_ENVIRONMENT.blanks(_INPUT_LINELENGTH));
+			_SYSOUT.open(RTS_ENVIRONMENT.blanks(_OUTPUT_LINELENGTH));
 		}
 		_CUR = this;
 	}
@@ -981,7 +598,7 @@ public abstract class RTS_RTObject {
 		_CORUT = _DL._CORUT;
 		_STATE = OperationalState.attached;
 		if (RTS_Option.BLOCK_TRACING)
-		RTS_COMMON.TRACE("BEGIN " + edObjectAttributes());
+		RTS_UTIL.TRACE("BEGIN " + edObjectAttributes());
 		if (_SL == null) {
 //			Thread.dumpStack();
 			throw new RTS_SimulaRuntimeError("NONE-CHECK FAILED: Remote Call on Procedure x.proc, x==none");
@@ -1021,7 +638,7 @@ public abstract class RTS_RTObject {
 		switch (_STATE) {
 		case attached -> {
 			if (RTS_Option.BLOCK_TRACING)
-				RTS_COMMON.TRACE("END ATTACHED BLOCK " + edObjectAttributes());
+				RTS_UTIL.TRACE("END ATTACHED BLOCK " + edObjectAttributes());
 			_STATE = OperationalState.terminated;
 			_CUR = _DL; // Make the dynamic enclosure the new current instance.
 		}
@@ -1042,11 +659,11 @@ public abstract class RTS_RTObject {
 			_CUR = main._DL;
 			main._DL = dl;
 			if (RTS_Option.BLOCK_TRACING)
-				RTS_COMMON.TRACE("END COMPONENT " + edObjectAttributes());
+				RTS_UTIL.TRACE("END COMPONENT " + edObjectAttributes());
 		}
 		case terminatingProcess -> {
 			if (RTS_Option.BLOCK_TRACING)
-				RTS_COMMON.TRACE("TERMINATING PROCESS " + edObjectAttributes());
+				RTS_UTIL.TRACE("TERMINATING PROCESS " + edObjectAttributes());
 			_STATE = OperationalState.terminated;
 			_CORUT = null; // Leave it to the GarbageCollector
 			return; // Let this Continuation R.I.P.
@@ -1055,8 +672,8 @@ public abstract class RTS_RTObject {
 		}
 		if (_CUR == null || _CUR == _CTX) {
 			if (RTS_Option.BLOCK_TRACING)
-				RTS_COMMON.TRACE("PROGRAM PASSES THROUGH FINAL END " + edObjectAttributes());
-			endProgram(0);
+				RTS_UTIL.TRACE("PROGRAM PASSES THROUGH FINAL END " + edObjectAttributes());
+			RTS_UTIL.endProgram(0);
 		} else {
 			if (this._CORUT != null && this.isDetachUsed()) {
 				RTS_Coroutine.detach();
@@ -1157,7 +774,7 @@ public abstract class RTS_RTObject {
 		this._STATE = OperationalState.detached;
 
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE("DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
+			RTS_UTIL.TRACE("DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		RTS_Coroutine.detach();
 	}
 
@@ -1175,10 +792,10 @@ public abstract class RTS_RTObject {
 	 */
 	public void detach(int sourceLine) {
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
+			RTS_UTIL.TRACE("LINE " + sourceLine + ": BEGIN DETACH " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		detach();
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE("LINE " + sourceLine + ": DETACH(" + this.edObjectIdent() + ") CONTINUE IN "
+			RTS_UTIL.TRACE("LINE " + sourceLine + ": DETACH(" + this.edObjectIdent() + ") CONTINUE IN "
 					+ _CUR.edObjectIdent());
 	}
 
@@ -1240,10 +857,10 @@ public abstract class RTS_RTObject {
 	 */
 	public void call(final RTS_RTObject ins, int sourceLine) {
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN CALL " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
+			RTS_UTIL.TRACE("LINE " + sourceLine + ": BEGIN CALL " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		call(ins);
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE(
+			RTS_UTIL.TRACE(
 					"LINE " + sourceLine + ": CALL(" + this.edObjectIdent() + ") CONTINUE IN " + _CUR.edObjectIdent());
 	}
 
@@ -1300,7 +917,7 @@ public abstract class RTS_RTObject {
 	 */
 	public void resume(final RTS_RTObject ins, int sourceLine) {
 		if (RTS_Option.QPS_TRACING)
-			RTS_COMMON.TRACE("LINE " + sourceLine + ": BEGIN RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
+			RTS_UTIL.TRACE("LINE " + sourceLine + ": BEGIN RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 		resume(ins);
 	}
 
@@ -1339,7 +956,7 @@ public abstract class RTS_RTObject {
 			ins._DL = mainSL;
 			ins._STATE = OperationalState.resumed;
 			if (RTS_Option.QPS_TRACING)
-				RTS_COMMON.TRACE("RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
+				RTS_UTIL.TRACE("RESUME " + this.edObjectIdent() + " ==> " + _CUR.edObjectIdent());
 			if (doSwap)
 				swapCoroutines();
 		}
@@ -1353,37 +970,6 @@ public abstract class RTS_RTObject {
 	 */
 	public RTS_RTObject _STM() {
 		return (this);
-	}
-
-	// *********************************************************************
-	// *** endProgram
-	// *********************************************************************
-	/**
-	 * End of Simula program execution.
-	 * @param exitValue the exit value
-	 */
-	private static void endProgram(final int exitValue) {
-		// _SYSIN.close();
-		// _SYSOUT.close();
-		RTS_BASICIO._SYSOUT.outimage();
-		long timeUsed = System.currentTimeMillis() - startTimeMs;
-		if (RTS_Option.VERBOSE) {
-			RTS_COMMON.println("\nEnd program: " + RTS_COMMON.progamIdent);
-			if (RTS_COMMON.numberOfEditOverflows > 0)
-				RTS_COMMON.println(" -  WARNING " + RTS_COMMON.numberOfEditOverflows + " EditOverflows");
-			Runtime runtime = Runtime.getRuntime();
-			RTS_COMMON.println(" -  Memory(used=" + runtime.totalMemory() + ",free=" + runtime.freeMemory() + ')');
-			RTS_COMMON.println(" -  nProcessors=" + runtime.availableProcessors());
-			RTS_COMMON.println(" -  Elapsed Time Approximately " + timeUsed / 1000 + " sec.");
-		} else if (RTS_COMMON.numberOfEditOverflows > 0)
-			RTS_COMMON.println("End program: WARNING " + RTS_COMMON.numberOfEditOverflows + " EditOverflows");
-		if (RTS_COMMON.console == null) {
-			if(RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.endProgram: "+exitValue);
-			}
-
-			throw new RTS_EndProgram("Simula - endProgram");				
-		}
 	}
 
 	// *********************************************************************

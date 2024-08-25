@@ -220,7 +220,7 @@ public final class GeneratedJavaClass {
 	private String edLineNumberLine(final int simulaLine, final String modid) {
 		StringBuilder sb = new StringBuilder();
 		if (Global.duringSTM_Coding && Option.internal.GNERATE_LINE_CALLS) {
-			sb.append("RTS_COMMON._LINE(\"").append(modid).append("\",").append(simulaLine).append("); ");
+			sb.append("RTS_UTIL._LINE(\"").append(modid).append("\",").append(simulaLine).append("); ");
 		}
 		sb.append("// JavaLine ").append(currentJavaLineNumber).append(" <== SourceLine ").append(simulaLine);
 		return (sb.toString());

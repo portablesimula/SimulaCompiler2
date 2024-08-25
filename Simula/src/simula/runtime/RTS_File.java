@@ -194,7 +194,7 @@ public class RTS_File extends RTS_CLASS {
 	 * @return the filename
 	 */
 	public RTS_TXT filename() {
-		return (copy(FILE_NAME));
+		return (RTS_ENVIRONMENT.copy(FILE_NAME));
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class RTS_File extends RTS_CLASS {
 		else
 			unrecognized = true;
 		if (unrecognized) {
-			RTS_COMMON.printWarning("FILE(" + FILE_NAME.edText() + ").setaccess(" + id + ") -- is not recognized.");
+			RTS_UTIL.printWarning("FILE(" + FILE_NAME.edText() + ").setaccess(" + id + ") -- is not recognized.");
 		}
 		return (!unrecognized);
 	}
@@ -343,16 +343,16 @@ public class RTS_File extends RTS_CLASS {
 			charset = charset.substring(1).trim();
 			if (Charset.isSupported(charset)) {
 				if (RTS_Option.VERBOSE)
-					RTS_COMMON.printWarning("FILE(" + FILE_NAME.edText() + ").CHARSET Changed from " + _CHARSET + " to " + charset);
+					RTS_UTIL.printWarning("FILE(" + FILE_NAME.edText() + ").CHARSET Changed from " + _CHARSET + " to " + charset);
 				_CHARSET = Charset.forName(charset);
 				return (true);
 			} else {
-				RTS_COMMON.printWarning(
+				RTS_UTIL.printWarning(
 						"FILE(" + FILE_NAME.edText() + ").setaccess: The Charset \"" + charset + "\" is not supported");
 				return (false);
 			}
 		}
-		RTS_COMMON.println("CHARSET: _CHARSET=" + _CHARSET);
+		RTS_UTIL.println("CHARSET: _CHARSET=" + _CHARSET);
 		return (false);
 	}
 
@@ -522,7 +522,7 @@ public class RTS_File extends RTS_CLASS {
 			File file = new File(FILE_NAME.edText().trim());
 			if (_PURGE) {
 				if (!file.delete()) {
-					RTS_COMMON.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
+					RTS_UTIL.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
 							+ "\" failed - the underlying OS was unable to perform the delete operation");
 				}
 			}

@@ -117,31 +117,13 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		String CPU = System.getProperty("os.arch");
 		String user = System.getProperty("user.name");
 		user=new String(user.getBytes(), StandardCharsets.US_ASCII);
-		String job = RTS_COMMON.progamIdent;
+		String job = RTS_UTIL.progamIdent;
 		String acc = user;
-		String prog = RTS_COMMON.progamIdent;
+		String prog = RTS_UTIL.progamIdent;
 		String siteid=OS+'.'+user;
 		
 		String simulaIdent = simid + "!!!" + siteid + "!!!" + OS + "!!!" + CPU + "!!!" + user + "!!!" + job + "!!!" + acc + "!!!" + prog;
 		return (new RTS_TXT(simulaIdent));
-	}
-
-	// ************************************************************
-	// *** object IS classIdentifier
-	// ************************************************************
-	
-	/**
-	 * Object relation: IS.
-	 * <pre>
-	 *       simple-object-expression is class-identifier
-	 * </pre>
-	 * 
-	 * @param obj object reference
-	 * @param cls class reference
-	 * @return true: relation holds
-	 */
-	public static boolean _IS(final Object obj, final Class<?> cls) {
-		return ((obj == null) ? false : (obj.getClass() == cls));
 	}
 
 	// *****************************************
@@ -228,42 +210,6 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	public static double abs(final double e) {
 		return (Math.abs(e));
 	}
-
-	/**
-	 * Standard Procedure sign.
-	 * <pre>
-	 * integer procedure sign(e);    e;
-	 *     sign := if e > 0 then  1
-	 *        else if e &lt; 0 then -1 else 0;
-	 * </pre>
-	 * 
-	 * The result is zero if the parameter is zero, one if the parameter is
-	 * positive, and minus one otherwise.
-	 * 
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
-	public static int isign(final int e) {
-		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
-	}
-	
-	/**
-	 * Standard Procedure sign.
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
-	public static float fsign(final float e) {
-		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
-	}
-	
-	/**
-	 * Standard Procedure sign.
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
-	public static double dsign(final double e) {
-		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
-	}
 	
 	/**
 	 * Standard Procedure sign.
@@ -295,29 +241,6 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	public static int entier(final double d) {
 		int j = (int) d;
 		return ((((float) j) > d) ? (j - 1) : (j));
-	}
-
-	/**
-	 * Integer Power: b ** x
-	 * @param b argument b
-	 * @param x argument x
-	 * @return b ** x
-	 */
-	public static int _IPOW(final int b, int x) {
-		if (x == 0) {
-			if (b == 0)
-				throw new RTS_SimulaRuntimeError("Exponentiation: " + b + " ** " + x + "  Result is undefined.");
-			return (1); // any ** 0 ==> 1
-		} else if (x < 0)
-			throw new RTS_SimulaRuntimeError("Exponentiation: " + b + " ** " + x + "  Result is undefined.");
-		else if (b == 0)
-			return (0); // 0 ** non_zero ==> 0
-
-		long res = (long) Math.pow((double) b, (double) x);
-		if (res > Integer.MAX_VALUE || res < Integer.MIN_VALUE)
-			throw new RTS_SimulaRuntimeError("Arithmetic overflow: " + b + " ** " + x + " ==> " + res
-					+ " which is outside integer value range[" + Integer.MIN_VALUE + ':' + Integer.MAX_VALUE + ']');
-		return ((int) res);
 	}
 
 	/**
@@ -594,6 +517,70 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	}
 
 	/**
+	 * <pre>
+	 * text procedure copy(T); text T;
+	 *            if T =/= notext
+	 *            then begin text U;
+	 *               U.OBJ    :- new TEXTOBJ(T.LENGTH,false);
+	 *               U.START  := 1;
+	 *               U.LENGTH := T.LENGTH;
+	 *               U.POS    := 1;
+	 *               U        := T;
+	 *               copy     :- U
+	 *            end copy;
+	 * </pre>
+	 * 
+	 * "copy(T)", with T =/= notext, references a new alterable main frame which
+	 * contains a text value identical to that of T.
+	 * 
+	 * @param T the text object to be copied
+	 * @return a copy of T
+	 */
+	public static RTS_TXT copy(final RTS_TXT T) {
+		if (T == null)
+			return (null);
+		RTS_TXT U = blanks(T.LENGTH);
+		RTS_UTIL._ASGTXT(U, T);
+		return (U);
+	}
+
+	/**
+	 * <pre>
+	 * text procedure blanks(n); integer n;
+	 *            if        n &lt; 0 then error("..." ! Parm. to blanks &lt; 0;)
+	 *            else if   n > 0
+	 *            then begin text T;
+	 *               T.OBJ    :- new TEXTOBJ(n,false);
+	 *               T.START  := 1;
+	 *               T.LENGTH := n;
+	 *               T.POS    := 1;
+	 *               T        := notext;    ! blank-fill, see 4.1.2;
+	 *               blanks   :- T
+	 *            end blanks;
+	 * </pre>
+	 * 
+	 * "blanks(n)", with n > 0, references a new alterable main frame of length n,
+	 * containing only blank characters. "blanks(0)" references notext.
+	 * 
+	 * @param n the number of space characters
+	 * @return a text object conraining n space characters
+	 */
+	public static RTS_TXT blanks(final int n) {
+		if (n < 0)
+			throw new RTS_SimulaRuntimeError("Parmameter to blanks < 0");
+		if (n == 0)
+			return (RTS_UTIL.NOTEXT);
+		RTS_TXT textRef = new RTS_TXT();
+		RTS_TEXTOBJ textObj = new RTS_TEXTOBJ(n, false);
+		textObj.fill(' ');
+		textRef.START = 0; // Note: Counting from zero in this implementation
+		textRef.LENGTH = n;
+		textRef.POS = 0; // Note: Counting from zero in this implementation
+		textRef.OBJ = textObj;
+		return (textRef);
+	}
+
+	/**
 	 * Standard Procedure uppercase.
 	 * <pre>
 	 * text procedure upcase(t);   text t;
@@ -610,9 +597,9 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 */
 	public static RTS_TXT upcase(RTS_TXT t) {
 		if (t == null)
-			t = NOTEXT;
+			t = RTS_UTIL.NOTEXT;
 		String s = t.edText().toUpperCase();
-		return (_ASGTXT(t, new RTS_TXT(s)));
+		return (RTS_UTIL._ASGTXT(t, new RTS_TXT(s)));
 	}
 
 	/**
@@ -632,9 +619,9 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 */
 	public static RTS_TXT lowcase(RTS_TXT t) {
 		if (t == null)
-			t = NOTEXT;
+			t = RTS_UTIL.NOTEXT;
 		String s = t.edText().toLowerCase();
-		return (_ASGTXT(t, new RTS_TXT(s)));
+		return (RTS_UTIL._ASGTXT(t, new RTS_TXT(s)));
 	}
 
 	// *****************************************
@@ -907,7 +894,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return the greater of the two parameter values
 	 */
 	public static RTS_TXT max(final RTS_TXT x, final RTS_TXT y) {
-		return (_TXTREL_LT(x, y) ? y : x);
+		return (RTS_UTIL._TXTREL_LT(x, y) ? y : x);
 	}
 
 	/**
@@ -1036,7 +1023,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return the lesser of the two parameter values
 	 */
 	public static RTS_TXT min(final RTS_TXT x, final RTS_TXT y) {
-		return (_TXTREL_LT(x, y) ? x : y);
+		return (RTS_UTIL._TXTREL_LT(x, y) ? x : y);
 	}
 
 	// *****************************************
@@ -1747,7 +1734,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param withStackTrace true: if stacktrace is wanted
 	 */
 	public static void printThreadList(final boolean withStackTrace) {
-		RTS_COMMON.printThreadList(withStackTrace);
+		RTS_UTIL.printThreadList(withStackTrace);
 	}
 
 	// **********************************************************************
@@ -1760,7 +1747,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * See {@link RTS_ENVIRONMENT#DEFEXCEPTION(RTS_PRCQNT)}
 	 */
 	public static void printStaticChain() {
-		RTS_COMMON.printStaticChain(RTS_RTObject._CUR);
+		RTS_UTIL.printStaticChain(RTS_RTObject._CUR);
 	}
 
 	// **********************************************************************
@@ -2265,7 +2252,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		case 5 -> sb.append("nWarnings=" + info);
 		}
 		if (RTS_Option.VERBOSE)
-			RTS_COMMON.println(sb.toString());
+			RTS_UTIL.println(sb.toString());
 	}
 	
 	/**
@@ -2331,7 +2318,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 */
 	public static void rts_utility(final int index, final int level) {
 		if (RTS_Option.VERBOSE)
-			RTS_COMMON.println("rts_utility: index=" + index + ", level=" + level + "  Error or Warning given");
+			RTS_UTIL.println("rts_utility: index=" + index + ", level=" + level + "  Error or Warning given");
 		switch (index) {
 		case 0:
 			return; // Note
@@ -2345,7 +2332,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 			break;// return; // Abort
 		case 5: // newTag check-point with Stack trace
 			if (RTS_Option.VERBOSE)
-				RTS_COMMON.println("rts_utility: index=5: newTag should be changed to newTTag(ident)");
+				RTS_UTIL.println("rts_utility: index=5: newTag should be changed to newTTag(ident)");
 			break;
 		default:
 			NOT_IMPLEMENTED("rts_utility: index=" + index + ", level=" + level);
@@ -2366,7 +2353,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param s explanation
 	 */
 	private static void NOT_IMPLEMENTED(final String s) {
-		RTS_COMMON.IERR("*** NOT IMPLEMENTED: " + s);
+		RTS_UTIL.IERR("*** NOT IMPLEMENTED: " + s);
 	}
 
 }

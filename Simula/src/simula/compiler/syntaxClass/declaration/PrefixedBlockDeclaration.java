@@ -201,7 +201,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 				GeneratedJavaClass.code("");
 				GeneratedJavaClass.code("public static void main(String[] args) {");
 				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-				GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
+				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
 				
 				StringBuilder sb = new StringBuilder();
 				sb.append("new " + getJavaIdentifier() + "(_CTX");
@@ -212,7 +212,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 				} sb.append(");");
 				
 				GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
-				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
 				
 				GeneratedJavaClass.code("}", "End of main");
 			}

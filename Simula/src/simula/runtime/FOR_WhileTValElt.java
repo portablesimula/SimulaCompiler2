@@ -38,7 +38,7 @@ public final class FOR_WhileTValElt extends FOR_Element {
 	@Override
 	public Boolean next() {
 		RTS_TXT val = expr.get();
-		RTS_RTObject._ASGTXT(cvar.get(), val);
+		RTS_UTIL._ASGTXT(cvar.get(), val);
 		more = cond.get(); // IF not more return null - test i loopen: if(_CB==null) continue;
 		return (more);
 	}

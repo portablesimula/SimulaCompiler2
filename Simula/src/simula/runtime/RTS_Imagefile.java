@@ -210,13 +210,13 @@ public class RTS_Imagefile extends RTS_File {
 	 */
 	public void outint(final int i, final int w) {
 		if (w <= 0) {
-			RTS_TXT T = blanks(20);
+			RTS_TXT T = RTS_ENVIRONMENT.blanks(20);
 			RTS_TXT.putint(T, i);
 			String S = T.edText().trim();
 			if (w == 0)
 				outtext(S);
 			else
-				_ASGSTR(_FIELD(-w), S);
+				RTS_UTIL._ASGSTR(_FIELD(-w), S);
 		} else
 			RTS_TXT.putint(_FIELD(w), i);
 	}
@@ -247,13 +247,13 @@ public class RTS_Imagefile extends RTS_File {
 	 */
 	public void outfix(final double r, final int n, final int w) {
 		if (w <= 0) {
-			RTS_TXT T = blanks(n + 10);
+			RTS_TXT T = RTS_ENVIRONMENT.blanks(n + 10);
 			RTS_TXT.putfix(T, r, n);
 			String S = T.edText().trim();
 			if (w == 0)
 				outtext(S);
 			else
-				_ASGSTR(_FIELD(-w), S);
+				RTS_UTIL._ASGSTR(_FIELD(-w), S);
 		} else
 			RTS_TXT.putfix(_FIELD(w), r, n);
 	}
@@ -270,13 +270,13 @@ public class RTS_Imagefile extends RTS_File {
 	 */
 	public void outreal(final double r, final int n, final int w) {
 		if (w <= 0) {
-			RTS_TXT T = blanks(n + 10);
+			RTS_TXT T = RTS_ENVIRONMENT.blanks(n + 10);
 			RTS_TXT.putreal(T, r, n);
 			String S = T.edText().trim();
 			if (w == 0)
 				outtext(S);
 			else
-				_ASGSTR(_FIELD(-w), S);
+				RTS_UTIL._ASGSTR(_FIELD(-w), S);
 		} else
 			RTS_TXT.putreal(_FIELD(w), r, n);
 	}
@@ -293,13 +293,13 @@ public class RTS_Imagefile extends RTS_File {
 	 */
 	public void outreal(final float r, final int n, final int w) {
 		if (w <= 0) {
-			RTS_TXT T = blanks(n + 10);
+			RTS_TXT T = RTS_ENVIRONMENT.blanks(n + 10);
 			RTS_TXT.putreal(T, r, n);
 			String S = T.edText().trim();
 			if (w == 0)
 				outtext(S);
 			else
-				_ASGSTR(_FIELD(-w), S);
+				RTS_UTIL._ASGSTR(_FIELD(-w), S);
 		} else
 			RTS_TXT.putreal(_FIELD(w), r, n);
 	}
@@ -316,13 +316,13 @@ public class RTS_Imagefile extends RTS_File {
 	 */
 	public void outfrac(final int i, final int n, final int w) {
 		if (w <= 0) {
-			RTS_TXT T = blanks(n + 10);
+			RTS_TXT T = RTS_ENVIRONMENT.blanks(n + 10);
 			RTS_TXT.putfrac(T, i, n);
 			String S = T.edText().trim();
 			if (w == 0)
 				outtext(S);
 			else
-				_ASGSTR(_FIELD(-w), S);
+				RTS_UTIL._ASGSTR(_FIELD(-w), S);
 		} else
 			RTS_TXT.putfrac(_FIELD(w), i, n);
 	}
@@ -421,7 +421,7 @@ public class RTS_Imagefile extends RTS_File {
 	 * @return the resulting text
 	 */
 	public RTS_TXT intext(final int w) {
-		RTS_TXT T = blanks(w);
+		RTS_TXT T = RTS_ENVIRONMENT.blanks(w);
 		while (RTS_TXT.more(T))
 			RTS_TXT.putchar(T, inchar());
 		return (T);

@@ -7,7 +7,7 @@
  */
 package simula.runtime;
 
-import static simula.runtime.RTS_COMMON.*;
+import static simula.runtime.RTS_UTIL.*;
 
 /**
  * Utility class Ranking.

@@ -206,7 +206,7 @@ public class RTS_Outfile extends RTS_Imagefile {
 			throw new RTS_SimulaRuntimeError(ident + " failed", e);
 		}
 		if (blank)
-			_ASGTXT(image, null); // image:=NOTEXT;
+			RTS_UTIL._ASGTXT(image, null); // image:=NOTEXT;
 		setpos(1);
 	}
 

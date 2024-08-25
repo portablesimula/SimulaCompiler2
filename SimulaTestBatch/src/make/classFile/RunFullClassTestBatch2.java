@@ -55,7 +55,7 @@ public final class RunFullClassTestBatch2 {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;
 //		RTOption.GOTO_TRACING = false;

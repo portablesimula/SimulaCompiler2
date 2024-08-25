@@ -172,7 +172,7 @@ public final class RelationalOperation extends Expression {
 		    case KeyWord.GE -> fnc = "GE(";
 		    default -> Util.IERR();
 		}
-		s.append("_TXTREL_").append(fnc);
+		s.append("RTS_UTIL._TXTREL_").append(fnc);
 		s.append(lhs.get()).append(',');
 		s.append(rhs.get()).append(')');
 		return (s.toString());
@@ -189,6 +189,7 @@ public final class RelationalOperation extends Expression {
 		String fnc = "TRF_EQ(";
 		StringBuilder s = new StringBuilder();
 		if (opr == KeyWord.NER)	fnc = "TRF_NE(";
+		s.append("RTS_UTIL.");
 		s.append(fnc);
 		s.append(lhs.get()).append(',');
 		s.append(rhs.get()).append(')');

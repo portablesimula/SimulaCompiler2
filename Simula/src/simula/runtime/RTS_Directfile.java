@@ -237,7 +237,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 				File file = new File(FILE_NAME.edText().trim());
 				file.deleteOnExit();
 				if (file.exists()) {
-					RTS_COMMON.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
+					RTS_UTIL.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
 							+ "\" failed - the underlying OS was unable to perform the delete operation");
 				}
 			} else
@@ -451,7 +451,7 @@ public class RTS_Directfile extends RTS_Imagefile {
 			throw new RTS_SimulaRuntimeError("Outimage failed", e);
 		}
 		locate(_LOC + 1);
-		_ASGTXT(image, null);
+		RTS_UTIL._ASGTXT(image, null);
 		setpos(1);
 	}
 

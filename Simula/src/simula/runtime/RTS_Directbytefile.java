@@ -227,7 +227,7 @@ public class RTS_Directbytefile extends RTS_Bytefile {
 				randomAccessFile.close();
 				File file = new File(FILE_NAME.edText().trim());
 				if (file.exists()) {
-					RTS_COMMON.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
+					RTS_UTIL.printWarning("Purge " + this.getClass().getSimpleName() + " \"" + file.getName()
 							+ "\" failed - the underlying OS was unable to perform the delete operation");
 				}
 			} else

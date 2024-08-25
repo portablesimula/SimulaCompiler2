@@ -109,13 +109,13 @@ public class RTS_Infile extends RTS_Imagefile {
 			return (false);
 		this.image = image;
 		_ENDFILE = false;
-		_ASGTXT(image, null); // image := NOTEXT;
+		RTS_UTIL._ASGTXT(image, null); // image := NOTEXT;
 		setpos(length() + 1);
 
 		Reader reader;
 		if (FILE_NAME.edText().equalsIgnoreCase("#sysin")) {
-			if (RTS_COMMON.console != null)
-				reader = RTS_COMMON.console.getReader();
+			if (RTS_UTIL.console != null)
+				reader = RTS_UTIL.console.getReader();
 			else
 				reader = new InputStreamReader(System.in, _CHARSET);
 		} else {
@@ -232,9 +232,9 @@ public class RTS_Infile extends RTS_Imagefile {
 				if (line.length() > RTS_TXT.length(image))
 					throw new RTS_SimulaRuntimeError(FILE_NAME.edText() + ": Image too short: input.length="
 							+ line.length() + ", image.length=" + RTS_TXT.length(image));
-				_ASGSTR(image, line);
+				RTS_UTIL._ASGSTR(image, line);
 			} else {
-				_ASGSTR(image, "" + (char) 25);
+				RTS_UTIL._ASGSTR(image, "" + (char) 25);
 				_ENDFILE = true;
 			}
 		} catch (IOException e) {

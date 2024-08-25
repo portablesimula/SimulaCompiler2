@@ -500,7 +500,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					case Parameter.Kind.Simple -> {
 						if(par.type.keyWord == Type.T_TEXT && par.mode == Parameter.Mode.value) {
 							// Edit TEXT.COPY
-							typeValue = ("RTS_RTObject.copy((RTS_TXT)objectValue(param))");
+							typeValue = ("RTS_ENVIRONMENT.copy((RTS_TXT)objectValue(param))");
 						}
 						else
 							if (par.type.isArithmeticType()) typeValue = (tp + "Value(param)");
@@ -935,7 +935,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 							
 							if(par.type.keyWord == Type.T_TEXT && par.mode == Parameter.Mode.value) {
 								// Build TEXT.COPY
-								RTS.invokestatic_RTS_TXT_copy(codeBuilder);
+								RTS.invokestatic_ENVIRONMENT_copy(codeBuilder);
 							}
 							
 							codeBuilder

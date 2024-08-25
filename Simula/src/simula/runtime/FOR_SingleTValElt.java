@@ -41,7 +41,7 @@ public final class FOR_SingleTValElt extends FOR_Element {
 		if (nextValue == null)
 			return (false);
 		RTS_TXT val = nextValue.get();
-		RTS_RTObject._ASGTXT(cvar.get(), val);
+		RTS_UTIL._ASGTXT(cvar.get(), val);
 		nextValue = null;
 		return (true);
 	}

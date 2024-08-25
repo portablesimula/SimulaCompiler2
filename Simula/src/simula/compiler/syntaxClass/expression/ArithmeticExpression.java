@@ -255,7 +255,7 @@ public final class ArithmeticExpression extends Expression {
 			if(type.keyWord == Type.T_INTEGER) {
 				rhs.buildEvaluation(null,codeBuilder);
 //				codeBuilder.invokestatic(BlockDeclaration.currentClassDesc(), "_IPOW", MethodTypeDesc.ofDescriptor("(II)I"));
-				RTS.invokestatic_RTS_IPOW(codeBuilder);
+				RTS.invokestatic_UTIL_IPOW(codeBuilder);
 			} else {
 				if(type.keyWord == Type.T_REAL) codeBuilder.f2d();
 				rhs.buildEvaluation(null,codeBuilder);
@@ -303,7 +303,7 @@ public final class ArithmeticExpression extends Expression {
 		switch (opr) {
 			case KeyWord.EXP:
 				if (this.type.keyWord == Type.T_INTEGER)
-					 return ("_IPOW(" + lhs.get() + ',' + rhs.get() + ')');
+					 return ("RTS_UTIL._IPOW(" + lhs.get() + ',' + rhs.get() + ')');
 				else return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
 			
 			default:

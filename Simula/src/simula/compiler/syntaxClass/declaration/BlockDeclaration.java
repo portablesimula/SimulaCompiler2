@@ -522,7 +522,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 //    Code:
 //      stack=3, locals=3, args_size=1
 //         0: aload_0
-//         1: invokestatic  #86                 // Method simula/runtime/RTS_COMMON.setRuntimeOptions:([Ljava/lang/String;)V
+//         1: invokestatic  #86                 // Method simula/runtime/RTS_UTIL.setRuntimeOptions:([Ljava/lang/String;)V
 
 //RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");			
 //         4: new           #8                  // class simulaTestPrograms/adHoc01
@@ -549,7 +549,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
      * Generate byteCode for the 'main' method.
      * <pre>
      *     public static void main(String[] args) {
-     *         RTS_COMMON.setRuntimeOptions(args);
+     *         RTS_UTIL.setRuntimeOptions(args);
      *         new adHoc06(_CTX)._STM();
      *     }
      * </pre>
@@ -565,9 +565,9 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				.localVariable(0,"argv",ConstantDescs.CD_String.arrayType(),begScope,endScope)
 				.labelBinding(begScope)
 
-				// RTS_COMMON.setRuntimeOptions(args);
+				// RTS_UTIL.setRuntimeOptions(args);
 				.aload(0) // argv
-				.invokestatic(ClassDesc.of("simula.runtime.RTS_COMMON")
+				.invokestatic(ClassDesc.of("simula.runtime.RTS_UTIL")
 						, "setRuntimeOptions", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"));
 		codeBuilder
 			// new adHoc06(_CTX)._STM();
@@ -603,7 +603,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				catchBuilder -> catchBuilder.catching(RTS.CD.JAVA_LANG_THROWABLE,
 					blockCodeBuilder -> {
 						blockCodeBuilder.aload(1); // Throwable
-						RTS.invokestatic_RTS_treatException(blockCodeBuilder);
+						RTS.invokestatic_UTIL_treatException(blockCodeBuilder);
 					}))
 			.return_()
 			.labelBinding(endScope);

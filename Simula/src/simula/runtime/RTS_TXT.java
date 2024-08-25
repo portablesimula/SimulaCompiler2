@@ -317,7 +317,7 @@ public final class RTS_TXT {
 		if (n < 0)
 			throw new RTS_SimulaRuntimeError(" ! Sub(i=" + i + ",n=" + n + ") is out of frame, n < 0");
 		if (T == null)
-			T = RTS_ENVIRONMENT.NOTEXT;
+			T = RTS_UTIL.NOTEXT;
 		if (i + n > T.LENGTH + 1)
 			throw new RTS_SimulaRuntimeError(
 					" ! Sub(i=" + i + ",n=" + n + ") is out of frame, i + n > LENGTH + 1, LENGTH = " + T.LENGTH);
@@ -659,7 +659,7 @@ public final class RTS_TXT {
 		checkAssignable(T);
 		char[] c = s.toCharArray();
 		if (c.length > T.LENGTH) {
-			RTS_COMMON.numberOfEditOverflows++;
+			RTS_UTIL.numberOfEditOverflows++;
 			for (int j = 0; j < T.LENGTH; j = j + 1)
 				T.OBJ.MAIN[T.START + j] = '*';
 		} else {
@@ -861,7 +861,7 @@ public final class RTS_TXT {
 			while (p >= 0)
 				item[p--] = ' ';
 		} catch (ArrayIndexOutOfBoundsException e) {
-//			RTS_COMMON.numberOfEditOverflows++;
+//			RTS_UTIL.numberOfEditOverflows++;
 			for (int i = 0; i < item.length; i++)
 				item[i] = '*';
 		}

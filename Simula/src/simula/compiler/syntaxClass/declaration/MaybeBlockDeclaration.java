@@ -288,12 +288,12 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 				GeneratedJavaClass.code("");
 				GeneratedJavaClass.code("public static void main(String[] args) {");
 				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-				GeneratedJavaClass.code("RTS_COMMON.setRuntimeOptions(args);");
+				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
 				
 	//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
 				
 				GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
-				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_RTObject.treatException(e, prog); }");
+				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
 	
 				GeneratedJavaClass.code("}", "End of main");
 			}

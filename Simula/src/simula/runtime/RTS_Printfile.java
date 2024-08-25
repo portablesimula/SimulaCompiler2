@@ -166,8 +166,8 @@ public class RTS_Printfile extends RTS_Outfile {
 		this.image = image;
 		setpos(1);
 		if (FILE_NAME.edText().equalsIgnoreCase("#sysout")) {
-			if (RTS_COMMON.console != null)
-				writer = RTS_COMMON.console.getWriter();
+			if (RTS_UTIL.console != null)
+				writer = RTS_UTIL.console.getWriter();
 			else
 				writer = new PrintWriter(System.out, true, _CHARSET);
 		} else if (fileName.toUpperCase().startsWith("CONSOLE: ")) {
@@ -392,7 +392,7 @@ public class RTS_Printfile extends RTS_Outfile {
 		}
 		_LINE = _LINE + _SPACING;
 		if (blank)
-			_ASGTXT(image, null); // image := NOTEXT;
+			RTS_UTIL._ASGTXT(image, null); // image := NOTEXT;
 		setpos(1);
 	}
 

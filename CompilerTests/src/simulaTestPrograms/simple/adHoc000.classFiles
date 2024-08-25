@@ -706,11 +706,11 @@ Constant pool:
   #31 = Utf8               ([Ljava/lang/String;)V
   #32 = Utf8               argv
   #33 = Utf8               [Ljava/lang/String;
-  #34 = Utf8               simula/runtime/RTS_COMMON
-  #35 = Class              #34            // simula/runtime/RTS_COMMON
+  #34 = Utf8               simula/runtime/RTS_UTIL
+  #35 = Class              #34            // simula/runtime/RTS_UTIL
   #36 = Utf8               setRuntimeOptions
   #37 = NameAndType        #36:#31        // setRuntimeOptions:([Ljava/lang/String;)V
-  #38 = Methodref          #35.#37        // simula/runtime/RTS_COMMON.setRuntimeOptions:([Ljava/lang/String;)V
+  #38 = Methodref          #35.#37        // simula/runtime/RTS_UTIL.setRuntimeOptions:([Ljava/lang/String;)V
   #39 = Utf8               _CTX
   #40 = Utf8               Lsimula/runtime/RTS_CLASS;
   #41 = NameAndType        #39:#40        // _CTX:Lsimula/runtime/RTS_CLASS;
@@ -786,7 +786,7 @@ Constant pool:
     Code:
       stack=3, locals=2, args_size=1
          0: aload_0
-         1: invokestatic  #38                 // Method simula/runtime/RTS_COMMON.setRuntimeOptions:([Ljava/lang/String;)V
+         1: invokestatic  #38                 // Method simula/runtime/RTS_UTIL.setRuntimeOptions:([Ljava/lang/String;)V
          4: new           #2                  // class simulaTestPrograms/adHoc000
          7: dup
          8: getstatic     #42                 // Field _CTX:Lsimula/runtime/RTS_CLASS;
