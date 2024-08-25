@@ -1,7 +1,0 @@
-
-begin
-
-	outtext("ABRACADAB");
-%	outimage;
-	
-end of program;

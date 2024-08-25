@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Simula-Setup-Dated: Sat Jun 15 12:02:31 CEST 2024
-Simula-Revision: 23
-Main-Class: make.setup.SimulaExtractor
-

@@ -1,6 +1,0 @@
-begin
-	integer i, U1;
-	
-        i:= randint (-10, 10, u1);
-        
-end of program;

@@ -1,3 +1,0 @@
-
-class adHoc00(i); integer i; virtual: procedure checkEvent; begin
-	checkEvent(val); end;
