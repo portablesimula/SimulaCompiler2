@@ -11,7 +11,9 @@ begin
 	end;
          
 	ref(module) procedure regnewmodule; begin
-%		regnewmodule :- moduletab(nxtindex) :- new module;
+		regnewmodule :-
+		 moduletab(nxtindex) :-
+		  new module;
 %		nxtindex := 444;
 	end;
 	

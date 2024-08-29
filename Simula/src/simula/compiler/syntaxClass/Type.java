@@ -718,8 +718,9 @@ public class Type extends SyntaxClass {
 			case T_LABEL:		return "Label";
 			case T_REF:			//return "Ref()";
 				if(declaredIn==null) {
-					if(qual==null) return("ref("+classIdent+')');
-					return("ref("+classIdent+") qualified by Class "+qual.identifier);
+//					if(qual==null) return("ref("+classIdent+')');
+//					return("ref("+classIdent+") qualified by Class "+qual.identifier);
+					return("ref("+classIdent+')');
 				}
 				return("ref("+classIdent+") declared in "+declaredIn.identifier);
 		}

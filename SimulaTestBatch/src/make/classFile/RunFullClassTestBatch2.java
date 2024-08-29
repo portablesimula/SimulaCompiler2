@@ -55,7 +55,7 @@ public final class RunFullClassTestBatch2 {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=false;
 //		RTOption.BLOCK_TRACING = false;
 //		RTOption.GOTO_TRACING = false;
@@ -240,8 +240,9 @@ public final class RunFullClassTestBatch2 {
 		names.add("simtst152.sim"); // OK: Test nested connection statements
 		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 		names.add("simtst154.sim"); // OK: Test function result assignment
-		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
-		names.add("simtst155.sim"); // OK: Test
+//		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
+//		names.add("simtst155.sim"); // OK: Test
+		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

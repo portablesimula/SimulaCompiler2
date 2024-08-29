@@ -93,11 +93,11 @@ public abstract class RTS_CatchingErrors extends RTS_CLASS {
 			throw (e);
 		try {
 			String message = RTS_UTIL.getErrorMessage(e);
-			if (RTS_Option.VERBOSE) {
-//				System.out.println("RTS_CatchingErrors._onError: GOT _SimulaRuntimeError:" + message);
-				e.printStackTrace(System.out);
-				RTS_UTIL.printSimulaStackTrace(1);
-			}
+//			if (RTS_Option.VERBOSE) {
+////				System.out.println("RTS_CatchingErrors._onError: GOT _SimulaRuntimeError:" + message);
+//				e.printStackTrace(System.out);
+//				RTS_UTIL.printSimulaStackTrace(1);
+//			}
 //			System.out.println("RTS_CatchingErrors._onError: match="+match);
 			match.CPF().setPar(new RTS_NAME<RTS_TXT>() {
 				public RTS_TXT get() {

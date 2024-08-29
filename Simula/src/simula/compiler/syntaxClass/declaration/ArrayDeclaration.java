@@ -533,7 +533,8 @@ public final class ArrayDeclaration extends Declaration {
 
 	@Override
 	public String toString() {
-		String s = "ARRAY " + identifier + ((boundPairList == null) ? "(?)" : boundPairList);
+//		String s = "ARRAY " + identifier + ((boundPairList == null) ? "(?)" : boundPairList);
+		String s = "ARRAY " + identifier;
 		if (type != null)
 			s = type.toString() + " " + s;
 		return (s);

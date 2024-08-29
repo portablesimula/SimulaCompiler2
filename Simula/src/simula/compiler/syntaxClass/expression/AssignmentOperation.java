@@ -374,6 +374,11 @@ public final class AssignmentOperation extends Expression {
 					arr.arrayPutElement(var,false,rhs,codeBuilder);
 					if(this.backLink == null) {
 						type.pop(codeBuilder);
+					} else {
+//						System.out.println("AssignmentOperation.buildAssignment: "+arr+"  BACKLINK = "+backLink);
+						if(arr.type.isReferenceType())
+							codeBuilder.checkcast(arr.type.toClassDesc());
+//						arr.type.checkCast(codeBuilder);
 					}
 				}
 				

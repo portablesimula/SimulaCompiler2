@@ -33,7 +33,7 @@ public final class RunCompilerTest {
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
@@ -123,9 +123,9 @@ public final class RunCompilerTest {
 //		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
-		 names.add("/simple/adHoc03.sim");
+//		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");
-//		 names.add("/simple/adHoc04.sim");
+		 names.add("/simple/adHoc04.sim");
 //		
 //		 names.add("/simple/adHoc05.sim");
 //		 names.add("/simple/adHoc06.sim");

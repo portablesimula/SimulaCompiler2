@@ -1,7 +1,40 @@
 
 begin
 
-	outtext("ABRACADAB");
-%	outimage;
+	
+	boolean b;    boolean array boolARR(1:20);
+	integer i;    integer array intrARR(1:20);
+	real r;       real array realARR(1:20);
+	long real lr; long real array lreaARR(1:20);
+	character c;  character array charARR(1:20);
+	text t;       text array textARR(1:20);
+	ref(A) x;     ref(A) array refARR(1:20);
+	
+	class A; begin
+	end;
+	
+	boolean   procedure boolPROC; begin boolPROC := boolARR(4) := true; end;
+	integer   procedure intrPROC; begin intrPROC := intrARR(4) := 444; end;
+	real      procedure realPROC; begin realPROC := realARR(4) := 3.14; end;
+	long real procedure lreaPROC; begin lreaPROC := lreaARR(4) := 5.31; end;
+	character procedure charPROC; begin charPROC := charARR(4) := 'Z'; end;
+	text      procedure textPROC; begin textPROC :- textARR(4) :- copy("Abra"); end;
+	ref(A)    procedure refPROC;  begin	refPROC  :- refARR(4)  :- new A; end;
+	
+	b  := boolARR(4) := true;
+	i  := intrARR(4) := 666;
+	r  := realARR(4) := 8.21;
+	lr := lreaARR(4) := 2.98;
+	t  :- textARR(4) :- copy("Cadab");;
+	c  := charARR(4) := 'X';
+	x  :- refARR(4)  :- new A;
+	
+	b  := boolPROC;
+	i  := intrPROC;
+	r  := realPROC;
+	lr := lreaPROC;
+	t  :- textPROC;
+	c  := charPROC;
+	x  :- refPROC;
 	
 end of program;
