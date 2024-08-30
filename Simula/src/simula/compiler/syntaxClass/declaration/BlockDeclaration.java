@@ -332,40 +332,17 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 * Coding utility: Code Method Main
 	 */
     protected void codeMethodMain(String progid) {
-    	if(! Option.internal.TESTING_CTX) {
-    		OLD_codeMethodMain();
-    		return;
-    	}
     	// GENERATES:
     	//
     	// public static void main(String[] args) {
     	//	 // System.setProperty("file.encoding","UTF-8");
     	//	 RTS_UTIL.BPRG("adHoc04", args);
-    	//	 RTS_RTObject._USR = new adHoc04(_CTX);
-    	//	 try { RTS_RTObject._USR._STM();
-    	//	 } catch (Throwable e) {
-    	//		RTS_UTIL.treatException(e, RTS_RTObject._USR);
-    	//	 }
+    	//	 RTS_UTIL.RUN_STM(new adHoc04(_CTX));
     	// } // End of main
 		GeneratedJavaClass.code("");
 		GeneratedJavaClass.code("public static void main(String[] args) {");
 		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
 		GeneratedJavaClass.code("RTS_UTIL.BPRG(\""+progid+"\", args);");
-		
-//		if(this instanceof PrefixedBlockDeclaration pblk) {
-//			StringBuilder sb = new StringBuilder();
-//			sb.append("new " + getJavaIdentifier() + "(_CTX");
-//			if (pblk.blockPrefix != null && pblk.blockPrefix.hasArguments()) {
-//				for (Expression par : pblk.blockPrefix.checkedParams) {
-//					sb.append(',').append(par.toJavaCode());
-//				}
-//			} sb.append(");");
-//			GeneratedJavaClass.code("RTS_RTObject._USR = " + sb);
-//		} else {
-//			GeneratedJavaClass.code("RTS_RTObject._USR = new " + getJavaIdentifier() + "(_CTX);");			
-//		}
-//		GeneratedJavaClass.code("    try { RTS_RTObject._USR._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, RTS_RTObject._USR); }");
-
 		if(this instanceof PrefixedBlockDeclaration pblk) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("new " + getJavaIdentifier() + "(_CTX");
@@ -378,38 +355,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		} else {
 			GeneratedJavaClass.code("RTS_UTIL.RUN_STM(new " + getJavaIdentifier() + "(_CTX));");			
 		}
-		GeneratedJavaClass.code("}", "End of main");
-    }
-    
-    protected void OLD_codeMethodMain() {
-//        public static void main(String[] args) {
-//            //System.setProperty("file.encoding","UTF-8");
-//            RTS_UTIL.setRuntimeOptions(args);
-//            RTS_RTObject prog = new adHoc04(_CTX);
-//            try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }
-//        } // End of main
-		GeneratedJavaClass.code("");
-		GeneratedJavaClass.code("public static void main(String[] args) {");
-		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-		GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
-		
-		if(this instanceof PrefixedBlockDeclaration pblk) {
-			StringBuilder sb = new StringBuilder();
-			sb.append("new " + getJavaIdentifier() + "(_CTX");
-			if (pblk.blockPrefix != null && pblk.blockPrefix.hasArguments()) {
-				for (Expression par : pblk.blockPrefix.checkedParams) {
-					sb.append(',').append(par.toJavaCode());
-				}
-			} sb.append(");");
-			
-			GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
-		} else {
-			GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");			
-		}
-		
-		
-		GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
-		
 		GeneratedJavaClass.code("}", "End of main");
     }
 	

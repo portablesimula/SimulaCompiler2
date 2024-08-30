@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 731
+// JavaLine 1 <== SourceLine 732
 package simulaFEC;
-// Simula-2.0 Compiled at Wed Jul 17 09:58:23 CEST 2024
+// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class RPSW extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=4, firstLine=731, lastLine=0, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=4, firstLine=732, lastLine=0, hasLocalClasses=false, System=false
     @Override
 public Object _RESULT() { return(_RESULT); }
     // Declare parameters as attributes
@@ -40,17 +40,17 @@ public Object _RESULT() { return(_RESULT); }
     @Override
     public RPSW _STM() {
         switch(p__SW-1) {
-            case 0: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_S0_1; break;
-            case 1: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_Block740_S1_0; break;
-            case 2: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_S2_1; break;
-            case 3: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_Block740_RECOVER1_0; break;
-            case 4: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_RECOVER2_1; break;
-            case 5: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_RECOVER3_1; break;
-            case 6: _RESULT=((PARSER_grammer_module)(_CUR._SL))._LABEL_PARSER_grammer_module_RECOVER4_1; break;
+            case 0: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_S0_1; break;
+            case 1: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_Block741_S1_0; break;
+            case 2: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_S2_1; break;
+            case 3: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_Block741_RECOVER1_0; break;
+            case 4: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_RECOVER2_1; break;
+            case 5: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_RECOVER3_1; break;
+            case 6: _RESULT=((CLASS_PARSER_grammer_module)(_CUR._SL))._LABEL_CLASS_PARSER_grammer_module_RECOVER4_1; break;
             default: throw new RTS_SimulaRuntimeError("Illegal switch index: "+p__SW);
         }
         EBLK();
         return(this);
     } // End of Switch BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("PARSER.sim","5 RPSW",1,731,54,0);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","5 RPSW",1,732,54,0);
 } // End of Procedure

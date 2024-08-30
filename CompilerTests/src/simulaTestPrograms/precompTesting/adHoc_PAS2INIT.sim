@@ -21,6 +21,7 @@ begin
 			integer dummy;
 			!***   B U I L D E R I N I T   ***;
 			inspect new semchecker do begin
+				text t,feoptions; short integer i;
 				sysout.outtext("PAS2INIT.main: "); outimage;
 				checker0:-checker:- this semchecker;
 			end;

@@ -61,7 +61,7 @@ public final class Option {
 	 */
 	public static class internal {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
-		public static boolean TESTING_CTX = true;//false;
+		public static boolean TESTING_PRECOMP = false;
 
 		/**
 		 * Use the SimulaClassLoader instead of the executable jar file
