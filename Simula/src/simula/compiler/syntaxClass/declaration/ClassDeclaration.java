@@ -1315,14 +1315,6 @@ public class ClassDeclaration extends BlockDeclaration {
 				codeBuilder.putfield(par.getFieldRefEntry(pool));
 			}
 
-			if (this.isMainModule) { // E.g. Main program is Prefixed Block
-				// GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
-				codeBuilder
-					.aload(0)
-					.ldc(pool.stringEntry(this.edJavaClassName()));
-				RTS.invokevirtual_RTObject_BPRG(codeBuilder);
-			}
-
 			// BBLK(); // Iff no prefix
 			if (!hasRealPrefix()) {
 				codeBuilder.aload(0);

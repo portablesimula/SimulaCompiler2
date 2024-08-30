@@ -258,11 +258,11 @@ public abstract class DeclarationScope extends Declaration  {
 	 * @return edited context chain
 	 */
 	public String edCTX() {
-		if(Option.internal.TESTING_CTX) {
+//		if(Option.internal.TESTING_CTX) {
 			if (getRTBlockLevel() == 0)	return ("_USR");			
-		} else {
-			if (getRTBlockLevel() == 0)	return ("_CTX");
-		}
+//		} else {
+//			if (getRTBlockLevel() == 0)	return ("_CTX");
+//		}
 		int curLevel = Global.getCurrentScope().getRTBlockLevel();
 		int ctxDiff = curLevel - getRTBlockLevel();
 		return (edCTX(ctxDiff));
@@ -299,12 +299,12 @@ public abstract class DeclarationScope extends Declaration  {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
 		int endLevel = endScope.getRTBlockLevel();
-		if(Option.internal.TESTING_CTX) {
+//		if(Option.internal.TESTING_CTX) {
 			if(endLevel == 0) {
 				codeBuilder.getstatic(RTS.FRE.RTObject_USR(pool));
 				return(true);
 			}
-		}
+//		}
 		
 		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		int curLevel = curScope.getRTBlockLevel();

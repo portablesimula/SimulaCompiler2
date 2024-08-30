@@ -75,14 +75,14 @@ public final class RunSingleTest {
 //		Option.internal.TRACE_REPAIRING_OUTPUT=true;
 
 		Global.packetName="simulaTestBatch";
-//		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
+		Option.internal.keepJava=userDir; // Generated .java Source is then found in Eclipse Package simulaTestBatch
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-//		RTOption.BLOCK_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
@@ -172,7 +172,7 @@ public final class RunSingleTest {
 //		names.add("simtst63.sim"); // OK:  Transmission by name of reference types. 
 //		names.add("simtst64.sim"); // OK:  Parameter transmission by value to classes.
 //		names.add("simtst65.sim"); // OK:  Parameter transmission by reference to classes.
-//		names.add("simtst66.sim"); // OK:  Test coroutines and two infiles which read from the same file.
+		names.add("simtst66.sim"); // OK:  Test coroutines and two infiles which read from the same file.
 //		names.add("simtst67.sim"); // OK:  Simple test of detach, call and resume.
 //		names.add("simtst68.sim"); // OK:  Test of coroutines.
 //		names.add("simtst69.sim"); // OK:  Test complex use of detach, call and resume.
@@ -274,7 +274,7 @@ public final class RunSingleTest {
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment
 //
-		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
+//		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

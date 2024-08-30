@@ -324,6 +324,96 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
 
+    
+	// ***********************************************************************************************
+	// *** Coding Utility: codeStatements
+	// ***********************************************************************************************
+	/**
+	 * Coding utility: Code Method Main
+	 */
+    protected void codeMethodMain(String progid) {
+    	if(! Option.internal.TESTING_CTX) {
+    		OLD_codeMethodMain();
+    		return;
+    	}
+    	// GENERATES:
+    	//
+    	// public static void main(String[] args) {
+    	//	 // System.setProperty("file.encoding","UTF-8");
+    	//	 RTS_UTIL.BPRG("adHoc04", args);
+    	//	 RTS_RTObject._USR = new adHoc04(_CTX);
+    	//	 try { RTS_RTObject._USR._STM();
+    	//	 } catch (Throwable e) {
+    	//		RTS_UTIL.treatException(e, RTS_RTObject._USR);
+    	//	 }
+    	// } // End of main
+		GeneratedJavaClass.code("");
+		GeneratedJavaClass.code("public static void main(String[] args) {");
+		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+		GeneratedJavaClass.code("RTS_UTIL.BPRG(\""+progid+"\", args);");
+		
+//		if(this instanceof PrefixedBlockDeclaration pblk) {
+//			StringBuilder sb = new StringBuilder();
+//			sb.append("new " + getJavaIdentifier() + "(_CTX");
+//			if (pblk.blockPrefix != null && pblk.blockPrefix.hasArguments()) {
+//				for (Expression par : pblk.blockPrefix.checkedParams) {
+//					sb.append(',').append(par.toJavaCode());
+//				}
+//			} sb.append(");");
+//			GeneratedJavaClass.code("RTS_RTObject._USR = " + sb);
+//		} else {
+//			GeneratedJavaClass.code("RTS_RTObject._USR = new " + getJavaIdentifier() + "(_CTX);");			
+//		}
+//		GeneratedJavaClass.code("    try { RTS_RTObject._USR._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, RTS_RTObject._USR); }");
+
+		if(this instanceof PrefixedBlockDeclaration pblk) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("new " + getJavaIdentifier() + "(_CTX");
+			if (pblk.blockPrefix != null && pblk.blockPrefix.hasArguments()) {
+				for (Expression par : pblk.blockPrefix.checkedParams) {
+					sb.append(',').append(par.toJavaCode());
+				}
+			} sb.append(")");
+			GeneratedJavaClass.code("RTS_UTIL.RUN_STM(" + sb + ");");
+		} else {
+			GeneratedJavaClass.code("RTS_UTIL.RUN_STM(new " + getJavaIdentifier() + "(_CTX));");			
+		}
+		GeneratedJavaClass.code("}", "End of main");
+    }
+    
+    protected void OLD_codeMethodMain() {
+//        public static void main(String[] args) {
+//            //System.setProperty("file.encoding","UTF-8");
+//            RTS_UTIL.setRuntimeOptions(args);
+//            RTS_RTObject prog = new adHoc04(_CTX);
+//            try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }
+//        } // End of main
+		GeneratedJavaClass.code("");
+		GeneratedJavaClass.code("public static void main(String[] args) {");
+		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+		GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
+		
+		if(this instanceof PrefixedBlockDeclaration pblk) {
+			StringBuilder sb = new StringBuilder();
+			sb.append("new " + getJavaIdentifier() + "(_CTX");
+			if (pblk.blockPrefix != null && pblk.blockPrefix.hasArguments()) {
+				for (Expression par : pblk.blockPrefix.checkedParams) {
+					sb.append(',').append(par.toJavaCode());
+				}
+			} sb.append(");");
+			
+			GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
+		} else {
+			GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");			
+		}
+		
+		
+		GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
+		
+		GeneratedJavaClass.code("}", "End of main");
+    }
+	
+	
 	// ***********************************************************************************************
 	// *** ByteCoding: buildIsQPSystemBlock
 	// ***********************************************************************************************
@@ -516,41 +606,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethodMain
 	// ***********************************************************************************************
-//	  public static void main(java.lang.String[]);
-//    descriptor: ([Ljava/lang/String;)V
-//    flags: (0x0009) ACC_PUBLIC, ACC_STATIC
-//    Code:
-//      stack=3, locals=3, args_size=1
-//         0: aload_0
-//         1: invokestatic  #86                 // Method simula/runtime/RTS_UTIL.setRuntimeOptions:([Ljava/lang/String;)V
-
-//RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");			
-//         4: new           #8                  // class simulaTestPrograms/adHoc01
-//         7: dup
-//         8: getstatic     #92                 // Field _CTX:Lsimula/runtime/RTS_CLASS;
-//        11: invokespecial #96                 // Method "<init>":(Lsimula/runtime/RTS_RTObject;)V
-//        14: astore_1
-//TRY
-//        15: aload_1
-//        16: invokevirtual #97                 // Method simula/runtime/RTS_RTObject._STM:()Lsimula/runtime/RTS_RTObject;
-//        19: pop
-//        20: goto          29
-//CATCH
-//        23: astore_2
-//        24: aload_2
-//        25: aload_1
-//        26: invokestatic  #105                // Method simula/runtime/RTS_RTObject.treatUncaughtException:(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V
-//END
-//        29: return
-//      Exception table:
-//         from    to  target type
-//            15    20    23   Class java/lang/Throwable
     /**
      * Generate byteCode for the 'main' method.
      * <pre>
-     *     public static void main(String[] args) {
-     *         RTS_UTIL.setRuntimeOptions(args);
-     *         new adHoc06(_CTX)._STM();
+     *     public static void main(String[] argv) {
+     *         RTS_UTIL.BPRG(progid, argv);
+     *         RTS_UTIL_RUN_STM(new userProg(_CTX, ...));
      *     }
      * </pre>
      * @param codeBuilder the CodeBuilder
@@ -563,18 +624,18 @@ public abstract class BlockDeclaration extends DeclarationScope {
 
 		codeBuilder
 				.localVariable(0,"argv",ConstantDescs.CD_String.arrayType(),begScope,endScope)
-				.labelBinding(begScope)
+				.labelBinding(begScope);
 
-				// RTS_UTIL.setRuntimeOptions(args);
-				.aload(0) // argv
-				.invokestatic(ClassDesc.of("simula.runtime.RTS_UTIL")
-						, "setRuntimeOptions", MethodTypeDesc.ofDescriptor("([Ljava/lang/String;)V"));
+		// RTS_UTIL.BPRG(progid, argv);
+		codeBuilder
+				.ldc(pool.stringEntry(this.externalIdent))
+				.aload(0); // argv
+		RTS.invokestatic_UTIL_BPRG(codeBuilder);
+		
 		codeBuilder
 			// new adHoc06(_CTX)._STM();
 			.new_(currentClassDesc())
 			.dup()
-//			.getstatic(currentClassDesc(),"_CTX",RTS.CD.RTS_CLASS);
-//			.getstatic(RTS.CD.RTS_RTObject,"_CTX",RTS.CD.RTS_BASICIO);
 			.getstatic(RTS.FRE.RTObject_CTX(pool));
 
 		if(this instanceof PrefixedBlockDeclaration pblk) {
@@ -589,22 +650,10 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			codeBuilder.invokespecial(currentClassDesc()
 							, "<init>", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"));
 		}
-
-		//  try _STM(); catch(Throwable t) {   }
+			
+		RTS.invokestatic_UTIL_RUN_STM(codeBuilder);
+			
 		codeBuilder
-			.astore(1)
-			.trying(
-				blockCodeBuilder -> {
-					blockCodeBuilder
-						.aload(1)
-						.invokevirtual(currentClassDesc(), "_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"))
-						.pop();
-				},
-				catchBuilder -> catchBuilder.catching(RTS.CD.JAVA_LANG_THROWABLE,
-					blockCodeBuilder -> {
-						blockCodeBuilder.aload(1); // Throwable
-						RTS.invokestatic_UTIL_treatException(blockCodeBuilder);
-					}))
 			.return_()
 			.labelBinding(endScope);
 	}

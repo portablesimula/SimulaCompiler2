@@ -468,6 +468,58 @@ public final class RTS_UTIL {
 		}
 	}
 
+
+	// ************************************************************
+	// *** BPRG -- Begin Program
+	// ************************************************************
+	/**
+	 * The begin program routine (BPRG) is the runtime system initialization
+	 * routine. It will initiate the global data in the runtime system.
+	 * 
+	 * @param ident the program identifier
+	 */
+	public static void BPRG(final String ident, final String[] args) {
+//		System.out.println("RTS_UTIL.BPRG: "+ident);
+		setRuntimeOptions(args);
+		RTS_Coroutine.INIT();
+		RTS_UTIL.numberOfEditOverflows = 0;
+		RTS_RTObject.startTimeMs = System.currentTimeMillis();
+//		RTS_RTObject._CTX = new RTS_BASICIO(null);
+//		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(prog));
+		RTS_UTIL.progamIdent = ident;
+		if (RTS_Option.BLOCK_TRACING)
+			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
+		if (RTS_RTObject._SYSIN == null) {
+			if (RTS_Option.USE_CONSOLE) {
+				RTS_UTIL.console = new RTS_ConsolePanel();
+				RTS_UTIL.console.popup("Runtime Console");
+			}
+			RTS_RTObject._SYSIN = new RTS_Infile(RTS_RTObject._CTX, new RTS_TXT("#sysin"));
+			RTS_RTObject._SYSOUT = new RTS_Printfile(RTS_RTObject._CTX, new RTS_TXT("#sysout"));
+			RTS_RTObject._SYSIN.open(RTS_ENVIRONMENT.blanks(RTS_RTObject._INPUT_LINELENGTH));
+			RTS_RTObject._SYSOUT.open(RTS_ENVIRONMENT.blanks(RTS_RTObject._OUTPUT_LINELENGTH));
+		}
+		RTS_RTObject._CUR = RTS_RTObject._CTX;
+	}
+
+	// ************************************************************
+	// *** RUN_STM -- Run users statements
+	// ************************************************************
+	/**
+	 * Run users statements
+	 * 
+	 * @param usr user program
+	 */
+	public static void RUN_STM(final RTS_RTObject usr) {
+//		System.out.println("RTS_UTIL.RUN_STM: "+usr);
+		RTS_RTObject._USR = (RTS_BASICIO) usr;
+		try {
+			RTS_RTObject._USR._STM();
+		} catch (Throwable e) {
+			RTS_UTIL.treatException(e, RTS_RTObject._USR);
+		}
+	}
+
 	/**
 	 * Set runtime options.
 	 * @param args argument array

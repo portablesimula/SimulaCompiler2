@@ -285,17 +285,18 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			doCodeStatements();
 			Global.duringSTM_Coding=duringSTM_Coding;
 			if (this.isMainModule) {
-				GeneratedJavaClass.code("");
-				GeneratedJavaClass.code("public static void main(String[] args) {");
-				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
-				
-	//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
-				
-				GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
-				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
-	
-				GeneratedJavaClass.code("}", "End of main");
+				codeMethodMain(this.externalIdent);
+//				GeneratedJavaClass.code("");
+//				GeneratedJavaClass.code("public static void main(String[] args) {");
+//				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+//				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
+//				
+//	//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
+//				
+//				GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
+//				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
+//	
+//				GeneratedJavaClass.code("}", "End of main");
 			}
 			javaModule.codeProgramInfo();
 			GeneratedJavaClass.code("}", "End of SubBlock");
@@ -314,7 +315,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		GeneratedJavaClass.code("public " + getJavaIdentifier() + "(RTS_RTObject staticLink) {");
 		GeneratedJavaClass.code("super(staticLink);");
 		GeneratedJavaClass.code("BBLK();");
-		if (declarationKind == ObjectKind.SimulaProgram) GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
 		GeneratedJavaClass.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
 		GeneratedJavaClass.code("}");
@@ -391,7 +391,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 *         // Initiate local variables
 	 *         // Declaration Code
 	 *         BBLK();
-	 *         BPRG("adHoc06");
 	 *     }
 	 * </pre>
 	 * @param codeBuilder the CodeBuilder
@@ -424,14 +423,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			// BBLK();
 			codeBuilder.aload(0);
 			RTS.invokevirtual_RTObject_BBLK(codeBuilder);
-
-			if (declarationKind == ObjectKind.SimulaProgram) {
-				// BPRG("adHoc06");
-				codeBuilder
-					.aload(0)
-					.ldc(pool.stringEntry(this.edJavaClassName()));
-					RTS.invokevirtual_RTObject_BPRG(codeBuilder);  // TODO: RART AT DETTE IKKE VIRKER
-			}
+			
 			// Add Declaration Code to Constructor
 			for (Declaration decl : declarationList)
 				decl.buildDeclarationCode(codeBuilder);

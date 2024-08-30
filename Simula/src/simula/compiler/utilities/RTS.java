@@ -211,6 +211,16 @@ public class RTS {
 	// ********************************************************************************************
 	// *** OWNER: RTS_UTIL
 	// ********************************************************************************************
+	
+	public static void invokestatic_UTIL_BPRG(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;[Ljava/lang/String;)V"));
+	}
+	
+	public static void invokestatic_UTIL_RUN_STM(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "RUN_STM", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"));
+	}
 
 	public static void invokestatic_UTIL_ASGTXT(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_UTIL;
@@ -342,11 +352,10 @@ public class RTS {
 		return true;
 	}
 	
-	public static void invokevirtual_RTObject_BPRG(CodeBuilder codeBuilder) {
-		ClassDesc owner = CD.RTS_RTObject;
-		codeBuilder.invokevirtual(owner, "BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"));
-//        .invokevirtual(CD.RTS_RTObject,"BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"))
-	}
+//	public static void invokevirtual_RTObject_BPRG(CodeBuilder codeBuilder) {
+//		ClassDesc owner = CD.RTS_RTObject;
+//		codeBuilder.invokevirtual(owner, "BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"));
+//	}
 	
 	public static void invokevirtual_RTObject_BBLK(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_RTObject;

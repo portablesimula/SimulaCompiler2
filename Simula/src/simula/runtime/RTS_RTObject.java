@@ -514,73 +514,75 @@ public abstract class RTS_RTObject {
 		
 	}
 
-	// ************************************************************
-	// *** UncaughtExceptionHandler
-	// ************************************************************
-	/**
-	 * 
-	 * UncaughtExceptionHandler
-	 *
-	 */
-	public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {   // TODO: SKAL FJERNES !!!
-		/**
-		 * Current RTObject in which the exception occured.
-		 */
-		public final RTS_RTObject obj;
-
-		/**
-		 * Create an UncaughtExceptionHandler.
-		 * @param obj the Current RTObject in which the exception occured.
-		 */
-		public UncaughtExceptionHandler(final RTS_RTObject obj) {
-			this.obj = obj;
-		}
-
-		@Override
-		public void uncaughtException(Thread thread, Throwable e) {
-			
-//			if (RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.uncaughtException: in "+obj+"  "+e);
-				System.out.println("RTS_RTObject.uncaughtException: IMPOSSIBLE ???????????????");
-				System.exit(-44);
+//	// ************************************************************
+//	// *** UncaughtExceptionHandler
+//	// ************************************************************
+//	/**
+//	 * 
+//	 * UncaughtExceptionHandler
+//	 *
+//	 */
+//	public class UncaughtExceptionHandler implements Thread.UncaughtExceptionHandler {   // TODO: SKAL FJERNES !!!
+//		/**
+//		 * Current RTObject in which the exception occured.
+//		 */
+//		public final RTS_RTObject obj;
+//
+//		/**
+//		 * Create an UncaughtExceptionHandler.
+//		 * @param obj the Current RTObject in which the exception occured.
+//		 */
+//		public UncaughtExceptionHandler(final RTS_RTObject obj) {
+//			this.obj = obj;
+//		}
+//
+//		@Override
+//		public void uncaughtException(Thread thread, Throwable e) {
+//			
+////			if (RTS_Option.GOTO_TRACING) {
+//				System.out.println("RTS_RTObject.uncaughtException: in "+obj+"  "+e);
+//				System.out.println("RTS_RTObject.uncaughtException: IMPOSSIBLE ???????????????");
+//				System.exit(-44);
+////			}
+////			treatException(e, obj);
+//		}
+//
+//	}
+//
+//	// ************************************************************
+//	// *** BPRG -- Begin Program
+//	// ************************************************************
+//	/**
+//	 * The begin program routine (BPRG) is the runtime system initialization
+//	 * routine. It will initiate the global data in the runtime system.
+//	 * 
+//	 * @param ident the program identifier
+//	 */
+//	public void BPRG(final String ident) {
+//		if(RTS_Option.TESTING_CTX) {
+//			Thread.dumpStack();
+//			System.exit(0);
+//			_USR = (RTS_BASICIO) this;
+//		}
+//		RTS_Coroutine.INIT();
+//		RTS_UTIL.numberOfEditOverflows = 0;
+//		startTimeMs = System.currentTimeMillis();
+////		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
+//		RTS_UTIL.progamIdent = ident;
+//		if (RTS_Option.BLOCK_TRACING)
+//			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
+//		if (_SYSIN == null) {
+//			if (RTS_Option.USE_CONSOLE) {
+//				RTS_UTIL.console = new RTS_ConsolePanel();
+//				RTS_UTIL.console.popup("Runtime Console");
 //			}
-//			treatException(e, obj);
-		}
-
-	}
-
-	// ************************************************************
-	// *** BPRG -- Begin Program
-	// ************************************************************
-	/**
-	 * The begin program routine (BPRG) is the runtime system initialization
-	 * routine. It will initiate the global data in the runtime system.
-	 * 
-	 * @param ident the program identifier
-	 */
-	public void BPRG(final String ident) {
-		if(RTS_Option.TESTING_CTX) {
-			_USR = (RTS_BASICIO) this;
-		}
-		RTS_Coroutine.INIT();
-		RTS_UTIL.numberOfEditOverflows = 0;
-		startTimeMs = System.currentTimeMillis();
-		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(this));
-		RTS_UTIL.progamIdent = ident;
-		if (RTS_Option.BLOCK_TRACING)
-			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
-		if (_SYSIN == null) {
-			if (RTS_Option.USE_CONSOLE) {
-				RTS_UTIL.console = new RTS_ConsolePanel();
-				RTS_UTIL.console.popup("Runtime Console");
-			}
-			_SYSIN = new RTS_Infile(this, new RTS_TXT("#sysin"));
-			_SYSOUT = new RTS_Printfile(this, new RTS_TXT("#sysout"));
-			_SYSIN.open(RTS_ENVIRONMENT.blanks(_INPUT_LINELENGTH));
-			_SYSOUT.open(RTS_ENVIRONMENT.blanks(_OUTPUT_LINELENGTH));
-		}
-		_CUR = this;
-	}
+//			_SYSIN = new RTS_Infile(this, new RTS_TXT("#sysin"));
+//			_SYSOUT = new RTS_Printfile(this, new RTS_TXT("#sysout"));
+//			_SYSIN.open(RTS_ENVIRONMENT.blanks(_INPUT_LINELENGTH));
+//			_SYSOUT.open(RTS_ENVIRONMENT.blanks(_OUTPUT_LINELENGTH));
+//		}
+//		_CUR = this;
+//	}
 
 	// ************************************************************
 	// *** BBLK - Begin Block
@@ -599,6 +601,7 @@ public abstract class RTS_RTObject {
 		_STATE = OperationalState.attached;
 		if (RTS_Option.BLOCK_TRACING)
 		RTS_UTIL.TRACE("BEGIN " + edObjectAttributes());
+//		System.out.println("RTS_RTObject.BBLK: USR="+_USR);
 		if (_SL == null) {
 //			Thread.dumpStack();
 			throw new RTS_SimulaRuntimeError("NONE-CHECK FAILED: Remote Call on Procedure x.proc, x==none");

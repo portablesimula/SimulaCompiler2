@@ -198,23 +198,24 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			Global.duringSTM_Coding=duringSTM_Coding;
 	
 			if (this.isMainModule) {
-				GeneratedJavaClass.code("");
-				GeneratedJavaClass.code("public static void main(String[] args) {");
-				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
-				
-				StringBuilder sb = new StringBuilder();
-				sb.append("new " + getJavaIdentifier() + "(_CTX");
-				if (blockPrefix != null && blockPrefix.hasArguments()) {
-					for (Expression par : blockPrefix.checkedParams) {
-						sb.append(',').append(par.toJavaCode());
-					}
-				} sb.append(");");
-				
-				GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
-				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
-				
-				GeneratedJavaClass.code("}", "End of main");
+				codeMethodMain(this.externalIdent);
+//				GeneratedJavaClass.code("");
+//				GeneratedJavaClass.code("public static void main(String[] args) {");
+//				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+//				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
+//				
+//				StringBuilder sb = new StringBuilder();
+//				sb.append("new " + getJavaIdentifier() + "(_CTX");
+//				if (blockPrefix != null && blockPrefix.hasArguments()) {
+//					for (Expression par : blockPrefix.checkedParams) {
+//						sb.append(',').append(par.toJavaCode());
+//					}
+//				} sb.append(");");
+//				
+//				GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
+//				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
+//				
+//				GeneratedJavaClass.code("}", "End of main");
 			}
 			javaModule.codeProgramInfo();
 			GeneratedJavaClass.code("}", "End of Class");
@@ -238,8 +239,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		GeneratedJavaClass.debug("// Parameter assignment to locals");
 		for (Parameter par : parameterList)
 			GeneratedJavaClass.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
-		if (this.isMainModule)
-			GeneratedJavaClass.code("BPRG(\"" + identifier + "\");");
 		GeneratedJavaClass.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
 		GeneratedJavaClass.code("}");
