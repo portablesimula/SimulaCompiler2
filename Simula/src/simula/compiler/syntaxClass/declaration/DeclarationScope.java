@@ -539,53 +539,5 @@ public abstract class DeclarationScope extends Declaration  {
 		}
 		return(res);
 	}
-	
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//		
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//		
-//		// *** DeclarationScope
-//		oupt.writeString(sourceFileName);
-//		oupt.writeString(isPreCompiledFromFile);
-//		oupt.writeBoolean(hasLocalClasses);
-//		LabelList.writeLabelList(labelList, oupt);
-//		DeclarationList decls = prep(declarationList);
-//		oupt.writeShort(decls.size());
-//		for(Declaration decl:decls) oupt.writeObj(decl);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//
-//		// *** DeclarationScope
-//		sourceFileName = inpt.readString();
-//		isPreCompiledFromFile = inpt.readString();
-//		hasLocalClasses = inpt.readBoolean();
-//		labelList = LabelList.readLabelList(inpt);
-//		int n = inpt.readShort();
-//		for(int i=0;i<n;i++) {
-//			Declaration decl = (Declaration) inpt.readObj();
-//			declarationList.add(decl);
-//		}
-//	}
 
 }

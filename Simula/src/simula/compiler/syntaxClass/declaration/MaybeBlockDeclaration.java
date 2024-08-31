@@ -220,21 +220,11 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if(Option.internal.TESTING_PRECOMP) {
-			if (declarationKind == ObjectKind.CompoundStatement)
-				 doCompoundStatementCoding();
-			else if (this.isPreCompiledFromFile != null) {
-				if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
-			} else doSubBlockCoding();
-		} else {
-			if (this.isPreCompiledFromFile != null) {
-				if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
-			} else {
-				if (declarationKind == ObjectKind.CompoundStatement)
-					 doCompoundStatementCoding();
-				else doSubBlockCoding();
-			}
-		}
+		if (declarationKind == ObjectKind.CompoundStatement)
+			doCompoundStatementCoding();
+		else if (this.isPreCompiledFromFile != null) {
+			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+		} else doSubBlockCoding();
 	}
 
 	// ***********************************************************************************************
@@ -554,7 +544,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
-		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
@@ -585,7 +574,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 		// *** DeclarationScope
 		blk.sourceFileName = inpt.readString();
-		blk.isPreCompiledFromFile = inpt.readString();
 		blk.hasLocalClasses = inpt.readBoolean();
 		blk.labelList = LabelList.readLabelList(inpt);
 		blk.declarationList = DeclarationList.readObject(inpt);
@@ -597,11 +585,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		}
 
 		Global.setScope(scope);
-		if(Option.internal.TESTING_PRECOMP) {
-			blk.isPreCompiledFromFile = inpt.jarFileName;
-		} else {
-//			blk.isPreCompiledFromFile = inpt.jarFileName;
-		}
+		blk.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
 		return(blk);
 	}

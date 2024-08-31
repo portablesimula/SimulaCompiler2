@@ -38,7 +38,6 @@ public final class RunCompilerTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.TESTING_PRECOMP = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;

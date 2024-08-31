@@ -58,7 +58,7 @@ public abstract class ClassHierarchy {
 	private static Collection<ClassDesc> interfaces;
 
 	public static void init() {
-		classToSuperClass = new HashMap<ClassDesc, ClassDesc>(); // TESTING_PRECOMP
+		classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
 		interfaces = new Vector<ClassDesc>();		
 	}
 	

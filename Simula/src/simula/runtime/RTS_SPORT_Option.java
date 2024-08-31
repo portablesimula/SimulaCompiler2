@@ -126,8 +126,8 @@ public class RTS_SPORT_Option {
 				name = name.substring(0, i);
 			fileName = SPORT_SysInsertDirName + "/temp/" + name + ".atr";
 			file = new File(fileName);
-			if (!file.exists())
-				System.out.println("_RT.getExternalAttributeFileName: \"" + file + "\"  does NOT exists");
+//			if (!file.exists())
+//				System.out.println("_RT.getExternalAttributeFileName: \"" + file + "\"  does NOT exists");
 		}
 		return (fileName);
 	}

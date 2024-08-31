@@ -95,9 +95,8 @@ public final class CompileFEC2 {
 
 		// Set options and tracing.
 		Option.internal.INLINE_TESTING=true;
-		Option.internal.TESTING_PRECOMP = true;
 		Option.internal.SPORT=true;
-		Option.verbose=true;
+//		Option.verbose=true;
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
 //		Option.internal.CREATE_JAVA_SOURCE = true;
@@ -124,7 +123,7 @@ public final class CompileFEC2 {
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=1;
+//		Option.internal.PRINT_SYNTAX_TREE=1;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //

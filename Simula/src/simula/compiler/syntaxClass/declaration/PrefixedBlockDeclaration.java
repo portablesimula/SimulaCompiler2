@@ -392,7 +392,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
-		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
@@ -432,7 +431,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 
 		// *** DeclarationScope
 		pbl.sourceFileName = inpt.readString();
-		pbl.isPreCompiledFromFile = inpt.readString();
 		pbl.hasLocalClasses = inpt.readBoolean();
 		pbl.labelList = LabelList.readLabelList(inpt);
 		pbl.declarationList = DeclarationList.readObject(inpt);
@@ -449,19 +447,11 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.hiddenList = (ObjectList<HiddenSpecification>) inpt.readObjectList();
 		pbl.protectedList = (ObjectList<ProtectedSpecification>) inpt.readObjectList();
 		pbl.statements1 = (ObjectList<Statement>) inpt.readObjectList();
-//		if(!Option.internal.CREATE_JAVA_SOURCE)
-//			pbl.isPreCompiledFromFile = inpt.jarFileName;
 		
 		// *** PrefixedBlockDeclaration
 		pbl.blockPrefix = (VariableExpression) inpt.readObj();
 		
-		if(Option.internal.TESTING_PRECOMP) {
-			pbl.isPreCompiledFromFile = inpt.jarFileName;
-		} else {
-			if(!Option.internal.CREATE_JAVA_SOURCE)
-				pbl.isPreCompiledFromFile = inpt.jarFileName;
-		}
-//		System.out.println("PrefixedBlockDeclaration.readObject: PrefixedBlock "+pbl.identifier+" isPreCompiledFromFile="+pbl.isPreCompiledFromFile);
+		pbl.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("END Read PrefixedBlockDeclaration: " + pbl.identifier + ", Declared in: " + pbl.declaredIn);
 		Global.setScope(pbl.declaredIn);
 		return(pbl);

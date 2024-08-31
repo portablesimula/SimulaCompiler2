@@ -291,7 +291,6 @@ public final class ConnectionBlock extends DeclarationScope {
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
-		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
@@ -321,7 +320,6 @@ public final class ConnectionBlock extends DeclarationScope {
 
 		// *** DeclarationScope
 		blk.sourceFileName = inpt.readString();
-		blk.isPreCompiledFromFile = inpt.readString();
 		blk.hasLocalClasses = inpt.readBoolean();
 		blk.labelList = LabelList.readLabelList(inpt);
 		blk.declarationList = DeclarationList.readObject(inpt);
@@ -331,10 +329,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		blk.whenClassIdentifier = inpt.readString();
 		blk.inspectedVariable = (VariableExpression) inpt.readObj();
 
-		if(Option.internal.TESTING_PRECOMP) {
-			blk.isPreCompiledFromFile = inpt.jarFileName;
-		} else {
-		}
+		blk.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("END Read ConnectionBlock: "+identifier+", Declared in: "+blk.declaredIn);
 		Global.setScope(blk.declaredIn);
 		return(blk);

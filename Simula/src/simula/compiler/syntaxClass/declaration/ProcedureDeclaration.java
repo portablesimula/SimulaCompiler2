@@ -1065,14 +1065,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		oupt.writeKind(declarationKind); // Mark: This is a ProcedureDeclaration
 		oupt.writeString(identifier);
 		oupt.writeShort(OBJECT_SEQU);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeShort(rtBlockLevel);
-//		oupt.writeBoolean(hasLocalClasses);
-//
-//		oupt.writeShort(parameterList.size());
-//		for(Parameter par:parameterList) par.writeParameter(oupt);
-
 		
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -1084,9 +1076,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
-//		oupt.writeShort(ctBlockLevel);
-//		oupt.writeShort(rtBlockLevel);
-//		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		
 		// *** ProcedurekDeclaration
@@ -1116,14 +1105,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		// *** ProcedurekDeclaration
 		pro.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
 
-		if(Option.internal.TESTING_PRECOMP) {
-			pro.isPreCompiledFromFile = inpt.jarFileName;
-		} else {
-			if(!Option.internal.CREATE_JAVA_SOURCE)
-				pro.isPreCompiledFromFile = inpt.jarFileName;
-		}
-//		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
-		
+		pro.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: Procedure "+identifier+", Declared in: "+pro.declaredIn);
 		Global.setScope(pro.declaredIn);
 		return(pro);

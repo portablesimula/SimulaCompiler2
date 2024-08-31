@@ -1563,7 +1563,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
-		oupt.writeString(isPreCompiledFromFile);
 		oupt.writeBoolean(hasLocalClasses);
 		LabelList.writeLabelList(labelList, oupt);
 		DeclarationList decls = prep(declarationList);
@@ -1604,7 +1603,6 @@ public class ClassDeclaration extends BlockDeclaration {
 
 		// *** DeclarationScope
 		cls.sourceFileName = inpt.readString();
-		cls.isPreCompiledFromFile = inpt.readString();
 		cls.hasLocalClasses = inpt.readBoolean();
 		cls.labelList = LabelList.readLabelList(inpt);
 		cls.declarationList = DeclarationList.readObject(inpt);
@@ -1621,12 +1619,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.hiddenList = (ObjectList<HiddenSpecification>) inpt.readObjectList();
 		cls.protectedList = (ObjectList<ProtectedSpecification>) inpt.readObjectList();
 		cls.statements1 = (ObjectList<Statement>) inpt.readObjectList();
-		if(Option.internal.TESTING_PRECOMP) {
-			cls.isPreCompiledFromFile = inpt.jarFileName;
-		} else {
-			if(!Option.internal.CREATE_JAVA_SOURCE)
-				cls.isPreCompiledFromFile = inpt.jarFileName;
-		}
+
+		cls.isPreCompiledFromFile = inpt.jarFileName;
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		Global.setScope(cls.declaredIn);
 		return(cls);

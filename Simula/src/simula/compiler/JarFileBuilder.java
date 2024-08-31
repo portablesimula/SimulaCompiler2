@@ -112,7 +112,8 @@ public class JarFileBuilder {
 		if(TESTING)	System.out.println("JarOutputSet.putMapEntry: "+entryName);
 		byte[] prev = classFileMap.put(entryName,bytes);
 		if(prev != null) {
-			System.out.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED");
+			if(Option.verbose)
+				System.out.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED");
 		}
 	}
 	
@@ -298,19 +299,13 @@ public class JarFileBuilder {
 	}
 
 	/**
-	 * Add the jarFile to the includeQueue in reverse order.  // TODO: TESTING_PRECOMP - SJEKK OM includeQueue KAN FJERNES
+	 * Add the jarFile to the includeQueue.
 	 * @param jarFile
 	 * @throws IOException if something went wrong
 	 */
 	public static void addToIncludeQueue(final JarFile jarFile) throws IOException {
 		if(Global.includeQueue == null) Global.includeQueue = new LinkedList<JarFile>();
-//		if(TESTING)
-			System.out.println("JarFileBuilder.addToIncludeQueue: includeQueue.add: "+jarFile.getName());
-//		if(Option.internal.TESTING_PRECOMP) {
-			Global.includeQueue.add(jarFile);			
-//		} else {
-//			Global.includeQueue.addFirst(jarFile);
-//		}
+		Global.includeQueue.add(jarFile);			
 	}
 
 	public void addIncludeQueue() throws IOException {

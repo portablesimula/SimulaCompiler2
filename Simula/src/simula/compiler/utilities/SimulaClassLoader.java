@@ -18,12 +18,10 @@ public class SimulaClassLoader extends ClassLoader {
 	public SimulaClassLoader() {}
 	
 	public void loadClass(String name, byte[] bytes, String origin) {
-		System.out.println("SimulaClassLoader.loadClass: " + name + " from  " + origin);
+//		System.out.println("SimulaClassLoader.loadClass: " + name + " from  " + origin);
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		if(clazz != null) {
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " FAILED: " + clazz);
-			System.err.println("SimulaClassLoader.loadClass: " + name + " FAILED: " + clazz);
-//			Util.IERR();
 		} else {
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: TRY " + name);
 			clazz = Global.simulaClassLoader.defineClass(name, bytes, 0, bytes.length);
