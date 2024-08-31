@@ -1516,10 +1516,11 @@ public class ClassDeclaration extends BlockDeclaration {
 	@Override
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
-		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		String tail = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		if(isPreCompiledFromFile != null) tail = tail + " From: " + isPreCompiledFromFile;
 		String prfx = (prefix==null) ? "" : "  extends " + prefix;
 		String declIn = " declaredIn " + this.declaredIn.identifier;
-		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + BL + "  PrefixLevel=" + prefixLevel() + prfx + declIn);
+		System.out.println(edTreeIndent(indent) + "CLASS " + identifier + tail + "  PrefixLevel=" + prefixLevel() + prfx + declIn);
 		if(labelList != null) labelList.printTree(indent+1,this);
 		for(Parameter p:parameterList) p.printTree(indent+1,this);
 		if (!virtualSpecList.isEmpty())
@@ -1620,8 +1621,12 @@ public class ClassDeclaration extends BlockDeclaration {
 		cls.hiddenList = (ObjectList<HiddenSpecification>) inpt.readObjectList();
 		cls.protectedList = (ObjectList<ProtectedSpecification>) inpt.readObjectList();
 		cls.statements1 = (ObjectList<Statement>) inpt.readObjectList();
-		if(!Option.internal.CREATE_JAVA_SOURCE)
+		if(Option.internal.TESTING_PRECOMP) {
 			cls.isPreCompiledFromFile = inpt.jarFileName;
+		} else {
+			if(!Option.internal.CREATE_JAVA_SOURCE)
+				cls.isPreCompiledFromFile = inpt.jarFileName;
+		}
 		Util.TRACE_INPUT("END Read ClassDeclaration: " + identifier + ", Declared in: " + cls.declaredIn);
 		Global.setScope(cls.declaredIn);
 		return(cls);

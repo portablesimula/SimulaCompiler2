@@ -38,6 +38,7 @@ public final class RunCompilerTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PRECOMP = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
@@ -91,7 +92,7 @@ public final class RunCompilerTest {
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
-		RTOption.GOTO_TRACING = true;
+//		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
 
@@ -128,8 +129,8 @@ public final class RunCompilerTest {
 //		names.add("/precompTesting/adHoc_SCODER3.sim");
 //		names.add("/precompTesting/adHoc_SCODER4.sim");
 //		names.add("/precompTesting/adHoc_PAS2INIT.sim");
-		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
-//		names.add("/precompTesting/adHoc_FECMAIN.sim");
+//		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
+		names.add("/precompTesting/adHoc_FECMAIN.sim");
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");
 //		names.add("/precompTesting/adHoc_ERRMSG.sim");

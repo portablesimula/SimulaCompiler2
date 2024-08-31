@@ -1,29 +1,36 @@
-	 class adHoc_PAS2INIT;
-begin
-	ref(precheck0) checker0,checker;
 
-	class precheck0; begin
+class adHoc00(n,title); integer n; text title;
+begin
+	boolean found_error;
+	integer nFailed;
+	boolean verbose=false;
+	boolean noMessage;
+
+	procedure err(t); text t;
+	begin sysout.setpos(1);
+	      outtext("*** error: in test "); outtext(t); outimage;
+	      found_error:=true; nFailed:=nFailed+1;
+	end;
+
+	if verbose then begin
+		outtext ("--- START Simula a.s. TEST"); outint(n,4); outimage;
+		outtext (title);
+		outimage; outimage;
 	end;
 	
-	precheck0 class semchecker; begin
-		detach;
-	end;
-
-	!** Svarer til PAS2INIT/codegeneratorinit;
-%	codegenerator4
-	 class codegeneratorinit; begin
-		sysout.outtext("adHoc_PAS2INIT: BEGIN class PAS2INIT/codegeneratorinit STATEMENTS"); sysout.outimage;
-
-		begin
-			integer dummy;
-			!***   B U I L D E R I N I T   ***;
-			inspect new semchecker do begin
-				text t,feoptions; short integer i;
-				sysout.outtext("PAS2INIT.main: "); outimage;
-				checker0:-checker:- this semchecker;
-			end;
+	inner;
+	
+	if noMessage then else begin
+		if found_error then begin
+			outtext ("--- " & edit(nFailed) & " ERROR(S) FOUND IN TEST"); outint(n,4); outtext("  "); outtext(title); --outimage;
+			error("Test sample has " & edit(nFailed) & " error(s)");
+		end else begin
+			outtext ("--- NO ERRORS FOUND IN TEST"); outint(n,4); outtext("  "); outtext(title); --outimage;
 		end;
-		
+
+		if verbose then begin
+			outtext ("--- END Simula a.s. TEST"); outint(n,4); outimage;
+		end;
 	end;
-		
+	
 end;

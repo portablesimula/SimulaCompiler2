@@ -1029,8 +1029,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
 		String typeID = (type == null) ? "" : type.toString() + " ";
-		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + typeID + "PROCEDURE " + identifier + '[' + externalIdent + "]" + BL);
+		String tail = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		if(isPreCompiledFromFile != null) tail = tail + " From: " + isPreCompiledFromFile;
+		System.out.println(edTreeIndent(indent) + typeID + "PROCEDURE " + identifier + '[' + externalIdent + "]" + tail);
 		if (labelList != null) labelList.printTree(indent + 1, this);
 		for (Parameter p : parameterList) p.printTree(indent + 1, this);
 		printDeclarationList(indent + 1);
@@ -1115,8 +1116,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		// *** ProcedurekDeclaration
 		pro.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
 
-		if(!Option.internal.CREATE_JAVA_SOURCE)
+		if(Option.internal.TESTING_PRECOMP) {
 			pro.isPreCompiledFromFile = inpt.jarFileName;
+		} else {
+			if(!Option.internal.CREATE_JAVA_SOURCE)
+				pro.isPreCompiledFromFile = inpt.jarFileName;
+		}
 //		System.out.println("ProcedureDeclaration.readObject: "+identifier+", isPreCompiledFromFile="+pro.isPreCompiledFromFile);
 		
 		Util.TRACE_INPUT("END Read ProcedureDeclaration: Procedure "+identifier+", Declared in: "+pro.declaredIn);

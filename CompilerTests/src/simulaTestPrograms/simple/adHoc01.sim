@@ -1,31 +1,8 @@
 
-begin
+external class adHoc00;
 
-class adHoc_PRECOMP; begin
-	boolean ReuseProc;
+adHoc00(0,"--- Empty test") begin
 
-	class tester0; begin
+	outtext("IN EMPTY TEST"); outimage;
 	
-		reuseProc:=true;
-	
-	end;
-		
-			
-end;
-
-adHoc_PRECOMP class adHoc_PRECOMP2;
-begin
-
-	tester0 class tester1; begin
-	end;
-		
-end;
-
-adHoc_PRECOMP2 begin
-
-	outtext(" ++++++++++++ MAIN");
-	new tester1;
-		
-end;
-
-end
+end of program;

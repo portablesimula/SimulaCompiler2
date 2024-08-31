@@ -331,7 +331,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	/**
 	 * Coding utility: Code Method Main
 	 */
-    protected void codeMethodMain(String progid) {
+    protected void codeMethodMain() {
     	// GENERATES:
     	//
     	// public static void main(String[] args) {
@@ -339,6 +339,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
     	//	 RTS_UTIL.BPRG("adHoc04", args);
     	//	 RTS_UTIL.RUN_STM(new adHoc04(_CTX));
     	// } // End of main
+    	String progid = this.externalIdent;
 		GeneratedJavaClass.code("");
 		GeneratedJavaClass.code("public static void main(String[] args) {");
 		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");

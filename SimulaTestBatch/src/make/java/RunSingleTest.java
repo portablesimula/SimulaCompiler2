@@ -40,6 +40,7 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PRECOMP = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -95,7 +96,7 @@ public final class RunSingleTest {
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
-//		names.add("simtst00.sim"); // OK:  Empty test
+		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
@@ -172,7 +173,7 @@ public final class RunSingleTest {
 //		names.add("simtst63.sim"); // OK:  Transmission by name of reference types. 
 //		names.add("simtst64.sim"); // OK:  Parameter transmission by value to classes.
 //		names.add("simtst65.sim"); // OK:  Parameter transmission by reference to classes.
-		names.add("simtst66.sim"); // OK:  Test coroutines and two infiles which read from the same file.
+//		names.add("simtst66.sim"); // OK:  Test coroutines and two infiles which read from the same file.
 //		names.add("simtst67.sim"); // OK:  Simple test of detach, call and resume.
 //		names.add("simtst68.sim"); // OK:  Test of coroutines.
 //		names.add("simtst69.sim"); // OK:  Test complex use of detach, call and resume.

@@ -220,12 +220,20 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	@Override
 	public void doJavaCoding() {
 		ASSERT_SEMANTICS_CHECKED();
-		if (this.isPreCompiledFromFile != null) {
-			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
-		} else {
+		if(Option.internal.TESTING_PRECOMP) {
 			if (declarationKind == ObjectKind.CompoundStatement)
 				 doCompoundStatementCoding();
-			else doSubBlockCoding();
+			else if (this.isPreCompiledFromFile != null) {
+				if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+			} else doSubBlockCoding();
+		} else {
+			if (this.isPreCompiledFromFile != null) {
+				if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
+			} else {
+				if (declarationKind == ObjectKind.CompoundStatement)
+					 doCompoundStatementCoding();
+				else doSubBlockCoding();
+			}
 		}
 	}
 
@@ -284,20 +292,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			Global.duringSTM_Coding=true;
 			doCodeStatements();
 			Global.duringSTM_Coding=duringSTM_Coding;
-			if (this.isMainModule) {
-				codeMethodMain(this.externalIdent);
-//				GeneratedJavaClass.code("");
-//				GeneratedJavaClass.code("public static void main(String[] args) {");
-//				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-//				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
-//				
-//	//			GeneratedJavaClass.code("new " + getJavaIdentifier() + "(_CTX)._STM();");
-//				
-//				GeneratedJavaClass.code("RTS_RTObject prog = new " + getJavaIdentifier() + "(_CTX);");
-//				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
-//	
-//				GeneratedJavaClass.code("}", "End of main");
-			}
+			if (this.isMainModule) codeMethodMain();
 			javaModule.codeProgramInfo();
 			GeneratedJavaClass.code("}", "End of SubBlock");
 		Global.exitScope();
@@ -519,8 +514,9 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
 		String block = ObjectKind.edit(declarationKind);
-		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + block + " " + identifier + BL + "  declaredIn="+this.declaredIn);
+		String tail = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		if(isPreCompiledFromFile != null) tail = tail + " From: " + isPreCompiledFromFile;
+		System.out.println(edTreeIndent(indent) + block + " " + identifier + tail + "  declaredIn="+this.declaredIn);
 		if(labelList != null) labelList.printTree(indent+1,this);
 		printDeclarationList(indent+1);
 		printStatementList(indent+1);
@@ -601,7 +597,11 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		}
 
 		Global.setScope(scope);
-//		blk.isPreCompiledFromFile = inpt.jarFileName;
+		if(Option.internal.TESTING_PRECOMP) {
+			blk.isPreCompiledFromFile = inpt.jarFileName;
+		} else {
+//			blk.isPreCompiledFromFile = inpt.jarFileName;
+		}
 		Util.TRACE_INPUT("MaybeBlockDeclaration: " + blk);
 		return(blk);
 	}

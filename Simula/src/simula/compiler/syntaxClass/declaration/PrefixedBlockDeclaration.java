@@ -197,26 +197,8 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			codeClassStatements();
 			Global.duringSTM_Coding=duringSTM_Coding;
 	
-			if (this.isMainModule) {
-				codeMethodMain(this.externalIdent);
-//				GeneratedJavaClass.code("");
-//				GeneratedJavaClass.code("public static void main(String[] args) {");
-//				GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-//				GeneratedJavaClass.code("RTS_UTIL.setRuntimeOptions(args);");
-//				
-//				StringBuilder sb = new StringBuilder();
-//				sb.append("new " + getJavaIdentifier() + "(_CTX");
-//				if (blockPrefix != null && blockPrefix.hasArguments()) {
-//					for (Expression par : blockPrefix.checkedParams) {
-//						sb.append(',').append(par.toJavaCode());
-//					}
-//				} sb.append(");");
-//				
-//				GeneratedJavaClass.code("RTS_RTObject prog = " + sb);
-//				GeneratedJavaClass.code("    try { prog._STM(); } catch(Throwable e) { RTS_UTIL.treatException(e, prog); }");
-//				
-//				GeneratedJavaClass.code("}", "End of main");
-			}
+			if (this.isMainModule) codeMethodMain();
+			
 			javaModule.codeProgramInfo();
 			GeneratedJavaClass.code("}", "End of Class");
 		Global.exitScope();
@@ -373,8 +355,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	@Override
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
-		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + blockPrefix + " begin" + BL);
+		String tail = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		if(isPreCompiledFromFile != null) tail = tail + " From: " + isPreCompiledFromFile;
+		System.out.println(edTreeIndent(indent) + blockPrefix + " begin" + tail);
 		if(labelList != null) labelList.printTree(indent+1,this);
 		for(Parameter p : parameterList) p.printTree(indent+1,this);
 		printDeclarationList(indent+1);
@@ -466,14 +449,18 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		pbl.hiddenList = (ObjectList<HiddenSpecification>) inpt.readObjectList();
 		pbl.protectedList = (ObjectList<ProtectedSpecification>) inpt.readObjectList();
 		pbl.statements1 = (ObjectList<Statement>) inpt.readObjectList();
-		if(!Option.internal.CREATE_JAVA_SOURCE)
-			pbl.isPreCompiledFromFile = inpt.jarFileName;
+//		if(!Option.internal.CREATE_JAVA_SOURCE)
+//			pbl.isPreCompiledFromFile = inpt.jarFileName;
 		
 		// *** PrefixedBlockDeclaration
 		pbl.blockPrefix = (VariableExpression) inpt.readObj();
 		
-		if(!Option.internal.CREATE_JAVA_SOURCE)
+		if(Option.internal.TESTING_PRECOMP) {
 			pbl.isPreCompiledFromFile = inpt.jarFileName;
+		} else {
+			if(!Option.internal.CREATE_JAVA_SOURCE)
+				pbl.isPreCompiledFromFile = inpt.jarFileName;
+		}
 //		System.out.println("PrefixedBlockDeclaration.readObject: PrefixedBlock "+pbl.identifier+" isPreCompiledFromFile="+pbl.isPreCompiledFromFile);
 		Util.TRACE_INPUT("END Read PrefixedBlockDeclaration: " + pbl.identifier + ", Declared in: " + pbl.declaredIn);
 		Global.setScope(pbl.declaredIn);

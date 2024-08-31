@@ -244,8 +244,9 @@ public final class ConnectionBlock extends DeclarationScope {
 	@Override
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
-		String BL = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
-		System.out.println(edTreeIndent(indent) + "CONNECTION " + identifier + BL + "  PrefixLevel=" + prefixLevel() + "  declaredIn="+this.declaredIn);
+		String tail = (IS_SEMANTICS_CHECKED()) ? "  BL=" + getRTBlockLevel() : "";
+		if(isPreCompiledFromFile != null) tail = tail + " From: " + isPreCompiledFromFile;
+		System.out.println(edTreeIndent(indent) + "CONNECTION " + identifier + tail + "  PrefixLevel=" + prefixLevel() + "  declaredIn="+this.declaredIn);
 		printDeclarationList(indent+1);
 		statement.printTree(indent + 1, this);
 		System.out.println(edTreeIndent(indent)+"END CONNECTION "+identifier);
@@ -330,6 +331,10 @@ public final class ConnectionBlock extends DeclarationScope {
 		blk.whenClassIdentifier = inpt.readString();
 		blk.inspectedVariable = (VariableExpression) inpt.readObj();
 
+		if(Option.internal.TESTING_PRECOMP) {
+			blk.isPreCompiledFromFile = inpt.jarFileName;
+		} else {
+		}
 		Util.TRACE_INPUT("END Read ConnectionBlock: "+identifier+", Declared in: "+blk.declaredIn);
 		Global.setScope(blk.declaredIn);
 		return(blk);
