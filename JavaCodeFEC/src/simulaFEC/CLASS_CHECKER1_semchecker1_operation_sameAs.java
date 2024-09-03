@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 205
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_CHECKER1_semchecker1_operation_sameAs extends RTS_PROCEDURE {
@@ -66,7 +66,7 @@ public Object _RESULT() { return(_RESULT); }
                                     if(_VALUE(((boolean)(((CLASS_CHECKER1_semchecker1_operation)(_CUR._SL)).p1_left.sameAs_0().CPF().setPar(((CLASS_CHECKER1_semchecker1_operation)(p_e)).p1_left)._ENT()._RESULT())))) {
                                         // JavaLine 67 <== SourceLine 213
                                         {
-                                            _SIM_LABEL(1); // DeclaredIn: sameAs -> sameAs[externalIdent=CLASS_CHECKER1_semchecker1_operation_sameAs] Kind=5, QUAL=ProcedureDeclaration, HashCode=2121613270
+                                            _SIM_LABEL(1); // DeclaredIn: sameAs -> sameAs[externalIdent=CLASS_CHECKER1_semchecker1_operation_sameAs] Kind=5, QUAL=ProcedureDeclaration, HashCode=1378841761
                                             _RESULT=((boolean)(((CLASS_CHECKER1_semchecker1_operation)(_CUR._SL)).p1_right.sameAs_0().CPF().setPar(((CLASS_CHECKER1_semchecker1_operation)(p_e)).p1_right)._ENT()._RESULT()));
                                         }
                                     }

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 232
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER2_normalattrfile_expandextlist extends RTS_PROCEDURE {
@@ -90,7 +90,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandextlist extends RTS_PROCE
                             {
                                 // JavaLine 91 <== SourceLine 252
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=96663004
+                                    _SIM_LABEL(1); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=273479239
                                     if(_VALUE((((CLASS_BUILDER2_normalattrfile)(_CUR._SL)).xlongindic!=(((char)0))))) {
                                         {
                                             // JavaLine 96 <== SourceLine 253
@@ -118,7 +118,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandextlist extends RTS_PROCE
                                 ;
                                 // JavaLine 119 <== SourceLine 260
                                 {
-                                    _SIM_LABEL(2); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=96663004
+                                    _SIM_LABEL(2); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=273479239
                                     cq=((((((CLASS_BUILDER2_normalattrfile)(_CUR._SL)).xcateg==(((char)4)))&&((((CLASS_BUILDER2_normalattrfile)(_CUR._SL)).xclf!=(((char)1))))))?(new CLASS_BUILDER1_newextquantbrec((_CUR._SL._SL),p_encl.blev,p_encl.rtblev,'B',((CLASS_COMMON_extquantity)(p_module.declquant)))._RESULT):(new CLASS_COMMON_extquantity((_CUR._SL._SL),p_module)._STM()));
                                 }
                                 ;
@@ -186,7 +186,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandextlist extends RTS_PROCE
                                 if(_VALUE((((cq.categ_1==(((char)3)))||(((cq.categ_1==(((char)4)))&&((cq.descr_1==(null))))))&&(((cq.kind_1==(((char)1)))||((cq.kind_1==(((char)5))))))))) {
                                     // JavaLine 187 <== SourceLine 293
                                     {
-                                        _SIM_LABEL(3); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=96663004
+                                        _SIM_LABEL(3); // DeclaredIn: expandextlist -> expandextlist[externalIdent=CLASS_BUILDER2_normalattrfile_expandextlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=273479239
                                         {
                                             // BEGIN INSPECTION 
                                             _inspect_293_4535=new CLASS_COMMON_brecord((_CUR._SL._SL))._STM();

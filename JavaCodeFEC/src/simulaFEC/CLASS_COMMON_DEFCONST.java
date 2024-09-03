@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 202
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_COMMON_DEFCONST extends RTS_PROCEDURE {
@@ -74,7 +74,7 @@ public final class CLASS_COMMON_DEFCONST extends RTS_PROCEDURE {
                         } else {
                             // JavaLine 75 <== SourceLine 220
                             {
-                                _SIM_LABEL(1); // DeclaredIn: DEFCONST -> DEFCONST[externalIdent=CLASS_COMMON_DEFCONST] Kind=5, QUAL=ProcedureDeclaration, HashCode=1060830840
+                                _SIM_LABEL(1); // DeclaredIn: DEFCONST -> DEFCONST[externalIdent=CLASS_COMMON_DEFCONST] Kind=5, QUAL=ProcedureDeclaration, HashCode=321142942
                                 {
                                     // BEGIN INSPECTION 
                                     _inspect_220_4445=new CLASS_COMMON_constsymbol((_CUR._SL))._STM();

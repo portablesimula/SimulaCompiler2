@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 559
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_quantity extends CLASS_COMMON_sembox {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=1, firstLine=559, lastLine=762, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=1, firstLine=559, lastLine=762, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 560
@@ -54,5 +54,5 @@ public class CLASS_COMMON_quantity extends CLASS_COMMON_sembox {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 quantity",1,559,10,560,15,561,17,562,19,563,21,565,23,566,25,567,27,568,29,569,31,570,33,572,35,573,37,574,48,84,50,762,56,762);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 quantity",1,559,10,560,15,561,17,562,19,563,21,565,23,566,25,567,27,568,29,569,31,570,33,572,35,573,37,574,48,84,50,762,56,762);
 } // End of Class

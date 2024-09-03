@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 308
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:33 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_CHECKER2_semchecker_caseexp_othwise extends RTS_PROCEDURE {

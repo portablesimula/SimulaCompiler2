@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1349
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_CHECKER1_semchecker1_identifier_NamedConstant extends RTS_PROCEDURE {
@@ -110,7 +110,7 @@ public final class CLASS_CHECKER1_semchecker1_identifier_NamedConstant extends R
                         {
                             // JavaLine 111 <== SourceLine 1378
                             {
-                                _SIM_LABEL(1); // DeclaredIn: NamedConstant -> NamedConstant[externalIdent=CLASS_CHECKER1_semchecker1_identifier_NamedConstant] Kind=5, QUAL=ProcedureDeclaration, HashCode=42575626
+                                _SIM_LABEL(1); // DeclaredIn: NamedConstant -> NamedConstant[externalIdent=CLASS_CHECKER1_semchecker1_identifier_NamedConstant] Kind=5, QUAL=ProcedureDeclaration, HashCode=510536150
                                 new CLASS_CHECKER1_semchecker1_identifier_identError((_CUR._SL),332);
                             }
                             ;

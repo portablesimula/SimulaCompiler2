@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1290
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER2_prechecker_allocate_alloc2 extends RTS_PROCEDURE {
@@ -268,7 +268,7 @@ public final class CLASS_BUILDER2_prechecker_allocate_alloc2 extends RTS_PROCEDU
                                         while(((VA!=(VC))&&((VA.symb_1!=(VC.symb_1))))) {
                                             // JavaLine 269 <== SourceLine 1504
                                             {
-                                                _SIM_LABEL(1); // DeclaredIn: alloc2 -> alloc2[externalIdent=CLASS_BUILDER2_prechecker_allocate_alloc2] Kind=5, QUAL=ProcedureDeclaration, HashCode=1187152896
+                                                _SIM_LABEL(1); // DeclaredIn: alloc2 -> alloc2[externalIdent=CLASS_BUILDER2_prechecker_allocate_alloc2] Kind=5, QUAL=ProcedureDeclaration, HashCode=1420130719
                                                 VA=((CLASS_COMMON_quantity)(VA.next));
                                             }
                                         }
@@ -553,7 +553,7 @@ public final class CLASS_BUILDER2_prechecker_allocate_alloc2 extends RTS_PROCEDU
                                 ;
                                 // JavaLine 554 <== SourceLine 1638
                                 {
-                                    _SIM_LABEL(3); // DeclaredIn: alloc2 -> alloc2[externalIdent=CLASS_BUILDER2_prechecker_allocate_alloc2] Kind=5, QUAL=ProcedureDeclaration, HashCode=1187152896
+                                    _SIM_LABEL(3); // DeclaredIn: alloc2 -> alloc2[externalIdent=CLASS_BUILDER2_prechecker_allocate_alloc2] Kind=5, QUAL=ProcedureDeclaration, HashCode=1420130719
                                     new CLASS_BUILDER2_prechecker_allocate_alloc2_checkhid((_CUR),B.fpar);
                                 }
                                 ;

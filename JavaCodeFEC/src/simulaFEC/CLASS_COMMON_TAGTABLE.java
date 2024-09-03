@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 12
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_TAGTABLE extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=12, lastLine=1395, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=12, lastLine=1395, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 15
@@ -32,5 +32,5 @@ public class CLASS_COMMON_TAGTABLE extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 TAGTABLE",1,12,10,15,12,16,20,15,26,1393,29,1395,34,1395);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 TAGTABLE",1,12,10,15,12,16,20,15,26,1393,29,1395,34,1395);
 } // End of Class

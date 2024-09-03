@@ -1,5 +1,5 @@
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:38 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:54 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODMAIN_codegenerator_Block192_Block196_Block2778_Block2781_Block2785_Block2786 extends RTS_BASICIO {

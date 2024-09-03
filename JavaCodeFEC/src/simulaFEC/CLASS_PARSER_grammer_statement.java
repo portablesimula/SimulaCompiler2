@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 662
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_PARSER_grammer_statement extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=662, lastLine=712, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=662, lastLine=712, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 666
@@ -41,5 +41,5 @@ public RTS_PRCQNT recover_0(){ throw new RTS_SimulaRuntimeError("No Virtual Matc
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","8 statement",1,662,10,666,12,667,14,670,17,689,19,706,21,707,23,708,38,712,43,712);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","9 statement",1,662,10,666,12,667,14,670,17,689,19,706,21,707,23,708,38,712,43,712);
 } // End of Class

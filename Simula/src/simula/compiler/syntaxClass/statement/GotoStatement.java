@@ -10,13 +10,10 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.constant.MethodTypeDesc;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
@@ -95,38 +92,44 @@ public final class GotoStatement extends Statement {
 	
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
-//		public void _GOTO(final RTS_LABEL q) {
-//			if (Option.GOTO_TRACING)
-//				RTS_UTIL.TRACE("_RTObject.GOTO: " + q);
-//			throw (q);
-//		}
-//        32: aload_0
-//        33: aload_0
-//        34: getfield      #14                 // Field _LABEL_L1:Lsimula/runtime/RTS_LABEL;
-//        37: invokevirtual #53                 // Method _GOTO:(Lsimula/runtime/RTS_LABEL;)V
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
-		if(label instanceof VariableExpression var) { // TODO: DETTE KAN FORENKLES !!!
+//		if(label instanceof VariableExpression var) { // TODO: DETTE KAN FORENKLES !!!
+//			Meaning meaning = var.meaning;
+//			if(meaning.declaredAs instanceof LabelDeclaration) {
+//				codeBuilder.aload(0);
+//			} else if(meaning.declaredAs instanceof Parameter par) {
+//				if(par.kind != Parameter.Kind.Procedure)
+//					codeBuilder.aload(0);
+//			} else if(meaning.declaredAs instanceof SwitchDeclaration) {
+//				codeBuilder.aload(0);
+//			} else if(meaning.declaredAs instanceof VirtualSpecification) {
+//				codeBuilder.aload(0);
+//			} else if(meaning.declaredAs instanceof ProcedureDeclaration) {
+//				codeBuilder.aload(0);
+//			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName());
+//		} else if(label instanceof ConditionalExpression expr) {
+//			codeBuilder.aload(0);
+//		} else Util.IERR(""+label.getClass().getSimpleName()+"  "+label);
+//		label.buildEvaluation(null,codeBuilder);
+//		RTS.invokevirtual_RTS_GOTO(codeBuilder);
+		
+		
+//		System.out.println("GotoStatement.buildByteCode: "+label.getClass().getSimpleName());
+		if(! labelIsParameterProcedure()) codeBuilder.aload(0);
+		label.buildEvaluation(null,codeBuilder);
+		RTS.invokevirtual_RTS_GOTO(codeBuilder);
+	}
+	
+	private boolean labelIsParameterProcedure() {
+		if(label instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
-			if(meaning.declaredAs instanceof LabelDeclaration) {
-				codeBuilder.aload(0);
-			} else if(meaning.declaredAs instanceof Parameter par) {
-				if(par.kind != Parameter.Kind.Procedure)
-					codeBuilder.aload(0);
-			} else if(meaning.declaredAs instanceof SwitchDeclaration) {
-				codeBuilder.aload(0);
-			} else if(meaning.declaredAs instanceof VirtualSpecification) {
-				codeBuilder.aload(0);
-			} else if(meaning.declaredAs instanceof ProcedureDeclaration) {
-				codeBuilder.aload(0);
-			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName());
-			label.buildEvaluation(null,codeBuilder);
-			RTS.invokevirtual_RTS_GOTO(codeBuilder);
-		} else if(label instanceof ConditionalExpression expr) {
-			codeBuilder.aload(0);
-			expr.buildEvaluation(null, codeBuilder);
-			RTS.invokevirtual_RTS_GOTO(codeBuilder);
-		} else Util.IERR(""+label.getClass().getSimpleName()+"  "+label);
+			if(meaning.declaredAs instanceof Parameter par) {
+				if(par.kind == Parameter.Kind.Procedure)
+					return true;
+			}
+		}
+		return false;
 	}
 
 	@Override

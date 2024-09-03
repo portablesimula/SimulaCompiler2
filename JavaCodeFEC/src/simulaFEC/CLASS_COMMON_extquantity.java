@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 802
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_extquantity extends CLASS_COMMON_quantity {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=2, firstLine=802, lastLine=816, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=2, firstLine=802, lastLine=816, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public CLASS_COMMON_extbrecord p2_module;
     // Declare locals as attributes
@@ -34,5 +34,5 @@ public class CLASS_COMMON_extquantity extends CLASS_COMMON_quantity {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 extquantity",1,802,11,807,13,808,25,84,27,762,29,816,36,816);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 extquantity",1,802,11,807,13,808,25,84,27,762,29,816,36,816);
 } // End of Class

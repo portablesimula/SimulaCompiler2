@@ -11,7 +11,6 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.*;
@@ -76,7 +75,7 @@ public abstract class BuildCP {
 			codeBuilder.pop(); // Pop off TOS
 		}
 	}
-	
+
 	// ********************************************************************
 	// *** BuildCP.remote
 	// ********************************************************************

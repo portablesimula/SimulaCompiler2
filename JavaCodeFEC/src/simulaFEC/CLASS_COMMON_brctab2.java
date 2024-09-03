@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 377
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_brctab2 extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=377, lastLine=381, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=377, lastLine=381, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 379
@@ -26,5 +26,5 @@ public class CLASS_COMMON_brctab2 extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 brctab2",1,377,10,379,23,381,28,381);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 brctab2",1,377,10,379,23,381,28,381);
 } // End of Class

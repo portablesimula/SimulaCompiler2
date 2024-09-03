@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 266
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_relation extends CLASS_CHECKER1_semchecker1_operation {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=2, firstLine=266, lastLine=268, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=2, firstLine=266, lastLine=268, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 267
@@ -30,5 +30,5 @@ public class CLASS_CHECKER1_semchecker1_relation extends CLASS_CHECKER1_semcheck
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 relation",1,266,10,267,21,169,23,223,25,268,32,268);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 relation",1,266,10,267,21,169,23,223,25,268,32,268);
 } // End of Class

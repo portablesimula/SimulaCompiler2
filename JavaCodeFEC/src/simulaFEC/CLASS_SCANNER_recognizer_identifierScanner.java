@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 900
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER_recognizer_identifierScanner extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=900, lastLine=932, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=900, lastLine=932, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
@@ -135,5 +135,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 identifierScanner",1,900,11,912,13,915,15,926,18,903,20,904,22,905,38,907,43,908,46,909,49,911,52,912,59,913,61,914,66,915,74,916,79,917,86,919,88,920,93,921,102,922,106,923,112,926,118,928,125,932,137,932);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 identifierScanner",1,900,11,912,13,915,15,926,18,903,20,904,22,905,38,907,43,908,46,909,49,911,52,912,59,913,61,914,66,915,74,916,79,917,86,919,88,920,93,921,102,922,106,923,112,926,118,928,125,932,137,932);
 } // End of Class

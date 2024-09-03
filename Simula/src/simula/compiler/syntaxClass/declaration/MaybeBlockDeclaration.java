@@ -355,6 +355,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 							MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"), ClassFile.ACC_PUBLIC, codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM",
 							MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC, codeBuilder -> buildMethod_STM(codeBuilder));
+
+//					classBuilder
+//						.withMethodBody("_TESTING",
+//							MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC, codeBuilder -> buildMethod_TESTING(codeBuilder));
 					
 					if (this.isMainModule)
 						classBuilder
@@ -364,6 +368,46 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		);
 		return(bytes);
 	}
+
+
+	// ***********************************************************************************************
+	// *** ByteCoding: buildMethod_TESTING
+	// ***********************************************************************************************
+//	private void buildMethod_TESTING(CodeBuilder codeBuilder) {
+//		ASSERT_SEMANTICS_CHECKED();
+//		Global.enterScope(this);
+//			Label begScope = codeBuilder.newLabel();
+//			Label endScope = codeBuilder.newLabel();
+//			Label checkStackSize = null; // TESTING_STACK_SIZE
+//			if(labelList != null) labelList.clear();
+//			codeBuilder
+//				.labelBinding(begScope)
+//				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
+//			
+//			Label endLabel = codeBuilder.newLabel();
+//			Label otwLabel = codeBuilder.newLabel();
+//
+//			codeBuilder.aconst_null();
+////			codeBuilder.if_null(endLabel);
+//			codeBuilder.if_null(otwLabel);
+//			// do statement
+//			RTS.buildSNAPSHOT(codeBuilder, "DO STATEMENT");
+//
+//			codeBuilder.goto_(endLabel);
+//
+//			codeBuilder.labelBinding(otwLabel);
+//			// do statement
+//			RTS.buildSNAPSHOT(codeBuilder, "OTHERWISE STATEMENT");
+//				
+//			codeBuilder.labelBinding(endLabel);
+//
+//				codeBuilder
+//					.aload(0)
+//					.areturn()
+//					
+//			.labelBinding(endScope);
+//		Global.exitScope();
+//	}
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor

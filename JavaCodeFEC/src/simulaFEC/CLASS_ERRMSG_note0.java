@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 306
+// JavaLine 1 <== SourceLine 301
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_note0 extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=306, lastLine=306, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=301, lastLine=301, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public int p_n;
     // Declare locals as attributes
@@ -40,5 +40,5 @@ public final class CLASS_ERRMSG_note0 extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 note0",1,306,42,306);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 note0",1,301,42,301);
 } // End of Procedure

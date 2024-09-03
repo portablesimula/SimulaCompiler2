@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 261
+// JavaLine 1 <== SourceLine 256
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_errQTN extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=261, lastLine=264, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=256, lastLine=259, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public CLASS_COMMON_quantity p_q;
     public int p_n;
@@ -42,7 +42,7 @@ public final class CLASS_ERRMSG_errQTN extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_errQTN _STM() {
-        // JavaLine 45 <== SourceLine 262
+        // JavaLine 45 <== SourceLine 257
         ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(1),new CLASS_ERRMSG_qlin((_CUR._SL),p_qt)._RESULT);
         ;
         new CLASS_ERRMSG_errQT((_CUR._SL),p_q,p_n);
@@ -50,5 +50,5 @@ public final class CLASS_ERRMSG_errQTN extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 errQTN",1,261,45,262,52,264);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 errQTN",1,256,45,257,52,259);
 } // End of Procedure

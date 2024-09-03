@@ -33,7 +33,7 @@ public final class RunCompilerTest {
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
 		Option.WARNINGS=false;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
@@ -55,8 +55,8 @@ public final class RunCompilerTest {
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
 		Option.internal.PRINT_SYNTAX_TREE=3;
-		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
-		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
+//		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 //
 //		// Checker Trace Options
 //		Option.internal.TRACE_CHECKER=true;
@@ -88,6 +88,7 @@ public final class RunCompilerTest {
 		
 		
 		// Set RunTime Options and tracing.
+		RTOption.VERBOSE = false;
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
@@ -127,9 +128,9 @@ public final class RunCompilerTest {
 //		names.add("/precompTesting/adHoc_SCODER2.sim");
 //		names.add("/precompTesting/adHoc_SCODER3.sim");
 //		names.add("/precompTesting/adHoc_SCODER4.sim");
-//		names.add("/precompTesting/adHoc_PAS2INIT.sim");
+		names.add("/precompTesting/adHoc_PAS2INIT.sim");
 		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
-//		names.add("/precompTesting/adHoc_FECMAIN.sim");
+		names.add("/precompTesting/adHoc_FECMAIN.sim");
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");
 //		names.add("/precompTesting/adHoc_ERRMSG.sim");

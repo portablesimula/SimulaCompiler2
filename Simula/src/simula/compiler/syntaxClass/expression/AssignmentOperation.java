@@ -11,15 +11,11 @@ import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.classfile.constantpool.FieldRefEntry;
-import java.lang.constant.ClassDesc;
-import java.lang.constant.MethodTypeDesc;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
-import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
@@ -349,13 +345,6 @@ public final class AssignmentOperation extends Expression {
 						
 				case ObjectKind.Procedure -> {
 					ProcedureDeclaration proc = (ProcedureDeclaration) decl;
-					
-//					int diff = Global.getCurrentScope().getRTBlockLevel() - proc.getRTBlockLevel();
-//					codeBuilder.aload(0);
-////				while((diff--) > 0)	codeBuilder.getfield(RTS.CD.RTS_RTObject, "_SL", RTS.CD.RTS_RTObject);
-//					while((diff--) > 0)	codeBuilder.getfield(FRE.SL(pool));
-//					codeBuilder.checkcast(proc.getClassDesc());
-
 					boolean withFollowSL = proc.buildCTX(codeBuilder);
 					if(withFollowSL) codeBuilder.checkcast(proc.getClassDesc());
 
@@ -382,7 +371,7 @@ public final class AssignmentOperation extends Expression {
 					}
 				}
 				
-				default -> Util.IERR();
+				default -> Util.IERR(""+ObjectKind.edit(decl.declarationKind));
 			}
 			
 		} else if(lhs instanceof RemoteVariable var) {

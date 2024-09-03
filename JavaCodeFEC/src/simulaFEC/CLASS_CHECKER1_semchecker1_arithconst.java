@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1194
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_arithconst extends CLASS_CHECKER1_semchecker1__const {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=2, firstLine=1194, lastLine=1194, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=2, firstLine=1194, lastLine=1194, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // Normal Constructor
@@ -28,5 +28,5 @@ public class CLASS_CHECKER1_semchecker1_arithconst extends CLASS_CHECKER1_semche
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 arithconst",1,1194,19,169,21,1192,23,1194,30,1194);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 arithconst",1,1194,19,169,21,1192,23,1194,30,1194);
 } // End of Class

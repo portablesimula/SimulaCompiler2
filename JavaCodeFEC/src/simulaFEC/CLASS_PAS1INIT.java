@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 3
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:29 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:49 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_PAS1INIT extends CLASS_PARSER {
-    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=5, firstLine=3, lastLine=265, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=1, PrefixLevel=5, firstLine=3, lastLine=265, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 28
@@ -24,7 +24,7 @@ public class CLASS_PAS1INIT extends CLASS_PARSER {
     public CLASS_PAS1INIT _STM() {
         // JavaLine 25 <== SourceLine 1323
         // BEGIN CLASS_COMMON INNER PART
-        // JavaLine 27 <== SourceLine 998
+        // JavaLine 27 <== SourceLine 993
         // BEGIN CLASS_ERRMSG INNER PART
         // JavaLine 29 <== SourceLine 2395
         // BEGIN CLASS_SCANNER INNER PART
@@ -46,5 +46,5 @@ public class CLASS_PAS1INIT extends CLASS_PARSER {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PAS1INIT.sim","8 CLASS_PAS1INIT",1,3,10,28,25,1323,27,998,29,2395,31,89,33,2698,35,262,38,265,48,265);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PAS1INIT.sim","9 CLASS_PAS1INIT",1,3,10,28,25,1323,27,993,29,2395,31,89,33,2698,35,262,38,265,48,265);
 } // End of Class

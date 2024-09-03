@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 849
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_idpack extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=849, lastLine=859, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=849, lastLine=859, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 850
@@ -30,5 +30,5 @@ public class CLASS_COMMON_idpack extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 idpack",1,849,10,850,13,851,15,852,27,859,32,859);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 idpack",1,849,10,850,13,851,15,852,27,859,32,859);
 } // End of Class

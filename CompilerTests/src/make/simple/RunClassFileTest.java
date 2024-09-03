@@ -113,8 +113,8 @@ public final class RunClassFileTest {
 //		 names.add("/simple/adHoc001.sim");
 //		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
-//		 names.add("/simple/adHoc02.sim");
-		 names.add("/simple/adHoc03.sim");
+		 names.add("/simple/adHoc02.sim");
+//		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");
 //		 names.add("/simple/adHoc04.sim");
 //		

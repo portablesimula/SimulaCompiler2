@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 41
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCANNER_setP1line extends RTS_PROCEDURE {

@@ -43,7 +43,7 @@ public final class RunClassFileTest {
 //		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -99,13 +99,13 @@ public final class RunClassFileTest {
 
 
 
-		names.add("/precompTesting/adHoc_PRECOMP.sim");
-		names.add("/precompTesting/adHoc_PRECOMP2.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP.sim");
+//		names.add("/precompTesting/adHoc_PRECOMP2.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP3.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP4.sim");
 //		names.add("/precompTesting/adHoc_PRECOMP5.sim");
 ////		names.add("/precompTesting/adHoc_PRECOMP6.sim");
-		names.add("/precompTesting/adHoc_MAIN.sim");
+//		names.add("/precompTesting/adHoc_MAIN.sim");
 
 
 //		names.add("/precompTesting/adHoc_COMMON.sim");
@@ -122,7 +122,7 @@ public final class RunClassFileTest {
 //		names.add("/precompTesting/adHoc_SCODER4.sim");
 //		names.add("/precompTesting/adHoc_PAS2INIT.sim");
 //		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
-//		names.add("/precompTesting/adHoc_FECMAIN.sim");
+		names.add("/precompTesting/adHoc_FECMAIN.sim");
 
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");

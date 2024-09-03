@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 3
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER extends CLASS_ERRMSG {
-    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=2, firstLine=3, lastLine=2395, hasLocalClasses=true, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=1, PrefixLevel=2, firstLine=3, lastLine=2395, hasLocalClasses=true, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 20
@@ -60,7 +60,7 @@ public class CLASS_SCANNER extends CLASS_ERRMSG {
     public CLASS_SCANNER _STM() {
         // JavaLine 61 <== SourceLine 1323
         // BEGIN CLASS_COMMON INNER PART
-        // JavaLine 63 <== SourceLine 998
+        // JavaLine 63 <== SourceLine 993
         // BEGIN CLASS_ERRMSG INNER PART
         // JavaLine 65 <== SourceLine 2395
         // BEGIN CLASS_SCANNER INNER PART
@@ -70,5 +70,5 @@ public class CLASS_SCANNER extends CLASS_ERRMSG {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 CLASS_SCANNER",1,3,10,20,12,21,14,25,16,26,18,27,20,28,22,29,24,30,26,31,28,32,30,33,32,34,34,37,36,38,38,39,40,462,42,463,44,464,46,466,48,1557,55,466,61,1323,63,998,65,2395,72,2395);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 CLASS_SCANNER",1,3,10,20,12,21,14,25,16,26,18,27,20,28,22,29,24,30,26,31,28,32,30,33,32,34,34,37,36,38,38,39,40,462,42,463,44,464,46,466,48,1557,55,466,61,1323,63,993,65,2395,72,2395);
 } // End of Class

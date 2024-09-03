@@ -1,20 +1,20 @@
-// JavaLine 1 <== SourceLine 282
+// JavaLine 1 <== SourceLine 277
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_newnotseen extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=282, lastLine=301, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=277, lastLine=296, hasLocalClasses=false, System=false
     @Override
 public Object _RESULT() { return(_RESULT); }
     // Declare parameters as attributes
     public CLASS_COMMON_symbolbox p_symx;
     // Declare locals as attributes
-    // JavaLine 13 <== SourceLine 283
+    // JavaLine 13 <== SourceLine 278
     public CLASS_COMMON_quantity q=null;
-    // JavaLine 15 <== SourceLine 284
-    public CLASS_COMMON_quantity _inspect_284_4461=null;
-    // JavaLine 17 <== SourceLine 282
+    // JavaLine 15 <== SourceLine 279
+    public CLASS_COMMON_quantity _inspect_279_4461=null;
+    // JavaLine 17 <== SourceLine 277
     public CLASS_COMMON_quantity _RESULT=null;
     // Parameter Transmission in case of Formal/Virtual Procedure Call
     @Override
@@ -44,63 +44,63 @@ public Object _RESULT() { return(_RESULT); }
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_newnotseen _STM() {
-        // JavaLine 47 <== SourceLine 284
+        // JavaLine 47 <== SourceLine 279
         {
             // BEGIN INSPECTION 
-            _inspect_284_4461=new CLASS_COMMON_quantity((_CUR._SL))._STM();
-            if(_inspect_284_4461!=null) { // INSPECT _inspect_284_4461  type=ref(QUANTITY)
-                // JavaLine 52 <== SourceLine 285
+            _inspect_279_4461=new CLASS_COMMON_quantity((_CUR._SL))._STM();
+            if(_inspect_279_4461!=null) { // INSPECT _inspect_279_4461  type=ref(QUANTITY)
+                // JavaLine 52 <== SourceLine 280
                 {
-                    // JavaLine 54 <== SourceLine 284
+                    // JavaLine 54 <== SourceLine 279
                     {
-                        // JavaLine 56 <== SourceLine 285
+                        // JavaLine 56 <== SourceLine 280
                         q=((CLASS_ERRMSG)(_CUR._SL)).unknowns.fpar;
                         ;
-                        // JavaLine 59 <== SourceLine 286
+                        // JavaLine 59 <== SourceLine 281
                         if(_VALUE((q==(null)))) {
-                            // JavaLine 61 <== SourceLine 287
+                            // JavaLine 61 <== SourceLine 282
                             {
-                                ((CLASS_ERRMSG)(_CUR._SL)).unknowns.fpar=((CLASS_COMMON_quantity)_inspect_284_4461);
+                                ((CLASS_ERRMSG)(_CUR._SL)).unknowns.fpar=((CLASS_COMMON_quantity)_inspect_279_4461);
                                 ;
-                                _inspect_284_4461.virtno_1=1;
+                                _inspect_279_4461.virtno_1=1;
                             }
                         } else {
-                            // JavaLine 68 <== SourceLine 288
+                            // JavaLine 68 <== SourceLine 283
                             {
                                 while((q.next!=(null))) {
                                     q=((CLASS_COMMON_quantity)(q.next));
                                 }
                                 ;
-                                // JavaLine 74 <== SourceLine 289
-                                q.next=((CLASS_COMMON_quantity)_inspect_284_4461);
+                                // JavaLine 74 <== SourceLine 284
+                                q.next=((CLASS_COMMON_quantity)_inspect_279_4461);
                                 ;
-                                // JavaLine 77 <== SourceLine 290
-                                _inspect_284_4461.virtno_1=(q.virtno_1+(1));
+                                // JavaLine 77 <== SourceLine 285
+                                _inspect_279_4461.virtno_1=(q.virtno_1+(1));
                                 ;
                             }
                         }
                         ;
-                        // JavaLine 83 <== SourceLine 292
-                        _inspect_284_4461.symb_1=p_symx;
+                        // JavaLine 83 <== SourceLine 287
+                        _inspect_279_4461.symb_1=p_symx;
                         ;
-                        // JavaLine 86 <== SourceLine 293
-                        _inspect_284_4461.categ_1=((char)5);
+                        // JavaLine 86 <== SourceLine 288
+                        _inspect_279_4461.categ_1=((char)5);
                         ;
-                        _inspect_284_4461.kind_1=((char)10);
+                        _inspect_279_4461.kind_1=((char)10);
                         ;
-                        _inspect_284_4461.type_1=((char)15);
+                        _inspect_279_4461.type_1=((char)15);
                         ;
-                        _inspect_284_4461.plev_1=1;
+                        _inspect_279_4461.plev_1=1;
                         ;
-                        // JavaLine 95 <== SourceLine 294
-                        _inspect_284_4461.line_1=((CLASS_ERRMSG)(_CUR._SL)).linenr;
+                        // JavaLine 95 <== SourceLine 289
+                        _inspect_279_4461.line_1=((CLASS_ERRMSG)(_CUR._SL)).linenr;
                         ;
-                        _inspect_284_4461.dim_1=1;
+                        _inspect_279_4461.dim_1=1;
                         ;
-                        _inspect_284_4461.encl_1=((CLASS_ERRMSG)(_CUR._SL)).unknowns;
+                        _inspect_279_4461.encl_1=((CLASS_ERRMSG)(_CUR._SL)).unknowns;
                         ;
-                        // JavaLine 102 <== SourceLine 297
-                        _RESULT=((CLASS_COMMON_quantity)(((CLASS_COMMON_identsymbol)(_inspect_284_4461.symb_1)).curmeaning_1=((CLASS_COMMON_quantity)_inspect_284_4461)));
+                        // JavaLine 102 <== SourceLine 292
+                        _RESULT=((CLASS_COMMON_quantity)(((CLASS_COMMON_identsymbol)(_inspect_279_4461.symb_1)).curmeaning_1=((CLASS_COMMON_quantity)_inspect_279_4461)));
                         ;
                     }
                 }
@@ -110,5 +110,5 @@ public Object _RESULT() { return(_RESULT); }
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 newnotseen",1,282,13,283,15,284,17,282,47,284,52,285,54,284,56,285,59,286,61,287,68,288,74,289,77,290,83,292,86,293,95,294,102,297,112,301);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 newnotseen",1,277,13,278,15,279,17,277,47,279,52,280,54,279,56,280,59,281,61,282,68,283,74,284,77,285,83,287,86,288,95,289,102,292,112,296);
 } // End of Procedure

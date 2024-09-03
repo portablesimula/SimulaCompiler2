@@ -1,5 +1,5 @@
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER2_normalattrfile_outquantwlist_Block574_Block580_Block719_Block721_Block725 extends RTS_BASICIO {

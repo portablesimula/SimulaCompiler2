@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 875
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_attrfile extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=875, lastLine=1294, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=875, lastLine=1294, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 876
@@ -120,5 +120,5 @@ public class CLASS_COMMON_attrfile extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 attrfile",1,875,10,876,12,878,15,883,17,884,19,885,21,886,23,887,25,888,27,889,29,890,31,891,33,892,35,893,37,894,39,895,41,896,43,897,45,898,47,899,50,901,52,902,55,903,63,904,68,905,75,906,80,907,82,908,86,909,88,910,90,911,92,912,94,913,96,914,98,915,100,916,102,917,104,918,117,1294,122,1294);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 attrfile",1,875,10,876,12,878,15,883,17,884,19,885,21,886,23,887,25,888,27,889,29,890,31,891,33,892,35,893,37,894,39,895,41,896,43,897,45,898,47,899,50,901,52,902,55,903,63,904,68,905,75,906,80,907,82,908,86,909,88,910,90,911,92,912,94,913,96,914,98,915,100,916,102,917,104,918,117,1294,122,1294);
 } // End of Class

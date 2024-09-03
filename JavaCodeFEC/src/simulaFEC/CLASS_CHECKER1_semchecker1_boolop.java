@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 242
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_boolop extends CLASS_CHECKER1_semchecker1_operation {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=2, firstLine=242, lastLine=264, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=2, firstLine=242, lastLine=264, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     public RTS_PRCQNT emit_0() { return(new RTS_PRCQNT(this,CLASS_CHECKER1_semchecker1_boolop_emit.class)); }
@@ -54,5 +54,5 @@ public class CLASS_CHECKER1_semchecker1_boolop extends CLASS_CHECKER1_semchecker
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 boolop",1,242,20,169,22,223,24,257,29,258,34,260,39,261,42,262,47,263,49,264,56,264);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 boolop",1,242,20,169,22,223,24,257,29,258,34,260,39,261,42,262,47,263,49,264,56,264);
 } // End of Class

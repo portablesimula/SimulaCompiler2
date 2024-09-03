@@ -9,8 +9,6 @@ package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.lang.constant.MethodTypeDesc;
-
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.SyntaxClass;

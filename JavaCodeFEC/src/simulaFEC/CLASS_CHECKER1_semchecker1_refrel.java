@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 270
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_refrel extends CLASS_CHECKER1_semchecker1_relation {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=3, firstLine=270, lastLine=337, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=3, firstLine=270, lastLine=337, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     public RTS_PRCQNT emit_0() { return(new RTS_PRCQNT(this,CLASS_CHECKER1_semchecker1_refrel_emit.class)); }
@@ -114,5 +114,5 @@ public class CLASS_CHECKER1_semchecker1_refrel extends CLASS_CHECKER1_semchecker
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 refrel",1,270,20,169,22,223,24,268,26,309,30,310,32,311,35,312,43,314,48,315,51,316,54,318,59,320,62,321,64,322,67,323,75,325,77,327,80,328,82,329,94,332,96,333,105,336,108,337,116,337);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 refrel",1,270,20,169,22,223,24,268,26,309,30,310,32,311,35,312,43,314,48,315,51,316,54,318,59,320,62,321,64,322,67,323,75,325,77,327,80,328,82,329,94,332,96,333,105,336,108,337,116,337);
 } // End of Class

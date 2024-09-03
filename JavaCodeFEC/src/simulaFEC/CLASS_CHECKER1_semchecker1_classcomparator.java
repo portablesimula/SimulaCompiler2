@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 531
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_classcomparator extends CLASS_CHECKER1_semchecker1_relation {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=3, firstLine=531, lastLine=563, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=3, firstLine=531, lastLine=563, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 553
@@ -109,5 +109,5 @@ public class CLASS_CHECKER1_semchecker1_classcomparator extends CLASS_CHECKER1_s
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 classcomparator",1,531,10,553,23,169,25,223,27,268,29,547,34,548,39,549,42,550,46,551,50,552,57,553,62,554,64,553,66,554,70,555,73,556,76,557,83,559,87,560,100,562,103,563,111,563);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 classcomparator",1,531,10,553,23,169,25,223,27,268,29,547,34,548,39,549,42,550,46,551,50,552,57,553,62,554,64,553,66,554,70,555,73,556,76,557,83,559,87,560,100,562,103,563,111,563);
 } // End of Class

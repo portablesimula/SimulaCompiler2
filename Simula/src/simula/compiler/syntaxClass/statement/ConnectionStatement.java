@@ -245,22 +245,26 @@ public final class ConnectionStatement extends Statement {
 		objectExpression.buildEvaluation(null,codeBuilder);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
-//		ClassDesc owner = inspectVariableDeclaration.declaredIn.getClassDesc();
-//		FieldRefEntry FRE=pool.fieldRefEntry(owner,inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
 
+		Label otwLabel = null;
 		endLabel = codeBuilder.newLabel();
 		if (!hasWhenPart) {
 			codeBuilder.aload(0);
 			codeBuilder.getfield(FRE);
-			codeBuilder.if_null(endLabel);
+			if(otherwise != null) {
+				otwLabel = codeBuilder.newLabel();
+				codeBuilder.if_null(otwLabel);
+			} else codeBuilder.if_null(endLabel);
 		}
 		
 		for(ConnectionDoPart part:connectionPart) 
 			part.buildByteCode(codeBuilder);
 		
-		if (otherwise != null) 
+		if (otherwise != null) {
+			codeBuilder.labelBinding(otwLabel);				
 			otherwise.buildByteCode(codeBuilder);
+		}
 		
 		codeBuilder.labelBinding(endLabel);
 	}

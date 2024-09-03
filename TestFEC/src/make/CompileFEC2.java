@@ -152,7 +152,7 @@ public final class CompileFEC2 {
 		RTOption.VERBOSE = true;
 //		RTOption.internal.DEBUGGING = false;
 //		RTOption.USE_CONSOLE=false;
-//		RTOption.BLOCK_TRACING = true;
+		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = false;
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;
@@ -165,8 +165,9 @@ public final class CompileFEC2 {
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestPrograms/simple/adHoc00.sim";
 		
 		RTOption.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/CompilerTests/src/simulaTestPrograms/simple/adHoc00.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/CompilerTests/src/simulaTestPrograms/simple/adHoc01.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S_Port/src/simulaTestPrograms/simple/adHoc01.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S_Port/src/simulaTestPrograms/simple/adHoc01.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestPrograms/simple/adHoc02.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S_Port/src/simulaTestPrograms/simple/Editing.sim";
 

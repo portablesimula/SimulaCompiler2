@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1196
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_textconst extends CLASS_CHECKER1_semchecker1__const {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=2, firstLine=1196, lastLine=1224, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=2, firstLine=1196, lastLine=1224, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 1197
@@ -31,5 +31,5 @@ public class CLASS_CHECKER1_semchecker1_textconst extends CLASS_CHECKER1_semchec
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 textconst",1,1196,10,1197,22,169,24,1192,26,1224,33,1224);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 textconst",1,1196,10,1197,22,169,24,1192,26,1224,33,1224);
 } // End of Class

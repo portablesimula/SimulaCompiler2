@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 598
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:34 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:52 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER1_codegenerator1_endsubscription extends RTS_PROCEDURE {
@@ -97,7 +97,7 @@ public final class CLASS_SCODER1_codegenerator1_endsubscription extends RTS_PROC
                                                     ;
                                                     // JavaLine 98 <== SourceLine 625
                                                     {
-                                                        _SIM_LABEL(1); // DeclaredIn: endsubscription -> endsubscription[externalIdent=CLASS_SCODER1_codegenerator1_endsubscription] Kind=5, QUAL=ProcedureDeclaration, HashCode=1997266310
+                                                        _SIM_LABEL(1); // DeclaredIn: endsubscription -> endsubscription[externalIdent=CLASS_SCODER1_codegenerator1_endsubscription] Kind=5, QUAL=ProcedureDeclaration, HashCode=569944732
                                                         // JavaLine 101 <== SourceLine 626
                                                         if(_VALUE((alowb!=(0)))) {
                                                             {
@@ -214,7 +214,7 @@ public final class CLASS_SCODER1_codegenerator1_endsubscription extends RTS_PROC
                                 ;
                                 // JavaLine 215 <== SourceLine 672
                                 {
-                                    _SIM_LABEL(2); // DeclaredIn: endsubscription -> endsubscription[externalIdent=CLASS_SCODER1_codegenerator1_endsubscription] Kind=5, QUAL=ProcedureDeclaration, HashCode=1997266310
+                                    _SIM_LABEL(2); // DeclaredIn: endsubscription -> endsubscription[externalIdent=CLASS_SCODER1_codegenerator1_endsubscription] Kind=5, QUAL=ProcedureDeclaration, HashCode=569944732
                                     ;
                                 }
                             }

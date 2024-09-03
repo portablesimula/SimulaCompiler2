@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 204
+// JavaLine 1 <== SourceLine 199
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_parserMessage extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=204, lastLine=207, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=199, lastLine=202, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public int p_errpos;
     public int p_n1;
@@ -42,20 +42,20 @@ public final class CLASS_ERRMSG_parserMessage extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_parserMessage _STM() {
-        // JavaLine 45 <== SourceLine 205
+        // JavaLine 45 <== SourceLine 200
         if(_VALUE((p_n2!=(0)))) {
             {
-                // JavaLine 48 <== SourceLine 206
+                // JavaLine 48 <== SourceLine 201
                 ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(0),new CLASS_ERRMSG_errmsg((_CUR._SL),p_n2)._RESULT);
                 ;
                 ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(0),CONC(new RTS_TXT(" - "),((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(0)));
             }
         }
         ;
-        // JavaLine 55 <== SourceLine 207
+        // JavaLine 55 <== SourceLine 202
         new CLASS_ERRMSG_outP1message((_CUR._SL),p_errpos,p_n1,((char)2));
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 parserMessage",1,204,45,205,48,206,55,207,59,207);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 parserMessage",1,199,45,200,48,201,55,202,59,202);
 } // End of Procedure

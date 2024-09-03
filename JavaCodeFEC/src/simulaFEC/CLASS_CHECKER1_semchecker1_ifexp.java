@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1082
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_ifexp extends CLASS_CHECKER1_semchecker1_operation {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=2, firstLine=1082, lastLine=1164, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=2, firstLine=1082, lastLine=1164, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public CLASS_CHECKER1_semchecker1_exp p2_testexp;
     // Declare local labels
@@ -164,5 +164,5 @@ public class CLASS_CHECKER1_semchecker1_ifexp extends CLASS_CHECKER1_semchecker1
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 ifexp",1,1082,11,1137,30,169,32,223,34,1116,39,1117,44,1118,49,1119,52,1120,56,1121,62,1122,64,1123,68,1126,76,1129,84,1132,94,1136,96,1137,104,1138,110,1141,113,1142,116,1143,120,1144,131,1156,136,1157,138,1158,145,1161,152,1164,166,1164);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 ifexp",1,1082,11,1137,30,169,32,223,34,1116,39,1117,44,1118,49,1119,52,1120,56,1121,62,1122,64,1123,68,1126,76,1129,84,1132,94,1136,96,1137,104,1138,110,1141,113,1142,116,1143,120,1144,131,1156,136,1157,138,1158,145,1161,152,1164,166,1164);
 } // End of Class

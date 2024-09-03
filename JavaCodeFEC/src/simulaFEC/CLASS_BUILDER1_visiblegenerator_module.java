@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 216
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_BUILDER1_visiblegenerator_module extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=216, lastLine=219, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=216, lastLine=219, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public RTS_TXT p_rtsmoduleid;
     public RTS_TXT p_checkcode;
@@ -31,5 +31,5 @@ public class CLASS_BUILDER1_visiblegenerator_module extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","8 module",1,216,28,219,33,219);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","9 module",1,216,28,219,33,219);
 } // End of Class

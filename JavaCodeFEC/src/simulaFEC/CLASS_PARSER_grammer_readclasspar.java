@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 431
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_PARSER_grammer_readclasspar extends RTS_PROCEDURE {
@@ -52,7 +52,7 @@ public final class CLASS_PARSER_grammer_readclasspar extends RTS_PROCEDURE {
                             ;
                             // JavaLine 53 <== SourceLine 477
                             {
-                                _SIM_LABEL(2); // DeclaredIn: readclasspar -> readclasspar[externalIdent=CLASS_PARSER_grammer_readclasspar] Kind=5, QUAL=ProcedureDeclaration, HashCode=1996472700, Protected by readclasspar defined in grammer
+                                _SIM_LABEL(2); // DeclaredIn: readclasspar -> readclasspar[externalIdent=CLASS_PARSER_grammer_readclasspar] Kind=5, QUAL=ProcedureDeclaration, HashCode=1592713508, Protected by readclasspar defined in grammer
                                 ((CLASS_PARSER_grammer)(_CUR._SL)).detach(477);
                             }
                             ;
@@ -99,7 +99,7 @@ public final class CLASS_PARSER_grammer_readclasspar extends RTS_PROCEDURE {
                             ;
                             // JavaLine 100 <== SourceLine 489
                             {
-                                _SIM_LABEL(4); // DeclaredIn: readclasspar -> readclasspar[externalIdent=CLASS_PARSER_grammer_readclasspar] Kind=5, QUAL=ProcedureDeclaration, HashCode=1996472700, Protected by readclasspar defined in grammer
+                                _SIM_LABEL(4); // DeclaredIn: readclasspar -> readclasspar[externalIdent=CLASS_PARSER_grammer_readclasspar] Kind=5, QUAL=ProcedureDeclaration, HashCode=1592713508, Protected by readclasspar defined in grammer
                                 new CLASS_PARSER_grammer_readspecification((_CUR._SL),((char)148));
                             }
                             ;

@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 393
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER_SourceElt extends CLASS_SCANNER_input {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=1, firstLine=393, lastLine=460, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=1, firstLine=393, lastLine=460, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     public RTS_TXT p1_fname;
@@ -265,5 +265,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 SourceElt",1,393,12,425,14,427,16,458,19,396,21,397,23,398,25,405,27,449,44,390,46,405,51,406,53,405,55,407,64,408,67,409,70,410,73,411,76,412,79,413,81,415,89,416,95,418,100,419,107,420,109,421,117,423,120,424,123,425,128,427,136,428,141,429,146,430,151,431,154,432,157,433,162,434,167,436,171,437,176,439,178,440,181,441,186,443,192,445,199,448,204,449,210,450,212,449,214,450,219,451,222,453,231,455,236,456,241,457,244,458,254,460,267,460);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 SourceElt",1,393,12,425,14,427,16,458,19,396,21,397,23,398,25,405,27,449,44,390,46,405,51,406,53,405,55,407,64,408,67,409,70,410,73,411,76,412,79,413,81,415,89,416,95,418,100,419,107,420,109,421,117,423,120,424,123,425,128,427,136,428,141,429,146,430,151,431,154,432,157,433,162,434,167,436,171,437,176,439,178,440,181,441,186,443,192,445,199,448,204,449,210,450,212,449,214,450,219,451,222,453,231,455,236,456,241,457,244,458,254,460,267,460);
 } // End of Class

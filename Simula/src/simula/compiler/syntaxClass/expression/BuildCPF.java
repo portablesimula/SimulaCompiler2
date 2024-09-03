@@ -29,6 +29,7 @@ public abstract class BuildCPF {
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
 		Declaration decl=variable.meaning.declaredAs;
+//		System.out.println("BuildCPF.formal: type="+decl.type+", backLink="+backLink);
 		if(decl.type != null && backLink != null) {
 			codeBuilder.aload(0);
 		}

@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 356
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER_input extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=356, lastLine=390, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=356, lastLine=390, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public boolean p_inserted;
     // Declare locals as attributes
@@ -41,5 +41,5 @@ public RTS_PRCQNT close_0(){ throw new RTS_SimulaRuntimeError("No Virtual Match:
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 input",1,356,11,359,13,360,15,361,18,362,20,363,22,364,24,365,38,390,43,390);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 input",1,356,11,359,13,360,15,361,18,362,20,363,22,364,24,365,38,390,43,390);
 } // End of Class

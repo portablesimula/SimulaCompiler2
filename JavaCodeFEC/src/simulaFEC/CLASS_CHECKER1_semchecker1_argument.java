@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 2111
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_argument extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=2111, lastLine=2130, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=2111, lastLine=2130, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public int p_argno;
     public CLASS_CHECKER1_semchecker1_exp p_actual;
@@ -31,5 +31,5 @@ public RTS_PRCQNT dump_0(){ throw new RTS_SimulaRuntimeError("No Virtual Match: 
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 argument",1,2111,12,2118,28,2130,33,2130);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 argument",1,2111,12,2118,28,2130,33,2130);
 } // End of Class

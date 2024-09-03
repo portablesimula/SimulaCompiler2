@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 355
+// JavaLine 1 <== SourceLine 350
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_note1 extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=355, lastLine=356, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=350, lastLine=351, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public int p_n;
     public RTS_TXT p_t;
@@ -39,12 +39,12 @@ public final class CLASS_ERRMSG_note1 extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_note1 _STM() {
-        // JavaLine 42 <== SourceLine 356
+        // JavaLine 42 <== SourceLine 351
         ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(0),p_t);
         ;
         new CLASS_ERRMSG_note0((_CUR._SL),p_n);
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 note1",1,355,42,356,48,356);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 note1",1,350,42,351,48,351);
 } // End of Procedure

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 638
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
@@ -68,7 +68,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 69 <== SourceLine 681
                         {
-                            _SIM_LABEL(1); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                            _SIM_LABEL(1); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                             while(((((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1==('+'))||(((CLASS_SCANNER)(_CUR._SL._SL)).selector.getELEMENT(RTS_ENVIRONMENT.isorank(((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1))))) {
                                 // JavaLine 73 <== SourceLine 682
                                 new CLASS_SCANNER_recognizer_directive_nextChar((_CUR));
@@ -93,7 +93,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 94 <== SourceLine 687
                         {
-                            _SIM_LABEL(2); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                            _SIM_LABEL(2); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                             while(((((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1==('-'))||((!(((CLASS_SCANNER)(_CUR._SL._SL)).selector.getELEMENT(RTS_ENVIRONMENT.rank(((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1))))))) {
                                 {
                                     // JavaLine 99 <== SourceLine 688
@@ -109,7 +109,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                         {
                                             // JavaLine 110 <== SourceLine 691
                                             {
-                                                _SIM_LABEL(3); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                                                _SIM_LABEL(3); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                                                 // JavaLine 113 <== SourceLine 692
                                                 if(_VALUE((((CLASS_SCANNER_recognizer)(_CUR._SL)).linepos_1>=(((CLASS_SCANNER_recognizer)(_CUR._SL)).linelength_1)))) {
                                                     _GOTO(_LABEL_CLASS_SCANNER_recognizer_directive_SKIPLINE_0); // GOTO EVALUATED LABEL
@@ -161,7 +161,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 162 <== SourceLine 709
                         {
-                            _SIM_LABEL(4); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                            _SIM_LABEL(4); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                             if(_VALUE(((CLASS_SCANNER)(_CUR._SL._SL)).listingon)) {
                                 {
                                     // BEGIN INSPECTION 
@@ -321,7 +321,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                                                         new CLASS_SCANNER_recognizer_directive_nextChar((_CUR));
                                                                         ;
                                                                         {
-                                                                            _SIM_LABEL(5); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                                                                            _SIM_LABEL(5); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                                                                             d=((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1;
                                                                         }
                                                                     }
@@ -356,7 +356,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                                                                 ;
                                                                 // JavaLine 357 <== SourceLine 767
                                                                 {
-                                                                    _SIM_LABEL(6); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                                                                    _SIM_LABEL(6); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                                                                     for(i=0;i<=95;i++) {
                                                                         // JavaLine 361 <== SourceLine 768
                                                                         RTS_TXT.putchar(((CLASS_SCANNER)(_CUR._SL._SL)).simsymbol,((CLASS_SCANNER)(_CUR._SL._SL)).option.getELEMENT(i));
@@ -454,7 +454,7 @@ public final class CLASS_SCANNER_recognizer_directive extends RTS_PROCEDURE {
                     {
                         // JavaLine 455 <== SourceLine 798
                         {
-                            _SIM_LABEL(7); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=1248908034
+                            _SIM_LABEL(7); // DeclaredIn: directive -> directive[externalIdent=CLASS_SCANNER_recognizer_directive] Kind=5, QUAL=ProcedureDeclaration, HashCode=204339470
                             if(_VALUE(((CLASS_SCANNER)(_CUR._SL._SL)).GiveNotes)) {
                                 new CLASS_SCANNER_P1warn((_CUR._SL._SL),278);
                             }

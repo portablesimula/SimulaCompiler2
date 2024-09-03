@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 331
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:33 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER2_semchecker_ConstEltChecker extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=331, lastLine=382, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=331, lastLine=382, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
@@ -173,5 +173,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER2.sim","8 ConstEltChecker",1,331,11,340,13,379,16,332,18,334,20,335,22,364,38,340,43,341,46,344,51,345,56,346,61,348,64,351,73,352,76,353,79,354,83,360,94,362,99,363,102,364,107,365,109,364,111,365,116,366,119,367,127,369,130,370,132,371,134,372,137,373,140,374,152,379,163,382,175,382);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER2.sim","9 ConstEltChecker",1,331,11,340,13,379,16,332,18,334,20,335,22,364,38,340,43,341,46,344,51,345,56,346,61,348,64,351,73,352,76,353,79,354,83,360,94,362,99,363,102,364,107,365,109,364,111,365,116,366,119,367,127,369,130,370,132,371,134,372,137,373,140,374,152,379,163,382,175,382);
 } // End of Class

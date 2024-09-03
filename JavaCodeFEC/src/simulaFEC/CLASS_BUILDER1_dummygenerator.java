@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 275
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_BUILDER1_dummygenerator extends CLASS_BUILDER1_visiblegenerator {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=5, firstLine=275, lastLine=291, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=5, firstLine=275, lastLine=291, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare locals as attributes
@@ -80,5 +80,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","8 dummygenerator",1,275,23,868,28,869,30,269,35,273,37,280,40,282,43,284,52,285,54,286,62,287,65,288,72,291,82,291);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","9 dummygenerator",1,275,23,868,28,869,30,269,35,273,37,280,40,282,43,284,52,285,54,286,62,287,65,288,72,291,82,291);
 } // End of Class

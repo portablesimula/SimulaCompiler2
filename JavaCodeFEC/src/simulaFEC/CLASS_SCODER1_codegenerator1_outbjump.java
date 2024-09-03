@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 195
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:34 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:52 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER1_codegenerator1_outbjump extends RTS_PROCEDURE {

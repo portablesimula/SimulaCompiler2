@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 278
+// JavaLine 1 <== SourceLine 273
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_notimp extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=278, lastLine=279, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=273, lastLine=274, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public RTS_TXT p_t;
     // Declare locals as attributes
@@ -36,7 +36,7 @@ public final class CLASS_ERRMSG_notimp extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_notimp _STM() {
-        // JavaLine 39 <== SourceLine 279
+        // JavaLine 39 <== SourceLine 274
         ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(0),p_t);
         ;
         new CLASS_ERRMSG_fatal0((_CUR._SL),309);
@@ -44,5 +44,5 @@ public final class CLASS_ERRMSG_notimp extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 notimp",1,278,39,279,46,279);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 notimp",1,273,39,274,46,274);
 } // End of Procedure

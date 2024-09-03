@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 66
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_BUILDER1_casedescr extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=66, lastLine=74, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=66, lastLine=74, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public int p_ndests;
     public int p_lb;
@@ -40,5 +40,5 @@ public class CLASS_BUILDER1_casedescr extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","8 casedescr",1,66,15,71,18,72,20,73,37,74,42,74);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","9 casedescr",1,66,15,71,18,72,20,73,37,74,42,74);
 } // End of Class

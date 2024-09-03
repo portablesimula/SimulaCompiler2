@@ -1,26 +1,26 @@
-// JavaLine 1 <== SourceLine 87
+// JavaLine 1 <== SourceLine 77
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_diagmerge extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=87, lastLine=116, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=77, lastLine=106, hasLocalClasses=false, System=false
     @Override
 public Object _RESULT() { return(_RESULT); }
     // Declare parameters as attributes
     public int p_n;
     // Declare local labels
-    // JavaLine 13 <== SourceLine 111
-    final RTS_LABEL _LABEL_CLASS_ERRMSG_diagmerge_Block91_Block92_CONCAT_0=new RTS_LABEL(this,0,1,"CONCAT"); // Local Label #1=CONCAT At PrefixLevel 0
-    // JavaLine 15 <== SourceLine 116
+    // JavaLine 13 <== SourceLine 101
+    final RTS_LABEL _LABEL_CLASS_ERRMSG_diagmerge_Block81_Block82_CONCAT_0=new RTS_LABEL(this,0,1,"CONCAT"); // Local Label #1=CONCAT At PrefixLevel 0
+    // JavaLine 15 <== SourceLine 106
     final RTS_LABEL _LABEL_CLASS_ERRMSG_diagmerge_EX_0=new RTS_LABEL(this,0,2,"EX"); // Local Label #2=EX At PrefixLevel 0
     // Declare locals as attributes
-    // JavaLine 18 <== SourceLine 88
+    // JavaLine 18 <== SourceLine 78
     public RTS_TXT result=null;
     public RTS_TXT t=null;
     public RTS_TXT t2=null;
     public int i=0;
-    // JavaLine 23 <== SourceLine 87
+    // JavaLine 23 <== SourceLine 77
     public RTS_TXT _RESULT=null;
     // Parameter Transmission in case of Formal/Virtual Procedure Call
     @Override
@@ -54,86 +54,86 @@ public Object _RESULT() { return(_RESULT); }
         _LOOP:while(_JTX>=0) {
             try {
                 _JUMPTABLE(_JTX,2); // For ByteCode Engineering
-                // JavaLine 57 <== SourceLine 89
+                // JavaLine 57 <== SourceLine 79
                 _RESULT=t=new CLASS_ERRMSG_errmsg((_CUR._SL),p_n)._RESULT;
                 ;
-                // JavaLine 60 <== SourceLine 90
+                // JavaLine 60 <== SourceLine 80
                 if(_VALUE(RTS_UTIL.TRF_NE(((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(0),null))) {
                     {
-                        // JavaLine 63 <== SourceLine 91
+                        // JavaLine 63 <== SourceLine 81
                         while(RTS_UTIL.TRF_NE(((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(i),null)) {
                             {
-                                // JavaLine 66 <== SourceLine 92
+                                // JavaLine 66 <== SourceLine 82
                                 if(_VALUE(((RTS_ENVIRONMENT.loadChar(((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(i),0)==('_'))&&((RTS_ENVIRONMENT.loadChar(((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(i),1)==('_')))))) {
-                                    // JavaLine 68 <== SourceLine 94
+                                    // JavaLine 68 <== SourceLine 84
                                     {
-                                        // JavaLine 70 <== SourceLine 95
+                                        // JavaLine 70 <== SourceLine 85
                                         if(_VALUE((p_n==(337)))) {
                                             {
-                                                // JavaLine 73 <== SourceLine 96
+                                                // JavaLine 73 <== SourceLine 86
                                                 _RESULT=new CLASS_ERRMSG_errmsg((_CUR._SL),168)._RESULT;
                                                 ;
                                                 _GOTO(_LABEL_CLASS_ERRMSG_diagmerge_EX_0); // GOTO EVALUATED LABEL
                                             }
                                         }
                                         ;
-                                        // JavaLine 80 <== SourceLine 97
+                                        // JavaLine 80 <== SourceLine 87
                                         if(_VALUE((p_n==(427)))) {
                                             {
-                                                // JavaLine 83 <== SourceLine 98
+                                                // JavaLine 83 <== SourceLine 88
                                                 _RESULT=new CLASS_ERRMSG_errmsg((_CUR._SL),358)._RESULT;
                                                 ;
                                                 _GOTO(_LABEL_CLASS_ERRMSG_diagmerge_EX_0); // GOTO EVALUATED LABEL
                                             }
                                         }
                                         ;
-                                        // JavaLine 90 <== SourceLine 99
+                                        // JavaLine 90 <== SourceLine 89
                                         if(_VALUE((p_n==(426)))) {
                                             {
-                                                // JavaLine 93 <== SourceLine 100
+                                                // JavaLine 93 <== SourceLine 90
                                                 _RESULT=new CLASS_ERRMSG_errmsg((_CUR._SL),234)._RESULT;
                                                 ;
                                                 _GOTO(_LABEL_CLASS_ERRMSG_diagmerge_EX_0); // GOTO EVALUATED LABEL
                                             }
                                         }
                                         ;
-                                        // JavaLine 100 <== SourceLine 101
+                                        // JavaLine 100 <== SourceLine 91
                                         ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(i),new RTS_TXT("ACTIVATE"));
                                         ;
                                     }
                                 }
                                 ;
-                                // JavaLine 106 <== SourceLine 103
+                                // JavaLine 106 <== SourceLine 93
                                 while(RTS_TXT.more(t)) {
-                                    // JavaLine 108 <== SourceLine 104
+                                    // JavaLine 108 <== SourceLine 94
                                     if(_VALUE((RTS_TXT.getchar(t)==('?')))) {
                                         {
-                                            // JavaLine 111 <== SourceLine 105
+                                            // JavaLine 111 <== SourceLine 95
                                             t2=RTS_TXT.sub(t,1,(RTS_TXT.pos(t)-(2)));
                                             ;
-                                            // JavaLine 114 <== SourceLine 106
+                                            // JavaLine 114 <== SourceLine 96
                                             t=RTS_TXT.sub(t,RTS_TXT.pos(t),((RTS_TXT.length(t)-(RTS_TXT.pos(t)))+(1)));
                                             ;
-                                            // JavaLine 117 <== SourceLine 107
-                                            _GOTO(_LABEL_CLASS_ERRMSG_diagmerge_Block91_Block92_CONCAT_0); // GOTO EVALUATED LABEL
+                                            // JavaLine 117 <== SourceLine 97
+                                            _GOTO(_LABEL_CLASS_ERRMSG_diagmerge_Block81_Block82_CONCAT_0); // GOTO EVALUATED LABEL
                                             ;
                                         }
                                     }
                                 }
                                 ;
-                                // JavaLine 124 <== SourceLine 109
+                                // JavaLine 124 <== SourceLine 99
                                 t2=t;
                                 ;
                                 t=null;
                                 ;
-                                // JavaLine 129 <== SourceLine 110
+                                // JavaLine 129 <== SourceLine 100
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: diagmerge -> diagmerge[externalIdent=CLASS_ERRMSG_diagmerge] Kind=5, QUAL=ProcedureDeclaration, HashCode=1519482659, Protected by diagmerge defined in CLASS_ERRMSG
-                                    // JavaLine 132 <== SourceLine 111
+                                    _SIM_LABEL(1); // DeclaredIn: diagmerge -> diagmerge[externalIdent=CLASS_ERRMSG_diagmerge] Kind=5, QUAL=ProcedureDeclaration, HashCode=726374052, Protected by diagmerge defined in CLASS_ERRMSG
+                                    // JavaLine 132 <== SourceLine 101
                                     result=CONC(CONC(result,t2),((CLASS_ERRMSG)(_CUR._SL)).diag.getELEMENT(i));
                                 }
                                 ;
-                                // JavaLine 136 <== SourceLine 112
+                                // JavaLine 136 <== SourceLine 102
                                 ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(i),null);
                                 ;
                                 i=(i+(1));
@@ -141,13 +141,13 @@ public Object _RESULT() { return(_RESULT); }
                             }
                         }
                         ;
-                        // JavaLine 144 <== SourceLine 114
+                        // JavaLine 144 <== SourceLine 104
                         _RESULT=CONC(result,t);
                         ;
                     }
                 }
                 ;
-                // JavaLine 150 <== SourceLine 116
+                // JavaLine 150 <== SourceLine 106
                 {
                     _SIM_LABEL(2); // DeclaredIn: diagmerge
                     ;
@@ -162,5 +162,5 @@ public Object _RESULT() { return(_RESULT); }
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 diagmerge",1,87,13,111,15,116,18,88,23,87,57,89,60,90,63,91,66,92,68,94,70,95,73,96,80,97,83,98,90,99,93,100,100,101,106,103,108,104,111,105,114,106,117,107,124,109,129,110,132,111,136,112,144,114,150,116,164,116);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 diagmerge",1,77,13,101,15,106,18,78,23,77,57,79,60,80,63,81,66,82,68,84,70,85,73,86,80,87,83,88,90,89,93,90,100,91,106,93,108,94,111,95,114,96,117,97,124,99,129,100,132,101,136,102,144,104,150,106,164,106);
 } // End of Procedure

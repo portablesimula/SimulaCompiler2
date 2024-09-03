@@ -1,8 +1,11 @@
 
-external class adHoc00;
+begin
 
-adHoc00(0,"--- Empty test") begin
 
-	outtext("IN EMPTY TEST"); outimage;
-	
-end of program;
+   procedure R(SFD);  switch SFD;
+   begin
+      goto SFD(1)
+   end of procedure R;
+
+
+end;

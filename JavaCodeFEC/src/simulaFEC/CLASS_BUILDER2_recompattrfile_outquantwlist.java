@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 916
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER2_recompattrfile_outquantwlist extends RTS_PROCEDURE {
@@ -260,7 +260,7 @@ public final class CLASS_BUILDER2_recompattrfile_outquantwlist extends RTS_PROCE
                                                         ;
                                                         // JavaLine 261 <== SourceLine 1050
                                                         {
-                                                            _SIM_LABEL(1); // DeclaredIn: outquantwlist -> outquantwlist[externalIdent=CLASS_BUILDER2_recompattrfile_outquantwlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=990468141
+                                                            _SIM_LABEL(1); // DeclaredIn: outquantwlist -> outquantwlist[externalIdent=CLASS_BUILDER2_recompattrfile_outquantwlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=924413267
                                                             while((qq!=(null))) {
                                                                 {
                                                                     // JavaLine 266 <== SourceLine 1051
@@ -269,7 +269,7 @@ public final class CLASS_BUILDER2_recompattrfile_outquantwlist extends RTS_PROCE
                                                                         {
                                                                             // JavaLine 270 <== SourceLine 1056
                                                                             {
-                                                                                _SIM_LABEL(2); // DeclaredIn: outquantwlist -> outquantwlist[externalIdent=CLASS_BUILDER2_recompattrfile_outquantwlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=990468141
+                                                                                _SIM_LABEL(2); // DeclaredIn: outquantwlist -> outquantwlist[externalIdent=CLASS_BUILDER2_recompattrfile_outquantwlist] Kind=5, QUAL=ProcedureDeclaration, HashCode=924413267
                                                                                 if(_VALUE((l==(0)))) {
                                                                                     {
                                                                                         new CLASS_COMMON_attrfile_nextKey((_CUR._SL));

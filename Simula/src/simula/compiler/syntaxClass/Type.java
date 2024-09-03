@@ -683,7 +683,7 @@ public class Type extends SyntaxClass {
 	 * @param codeBuilder the CodeBuilder to use
 	 */
 	public void valueToPrimitiveType(CodeBuilder codeBuilder) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		// Object TOS value ==> Primitive type
 		switch(keyWord) {
 			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"));

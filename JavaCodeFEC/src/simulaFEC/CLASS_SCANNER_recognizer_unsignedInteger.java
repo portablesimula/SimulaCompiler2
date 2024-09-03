@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 937
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER_recognizer_unsignedInteger extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=937, lastLine=1045, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=937, lastLine=1045, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
@@ -408,5 +408,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 unsignedInteger",1,937,11,983,13,1002,16,941,18,942,21,943,23,944,39,946,42,947,45,948,50,949,53,950,222,956,231,960,233,961,238,962,244,964,246,965,249,966,251,967,253,968,256,969,259,970,262,971,272,973,277,976,280,977,283,978,297,980,299,981,302,982,309,983,315,984,318,985,335,987,337,988,342,989,347,990,352,993,357,997,362,998,370,1002,376,1003,379,1004,385,1005,391,1042,398,1045,410,1045);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 unsignedInteger",1,937,11,983,13,1002,16,941,18,942,21,943,23,944,39,946,42,947,45,948,50,949,53,950,222,956,231,960,233,961,238,962,244,964,246,965,249,966,251,967,253,968,256,969,259,970,262,971,272,973,277,976,280,977,283,978,297,980,299,981,302,982,309,983,315,984,318,985,335,987,337,988,342,989,347,990,352,993,357,997,362,998,370,1002,376,1003,379,1004,385,1005,391,1042,398,1045,410,1045);
 } // End of Class

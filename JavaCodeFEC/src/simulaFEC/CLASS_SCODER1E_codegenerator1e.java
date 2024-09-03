@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 33
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:35 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:52 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCODER1E_codegenerator1e extends CLASS_SCODER1_codegenerator1 {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=7, firstLine=33, lastLine=373, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=7, firstLine=33, lastLine=373, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 35
@@ -63,5 +63,5 @@ public class CLASS_SCODER1E_codegenerator1e extends CLASS_SCODER1_codegenerator1
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER1E.sim","8 codegenerator1e",1,33,10,35,12,129,14,130,16,131,30,868,35,869,37,269,42,273,44,309,46,900,48,370,53,373,65,373);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER1E.sim","9 codegenerator1e",1,33,10,35,12,129,14,130,16,131,30,868,35,869,37,269,42,273,44,309,46,900,48,370,53,373,65,373);
 } // End of Class

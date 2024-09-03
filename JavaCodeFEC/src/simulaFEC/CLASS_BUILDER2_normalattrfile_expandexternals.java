@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 321
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PROCEDURE {
@@ -235,7 +235,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 236 <== SourceLine 382
                                                     {
-                                                        _SIM_LABEL(2); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(2); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         qe=qx.descr_1.fpar;
                                                     }
                                                     ;
@@ -292,7 +292,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 293 <== SourceLine 399
                                                     {
-                                                        _SIM_LABEL(3); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(3); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         // JavaLine 296 <== SourceLine 400
                                                         new CLASS_COMMON_QTRC((_CUR._SL._SL),new RTS_TXT("BUILDER2"),400,new RTS_TXT("FOUND: "),qe);
                                                     }
@@ -409,7 +409,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 410 <== SourceLine 443
                                                     {
-                                                        _SIM_LABEL(4); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(4); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         if(_VALUE(generate)) {
                                                             {
                                                                 // JavaLine 415 <== SourceLine 444
@@ -480,7 +480,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 481 <== SourceLine 461
                                                     {
-                                                        _SIM_LABEL(5); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(5); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         qq=new CLASS_BUILDER1_newextquantbrec((_CUR._SL._SL),p_b.blev,p_b.rtblev,'H',((CLASS_COMMON_extquantity)(q)))._RESULT;
                                                     }
                                                     ;
@@ -491,7 +491,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 492 <== SourceLine 464
                                                     {
-                                                        _SIM_LABEL(6); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(6); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         qq.encl_1=p_b;
                                                     }
                                                     ;
@@ -505,7 +505,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                                                     ;
                                                     // JavaLine 506 <== SourceLine 467
                                                     {
-                                                        _SIM_LABEL(7); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                                        _SIM_LABEL(7); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                                         ;
                                                     }
                                                 }
@@ -607,7 +607,7 @@ public final class CLASS_BUILDER2_normalattrfile_expandexternals extends RTS_PRO
                             ;
                             // JavaLine 608 <== SourceLine 497
                             {
-                                _SIM_LABEL(8); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1365704314
+                                _SIM_LABEL(8); // DeclaredIn: expandexternals -> expandexternals[externalIdent=CLASS_BUILDER2_normalattrfile_expandexternals] Kind=5, QUAL=ProcedureDeclaration, HashCode=1955119491
                                 q=((CLASS_COMMON_quantity)(q.next));
                             }
                             ;

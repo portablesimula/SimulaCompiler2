@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1800
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_PARSER_grammer_casestat extends CLASS_PARSER_grammer_statement {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=1, firstLine=1800, lastLine=1906, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=1, firstLine=1800, lastLine=1906, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
@@ -317,5 +317,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","8 casestat",1,1800,11,1828,13,1830,15,1846,17,1861,19,1881,21,1890,24,1802,40,712,42,1826,45,1827,48,1828,54,1830,60,1831,63,1832,70,1833,73,1834,77,1835,81,1836,84,1837,87,1838,96,1839,99,1840,103,1841,107,1842,110,1843,113,1844,116,1845,121,1846,129,1847,132,1848,141,1849,144,1850,153,1851,159,1853,163,1854,167,1855,172,1857,177,1861,183,1863,186,1864,191,1865,199,1868,202,1869,205,1870,214,1871,217,1872,225,1874,228,1875,231,1876,234,1877,238,1878,242,1879,252,1881,260,1883,264,1884,268,1885,271,1886,274,1887,277,1888,287,1890,293,1891,298,1893,303,1896,306,1906,319,1906);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","9 casestat",1,1800,11,1828,13,1830,15,1846,17,1861,19,1881,21,1890,24,1802,40,712,42,1826,45,1827,48,1828,54,1830,60,1831,63,1832,70,1833,73,1834,77,1835,81,1836,84,1837,87,1838,96,1839,99,1840,103,1841,107,1842,110,1843,113,1844,116,1845,121,1846,129,1847,132,1848,141,1849,144,1850,153,1851,159,1853,163,1854,167,1855,172,1857,177,1861,183,1863,186,1864,191,1865,199,1868,202,1869,205,1870,214,1871,217,1872,225,1874,228,1875,231,1876,234,1877,238,1878,242,1879,252,1881,260,1883,264,1884,268,1885,271,1886,274,1887,277,1888,287,1890,293,1891,298,1893,303,1896,306,1906,319,1906);
 } // End of Class

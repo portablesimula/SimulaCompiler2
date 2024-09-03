@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1219
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_PARSER_grammer_ifstat extends CLASS_PARSER_grammer_statement {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=1, firstLine=1219, lastLine=1291, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=1, firstLine=1219, lastLine=1291, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare local labels
@@ -214,5 +214,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","8 ifstat",1,1219,11,1241,13,1243,15,1251,17,1258,19,1267,21,1271,23,1276,41,712,43,1239,46,1240,49,1241,55,1243,63,1244,66,1245,71,1246,74,1247,77,1248,81,1249,83,1250,86,1251,94,1252,97,1253,104,1254,110,1258,116,1260,120,1261,124,1262,128,1263,132,1264,137,1267,142,1271,150,1272,153,1273,164,1276,172,1277,177,1279,182,1280,185,1282,188,1285,191,1286,194,1287,197,1288,200,1289,203,1291,216,1291);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","9 ifstat",1,1219,11,1241,13,1243,15,1251,17,1258,19,1267,21,1271,23,1276,41,712,43,1239,46,1240,49,1241,55,1243,63,1244,66,1245,71,1246,74,1247,77,1248,81,1249,83,1250,86,1251,94,1252,97,1253,104,1254,110,1258,116,1260,120,1261,124,1262,128,1263,132,1264,137,1267,142,1271,150,1272,153,1273,164,1276,172,1277,177,1279,182,1280,185,1282,188,1285,191,1286,194,1287,197,1288,200,1289,203,1291,216,1291);
 } // End of Class

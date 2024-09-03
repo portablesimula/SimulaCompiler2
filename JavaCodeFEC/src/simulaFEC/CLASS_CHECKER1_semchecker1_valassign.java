@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 727
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_CHECKER1_semchecker1_valassign extends CLASS_CHECKER1_semchecker1_exp {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=1, firstLine=727, lastLine=909, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=1, firstLine=727, lastLine=909, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     public CLASS_CHECKER1_semchecker1_exp p1_target;
@@ -339,5 +339,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","8 valassign",1,727,13,830,15,902,18,875,37,169,39,810,42,812,45,815,49,817,52,818,55,819,57,820,60,821,64,822,70,823,82,827,88,830,95,831,101,834,108,837,112,838,118,841,121,842,124,844,129,845,131,846,134,847,137,848,141,849,151,852,155,853,159,854,163,855,167,856,171,857,175,858,177,861,180,862,183,863,185,864,190,865,193,866,196,867,201,868,209,870,215,873,218,875,223,876,225,875,227,876,230,877,233,878,239,880,242,881,246,882,254,885,258,888,270,892,273,893,276,894,283,896,286,897,292,898,299,899,302,900,305,902,309,904,312,906,319,907,328,909,341,909);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_CHECKER1.sim","9 valassign",1,727,13,830,15,902,18,875,37,169,39,810,42,812,45,815,49,817,52,818,55,819,57,820,60,821,64,822,70,823,82,827,88,830,95,831,101,834,108,837,112,838,118,841,121,842,124,844,129,845,131,846,134,847,137,848,141,849,151,852,155,853,159,854,163,855,167,856,171,857,175,858,177,861,180,862,183,863,185,864,190,865,193,866,196,867,201,868,209,870,215,873,218,875,223,876,225,875,227,876,230,877,233,878,239,880,242,881,246,882,254,885,258,888,270,892,273,893,276,894,283,896,286,897,292,898,299,899,302,900,305,902,309,904,312,906,319,907,328,909,341,909);
 } // End of Class

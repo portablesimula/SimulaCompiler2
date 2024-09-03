@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 502
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_PARSER_grammer_readspecification extends RTS_PROCEDURE {
@@ -103,7 +103,7 @@ public final class CLASS_PARSER_grammer_readspecification extends RTS_PROCEDURE 
                             ;
                             // JavaLine 104 <== SourceLine 535
                             {
-                                _SIM_LABEL(2); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=982495267, Protected by readspecification defined in grammer
+                                _SIM_LABEL(2); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=1657624109, Protected by readspecification defined in grammer
                                 opnx=((CLASS_PARSER)(_CUR._SL._SL)).opn=((CLASS_PARSER_grammer)(_CUR._SL)).cs;
                             }
                             ;
@@ -111,13 +111,13 @@ public final class CLASS_PARSER_grammer_readspecification extends RTS_PROCEDURE 
                             ;
                             // JavaLine 112 <== SourceLine 536
                             {
-                                _SIM_LABEL(3); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=982495267, Protected by readspecification defined in grammer
+                                _SIM_LABEL(3); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=1657624109, Protected by readspecification defined in grammer
                                 ((CLASS_PARSER_grammer)(_CUR._SL)).detach(536);
                             }
                             ;
                             // JavaLine 118 <== SourceLine 537
                             {
-                                _SIM_LABEL(4); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=982495267, Protected by readspecification defined in grammer
+                                _SIM_LABEL(4); // DeclaredIn: readspecification -> readspecification[externalIdent=CLASS_PARSER_grammer_readspecification] Kind=5, QUAL=ProcedureDeclaration, HashCode=1657624109, Protected by readspecification defined in grammer
                                 if(_VALUE((((CLASS_PARSER_grammer)(_CUR._SL)).cs!=('Z')))) {
                                     new CLASS_PARSER_grammer_readspecification_specificationerror((_CUR),185);
                                 }

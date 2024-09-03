@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 806
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE {
@@ -89,7 +89,7 @@ public final class CLASS_SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE
                         // JavaLine 89 <== SourceLine 824
                         {
                             {
-                                _SIM_LABEL(2); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=CLASS_SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=2144965699
+                                _SIM_LABEL(2); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=CLASS_SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=1106488049
                                 // JavaLine 93 <== SourceLine 825
                                 while((((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1!=(';'))) {
                                     {
@@ -120,7 +120,7 @@ public final class CLASS_SCANNER_recognizer_ScanPastFormat extends RTS_PROCEDURE
                         {
                             // JavaLine 121 <== SourceLine 832
                             {
-                                _SIM_LABEL(3); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=CLASS_SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=2144965699
+                                _SIM_LABEL(3); // DeclaredIn: ScanPastFormat -> ScanPastFormat[externalIdent=CLASS_SCANNER_recognizer_ScanPastFormat] Kind=5, QUAL=ProcedureDeclaration, HashCode=1106488049
                                 ((CLASS_SCANNER_recognizer)(_CUR._SL)).atom_1=RTS_ENVIRONMENT.loadChar(((CLASS_SCANNER_recognizer)(_CUR._SL)).line_1,((CLASS_SCANNER_recognizer)(_CUR._SL)).linepos_1);
                             }
                             ;

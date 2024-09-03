@@ -1,22 +1,27 @@
 
-% begin integer jjj;
 begin
-	short integer nxtindex;
-	ref(module) array moduletab(0:20);
-	ref(module) X;
-	
-	class module; begin
-		nxtindex := 444;
-		nxtindex := nxtindex ** 2;
+	ref(A) virq;
+
+	class A; begin
+		ref(A) next;
+		integer type;
 	end;
-         
-	ref(module) procedure regnewmodule; begin
-		regnewmodule :-
-		 moduletab(nxtindex) :-
-		  new module;
-%		nxtindex := 444;
-	end;
+
+	procedure P; begin
+		sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (3)"); sysout.outimage;  ! TODO: TESTING ;
+%		virq:-favirt;
+		while true do inspect virq do begin
+			sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (4)"); sysout.outimage;  ! TODO: TESTING ;
+			virq:-next;
+		end otherwise begin
+			sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (3b)" & edit(virq.type)); sysout.outimage;  ! TODO: TESTING ;
+			goto EXvloop;
+		end;
+                  
+	EXvloop:
+
+		sysout.outimage; sysout.outtext("SCANNER: when IECWI, IEND (5)"); sysout.outimage;  ! TODO: TESTING ;
+	end P;
 	
-	X :- regnewmodule;
-end;
+	P;
 end;

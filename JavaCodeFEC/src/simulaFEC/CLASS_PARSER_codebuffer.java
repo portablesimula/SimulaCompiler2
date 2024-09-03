@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 40
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:28 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_PARSER_codebuffer extends CLASS_COMMON_outcodefile {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=4, firstLine=40, lastLine=113, hasLocalClasses=true, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=4, firstLine=40, lastLine=113, hasLocalClasses=true, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare locals as attributes
@@ -103,5 +103,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","8 codebuffer",1,40,11,41,13,42,16,44,18,45,20,46,22,47,24,48,26,49,28,104,42,868,47,869,49,99,54,100,57,101,60,103,63,104,72,105,79,106,89,109,96,113,105,113);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_PARSER.sim","9 codebuffer",1,40,11,41,13,42,16,44,18,45,20,46,22,47,24,48,26,49,28,104,42,868,47,869,49,99,54,100,57,101,60,103,63,104,72,105,79,106,89,109,96,113,105,113);
 } // End of Class

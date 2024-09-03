@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 253
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:37 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:53 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER4_codegenerator4_procLISCST extends RTS_PROCEDURE {
@@ -118,7 +118,7 @@ public final class CLASS_SCODER4_codegenerator4_procLISCST extends RTS_PROCEDURE
                                         ;
                                         // JavaLine 119 <== SourceLine 327
                                         {
-                                            _SIM_LABEL(1); // DeclaredIn: procLISCST -> procLISCST[externalIdent=CLASS_SCODER4_codegenerator4_procLISCST] Kind=5, QUAL=ProcedureDeclaration, HashCode=195304411
+                                            _SIM_LABEL(1); // DeclaredIn: procLISCST -> procLISCST[externalIdent=CLASS_SCODER4_codegenerator4_procLISCST] Kind=5, QUAL=ProcedureDeclaration, HashCode=632662560
                                             // JavaLine 122 <== SourceLine 328
                                             ((CLASS_SCODER4_codegenerator4)(_CUR._SL)).literal_6=new CLASS_COMMON_nameof((_CUR._SL._SL),((CLASS_SCODER4)(_CUR._SL._SL)).opihi_6,((CLASS_SCODER4)(_CUR._SL._SL)).opilo_6)._RESULT;
                                         }
@@ -222,7 +222,7 @@ public final class CLASS_SCODER4_codegenerator4_procLISCST extends RTS_PROCEDURE
                                 ;
                                 // JavaLine 223 <== SourceLine 380
                                 {
-                                    _SIM_LABEL(2); // DeclaredIn: procLISCST -> procLISCST[externalIdent=CLASS_SCODER4_codegenerator4_procLISCST] Kind=5, QUAL=ProcedureDeclaration, HashCode=195304411
+                                    _SIM_LABEL(2); // DeclaredIn: procLISCST -> procLISCST[externalIdent=CLASS_SCODER4_codegenerator4_procLISCST] Kind=5, QUAL=ProcedureDeclaration, HashCode=632662560
                                     ;
                                 }
                             }

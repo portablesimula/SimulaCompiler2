@@ -722,6 +722,7 @@ public final class RTS_UTIL {
 		for (int i = 0; i < n; i++) {
 			println("*** stackTraceElement["+i+"] = "+stackTraceElement[i]);
 		}
+//		System.exit(n);
 	}
 
 	/**

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 57
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:38 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:54 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODMAIN_codegenerator_DirectIdentifierReference extends RTS_PROCEDURE {
@@ -110,7 +110,7 @@ public final class CLASS_SCODMAIN_codegenerator_DirectIdentifierReference extend
                     {
                         // JavaLine 111 <== SourceLine 82
                         {
-                            _SIM_LABEL(1); // DeclaredIn: DirectIdentifierReference -> DirectIdentifierReference[externalIdent=CLASS_SCODMAIN_codegenerator_DirectIdentifierReference] Kind=5, QUAL=ProcedureDeclaration, HashCode=979869740
+                            _SIM_LABEL(1); // DeclaredIn: DirectIdentifierReference -> DirectIdentifierReference[externalIdent=CLASS_SCODMAIN_codegenerator_DirectIdentifierReference] Kind=5, QUAL=ProcedureDeclaration, HashCode=746138934
                             // JavaLine 114 <== SourceLine 83
                             if(_VALUE((((CLASS_SCODMAIN_codegenerator)(_CUR._SL)).opq_3.categ_1==(((char)2))))) {
                                 {

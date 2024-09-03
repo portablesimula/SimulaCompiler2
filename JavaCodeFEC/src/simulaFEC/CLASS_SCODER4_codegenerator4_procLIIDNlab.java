@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 194
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:37 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:53 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER4_codegenerator4_procLIIDNlab extends RTS_PROCEDURE {
@@ -109,7 +109,7 @@ public final class CLASS_SCODER4_codegenerator4_procLIIDNlab extends RTS_PROCEDU
                                         {
                                             // JavaLine 110 <== SourceLine 240
                                             {
-                                                _SIM_LABEL(1); // DeclaredIn: procLIIDNlab -> procLIIDNlab[externalIdent=CLASS_SCODER4_codegenerator4_procLIIDNlab] Kind=5, QUAL=ProcedureDeclaration, HashCode=1071766272
+                                                _SIM_LABEL(1); // DeclaredIn: procLIIDNlab -> procLIIDNlab[externalIdent=CLASS_SCODER4_codegenerator4_procLIIDNlab] Kind=5, QUAL=ProcedureDeclaration, HashCode=795832595
                                                 // JavaLine 113 <== SourceLine 241
                                                 if(_VALUE(((CLASS_SCODER4)(_CUR._SL._SL)).ingotostmt_6)) {
                                                     ((CLASS_SCODER4)(_CUR._SL._SL)).generalgoto_6=true;

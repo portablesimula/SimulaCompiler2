@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1096
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_COMMON_attrfile_fetchquant extends RTS_PROCEDURE {
@@ -213,7 +213,7 @@ public Object _RESULT() { return(_RESULT); }
                                 ;
                                 // JavaLine 214 <== SourceLine 1162
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=1468177767
+                                    _SIM_LABEL(1); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=745160567
                                     _RESULT=true;
                                 }
                                 ;
@@ -350,7 +350,7 @@ public Object _RESULT() { return(_RESULT); }
                                     {
                                         // JavaLine 351 <== SourceLine 1205
                                         {
-                                            _SIM_LABEL(4); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=1468177767
+                                            _SIM_LABEL(4); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=745160567
                                             new CLASS_COMMON_attrfile_gettext((_CUR._SL));
                                         }
                                         ;
@@ -393,7 +393,7 @@ public Object _RESULT() { return(_RESULT); }
                                 ;
                                 // JavaLine 394 <== SourceLine 1217
                                 {
-                                    _SIM_LABEL(5); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=1468177767
+                                    _SIM_LABEL(5); // DeclaredIn: fetchquant -> fetchquant[externalIdent=CLASS_COMMON_attrfile_fetchquant] Kind=5, QUAL=ProcedureDeclaration, HashCode=745160567
                                     // JavaLine 397 <== SourceLine 1218
                                     new CLASS_COMMON_attrfile_gettext((_CUR._SL));
                                 }

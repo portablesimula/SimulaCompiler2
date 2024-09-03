@@ -1,10 +1,10 @@
-// JavaLine 1 <== SourceLine 273
+// JavaLine 1 <== SourceLine 268
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_error2quants extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=273, lastLine=276, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=268, lastLine=271, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public int p_n;
     public CLASS_COMMON_quantity p_q;
@@ -42,7 +42,7 @@ public final class CLASS_ERRMSG_error2quants extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_error2quants _STM() {
-        // JavaLine 45 <== SourceLine 274
+        // JavaLine 45 <== SourceLine 269
         ((CLASS_ERRMSG)(_CUR._SL)).diag.putELEMENT(((CLASS_ERRMSG)(_CUR._SL)).diag.index(1),new CLASS_ERRMSG_qlin((_CUR._SL),p_qt)._RESULT);
         ;
         new CLASS_ERRMSG_error1id((_CUR._SL),p_n,p_q.symb_1);
@@ -50,5 +50,5 @@ public final class CLASS_ERRMSG_error2quants extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 error2quants",1,273,45,274,52,276);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 error2quants",1,268,45,269,52,271);
 } // End of Procedure

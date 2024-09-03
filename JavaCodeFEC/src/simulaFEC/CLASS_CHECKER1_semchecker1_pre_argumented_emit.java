@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 1731
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:51 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_CHECKER1_semchecker1_pre_argumented_emit extends RTS_PROCEDURE {
@@ -95,7 +95,7 @@ public final class CLASS_CHECKER1_semchecker1_pre_argumented_emit extends RTS_PR
                                 ;
                                 // JavaLine 96 <== SourceLine 1749
                                 {
-                                    _SIM_LABEL(1); // DeclaredIn: emit -> emit[externalIdent=CLASS_CHECKER1_semchecker1_pre_argumented_emit] Kind=5, QUAL=ProcedureDeclaration, HashCode=1092378530
+                                    _SIM_LABEL(1); // DeclaredIn: emit -> emit[externalIdent=CLASS_CHECKER1_semchecker1_pre_argumented_emit] Kind=5, QUAL=ProcedureDeclaration, HashCode=1526336282
                                     if(_VALUE(((_inspect_1733_4580.meaning!=(null))||((((CLASS_CHECKER1_semchecker1_pre_argumented)(_CUR._SL)).p_ch!=(']')))))) {
                                         // JavaLine 100 <== SourceLine 1751
                                         ((CLASS_CHECKER1_semchecker1_pre_argumented)(_CUR._SL)).p1_arguments.emit_0().CPF();

@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 3
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:33 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:52 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCODER0 extends CLASS_CHECKER2 {
-    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=10, firstLine=3, lastLine=311, hasLocalClasses=true, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=1, PrefixLevel=10, firstLine=3, lastLine=311, hasLocalClasses=true, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 17
@@ -86,7 +86,7 @@ public class CLASS_SCODER0 extends CLASS_CHECKER2 {
     public CLASS_SCODER0 _STM() {
         // JavaLine 87 <== SourceLine 1323
         // BEGIN CLASS_COMMON INNER PART
-        // JavaLine 89 <== SourceLine 998
+        // JavaLine 89 <== SourceLine 993
         // BEGIN CLASS_ERRMSG INNER PART
         // JavaLine 91 <== SourceLine 2395
         // BEGIN CLASS_SCANNER INNER PART
@@ -123,5 +123,5 @@ public class CLASS_SCODER0 extends CLASS_CHECKER2 {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER0.sim","8 CLASS_SCODER0",1,3,10,17,14,18,18,25,22,26,25,31,27,32,32,33,37,34,39,39,41,44,45,45,48,55,50,56,52,57,54,58,56,59,58,60,60,61,62,62,64,63,66,64,68,65,70,66,72,67,74,69,76,71,87,1323,89,998,91,2395,93,89,95,2698,97,262,100,265,102,802,104,1887,106,2636,108,1664,110,311,125,311);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER0.sim","9 CLASS_SCODER0",1,3,10,17,14,18,18,25,22,26,25,31,27,32,32,33,37,34,39,39,41,44,45,45,48,55,50,56,52,57,54,58,56,59,58,60,60,61,62,62,64,63,66,64,68,65,70,66,72,67,74,69,76,71,87,1323,89,993,91,2395,93,89,95,2698,97,262,100,265,102,802,104,1887,106,2636,108,1664,110,311,125,311);
 } // End of Class

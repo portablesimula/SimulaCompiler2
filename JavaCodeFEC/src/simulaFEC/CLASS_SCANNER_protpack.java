@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 1555
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:27 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:48 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCANNER_protpack extends CLASS_COMMON_idpack {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=1, firstLine=1555, lastLine=1555, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=1, firstLine=1555, lastLine=1555, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // Normal Constructor
@@ -25,5 +25,5 @@ public class CLASS_SCANNER_protpack extends CLASS_COMMON_idpack {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","8 protpack",1,1555,19,859,21,1555,27,1555);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCANNER.sim","9 protpack",1,1555,19,859,21,1555,27,1555);
 } // End of Class

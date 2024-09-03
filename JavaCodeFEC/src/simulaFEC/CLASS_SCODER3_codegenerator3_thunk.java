@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 50
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:36 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:53 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_SCODER3_codegenerator3_thunk extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=3, PrefixLevel=0, firstLine=50, lastLine=78, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=3, PrefixLevel=0, firstLine=50, lastLine=78, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 51
@@ -60,5 +60,5 @@ public class CLASS_SCODER3_codegenerator3_thunk extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER3.sim","8 thunk",1,50,10,51,23,67,28,69,30,70,33,71,36,72,39,73,44,74,49,75,54,76,57,78,62,78);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_SCODER3.sim","9 thunk",1,50,10,51,23,67,28,69,30,70,33,71,36,72,39,73,44,74,49,75,54,76,57,78,62,78);
 } // End of Class

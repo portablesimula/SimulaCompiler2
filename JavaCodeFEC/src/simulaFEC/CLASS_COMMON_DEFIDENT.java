@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 161
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_COMMON_DEFIDENT extends RTS_PROCEDURE {
@@ -71,7 +71,7 @@ public final class CLASS_COMMON_DEFIDENT extends RTS_PROCEDURE {
                         } else {
                             // JavaLine 72 <== SourceLine 177
                             {
-                                _SIM_LABEL(1); // DeclaredIn: DEFIDENT -> DEFIDENT[externalIdent=CLASS_COMMON_DEFIDENT] Kind=5, QUAL=ProcedureDeclaration, HashCode=142666848
+                                _SIM_LABEL(1); // DeclaredIn: DEFIDENT -> DEFIDENT[externalIdent=CLASS_COMMON_DEFIDENT] Kind=5, QUAL=ProcedureDeclaration, HashCode=403424356
                                 {
                                     // BEGIN INSPECTION 
                                     _inspect_177_4444=new CLASS_COMMON_identsymbol((_CUR._SL))._STM();

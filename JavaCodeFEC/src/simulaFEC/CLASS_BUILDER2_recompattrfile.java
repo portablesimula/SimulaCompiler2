@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 910
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:31 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_BUILDER2_recompattrfile extends CLASS_COMMON_attrfile {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=1, firstLine=910, lastLine=1107, hasLocalClasses=false, System=false, detachUsed=true
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=1, firstLine=910, lastLine=1107, hasLocalClasses=false, System=false, detachUsed=true
 public boolean isDetachUsed() { return(true); }
     // Declare parameters as attributes
     // Declare locals as attributes
@@ -91,5 +91,5 @@ public boolean isDetachUsed() { return(true); }
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER2.sim","8 recompattrfile",1,910,11,1076,22,1294,24,1078,29,1079,32,1080,34,1081,38,1084,43,1086,46,1087,51,1088,53,1089,56,1092,60,1093,66,1097,71,1098,76,1101,78,1102,82,1105,87,1107,93,1107);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER2.sim","9 recompattrfile",1,910,11,1076,22,1294,24,1078,29,1079,32,1080,34,1081,38,1084,43,1086,46,1087,51,1088,53,1089,56,1092,60,1093,66,1097,71,1098,76,1101,78,1102,82,1105,87,1107,93,1107);
 } // End of Class

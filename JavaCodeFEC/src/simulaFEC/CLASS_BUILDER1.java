@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 3
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_BUILDER1 extends CLASS_PAS1INIT {
-    // ClassDeclaration: Kind=8, BlockLevel=1, PrefixLevel=6, firstLine=3, lastLine=802, hasLocalClasses=true, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=1, PrefixLevel=6, firstLine=3, lastLine=802, hasLocalClasses=true, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 43
@@ -58,7 +58,7 @@ public class CLASS_BUILDER1 extends CLASS_PAS1INIT {
     public CLASS_BUILDER1 _STM() {
         // JavaLine 59 <== SourceLine 1323
         // BEGIN CLASS_COMMON INNER PART
-        // JavaLine 61 <== SourceLine 998
+        // JavaLine 61 <== SourceLine 993
         // BEGIN CLASS_ERRMSG INNER PART
         // JavaLine 63 <== SourceLine 2395
         // BEGIN CLASS_SCANNER INNER PART
@@ -83,5 +83,5 @@ public class CLASS_BUILDER1 extends CLASS_PAS1INIT {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","8 CLASS_BUILDER1",1,3,10,43,15,44,17,45,19,46,21,47,23,51,25,52,27,53,29,55,31,56,36,59,38,60,40,61,42,63,44,64,46,313,48,728,59,1323,61,998,63,2395,65,89,67,2698,69,262,72,265,74,802,85,802);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_BUILDER1.sim","9 CLASS_BUILDER1",1,3,10,43,15,44,17,45,19,46,21,47,23,51,25,52,27,53,29,55,31,56,36,59,38,60,40,61,42,63,44,64,46,313,48,728,59,1323,61,993,63,2395,65,89,67,2698,69,262,72,265,74,802,85,802);
 } // End of Class

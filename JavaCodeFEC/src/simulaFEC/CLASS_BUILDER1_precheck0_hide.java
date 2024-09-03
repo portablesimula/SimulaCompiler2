@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 611
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
@@ -120,7 +120,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                         ;
                         // JavaLine 121 <== SourceLine 638
                         {
-                            _SIM_LABEL(1); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                            _SIM_LABEL(1); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                             qz=p_q.descr_1.fpar;
                         }
                         ;
@@ -128,7 +128,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                         ;
                         // JavaLine 129 <== SourceLine 639
                         {
-                            _SIM_LABEL(2); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                            _SIM_LABEL(2); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                             while((qz!=(null))) {
                                 {
                                     // JavaLine 134 <== SourceLine 640
@@ -165,7 +165,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                                                                                 {
                                                                                     // JavaLine 166 <== SourceLine 657
                                                                                     {
-                                                                                        _SIM_LABEL(3); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                                                                                        _SIM_LABEL(3); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                                                                                         cvis.line=(-(cvis.line));
                                                                                     }
                                                                                     ;
@@ -207,7 +207,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                                     ;
                                     // JavaLine 208 <== SourceLine 670
                                     {
-                                        _SIM_LABEL(4); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                                        _SIM_LABEL(4); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                                         qz=((CLASS_COMMON_quantity)(qz.next));
                                     }
                                     ;
@@ -239,7 +239,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                         ;
                         // JavaLine 240 <== SourceLine 679
                         {
-                            _SIM_LABEL(5); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                            _SIM_LABEL(5); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                             cvis=fvis;
                         }
                         ;
@@ -258,7 +258,7 @@ public final class CLASS_BUILDER1_precheck0_hide extends RTS_PROCEDURE {
                         ;
                         // JavaLine 259 <== SourceLine 683
                         {
-                            _SIM_LABEL(6); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=547160119
+                            _SIM_LABEL(6); // DeclaredIn: hide -> hide[externalIdent=CLASS_BUILDER1_precheck0_hide] Kind=5, QUAL=ProcedureDeclaration, HashCode=1401589925
                             ;
                         }
                     }

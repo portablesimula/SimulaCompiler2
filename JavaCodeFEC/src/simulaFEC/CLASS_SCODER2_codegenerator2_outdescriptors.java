@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 901
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:35 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:53 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER2_codegenerator2_outdescriptors extends RTS_PROCEDURE {
@@ -188,7 +188,7 @@ public final class CLASS_SCODER2_codegenerator2_outdescriptors extends RTS_PROCE
                             ;
                             // JavaLine 189 <== SourceLine 999
                             {
-                                _SIM_LABEL(1); // DeclaredIn: outdescriptors -> outdescriptors[externalIdent=CLASS_SCODER2_codegenerator2_outdescriptors] Kind=5, QUAL=ProcedureDeclaration, HashCode=1061471337
+                                _SIM_LABEL(1); // DeclaredIn: outdescriptors -> outdescriptors[externalIdent=CLASS_SCODER2_codegenerator2_outdescriptors] Kind=5, QUAL=ProcedureDeclaration, HashCode=813163690
                                 new CLASS_SCODER2_codegenerator2_descriptorgenerator((_CUR._SL),p_q);
                             }
                             ;

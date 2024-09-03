@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 822
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_stackedi extends CLASS_COMMON_sembox {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=1, firstLine=822, lastLine=824, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=1, firstLine=822, lastLine=824, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     public char p1_rehi;
     public char p1_relo;
@@ -29,5 +29,5 @@ public class CLASS_COMMON_stackedi extends CLASS_COMMON_sembox {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 stackedi",1,822,23,84,25,824,31,824);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 stackedi",1,822,23,84,25,824,31,824);
 } // End of Class

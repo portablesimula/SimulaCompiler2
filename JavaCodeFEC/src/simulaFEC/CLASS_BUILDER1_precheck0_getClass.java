@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 369
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:30 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:50 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_BUILDER1_precheck0_getClass extends RTS_PROCEDURE {
@@ -87,7 +87,7 @@ public Object _RESULT() { return(_RESULT); }
                                                     ;
                                                     // JavaLine 88 <== SourceLine 389
                                                     {
-                                                        _SIM_LABEL(1); // DeclaredIn: getClass -> getClass[externalIdent=CLASS_BUILDER1_precheck0_getClass] Kind=5, QUAL=ProcedureDeclaration, HashCode=698743076
+                                                        _SIM_LABEL(1); // DeclaredIn: getClass -> getClass[externalIdent=CLASS_BUILDER1_precheck0_getClass] Kind=5, QUAL=ProcedureDeclaration, HashCode=998481768
                                                         if(_VALUE((cqt.symb_1!=(p_qty.symb_1)))) {
                                                             {
                                                                 // JavaLine 93 <== SourceLine 390
@@ -122,7 +122,7 @@ public Object _RESULT() { return(_RESULT); }
                                         ;
                                         // JavaLine 123 <== SourceLine 405
                                         {
-                                            _SIM_LABEL(2); // DeclaredIn: getClass -> getClass[externalIdent=CLASS_BUILDER1_precheck0_getClass] Kind=5, QUAL=ProcedureDeclaration, HashCode=698743076
+                                            _SIM_LABEL(2); // DeclaredIn: getClass -> getClass[externalIdent=CLASS_BUILDER1_precheck0_getClass] Kind=5, QUAL=ProcedureDeclaration, HashCode=998481768
                                             ;
                                         }
                                     }

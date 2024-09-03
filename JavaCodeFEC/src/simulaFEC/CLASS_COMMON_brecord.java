@@ -1,10 +1,10 @@
 // JavaLine 1 <== SourceLine 393
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:24 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:45 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public class CLASS_COMMON_brecord extends RTS_CLASS {
-    // ClassDeclaration: Kind=8, BlockLevel=2, PrefixLevel=0, firstLine=393, lastLine=556, hasLocalClasses=false, System=false, detachUsed=false
+    // ClassDeclaration: Kind=9, BlockLevel=2, PrefixLevel=0, firstLine=393, lastLine=556, hasLocalClasses=false, System=false, detachUsed=false
     // Declare parameters as attributes
     // Declare locals as attributes
     // JavaLine 10 <== SourceLine 395
@@ -62,5 +62,5 @@ public class CLASS_COMMON_brecord extends RTS_CLASS {
         EBLK();
         return(this);
     } // End of Class Statements
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","8 brecord",1,393,10,395,15,396,19,397,21,399,23,400,25,401,27,402,29,403,31,404,33,406,35,408,37,409,39,410,41,411,43,412,45,413,47,416,59,556,64,556);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_COMMON.sim","9 brecord",1,393,10,395,15,396,19,397,21,399,23,400,25,401,27,402,29,403,31,404,33,406,35,408,37,409,39,410,41,411,43,412,45,413,47,416,59,556,64,556);
 } // End of Class

@@ -1,15 +1,15 @@
-// JavaLine 1 <== SourceLine 45
+// JavaLine 1 <== SourceLine 36
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:26 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:47 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_ERRMSG_printDiag extends RTS_PROCEDURE {
-    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=45, lastLine=53, hasLocalClasses=false, System=false
+    // ProcedureDeclaration: Kind=5, BlockLevel=2, firstLine=36, lastLine=44, hasLocalClasses=false, System=false
     // Declare parameters as attributes
     public RTS_TXT p_t;
     // Declare locals as attributes
-    // JavaLine 11 <== SourceLine 50
-    public RTS_Printfile _inspect_50_4460=null;
+    // JavaLine 11 <== SourceLine 41
+    public RTS_Printfile _inspect_41_4460=null;
     // Parameter Transmission in case of Formal/Virtual Procedure Call
     @Override
     public CLASS_ERRMSG_printDiag setPar(Object param) {
@@ -38,10 +38,10 @@ public final class CLASS_ERRMSG_printDiag extends RTS_PROCEDURE {
     // Procedure Statements
     @Override
     public CLASS_ERRMSG_printDiag _STM() {
-        // JavaLine 41 <== SourceLine 46
+        // JavaLine 41 <== SourceLine 37
         if(_VALUE(RTS_UTIL.TRF_NE(p_t,null))) {
             {
-                // JavaLine 44 <== SourceLine 47
+                // JavaLine 44 <== SourceLine 38
                 RTS_BASICIO.sysout().outimage();
                 ;
                 RTS_BASICIO.sysout().outimage();
@@ -50,32 +50,32 @@ public final class CLASS_ERRMSG_printDiag extends RTS_PROCEDURE {
                 ;
                 RTS_BASICIO.sysout().outimage();
                 ;
-                // JavaLine 53 <== SourceLine 48
+                // JavaLine 53 <== SourceLine 39
                 RTS_BASICIO.sysout().outtext(p_t);
                 ;
                 RTS_BASICIO.sysout().outimage();
                 ;
-                // JavaLine 58 <== SourceLine 49
+                // JavaLine 58 <== SourceLine 40
                 RTS_BASICIO.sysout().outtext(new RTS_TXT("ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR ERROR "));
                 ;
                 RTS_BASICIO.sysout().outimage();
                 ;
                 RTS_BASICIO.sysout().outimage();
                 ;
-                // JavaLine 65 <== SourceLine 50
+                // JavaLine 65 <== SourceLine 41
                 if(_VALUE((((CLASS_ERRMSG)(_CUR._SL)).listfile!=(RTS_BASICIO.sysout())))) {
                     {
                         // BEGIN INSPECTION 
-                        _inspect_50_4460=((CLASS_ERRMSG)(_CUR._SL)).listfile;
-                        if(_inspect_50_4460!=null) { // INSPECT _inspect_50_4460  type=ref(PRINTFILE)
-                            // JavaLine 71 <== SourceLine 51
+                        _inspect_41_4460=((CLASS_ERRMSG)(_CUR._SL)).listfile;
+                        if(_inspect_41_4460!=null) { // INSPECT _inspect_41_4460  type=ref(PRINTFILE)
+                            // JavaLine 71 <== SourceLine 42
                             {
-                                // JavaLine 73 <== SourceLine 50
+                                // JavaLine 73 <== SourceLine 41
                                 {
-                                    // JavaLine 75 <== SourceLine 51
-                                    _inspect_50_4460.outtext(p_t);
+                                    // JavaLine 75 <== SourceLine 42
+                                    _inspect_41_4460.outtext(p_t);
                                     ;
-                                    _inspect_50_4460.outimage();
+                                    _inspect_41_4460.outimage();
                                     ;
                                 }
                             }
@@ -88,5 +88,5 @@ public final class CLASS_ERRMSG_printDiag extends RTS_PROCEDURE {
         EBLK();
         return(this);
     } // End of Procedure BODY
-    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 printDiag",1,45,11,50,41,46,44,47,53,48,58,49,65,50,71,51,73,50,75,51,90,53);
+    public static RTS_PROGINFO _INFO=new RTS_PROGINFO("CLASS_ERRMSG.sim","5 printDiag",1,36,11,41,41,37,44,38,53,39,58,40,65,41,71,42,73,41,75,42,90,44);
 } // End of Procedure

@@ -877,7 +877,7 @@ public final class VariableExpression extends Expression {
 				break;
 
 			default:
-				Util.IERR();
+				Util.IERR(""+ObjectKind.edit(decl.declarationKind));
 		}
 	}
 

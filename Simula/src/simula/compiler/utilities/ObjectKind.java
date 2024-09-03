@@ -6,72 +6,64 @@ public class ObjectKind {
 	/** Connection Block */		public static final int ConnectionBlock = 2;
 	/** Compound Statement */	public static final int CompoundStatement = 3;
 	/** Subblock */				public static final int SubBlock = 4;
-	/**
-	 * Normal Simula Procedure implemented as a Java Class
-	 */
-	public static final int Procedure = 5;
-	/**
-	 * Procedure coded as a Java Member Method.
-	 */
-	public static final int MemberMethod = 6;
-	/**
-	 * Procedure treated as a Java Static Method.
-	 */
-	public static final int ContextFreeMethod = 7;
-	/** Class */					public static final int Class = 8;
-	/** Prefixed Block */			public static final int PrefixedBlock = 9;
-	/** Simula Program */			public static final int SimulaProgram = 10;
-	/** Array Declaration */		public static final int ArrayDeclaration = 11;
-	/** Virtual Specification */	public static final int VirtualSpecification = 12;
-	/** Virtual Match */			public static final int VirtualMatch = 13;
-	/** Parameter */				public static final int Parameter = 14;
-	/** Thunk */					public static final int Thunk = 15;
-	/** Label Declaration */		public static final int LabelDeclaration = 16;
-	/** Simple Variable */			public static final int SimpleVariableDeclaration = 17;
-	/** Inspect Variable */			public static final int InspectVariableDeclaration = 18;
-	/** External Declaration */		public static final int ExternalDeclaration = 19;
-	/** Hidden Specification */		public static final int HiddenSpecification = 20;
-	/** Protected Specification */	public static final int ProtectedSpecification = 21;
+	/** Normal Simula Procedure implemented as a Java Class */	public static final int Procedure = 5;
+//	/** Prior Procedure implemented as a Member Method */		public static final int PriorProcedure = 6;
+	/** Procedure coded as a Java Member Method. */				public static final int MemberMethod = 7;
+	/** Procedure treated as a Java Static Method. */			public static final int ContextFreeMethod = 8;
+	/** Class */					public static final int Class = 9;
+	/** Prefixed Block */			public static final int PrefixedBlock = 10;
+	/** Simula Program */			public static final int SimulaProgram = 11;
+	/** Array Declaration */		public static final int ArrayDeclaration = 12;
+	/** Virtual Specification */	public static final int VirtualSpecification = 13;
+	/** Virtual Match */			public static final int VirtualMatch = 14;
+	/** Parameter */				public static final int Parameter = 15;
+	/** Thunk */					public static final int Thunk = 16;
+	/** Label Declaration */		public static final int LabelDeclaration = 17;
+	/** Simple Variable */			public static final int SimpleVariableDeclaration = 18;
+	/** Inspect Variable */			public static final int InspectVariableDeclaration = 19;
+	/** External Declaration */		public static final int ExternalDeclaration = 20;
+	/** Hidden Specification */		public static final int HiddenSpecification = 21;
+	/** Protected Specification */	public static final int ProtectedSpecification = 22;
 
 	// *** Statements:
 
-	/** BlockStatement */			public static final int BlockStatement = 22;
-	/** ConditionalStatement */		public static final int ConditionalStatement = 23;
-	/** ConnectionStatement */		public static final int ConnectionStatement = 24;
-	/** ConnectionDoPart */			public static final int ConnectionDoPart = 25;
-	/** ConnectionWhenPart */		public static final int ConnectionWhenPart = 26;
-	/** DummyStatement */			public static final int DummyStatement = 27;
-	/** ForStatement */				public static final int ForStatement = 28;
-	/** ForWhileElement */			public static final int ForListElement = 29;
-	/** ForStatement */				public static final int ForWhileElement = 30;
-	/** StepUntilElement */			public static final int StepUntilElement = 31;
-	/** GotoStatement */			public static final int GotoStatement = 32;
-	/** InlineStatement */			public static final int InlineStatement = 33;
-	/** InnerStatement */			public static final int InnerStatement = 34;
-	/** LabeledStatement */			public static final int LabeledStatement = 35;
-	/** ProgramModule */			public static final int ProgramModule = 36;
-	/** StandaloneExpression */		public static final int StandaloneExpression = 37;
-	/** SwitchStatement */			public static final int SwitchStatement = 38;
-	/** WhileStatement */			public static final int WhileStatement = 39;
-	/** ActivationStatement */		public static final int ActivationStatement = 40;
+	/** BlockStatement */			public static final int BlockStatement = 23;
+	/** ConditionalStatement */		public static final int ConditionalStatement = 24;
+	/** ConnectionStatement */		public static final int ConnectionStatement = 25;
+	/** ConnectionDoPart */			public static final int ConnectionDoPart = 26;
+	/** ConnectionWhenPart */		public static final int ConnectionWhenPart = 27;
+	/** DummyStatement */			public static final int DummyStatement = 28;
+	/** ForStatement */				public static final int ForStatement = 29;
+	/** ForWhileElement */			public static final int ForListElement = 30;
+	/** ForStatement */				public static final int ForWhileElement = 31;
+	/** StepUntilElement */			public static final int StepUntilElement = 32;
+	/** GotoStatement */			public static final int GotoStatement = 33;
+	/** InlineStatement */			public static final int InlineStatement = 34;
+	/** InnerStatement */			public static final int InnerStatement = 35;
+	/** LabeledStatement */			public static final int LabeledStatement = 36;
+	/** ProgramModule */			public static final int ProgramModule = 37;
+	/** StandaloneExpression */		public static final int StandaloneExpression = 38;
+	/** SwitchStatement */			public static final int SwitchStatement = 39;
+	/** WhileStatement */			public static final int WhileStatement = 40;
+	/** ActivationStatement */		public static final int ActivationStatement = 41;
 
 	// *** Expressions:
 
-	/** ArithmeticExpression */		public static final int ArithmeticExpression = 41;
-	/** AssignmentOperation */		public static final int AssignmentOperation = 42;
-	/** BooleanExpression */		public static final int BooleanExpression = 43;
-	/** ConditionalExpression */	public static final int ConditionalExpression = 44;
-	/** Constant */					public static final int Constant = 45;
-	/** LocalObject */				public static final int LocalObject = 46;
-	/** ObjectGenerator */			public static final int ObjectGenerator = 47;
-	/** ObjectRelation */			public static final int ObjectRelation = 48;
-	/** QualifiedObject */			public static final int QualifiedObject = 49;
-	/** RelationalOperation */		public static final int RelationalOperation = 50;
-	/** RemoteVariable */			public static final int RemoteVariable = 51;
-	/** TextExpression */			public static final int TextExpression = 52;
-	/** TypeConversion */			public static final int TypeConversion = 53;
-	/** UnaryOperation */			public static final int UnaryOperation = 54;
-	/** VariableExpression */		public static final int VariableExpression = 55;
+	/** ArithmeticExpression */		public static final int ArithmeticExpression = 42;
+	/** AssignmentOperation */		public static final int AssignmentOperation = 43;
+	/** BooleanExpression */		public static final int BooleanExpression = 44;
+	/** ConditionalExpression */	public static final int ConditionalExpression = 45;
+	/** Constant */					public static final int Constant = 46;
+	/** LocalObject */				public static final int LocalObject = 47;
+	/** ObjectGenerator */			public static final int ObjectGenerator = 48;
+	/** ObjectRelation */			public static final int ObjectRelation = 49;
+	/** QualifiedObject */			public static final int QualifiedObject = 50;
+	/** RelationalOperation */		public static final int RelationalOperation = 51;
+	/** RemoteVariable */			public static final int RemoteVariable = 52;
+	/** TextExpression */			public static final int TextExpression = 53;
+	/** TypeConversion */			public static final int TypeConversion = 54;
+	/** UnaryOperation */			public static final int UnaryOperation = 55;
+	/** VariableExpression */		public static final int VariableExpression = 56;
 
 	// *** ObjectReferences:
 
@@ -91,6 +83,7 @@ public class ObjectKind {
 			case CompoundStatement:			return "CompoundStatement";
 			case SubBlock:					return "SubBlock";
 			case Procedure:					return "Procedure";
+//			case PriorProcedure:			return "PriorProcedure";
 			case MemberMethod:				return "MemberMethod";
 			case ContextFreeMethod:			return "ContextFreeMethod";
 			case Class:						return "Class";

@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 469
 package simulaFEC;
-// Simula-2.0 Compiled at Fri Aug 30 10:28:34 CEST 2024
+// Simula-2.0 Compiled at Mon Sep 02 11:57:52 CEST 2024
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class CLASS_SCODER1_codegenerator1_staticencl extends RTS_PROCEDURE {
@@ -113,7 +113,7 @@ public final class CLASS_SCODER1_codegenerator1_staticencl extends RTS_PROCEDURE
                                         ;
                                         // JavaLine 114 <== SourceLine 503
                                         {
-                                            _SIM_LABEL(1); // DeclaredIn: staticencl -> staticencl[externalIdent=CLASS_SCODER1_codegenerator1_staticencl] Kind=5, QUAL=ProcedureDeclaration, HashCode=2040074572
+                                            _SIM_LABEL(1); // DeclaredIn: staticencl -> staticencl[externalIdent=CLASS_SCODER1_codegenerator1_staticencl] Kind=5, QUAL=ProcedureDeclaration, HashCode=1548840107
                                             // JavaLine 117 <== SourceLine 505
                                             new CLASS_SCODER0_codegenerator0_STRC2((_CUR._SL),new RTS_TXT("SCODMAIN"),505,CONC(new RTS_TXT("================================== staticencl: blevel="),RTS_ENVIRONMENT.edit(blevel)));
                                         }
@@ -166,7 +166,7 @@ public final class CLASS_SCODER1_codegenerator1_staticencl extends RTS_PROCEDURE
                                         ;
                                         // JavaLine 167 <== SourceLine 526
                                         {
-                                            _SIM_LABEL(2); // DeclaredIn: staticencl -> staticencl[externalIdent=CLASS_SCODER1_codegenerator1_staticencl] Kind=5, QUAL=ProcedureDeclaration, HashCode=2040074572
+                                            _SIM_LABEL(2); // DeclaredIn: staticencl -> staticencl[externalIdent=CLASS_SCODER1_codegenerator1_staticencl] Kind=5, QUAL=ProcedureDeclaration, HashCode=1548840107
                                             // JavaLine 170 <== SourceLine 531
                                             if(_VALUE((st_rblev<=(5)))) {
                                                 // JavaLine 172 <== SourceLine 532
