@@ -33,6 +33,9 @@ public final class CompileFEC2 {
 	CompileFEC2(){}
 	
 	// The following files are created when Simuletta front-end compiling the RTS:
+	//
+	// See project:   C:\WorkSpaces\SimulettaFECinJava\SimulettaFEC
+	//
     // - "C:\Simuletta\Attrs\BEC\simulaRTS\RTS$INTERFACE.dat"
 	// - "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTSINIT.ini"
 	// - "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/RTS-FEC-INTERFACE1.def"
@@ -152,7 +155,7 @@ public final class CompileFEC2 {
 		RTOption.VERBOSE = true;
 //		RTOption.internal.DEBUGGING = false;
 //		RTOption.USE_CONSOLE=false;
-		RTOption.BLOCK_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = false;
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;

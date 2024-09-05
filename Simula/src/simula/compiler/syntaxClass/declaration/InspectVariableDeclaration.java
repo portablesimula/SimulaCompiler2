@@ -101,6 +101,11 @@ public class InspectVariableDeclaration extends Declaration {
 
 	@Override
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
+//		System.out.println("InspectVariableDeclaration.buildDeclaration: "+this.externalIdent);
+//		if(externalIdent.equals("_inspect_339_4664")) {
+//			System.out.println("InspectVariableDeclaration.buildDeclaration: "+this);
+//			Thread.dumpStack();
+//		}
 		ClassDesc CD=type.toClassDesc();
 		classBuilder.withField(getFieldIdentifier(), CD, ClassFile.ACC_PUBLIC);
 	}

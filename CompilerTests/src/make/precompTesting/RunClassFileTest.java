@@ -120,9 +120,9 @@ public final class RunClassFileTest {
 //		names.add("/precompTesting/adHoc_SCODER2.sim");
 //		names.add("/precompTesting/adHoc_SCODER3.sim");
 //		names.add("/precompTesting/adHoc_SCODER4.sim");
-//		names.add("/precompTesting/adHoc_PAS2INIT.sim");
+		names.add("/precompTesting/adHoc_PAS2INIT.sim");
 //		names.add("/precompTesting/adHoc_SCODEMAIN.sim");
-		names.add("/precompTesting/adHoc_FECMAIN.sim");
+//		names.add("/precompTesting/adHoc_FECMAIN.sim");
 
 		
 //		names.add("/precompTesting/adHoc_COMMON.sim");

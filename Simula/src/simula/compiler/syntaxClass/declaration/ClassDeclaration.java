@@ -1170,7 +1170,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
 		ClassDesc CD_SuperClass = superClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
+		if(Option.verbose)
+			System.out.println("ClassDeclaration.buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
 		if(isPreCompiledFromFile != null) return getBytesFromFile();
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
 		

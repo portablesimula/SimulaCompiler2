@@ -495,8 +495,10 @@ public abstract class DeclarationScope extends Declaration  {
     		}
 
 //    		System.out.println("DeclarationScope.loadOrAddClassFile: "+externalIdent);
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_PAS2INIT_codegeneratorinit"))
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_PAS2INIT_codegeneratorinit_Block340"))
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_CHECKER1_semchecker1_valassign_emit"))
  			if(Option.internal.LIST_GENERATED_CLASS_FILES)
-// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("FECMAIN_PBLK28"))
    				listGeneratedClassFile(bytes);
     	}
     	

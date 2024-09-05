@@ -120,12 +120,12 @@ public final class RunCompilerTest {
 //		 names.add("/simple/adHoc000.sim");
 //		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
-		 names.add("/simple/adHoc02.sim");
+//		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");
 //		 names.add("/simple/adHoc30a.sim");
 //		 names.add("/simple/adHoc04.sim");
 //		
-//		 names.add("/simple/adHoc05.sim");
+		 names.add("/simple/adHoc05.sim");
 //		 names.add("/simple/adHoc06.sim");
 //		 
 //			names.add("/simple/adHoc07.sim");

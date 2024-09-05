@@ -1,6 +1,25 @@
 begin
-	integer i, U1;
-	
-        i:= randint (-10, 10, u1);
-        
+     class exp;
+%    virtual:procedure emit is procedure emit;;
+	begin end;
+
+%      exp
+%       class valassign(target,source); ref(exp)target,source;
+       procedure valassign(target,source); name source; ref(exp)target,source;
+      begin
+
+         procedure emit;
+         begin
+%            call(coder);
+%            target:-
+            source:-none; !*** reuse ***;
+         end valassign'emit;
+         
+         emit;
+	 end;       
+	        
+%	 new valassign(none, 'A', none, none);  
+%	 new valassign(none, none);  
+	 valassign(none, none);  
+	      
 end of program;

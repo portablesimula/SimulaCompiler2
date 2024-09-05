@@ -160,11 +160,14 @@ public final class Meaning {
 		// Edit staticLink reference
 		if(this.isConnected()) {
 	    	VariableExpression inspectedVariable = getInspectedVariable();
-			String id = inspectedVariable.getJavaIdentifier();
-			ConstantPoolBuilder pool=codeBuilder.constantPool();
-			codeBuilder
-				.aload(0)
-				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), id, inspectedVariable.type.toClassDesc()));
+//			String id = inspectedVariable.getJavaIdentifier();
+//			ConstantPoolBuilder pool=codeBuilder.constantPool();
+//			System.out.println("Meaning.buildQualifiedStaticLink: "+this);
+//			System.out.println("Meaning.buildQualifiedStaticLink: inspectedVariable="+inspectedVariable);
+			inspectedVariable.buildEvaluation(null, codeBuilder);
+//			codeBuilder
+//				.aload(0)
+//				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), id, inspectedVariable.type.toClassDesc()));
 		}
 		else {
 //			System.out.println("Meaning.buildQualifiedStaticLink: "+this);

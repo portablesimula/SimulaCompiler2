@@ -300,8 +300,10 @@ public final class AssignmentOperation extends Expression {
 
 	private void buildAssignment(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		System.out.println("AssignmentOperation.buildAssignment: "+lhs.getClass().getSimpleName()+"  "+lhs+" opr "+rhs);
 		if(lhs instanceof VariableExpression var) {
 			Declaration decl = var.meaning.declaredAs;
+//			System.out.println("AssignmentOperation.buildAssignment: "+ObjectKind.edit(decl.declarationKind));
 			switch(decl.declarationKind) {
 				case ObjectKind.SimpleVariableDeclaration -> {
 					var.buildIdentifierAccess(true,codeBuilder);
@@ -416,9 +418,9 @@ public final class AssignmentOperation extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FRE_par = par.getFieldRefEntry(pool);
 		if(par.mode == Parameter.Mode.name) {
-			codeBuilder
-				.aload(0)
-				.getfield(FRE_par);
+//			codeBuilder.aload(0)
+			var.buildIdentifierAccess(true,codeBuilder);
+			codeBuilder.getfield(FRE_par);
 			rhs.buildEvaluation(null,codeBuilder); // Result may be int,float, ...		
         	par.type.buildObjectValueOf(codeBuilder);
 			RTS.invokevirtual_NAME_put(codeBuilder);
@@ -432,7 +434,8 @@ public final class AssignmentOperation extends Expression {
 			}
 		} else {
 			// Simple Parameter by value/default
-			codeBuilder.aload(0);
+//			codeBuilder.aload(0);
+			var.buildIdentifierAccess(true,codeBuilder);
 			rhs.buildEvaluation(null,codeBuilder);
 
 			// Prepare for multiple assignment

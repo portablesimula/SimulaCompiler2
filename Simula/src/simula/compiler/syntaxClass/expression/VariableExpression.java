@@ -770,6 +770,7 @@ public final class VariableExpression extends Expression {
 		boolean destination = (rightPart != null);
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
 		
+//		System.out.println("VariableExpression.buildEvaluation: "+this+"="+rightPart+"  "+ObjectKind.edit(decl.declarationKind));
 		switch (decl.declarationKind) {
 
 			case ObjectKind.ArrayDeclaration:
@@ -945,6 +946,7 @@ public final class VariableExpression extends Expression {
 			break;
 
 		case Parameter.Kind.Simple, Parameter.Kind.Label:
+//			System.out.println("VariableExpression.buildEvaluateParameter'Simple: "+this);
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
 			codeBuilder.getfield(par.getFieldRefEntry(pool));
 //			System.out.println("VariableExpression.buildEvaluateParameter'Simple: destination="+destination+", mode="+Parameter.edMode(par.mode));

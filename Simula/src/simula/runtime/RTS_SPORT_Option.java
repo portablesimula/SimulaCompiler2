@@ -33,7 +33,7 @@ public class RTS_SPORT_Option {
 	/**
 	 * S-PORT: Sysinsert directory name.
 	 */
-	static String SPORT_SysInsertDirName = "C:/WorkSpaces/SPort-System/S-Port/src/sport/rts";
+	static String SPORT_SysInsertDirName = "C:/WorkSpaces/SPort-System/S_Port/src/sport/rts";
 
 	/**
 	 * Returns the source file name.
@@ -143,13 +143,13 @@ public class RTS_SPORT_Option {
 	 * <p>
 	 * NOTE: This file is created when front-end compiling the RTS:
 	 */
-	static String PredefFileName = "C:/WorkSpaces/SPort-System/S-Port/Attrs/FEC/PREDEF.atr";
+	static String PredefFileName = "C:/WorkSpaces/SPort-System/S_Port/Attrs/FEC/PREDEF.atr";
 
 	/**
 	 * Name of a file containing seldom used information for the front end compiler,
 	 * such as extended error messages.
 	 */
-	static String XmessageFileName = "C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/FECERROR.txt";
+	static String XmessageFileName = "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/FECERROR.txt";
 	
 	/**
 	 * Used by getIntInfo.

@@ -1,7 +1,7 @@
 % external class adHoc_SCODER4;
 
 % adHoc_SCODER4
-	 class adHoc_PAS2INIT;
+%	 class adHoc_PAS2INIT;
 begin
 	ref(precheck0) checker0,checker;
 
@@ -9,6 +9,9 @@ begin
 	end;
 	
 	precheck0 class semchecker; begin
+		procedure allocate;   ! (blhi,bllo,blockpref);
+		begin end;
+		
 		detach;
 	end;
 
@@ -24,9 +27,15 @@ begin
 				text t,feoptions; short integer i;
 				sysout.outtext("PAS2INIT.main: "); outimage;
 				checker0:-checker:- this semchecker;
+
+				sysout.outtext("PAS2INIT.main: (1)"); outimage;
+				allocate;
+				sysout.outtext("PAS2INIT.main: (2)"); outimage;
 			end;
 		end;
 		
 	end;
+	
+	new codegeneratorinit;
 		
 end;
