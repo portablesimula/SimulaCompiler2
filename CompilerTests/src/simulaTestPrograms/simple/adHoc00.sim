@@ -1,28 +1,17 @@
 
 begin
-	class A; begin
 
-		integer procedure Q(i, x); integer i; ref(A) x; begin
-			Q := 444;
-			goto L1;
-		end;	
+	ref(statement) first, last;
 
+	class statement; virtual: procedure recover is boolean procedure recover;;
+%	class statement; virtual: procedure recover;
+	begin
+		ref(statement) next;
 	end;
 	
-	procedure P(i,r); integer i; real r; begin
-		integer j;
-		j := i + r;
+	last :- new statement;
+	while not last.recover do begin
+		last.next:-none;
 	end;
-		
-	integer procedure Q(i, x); integer i; ref(A) x; begin
-		Q := 444;
-%		x.Q(555,x);
-		goto L1;
-	end;	
 
-	P(666, 3.14);
-	Q(333,new A);
-	
-	L1:
-	outtext("END of program"); outimage;
 end;

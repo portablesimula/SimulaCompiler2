@@ -819,7 +819,7 @@ public final class VariableExpression extends Expression {
 //			case ObjectKind.Switch:
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (destination) {
-					System.out.println("VariableExpression.buildEvaluation'Procedure: "+procedure.result);
+//					System.out.println("VariableExpression.buildEvaluation'Procedure: "+procedure.result);
 					codeBuilder
 						.aload(0)
 						.getfield(procedure.result.getFieldRefEntry(pool));
@@ -841,8 +841,10 @@ public final class VariableExpression extends Expression {
 				if(inspectedVariable != null) {
 					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-					if(withFollowSL)
+					if(withFollowSL) {
+//						System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: cblk.declaredIn="+cblk.declaredIn);
 						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
+					}
 					
 					codeBuilder
 						.getfield(inspectedVariable.getFieldRefEntry(pool))
@@ -859,8 +861,11 @@ public final class VariableExpression extends Expression {
 				if(inspectedVariable != null) {
 					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-					if(withFollowSL)
+					if(withFollowSL) {
+//						System.out.println("VariableExpression.buildEvaluation'InspectVariableDeclaration: cblk.declaredIn="+cblk.declaredIn);
+//						System.out.println("VariableExpression.buildEvaluation'InspectVariableDeclaration: ivar.declaredIn="+ivar.declaredIn);
 						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
+					}
 					
 					codeBuilder
 						.getfield(inspectedVariable.getFieldRefEntry(pool))

@@ -1,0 +1,134 @@
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 130
+%
+%  PURPOSE: Simple test of Arrays.
+%
+%  WRITTEN BY:  MYH 
+% ==============================================================================
+begin
+	integer testCase = 30;
+	text title = "--- Simple test of Arrays.";
+
+	boolean found_error;
+	integer nFailed;
+	boolean verbose=false;
+	boolean noMessage;
+
+	procedure err(t); text t;
+	begin sysout.setpos(1);
+	      outtext("*** error: in test "); outtext(t); outimage;
+	      found_error:=true; nFailed:=nFailed+1;
+	end;
+
+% *** Ref(A) array by default, value and name
+
+	ref(A)  array ARR(1:10);
+	text    array tARR(1:10);
+	integer array iARR(1:10);
+	integer i;
+	text t;
+
+	class A(i); integer i; begin end;
+
+	procedure P1(pARR); ref(A) array pARR; begin
+		ref(A) x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P2(pARR); name pARR; ref(A) array pARR; begin
+		ref(A) x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+	
+% **********************************************
+% *** Text array by default, value and name
+% **********************************************
+
+	procedure P3(pARR); text array pARR; begin
+		text x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P4(pARR); name pARR; text array pARR; begin
+		text x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	
+% **********************************************
+% *** Integer array by default, value and name
+% **********************************************
+
+	procedure P5(pARR); integer array pARR; begin
+		integer x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+	procedure P6(pARR); name pARR; integer array pARR; begin
+		integer x;
+		x :- pARR(1);
+		pARR(2) :- x;
+	end;
+
+
+	if verbose then begin
+		outtext ("--- START Simula a.s. TEST"); outint(testCase,4); outimage;
+		outtext (title);
+		outimage; outimage;
+	end;
+	
+
+% **********************************************
+% *** Statements -- ref(A) array
+% **********************************************
+	ARR(1) :- new A(444);
+	P1(ARR);
+	if ARR(2).i ne 444 then err(" ERROR 1");
+
+	ARR(1).i := 666;	
+	P2(ARR);
+	if ARR(2).i ne 666 then err(" ERROR 2");
+	
+% **********************************************
+% *** Statements -- Text array
+% **********************************************
+	tARR(1) :- copy("444");
+	P3(tARR);
+	if tARR(2) ne "444" then err(" ERROR 3");
+
+	tARR(1) := "666";	
+	P4(tARR);
+	if tARR(2) ne "666" then err(" ERROR 4");
+	
+% **********************************************
+% *** Statements Integer array
+% **********************************************
+	iARR(1) := 444;
+	P5(iARR);
+	if iARR(2) ne 444 then err(" ERROR 5");
+
+	iARR(1) := 666;	
+	P6(iARR);
+	if iARR(2) ne 666 then err(" ERROR 6");
+	
+	
+	if noMessage then else begin
+		if found_error then begin
+			outtext("--- "); outint(nFailed,3); outtext(" ERROR(S) FOUND IN TEST"); outint(testCase,4); outtext("  "); outtext(title);
+			outtext("Test sample has "); outint(nFailed,3);
+			error(" error(s)");
+		end else begin
+			outtext ("--- NO ERRORS FOUND IN TEST"); outint(testCase,4); outtext("  "); outtext(title);
+		end;
+
+		if verbose then begin
+			outtext ("--- END Simula a.s. TEST"); outint(testCase,4); outimage;
+		end;
+	end;
+
+end;

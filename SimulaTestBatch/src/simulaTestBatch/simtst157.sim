@@ -1,0 +1,79 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 157
+%
+%  PURPOSE:     Test identifier access
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(157,"--- Test identifier access") begin
+	text array facit(0:15);
+	integer traceCase;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+	integer i1;
+	integer array iarr(0:40);
+	integer procedure ifnc; begin ifnc := 888; end;
+	
+	class A(ap); integer ap; begin
+		begin integer i3;
+			begin integer i4;
+				i4 := 444;
+				i3 := 222;
+				ap := 222;
+				i1 := 111;
+			end;
+		end;
+	end;
+	
+	procedure P(np, pp, arr, fnc, lab); name np; integer np, pp; integer array arr; integer procedure fnc; label lab; begin
+		begin integer i3;
+			begin integer i4;
+				i1 := 111;
+				i4 := 444;
+				i3 := 222;
+				np := 123;
+				pp := 222;
+				arr(5) := 999;
+				i4 := fnc;
+				trace("End P i4=" & edit(i4));
+				goto lab;
+			end;
+		end;
+	end;
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "End P i4=888";
+	facit(2) :- "At L1  i1=123";
+	facit(3) :- "At L1  iarr(5)=999";
+	
+	facit(4) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+	P(i1,i1, iarr, ifnc, L1);
+	
+	L1:
+	trace("At L1  i1=" & edit(i1));
+	trace("At L1  iarr(5)=" & edit(iarr(5)));
+	
+	trace("At END");
+
+ end;

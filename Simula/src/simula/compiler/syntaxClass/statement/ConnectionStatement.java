@@ -157,6 +157,7 @@ public final class ConnectionStatement extends Statement {
 				|| (scope instanceof MaybeBlockDeclaration && scope.declarationList.size() == 0 )) {
 			scope = scope.declaredIn;
 		}
+//		System.out.println("NEW ConnectionStatement: "+ident+" ===> "+scope);
 		scope.declarationList.add(inspectVariableDeclaration);
 		inspectVariableDeclaration.declaredIn = scope;
 

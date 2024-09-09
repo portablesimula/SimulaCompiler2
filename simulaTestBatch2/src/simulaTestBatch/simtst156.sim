@@ -1,0 +1,93 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 156
+%
+%  PURPOSE:     Test arrays in multiple assignments
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(156,"--- Test arrays in multiple assignments") begin
+	text array facit(0:15);
+	integer traceCase;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+	boolean b;    boolean array boolARR(1:20);
+	integer i;    integer array intrARR(1:20);
+	real r;       real array realARR(1:20);
+	long real lr; long real array lreaARR(1:20);
+	character c;  character array charARR(1:20);
+	text t;       text array textARR(1:20);
+	ref(A) x;     ref(A) array refARR(1:20);
+	
+	class A(val); integer val; begin end;
+	
+	boolean   procedure boolPROC; begin boolPROC := boolARR(4) := true; end;
+	integer   procedure intrPROC; begin intrPROC := intrARR(4) := 444; end;
+	real      procedure realPROC; begin realPROC := realARR(4) := 3.14; end;
+	long real procedure lreaPROC; begin lreaPROC := lreaARR(4) := 5.31; end;
+	character procedure charPROC; begin charPROC := charARR(4) := 'Z'; end;
+	text      procedure textPROC; begin textPROC :- textARR(4) :- copy("Abra"); end;
+	ref(A)    procedure refPROC;  begin	refPROC  :- refARR(4)  :- new A(555); end;
+	
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "b = true";
+	facit(2) :- "i = 666";
+	facit(3) :- "r = 8.210";
+	facit(4) :- "lr = 2.9800";
+	facit(5) :- "t = Cadab";
+	facit(6) :- "c = X";
+	facit(7) :- "x.val = 333";
+
+	facit(8) :- "b = true";
+	facit(9) :- "i = 444";
+	facit(10) :- "r = 3.140";
+	facit(11) :- "lr = 5.3100";
+	facit(12) :- "t = Abra";
+	facit(13) :- "c = Z";
+	facit(14) :- "x.val = 555";
+	
+	facit(15) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+%	c := charARR(4) := 'X';
+%	trace("P1(T)=" & P1("cadabra"));
+	
+	b  := boolARR(4) := true;          trace("b = " & edit(b));
+	i  := intrARR(4) := 666;           trace("i = " & edit(i));
+	r  := realARR(4) := 8.21;          trace("r = " & edfix(r,3));
+	lr := lreaARR(4) := 2.98;          trace("lr = " & edfix(lr,4));
+	t  :- textARR(4) :- copy("Cadab"); trace("t = " & t);
+	c  := charARR(4) := 'X';           trace("c = " & edit(c));
+	x  :- refARR(4)  :- new A(333);    trace("x.val = " & edit(x.val));
+	
+	b  := boolPROC;  trace("b = " & edit(b));
+	i  := intrPROC;  trace("i = " & edit(i));
+	r  := realPROC;  trace("r = " & edfix(r,3));
+	lr := lreaPROC;  trace("lr = " & edfix(lr,4));
+	t  :- textPROC;  trace("t = " & t);
+	c  := charPROC;  trace("c = " & edit(c));
+	x  :- refPROC;   trace("x.val = " & edit(x.val));
+	
+	
+	trace("At END");
+
+ end;

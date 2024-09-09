@@ -386,7 +386,7 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
-	// *** ByteCoding Utility: getClassDesc   -- Redefined in StandardClass and ConnectionBlock
+	// *** ByteCoding Utility: getClassDesc -- Redefined in StandardClass, SubBlock and ConnectionBlock
 	// ***********************************************************************************************
 	public ClassDesc getClassDesc() {
 		return(RTS.CD.classDesc(externalIdent));
@@ -498,6 +498,7 @@ public abstract class DeclarationScope extends Declaration  {
 // 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_PAS2INIT_codegeneratorinit"))
 // 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_PAS2INIT_codegeneratorinit_Block340"))
 // 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_CHECKER1_semchecker1_valassign_emit"))
+// 			if(Option.internal.LIST_GENERATED_CLASS_FILES || externalIdent.equals("CLASS_SCODER2_codegenerator2_outdescriptors"))
  			if(Option.internal.LIST_GENERATED_CLASS_FILES)
    				listGeneratedClassFile(bytes);
     	}

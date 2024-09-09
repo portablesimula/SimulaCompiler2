@@ -557,7 +557,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	public byte[] buildClassFile() {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.verbose) System.out.println("ProcedureDeclaration.buildClassFile: "+CD_ThisClass);
 		if(isPreCompiledFromFile != null) return getBytesFromFile();
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, RTS.CD.RTS_PROCEDURE);
 		

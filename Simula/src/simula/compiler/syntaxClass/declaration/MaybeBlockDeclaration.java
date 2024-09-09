@@ -320,6 +320,16 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		GeneratedJavaClass.code("return(this);");
 		GeneratedJavaClass.code("}", "End of " + declarationKind + " Statements");
 	}
+	
+	// ***********************************************************************************************
+	// *** ByteCoding: buildClassFile
+	// ***********************************************************************************************
+	@Override
+	public ClassDesc getClassDesc() {
+		if (declarationKind == ObjectKind.CompoundStatement)
+			return ((DeclarationScope)declaredIn).getClassDesc();
+		return(RTS.CD.classDesc(externalIdent));
+	}
 
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
@@ -328,7 +338,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	public byte[] buildClassFile() {
 		labelList.setLabelIdexes();
 		ClassDesc CD_ThisClass = currentClassDesc();
-		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
+		if(Option.verbose) System.out.println("SubBlock.buildClassFile: "+CD_ThisClass);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, RTS.CD.RTS_BASICIO);
 		
 		byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,

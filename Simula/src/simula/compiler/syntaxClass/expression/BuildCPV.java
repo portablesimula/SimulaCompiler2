@@ -16,6 +16,7 @@ import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.Thunk;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.RTS;
+import simula.compiler.utilities.Util;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 
@@ -118,7 +119,28 @@ public class BuildCPV {
 			 buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
 		else BuildCPF.buildCPF(variable, codeBuilder);
 		
+		System.out.println("BuildCPV.virtual: backLink="+variable.backLink);
 	    if(backLink == null) codeBuilder.pop();
+	    else {
+//			Util.IERR();
+//	    	BuildLoad_RESULT(variable, codeBuilder);
+	    }
+	}
+	
+	private static void BuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
+		SyntaxClass backLink = variable.backLink;
+		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
+		System.out.println("BuildCPV.BuildLoad_RESULT: backLink="+backLink.getClass().getSimpleName()+"  "+backLink);
+		Expression expr = (Expression)backLink;
+		System.out.println("BuildCPV.BuildLoad_RESULT: expr="+expr.type+"  "+expr);
+		Declaration proc=variable.meaning.declaredAs;
+//		if(proc.type != null && backLink != null) {
+			RTS.invokevirtual_PROCEDURE_RESULT(codeBuilder);
+//			proc.type.checkCast(codeBuilder);
+//			RTS.objectToPrimitiveType(proc.type, codeBuilder);
+			expr.type.checkCast(codeBuilder);
+			RTS.objectToPrimitiveType(expr.type, codeBuilder);
+//		}
 	}
 	
 	// ********************************************************************

@@ -307,6 +307,7 @@ public final class AssignmentOperation extends Expression {
 			switch(decl.declarationKind) {
 				case ObjectKind.SimpleVariableDeclaration -> {
 					var.buildIdentifierAccess(true,codeBuilder);
+//					System.out.println("AssignmentOperation.buildAssignment: "+rhs.getClass().getSimpleName()+"  "+lhs+" opr "+rhs);
 					rhs.buildEvaluation(null,codeBuilder);
 					
 					// Prepare for multiple assignment
@@ -418,7 +419,7 @@ public final class AssignmentOperation extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FRE_par = par.getFieldRefEntry(pool);
 		if(par.mode == Parameter.Mode.name) {
-//			codeBuilder.aload(0)
+//			codeBuilder.aload(0);
 			var.buildIdentifierAccess(true,codeBuilder);
 			codeBuilder.getfield(FRE_par);
 			rhs.buildEvaluation(null,codeBuilder); // Result may be int,float, ...		
