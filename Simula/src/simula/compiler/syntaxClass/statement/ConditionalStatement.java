@@ -101,7 +101,7 @@ public final class ConditionalStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		condition.doChecking();
 		condition.backLink=this; // To ensure _RESULT from functions
-		if (condition.type.keyWord != Type.T_BOOLEAN)
+		if (condition.type == null || condition.type.keyWord != Type.T_BOOLEAN)
 			Util.error("ConditionalStatement.doChecking: Condition is not of Type Boolean, but: " + condition.type);
 		thenStatement.doChecking();
 		if (elseStatement != null)

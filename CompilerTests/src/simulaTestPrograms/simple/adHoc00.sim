@@ -2,16 +2,27 @@
 begin
 
 	ref(statement) first, last;
+	boolean b;
 
-	class statement; virtual: procedure recover is boolean procedure recover;;
-%	class statement; virtual: procedure recover;
+%	class statement; virtual: procedure recover is boolean procedure recover;;
+	class statement; virtual: procedure recover;
 	begin
+%		boolean procedure recover; begin recover := b; b := not b; end;
+%		integer procedure recover; begin recover := 444; end;
+		
 		ref(statement) next;
+%		b := recover;
+		while recover do begin end;
 	end;
 	
 	last :- new statement;
-	while not last.recover do begin
-		last.next:-none;
-	end;
+%	while not last.recover do begin
+	while     last.recover do begin
+		sysout.outtext("Abra"); sysout.outimage;
+%		last.next:-none;
+%	end;
+%	sysout.outtext("CaDab"); sysout.outimage;
+%	b := ( not last.recover) or b;
+%	b := last.recover;
 
 end;

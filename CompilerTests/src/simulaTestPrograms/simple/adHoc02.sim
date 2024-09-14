@@ -1,18 +1,23 @@
 
 begin
-	ref(infile) virq;
-
-	procedure P; begin
-		while true do inspect virq do begin
-%			virq:-next;
-			outtext("AAA");
-		end otherwise begin
-			outtext("BBB");
-			goto EXvloop;
+	class A; virtual: procedure vP2 is procedure vP2(t); value t; text t;;
+	begin
+ 
+		procedure vP2(t); value t; text t; begin
 		end;
-                  
-	EXvloop:
-	end P;
-	
-	P;
-end;
+
+   		P1(vP2);
+	end;
+
+	procedure P1(fP); name fP; procedure fP; begin
+		fP(copy("AbreCaDab"));
+	end;
+ 
+	ref(A) x;
+	text t1, t2;
+
+    x:-new A;
+
+    P1(x.vP2);
+
+ end;

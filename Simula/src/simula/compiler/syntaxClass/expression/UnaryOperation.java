@@ -101,8 +101,9 @@ public final class UnaryOperation extends Expression {
 		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN UnaryOperation" + toString() + ".doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
 		operand.doChecking();
-		if (oprator == KeyWord.NOT)
+		if (oprator == KeyWord.NOT) {
 			this.type=Type.Boolean;
+		}
 		else if (oprator == KeyWord.PLUS || oprator == KeyWord.MINUS) {
 			this.type=operand.type;
 		}

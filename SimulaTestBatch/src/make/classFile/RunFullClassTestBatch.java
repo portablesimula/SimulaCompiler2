@@ -179,6 +179,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
 		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
+		
 		names.add("simtst100.sim"); // OK: Test that put-get-put delivers the identity.
 		names.add("simtst101.sim"); // OK: Test Standard Procedure 'sourceline'.
 		names.add("simtst102.sim"); // OK: GOTO out of an operating Process
@@ -189,6 +190,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst107.sim"); // OK:  Test Process, activation statements, idle, terminated, time.
 		names.add("simtst108.sim"); // OK: Simple Co-Routine Sample 1: detach - call
 		names.add("simtst109.sim"); // OK: Simple Co-Routine Sample 2: detach - resume
+		
 		names.add("simtst110.sim"); // OK: Simple Co-Routine Sample 3: detach - resume - chain
 		names.add("simtst111.sim"); // OK: Virtual Label Sample 1
 		names.add("simtst112.sim"); // OK: Virtual Label Sample 2
@@ -201,6 +203,7 @@ public final class RunFullClassTestBatch {
 		names.add("ExternalClass1.sim"); // OK:  Precompile this for Simtst 119.
 		names.add("ExternalClass2.sim"); // OK:  Precompile this for Simtst 119.
 		names.add("simtst119.sim"); // OK: Uses ExternalClass1-2
+		
 		names.add("simtst120.sim"); // OK: VERY LOCAL GOTO SAMPLE
 		names.add("simtst121.sim"); // OK: LEGAL GOTO out of an operating Process and the enclosing System.
 		names.add("simtst122.sim"); // OK: GOTO LABEL IN SUPER CLASS
@@ -212,6 +215,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 		names.add("simtst129.sim"); // OK: Switch in precompiled class
+		
 		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 		names.add("simtst131.sim"); // OK: Catching Errors
 		names.add("simtst132.sim"); // OK: SPORT Options
@@ -222,6 +226,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst137.sim"); // OK: DirectBytefile with CREATE, APPEND and PURGE.
 		names.add("simtst138.sim"); // OK: ref() and Real type Arrays.
 		names.add("simtst139.sim"); // OK: Test remote Array access.
+		
 		names.add("simtst140.sim"); // OK: Test For-Statement with ControlVariable with Type Conversion.
 		names.add("simtst141.sim"); // OK: Test For-Statement with SIMSET and SIMULATION list-processing.
 		names.add("simtst142.sim"); // OK: Simple test of Random drawing procedures.
@@ -233,6 +238,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst147.sim"); // OK: Test virtual procedure by name
 		names.add("simtst148.sim"); // OK: Test procedure min and max with arguments of all types
 		names.add("simtst149.sim"); // OK: Test all mode/type parameters to a Class
+		
 		names.add("simtst150.sim"); // OK: Test all mode/type parameters except name, ... to a Procedure
 		names.add("simtst151.sim"); // OK: Test multiple assignments
 		names.add("simtst152.sim"); // OK: Test nested connection statements
@@ -242,6 +248,11 @@ public final class RunFullClassTestBatch {
 		names.add("simtst155.sim"); // OK: Test inspection in SubBlock in Precompiled inner class
 		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 		names.add("simtst157.sim"); // OK: Test identifier access
+		names.add("simtst158.sim"); // OK: Test Specified Virtual Boolean Functions as part of an Expression
+		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
+
+		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
+		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

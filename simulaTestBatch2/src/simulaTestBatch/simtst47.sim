@@ -65,9 +65,9 @@ SimulaTest(47,"--- Test of this") begin
 		if k = 444 then
 		else
 		begin
-			err("Second test(1) fails.")
-			outtext("A'j = " & edit(x qua A.j)); outimage;
-			outtext("B'j = " & edit(x qua B.j)); outimage;
+			err("Second test(1) fails.");
+			outtext("A'j = "); outint(x qua A.j,3); outimage;
+			outtext("B'j = "); outint(x qua B.j,3); outimage;
 		end;
 	
 		begin integer i;
@@ -75,9 +75,9 @@ SimulaTest(47,"--- Test of this") begin
 			if k = 444 then
 			else
 			begin
-				err("Second test(2) fails.")
-				outtext("A'j = " & edit(x qua A.j)); outimage;
-				outtext("B'j = " & edit(x qua B.j)); outimage;
+				err("Second test(2) fails.");
+				outtext("A'j = "); outint(x qua A.j,3); outimage;
+				outtext("B'j = "); outint(x qua B.j,3); outimage;
 			end;
 		end;
 		

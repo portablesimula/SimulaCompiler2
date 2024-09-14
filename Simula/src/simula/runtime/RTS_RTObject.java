@@ -304,10 +304,6 @@ public abstract class RTS_RTObject {
 			par = npar.get();
 		if (par instanceof RTS_PRCQNT proc)
 			par = proc.CPF()._RESULT();
-//		if (par instanceof Float f)
-//			return (f.doubleValue());
-//		if (par instanceof Double d)
-//			return (d);
 		if (par instanceof Boolean b)
 			return (b.booleanValue());
 		throw new ClassCastException("Incompatible Types: boolean," + par.getClass().getSimpleName());
@@ -329,10 +325,6 @@ public abstract class RTS_RTObject {
 			par = npar.get();
 		if (par instanceof RTS_PRCQNT proc)
 			par = proc.CPF()._RESULT();
-//		if (par instanceof Float f)
-//			return (f.doubleValue());
-//		if (par instanceof Double d)
-//			return (d);
 		if (par instanceof Character c)
 			return (c.charValue());
 		throw new ClassCastException("Incompatible Types: character," + par.getClass().getSimpleName());

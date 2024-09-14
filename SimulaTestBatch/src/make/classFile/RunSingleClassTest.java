@@ -272,10 +272,15 @@ public final class RunSingleClassTest {
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment
-		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
-		names.add("simtst155.sim"); // OK: Test
+//		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
+//		names.add("simtst155.sim"); // OK: Test
 //		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 //		names.add("simtst157.sim"); // OK: Test identifier access
+//		names.add("simtst158.sim"); // OK: Test Specified Virtual Boolean Functions as part of an Expression
+//		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
+
+//		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
+		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

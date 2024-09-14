@@ -152,7 +152,7 @@ public class RTS {
 		ClassDesc owner = CD.RTS_PROCEDURE;
 		codeBuilder.invokevirtual(owner, "_ENT", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PROCEDURE;"));
 	}
-	
+
 	public static void invokevirtual_PROCEDURE_RESULT(CodeBuilder codeBuilder) {
 		ClassDesc owner = CD.RTS_PROCEDURE;
 		codeBuilder.invokevirtual(owner, "_RESULT", MethodTypeDesc.ofDescriptor("()Ljava/lang/Object;"));
@@ -352,6 +352,7 @@ public class RTS {
 		return true;
 	}
 	
+
 //	public static void invokevirtual_RTObject_BPRG(CodeBuilder codeBuilder) {
 //		ClassDesc owner = CD.RTS_RTObject;
 //		codeBuilder.invokevirtual(owner, "BPRG", MethodTypeDesc.ofDescriptor("(Ljava/lang/String;)V"));

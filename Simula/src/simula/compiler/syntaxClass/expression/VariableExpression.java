@@ -297,11 +297,22 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.MemberMethod:
 				this.type = decl.type;
 				Type overloadedType = this.type;
-				Iterator<Parameter> paramIterator;
+				Iterator<Parameter> paramIterator = null;
 				if (decl instanceof ClassDeclaration cdecl)
 					paramIterator = cdecl.new ClassParameterIterator();
-				else {
-					paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
+				else if (decl instanceof ProcedureDeclaration proc) {
+//					if(Option.internal.TESTING_PARAMETER_LIST) {
+//						paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
+//						if(proc.myVirtual != null) {
+//							if(proc.myVirtual.virtualSpec.procedureSpec != null) {
+//								paramIterator = proc.myVirtual.virtualSpec.procedureSpec.parameterList.iterator();
+//								if (params == null && paramIterator.hasNext())
+//										Util.error("XXX: Missing parameter(s) to " + decl.identifier);
+//							}
+//						}
+//					} else{
+						paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
+//					}
 					if(!Option.internal.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
@@ -314,9 +325,8 @@ public final class VariableExpression extends Expression {
 							}
 						}
 					}
-				}
+				} else Util.IERR();
 				if (params == null) {
-//					System.out.println("VariableExpression.doChecking: "+this.backLink);
 					if(decl.declarationKind != ObjectKind.Procedure) {
 //						System.out.println("VariableExpression.doChecking: NOT Procedure'backLink="+this.backLink);
 						if (paramIterator.hasNext())
@@ -387,6 +397,7 @@ public final class VariableExpression extends Expression {
 				}
 				break;
 			case ObjectKind.VirtualSpecification:
+//				System.out.println("VariableExpression.doChecking: VirtualSpecification: "+decl);
 				VirtualSpecification vspec = (VirtualSpecification) decl;
 				this.type = vspec.type;
 				if(params != null) {

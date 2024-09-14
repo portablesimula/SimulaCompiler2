@@ -123,6 +123,7 @@ public final class ProcedureSpecification {
 			Util.TRACE("END ProcedureSpecification: " + block);
 		Global.setScope(block.declaredIn);
 		ProcedureSpecification procedureSpecification = new ProcedureSpecification(block.identifier, type, block.parameterList);
+//		System.out.println("ProcedureSpecification.expectProcedureSpecification: "+procedureSpecification);
 		return (procedureSpecification);
 	}
 

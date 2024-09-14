@@ -22,14 +22,14 @@ SimulaTest(55,"--- Test virtual procedures.") begin
 
    A class B;
    begin
-      integer procedure P; outtext(" B.P ");
+      		  procedure P; outtext(" B.P ");
       integer procedure iP; outtext(" B.iP ");
       ref(C)  procedure cP; outtext(" B.cP ");
    end;
 
    A class C;
    begin
-      ref(A)   procedure P; outtext(" C.P ");
+      		   procedure P; outtext(" C.P ");
       real     procedure rP; outtext(" C.rP ");
       ref(B)   procedure cP; outtext(" C.cP ");
    end;
@@ -43,7 +43,7 @@ SimulaTest(55,"--- Test virtual procedures.") begin
 
    D class E;
    begin
-      text    procedure P; outtext(" E.P ");
+      	      procedure P; outtext(" E.P ");
       integer procedure iP; outtext(" E.iP ");
       ref(C)  procedure cP; outtext(" E.cP ");
    end;

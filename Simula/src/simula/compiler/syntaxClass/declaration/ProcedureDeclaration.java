@@ -327,6 +327,19 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			VirtualSpecification virtualSpec = VirtualSpecification.getVirtualSpecification(this);
 			if (virtualSpec != null) {
 				// This Procedure is a Virtual Match
+				if(! Type.equalsOrSubordinate(virtualSpec.type, this.type))
+					Util.error("Virtual match has wrong type " + type + ", specified as " + virtualSpec.type);
+				if(virtualSpec.procedureSpec != null) {
+					ObjectList<Parameter> list1 = this.parameterList;
+					ObjectList<Parameter> list2 = virtualSpec.procedureSpec.parameterList;
+					if(list1.size() != list2.size()) {
+						Util.error("Virtual match has wrong number of parameters " + list1.size() + ". Specified with " + list2.size());	
+					} else {
+						for(int i=0;i<list1.size();i++)
+							if(! list1.get(i).equals(list2.get(i)))
+								Util.error("Virtual match has wrong heading. Parameter " + (i+1) + " does not match the specification");	
+					}
+				} 
 				myVirtual = new VirtualMatch(virtualSpec, this);
 				ClassDeclaration decl = (ClassDeclaration) declaredIn;
 				decl.virtualMatchList.add(myVirtual);

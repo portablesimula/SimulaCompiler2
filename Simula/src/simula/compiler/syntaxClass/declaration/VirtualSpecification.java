@@ -25,6 +25,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -142,9 +143,10 @@ public final class VirtualSpecification extends Declaration {
 				String identifier = Parse.expectIdentifier();
 				ProcedureSpecification procedureSpec = null;
 				if (Parse.accept(KeyWord.IS)) {
-					Type procedureType = Parse.acceptType();
+					if(type != null) Util.error("An IS-specified virtual procedure can have its type only after IS.");
+					type = Parse.acceptType();
 					Parse.expect(KeyWord.PROCEDURE);
-					procedureSpec = ProcedureSpecification.expectProcedureSpecification(procedureType);
+					procedureSpec = ProcedureSpecification.expectProcedureSpecification(type);						
 					cls.virtualSpecList
 							.add(new VirtualSpecification(identifier, type, Kind.Procedure, cls.prefixLevel(), procedureSpec));
 				} else {

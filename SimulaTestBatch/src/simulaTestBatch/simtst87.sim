@@ -26,9 +26,9 @@ SimulaTest(87,"--- Test Specification of Virtual Procedures.") begin
      end;
    end;
 
-   class A; virtual: ref(File) procedure myFile is ref(File) procedure actual(i,j); integer i,j;;
+   class A; virtual: procedure myFile is ref(File) procedure actual(i,j); integer i,j;;
                      procedure virt2 is procedure act2(j); integer j;;
-                     integer procedure virt3 is procedure act3;;
+                     procedure virt3 is procedure act3;;
                      procedure virt4 is procedure act4;;
    begin integer i;
      ref(File) procedure myFile(i,j); integer i,j;

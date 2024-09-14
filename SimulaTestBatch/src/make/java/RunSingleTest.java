@@ -40,6 +40,7 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.internal.TESTING_PARAMETER_LIST = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -80,9 +81,9 @@ public final class RunSingleTest {
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-		RTOption.BLOCK_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
@@ -273,10 +274,15 @@ public final class RunSingleTest {
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment
-		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
-		names.add("simtst155.sim"); // OK: Test inspection in SubBlock in Precompiled inner class
+//		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
+//		names.add("simtst155.sim"); // OK: Test inspection in SubBlock in Precompiled inner class
 //		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 //		names.add("simtst157.sim"); // OK: Test identifier access
+		
+//		names.add("simtst158.sim"); // OK: Test Specified Virtual Boolean Functions as part of an Expression
+		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
+//		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
+//		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

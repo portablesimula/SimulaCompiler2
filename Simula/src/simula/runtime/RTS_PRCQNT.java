@@ -47,6 +47,7 @@ public final class RTS_PRCQNT {
 	 */
 	public RTS_PROCEDURE CPF() {
 		try {
+//			System.out.println("RTS_PRCQNT.CPF: "+procedure);
 			// Get 'default' constructor: <Procedure>(_RTObject SL);
 			Constructor<?> constr = procedure.getConstructor(new Class[] { RTS_RTObject.class });
 			Object obj = constr.newInstance(staticLink);

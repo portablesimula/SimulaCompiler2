@@ -9,6 +9,7 @@ package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
+import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
@@ -22,6 +23,7 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
+import simula.runtime.RTS_PROCEDURE;
 
 /**
  * Type Conversion.
@@ -155,6 +157,7 @@ public final class TypeConversion extends Expression {
 		Type fromType = expression.type;
 		if(fromType==null) {
 			Util.error("Expression "+expression+" has no type - can't be converted to "+toType);
+			Thread.dumpStack();
 			return(false);
 		}
 		ConversionKind conversionKind = fromType.isConvertableTo(toType);
@@ -202,7 +205,7 @@ public final class TypeConversion extends Expression {
 			if (fromType.keyWord == Type.T_REAL || fromType.keyWord == Type.T_LONG_REAL)
 				return("(int)Math.round(" + evaluated + ")");
 		}
-		return ("((" + type.toJavaType() + ")(" + evaluated + "))");
+		return ("((" + type.toJavaType() + ")(" + evaluated + "))");			
 	}
 
 	@Override
@@ -244,7 +247,8 @@ public final class TypeConversion extends Expression {
 				}
 			} break;
 			
-			default: codeBuilder.checkcast(type.toClassDesc());
+			default:
+				codeBuilder.checkcast(type.toObjectClassDesc());
 		}
 	}
 

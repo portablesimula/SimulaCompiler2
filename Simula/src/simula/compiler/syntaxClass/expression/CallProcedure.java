@@ -23,6 +23,7 @@ import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -320,12 +321,13 @@ public final class CallProcedure {
 				if(binOper.backLink==null) partOfExpression=false;
 			}
 			if(partOfExpression) {
-				s.append("._RESULT()");
-				String callVirtual=s.toString();
-				String cast=resultType.toJavaType();
-				if(resultType.isArithmeticType())
-					return(cast+"Value("+callVirtual+")");
-				else return("(("+cast+")("+callVirtual+"))");
+					s.append("._RESULT()");
+					String callVirtual=s.toString();
+					String cast=resultType.toJavaType();
+					if(resultType.isArithmeticType())
+						return(cast+"Value("+callVirtual+")");
+					else return("(("+cast+")("+callVirtual+"))");
+//				}
 			}
 		}
 		return(s.toString());

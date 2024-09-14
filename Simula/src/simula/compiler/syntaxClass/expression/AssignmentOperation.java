@@ -418,6 +418,7 @@ public final class AssignmentOperation extends Expression {
 	private void buildSimpleParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FRE_par = par.getFieldRefEntry(pool);
+//		System.out.println("AssignmentOperation.buildSimpleParameter: rhs="+rhs.getClass().getSimpleName()+"  "+rhs);
 		if(par.mode == Parameter.Mode.name) {
 //			codeBuilder.aload(0);
 			var.buildIdentifierAccess(true,codeBuilder);

@@ -142,19 +142,23 @@ public final class RemoteVariable extends Expression {
 			}
 			var.setRemotelyAccessed(remoteAttribute);
 
-			if (remoteAttribute.declaredAs instanceof Parameter par) {
+			Declaration declaredAs = remoteAttribute.declaredAs;
+			result = declaredAs.type;
+			if (declaredAs instanceof Parameter par) {
 				if (par.kind == Parameter.Kind.Array)
 					accessRemoteArray = true;
 			}
 
-			if (remoteAttribute.declaredAs instanceof ArrayDeclaration) { // Array
+			if (declaredAs instanceof ArrayDeclaration) { // Array
 				if (var.hasArguments())	accessRemoteArray = true;
-			} else if (remoteAttribute.declaredAs instanceof ProcedureDeclaration proc) { // Procedure
+			} else if (declaredAs instanceof ProcedureDeclaration proc) { // Procedure
 				callRemoteProcedure = proc;
-			} else if (remoteAttribute.declaredAs instanceof VirtualSpecification virSpec) { // Virtual Procedure
+			} else if (declaredAs instanceof VirtualSpecification virSpec) { // Virtual Procedure
 				callRemoteVirtual = virSpec;
+				if(virSpec.procedureSpec != null)
+					result = virSpec.procedureSpec.type;
+				return (result);
 			}
-			result = remoteAttribute.declaredAs.type;
 		} else {
 			Util.error("Illegal attribute(" + attr + ") in remote access");
 			result = attr.type;

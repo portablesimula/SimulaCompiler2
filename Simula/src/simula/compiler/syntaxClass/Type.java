@@ -169,6 +169,15 @@ public class Type extends SyntaxClass {
 		return (qual);
 	}
 
+	public static boolean equalsOrSubordinate(Type t1, Type t2) {
+		if(t1 == null) return(t2 == null);
+		if(t2 == null) return(t1 == null);
+		if(t2.keyWord == Type.T_REF) {
+			if(t2.isSubReferenceOf(t1)) return true;
+		}
+		return t1.equals(t2);
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		Type other=(Type) obj;

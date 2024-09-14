@@ -16,9 +16,9 @@ import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.Thunk;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.RTS;
-import simula.compiler.utilities.Util;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
+import simula.compiler.utilities.Option;
 
 public class BuildCPV {
 
@@ -119,28 +119,12 @@ public class BuildCPV {
 			 buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
 		else BuildCPF.buildCPF(variable, codeBuilder);
 		
-		System.out.println("BuildCPV.virtual: backLink="+variable.backLink);
+//		System.out.println("BuildCPV.virtual: backLink="+variable.backLink);
 	    if(backLink == null) codeBuilder.pop();
 	    else {
 //			Util.IERR();
 //	    	BuildLoad_RESULT(variable, codeBuilder);
 	    }
-	}
-	
-	private static void BuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
-		SyntaxClass backLink = variable.backLink;
-		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
-		System.out.println("BuildCPV.BuildLoad_RESULT: backLink="+backLink.getClass().getSimpleName()+"  "+backLink);
-		Expression expr = (Expression)backLink;
-		System.out.println("BuildCPV.BuildLoad_RESULT: expr="+expr.type+"  "+expr);
-		Declaration proc=variable.meaning.declaredAs;
-//		if(proc.type != null && backLink != null) {
-			RTS.invokevirtual_PROCEDURE_RESULT(codeBuilder);
-//			proc.type.checkCast(codeBuilder);
-//			RTS.objectToPrimitiveType(proc.type, codeBuilder);
-			expr.type.checkCast(codeBuilder);
-			RTS.objectToPrimitiveType(expr.type, codeBuilder);
-//		}
 	}
 	
 	// ********************************************************************
@@ -186,7 +170,7 @@ public class BuildCPV {
 			// s.append("._ENT()"); // Only when any parameter
 			RTS.invokevirtual_PROCEDURE_ENT(codeBuilder);
 		}
-		BuildCPF.maybeBuildLoad_RESULT(variable, codeBuilder);
+		BuildLoad_RESULT(variable, codeBuilder);			
 	}
 	
 	// ********************************************************************
@@ -194,15 +178,49 @@ public class BuildCPV {
 	// ********************************************************************
 	private static void prepareForValueType(final VariableExpression variable, CodeBuilder codeBuilder) {
 	    // Prepare for possible _RESULT to Object conversion in buildCPF.
-		Declaration decl=variable.meaning.declaredAs;
-		if(decl.type != null && decl.type.isValueType() && variable.backLink != null) {
+		Type resultType = functionResultType(variable);
+		if(resultType != null && resultType.isValueType() && variable.backLink != null) {
 			codeBuilder.aload(0);
 			if(Global.getCurrentScope() instanceof Thunk thunk) {
 				ConstantPoolBuilder pool=codeBuilder.constantPool();
 				codeBuilder
-//					.getfield(RTS.CD.RTS_NAME,"_CUR",RTS.CD.RTS_RTObject)
 					.getfield(RTS.FRE.NAME_CUR(pool))
 					.checkcast(thunk.declaredIn.getClassDesc());
+			}
+		}
+	}
+	
+	private static Type functionResultType(VariableExpression variable) {
+		Declaration proc = variable.meaning.declaredAs;
+		Type resultType = proc.type;
+		if(proc instanceof VirtualSpecification virt) {
+			if(virt.procedureSpec != null) {
+				resultType = virt.procedureSpec.type;
+//				System.out.println("BuildCPV.functionResultType: resultType="+resultType);
+			}
+		}
+		return resultType;
+	}
+	
+	private static void BuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
+		SyntaxClass backLink = variable.backLink;
+		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
+//		System.out.println("BuildCPV.BuildLoad_RESULT: backLink="+backLink);
+		Type resultType = functionResultType(variable);
+		if(resultType!=null && variable.backLink!=null) {
+			boolean partOfExpression=true;
+			if(variable.backLink instanceof RemoteVariable binOper) {
+				// NOTE: Standalone <expression>.<function> should not be casted
+				if(binOper.backLink==null) partOfExpression=false;
+			}
+			if(partOfExpression) {
+//				s.append("._RESULT()");
+				RTS.invokevirtual_PROCEDURE_RESULT(codeBuilder);
+				if(resultType.isValueType()) {
+					RTS.objectToPrimitiveType(resultType, codeBuilder);
+				} else {
+					resultType.checkCast(codeBuilder);				
+				}
 			}
 		}
 	}

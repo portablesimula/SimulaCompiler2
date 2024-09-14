@@ -75,7 +75,7 @@ public final class GotoStatement extends Statement {
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		label.doChecking();
-		if (label.type.keyWord != Type.T_LABEL)
+		if (label.type == null || label.type.keyWord != Type.T_LABEL)
 			Util.error("Goto " + label + ", " + label + " is not a Label");
 		label.backLink = this; // To ensure _RESULT from functions
 		SET_SEMANTICS_CHECKED();

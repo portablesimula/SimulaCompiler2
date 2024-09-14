@@ -1,14 +1,7 @@
 
 begin
-	class semchecker; begin
-		procedure allocate;
-		begin end;
-	end;
 
-	inspect new semchecker do begin
-		integer dum2;
+   procedure Q (f, a); name a; integer procedure f; integer a;
+      a := f ;
 
-		allocate;
-	end;
-		
 end;

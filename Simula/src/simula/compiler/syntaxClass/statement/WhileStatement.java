@@ -12,6 +12,7 @@ import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
 import simula.compiler.syntaxClass.expression.Expression;
+import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
@@ -52,7 +53,8 @@ public final class WhileStatement extends Statement {
 	 */
 	WhileStatement(int line) {
 		super(line);
-		if (Option.internal.TRACE_PARSE)	Util.TRACE("Parse WhileStatement: line="+line+", current=" + Parse.currentToken);
+		if (Option.internal.TRACE_PARSE)
+			Util.TRACE("Parse WhileStatement: line="+line+", current=" + Parse.currentToken);
 		condition = Expression.expectExpression();
 		Parse.expect(KeyWord.DO);
 		doStatement = Statement.expectStatement();
@@ -64,7 +66,7 @@ public final class WhileStatement extends Statement {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber=lineNumber;
 		condition.doChecking(); condition.backLink=this;
-		if (condition.type.keyWord != Type.T_BOOLEAN) Util.error("While condition is not Boolean");
+		if (condition.type == null || condition.type.keyWord != Type.T_BOOLEAN) Util.error("While condition is not Boolean");
 		doStatement.doChecking();
 		SET_SEMANTICS_CHECKED();
 	}

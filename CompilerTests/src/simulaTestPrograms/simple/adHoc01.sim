@@ -2,10 +2,34 @@
 begin
 
 
-   procedure R(SFD);  switch SFD;
-   begin
-      goto SFD(1)
-   end of procedure R;
+	ref(A) first;
+	ref(A) x;
 
+	class A(i); integer i;
+		virtual:
+			procedure virt2 is ref(A) procedure virt2(p1,p2); integer p1; real p2;;
+	begin
+		ref(A) procedure virt2(p1,p2); integer p1; real p2; begin
+			outtext("IN A.virt2"); outimage;
+			virt2 :- x; x :- new A(i+1);
+		end;
 
-end;
+%		x :- virt2;
+	end;
+	
+	A class B; begin
+		ref(B) procedure virt2(p1,p2); integer p1; real p2; begin
+			outtext("IN B.virt2"); outimage;
+			virt2 :- x; x :- new B(i+1);
+		end;
+
+	end;
+	
+% ========================================================
+	
+	first :- new B(0);
+%	x :- new B(1);
+	
+	x :- first.virt2;
+
+ end;
