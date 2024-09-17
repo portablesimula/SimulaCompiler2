@@ -244,7 +244,7 @@ public final class Constant extends Expression {
 	}
 
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		//ASSERT_SEMANTICS_CHECKED(); // ØM: Ad'Hoc
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(this.value==null)

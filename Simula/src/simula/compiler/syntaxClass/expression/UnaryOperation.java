@@ -118,7 +118,7 @@ public final class UnaryOperation extends Expression {
 	}
 
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
 		operand.buildEvaluation(null,codeBuilder);
 		if (oprator == KeyWord.PLUS) ; // NOTHING

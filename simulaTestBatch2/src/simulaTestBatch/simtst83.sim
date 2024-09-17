@@ -36,7 +36,7 @@ SimulaTest(83,"--- Test name Parameter with EXTREME BI-EFFECTS") begin
    
       P(new A);
    
-      if rA(0).n = 8 and rA(1).n = 5 then -- OK
+      if rA(0).n = 8 and rA(1).n = 5 then ! -- OK ;
       else begin
          err(" ERROR IN PART 1");
          for j:=0 step 1 until i do begin
@@ -69,7 +69,7 @@ SimulaTest(83,"--- Test name Parameter with EXTREME BI-EFFECTS") begin
 
       procedure Q(ii); name ii; integer ii;
       begin
-         ii:=ii+2
+         ii:=ii+2;
          if verbose then
          begin outtext("INC: x.i,v.i=");
             if x =/= none then outint(x.i,3) else outtext("x==NONE ");

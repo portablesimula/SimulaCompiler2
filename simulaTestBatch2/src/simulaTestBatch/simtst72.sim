@@ -65,7 +65,7 @@ SimulaTest(72,"--- Test of formal procedures.") begin
    procedure Q(ii); name ii; integer ii;
    begin
       TEST("BEFORE ii:=ii+2");
-      ii:=ii+2
+      ii:=ii+2;
       TEST("AFTER ii:=ii+2");
    end;
 

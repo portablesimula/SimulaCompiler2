@@ -40,7 +40,6 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.TESTING_PARAMETER_LIST = true;
 		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -280,9 +279,10 @@ public final class RunSingleTest {
 //		names.add("simtst157.sim"); // OK: Test identifier access
 		
 //		names.add("simtst158.sim"); // OK: Test Specified Virtual Boolean Functions as part of an Expression
-		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
+//		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
 //		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
 //		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
+		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

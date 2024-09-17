@@ -17,7 +17,6 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
-import simula.compiler.syntaxClass.statement.ConnectionDoPart;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -84,11 +83,11 @@ public final class ConnectionBlock extends DeclarationScope {
 	}
 
 	/**
-	 * Get inspected expression.
+	 * Get inspected variable.
 	 * 
-	 * @return inspected expression.
+	 * @return inspected variable.
 	 */
-	public Expression getInspectedExpression() {
+	public Expression getTypedInspectedVariable() {
 		Type type = classDeclaration.type;
 		return ((Expression) TypeConversion.testAndCreate(type, inspectedVariable));
 	}

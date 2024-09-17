@@ -237,6 +237,7 @@ public final class AssignmentOperation extends Expression {
 	 */
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+		setLineNumber();
 //		System.out.println("AssignmentOperation.buildEvaluation: type="+type+"  "+this);
 		ASSERT_SEMANTICS_CHECKED();
 		if (this.textValueAssignment)

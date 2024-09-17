@@ -280,7 +280,8 @@ public final class RunSingleClassTest {
 //		names.add("simtst159.sim"); // OK: Test Specified Virtual Real Functions as part of an Expression
 
 //		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
-		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
+//		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
+		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
 //		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

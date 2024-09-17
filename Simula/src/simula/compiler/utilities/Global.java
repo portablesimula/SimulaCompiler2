@@ -24,6 +24,7 @@ import simula.compiler.GeneratedJavaClass;
 import simula.compiler.JarFileBuilder;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
+import simula.compiler.syntaxClass.statement.ProgramModule;
 
 /**
  * Global Variables.
@@ -101,6 +102,11 @@ public final class Global {
 	 * The insert name.
 	 */
 	public static String insertName;
+	
+	/**
+	 * The programModule.
+	 */
+	public static ProgramModule programModule;
 	
 	/**
 	 * Where to find the Simula Runtime System.

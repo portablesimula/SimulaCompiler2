@@ -97,17 +97,16 @@ public final class Meaning {
 	 * Returns the inspected expression or null.
 	 * @return the inspected expression or null
 	 */
-	public Expression getInspectedExpression() {
-		if (isConnected())
-			 return (((ConnectionBlock) declaredIn).getInspectedExpression());
+	public Expression getTypedInspectedVariable() {
+		if (declaredIn instanceof ConnectionBlock conn)
+			 return (conn.getTypedInspectedVariable());
 		else return (null);
 	}
 
 	public VariableExpression getInspectedVariable() {
-		Expression inspected = getInspectedExpression();
-		if(inspected instanceof TypeConversion tc) inspected = tc.expression;
-		VariableExpression inspectedVariable = (VariableExpression)inspected;
-		return(inspectedVariable);
+		if (declaredIn instanceof ConnectionBlock conn)
+			 return (conn.inspectedVariable);
+		else return (null);
 	}
 
 	// ***************************************************************************************
@@ -120,7 +119,7 @@ public final class Meaning {
 	public String edUnqualifiedStaticLink() {
 		// Edit staticLink reference
 		String staticLink;
-		Expression connectedObject = getInspectedExpression();
+		Expression connectedObject = getTypedInspectedVariable();
 		if (connectedObject != null)
 			staticLink = connectedObject.toJavaCode();
 		else {
@@ -139,7 +138,7 @@ public final class Meaning {
 	public String edQualifiedStaticLink() {
 		// Edit staticLink reference
 		String staticLink;
-		Expression connectedObject = getInspectedExpression();
+		Expression connectedObject = getTypedInspectedVariable();
 		if (connectedObject != null)
 			staticLink = connectedObject.toJavaCode();
 		else {
@@ -194,7 +193,7 @@ public final class Meaning {
 	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
 		Meaning meaning=this;
 		if (meaning.isConnected()) {
-			Expression inspectedExpression = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
+			Expression inspectedExpression = ((ConnectionBlock) meaning.declaredIn).getTypedInspectedVariable();
 				inspectedExpression.buildEvaluation(null, codeBuilder);
 		} else if(declaredAs instanceof ProcedureDeclaration) {			
 	        // 0: getstatic     #17                 // Field _CUR:Lsimula/runtime/RTS_RTObject;

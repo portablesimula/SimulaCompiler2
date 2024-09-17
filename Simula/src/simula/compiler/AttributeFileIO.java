@@ -109,7 +109,7 @@ public final class AttributeFileIO {
 //		else if(program.module instanceof ClassDeclaration cls) cls.writeObject(oupt);
 //		else Util.IERR();
 		
-		oupt.writeObj(program.module);
+		oupt.writeObj(program.mainModule);
 
 		oupt.close();
 		return(byteArrayOutputStream.toByteArray());

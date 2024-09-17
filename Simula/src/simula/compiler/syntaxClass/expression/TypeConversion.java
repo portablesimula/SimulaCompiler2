@@ -209,7 +209,7 @@ public final class TypeConversion extends Expression {
 	}
 
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
 		expression.buildEvaluation(null,codeBuilder);
 		Type fromType = expression.type;

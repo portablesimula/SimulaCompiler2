@@ -149,7 +149,7 @@ public final class TextExpression extends Expression {
 	}
 
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
 		codeBuilder.aload(0);
 		lhs.buildEvaluation(null,codeBuilder);

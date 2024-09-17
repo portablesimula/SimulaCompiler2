@@ -37,6 +37,7 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
+import simula.compiler.syntaxClass.statement.ConnectionStatement;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
@@ -301,18 +302,7 @@ public final class VariableExpression extends Expression {
 				if (decl instanceof ClassDeclaration cdecl)
 					paramIterator = cdecl.new ClassParameterIterator();
 				else if (decl instanceof ProcedureDeclaration proc) {
-//					if(Option.internal.TESTING_PARAMETER_LIST) {
-//						paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
-//						if(proc.myVirtual != null) {
-//							if(proc.myVirtual.virtualSpec.procedureSpec != null) {
-//								paramIterator = proc.myVirtual.virtualSpec.procedureSpec.parameterList.iterator();
-//								if (params == null && paramIterator.hasNext())
-//										Util.error("XXX: Missing parameter(s) to " + decl.identifier);
-//							}
-//						}
-//					} else{
-						paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
-//					}
+					paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
 					if(!Option.internal.CREATE_JAVA_SOURCE) {
 						if(decl instanceof StandardProcedure prc) {
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
@@ -547,7 +537,6 @@ public final class VariableExpression extends Expression {
 		boolean destination = (rightPart != null);
 		Declaration decl = meaning.declaredAs;
 		ASSERT_SEMANTICS_CHECKED();
-		Expression inspectedVariable = meaning.getInspectedExpression();
 		StringBuilder s;
 		
 //		System.out.println("VariableExpression.editVariable: "+ObjectKind.edit(decl.declarationKind)+" "+decl);
@@ -608,6 +597,7 @@ public final class VariableExpression extends Expression {
 				case Parameter.Kind.Procedure: // Parameter Procedure
 					if (destination)
 						Util.IERR();
+					Expression inspectedVariable = meaning.getTypedInspectedVariable();
 					if (inspectedVariable != null)
 						s.append(inspectedVariable.toJavaCode()).append('.');
 					if (par.mode == Parameter.Mode.value)
@@ -724,7 +714,7 @@ public final class VariableExpression extends Expression {
 			return (id);
 		}
 		if (meaning.isConnected()) {
-			Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
+			Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getTypedInspectedVariable();
 			if (meaning.foundBehindInvisible) {
 				String remoteCast = meaning.foundIn.getJavaIdentifier();
 				id = "((" + remoteCast + ")(" + inspectedVariable.toJavaCode() + "))." + id;
@@ -774,7 +764,7 @@ public final class VariableExpression extends Expression {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
 		Declaration decl=meaning.declaredAs;
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
@@ -853,10 +843,16 @@ public final class VariableExpression extends Expression {
 					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
 					if(withFollowSL) {
-//						System.out.println("VariableExpression.buildEvaluation'SimpleVariableDeclaration: cblk.declaredIn="+cblk.declaredIn);
-						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
+							DeclarationScope declaredIn = cblk.declaredIn;
+							int bl = declaredIn.getRTBlockLevel();
+							if(bl == 0) { // Accessing _USR
+								ClassDesc main = Global.programModule.mainModule.getClassDesc();
+								codeBuilder.checkcast(main);
+							} else {
+								while(declaredIn.declaredIn.getRTBlockLevel() == bl) declaredIn = declaredIn.declaredIn;
+								codeBuilder.checkcast(declaredIn.getClassDesc());
+							}
 					}
-					
 					codeBuilder
 						.getfield(inspectedVariable.getFieldRefEntry(pool))
 						.checkcast( ((DeclarationScope)var.declaredIn).getClassDesc())
@@ -870,18 +866,17 @@ public final class VariableExpression extends Expression {
 			case ObjectKind.InspectVariableDeclaration:
 				InspectVariableDeclaration ivar=(InspectVariableDeclaration)decl;
 				if(inspectedVariable != null) {
-					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
-					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
-					if(withFollowSL) {
-//						System.out.println("VariableExpression.buildEvaluation'InspectVariableDeclaration: cblk.declaredIn="+cblk.declaredIn);
-//						System.out.println("VariableExpression.buildEvaluation'InspectVariableDeclaration: ivar.declaredIn="+ivar.declaredIn);
-						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
-					}
-					
-					codeBuilder
-						.getfield(inspectedVariable.getFieldRefEntry(pool))
-						.checkcast( ((DeclarationScope)ivar.declaredIn).getClassDesc())
-						.getfield(ivar.getFieldRefEntry(pool));
+//					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
+//					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
+//					if(withFollowSL) {
+//						codeBuilder.checkcast(cblk.declaredIn.getClassDesc());
+//					}
+//					
+//					codeBuilder
+//						.getfield(inspectedVariable.getFieldRefEntry(pool))
+//						.checkcast( ((DeclarationScope)ivar.declaredIn).getClassDesc())
+//						.getfield(ivar.getFieldRefEntry(pool));
+					Util.IERR(); // TROR IKKE DETTE FOREKOMMER !
 				} else {
 					buildIdentifierAccess(destination,codeBuilder);
 					codeBuilder.getfield(ivar.getFieldRefEntry(pool));

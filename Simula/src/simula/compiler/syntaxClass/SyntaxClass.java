@@ -109,6 +109,10 @@ public abstract class SyntaxClass {
 	 * The source line number
 	 */
 	public int lineNumber;
+	
+	protected void setLineNumber() {
+		Global.sourceLineNumber = lineNumber;
+	}
 
 	/**
 	 * Create a new SyntaxClass.
@@ -225,7 +229,7 @@ public abstract class SyntaxClass {
 		String s = "";
 		while ((i--) > 0)
 			s = s + "    ";
-		return (s+this.getClass().getSimpleName()+"    ");
+		return (s+"Line "+this.lineNumber+": "+this.getClass().getSimpleName()+"    ");
 	}
 
 	/**

@@ -105,7 +105,7 @@ public final class ConditionalExpression extends Expression {
 	}
 
 	@Override
-	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {
+	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
 		condition.buildEvaluation(null,codeBuilder);
 		Label elseLabel = codeBuilder.newLabel();

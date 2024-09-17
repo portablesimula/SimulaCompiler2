@@ -16,6 +16,7 @@ import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.Thunk;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.RTS;
+import simula.compiler.utilities.Util;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.Option;
@@ -34,6 +35,12 @@ public class BuildCPV {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	static void virtual(final VariableExpression variable,final VirtualSpecification virtual,final boolean remotelyAccessed,CodeBuilder codeBuilder) {
+		if(! variable.hasArguments()) {
+//			System.out.println("CallProcedure.codeCPF: procedureSpec="+virtual.procedureSpec);
+			if(virtual.procedureSpec != null && virtual.procedureSpec.parameterList.size() > 0) {
+				Util.error("Missing parameter(s) to " + variable.identifier);
+			}
+		}
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		//return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 	    String ident=virtual.getSimpleVirtualIdentifier();
@@ -110,6 +117,11 @@ public class BuildCPV {
 	 * @param codeBuilder the CodeBuilder
 	 */
 	static void remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual,final SyntaxClass backLink,CodeBuilder codeBuilder) {
+		if(! variable.hasArguments()) {
+//			System.out.println("CallProcedure.codeCPF: procedureSpec="+virtual.procedureSpec);
+			if(virtual.procedureSpec != null && virtual.procedureSpec.parameterList.size() > 0)
+				Util.error("Missing parameter(s) to " + variable.identifier);
+		}
 		//return("<Object>.<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 	    String ident=virtual.getSimpleVirtualIdentifier();
 		prepareForValueType(variable, codeBuilder);

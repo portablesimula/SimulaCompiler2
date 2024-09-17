@@ -133,7 +133,7 @@ SimulaTest(79,"--- Test the attribute 'isopen' of class File.") begin
 
 
    xf:- new Directbytefile(anydirectbytefile);     !***** NOTE 1, NOTE 4 *****;
-   xf.setaccess("CREATE");                ! MYH
+   xf.setaccess("CREATE");                ! MYH ;
    Test(sourceline,xf.isopen, false, 25);
 
    if not xf qua Directbytefile.open

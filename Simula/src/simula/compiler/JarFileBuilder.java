@@ -152,7 +152,7 @@ public class JarFileBuilder {
 			add(false, rtsHome, Global.simulaRtsLib.toString().length());
 		} else {
 			String id = programModule.getIdentifier();
-			String kind = (programModule.module instanceof ClassDeclaration) ? "Class " : "Procedure ";
+			String kind = (programModule.mainModule instanceof ClassDeclaration) ? "Class " : "Procedure ";
 			Util.warning("No execution - Separate Compiled " + kind + id + " is written to: \"" + outputJarFile + "\"");
 		}
         

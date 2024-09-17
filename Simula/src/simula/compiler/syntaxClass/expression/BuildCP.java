@@ -179,7 +179,7 @@ public abstract class BuildCP {
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
 		if (meaning.isConnected()) {
-			Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getInspectedExpression();
+			Expression inspectedVariable = ((ConnectionBlock) meaning.declaredIn).getTypedInspectedVariable();
 			callRemoteStandardProcedure(inspectedVariable, pro, variable, codeBuilder);
 		} else {
 			// PUSH Parameter values onto the stack

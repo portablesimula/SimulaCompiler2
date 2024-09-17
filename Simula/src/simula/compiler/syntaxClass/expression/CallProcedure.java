@@ -275,6 +275,11 @@ public final class CallProcedure {
 	 * @return the resulting Java source code
 	 */
 	private static String codeCPF(final String ident,final VariableExpression variable,final ProcedureSpecification procedureSpec) {
+		if(! variable.hasArguments()) {
+			if(procedureSpec != null && procedureSpec.parameterList.size() > 0)
+				Util.error("Missing parameter(s) to " + variable.identifier);
+		}
+		
 		StringBuilder s=new StringBuilder();
 		if(procedureSpec!=null) s.append(codeCSVP(ident,variable,procedureSpec));
 		else {

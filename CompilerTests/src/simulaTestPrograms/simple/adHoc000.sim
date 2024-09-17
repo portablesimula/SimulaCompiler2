@@ -1,7 +1,34 @@
 
 begin
 
-   procedure Q (f, a); name a; integer procedure f; integer a;
-      a := f ;
+	class brecord; begin
+         ref(quantity) declquant;
+	end;
 
+	class quantity; begin
+		ref(brecord)descr;
+		descr :- new brecord;
+		descr.declquant :- this quantity;;
+	end;
+
+	ref(quantity) VC;
+	VC:-new quantity;
+            
+	inspect VC do begin
+		inspect descr do begin
+			integer dummy;
+			declquant.descr :- none;
+		end;
+	end;
+	
+	begin
+		integer dummy;
+		inspect VC do begin     
+			inspect descr do begin
+				integer dummy;
+				declquant.descr :- none;
+			end;
+		end;
+		
+	end;
 end;

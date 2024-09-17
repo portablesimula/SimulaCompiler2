@@ -261,6 +261,7 @@ public final class SimulaCompiler {
 			Global.generatedJavaClass = new Vector<GeneratedJavaClass>();
 			Parse.initiate(reader);
 			programModule = new ProgramModule();
+			Global.programModule = programModule;
 			if (Option.internal.TRACING) {
 				Util.println("END Parsing, resulting Program: \"" + programModule + "\"");
 				if (Option.internal.TRACE_PARSE && programModule != null)
@@ -688,7 +689,7 @@ public final class SimulaCompiler {
 	private void printSummary() {
 		Util.println("------------  COMPILATION SUMMARY  ------------");
 		if (!programModule.isExecutable()) {
-			Util.println("Separate Compiled " + ObjectKind.edit(programModule.module.declarationKind)
+			Util.println("Separate Compiled " + ObjectKind.edit(programModule.mainModule.declarationKind)
 			                   + " " + programModule  + " is written to: \"" + outputJarFile + "\"");
 			Util.println("Rel Attr.File:   \"" + programModule.getRelativeAttributeFileName() + "\"");
 		} else {

@@ -105,7 +105,7 @@ public final class ConnectionStatement extends Statement {
 	/**
 	 * The inspected variable's declaration.
 	 */
-	InspectVariableDeclaration inspectVariableDeclaration;
+	public InspectVariableDeclaration inspectVariableDeclaration;
 	
 	/**
 	 * The connection parts. A ConnectionDoPart or a list of WhenParts.
@@ -244,6 +244,7 @@ public final class ConnectionStatement extends Statement {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
+//		System.out.println("ConnectionStatement.buildByteCode: "+inspectedVariable.meaning.declaredIn);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);

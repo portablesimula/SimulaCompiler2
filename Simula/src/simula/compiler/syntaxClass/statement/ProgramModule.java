@@ -72,9 +72,9 @@ public final class ProgramModule extends Statement {
 	final private VariableExpression sysout;
 	
 	/**
-	 * The module declaration.
+	 * The mainModule declaration.
 	 */
-	public final DeclarationScope module;
+	public final DeclarationScope mainModule;
 
 	/**
 	 * The external head
@@ -82,28 +82,28 @@ public final class ProgramModule extends Statement {
 	public Vector<ExternalDeclaration> externalHead;
 
 	/**
-	 * Returns the module identifier.
-	 * @return the module identifier
+	 * Returns the mainModule identifier.
+	 * @return the mainModule identifier
 	 */
-	public String getIdentifier() { return(module.identifier); }
+	public String getIdentifier() { return(mainModule.identifier); }
 
 	/**
 	 * Returns the relative file name.
 	 * @return the relative file name
 	 */
 	public String getRelativeAttributeFileName() {
-		if(module.declarationKind==ObjectKind.Class) return(Global.packetName+"/CLASS.AF");
-		if(module.declarationKind==ObjectKind.Procedure) return(Global.packetName+"/PROCEDURE.AF");
+		if(mainModule.declarationKind==ObjectKind.Class) return(Global.packetName+"/CLASS.AF");
+		if(mainModule.declarationKind==ObjectKind.Procedure) return(Global.packetName+"/PROCEDURE.AF");
 		else return(null);
 	}
 	  
 	/**
-	 * Returns true if this program module is executable.
-	 * @return true if this program module is executable
+	 * Returns true if this program mainModule is executable.
+	 * @return true if this program mainModule is executable
 	 */
 	public boolean isExecutable() {
-		if(module.declarationKind==ObjectKind.SimulaProgram) return(true);
-		if(module.declarationKind==ObjectKind.PrefixedBlock) return(true);
+		if(mainModule.declarationKind==ObjectKind.SimulaProgram) return(true);
+		if(mainModule.declarationKind==ObjectKind.PrefixedBlock) return(true);
 		else return(false);
 	}
 
@@ -112,7 +112,7 @@ public final class ProgramModule extends Statement {
 	 */
 	public ProgramModule() {
 		super(0);
-		DeclarationScope module=null;
+		DeclarationScope mainModule=null;
 		sysin=new VariableExpression("sysin");
 		sysout=new VariableExpression("sysout");
 		try	{
@@ -129,29 +129,29 @@ public final class ProgramModule extends Statement {
 			}
 			String ident=Parse.acceptIdentifier();
 			if(ident!=null) {
-				if(Parse.accept(KeyWord.CLASS)) module=ClassDeclaration.expectClassDeclaration(ident);
+				if(Parse.accept(KeyWord.CLASS)) mainModule=ClassDeclaration.expectClassDeclaration(ident);
 			    else {
 			    	VariableExpression blockPrefix=VariableExpression.expectVariable(ident);	
 			    	
 			  	    Parse.expect(KeyWord.BEGIN);
-		        	module=PrefixedBlockDeclaration.expectPrefixedBlock(blockPrefix,true);
+		        	mainModule=PrefixedBlockDeclaration.expectPrefixedBlock(blockPrefix,true);
 			    }
 			}
-			else if(Parse.accept(KeyWord.BEGIN)) module=MaybeBlockDeclaration.createMainProgramBlock(); 
-			else if(Parse.accept(KeyWord.CLASS)) module=ClassDeclaration.expectClassDeclaration(null);
+			else if(Parse.accept(KeyWord.BEGIN)) mainModule=MaybeBlockDeclaration.createMainProgramBlock(); 
+			else if(Parse.accept(KeyWord.CLASS)) mainModule=ClassDeclaration.expectClassDeclaration(null);
 			else {
 				Type type=Parse.acceptType();
-			    if(Parse.expect(KeyWord.PROCEDURE)) module=ProcedureDeclaration.expectProcedureDeclaration(type);
+			    if(Parse.expect(KeyWord.PROCEDURE)) mainModule=ProcedureDeclaration.expectProcedureDeclaration(type);
 			}
-			StandardClass.BASICIO.declarationList.add(module);
+			StandardClass.BASICIO.declarationList.add(mainModule);
 		
 			if(Option.verbose) Util.TRACE("ProgramModule: END NEW SimulaProgram: "+toString());
 		} catch(Throwable e) {
 			e.printStackTrace();
 			Util.IERR();
 			}
-		this.module=module;
-//		if(Option.PRINT_SYNTAX_TREE) module.printTree(0);
+		this.mainModule=mainModule;
+//		if(Option.PRINT_SYNTAX_TREE) mainModule.printTree(0);
 	}	
 
 	@Override
@@ -159,12 +159,12 @@ public final class ProgramModule extends Statement {
 		if(IS_SEMANTICS_CHECKED()) return;
 		sysin.doChecking();
 		sysout.doChecking();
-		module.doChecking();
+		mainModule.doChecking();
 		SET_SEMANTICS_CHECKED();
 	}
   
 	@Override
-	public void doJavaCoding() { module.doJavaCoding(); }
+	public void doJavaCoding() { mainModule.doJavaCoding(); }
 
 	/**
 	 * Create Java ClassFile.
@@ -172,11 +172,11 @@ public final class ProgramModule extends Statement {
 	 */
 	public void createJavaClassFile() throws IOException {
 		Global.sourceLineNumber = lineNumber;
-		module.createJavaClassFile();
+		mainModule.createJavaClassFile();
 	}
 
 	@Override
-	public void print(final int indent) { module.print(0); }
+	public void print(final int indent) { mainModule.print(0); }
 
 	@Override
 	public void printTree(final int indent, final Object head) {
@@ -191,6 +191,6 @@ public final class ProgramModule extends Statement {
 	}
 	
 	@Override
-	public String toString() { return((module==null)?"":""+module.identifier); }
+	public String toString() { return((mainModule==null)?"":""+mainModule.identifier); }
 	
 }

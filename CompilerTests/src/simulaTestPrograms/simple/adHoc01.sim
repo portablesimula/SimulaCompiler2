@@ -14,7 +14,7 @@ begin
 			virt2 :- x; x :- new A(i+1);
 		end;
 
-%		x :- virt2;
+		x :- virt2;
 	end;
 	
 	A class B; begin
