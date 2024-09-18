@@ -14,6 +14,9 @@ SimulaTest(118,"--- Test Simple QPS-Sample 4") begin
    integer nA,nB;
    ref(A) x;
    ref(B) y;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

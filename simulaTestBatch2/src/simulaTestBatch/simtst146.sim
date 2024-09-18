@@ -13,6 +13,9 @@ external class SimulaTest;
 SimulaTest(146,"--- Test text by value to formal and virtual procedure") begin
    text array facit(0:13);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

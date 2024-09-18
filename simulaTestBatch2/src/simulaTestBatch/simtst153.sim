@@ -13,6 +13,9 @@ external class SimulaTest;
 SimulaTest(153,"--- Test GOTO ConditionalExpression") begin
    text array facit(0:4);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

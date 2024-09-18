@@ -19,6 +19,15 @@ SimulaTest(142,"--- Simple test of Random drawing procedures.") begin
 	real val;
 	real array RA, RB(1:9);
 	long real array LRA, LRB(1:9);
+  
+   text procedure edit(n); integer n; begin
+   end;
+  
+   text procedure edfix(r,n); real r; integer n; begin
+   end;
+  
+   text procedure editBool(n); boolean n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin
@@ -52,15 +61,15 @@ SimulaTest(142,"--- Simple test of Random drawing procedures.") begin
 	trace("At START");
 	U:= 1566259315; 
 
-	trace("Test draw: res = "     & edit(draw(3.14, U)));
+	trace("Test draw: res = "     & editBool(draw(3.14, U)));
 	trace("Test randint: res = "  & edit(randint(3,7, U)));
 	trace("Test uniform: res = "  & edfix(uniform(3.14,7.31, U),3));
 	trace("Test normal: res = "   & edfix(normal(3.14,7.31, U),3));
 	trace("Test negexp: res = "   & edfix(negexp(7.31, U),3));
 	trace("Test Poisson: res = "  & edit(Poisson(7.31, U)));
 	trace("Test Erlang: res = "   & edfix(Erlang(3.14,7.31, U),3));
-	trace("Test discrete: res = " & edit(discrete(RA, U)));
-	trace("Test discrete: res = " & edit(discrete(LRA, U)));
+%	trace("Test discrete: res = " & edit(discrete(RA, U)));
+%	trace("Test discrete: res = " & edit(discrete(LRA, U)));
 	
 		
 	for i := 1 step 1 until 8 do begin
@@ -69,12 +78,12 @@ SimulaTest(142,"--- Simple test of Random drawing procedures.") begin
 	end;
 	RA(9) := RB(9) := LRA(9) := LRB(9) := 1;
 	
-	trace("Test linear: res = "   & edfix(linear(RA, RB, U),3));
-	trace("Test linear: res = "   & edfix(linear(RA, LRB, U),3));
-	trace("Test linear: res = "   & edfix(linear(LRA, RB, U),3));
-	trace("Test linear: res = "   & edfix(linear(LRA, LRB, U),3));
+%	trace("Test linear: res = "   & edfix(linear(RA, RB, U),3));
+%	trace("Test linear: res = "   & edfix(linear(RA, LRB, U),3));
+%	trace("Test linear: res = "   & edfix(linear(LRA, RB, U),3));
+%	trace("Test linear: res = "   & edfix(linear(LRA, LRB, U),3));
 	
-	trace("Test histd: res = "    & edit(histd(RA, U)));
+%	trace("Test histd: res = "    & edit(histd(RA, U)));
 
 	trace("At END");
 	

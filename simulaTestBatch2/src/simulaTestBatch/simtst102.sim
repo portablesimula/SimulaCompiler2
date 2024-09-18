@@ -13,6 +13,9 @@ SimulaTest(102,"--- LEGAL GOTO out of an operating process and the enclosing Sys
    integer traceCase;
    text array facit(0:5);
    
+   text procedure edit(n); integer n; begin
+   end;
+   
    procedure trace(line,msg); integer line; text msg;
    begin
       text case1;

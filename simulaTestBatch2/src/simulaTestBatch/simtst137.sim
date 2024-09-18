@@ -12,6 +12,9 @@ SimulaTest(137,"--- Test DirectBytefile with CREATE, APPEND and PURGE.") begin
 
 	integer i,byte;
 	ref(Directbytefile) f1,f2;
+  
+   text procedure edit(n); integer n; begin
+   end;
 	
 	procedure trace(byte); integer byte; begin
 		sysout.outtext("Inbyte: "); sysout.outint(byte,0); sysout.outimage;

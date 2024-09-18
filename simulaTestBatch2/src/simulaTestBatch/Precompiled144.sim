@@ -19,6 +19,9 @@ begin
 	text tConst = "AbraCaDabra";
 	boolean bConst = true;
 	
+  
+   text procedure edit(n); integer n; begin
+   end;
 	   
    procedure trace(msg); text msg;
    begin

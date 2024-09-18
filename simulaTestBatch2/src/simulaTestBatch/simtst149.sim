@@ -13,6 +13,12 @@ external class SimulaTest;
 SimulaTest(149,"--- Test all mode/type parameters to a Class") begin
    text array facit(0:27);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+  
+   text procedure edfix(r,n); real r; integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

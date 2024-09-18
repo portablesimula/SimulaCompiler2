@@ -4,6 +4,9 @@ SimulaTest class Precompiled129(i); integer i; begin
    ref(A) x;
    integer n;
    switch EXIT:=X1,X2,X3;
+  
+   text procedure edit(n); integer n; begin
+   end;
 
    class A(j); integer j; begin
        switch MESSAGE:=M1,M2,M3;

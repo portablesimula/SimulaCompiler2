@@ -11,12 +11,16 @@ external class SimulaTest;
 SimulaTest(104,"--- Test procedure parameter 'F' by name.") begin
 
    real r;
+  
+   text procedure edit(n); real n; begin
+   end;
 
    procedure trace(msg,r,facit); text msg; real r,facit;
    begin
       if verbose or (r <> facit) then
       begin
-         text case=msg & ", Result=" & edit(r) & "  Facit=" & edit(facit);
+         text case;
+         case :- copy(msg & ", Result=" & edit(r) & "  Facit=" & edit(facit));
          if r <> facit then err(case)
          else outtext("TRACE: " & case); outimage;
       end;

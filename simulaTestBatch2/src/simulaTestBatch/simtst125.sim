@@ -11,6 +11,9 @@ SimulaTest(125,"--- Test goto label within compound statements") begin
    integer traceCase;
    text array facit(0:3);
    integer n;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

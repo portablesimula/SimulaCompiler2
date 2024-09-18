@@ -14,6 +14,9 @@ SimulaTest(140,"--- Test For-Statement with ControlVariable with Type Conversion
    integer i,k;
    real r;
    long real lr;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
 	class A(i); integer i; begin
 	   ref(A) procedure next; next :- if i=1 then y else none;
@@ -174,8 +177,8 @@ SimulaTest(140,"--- Test For-Statement with ControlVariable with Type Conversion
 
 % =================== For-step-until elements
 
-   r := 1.5
-   lr := 7.49
+   r := 1.5;
+   lr := 7.49;
    for i := lr step r until 10.0 do trace("Case 33,34: i = " & edit(i));
 
    i := 2;

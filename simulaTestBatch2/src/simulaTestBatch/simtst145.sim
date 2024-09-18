@@ -11,6 +11,9 @@ external class SimulaTest;
 SimulaTest(145,"--- Test Label parameter to normal and formal procedure.") begin
    text array facit(0:9);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

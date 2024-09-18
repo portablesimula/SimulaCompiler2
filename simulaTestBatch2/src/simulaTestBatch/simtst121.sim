@@ -13,6 +13,9 @@ external class SimulaTest;
 SimulaTest(121,"--- Test LEGAL GOTO out of an operating Process and the enclosing System.") begin
    integer traceCase;
    text array facit(0:9);
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

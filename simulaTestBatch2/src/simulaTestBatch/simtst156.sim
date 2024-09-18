@@ -13,6 +13,15 @@ external class SimulaTest;
 SimulaTest(156,"--- Test arrays in multiple assignments") begin
 	text array facit(0:15);
 	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+  
+   text procedure edBool(n); boolean n; begin
+   end;
+  
+   text procedure edfix(r,n); real r; integer n; begin
+   end;
    
 	procedure trace(msg); text msg; begin
 		if verbose then
@@ -71,7 +80,7 @@ SimulaTest(156,"--- Test arrays in multiple assignments") begin
 %	c := charARR(4) := 'X';
 %	trace("P1(T)=" & P1("cadabra"));
 	
-	b  := boolARR(4) := true;          trace("b = " & edit(b));
+	b  := boolARR(4) := true;          trace("b = " & edBool(b));
 	i  := intrARR(4) := 666;           trace("i = " & edit(i));
 	r  := realARR(4) := 8.21;          trace("r = " & edfix(r,3));
 	lr := lreaARR(4) := 2.98;          trace("lr = " & edfix(lr,4));
@@ -79,7 +88,7 @@ SimulaTest(156,"--- Test arrays in multiple assignments") begin
 	c  := charARR(4) := 'X';           trace("c = " & edit(c));
 	x  :- refARR(4)  :- new A(333);    trace("x.val = " & edit(x.val));
 	
-	b  := boolPROC;  trace("b = " & edit(b));
+	b  := boolPROC;  trace("b = " & edBool(b));
 	i  := intrPROC;  trace("i = " & edit(i));
 	r  := realPROC;  trace("r = " & edfix(r,3));
 	lr := lreaPROC;  trace("lr = " & edfix(lr,4));

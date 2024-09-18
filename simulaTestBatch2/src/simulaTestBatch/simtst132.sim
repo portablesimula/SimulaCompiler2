@@ -10,6 +10,9 @@ external class SimulaTest;
 SimulaTest(132,"--- Test SPORT Options") begin
    integer traceCase;
    text array facit(0:3);
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

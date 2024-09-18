@@ -1,0 +1,99 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 158
+%
+%  PURPOSE:     Test Specified Virtual Boolean Functions as part of an Expression
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(158,"--- Test Specified Virtual Boolean Functions as part of an Expression") begin
+	text array facit(0:15);
+	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+  
+   text procedure edBool(n); boolean n; begin
+   end;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+
+	ref(A) first;
+	boolean b;
+
+	class A;
+		virtual:
+			procedure virt1 is boolean procedure virt1;;
+			procedure virt2 is boolean procedure virt2(p1,p2); integer p1; real p2;;
+	begin
+		boolean procedure virt1; begin virt1 := b; b := not b; end;
+		boolean procedure virt2(p1,p2); integer p1; real p2; begin virt2 := b; b := not b; end;
+
+		trace("At A'Statements");
+	end;
+	
+% ========================================================
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "At A'Statements";
+	facit(2) :- "b = true";
+	facit(3) :- "b = true";
+	facit(4) :- "b = true";
+	facit(5) :- "b = true";
+	
+	facit(6) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+	first :- new A;
+	b := ( not first.virt1) or b;
+	trace("b = " & edBool(b));
+	
+	b := first.virt1;
+	trace("b = " & edBool(b));
+
+	if not first.virt1 then begin
+		trace("In if not first.virt1");
+	end;
+	
+	while first.virt1 do begin
+		trace("In while first.virt1");
+	end;
+
+% ========================================================
+
+	b := ( not first.virt2(0,0)) imp b;
+	trace("b = " & edBool(b));
+	
+	b := first.virt2(1,2);
+	trace("b = " & edBool(b));
+
+	if not first.virt2(3,3) then begin
+		trace("In if not first.virt2");
+	end;
+	
+	while first.virt2(4,5) do begin
+		trace("In while first.virt2");
+	end;
+
+
+	trace("At END");
+
+ end;

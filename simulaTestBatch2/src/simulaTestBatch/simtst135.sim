@@ -12,6 +12,9 @@ SimulaTest(135,"--- Test Outbytefile with CREATE, APPEND and PURGE.") begin
 
 	integer i,byte;
 	ref(Outbytefile) f1,f2;
+  
+   text procedure edit(n); integer n; begin
+   end;
 	
 	procedure trace(byte); integer byte; begin
 		sysout.outtext("Inbyte: "); sysout.outint(byte,0); sysout.outimage;

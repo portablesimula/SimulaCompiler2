@@ -18,6 +18,9 @@ SimulaTest(133,"--- Test infile reading with inimage and inrecord.") begin
    ref(Infile) fil;   
    integer traceCase;
    text array facit(0:9);
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

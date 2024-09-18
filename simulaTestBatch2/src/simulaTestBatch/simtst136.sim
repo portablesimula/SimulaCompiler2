@@ -13,6 +13,9 @@ SimulaTest(136,"--- Test Directfile with CREATE, APPEND and PURGE.") begin
 	integer i;
 	text expected;
 	ref(Directfile) f1,f2;
+  
+   text procedure edit(n); integer n; begin
+   end;
 	
 	procedure trace(image); text image; begin
 		sysout.outtext("Inimage: "); sysout.outtext(image); sysout.outimage;

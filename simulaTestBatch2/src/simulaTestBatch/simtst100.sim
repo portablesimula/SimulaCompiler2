@@ -33,6 +33,9 @@ SimulaTest(100,"--- Test that put-get-put delivers the identity.") begin
        long real TENPOWER;    !*** 10**signpos ***;
        long real DELTA;       !*** TENPOWER(**(-1) ***;
        boolean up,down;
+  
+   text procedure edit(n); integer n; begin
+   end;
 
        text t,prevt,st,putgetput,heading;  ! local use in testputget ;
        procedure testputget(prevr,up); long real prevr; boolean up;

@@ -1,0 +1,91 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 160
+%
+%  PURPOSE:     Test Specified Virtual Text Functions as part of an Expression
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(160,"--- Test Specified Virtual Text Functions as part of an Expression") begin
+	text array facit(0:15);
+	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+    
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+
+	ref(A) first;
+	text t;
+
+	class A;
+		virtual:
+			procedure virt1 is text procedure virt1;;
+			procedure virt2 is text procedure virt2(p1,p2); integer p1; real p2;;
+	begin
+		text procedure virt1; begin virt1 :- t; t :- t & "0"; end;
+		text procedure virt2(p1,p2); integer p1; real p2; begin virt2 :- t; t :- t & "0"; end;
+
+		trace("At A'Statements");
+	end;
+	
+% ========================================================
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "At A'Statements";
+	facit(2) :- "t = X1X10";
+	facit(3) :- "t = X1X10";
+	facit(4) :- "In if not first.virt1";
+	facit(5) :- "t = ABRA X1X100";
+	facit(6) :- "t = ABRA X1X100";
+	facit(7) :- "In if not first.virt2";
+	
+	facit(8) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+	t :- copy("X1");
+	first :- new A;
+	t :- first.virt1 & t;
+	trace("t = " & t);
+	
+	t :- first.virt1;
+	trace("t = " & t);
+
+	if first.virt1 ne "ABRA" then begin
+		trace("In if not first.virt1");
+	end;
+
+% ========================================================
+
+	t :- "ABRA " & first.virt2(0,0);
+	trace("t = " & t);
+	
+	t :- first.virt2(1,2);
+	trace("t = " & t);
+
+	if first.virt2(3,3) ne "CADAB" then begin
+		trace("In if not first.virt2");
+	end;
+
+
+	trace("At END");
+
+ end;

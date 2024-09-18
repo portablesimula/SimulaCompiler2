@@ -11,6 +11,9 @@ SimulaTest(112,"--- Test Virtual Label - Sample 2") begin
    integer traceCase;
    text array facit(0:8);
    ref(B) x;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

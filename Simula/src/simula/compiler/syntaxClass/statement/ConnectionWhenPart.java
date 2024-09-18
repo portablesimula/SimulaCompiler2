@@ -89,7 +89,7 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 			connectionStatement.inspectedVariable.buildEvaluation(null, codeBuilder);
 			Label elseLabel = codeBuilder.newLabel();
 			codeBuilder
-				.instanceof_(classDeclaration.getClassDesc())
+				.instanceOf(classDeclaration.getClassDesc())
 				.ifeq(elseLabel);
 			
 			connectionBlock.buildByteCode(codeBuilder);

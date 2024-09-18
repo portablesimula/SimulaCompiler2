@@ -16,6 +16,9 @@ SimulaTest(101,"--- Test Standard Procedure 'sourceline'.") begin
    
    text procedure edint(i); integer i;
    begin text t; t:-blanks(2); t.putint(i); edint:-t; end;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(line,msg); integer line; text msg;
    begin

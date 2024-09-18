@@ -12,6 +12,9 @@ SimulaTest(120,"--- Test a very local goto sample") begin
    text array facit(0:9);
    boolean b;
    integer i;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

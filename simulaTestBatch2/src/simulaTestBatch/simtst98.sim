@@ -23,6 +23,9 @@ SimulaTest(98,"--- Test attribute protection. Test visibility of labels.") begin
       
       text programpoint;
       boolean ablock,bblock,cblock,dblock,eblock,fblock;
+  
+   text procedure edit(n); integer n; begin
+   end;
 
       procedure outattr(line,t,i,expected);
       text t; integer line,i,expected;

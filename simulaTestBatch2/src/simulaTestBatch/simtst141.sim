@@ -11,6 +11,9 @@ external class SimulaTest;
 SimulaTest(141,"--- Test For-Statement with SIMSET and SIMULATION list-processing.") begin
    text array facit(0:25);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

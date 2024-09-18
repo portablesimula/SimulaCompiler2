@@ -1,0 +1,86 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 162
+%
+%  PURPOSE:     Test Complicated nested inspection
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(162,"--- Test Complicated nested inspection") begin
+	text array facit(0:17);
+	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+
+	class brecord; begin
+         ref(quantity) declquant;
+	end;
+
+	class quantity; begin
+		ref(brecord)descr;
+		descr :- new brecord;
+		descr.declquant :- this quantity;;
+	end;
+
+	ref(quantity) VC;
+	
+% ========================================================
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "In first inspect VC";
+	facit(2) :- "End first inspect descr";
+	facit(3) :- "In second inspect VC";
+	facit(4) :- "End second inspect descr";
+	
+	facit(5) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+	VC:-new quantity;
+            
+	inspect VC do begin
+		trace("In first inspect VC");
+		inspect descr do begin
+			integer dummy;
+			declquant.descr :- new brecord;
+			descr.declquant :- this quantity;;
+			trace("End first inspect descr");
+		end;
+	end;
+	
+	begin
+		integer dummy;
+		inspect VC do begin     
+			trace("In second inspect VC");
+			inspect descr do begin
+				integer dummy;
+				declquant.descr :- none;
+				trace("End second inspect descr");
+			end;
+		end;
+		
+	end;
+
+	trace("At END");
+
+ end;

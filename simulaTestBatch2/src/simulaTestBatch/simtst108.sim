@@ -11,6 +11,9 @@ SimulaTest(108,"--- Simple Co-Routine Sample 1: detach - call") begin
    integer traceCase;
    text array facit(0:6);
    ref(A) x;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin
@@ -51,7 +54,7 @@ SimulaTest(108,"--- Simple Co-Routine Sample 1: detach - call") begin
       trace("Main: Before second call");
       call(x);
       trace("Main: Before third call");
-      !call(x); !Will cause ERROR: Call(x): x is not in detached state.
+      !call(x); !Will cause ERROR: Call(x): x is not in detached state.;
    end subBlock;
    
    

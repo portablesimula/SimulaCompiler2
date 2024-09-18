@@ -10,6 +10,9 @@ SimulaTest class Pre155;
 begin
 	text array facit(0:14);
 	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
 	   
 	procedure trace(msg); text msg;
 	begin

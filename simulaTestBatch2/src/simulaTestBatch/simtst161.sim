@@ -1,0 +1,102 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 161
+%
+%  PURPOSE:     Test Specified Virtual ref-type Functions as part of an Expression
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(161,"--- Test Specified Virtual ref-type Functions as part of an Expression") begin
+	text array facit(0:17);
+	integer traceCase;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+
+	ref(A) first;
+	ref(A) x;
+
+	class A(i); integer i;
+		virtual:
+			procedure virt1 is ref(A) procedure virt1;;
+			procedure virt2 is ref(A) procedure virt2(p1,p2); integer p1; real p2;;
+	begin
+		ref(A) procedure virt1; begin virt1 :- x; x :- new A(i+1); end;
+		ref(A) procedure virt2(p1,p2); integer p1; real p2; begin virt2 :- x; x :- new A(i+1); end;
+
+		trace("At A'Statements: " & edit(i));
+	end;
+	
+	A class B; begin
+		ref(B) procedure virt1; begin virt1 :- x; x :- new B(i+1); end;
+		ref(B) procedure virt2(p1,p2); integer p1; real p2; begin virt2 :- x; x :- new B(i+1); end;
+
+		trace("At B'Statements: " & edit(i));
+	end;
+	
+% ========================================================
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "At A'Statements: 100";
+	facit(2) :- "At A'Statements: 1";
+	facit(3) :- "At A'Statements: 101";
+	facit(4) :- "x :- first.virt1";
+	facit(5) :- "At A'Statements: 101";
+	facit(6) :- "if first.virt1 =/= none";
+	facit(7) :- "At A'Statements: 200";
+	facit(8) :- "At B'Statements: 200";
+	facit(9) :- "At A'Statements: 300";
+	facit(10) :- "At B'Statements: 300";
+	facit(11) :- "At A'Statements: 201";
+	facit(12) :- "At B'Statements: 201";
+	facit(13) :- "x :- first.virt2";
+	facit(14) :- "At A'Statements: 201";
+	facit(15) :- "At B'Statements: 201";
+	facit(16) :- "if first.virt2 =/= none";
+	
+	facit(17) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+	
+	first :- new A(100);
+	x :- new A(1);
+	
+	x :- first.virt1;
+	trace("x :- first.virt1");
+
+	if first.virt1 =/= none then begin
+		trace("if first.virt1 =/= none");
+	end;
+
+% ========================================================
+
+	first :- new B(200);
+	x :- new B(300);
+	
+	x :- first.virt2(1,2);
+	trace("x :- first.virt2");
+
+	if first.virt2(5,6) =/= none then begin
+		trace("if first.virt2 =/= none");
+	end;
+
+
+	trace("At END");
+
+ end;

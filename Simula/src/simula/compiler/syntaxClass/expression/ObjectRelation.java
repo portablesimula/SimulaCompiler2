@@ -165,7 +165,7 @@ public final class ObjectRelation extends Expression {
 			RTS.invokestatic_UTIL_IS(classDeclaration.getClassDesc(), codeBuilder);
 		} else if(opr == KeyWord.IN) {
 			lhs.buildEvaluation(null,codeBuilder);
-			codeBuilder.instanceof_(classDeclaration.getClassDesc());
+			codeBuilder.instanceOf(classDeclaration.getClassDesc());
 		} else Util.IERR();
 	}
 

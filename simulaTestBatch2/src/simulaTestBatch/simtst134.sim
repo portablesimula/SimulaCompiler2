@@ -13,6 +13,9 @@ SimulaTest(134,"--- Test Outfile with CREATE, APPEND and PURGE.") begin
 	integer i,byte;
 	ref(Outfile) f1,f2;
 	text expected;
+  
+   text procedure edit(n); integer n; begin
+   end;
 	
 	procedure trace(image); text image; begin
 		sysout.outtext("Inimage: "); sysout.outtext(image); sysout.outimage;

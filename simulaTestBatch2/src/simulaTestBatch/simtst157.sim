@@ -13,6 +13,9 @@ external class SimulaTest;
 SimulaTest(157,"--- Test identifier access") begin
 	text array facit(0:15);
 	integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
 	procedure trace(msg); text msg; begin
 		if verbose then

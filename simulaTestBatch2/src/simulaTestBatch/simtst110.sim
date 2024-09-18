@@ -12,6 +12,9 @@ SimulaTest(110,"--- Simple Co-Routine Sample 3: detach - resume - chain") begin
    text array facit(0:11);
    ref(ProducerClass) producer;
    ref(ConsumerClass) consumer;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

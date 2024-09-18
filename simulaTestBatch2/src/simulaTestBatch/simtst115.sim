@@ -11,6 +11,9 @@ SimulaTest(115,"--- Simple QPS-Sample 1") begin
    integer traceCase;
    text array facit(0:8);
    ref(C)  x;
+  
+   text procedure edit(n); integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin

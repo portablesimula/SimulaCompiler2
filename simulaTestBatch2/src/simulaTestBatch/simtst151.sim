@@ -13,6 +13,15 @@ external class SimulaTest;
 SimulaTest(151,"--- Test multiple assignments") begin
    text array facit(0:15);
    integer traceCase;
+  
+   text procedure edit(n); integer n; begin
+   end;
+  
+   text procedure edBool(b); boolean b; begin
+   end;
+  
+   text procedure edfix(r,n); real r; integer n; begin
+   end;
    
    procedure trace(msg); text msg;
    begin
@@ -37,7 +46,7 @@ SimulaTest(151,"--- Test multiple assignments") begin
 		boolean procedure P_BOOL(par_B); boolean par_B; begin
 			boolean P_B;
 			P_B := P_BOOL := par_B := A_B := true;
-			trace("P_B=" & edit(P_B) & ", par_B=" & edit(par_B));
+			trace("P_B=" & edBool(P_B) & ", par_B=" & edBool(par_B));
 		end;
  
 		character procedure P_CHAR(par_C); character par_C; begin
@@ -121,7 +130,7 @@ SimulaTest(151,"--- Test multiple assignments") begin
 
 	x :- new A;
 	b1 := x.P_BOOL(b);
-	trace("x.A_B=" & edit(x.A_B) & ", b1=" & edit(b1));
+	trace("x.A_B=" & edBool(x.A_B) & ", b1=" & edBool(b1));
 
 	c1 := x.P_CHAR(c);
 	trace("x.A_C=" & edit(x.A_C) & ", c1=" & edit(c1));
