@@ -166,7 +166,6 @@ public final class StandardClass extends ClassDeclaration {
 		UNIVERSE.addStandardClass(RTObject); // Declared in UNIVERSE
 		RTObject.isContextFree = true;
 		RTObject.addStandardProcedure(ObjectKind.MemberMethod, Type.Text, "objectTraceIdentifier");
-		RTObject.addStandardProcedure(ObjectKind.MemberMethod, Type.Text, "waitSomeTime",	parameter("millies", Type.Integer));
 		RTObject.addStandardProcedure(ObjectKind.MemberMethod, null, "detach"); // Nødvendig for å kompilere Simuletta
 	}
 	  

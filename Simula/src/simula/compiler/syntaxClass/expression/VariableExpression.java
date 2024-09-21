@@ -333,7 +333,7 @@ public final class VariableExpression extends Expression {
 					Iterator<Expression> actualIterator = params.iterator();
 					LOOP: while (actualIterator.hasNext()) {
 						if (!paramIterator.hasNext()) {
-							Util.error("Too meny parameters to " + decl.identifier);
+							Util.error("Too many parameters to " + decl.identifier);
 							break LOOP;
 						}
 						Parameter formalParameter = (Parameter) paramIterator.next();
@@ -403,6 +403,9 @@ public final class VariableExpression extends Expression {
 				break;
 
 			case ObjectKind.SimpleVariableDeclaration:
+				if(params != null) Util.error("Illegal subscription of variable " + this.identifier);
+				break;
+				
 			case ObjectKind.InspectVariableDeclaration:
 			case ObjectKind.LabelDeclaration:
 				break;

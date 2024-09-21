@@ -1,13 +1,13 @@
 % ===============================================   Main   program =============
 %  PROGRAM NAME:   SIMULA TEST NO 128
 %
-%  PURPOSE: The new standard procedures  edit and edfix
+%  PURPOSE: The new standard procedures waitSomeTime, edit and edfix
 %
 %  WRITTEN BY:  MYH 
 % ==============================================================================
 external class SimulaTest;
 
-SimulaTest(128,"--- Test the new standard procedures  edit and edfix") begin
+SimulaTest(128,"--- Test the new standard procedures waitSomeTime, edit and edfix") begin
    integer traceCase;
    text array facit(0:5);
    
@@ -43,6 +43,7 @@ SimulaTest(128,"--- Test the new standard procedures  edit and edfix") begin
 
    test;
    
+   waitSomeTime(100);
    trace(simulaid);
    
 end;

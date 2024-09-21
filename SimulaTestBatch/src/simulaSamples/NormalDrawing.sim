@@ -1,0 +1,42 @@
+
+Drawing("Normal Drawing",900,900) begin
+	-- This is a simple application of the random drawing procedure 'normal'.
+	
+	integer meanValue = 400;
+	integer standardDeviation = 100;
+	
+	integer baseLine = 850;
+	integer leftMargin = 50;
+	integer width = 2;
+	integer height = 3;
+	integer nColums = meanValue * 2;
+	integer nSamples = 350000;
+	
+	ref(ShapeElement) array dot(0:nColums);
+	integer array acc(0:nColums);
+
+	procedure init; begin
+		integer i;
+		setFillColor(red);
+		for i := 0 step 1 until nColums do begin
+			dot(i) :- fillRectangle(leftMargin + i, baseLine, width, height);
+		end;
+	end;
+	
+	procedure sampler; begin
+		integer x, y, maxAcc, U;
+		while maxAcc < baseLine do begin
+			x := normal(meanValue, standardDeviation, U);
+			if x >= 0 and then x <= nColums then begin
+				acc(x) := acc(x)+1;
+				maxAcc := max(maxAcc, acc(x));
+				y := baseLine - acc(x);
+				dot(x).instantMoveTo(leftMargin + x, y);
+			end;
+		end;
+	end;
+	
+	init;
+	sampler;
+
+end;

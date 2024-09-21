@@ -101,7 +101,7 @@ public class SimulaEditor extends JFrame {
      */
     public static void main(String[] args) {
 		Global.packetName="simprog";
-		String userDir="C:/GitHub/SimulaCompiler/Simula";
+		String userDir="C:/GitHub/SimulaCompiler2/Simula";
 		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime  Download
 		RTOption.InitRuntimeOptions();
     	Option.InitCompilerOptions();
@@ -168,9 +168,9 @@ public class SimulaEditor extends JFrame {
         this.setVisible(true);
         
 		int javaVersion=getJavaVersion();
-		if(javaVersion < 21) {
+		if(javaVersion < 23) {
 			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
-					     +"\nWe recommend at least Java 21."
+					     +"\nWe recommend at least Java 23."
 					     +"\nCheck the settings and consider"
 					     +"\ninstalling a newer version.\n");
 		}
@@ -365,8 +365,13 @@ public class SimulaEditor extends JFrame {
             String remoteReleaseID=remoteProperties.getProperty("simula.version")
             		          +'R'+remoteProperties.getProperty("simula.revision");
         	String remoteSetupDated=remoteProperties.getProperty("simula.setup.dated","?");
-            
-            if(!remoteReleaseID.equalsIgnoreCase(thisReleaseID)) {
+
+        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID="+remoteReleaseID);
+        	Util.println("SimulaEditor.doCheckForNewVersion: thisReleaseID="+thisReleaseID);
+        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID.compareTo(thisReleaseID)="+remoteReleaseID.compareTo(thisReleaseID));
+//            if(!remoteReleaseID.equalsIgnoreCase(thisReleaseID)) {
+            if(remoteReleaseID.compareTo(thisReleaseID) > 0) {
+//            if(remoteReleaseID.compareTo(thisReleaseID) < 0) {
     			String msg = "   A newer version of Simula is available:\n\n"
 				  	       + "   - Installed version: "+thisReleaseID+"\n"
  				  	       + "        Dated: "+thisSetupDated+"\n\n"
@@ -390,7 +395,7 @@ public class SimulaEditor extends JFrame {
 					}
     			}
             }
-        } catch(Exception e) { Util.IERR("Impossible",e); }
+        } catch(Exception e) { }
     }
     
     

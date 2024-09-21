@@ -22,7 +22,6 @@ import javax.tools.ToolProvider;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.statement.ProgramModule;
 import simula.compiler.transform.ClassFileTransform;
-import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;

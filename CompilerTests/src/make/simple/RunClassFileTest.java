@@ -110,7 +110,7 @@ public final class RunClassFileTest {
 		// names.add("/simple/p41.sim");
 		// names.add("/simple/adErr09.sim");
 //		 names.add("/simple/adHoc000.sim");
-		 names.add("/simple/adHoc001.sim");
+//		 names.add("/simple/adHoc001.sim");
 //		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
@@ -171,6 +171,7 @@ public final class RunClassFileTest {
 		// names.add("/simple/InfileSample.sim");
 		// names.add("/simple/InspectionSamples.sim");  
 		// names.add("/simple/LocalObject.sim");
+		 names.add("/simple/NormalDrawing.sim");
 		// names.add("/simple/ParamSample.sim");
 		// names.add("/simple/PrfxBlockSamples.sim");
 		// names.add("/simple/PrintFile.sim");
