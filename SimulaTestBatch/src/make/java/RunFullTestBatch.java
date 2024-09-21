@@ -35,6 +35,7 @@ public final class RunFullTestBatch {
 	public static void main(String[] args) {
 
 		// Set Compiler Options.
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 //		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 		Option.CaseSensitive=true;
@@ -44,7 +45,6 @@ public final class RunFullTestBatch {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;

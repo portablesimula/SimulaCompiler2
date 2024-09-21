@@ -481,7 +481,7 @@ public abstract class DeclarationScope extends Declaration  {
     
     protected void loadOrAddClassFile(byte[] bytes) throws IOException {  // TODO: TESTING
     	if(bytes != null) {
-    		if(Option.internal.USE_SimulaClassLoader) {
+    		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
     				String name = Global.packetName + "." + externalIdent;
     				Global.simulaClassLoader.loadClass(name, bytes, "SourceFile " + Global.sourceFileName);

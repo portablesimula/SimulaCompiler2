@@ -72,8 +72,7 @@ public final class AttributeFileIO {
 		byte[] bytes = buildAttrFile(program);
 		String entryName = program.getRelativeAttributeFileName();
 
-//		if(Option.internal.USE_SimulaClassLoader && Global.simulaClassLoader != null) {
-		if(Option.internal.USE_SimulaClassLoader) {
+   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
 			if(Global.jarFileBuilder!=null) {
 				Global.jarFileBuilder.writeJarEntry(entryName, bytes);
 			}
@@ -158,7 +157,7 @@ public final class AttributeFileIO {
 							+ '[' + module.externalIdent + ']' +"  ==>  "+declarationList.identifier);
 			}
     			
-			if(Option.internal.USE_SimulaClassLoader) {
+	   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
 				JarFileBuilder.addToIncludeQueue(jarFile);
 			} else {
 				Global.jarFileBuilder.expandJarFile(jarFile);

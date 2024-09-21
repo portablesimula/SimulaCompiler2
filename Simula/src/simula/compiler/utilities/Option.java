@@ -29,6 +29,17 @@ import javax.swing.JPanel;
  *
  */
 public final class Option {
+
+    public enum CompilerMode { 
+    	/** Generate Java source and use Java compiler to generate JavaClass files. */					viaJavaSource,
+    	/** Generate JavaClass files directly. No Java source files are generated. */ 					directClassFiles,
+    	/** Generate ClassFile byte array and load it directly. No intermediate files are created. */	simulaClassLoader
+    }
+
+	/**
+	 * The Compiler mode.
+	 */
+	public static CompilerMode compilerMode=CompilerMode.viaJavaSource;
 	
 	/**
 	 * Source file is case sensitive.
@@ -63,19 +74,9 @@ public final class Option {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
 
 		/**
-		 * Use the SimulaClassLoader instead of the executable jar file
-		 */
-		public static boolean USE_SimulaClassLoader = false;
-		
-		/**
 		 * Used to insert code to enforce 'stack size mismatch'
 		 */
 		public static boolean TESTING_STACK_SIZE = false;
-
-		/**
-		 * Create Java source intermediate files
-		 */
-		public static boolean CREATE_JAVA_SOURCE = false;
 
 		/**
 		 * List generated .class files

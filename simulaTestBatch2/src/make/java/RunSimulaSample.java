@@ -53,7 +53,7 @@ public final class RunSimulaSample {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 //		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;

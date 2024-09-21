@@ -96,7 +96,7 @@ public class JarFileBuilder {
 		}
 		jarOutputStream = new JarOutputStream(new FileOutputStream(outputJarFile), manifest);
 		
-		if(!Option.internal.CREATE_JAVA_SOURCE) {
+		if(Option.compilerMode != Option.CompilerMode.viaJavaSource) {
 			// Add initial entry: 
 			String entryName = Global.packetName + '/';
 			writeJarEntry(entryName, null);
@@ -180,7 +180,7 @@ public class JarFileBuilder {
 	 * @throws IOException if something went wrong
 	 */
 	public void addTempClassFiles() throws IOException {
-		if(!Option.internal.CREATE_JAVA_SOURCE) Util.IERR();
+		if(Option.compilerMode != Option.CompilerMode.viaJavaSource) Util.IERR();
 		// ADD TEMP .class FILES
 		add(true, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
 	}	

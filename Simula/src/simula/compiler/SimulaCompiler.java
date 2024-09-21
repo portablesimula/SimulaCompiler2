@@ -245,12 +245,7 @@ public final class SimulaCompiler {
 						+ Global.sourceName);
 			}
 			
-    		if(Option.internal.USE_SimulaClassLoader) {
-//    			if(!programModule.isExecutable()) {
-//    				// Separate Compilation
-//        			Global.jarFileBuilder = new JarFileBuilder();
-//    			}
-    		} else {
+       		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
     			Global.jarFileBuilder = new JarFileBuilder();
     		}
 			
@@ -281,7 +276,7 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Generate .java files or ClassFileBuilder -> jarFile
 			// ***************************************************************
-			if(Option.internal.USE_SimulaClassLoader) {
+	   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
 				if (!programModule.isExecutable()) {
 					// Separate Compilation
 					Global.jarFileBuilder = new JarFileBuilder();
@@ -323,7 +318,7 @@ public final class SimulaCompiler {
 				throw new RuntimeException(msg);
 			}
 			
-			if (!Option.internal.CREATE_JAVA_SOURCE) {
+			if (Option.compilerMode != Option.CompilerMode.viaJavaSource) {
 				if (Option.internal.TRACING)
 					Util.println("BEGIN Generate .class Output Code");
 				// *** Generate .class files
@@ -345,7 +340,7 @@ public final class SimulaCompiler {
 				throw new RuntimeException(msg);
 			}
 
-			if(Option.internal.CREATE_JAVA_SOURCE) {
+			if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
 				// ***************************************************************
 				// *** CALL JAVA COMPILER
 				// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
@@ -362,16 +357,16 @@ public final class SimulaCompiler {
 			// *** CRERATE .jar FILE INLINE
 			// ***************************************************************
 			String jarFile = null;
-    		if(Option.internal.USE_SimulaClassLoader) {
+       		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.jarFileBuilder != null) {
-    				if(Option.internal.CREATE_JAVA_SOURCE) {
+    				if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
     					Global.jarFileBuilder.addTempClassFiles();
     				}
     				outputJarFile = Global.jarFileBuilder.close();
     				jarFile = outputJarFile.toString(); 				
     			}
     		} else {
-				if(Option.internal.CREATE_JAVA_SOURCE) {
+				if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
 					Global.jarFileBuilder.addTempClassFiles();
 				}
 				outputJarFile = Global.jarFileBuilder.close();
@@ -386,7 +381,7 @@ public final class SimulaCompiler {
 			Vector<String> cmds = new Vector<String>();
 			cmds.add("java");
 			cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
-    		if(!Option.internal.USE_SimulaClassLoader) {
+       		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
     			cmds.add("-jar");
     			cmds.add(jarFile);
     		}
@@ -401,7 +396,7 @@ public final class SimulaCompiler {
 			if (Option.internal.SOURCE_FILE.length() > 0) {
 				cmds.add(Option.internal.SOURCE_FILE);
 			}
-    		if(Option.internal.USE_SimulaClassLoader) {
+       		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
     				String name = Global.packetName + '.' + programModule.getIdentifier();
 //    				System.out.println(""+name);

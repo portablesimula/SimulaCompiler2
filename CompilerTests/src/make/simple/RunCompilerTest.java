@@ -37,8 +37,8 @@ public final class RunCompilerTest {
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
@@ -86,6 +86,7 @@ public final class RunCompilerTest {
 		
 		
 		// Set RunTime Options and tracing.
+		RTOption.VERBOSE = false;
 //		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;

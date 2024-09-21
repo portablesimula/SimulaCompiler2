@@ -41,8 +41,8 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.USE_SimulaClassLoader = true;
-//		Option.internal.CREATE_JAVA_SOURCE = true;
+		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
+//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;

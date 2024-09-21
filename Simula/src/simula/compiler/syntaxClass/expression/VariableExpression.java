@@ -303,7 +303,7 @@ public final class VariableExpression extends Expression {
 					paramIterator = cdecl.new ClassParameterIterator();
 				else if (decl instanceof ProcedureDeclaration proc) {
 					paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
-					if(!Option.internal.CREATE_JAVA_SOURCE) {
+					if(Option.compilerMode != Option.CompilerMode.viaJavaSource) {
 						if(decl instanceof StandardProcedure prc) {
 							if(prc.identifier.equalsIgnoreCase("histd")) ; // NOTHING
 							else if(prc.identifier.equalsIgnoreCase("discrete")) ; // NOTHING

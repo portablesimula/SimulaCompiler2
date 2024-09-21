@@ -31,6 +31,7 @@ public final class RunSingleTest {
 	public static void main(String[] args) {
 		
 		// Set options.
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 //		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
@@ -40,7 +41,6 @@ public final class RunSingleTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.internal.CREATE_JAVA_SOURCE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
