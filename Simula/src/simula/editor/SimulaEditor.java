@@ -52,6 +52,7 @@ import simula.compiler.utilities.ConsolePanel;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.runtime.RTS_Option;
 
 
 /**
@@ -106,6 +107,15 @@ public class SimulaEditor extends JFrame {
 		RTOption.InitRuntimeOptions();
     	Option.InitCompilerOptions();
 		Global.sampleSourceDir=new File(userDir+"/src/simulaTestPrograms/samples");
+//		if(RTS_Option.TESTING) {
+			Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+				public void uncaughtException(Thread thread, Throwable e) {
+					System.out.print("SimulaEditor.UncaughtExceptionHandler: GOT Exception: " + e);
+			}});
+//			MAIN_THREAD = Thread.currentThread();
+//			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
+//			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD.UncaughtExceptionHandler="+MAIN_THREAD.getUncaughtExceptionHandler());
+//		}
 		Option.internal.INLINE_TESTING=true;
 		SimulaEditor editor=new SimulaEditor();
     	editor.setVisible(true);

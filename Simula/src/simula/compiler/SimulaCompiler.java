@@ -67,12 +67,6 @@ public final class SimulaCompiler {
 	 * The output .jar file
 	 */
 	private File outputJarFile;
-//	private JarFileBuilder jarFileBuilder;
-	
-	/**
-	 * Main entry name.
-	 */
-	private String mainEntry;
 
 	/**
 	 * Create a new SimulaCompiler.
@@ -682,6 +676,7 @@ public final class SimulaCompiler {
 	 */
 	private void printSummary() {
 		Util.println("------------  COMPILATION SUMMARY  ------------");
+		Util.println("Compiler Mode:   \"" + Option.compilerMode + "\"");
 		if (!programModule.isExecutable()) {
 			Util.println("Separate Compiled " + ObjectKind.edit(programModule.mainModule.declarationKind)
 			                   + " " + programModule  + " is written to: \"" + outputJarFile + "\"");
@@ -689,8 +684,10 @@ public final class SimulaCompiler {
 		} else {
     		if(outputJarFile != null) {
     			Util.println("Resulting File:  \"" + outputJarFile.getAbsolutePath() + "\"");
+    			Util.println("Main Entry:      \"" + Global.jarFileBuilder.mainEntry + "\"");
+    		} else {
+    			Util.println("No executable jar-file is generated");    			
     		}
-			Util.println("Main Entry:      \"" + mainEntry + "\"");
 		}
 //		if(outputJarFile != null) {
 //			JarFileBuilder.listJarFile(outputJarFile);

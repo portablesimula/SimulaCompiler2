@@ -74,7 +74,7 @@ public final class RTS_UTIL {
 			U = NOTEXT;
 		int fromLength = U.LENGTH;
 		
-//		System.out.println("RTS_RTObject: _ASGTXT \""+T.edText()+"\" <=== \""+U.edText()+'"');
+//		System.out.println("RTS_UTIL: _ASGTXT \""+T.edText()+"\" <=== \""+U.edText()+'"');
 		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
@@ -99,7 +99,7 @@ public final class RTS_UTIL {
 		if (s != null)
 			fromLength = s.length();
 		
-//		System.out.println("RTS_RTObject: _ASGSTR \""+T.edText()+"\" <=== \""+s+'"');
+//		System.out.println("RTS_UTIL: _ASGSTR \""+T.edText()+"\" <=== \""+s+'"');
 		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
@@ -327,6 +327,10 @@ public final class RTS_UTIL {
 	}
 	
 	public static void treatException(final Throwable e, final RTS_RTObject obj) {
+		if(RTS_Option.TESTING) {
+			System.out.println("RTS_UTIL.treatException: "+e);
+			Thread.dumpStack();
+		}
 		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
 		if (RTS_Option.GOTO_TRACING) {
 			RTS_UTIL.println("\nRTS_RTObject.treatException: In "+ threadID + e);
@@ -348,7 +352,7 @@ public final class RTS_UTIL {
 				DL._CORUT.run();
 			} else {
 				String msg = "Illegal GOTO " + ((RTS_LABEL) e).identifier;
-//				System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
+//				System.out.println("RTS_UTIL.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
 				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
 					callExceptionHandler(msg);
 				} else {
@@ -357,20 +361,20 @@ public final class RTS_UTIL {
 						e.printStackTrace();
 					
 					if (RTS_Option.GOTO_TRACING) {
-						System.out.println("RTS_RTObject.treatException: Return after 'Illege GOTO' message");
+						System.out.println("RTS_UTIL.treatException: Return after 'Illege GOTO' message");
 					}
 					System.exit(-1);
 				}
 			}
 		} else if (e instanceof RTS_EndProgram) {
 			if (RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.treatException: RTS_EndProgram EXIT");
+				System.out.println("RTS_UTIL.treatException: RTS_EndProgram EXIT");
 			}
 			// NOTHING
 		} else if (e instanceof RuntimeException) {
 			String msg = getErrorMessage(e);
 			msg = msg.replace("RTS_SimulaRuntimeError: ", "");
-//			System.out.println("RTS_RTObject.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
+//			System.out.println("RTS_UTIL.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
 			if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
 				callExceptionHandler(msg);
 			} else {
@@ -404,15 +408,17 @@ public final class RTS_UTIL {
 	 */
 	private static void callExceptionHandler(String msg) {
 		RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
-//		System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
+		if(RTS_Option.TESTING) {
+			System.out.println("RTS_UTIL.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
+		}
 		try {
 			RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
 //			RTS_ENVIRONMENT.IN_EXCEPTION_HANDLER = true;
-//			System.out.println("RTS_RTObject.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
+//			System.out.println("RTS_UTIL.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
 			erh.CPF().setPar(new RTS_TXT(msg))._ENT();
 		} catch (RTS_EndProgram e) {
 			if(RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.callExceptionHandler: callExceptionHandler returned with exception: "+e);
+				System.out.println("RTS_UTIL.callExceptionHandler: callExceptionHandler returned with exception: "+e);
 			}
 			// NOTHING
 		} catch (Throwable t) {
@@ -438,13 +444,16 @@ public final class RTS_UTIL {
 	}
 
 	// *********************************************************************
-	// *** endProgram XXXXXX
+	// *** endProgram
 	// *********************************************************************
 	/**
 	 * End of Simula program execution.
 	 * @param exitValue the exit value
 	 */
 	static void endProgram(final int exitValue) {
+		if(RTS_Option.TESTING) {
+			System.out.println("RTS_UTIL.endProgram: "+exitValue);
+		}
 		// _SYSIN.close();
 		// _SYSOUT.close();
 		RTS_BASICIO._SYSOUT.outimage();
@@ -461,7 +470,7 @@ public final class RTS_UTIL {
 			RTS_UTIL.println("End program: WARNING " + RTS_UTIL.numberOfEditOverflows + " EditOverflows");
 		if (RTS_UTIL.console == null) {
 			if(RTS_Option.GOTO_TRACING) {
-				System.out.println("RTS_RTObject.endProgram: "+exitValue);
+				System.out.println("RTS_UTIL.endProgram: "+exitValue);
 			}
 
 			throw new RTS_EndProgram("Simula - endProgram");				
@@ -469,6 +478,7 @@ public final class RTS_UTIL {
 	}
 
 
+	public static Thread MAIN_THREAD; // TODO: RTS_Option.TESTING
 	// ************************************************************
 	// *** BPRG -- Begin Program
 	// ************************************************************
@@ -479,13 +489,25 @@ public final class RTS_UTIL {
 	 * @param ident the program identifier
 	 */
 	public static void BPRG(final String ident, final String[] args) {
-//		System.out.println("RTS_UTIL.BPRG: "+ident);
+		if(RTS_Option.TESTING) {
+			System.out.println("RTS_UTIL.BPRG: "+ident);
+		}
 		setRuntimeOptions(args);
 		RTS_Coroutine.INIT();
 		RTS_UTIL.numberOfEditOverflows = 0;
 		RTS_RTObject.startTimeMs = System.currentTimeMillis();
 //		RTS_RTObject._CTX = new RTS_BASICIO(null);
-//		Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(prog));
+		if(RTS_Option.TESTING) {
+			Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+				public void uncaughtException(Thread thread, Throwable e) {
+					System.out.print("RTS_UTIL.UncaughtExceptionHandler: GOT Exception: " + e);
+			}});
+			MAIN_THREAD = Thread.currentThread();
+			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
+			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD.UncaughtExceptionHandler="+MAIN_THREAD.getUncaughtExceptionHandler());
+		} else {
+//			Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(prog));
+		}
 		RTS_UTIL.progamIdent = ident;
 		if (RTS_Option.BLOCK_TRACING)
 			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
@@ -870,6 +892,7 @@ public final class RTS_UTIL {
 		Thread[] t = new Thread[50];
 		int i = Thread.enumerate(t);
 		RTS_UTIL.println("ACTIVE THREAD LIST:");
+		System.out.println("ACTIVE THREAD LIST:");
 		for (int j = 0; j < i; j++) {
 			Thread T = t[j];
 			String msg = "  - " + T;

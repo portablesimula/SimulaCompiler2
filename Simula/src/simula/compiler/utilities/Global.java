@@ -25,6 +25,7 @@ import simula.compiler.JarFileBuilder;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
 import simula.compiler.syntaxClass.statement.ProgramModule;
+import simula.editor.RTOption;
 
 /**
  * Global Variables.
@@ -387,7 +388,7 @@ public final class Global {
 		// <user.home>/simula/simula-2.0
 		String USER_HOME = System.getProperty("user.home");
 		File simulaPropertiesDir = new File(USER_HOME, "simula/simula-2.0");
-		System.out.println("Global.getSimulaPropertiesFile: simulaPropertiesDir=" + simulaPropertiesDir);
+//		System.out.println("Global.getSimulaPropertiesFile: simulaPropertiesDir=" + simulaPropertiesDir);
 		simulaPropertiesDir.mkdirs();
 		simulaPropertiesFile = new File(simulaPropertiesDir, "simulaProperties.xml");
 		if (!simulaPropertiesFile.exists()) {
@@ -408,6 +409,7 @@ public final class Global {
 			simulaProperties.loadFromXML(new FileInputStream(simulaPropertiesFile));
 		} catch (Exception e) {
 			Util.popUpError("Can't load: " + simulaPropertiesFile + "\nGot error: " + e);
+			Thread.dumpStack();
 		}
 	}
 
@@ -432,10 +434,18 @@ public final class Global {
 		String USER_HOME = System.getProperty("user.home");
 		File simulaPropertiesDir = new File(USER_HOME, ".simula");
 		simulaWorkspacesFile = new File(simulaPropertiesDir, "workspaces.xml");
+//		System.out.println("Global.loadWorkspaceProperties: " + simulaWorkspacesFile);
+//		Thread.dumpStack();
 		workspaces = new ArrayDeque<File>();
 		if (simulaWorkspacesFile.exists()) {
 			try {
+				Option.getCompilerOptions(simulaProperties);
 				simulaWorkspaces.loadFromXML(new FileInputStream(simulaWorkspacesFile));
+				
+//				simulaWorkspaces.list(System.out);
+				Option.getCompilerOptions(simulaWorkspaces);
+				RTOption.getRuntimeOptions(simulaWorkspaces);
+				
 				String ext = simulaWorkspaces.getProperty("simula.extLib", null);
 				// Util.println("Global.loadWorkspaceProperties: extLib="+ext);
 				if (ext != null)
@@ -494,18 +504,18 @@ public final class Global {
 	 */
 	public static void storeWorkspaceProperties() {
 		simulaWorkspaces = new Properties();
-		int i = 1;
-		// Util.println("Global.storeWorkspaceProperties:
-		// extLib="+Global.extLib.toString());
+		Option.setCompilerOptions(simulaWorkspaces);
+		RTOption.setRuntimeOptions(simulaWorkspaces);
 		if (Global.extLib != null)
 			simulaWorkspaces.setProperty("simula.extLib", Global.extLib.toString());
+		int i = 1;
 		for (File ws : workspaces) {
 			simulaWorkspaces.setProperty("simula.workspace." + (i++), ws.toString());
 		}
 		Global.currentWorkspace = workspaces.getFirst();
 		simulaWorkspacesFile.getParentFile().mkdirs();
 		try {
-			simulaWorkspaces.storeToXML(new FileOutputStream(simulaWorkspacesFile), "Simula Workspaces");
+			simulaWorkspaces.storeToXML(new FileOutputStream(simulaWorkspacesFile), "Simula Editor Properties");
 		} catch (Exception e) {
 			Util.IERR();
 		}

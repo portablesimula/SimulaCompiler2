@@ -164,7 +164,7 @@ public class RTS_Coroutine implements Runnable {
 					detach();
 				}
 			};
-//			if(_RT.Option.USE_VIRTUAL_THREAD) {
+//			if(! RTS_Option.TESTING) {
 			targetThread = Thread.startVirtualThread(runner);
 //			} else {
 //				targetThread=new Thread(runner);

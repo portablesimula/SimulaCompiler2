@@ -10,6 +10,7 @@ package simula.editor;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Properties;
 import java.util.Vector;
 
 import javax.swing.BoxLayout;
@@ -17,6 +18,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
@@ -72,6 +75,32 @@ public final class RTOption {
 			args.add(SPORT_SOURCE_FILE);
 		}
 	}
+	
+	/**
+	 * Get Compiler options from property file.
+	 */
+	public static void getRuntimeOptions(Properties properties) {
+//		System.out.println("Option.getRuntimeOptions(properties)");	
+		RTOption.VERBOSE = properties.getProperty("simula.runtime.option.VERBOSE", "false").equalsIgnoreCase("true");
+		RTOption.USE_CONSOLE = properties.getProperty("simula.runtime.option.USE_CONSOLE", "true").equalsIgnoreCase("true");
+		RTOption.BLOCK_TRACING = properties.getProperty("simula.runtime.option.BLOCK_TRACING", "false").equalsIgnoreCase("true");
+		RTOption.GOTO_TRACING = properties.getProperty("simula.runtime.option.GOTO_TRACING", "false").equalsIgnoreCase("true");
+		RTOption.QPS_TRACING = properties.getProperty("simula.runtime.option.QPS_TRACING", "false").equalsIgnoreCase("true");
+		RTOption.SML_TRACING = properties.getProperty("simula.runtime.option.SML_TRACING", "false").equalsIgnoreCase("true");
+	}
+	
+	/**
+	 * Set Compiler options in property file.
+	 */
+	public static void setRuntimeOptions(Properties properties) {
+//		System.out.println("Option.setRuntimeOptions(properties)");
+		properties.setProperty("simula.runtime.option.VERBOSE", ""+RTOption.VERBOSE);
+		properties.setProperty("simula.runtime.option.USE_CONSOLE", ""+RTOption.USE_CONSOLE);
+		properties.setProperty("simula.runtime.option.BLOCK_TRACING", ""+RTOption.BLOCK_TRACING);
+		properties.setProperty("simula.runtime.option.GOTO_TRACING", ""+RTOption.GOTO_TRACING);
+		properties.setProperty("simula.runtime.option.QPS_TRACING", ""+RTOption.QPS_TRACING);
+		properties.setProperty("simula.runtime.option.SML_TRACING", ""+RTOption.SML_TRACING);
+	}
     
 	/**
 	 * Editor Utility: Select Runtime Options.
@@ -87,6 +116,7 @@ public final class RTOption {
         panel.add(checkBox("SML_TRACING"));
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		Util.optionDialog(panel,"Select Runtime Options",JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE,"Ok");
+    	Global.storeWorkspaceProperties();
     }
 
 	/**

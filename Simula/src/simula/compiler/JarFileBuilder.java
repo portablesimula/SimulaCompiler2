@@ -45,7 +45,7 @@ public class JarFileBuilder {
 	/**
 	 * Main entry name.
 	 */
-	private String mainEntry;
+	String mainEntry;
 
 	/**
 	 * The intermediate classFileMap.

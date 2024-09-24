@@ -13,11 +13,18 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.util.Enumeration;
+import java.util.Properties;
 
+import javax.swing.AbstractButton;
 import javax.swing.BoxLayout;
+import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+import javax.swing.JTextArea;
 
 /**
  * Compile Time Options.
@@ -39,7 +46,9 @@ public final class Option {
 	/**
 	 * The Compiler mode.
 	 */
-	public static CompilerMode compilerMode=CompilerMode.viaJavaSource;
+//	public static CompilerMode compilerMode=CompilerMode.viaJavaSource;
+	public static CompilerMode compilerMode=CompilerMode.directClassFiles;
+//	public static CompilerMode compilerMode=CompilerMode.simulaClassLoader;
 	
 	/**
 	 * Source file is case sensitive.
@@ -157,7 +166,6 @@ public final class Option {
 
 			// Coder Trace Options
 			Option.internal.TRACE_CODING=false;
-
 		}
 
 	}
@@ -171,6 +179,9 @@ public final class Option {
 	 * Initiate Compiler options.
 	 */
 	public static void InitCompilerOptions() {
+//		CompilerMode compilerMode=CompilerMode.viaJavaSource;
+		compilerMode=CompilerMode.directClassFiles;
+//		compilerMode=CompilerMode.simulaClassLoader;
 		Option.CaseSensitive=false;
 		Option.verbose = false;
 		Option.noExecution = false;
@@ -179,6 +190,98 @@ public final class Option {
 		
 		Option.internal.InitCompilerOptions();
 	}
+	
+	/**
+	 * Get Compiler options from property file.
+	 */
+	public static void getCompilerOptions(Properties properties) {
+//		System.out.println("Option.getCompilerOptions(properties)");
+		setCompilerMode(properties.getProperty("simula.compiler.option.mode", "directClassFiles"));
+		Option.CaseSensitive = properties.getProperty("simula.compiler.option.CaseSensitive", "false").equalsIgnoreCase("true");
+		Option.verbose = properties.getProperty("simula.compiler.option.verbose", "false").equalsIgnoreCase("true");
+		Option.noExecution = properties.getProperty("simula.compiler.option.noExecution", "false").equalsIgnoreCase("true");
+		Option.WARNINGS = properties.getProperty("simula.compiler.option.WARNINGS", "false").equalsIgnoreCase("true");
+		Option.EXTENSIONS = properties.getProperty("simula.compiler.option.EXTENSIONS", "true").equalsIgnoreCase("true");
+	}
+	
+	/**
+	 * Set Compiler options in property file.
+	 */
+	public static void setCompilerOptions(Properties properties) {
+//		System.out.println("Option.setCompilerOptions(properties)");
+		properties.setProperty("simula.compiler.option.mode", ""+Option.compilerMode);
+		properties.setProperty("simula.compiler.option.CaseSensitive", ""+Option.CaseSensitive);
+		properties.setProperty("simula.compiler.option.verbose", ""+Option.verbose);
+		properties.setProperty("simula.compiler.option.noExecution", ""+Option.noExecution);
+		properties.setProperty("simula.compiler.option.WARNINGS", ""+Option.WARNINGS);
+		properties.setProperty("simula.compiler.option.EXTENSIONS", ""+Option.EXTENSIONS);
+	}
+
+	/**
+	 * Editor Utility: Set Compiler Mode.
+	 */
+	public static void setCompilerMode() {
+		JPanel panel=new JPanel();
+		panel.setBackground(Color.white);
+		JCheckBox but1 = checkBox("viaJavaSource","Generate Java source and use Java compiler to generate JavaClass files.");
+		JCheckBox but2 = checkBox("directClassFiles","Generate JavaClass files directly. No Java source files are generated.");
+		JCheckBox but3 = checkBox("simulaClassLoader","Generate ClassFile byte array and load it directly. No intermediate files are created.");
+
+		if(Option.compilerMode == CompilerMode.viaJavaSource) but1.setSelected(true);
+		else if(Option.compilerMode == CompilerMode.directClassFiles) but2.setSelected(true);
+		else if(Option.compilerMode == CompilerMode.simulaClassLoader) but3.setSelected(true);
+		
+		ButtonGroup buttonGroup = new ButtonGroup();
+		panel.add(but1); buttonGroup.add(but1);
+//		panel.add(new JTextArea("Generate Java source and use Java compiler to generate JavaClass files."));
+		panel.add(new JLabel("   The Simula Compiler will generate Java source files and use"));
+		panel.add(new JLabel("   the Java compiler to generate JavaClass files which in turn"));
+		panel.add(new JLabel("   are collected together with the Runtime System into the"));
+		panel.add(new JLabel("   resulting executable jar-file."));
+		panel.add(new JLabel(" "));
+		panel.add(but2); buttonGroup.add(but2);
+		panel.add(new JLabel("   The Simula Compiler will generate JavaClass files directly"));
+		panel.add(new JLabel("   which in turn are collected together with the Runtime System"));
+		panel.add(new JLabel("   into the resulting executable jar-file."));
+		panel.add(new JLabel("   No Java source files are generated."));
+		panel.add(new JLabel(" "));
+		panel.add(but3); buttonGroup.add(but3);
+		panel.add(new JLabel("   The Simula Compiler will generate ClassFile byte array and"));
+		panel.add(new JLabel("   load it directly. No intermediate files are created."));
+		panel.add(new JLabel(" "));
+		panel.add(new JLabel("   NOTE:   In this mode, the editor will terminate after the first"));
+		panel.add(new JLabel("                  program execution"));
+		panel.add(new JLabel(" "));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		Util.optionDialog(panel,"Select Compiler Mode",JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE,"Ok");
+    	Global.storeWorkspaceProperties();
+	}
+
+	/**
+	 * Editor Utility: Set Compiler Mode.
+	 */
+	public static void setCompilerMode(String id) {
+//		System.out.println("Option.setCompilerMode: "+id);
+		if(id.equals("viaJavaSource")) {
+			Option.compilerMode = CompilerMode.viaJavaSource;
+		} else if(id.equals("directClassFiles")) {
+			Option.compilerMode = CompilerMode.directClassFiles;
+		} else if(id.equals("simulaClassLoader")) {
+			Option.compilerMode = CompilerMode.simulaClassLoader;
+		}
+	}
+	
+	public String getSelectedButtonText(ButtonGroup buttonGroup) {
+        for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
+            AbstractButton button = buttons.nextElement();
+
+            if (button.isSelected()) {
+                return button.getText();
+            }
+        }
+
+        return null;
+    }
 
 	/**
 	 * Returns the option name 'id'
@@ -255,6 +358,7 @@ public final class Option {
 		}
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		Util.optionDialog(panel,"Select Compiler Options",JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE,"Ok");
+    	Global.storeWorkspaceProperties();
 	}
 
 	/**
@@ -264,12 +368,27 @@ public final class Option {
 	 * @return the resulting check box
 	 */
 	private static JCheckBox checkBox(String id,String tooltip) {
+		return checkBox(id, tooltip,Option.getOption(id));
+	}
+
+		/**
+		 * Editor Utility: Create a checkBox with tooltips.
+		 * @param id option id
+		 * @param tooltip option's tooltip or null
+		 * @return the resulting check box
+		 */
+		private static JCheckBox checkBox(String id,String tooltip,boolean selected) {
         JCheckBox item = new JCheckBox(id);
     	item.setBackground(Color.white);
-        item.setSelected(Option.getOption(id));
+        item.setSelected(selected);
         item.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
+        		if(id.equals("viaJavaSource") || id.equals("directClassFiles") || id.equals("simulaClassLoader")) {
+            		if(Option.verbose) Util.println("Compiler Mode: "+id);
+        			Option.setCompilerMode(id);
+        		} else {
         		Option.setOption(id,item.isSelected());
+        		}
 		}});
         if(tooltip != null) item.setToolTipText(tooltip);
         item.addMouseListener(new MouseAdapter() {
