@@ -106,6 +106,15 @@ public abstract class ClassHierarchy {
 	// ***********************************************************************************************
 	private static Vector<Node> allNodes;
 	
+	public static void list() {
+		for (Map.Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
+			String key = entry.getKey().descriptorString();
+			String val = entry.getValue().descriptorString();
+//		     System.out.printf("%-15s : %s%n", entry.getKey(), entry.getValue());
+		     System.out.println(key + " extends " +val);
+		}
+	}
+	
 	public static void print() {
 		allNodes = new Vector<Node>();
 		Node top = lookup("_TOP");

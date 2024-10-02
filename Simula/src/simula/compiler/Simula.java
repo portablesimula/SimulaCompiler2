@@ -10,6 +10,8 @@ package simula.compiler;
 import java.io.File;
 import java.io.IOException;
 
+import javax.swing.JLabel;
+
 import simula.compiler.parsing.SimulaScanner;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -85,6 +87,7 @@ public final class Simula {
 		Util.println("possible options include:");
 		Util.println("  -help                      Print this synopsis of standard options");
 		Util.println("  -caseSensitive             Source file is case sensitive.");	
+		Util.println("  -compilerMode modeString   Simula Compiler mode *) see below.");	
 		Util.println("  -noexec                    Don't execute generated .jar file");
 		Util.println("  -nowarn                    Generate no warnings");
 		Util.println("  -noextension               Disable all language extensions");
@@ -102,7 +105,32 @@ public final class Simula {
 		Util.println("  -extLib <directory>        Specify where to search for precompiled classes and procedures");
 		Util.println("                             If not found, output directory is also searched");
 		Util.println("");
-		Util.println("sourceFile      Simula Source File");
+		Util.println("sourceFile ::= Simula Source File");
+		Util.println("");
+		Util.println("modeString ::= viaJavaSource | directClassFiles | simulaClassLoader");
+		Util.println("");
+		Util.println("");
+		Util.println("viaJavaSource");
+		Util.println("   The Simula Compiler will generate Java source files and use");
+		Util.println("   the Java compiler to generate JavaClass files which in turn");
+		Util.println("   are collected together with the Runtime System into the");
+		Util.println("   resulting executable jar-file.");
+		Util.println("");
+		Util.println("");
+		Util.println("directClassFiles");
+		Util.println("   The Simula Compiler will generate JavaClass files directly");
+		Util.println("   which in turn are collected together with the Runtime System");
+		Util.println("   into the resulting executable jar-file.");
+		Util.println("   No Java source files are generated.");
+		Util.println("");
+		Util.println("");
+		Util.println("simulaClassLoader");
+		Util.println("   The Simula Compiler will generate ClassFile byte array and");
+		Util.println("   load it directly. No intermediate files are created.");
+		Util.println("");
+		Util.println("   NOTE: In this mode, the editor will terminate after the first");
+		Util.println("         program execution");
+
 		System.exit(0);
 	}
 
@@ -116,6 +144,7 @@ public final class Simula {
 		Option.WARNINGS=false;
 		Option.EXTENSIONS=true;
 		Global.initSimulaProperties();
+		boolean noConsole = false;
 
 		// Parse command line arguments.
 		for(int i=0;i<argv.length;i++) {
@@ -123,6 +152,7 @@ public final class Simula {
 			if (arg.charAt(0) == '-') { // command line option
 				if (arg.equalsIgnoreCase("-help")) help();
 				else if (arg.equalsIgnoreCase("-caseSensitive")) Option.CaseSensitive=true;
+				else if (arg.equalsIgnoreCase("-compilerMode")) Option.setCompilerMode(argv[++i]);
 				else if (arg.equalsIgnoreCase("-noexec")) Option.noExecution=true;
 				else if (arg.equalsIgnoreCase("-nowarn")) Option.WARNINGS=false;
 				else if (arg.equalsIgnoreCase("-noextension")) Option.EXTENSIONS=false;
@@ -135,13 +165,22 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
 				else if (arg.equalsIgnoreCase("-extLib")) Global.extLib=new File(argv[++i]);
 				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
+				else if (arg.equalsIgnoreCase("-runtimeUserDir")) Option.internal.RUNTIME_USER_DIR=argv[++i];
+
+//				else if (arg.equalsIgnoreCase("-noConsole")) RTOption.USE_CONSOLE = false;
+				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
 
 				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: Change when ClassFile API is released
 
-				else error("Unknown option "+arg);
+//				else error("Unknown option "+arg);
+				else {
+					System.out.println("ERROR: Unknown option " + arg);
+					help();
+				}
 			} else if(fileName==null) fileName = arg;
 			else error("multiple input files specified");
-		}	
+		}
+		
 	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"rts");
 	    
 		if (fileName == null) {
@@ -152,6 +191,7 @@ public final class Simula {
 			SimulaEditor editor = new SimulaEditor();
 			editor.setVisible(true);
 		} else {
+			RTOption.USE_CONSOLE = ! noConsole;			
 			// *** STARTING SIMULA COMPILER ***
 			try {
 				new SimulaCompiler(fileName).doCompile();

@@ -87,7 +87,7 @@ public final class RunCompilerTest {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -118,8 +118,9 @@ public final class RunCompilerTest {
 
 //		 names.add("/simple/p41.sim");
 //		 names.add("/simple/adErr09.sim");
-		 names.add("/simple/adHoc000.sim");
-//		 names.add("/simple/adHoc00.sim");
+//		 names.add("/simple/adHoc000.sim");
+//		 names.add("/simple/adHoc001.sim");
+		 names.add("/simple/adHoc00.sim");
 //		 names.add("/simple/adHoc01.sim");
 //		 names.add("/simple/adHoc02.sim");
 //		 names.add("/simple/adHoc03.sim");

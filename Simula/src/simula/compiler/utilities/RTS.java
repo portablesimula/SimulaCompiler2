@@ -11,7 +11,7 @@ import simula.compiler.syntaxClass.Type;
 public class RTS {
 	
 	public class CD {
-		public static final ClassDesc RTS_UTIL		 = ClassDesc.of("simula.runtime.RTS_UTIL");
+		public static final ClassDesc RTS_UTIL			 = ClassDesc.of("simula.runtime.RTS_UTIL");
 		public static final ClassDesc RTS_RTObject       = ClassDesc.of("simula.runtime.RTS_RTObject");
 		public static final	ClassDesc RTS_ENVIRONMENT    = ClassDesc.of("simula.runtime.RTS_ENVIRONMENT"); 
 		public static final	ClassDesc RTS_BASICIO        = ClassDesc.of("simula.runtime.RTS_BASICIO");

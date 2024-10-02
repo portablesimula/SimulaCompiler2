@@ -552,11 +552,14 @@ public class RTS_Drawing extends RTS_Simset {
 					System.out.println("windowClosing.WindowsEvent: " + e);
 				if (e.getID() == WindowEvent.WINDOW_CLOSING) {
 					if(RTS_Option.TESTING) {
-						System.out.println("RTS_DRAWING.WINDOW_CLOSING: "+SL);
-						Thread MAIN_THREAD = RTS_UTIL.MAIN_THREAD;
-						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-						Thread.UncaughtExceptionHandler handler = MAIN_THREAD.getUncaughtExceptionHandler();
-						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD.UncaughtExceptionHandler="+handler);
+//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: RuntimeConsole="+RTS_UTIL.console);
+//						if(RTS_UTIL.console != null) {
+//							RTS_UTIL.console.show(false);
+//						}
+//						Thread MAIN_THREAD = RTS_UTIL.MAIN_THREAD;
+//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
+//						Thread.UncaughtExceptionHandler handler = MAIN_THREAD.getUncaughtExceptionHandler();
+//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD.UncaughtExceptionHandler="+handler);
 //						handler.uncaughtException(Thread.currentThread(), new RTS_EndProgram("Drawing - endProgram"));
 					} else {
 //						throw new RTS_EndProgram("Simula - endProgram");

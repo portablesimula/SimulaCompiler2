@@ -10,7 +10,7 @@ import simula.runtime.RTS_EndProgram;
  * SimulaClassLoader.
  */
 public class SimulaClassLoader extends ClassLoader {
-	private final static boolean TESTING = false;//true;//false;
+	private final static boolean TESTING = false;
 	
 	/**
 	 * Default Constructor.
@@ -18,7 +18,7 @@ public class SimulaClassLoader extends ClassLoader {
 	public SimulaClassLoader() {}
 	
 	public void loadClass(String name, byte[] bytes, String origin) {
-//		System.out.println("SimulaClassLoader.loadClass: " + name + " from  " + origin);
+		if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " from  " + origin);
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		if(clazz != null) {
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " FAILED: " + clazz);

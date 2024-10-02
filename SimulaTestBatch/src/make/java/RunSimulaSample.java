@@ -14,6 +14,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.editor.RTOption;
 
 /**
  * Run inline compiler tests.
@@ -27,7 +28,7 @@ public final class RunSimulaSample {
 
 		// *** SIMULA PROGRAMMER TIL RELEASE TESTING
 //		String name="AnimationTest.sim";
-//		String name="Atkins.sim";
+		String name="Atkins.sim";
 //		String name="Dates.sim";
 //		String name="DatesTest.sim";
 //		String name="Docking.sim";    // FEILER
@@ -37,7 +38,7 @@ public final class RunSimulaSample {
 //		String name="InfectionDisease.sim";
 //		String name="JensensDevice.sim";
 //		String name="LiftSimulation.sim";
-		String name="NormalDrawing.sim";
+//		String name="NormalDrawing.sim";
 //		String name="PrimeUnder.sim";
 //		String name="Quine.sim";
 //		String name="Sudoku.sim";
@@ -45,7 +46,9 @@ public final class RunSimulaSample {
 //		String name="TQueens.sim";
 
 		// Set Compiler Options.
-		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+		Option.compilerMode = Option.CompilerMode.directClassFiles;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 //		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
@@ -73,7 +76,8 @@ public final class RunSimulaSample {
 			
 			
 		// Set RunTime Options and tracing.
-//		RTOption.VERBOSE = true;
+		RTOption.VERBOSE = false;
+		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = false;

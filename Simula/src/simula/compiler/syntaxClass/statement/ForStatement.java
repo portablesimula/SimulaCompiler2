@@ -10,7 +10,6 @@ package simula.compiler.syntaxClass.statement;
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;

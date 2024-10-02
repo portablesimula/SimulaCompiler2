@@ -1,28 +1,19 @@
 
 begin
-
-	ref(statement) first, last;
-	boolean b;
-
-%	class statement; virtual: procedure recover is boolean procedure recover;;
-	class statement; virtual: procedure recover;
-	begin
-%		boolean procedure recover; begin recover := b; b := not b; end;
-%		integer procedure recover; begin recover := 444; end;
-		
-		ref(statement) next;
-%		b := recover;
-		while recover do begin end;
-	end;
+	integer MAX = 50000;
+	integer k, n2;
+	integer x = 49458;
+	integer y = 49729;
 	
-	last :- new statement;
-%	while not last.recover do begin
-	while     last.recover do begin
-		sysout.outtext("Abra"); sysout.outimage;
-%		last.next:-none;
-%	end;
-%	sysout.outtext("CaDab"); sysout.outimage;
-%	b := ( not last.recover) or b;
-%	b := last.recover;
+	integer z;
+	
+	z := x * y;
+	
+	outtext("" & edit(z) ); outimage;
+
+	n2 := 49458;
+    for k := n2 step n2 until MAX do begin 
+    	outtext("Line" & edit(sourceLine) & " k=" & edit(k) ); outimage;
+    end;
 
 end;

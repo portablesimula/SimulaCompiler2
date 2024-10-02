@@ -356,7 +356,7 @@ public class SimulaEditor extends JFrame {
     /**
      * Check for new version of the Simula System.
      * <p>
-     * The Simula site at GitHub is contacted and the current Simula Release ID is checked against this vesrion.
+     * The Simula site at GitHub is contacted and the current Simula Release ID is checked against this version.
      * If not equal question dialog panel is poped up.
      */
     void doCheckForNewVersion() {
@@ -376,9 +376,9 @@ public class SimulaEditor extends JFrame {
             		          +'R'+remoteProperties.getProperty("simula.revision");
         	String remoteSetupDated=remoteProperties.getProperty("simula.setup.dated","?");
 
-        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID="+remoteReleaseID);
-        	Util.println("SimulaEditor.doCheckForNewVersion: thisReleaseID="+thisReleaseID);
-        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID.compareTo(thisReleaseID)="+remoteReleaseID.compareTo(thisReleaseID));
+//        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID="+remoteReleaseID);
+//        	Util.println("SimulaEditor.doCheckForNewVersion: thisReleaseID="+thisReleaseID);
+//        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID.compareTo(thisReleaseID)="+remoteReleaseID.compareTo(thisReleaseID));
 //            if(!remoteReleaseID.equalsIgnoreCase(thisReleaseID)) {
             if(remoteReleaseID.compareTo(thisReleaseID) > 0) {
 //            if(remoteReleaseID.compareTo(thisReleaseID) < 0) {

@@ -169,7 +169,8 @@ public class RTS_Printfile extends RTS_Outfile {
 			if (RTS_UTIL.console != null)
 				writer = RTS_UTIL.console.getWriter();
 			else
-				writer = new PrintWriter(System.out, true, _CHARSET);
+//				writer = new PrintWriter(System.out, true, _CHARSET);
+				writer = System.console().writer();
 		} else if (fileName.toUpperCase().startsWith("CONSOLE: ")) {
 			RTS_ConsolePanel console = new RTS_ConsolePanel();
 			String title = fileName.substring(9);

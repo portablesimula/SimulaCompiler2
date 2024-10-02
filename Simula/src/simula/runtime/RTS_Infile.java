@@ -54,6 +54,11 @@ import java.io.Reader;
 public class RTS_Infile extends RTS_Imagefile {
 	
 	/**
+	 * True: this Infile is Sysin.
+	 */
+	private boolean readFromSystem;
+	
+	/**
 	 * The BufferedReader used.
 	 */
 	private BufferedReader lineReader;
@@ -112,12 +117,14 @@ public class RTS_Infile extends RTS_Imagefile {
 		RTS_UTIL._ASGTXT(image, null); // image := NOTEXT;
 		setpos(length() + 1);
 
-		Reader reader;
 		if (FILE_NAME.edText().equalsIgnoreCase("#sysin")) {
-			if (RTS_UTIL.console != null)
-				reader = RTS_UTIL.console.getReader();
-			else
-				reader = new InputStreamReader(System.in, _CHARSET);
+			if (RTS_UTIL.console != null) {
+				Reader reader = RTS_UTIL.console.getReader();
+				lineReader = new BufferedReader(reader);
+			} else {
+//				reader = new InputStreamReader(System.in, _CHARSET);
+				readFromSystem = true;
+			}
 		} else {
 			File file = doCreateAction();
 			if (!file.exists()) {
@@ -126,7 +133,8 @@ public class RTS_Infile extends RTS_Imagefile {
 					file = selected;
 			}
 			try {
-				reader = new FileReader(file, _CHARSET);
+				Reader reader = new FileReader(file, _CHARSET);
+				lineReader = new BufferedReader(reader);
 			} catch (IOException e) {
 				if (RTS_Option.VERBOSE)
 					e.printStackTrace();
@@ -134,7 +142,6 @@ public class RTS_Infile extends RTS_Imagefile {
 				return (false);
 			}
 		}
-		lineReader = new BufferedReader(reader);
 		_OPEN = true;
 		return (true);
 	}
@@ -226,7 +233,8 @@ public class RTS_Infile extends RTS_Imagefile {
 		if (!_OPEN || _ENDFILE)
 			throw new RTS_SimulaRuntimeError(FILE_NAME.edText() + ": File not opened or attempt to read past EOF");
 		try {
-			String line = (rest != null) ? rest : lineReader.readLine();
+//			String line = (rest != null) ? rest : lineReader.readLine(); // TODO: RTS_Option.TESTING
+			String line = (rest != null) ? rest : readLine();
 			rest = null;
 			if (line != null) {
 				if (line.length() > RTS_TXT.length(image))
@@ -241,6 +249,20 @@ public class RTS_Infile extends RTS_Imagefile {
 			throw new RTS_SimulaRuntimeError("Inimage failed", e);
 		}
 		setpos(1);
+	}
+	
+	private String readLine() throws IOException {
+//		if(System.console()!=null) 
+//			 System.out.println("RTS:Infile.readLine: readFromSystem="+readFromSystem+", System.console()="+System.console().getClass().getSimpleName());
+//		else System.out.println("RTS:Infile.readLine: readFromSystem="+readFromSystem+", System.console()="+System.console());
+		String line;
+		if (readFromSystem) {
+			line = System.console().readLine();
+		} else {
+			line = lineReader.readLine();
+		}
+//		System.out.println("RTS:Infile: line="+line);
+		return line;
 	}
 
 	/**
@@ -286,7 +308,8 @@ public class RTS_Infile extends RTS_Imagefile {
 			throw new RTS_SimulaRuntimeError(FILE_NAME.edText() + ": File not opened or attempt to read past EOF");
 		try {
 			RTS_TXT.setpos(image, 1);
-			String line = (rest != null) ? rest : lineReader.readLine();
+//			String line = (rest != null) ? rest : lineReader.readLine();  // TODO: RTS_Option.TESTING
+			String line = (rest != null) ? rest : readLine();
 			rest = null;
 			if (line != null) {
 				if (line.length() > RTS_TXT.length(image)) { // Return partial image

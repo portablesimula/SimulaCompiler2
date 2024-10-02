@@ -1,7 +1,7 @@
 
 begin
-	integer x,y;
-	
-	y(4) := 150;
-	x := y(4);
+	integer i;
+	outtext("Skriv et tall: "); breakoutimage;
+	i := inint;
+	outtext("Jeg leste: "); outint(i,0); outimage;
 end;

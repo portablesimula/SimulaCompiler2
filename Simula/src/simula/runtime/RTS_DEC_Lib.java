@@ -903,11 +903,16 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	 * @return single character
 	 */
 	public static char insinglechar() {
-		try {
-			return (RTS_UTIL.console.read());
-		} catch (Exception e) {
+		if(RTS_Option.TESTING) {
 			throw new RTS_SimulaRuntimeError(
-					"Procedure insinglechar is undefined: re-run program with Runtime Option USE_CONSOLE=true");
+					"DEC_Lib procedure insinglechar is undefined in this implementation");			
+		} else {
+			try {
+				return (RTS_UTIL.console.read());
+			} catch (Exception e) {
+				throw new RTS_SimulaRuntimeError(
+						"Procedure insinglechar is undefined: re-run program with Runtime Option USE_CONSOLE=true");
+			}
 		}
 	}
 

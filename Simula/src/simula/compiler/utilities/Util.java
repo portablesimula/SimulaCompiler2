@@ -151,9 +151,11 @@ public final class Util {
 		
 //		System.out.println("Util.edLINE: Global.sourceName = "+Global.sourceName);
 //		System.out.println("Util.edLINE: CurrentScope'sourceFileName = "+Global.getCurrentScope().sourceFileName);
-		if(Global.getCurrentScope().sourceFileName!=null) {
-			String sourceName = getSimpleName(Global.getCurrentScope().sourceFileName);
-			line = sourceName + ':' + line;
+		if(Global.getCurrentScope() != null) {
+			if(Global.getCurrentScope().sourceFileName!=null) {
+				String sourceName = getSimpleName(Global.getCurrentScope().sourceFileName);
+				line = sourceName + ':' + line;
+			}
 		}
 		
 		return(line);

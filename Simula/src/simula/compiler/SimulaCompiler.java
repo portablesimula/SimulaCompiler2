@@ -270,6 +270,7 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Generate .java files or ClassFileBuilder -> jarFile
 			// ***************************************************************
+//			System.out.println("SimulaCompiler.doCompile: Option.compilerMode="+Option.compilerMode);
 	   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
 				if (!programModule.isExecutable()) {
 					// Separate Compilation
@@ -277,6 +278,8 @@ public final class SimulaCompiler {
 					Global.jarFileBuilder.open(programModule);
 				} else {
 					Global.simulaClassLoader = new SimulaClassLoader();
+					if(! Option.internal.INLINE_TESTING)
+						JarFileBuilder.loadRuntimeSystem();
 					JarFileBuilder.loadIncludeQueue();
 				}
 			} else {

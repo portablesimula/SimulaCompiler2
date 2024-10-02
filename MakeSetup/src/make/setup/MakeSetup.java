@@ -64,6 +64,7 @@ public final class MakeSetup {
 			updateSetupProperties();
 
 			makeSimulaCompiler2();
+			makeRuntimeSystemJar();
 			copySimulaRuntimeSystem();
 			copySimulaIconFiles();
 //			dummyExecuteSimulaCompiler2();
@@ -97,6 +98,17 @@ public final class MakeSetup {
 		execute("jar", "-tvf", RELEASE_HOME+"\\simula.jar");
 	}
 	
+	// ***************************************************************
+	// *** MAKE SIMULA RUNTIME SYSTEM JAR
+	// ***************************************************************
+	private static void makeRuntimeSystemJar() throws IOException {
+		
+		// jar --create --file classes.jar Foo.class Bar.class
+		execute("jar", "--create", "--file", RELEASE_HOME+"\\RTS.jar", "-C", COMPILER_BIN, "./simula/runtime");
+		// jar -tf foo.jar
+		execute("jar", "-tf", RELEASE_HOME+"\\RTS.jar");
+	}
+		
 	// ***************************************************************
 	// *** COPY SIMULA RUNTIME SYSTEM
 	// ***************************************************************

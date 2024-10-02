@@ -7,6 +7,7 @@
  */
 package simula.compiler.syntaxClass.declaration;
 
+import simula.compiler.utilities.ClassHierarchy;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.ObjectList;
@@ -1209,6 +1210,14 @@ public final class StandardClass extends ClassDeclaration {
 	private StandardClass(String prefix,String className) {
 		this(className);
 		this.prefix=prefix;
+		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
+			ClassDesc CD_ThisClass = ClassDesc.of("simula.runtime.RTS_" + className); 
+			ClassDesc CD_SuperClass = ClassDesc.of("simula.runtime.RTS_" + prefix); 
+			ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
+//			System.out.println("New StandardClass: ===================== BEGIN PRINT ClassHierarchy ==================== ");
+//			ClassHierarchy.list();
+//			System.out.println("New StandardClass: ===================== END PRINT ClassHierarchy ==================== ");
+		}
 	}
 
 	/**

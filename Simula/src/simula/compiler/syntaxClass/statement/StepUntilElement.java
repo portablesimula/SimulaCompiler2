@@ -18,6 +18,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
+import simula.runtime.RTS_UTIL;
 
 // ************************************************************************************
 // *** ForListElement -- Step Until Element
@@ -128,7 +129,7 @@ public class StepUntilElement extends ForListElement {
 	 * 
 	 *		controlVariable = expr1();
 	 * 		DELTA = expr2();
-	 * 		while( DELTA*(controlVariable-expr3()) <= 0) {
+	 * 		while( sign(DELTA)*(controlVariable-expr3()) <= 0) {
 	 * 			STATEMENT();
 	 * 			DELTA = expr2();
 	 * 			controlVariable = controlVariable + DELTA;
@@ -143,10 +144,20 @@ public class StepUntilElement extends ForListElement {
 		String deltaType=expr2.type.toJavaType();
 		String deltaID = "DELTA_" + (DELTA_SEQU++);
 		GeneratedJavaClass.debug("// ForStatement:");
+		
 		GeneratedJavaClass.code(deltaType + " " + deltaID + ';');
 		GeneratedJavaClass.code(cv + " = " + this.expr1.toJavaCode() + ";");
 		GeneratedJavaClass.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
-		GeneratedJavaClass.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
+		
+		String deltaSign = null;
+		switch(expr2.type.keyWord) {
+			case Type.T_INTEGER:   deltaSign = "RTS_UTIL.isign("+deltaID+")"; break;
+			case Type.T_REAL:      deltaSign = "RTS_UTIL.fsign("+deltaID+")"; break;
+			case Type.T_LONG_REAL: deltaSign = "RTS_UTIL.dsign("+deltaID+")"; break;
+			default: Util.IERR();
+		}
+//		GeneratedJavaClass.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
+		GeneratedJavaClass.code("while( "+ deltaSign + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
 		
 		forStatement.doStatement.doJavaCoding();
 		
