@@ -47,7 +47,7 @@ public class ClassFileTransform {
 		ClassTransform transform = ClassTransform.transformingMethodBodies(filter, new SimulaCodeTransform());
 		if (transform != null) {
 //			byte[] bytes2 = classModel.transform(transform);
-			byte[] bytes2 = cf.transform(classModel, transform);
+			byte[] bytes2 = cf.transformClass(classModel, transform);
 			if (Option.internal.TRACE_REPAIRING_OUTPUT)
 				Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Output=" + outputFileName);
 			FileOutputStream oupt = new FileOutputStream(outputFileName);

@@ -565,15 +565,10 @@ public class EditorMenues extends JMenuBar {
 			return;
 		}
 		try {
-//			if(RTS_Option.TESTING) {
-				Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-					public void uncaughtException(Thread thread, Throwable e) {
-						System.out.print("EditorMenues.UncaughtExceptionHandler: GOT Exception: " + e);
-				}});
-//				MAIN_THREAD = Thread.currentThread();
-//				System.out.println("RTS_UTIL.BPRG: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-//				System.out.println("RTS_UTIL.BPRG: MAIN_THREAD.UncaughtExceptionHandler="+MAIN_THREAD.getUncaughtExceptionHandler());
-//			}
+			Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+				public void uncaughtException(Thread thread, Throwable e) {
+					System.out.print("EditorMenues.UncaughtExceptionHandler: GOT Exception: " + e);
+			}});
 			// Start compiler ....
 			Util.ASSERT(SimulaEditor.current!=null,"EditorMenues.doRunAction: Invariant-1");
 			String text=SimulaEditor.current.editTextPane.getText();

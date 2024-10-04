@@ -107,15 +107,10 @@ public class SimulaEditor extends JFrame {
 		RTOption.InitRuntimeOptions();
     	Option.InitCompilerOptions();
 		Global.sampleSourceDir=new File(userDir+"/src/simulaTestPrograms/samples");
-//		if(RTS_Option.TESTING) {
-			Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-				public void uncaughtException(Thread thread, Throwable e) {
-					System.out.print("SimulaEditor.UncaughtExceptionHandler: GOT Exception: " + e);
-			}});
-//			MAIN_THREAD = Thread.currentThread();
-//			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-//			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD.UncaughtExceptionHandler="+MAIN_THREAD.getUncaughtExceptionHandler());
-//		}
+		Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
+			public void uncaughtException(Thread thread, Throwable e) {
+				System.out.print("SimulaEditor.UncaughtExceptionHandler: GOT Exception: " + e);
+		}});
 		Option.internal.INLINE_TESTING=true;
 		SimulaEditor editor=new SimulaEditor();
     	editor.setVisible(true);
@@ -178,9 +173,9 @@ public class SimulaEditor extends JFrame {
         this.setVisible(true);
         
 		int javaVersion=getJavaVersion();
-		if(javaVersion < 23) {
+		if(javaVersion < 24) {
 			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
-					     +"\nWe recommend at least Java 23."
+					     +"\nWe recommend at least Java 24."
 					     +"\nCheck the settings and consider"
 					     +"\ninstalling a newer version.\n");
 		}

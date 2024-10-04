@@ -21,6 +21,7 @@ import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
 import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.Vector;
 
 import javax.swing.JFrame;
 
@@ -515,7 +516,10 @@ public class RTS_Drawing extends RTS_Simset {
 	public RTS_Drawing(final RTS_RTObject SL, final RTS_TXT title, final int width, final int height) {
 		super(SL);
 		RENDERING_SET = (RTS_Head) new RTS_Head(RTS_Drawing.this)._STM();
-		frame = new JFrame(title.edText());
+//		JFrame frame = new JFrame();
+//		RTS_UTIL.openFrame(frame);
+//		RTS_Frame frame = new RTS_Frame();
+		frame = new RTS_Frame();
 		canvas = new DrawCanvas();
 		canvas.setSize(width, height);
 		currentFont = new Font(Font.SERIF, 12, Font.PLAIN);
@@ -529,76 +533,6 @@ public class RTS_Drawing extends RTS_Simset {
 		frame.setVisible(true);
 		canvas.createBufferStrategy(2);
 		strategy = canvas.getBufferStrategy();
-		
-//		DO_NOTHING_ON_CLOSE (defined in WindowConstants): Don't do anything; require the program to handle the operation in the windowClosing method of a registered WindowListener object.
-//		HIDE_ON_CLOSE (defined in WindowConstants): Automatically hide the frame after invoking any registered WindowListener objects.
-//		DISPOSE_ON_CLOSE (defined in WindowConstants): Automatically hide and dispose the frame after invoking any registered WindowListener objects.
-//		EXIT_ON_CLOSE
-//		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		DEBUG = true;
-		frame.addWindowListener(new WindowListener() {
-			@Override
-			public void windowOpened(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowOpened.WindowsEvent: " + e);
-			}
-
-			@Override
-			public void windowClosing(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowClosing.WindowsEvent: " + e);
-				if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-					if(RTS_Option.TESTING) {
-//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: RuntimeConsole="+RTS_UTIL.console);
-//						if(RTS_UTIL.console != null) {
-//							RTS_UTIL.console.show(false);
-//						}
-//						Thread MAIN_THREAD = RTS_UTIL.MAIN_THREAD;
-//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-//						Thread.UncaughtExceptionHandler handler = MAIN_THREAD.getUncaughtExceptionHandler();
-//						System.out.println("RTS_DRAWING.WINDOW_CLOSING: MAIN_THREAD.UncaughtExceptionHandler="+handler);
-//						handler.uncaughtException(Thread.currentThread(), new RTS_EndProgram("Drawing - endProgram"));
-					} else {
-//						throw new RTS_EndProgram("Simula - endProgram");
-//						throw new RTS_EndProgram("Drawing - endProgram");
-						System.exit(0);
-					}
-				}
-			}
-
-			@Override
-			public void windowClosed(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowClosed.WindowsEvent: " + e);
-			}
-
-			@Override
-			public void windowIconified(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowIconified.WindowsEvent: " + e);
-			}
-
-			@Override
-			public void windowDeiconified(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowDeiconified.WindowsEvent: " + e);
-			}
-
-			@Override
-			public void windowActivated(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowActivated.WindowsEvent: " + e);
-			}
-
-			@Override
-			public void windowDeactivated(WindowEvent e) {
-				if (DEBUG)
-					System.out.println("windowClosing.WindowsEvent: " + e);
-			}
-		});
 		canvas.setFocusable(true);
 		canvas.addKeyListener(new KeyListener() {
 			@Override
@@ -623,7 +557,8 @@ public class RTS_Drawing extends RTS_Simset {
 			}
 		});
 	}
-
+		
+	
 //	private void listRenderingSet() {
 //		_Link lnk = RENDERING_SET.first();
 //		_RT.println("RENDERING SET: first=" + lnk);

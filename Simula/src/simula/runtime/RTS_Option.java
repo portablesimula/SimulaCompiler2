@@ -10,7 +10,6 @@ public class RTS_Option {
 	 * Default constructor.
 	 */
 	RTS_Option() {}
-	public static boolean TESTING = false; //true;
 
 	/**
 	 * Output messages about what the RTS is doing.

@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
+import java.util.Vector;
 
 /**
  * This is an implementation of a Console Panel.
@@ -300,77 +301,16 @@ public final class RTS_ConsolePanel extends JPanel {
 	 * @param title for the Panel
 	 */
 	public void popup(String title) {
-		JFrame frame = new JFrame();
+//		JFrame frame = new JFrame();
+//		RTS_UTIL.openFrame(frame);
+		RTS_Frame frame = new RTS_Frame();
 		frame.setSize(950, 500); // Initial frame size
 		frame.setTitle(title);
-//		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-//		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		DEBUG = true;
-//		frame.addWindowListener(new WindowListener() {
-//			@Override
-//			public void windowOpened(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowOpened.WindowsEvent: " + e);
-//			}
-//
-//			@Override
-//			public void windowClosing(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowClosing.WindowsEvent: " + e);
-//				if (e.getID() == WindowEvent.WINDOW_CLOSING) {
-//					if(RTS_Option.TESTING) {
-//						System.out.println("RTS_ConsolePanel.WINDOW_CLOSING: ");
-//						Thread MAIN_THREAD = RTS_UTIL.MAIN_THREAD;
-//						System.out.println("RTS_ConsolePanel.WINDOW_CLOSING: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-//						Thread.UncaughtExceptionHandler handler = MAIN_THREAD.getUncaughtExceptionHandler();
-//						System.out.println("RTS_ConsolePanel.WINDOW_CLOSING: MAIN_THREAD.UncaughtExceptionHandler="+handler);
-////						handler.uncaughtException(Thread.currentThread(), new RTS_EndProgram("RTS_ConsolePanel - endProgram"));
-//					} else {
-////						throw new RTS_EndProgram("Simula - endProgram");
-////						throw new RTS_EndProgram("Drawing - endProgram");
-////						System.exit(0);
-//					}
-//				}
-//			}
-//
-//			@Override
-//			public void windowClosed(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowClosed.WindowsEvent: " + e);
-//			}
-//
-//			@Override
-//			public void windowIconified(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowIconified.WindowsEvent: " + e);
-//			}
-//
-//			@Override
-//			public void windowDeiconified(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowDeiconified.WindowsEvent: " + e);
-//			}
-//
-//			@Override
-//			public void windowActivated(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowActivated.WindowsEvent: " + e);
-//			}
-//
-//			@Override
-//			public void windowDeactivated(WindowEvent e) {
-//				if (DEBUG)
-//					System.out.println("RTS_ConsolePanel: windowDeactivated.WindowsEvent: " + e);
-//			}
-//		});
 		frame.setLocationRelativeTo(null);
-
 		frame.getContentPane().add(this);
 		frame.setVisible(true);
 	}
-
+	
 	/**
 	 * Add styles to a Document
 	 * @param doc the Document

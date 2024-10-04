@@ -233,7 +233,7 @@ public class RTS_Infile extends RTS_Imagefile {
 		if (!_OPEN || _ENDFILE)
 			throw new RTS_SimulaRuntimeError(FILE_NAME.edText() + ": File not opened or attempt to read past EOF");
 		try {
-//			String line = (rest != null) ? rest : lineReader.readLine(); // TODO: RTS_Option.TESTING
+//			String line = (rest != null) ? rest : lineReader.readLine();
 			String line = (rest != null) ? rest : readLine();
 			rest = null;
 			if (line != null) {
@@ -308,7 +308,7 @@ public class RTS_Infile extends RTS_Imagefile {
 			throw new RTS_SimulaRuntimeError(FILE_NAME.edText() + ": File not opened or attempt to read past EOF");
 		try {
 			RTS_TXT.setpos(image, 1);
-//			String line = (rest != null) ? rest : lineReader.readLine();  // TODO: RTS_Option.TESTING
+//			String line = (rest != null) ? rest : lineReader.readLine();
 			String line = (rest != null) ? rest : readLine();
 			rest = null;
 			if (line != null) {

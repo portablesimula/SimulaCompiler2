@@ -327,10 +327,6 @@ public final class RTS_UTIL {
 	}
 	
 	public static void treatException(final Throwable e, final RTS_RTObject obj) {
-		if(RTS_Option.TESTING) {
-			System.out.println("RTS_UTIL.treatException: "+e);
-			Thread.dumpStack();
-		}
 		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
 		if (RTS_Option.GOTO_TRACING) {
 			RTS_UTIL.println("\nRTS_RTObject.treatException: In "+ threadID + e);
@@ -408,9 +404,6 @@ public final class RTS_UTIL {
 	 */
 	private static void callExceptionHandler(String msg) {
 		RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
-		if(RTS_Option.TESTING) {
-			System.out.println("RTS_UTIL.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
-		}
 		try {
 			RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
 //			RTS_ENVIRONMENT.IN_EXCEPTION_HANDLER = true;
@@ -451,9 +444,6 @@ public final class RTS_UTIL {
 	 * @param exitValue the exit value
 	 */
 	static void endProgram(final int exitValue) {
-		if(RTS_Option.TESTING) {
-			System.out.println("RTS_UTIL.endProgram: "+exitValue);
-		}
 		// _SYSIN.close();
 		// _SYSOUT.close();
 		RTS_BASICIO._SYSOUT.outimage();
@@ -478,7 +468,6 @@ public final class RTS_UTIL {
 	}
 
 
-	public static Thread MAIN_THREAD; // TODO: RTS_Option.TESTING
 	// ************************************************************
 	// *** BPRG -- Begin Program
 	// ************************************************************
@@ -489,25 +478,10 @@ public final class RTS_UTIL {
 	 * @param ident the program identifier
 	 */
 	public static void BPRG(final String ident, final String[] args) {
-		if(RTS_Option.TESTING) {
-			System.out.println("RTS_UTIL.BPRG: "+ident);
-		}
 		setRuntimeOptions(args);
 		RTS_Coroutine.INIT();
 		RTS_UTIL.numberOfEditOverflows = 0;
 		RTS_RTObject.startTimeMs = System.currentTimeMillis();
-//		RTS_RTObject._CTX = new RTS_BASICIO(null);
-		if(RTS_Option.TESTING) {
-			Thread.currentThread().setUncaughtExceptionHandler(new Thread.UncaughtExceptionHandler() {
-				public void uncaughtException(Thread thread, Throwable e) {
-					System.out.print("RTS_UTIL.UncaughtExceptionHandler: GOT Exception: " + e);
-			}});
-			MAIN_THREAD = Thread.currentThread();
-			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD="+MAIN_THREAD+"  State="+MAIN_THREAD.getState());
-			System.out.println("RTS_UTIL.BPRG: MAIN_THREAD.UncaughtExceptionHandler="+MAIN_THREAD.getUncaughtExceptionHandler());
-		} else {
-//			Thread.currentThread().setUncaughtExceptionHandler(new UncaughtExceptionHandler(prog));
-		}
 		RTS_UTIL.progamIdent = ident;
 		if (RTS_Option.BLOCK_TRACING)
 			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
@@ -574,7 +548,7 @@ public final class RTS_UTIL {
 				else if (arg.equalsIgnoreCase("-listing"))				RTS_SPORT_Option.ListingFileName = args[++i];
 				else if (arg.equalsIgnoreCase("-trace"))				RTS_SPORT_Option.TraceLevel = Integer.decode(args[++i]);
 
-				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: Change when ClassFile API is released
+				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
 
 				else
 					error("Unknown option " + arg);

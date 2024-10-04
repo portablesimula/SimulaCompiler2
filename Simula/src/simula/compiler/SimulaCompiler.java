@@ -377,7 +377,11 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			Vector<String> cmds = new Vector<String>();
 			cmds.add("java");
-			cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
+			
+			if(! Option.internal.TESTING_JDK24) {
+				cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
+			}
+			
        		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
     			cmds.add("-jar");
     			cmds.add(jarFile);
@@ -528,9 +532,11 @@ public final class SimulaCompiler {
 	private int callJavaSystemCompiler(final JavaCompiler compiler, final String classPath) throws IOException {
 		Vector<String> arguments = new Vector<String>();
 		
-		arguments.add("--release"); arguments.add("23"); // TODO: Change when ClassFile API is released
-		arguments.add("--enable-preview");               // TODO: Change when ClassFile API is released
-
+		if(! Option.internal.TESTING_JDK24) {
+			arguments.add("--release"); arguments.add("23"); // TODO: Change when ClassFile API is released
+			arguments.add("--enable-preview");               // TODO: Change when ClassFile API is released
+		}
+		
 		if (Option.internal.DEBUGGING) {
 			arguments.add("-version");
 		}
@@ -581,8 +587,10 @@ public final class SimulaCompiler {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("javac");
 		
-		cmds.add("--release"); cmds.add("23"); // TODO: Change when ClassFile API is released
-		cmds.add("--enable-preview");          // TODO: Change when ClassFile API is released
+		if(! Option.internal.TESTING_JDK24) {
+			cmds.add("--release"); cmds.add("23"); // TODO: Change when ClassFile API is released
+			cmds.add("--enable-preview");          // TODO: Change when ClassFile API is released
+		}
 
 		if (Option.internal.DEBUGGING) {
 			cmds.add("-version");

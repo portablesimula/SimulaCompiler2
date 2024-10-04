@@ -170,7 +170,7 @@ public final class Simula {
 //				else if (arg.equalsIgnoreCase("-noConsole")) RTOption.USE_CONSOLE = false;
 				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
 
-				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: Change when ClassFile API is released
+				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
 
 //				else error("Unknown option "+arg);
 				else {

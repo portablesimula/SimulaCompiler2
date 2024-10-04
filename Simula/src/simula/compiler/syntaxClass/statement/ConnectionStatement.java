@@ -256,8 +256,8 @@ public final class ConnectionStatement extends Statement {
 			codeBuilder.getfield(FRE);
 			if(otherwise != null) {
 				otwLabel = codeBuilder.newLabel();
-				codeBuilder.if_null(otwLabel);
-			} else codeBuilder.if_null(endLabel);
+				codeBuilder.ifnull(otwLabel);
+			} else codeBuilder.ifnull(endLabel);
 		}
 		
 		for(ConnectionDoPart part:connectionPart) 

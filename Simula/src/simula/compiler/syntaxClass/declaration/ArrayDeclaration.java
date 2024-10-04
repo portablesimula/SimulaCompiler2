@@ -416,7 +416,7 @@ public final class ArrayDeclaration extends Declaration {
 	
 	private static void prepIndexing(Vector<Expression> checkedParams, CodeBuilder codeBuilder) {
 		Constant.buildIntConst(codeBuilder, checkedParams.size());
-		codeBuilder.newarray(TypeKind.IntType);
+		codeBuilder.newarray(TypeKind.INT);
 		for(int i=0;i<checkedParams.size();i++) {
 			codeBuilder.dup();
 			Constant.buildIntConst(codeBuilder, i);
