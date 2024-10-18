@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module TestFEC {
-	requires Simula;
-}

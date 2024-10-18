@@ -47,28 +47,24 @@ public final class CompileFEC {
 	public static void main(String[] args) {
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
-//		names.add("COMMON.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\COMMON.jar
-//		names.add("ERRMSG.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
-//		names.add("SCANNER.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANNER.jar
-//		names.add("SCANINP.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCANINP.jar 
-//		names.add("PARSER.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PARSER.jar
-		names.add("adHoc01.sim");   // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\ERRMSG.jar
-//		names.add("PAS1INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS1INIT.jar
-//		names.add("BUILDER1.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER1.jar
-//		names.add("BUILDER2.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\BUILDER2.jar
-//		
-//		names.add("CHECKER1.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\CHECKER1.jar
-//		names.add("CHECKER2.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\CHECKER2.jar
-//		
-//		names.add("SCODER0.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER0.jar
-//		names.add("SCODER1.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER1.jar
-//		names.add("SCODER1E.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER1E.jar	
-//		names.add("SCODER2.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER2.jar
-//		names.add("SCODER3.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER3.jar
-//		names.add("SCODER4.sim");  // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODER4.jar
-//		
-//		names.add("PAS2INIT.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\PAS2INIT.jar 
-//		names.add("SCODMAIN.sim"); // END Create .jar File: C:\WorkSpaces\SPort-System\S-Port\src\sport\fec\bin\SCODMAIN.jar
+//		names.add("CLASS_COMMON.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_COMMON.jar
+//		names.add("CLASS_ERRMSG.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_ERRMSG.jar
+//		names.add("CLASS_SCANNER.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANNER.jar
+//		names.add("CLASS_SCANINP.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANINP.jar 
+//		names.add("CLASS_PARSER.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PARSER.jar
+//		names.add("CLASS_PAS1INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS1INIT.jar
+//		names.add("CLASS_BUILDER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER1.jar
+//		names.add("CLASS_BUILDER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER2.jar
+//		names.add("CLASS_CHECKER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER1.jar
+		names.add("CLASS_CHECKER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER2.jar
+//		names.add("CLASS_SCODER0.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER0.jar
+//		names.add("CLASS_SCODER1.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1.jar
+//		names.add("CLASS_SCODER1E.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1E.jar	
+//		names.add("CLASS_SCODER2.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER2.jar
+//		names.add("CLASS_SCODER3.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER3.jar
+//		names.add("CLASS_SCODER4.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER4.jar
+//		names.add("CLASS_PAS2INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS2INIT.jar
+//		names.add("CLASS_SCODMAIN.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODMAIN.jar
 
 //		names.add("GENMSG.sim");            // WILL GENERATE FILE MessageGenerator.sim
 //		names.add("MessageGenerator.sim");  // WILL GENERATE ERROR MESSAGE FILE FECERROR.txt
@@ -314,7 +310,9 @@ public final class CompileFEC {
 
 		for(String name:names) {
 //			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;
-			String fileName = "C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/"+name;
+//			String fileName = "C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/"+name;
+//			String fileName = "C:/WorkSpaces/SportFECinSimula/SPortFEC/src/fec/source/"+name;
+			String fileName = "C:/GitHub/S-Port-Simula/FEC/src/fec/source/"+name;
 			System.out.println("Compile: "+fileName);
 			SimulaCompiler compiler = new SimulaCompiler(fileName);
 			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();

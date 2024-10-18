@@ -1948,6 +1948,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return requested text info
 	 */
 	public static RTS_TXT getTextInfo(final int index) {
+		RTS_TXT info = getTextInfo2(index);
+		System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+info.edText());
+		return(info);
+	}
+	private static RTS_TXT getTextInfo2(final int index) {
 		switch (index) {
 		case 1:
 			String sourceFileName = RTS_SPORT_Option.getSourceFileName();
@@ -1960,8 +1965,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		case 4:
 			String sCodeFileName = RTS_SPORT_Option.getSCodeFileName();
 			RTS_SPORT_Option.print_SPORT_Options();
-			System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+sCodeFileName);
 			return (new RTS_TXT(sCodeFileName));
+		case 6:
+//			String sCodeListing = RTS_SPORT_Option.getSCodeFileName();
+			String sCodeListing = "#sysout";
+			return (new RTS_TXT(sCodeListing));
 		case 7:
 			String scratchFileName = RTS_SPORT_Option.getScratchFileName();
 			return (new RTS_TXT(scratchFileName)); // FileName for intermediate code

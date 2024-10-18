@@ -52,8 +52,6 @@ import java.util.Vector;
  * ClassHierarchyInfo.ofInterface() : ClassHierarchyInfo.ofClass(ClassDesc superClass))`
  */
 public abstract class ClassHierarchy {
-//	private static Map<ClassDesc, ClassDesc> classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
-//	private static Collection<ClassDesc> interfaces = new Vector<ClassDesc>();
 	private static Map<ClassDesc, ClassDesc> classToSuperClass;
 	private static Collection<ClassDesc> interfaces;
 
@@ -87,22 +85,9 @@ public abstract class ClassHierarchy {
 		return packageName+'.'+sup.displayName();
 	}
 	
-	public static void xprint() {
-		System.out.println("\n================= ClassHierarchy.print =================");
-        for (Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
-            ClassDesc sub = entry.getKey();
-            ClassDesc sup = entry.getValue();
-//            if(! sup.displayName().startsWith("RTS_")) {
-	    		String subClass = sub.packageName() + '.' + sub.displayName();
-	    		while(subClass.length() < 50) subClass = subClass + ' ';
-	    		String superClass = sup.packageName() + '.' + sup.displayName();
-	    		System.out.println("class " + subClass + " extends " + superClass);
-//            }
-        }
-	}
 
 	// ***********************************************************************************************
-	// *** ClassHierarchy print tree
+	// *** ClassHierarchy list and print tree
 	// ***********************************************************************************************
 	private static Vector<Node> allNodes;
 	
@@ -110,7 +95,6 @@ public abstract class ClassHierarchy {
 		for (Map.Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
 			String key = entry.getKey().descriptorString();
 			String val = entry.getValue().descriptorString();
-//		     System.out.printf("%-15s : %s%n", entry.getKey(), entry.getValue());
 		     System.out.println(key + " extends " +val);
 		}
 	}
@@ -176,7 +160,6 @@ public abstract class ClassHierarchy {
 
 	public static void readObject(AttributeInputStream inpt) throws IOException {
 		String next = inpt.readString();
-//		while(next != null) {
 		while(! next.equals(mark)) {
 			ClassDesc sub = ClassDesc.of(next+'.'+inpt.readString());
 			ClassDesc sup = ClassDesc.of(inpt.readString()+'.'+inpt.readString());
@@ -184,7 +167,6 @@ public abstract class ClassHierarchy {
 			next = inpt.readString();
 		}
 		Util.TRACE_INPUT("END Read ClassHierarchy: ");
-//		print();
 	}
 	
 	
