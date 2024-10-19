@@ -3,6 +3,7 @@ package simula.compiler.utilities;
 import java.io.IOException;
 import java.lang.classfile.ClassHierarchyResolver;
 import java.lang.constant.ClassDesc;
+import java.lang.constant.ConstantDescs;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,7 +59,11 @@ public abstract class ClassHierarchy {
 
 	public static void init() {
 		classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
-		interfaces = new Vector<ClassDesc>();		
+		interfaces = new Vector<ClassDesc>();
+		
+		classToSuperClass.put(RTS.CD.RTS_CLASS, ConstantDescs.CD_Object);
+		classToSuperClass.put(RTS.CD.RTS_PROCEDURE, ConstantDescs.CD_Object);
+
 	}
 	
 	public static ClassHierarchyResolver getResolver() {
