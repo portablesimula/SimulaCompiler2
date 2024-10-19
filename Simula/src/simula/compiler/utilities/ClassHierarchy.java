@@ -7,6 +7,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeSet;
 
 import simula.compiler.AttributeInputStream;
@@ -65,6 +66,36 @@ public abstract class ClassHierarchy {
 				.orElse(ClassHierarchyResolver.of(interfaces, classToSuperClass));
 		return res;
 	}
+	
+//	public static ClassHierarchyResolver getResolver() {
+//		ClassHierarchyResolver res = ClassHierarchyResolver.of(interfaces, classToSuperClass);
+//		return res;
+//	}
+	
+//	class MyClassHierarchyInfo implements ClassHierarchyInfo {
+//		ClassDesc cld;
+//		ClassDesc sup;
+//		
+//		public MyClassHierarchyInfo(ClassDesc cld, ClassDesc sup) {
+//			this.cld = cld;
+//			this.sup = sup;
+//		}
+//	}
+	
+	
+//	public static ClassHierarchyResolver getResolver() {
+//		ClassHierarchyResolver res = new ClassHierarchyResolver() {
+//
+//			@Override
+//			public ClassHierarchyInfo getClassInfo(ClassDesc classDesc) {
+//				// TODO Auto-generated method stub
+//				ClassHierarchyInfo classInfo = ClassHierarchyInfo.of(cld,sup,bool)
+//				return null;
+//			}
+//			
+//		};
+//		return res;
+//	}
 
 	public static void addClassToSuperClass(ClassDesc cld, ClassDesc sup) {
 		classToSuperClass.put(cld, sup);
@@ -85,6 +116,16 @@ public abstract class ClassHierarchy {
 		return packageName+'.'+sup.displayName();
 	}
 	
+	public static ClassDesc getClassDesc(String classID) {
+		Set<ClassDesc> keys = classToSuperClass.keySet();
+		String ID = "ClassDesc[" + classID + ']';
+		for(ClassDesc key:keys) {
+//			System.out.println("ClassHierarchy.getClassDesc: CHECK "+key+" AGAINST "+ID);
+			if(key.toString().equals(ID))
+				return key;
+		}
+		return null;
+	}
 
 	// ***********************************************************************************************
 	// *** ClassHierarchy list and print tree

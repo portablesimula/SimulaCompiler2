@@ -143,7 +143,8 @@ public class RTS_SPORT_Option {
 	 * <p>
 	 * NOTE: This file is created when front-end compiling the RTS:
 	 */
-	static String PredefFileName = "C:/WorkSpaces/SPort-System/S_Port/Attrs/FEC/PREDEF.atr";
+//	static String PredefFileName = "C:/WorkSpaces/SPort-System/S_Port/Attrs/FEC/PREDEF.atr";
+	static String PredefFileName = "C:/GitHub/S-Port-Simula/FEC/Attrs/FEC/PREDEF.atr";
 
 	/**
 	 * Name of a file containing seldom used information for the front end compiler,

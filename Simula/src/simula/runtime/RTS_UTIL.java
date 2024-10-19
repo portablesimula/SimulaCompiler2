@@ -12,6 +12,9 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
+import simula.compiler.utilities.Global;
+import simula.compiler.utilities.Util;
+
 /**
  * Utility class containing a lot of common stuff.
  * <p>
@@ -517,6 +520,30 @@ public final class RTS_UTIL {
 	}
 
 	/**
+	 * Print synopsis of standard options
+	 */
+	private static void help() {
+		println(RTS_ENVIRONMENT.simulaReleaseID + " See: https://github.com/portablesimula\n");
+		println("Usage: java -jar simula.jar  [options]\n\n"
+				+ "jarFile			Any output jar file from the simula compiler\n\n" + "possible options include:\n"
+				+ "  -help                 Print this synopsis of standard options\n"
+				+ "  -verbose              Output messages about what the RTS is doing\n"
+				+ "  -useConsole           Map sysout and sysin to a popUp Console\n"
+				+ "  -blockTracing         Debug: Trace enter and exit of blocks, classes and procedures\n"
+				+ "  -gotoTracing          Debug: Trace goto statements\n"
+				+ "  -qpsTracing           Debug: Trace detach, resume and call\n"
+				+ "  -smlTracing           Debug: Trace Simulation events\n"
+				+ "  -userDir <directory>  Specify where Simula files (Outfile, Infile, ...) are written and read\n"
+				+ "                        Default: User working directory. System.property(\"user.dir\")\n"
+				+ "\n  -source <fileName>    Specify the SPORT source simula file\n"
+				+ "  -listing <fileName>   Specify the SPORT listing file\n"
+				+ "  -select <string>      Specify the SPORT selection string\n"
+				+ "  -trace <traceLevel>   Debug: The SPORT trace level\n"
+		);
+		System.exit(0);
+	}
+
+	/**
 	 * Set runtime options.
 	 * @param args argument array
 	 */
@@ -550,8 +577,10 @@ public final class RTS_UTIL {
 
 				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
 
-				else
-					error("Unknown option " + arg);
+				else{
+					System.out.println("Unknown option " + arg);
+					help();
+				}
 			} else {
 				if (file == null) {
 					file = new File(arg);
@@ -565,25 +594,6 @@ public final class RTS_UTIL {
 			listRuntimeOptions();
 			RTS_SPORT_Option.print_SPORT_Options();
 		}
-	}
-
-	/**
-	 * Print synopsis of standard options
-	 */
-	private static void help() {
-		println(RTS_ENVIRONMENT.simulaReleaseID + " See: https://github.com/portablesimula\n");
-		println("Usage: java -jar simula.jar  [options]\n\n"
-				+ "jarFile			Any output jar file from the simula compiler\n\n" + "possible options include:\n"
-				+ "  -help                 Print this synopsis of standard options\n"
-				+ "  -verbose              Output messages about what the RTS is doing\n"
-				+ "  -useConsole           Map sysout and sysin to a popUp Console\n"
-				+ "  -blockTracing         Debug: Trace enter and exit of blocks, classes and procedures\n"
-				+ "  -gotoTracing          Debug: Trace goto statements\n"
-				+ "  -qpsTracing           Debug: Trace detach, resume and call\n"
-				+ "  -smlTracing           Debug: Trace Simulation events\n"
-				+ "  -userDir <directory>  Specify where Simula files (Outfile, Infile, ...) are written and read\n"
-				+ "                        Default: User working directory. System.property(\"user.dir\")\n" + "");
-		System.exit(0);
 	}
 
 	/**

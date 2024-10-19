@@ -9,6 +9,7 @@ package make;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.Vector;
 
 import simula.compiler.Simula;
@@ -56,7 +57,7 @@ public final class CompileFEC {
 //		names.add("CLASS_BUILDER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER1.jar
 //		names.add("CLASS_BUILDER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER2.jar
 //		names.add("CLASS_CHECKER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER1.jar
-		names.add("CLASS_CHECKER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER2.jar
+//		names.add("CLASS_CHECKER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER2.jar
 //		names.add("CLASS_SCODER0.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER0.jar
 //		names.add("CLASS_SCODER1.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1.jar
 //		names.add("CLASS_SCODER1E.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1E.jar	
@@ -69,7 +70,7 @@ public final class CompileFEC {
 //		names.add("GENMSG.sim");            // WILL GENERATE FILE MessageGenerator.sim
 //		names.add("MessageGenerator.sim");  // WILL GENERATE ERROR MESSAGE FILE FECERROR.txt
 		
-//		names.add("FECMAIN.sim");  // WILL CREATE THE S-PORT COMPILER
+		names.add("FEC.sim");  // WILL CREATE THE S-PORT COMPILER: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\FEC.jar
 
 		// Set options and tracing.
 		Option.internal.INLINE_TESTING=true;
@@ -78,7 +79,8 @@ public final class CompileFEC {
 //		Option.internal.TRACING=false;
 		Option.WARNINGS=false;
 //		Option.compilerMode = Option.CompilerMode.viaJavaSource;
-		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
+		Option.compilerMode = Option.CompilerMode.directClassFiles;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 //		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 //		Option.CASE_SENSITIVE=true;
 //		Option.GNERATE_LINE_CALLS=true;
@@ -261,7 +263,7 @@ public final class CompileFEC {
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst99.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst100.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst101.sim";
+		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch2/src/simulaTestBatch/simtst101.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst102.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst103.sim";
 //		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst104.sim"; 
@@ -319,9 +321,23 @@ public final class CompileFEC {
 			try { compiler.doCompile(); } catch (IOException e) { Util.IERR("Compiler Error: ", e); }
 			System.out.println("Done: "+fileName);
 		}
+		copyFECtoSPORT_HOME();
 		System.out.println("--- END OF SIMULA TESTBATCH");
 		long timeUsed  = System.currentTimeMillis( ) - startTimeMs;
 		System.out.println("\nElapsed Time: Approximately " + timeUsed/1000 + " sec.");
+	}
+	
+	private static void copyFECtoSPORT_HOME() {
+		File source=new File("C:/GitHub/S-Port-Simula/FEC/src/fec/source/bin/FEC.jar");
+		File target=new File("C:/SPORT/FEC.jar");
+		target.mkdirs();
+		System.out.println("source="+source);
+		System.out.println("target="+target);
+		try {
+			Files.copy(source.toPath(), target.toPath(), java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 }

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.classfile.ClassBuilder;
 import java.lang.classfile.ClassFile;
 import java.lang.classfile.ClassHierarchyResolver;
+import java.lang.classfile.ClassHierarchyResolver.ClassHierarchyInfo;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.attribute.SourceFileAttribute;
@@ -1175,58 +1176,93 @@ public class ClassDeclaration extends BlockDeclaration {
 			System.out.println("ClassDeclaration.buildClassFile: "+CD_ThisClass+" extends "+CD_SuperClass);
 		if(isPreCompiledFromFile != null) return getBytesFromFile();
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, CD_SuperClass);
-		try {
-			byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
-					classBuilder -> {
-						classBuilder
-							.with(SourceFileAttribute.of(Global.sourceFileName))
-							.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
-							.withSuperclass(CD_SuperClass);
-	
-						if(this.hasAccumLabel())
-							for (LabelDeclaration lab : labelList.getAccumLabels())
-								lab.buildDeclaration(classBuilder,this);
-	
-						for (Declaration decl : declarationList)
-							decl.buildDeclaration(classBuilder,this);
-						
-						for (Parameter par : parameterList)
-							par.buildDeclaration(classBuilder,this);
-						
-						for (VirtualSpecification virtual : virtualSpecList) 
-							if (!virtual.hasDefaultMatch) 
-								virtual.buildMethod(classBuilder);
-						
-						for (VirtualMatch match : virtualMatchList)
-							match.buildMethod(classBuilder);
-	
-						classBuilder
-							.withMethodBody("<init>", MethodTypeDesc.ofDescriptor(edConstructorSignature()), ClassFile.ACC_PUBLIC,
-								codeBuilder -> buildConstructor(codeBuilder))
-							.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
-								codeBuilder -> buildMethod_STM(codeBuilder));
-						
-						if (isDetachUsed()) 
-							classBuilder
-								.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
-									codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
-					}
-			);
-			return(bytes);
-		} catch(Throwable e) {
-			// Could not resolve class CLASS_CHECKER1_semchecker1_exp
-			System.out.println("ClassDeclaration.buildClassFile: FATAL ERROR CAUSED BY "+e);
-			ClassHierarchy.print();
-			ClassHierarchyResolver resolver = ClassHierarchy.getResolver();
-			
-			System.out.println("ClassDeclaration.buildClassFile: ThisClass'classInfo("+CD_ThisClass+") = " + resolver.getClassInfo(CD_ThisClass));
-			System.out.println("ClassDeclaration.buildClassFile: SuperClass'classInfo("+CD_SuperClass+") = " + resolver.getClassInfo(CD_SuperClass));
-			ClassDesc desc = ClassDesc.of("simulaFEC.CLASS_CHECKER1_semchecker1_exp");
-			System.out.println("ClassDeclaration.buildClassFile: classInfo("+desc+") = " + resolver.getClassInfo(desc));
-
-			e.printStackTrace();
-			return null;
+		
+		if(CD_ThisClass.toString().equals("CLASS_CHECKER2_semchecker_unstack")) {
+			ClassDesc desc1 = ClassDesc.of("simulaFEC.CLASS_CHECKER1_semchecker1_exp");
+			System.out.println("ClassDeclaration.buildClassFile: classInfo("+desc1+") = " + ClassHierarchy.getResolver().getClassInfo(desc1));
+			Util.IERR();
 		}
+		
+		int count = 5;
+		while((count--) > 0) {
+			try {
+				if(Option.verbose)
+					System.out.println("ClassDeclaration.buildClassFile: TRY: "+CD_ThisClass+" extends "+CD_SuperClass);
+				byte[] bytes = ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(ClassHierarchy.getResolver())).build(CD_ThisClass,
+						classBuilder -> {
+							classBuilder
+								.with(SourceFileAttribute.of(Global.sourceFileName))
+								.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
+								.withSuperclass(CD_SuperClass);
+		
+							if(this.hasAccumLabel())
+								for (LabelDeclaration lab : labelList.getAccumLabels())
+									lab.buildDeclaration(classBuilder,this);
+		
+							for (Declaration decl : declarationList)
+								decl.buildDeclaration(classBuilder,this);
+							
+							for (Parameter par : parameterList)
+								par.buildDeclaration(classBuilder,this);
+							
+							for (VirtualSpecification virtual : virtualSpecList) 
+								if (!virtual.hasDefaultMatch) 
+									virtual.buildMethod(classBuilder);
+							
+							for (VirtualMatch match : virtualMatchList)
+								match.buildMethod(classBuilder);
+		
+							classBuilder
+								.withMethodBody("<init>", MethodTypeDesc.ofDescriptor(edConstructorSignature()), ClassFile.ACC_PUBLIC,
+									codeBuilder -> buildConstructor(codeBuilder))
+								.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
+									codeBuilder -> buildMethod_STM(codeBuilder));
+							
+							if (isDetachUsed()) 
+								classBuilder
+									.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
+										codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
+						}
+				);
+				if(Option.verbose)
+					System.out.println("ClassDeclaration.buildClassFile: DONE: "+CD_ThisClass+" extends "+CD_SuperClass);
+				return(bytes);
+			} catch(IllegalArgumentException e) {
+				// Could not resolve class CLASS_CHECKER1_semchecker1_exp
+				System.out.println("ClassDeclaration.buildClassFile: FATAL ERROR CAUSED BY "+e);
+//				ClassHierarchy.print();
+				
+				boolean feasibleToReTry = false;
+				String msg = e.getMessage();
+				System.out.println("\nClassDeclaration.buildClassFile: msg="+msg);
+				if(msg.startsWith("Could not resolve class")) {
+					String classID = msg.substring(24);
+					System.out.println("\nClassDeclaration.buildClassFile: classID="+classID);
+					ClassDesc CD = ClassHierarchy.getClassDesc(classID);
+					if(CD != null) {
+						System.out.println("ClassDeclaration.buildClassFile: classID'CD="+CD);
+						ClassHierarchyResolver resolver = ClassHierarchy.getResolver();
+						ClassHierarchyInfo classInfo = resolver.getClassInfo(CD);
+						System.out.println("ClassDeclaration.buildClassFile: classInfo("+CD+") = " + classInfo);
+						feasibleToReTry = classInfo != null;
+					}
+//					Util.IERR("STOP");
+				}
+				
+//				ClassHierarchyResolver resolver = ClassHierarchy.getResolver();
+//				System.out.println("ClassDeclaration.buildClassFile: ThisClass'classInfo("+CD_ThisClass+") = " + resolver.getClassInfo(CD_ThisClass));
+//				System.out.println("ClassDeclaration.buildClassFile: SuperClass'classInfo("+CD_SuperClass+") = " + resolver.getClassInfo(CD_SuperClass));
+//				ClassDesc desc = ClassDesc.of("simulaFEC.CLASS_CHECKER1_semchecker1_exp");
+//				System.out.println("ClassDeclaration.buildClassFile: classInfo("+desc+") = " + resolver.getClassInfo(desc));
+//				e.printStackTrace(System.out);
+				
+//	//			return null;
+				if(Option.verbose)
+					System.out.println("ClassDeclaration.buildClassFile: FAILED: "+CD_ThisClass+" extends "+CD_SuperClass+"  feasibleToReTry="+feasibleToReTry);
+				if(count <= 0 || !feasibleToReTry) throw e;
+			}
+		}
+		return null;
 	}
 
 	// ***********************************************************************************************
