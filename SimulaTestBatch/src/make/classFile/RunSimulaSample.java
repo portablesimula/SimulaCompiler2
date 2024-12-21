@@ -36,8 +36,8 @@ public final class RunSimulaSample {
 //		String name="HexDump.sim";
 //		String name="InfectionDisease.sim";
 //		String name="JensensDevice.sim";
-//		String name="LiftSimulation.sim";
-		String name="NormalDrawing.sim";
+		String name="LiftSimulation.sim";
+//		String name="NormalDrawing.sim";
 //		String name="PrimeUnder.sim";
 //		String name="Quine.sim";
 //		String name="Sudoku.sim";

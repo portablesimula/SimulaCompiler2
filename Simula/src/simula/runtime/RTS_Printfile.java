@@ -10,6 +10,8 @@ package simula.runtime;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import simula.compiler.utilities.Util;
+
 /**
  * System class PrintFile.
  * <p>
@@ -157,7 +159,8 @@ public class RTS_Printfile extends RTS_Outfile {
 	public boolean open(final RTS_TXT image) {
 		String fileName = FILE_NAME.edText();
 		if (RTS_Option.VERBOSE)
-			TRACE_OPEN("Open PrintFile");
+			TRACE_OPEN("Open PrintFile: " + fileName);
+//		System.out.println("Open PrintFile: " + fileName);
 		if (_OPEN)
 			return (false); // File already opened
 		_PAGE = 0;
@@ -226,10 +229,19 @@ public class RTS_Printfile extends RTS_Outfile {
 	public boolean close() {
 		if (RTS_Option.VERBOSE)
 			TRACE_OPEN("Close PrintFile");
+		
+//		String img = this.image.edStripedText();
+//		System.out.println("PrintFile.close: " + FILE_NAME.edText() + "  img.length=" + img.length() + "  \"" + img + '"');
+//		if(img.length() < 2) {
+//			new Exception("Stack trace").printStackTrace(System.out);
+//			Util.IERR();
+//		}
+
 		if (!_OPEN)
 			return (false); // File not opened
-		if (pos() != 1)
+		if (pos() != 1) {
 			outimage();
+		}
 		_SPACING = 1;
 		_LINES_PER_PAGE = 0;
 		_LINE = 0;
@@ -377,6 +389,13 @@ public class RTS_Printfile extends RTS_Outfile {
 	@Override
 	protected void writeImage(String ident, String img, boolean blank) {
 		// Used by Outimage, OutRecord and BreakOutimage in Outfile
+		
+//		System.out.println("PrintFile.writeImage: " + FILE_NAME.edText() + "  img.length=" + img.length() + "  \"" + img + '"');
+//		if(img.length() < 2) {
+//			new Exception("Stack trace").printStackTrace(System.out);
+//			Util.IERR();
+//		}
+		
 		if (!_OPEN)
 			throw new RTS_SimulaRuntimeError("File not opened");
 		if (_LINE > _LINES_PER_PAGE)

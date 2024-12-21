@@ -1949,7 +1949,8 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 */
 	public static RTS_TXT getTextInfo(final int index) {
 		RTS_TXT info = getTextInfo2(index);
-		System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+info.edText());
+		String info2 = (info == null) ? "NOTEXT" : info.edText();
+		if(RTS_SPORT_Option.FEC_Verbose > 0) System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+info2);
 		return(info);
 	}
 	private static RTS_TXT getTextInfo2(final int index) {
@@ -1964,7 +1965,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 			return (new RTS_TXT(listingFileName)); // listname i.e. Listing File Name
 		case 4:
 			String sCodeFileName = RTS_SPORT_Option.getSCodeFileName();
-			RTS_SPORT_Option.print_SPORT_Options();
+//			RTS_SPORT_Option.print_SPORT_Options();
 			return (new RTS_TXT(sCodeFileName));
 		case 6:
 //			String sCodeListing = RTS_SPORT_Option.getSCodeFileName();
@@ -2178,6 +2179,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return requested integer info
 	 */
 	public static int getIntInfo(final int index) {
+		int info = getIntInfo2(index);
+		if(RTS_SPORT_Option.FEC_Verbose > 0) System.out.println("RTS_ENVIRONMENT.getIntInfo("+index+") = "+info);
+		return(info);
+	}
+	public static int getIntInfo2(final int index) {
 		// _RT.println("getIntInfo: index="+index);
 		switch (index) {
 		case 1:
@@ -2193,12 +2199,22 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		case 10: // ARRAY BOUNDS CHECK ? Result: 0 - Complete checking,
 				 //   1 - Partial checking, 2 - No checking will be done.
 			return (0);
-		case 16:
-			return (RTS_SPORT_Option.TraceLevel); // Image length for the listing file
+//		case 16:
+//			return (RTS_SPORT_Option.TraceLevel); // Image length for the listing file
 		case 22:
 			return (RTS_SPORT_Option.Recompilation); // recomp
 		case 30:
 			return (RTS_SPORT_Option.SimobLevel); // simob_level
+			
+		// IN FEC'CLASS_PAS1INIT line 38 ...	
+		//      verbose    := getintinfo(44) > 0;
+		//	    traceScode := getintinfo(45) > 0;
+		//	    traceLevel := getintinfo(46);
+
+		case 44: return (RTS_SPORT_Option.FEC_Verbose);
+		case 45: return (RTS_SPORT_Option.FEC_TraceScode);
+		case 46: return (RTS_SPORT_Option.FEC_TraceLevel);
+
 		default:
 			NOT_IMPLEMENTED("getIntInfo: " + index);
 		}
@@ -2239,25 +2255,30 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param index case index
 	 * @param info the integer info
 	 */
+	private static int exitCode = 0;
 	public static void giveIntInfo(final int index, final int info) {
 		StringBuilder sb = new StringBuilder();
 		switch (index) {
-		case 1 -> {
-			sb.append("End of pass " + (PASS_NO++) + ": ");
-			switch (info) {
-			case 0 -> sb.append("No user errors found. Go on with next pass.");
-			case 1 -> sb.append("User errors are found, but go on with next pass.");
-			case 2 -> sb.append("Reserved for fututre use, continuation is possible.");
-			case 3 -> sb.append("No user errors found, but because of options etc. the next pass should not be started.");
-			case 4 -> sb.append("User errors found, therefore do not start next pass.");
-			case 5 -> sb.append("Too many or too difficult user errors encountered. Compiler should terminate.");
-			case 6 -> sb.append("An internal error in the compiler has occurred. Compiler should terminate.");
+			case 1 -> {
+				exitCode = (info < 3) ? 0 : -info;
+				sb.append("End of pass " + (PASS_NO++) + ": ");
+				switch (info) {
+					case 0 -> sb.append("No user errors found. Go on with next pass.");
+					case 1 -> sb.append("User errors are found, but go on with next pass.");
+					case 2 -> sb.append("Reserved for fututre use, continuation is possible.");
+					case 3 -> sb.append("No user errors found, but because of options etc. the next pass should not be started.");
+					case 4 -> sb.append("User errors found, therefore do not start next pass.");
+					case 5 -> sb.append("Too many or too difficult user errors encountered. Compiler should terminate.");
+					case 6 -> sb.append("An internal error in the compiler has occurred. Compiler should terminate.");
+				}
 			}
-		}
-		case 2 -> sb.append("Max tag=" + info);
-		case 3 -> sb.append("nSourceLines=" + info);
-		case 4 -> sb.append("nErrors=" + info);
-		case 5 -> sb.append("nWarnings=" + info);
+			case 2 -> sb.append("Max tag=" + info);
+			case 3 -> sb.append("nSourceLines=" + info);
+			case 4 -> sb.append("nErrors=" + info);
+			case 5 -> { 
+				sb.append("nWarnings=" + info);
+				System.exit(exitCode);
+			}
 		}
 		if (RTS_Option.VERBOSE)
 			RTS_UTIL.println(sb.toString());

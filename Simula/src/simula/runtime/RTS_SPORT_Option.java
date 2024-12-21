@@ -29,6 +29,11 @@ public class RTS_SPORT_Option {
 	 * S-PORT: Source file name
 	 */
 	static String SPORT_SourceFileName = SourceDirName + "/ModuleName";
+
+	/**
+	 * S-PORT: Source file name
+	 */
+	static String SPORT_SCodeFileName = null;
 	
 	/**
 	 * S-PORT: Sysinsert directory name.
@@ -48,15 +53,18 @@ public class RTS_SPORT_Option {
 	/**
 	 * The S-PORT listing file
 	 */
-	static String ListingFileName = "#sysout";
+	static String ListingFileName = null; //"#sysout";
 	
 	public static void print_SPORT_Options() {
+		System.out.println("print_SPORT_Options: FEC_Verbose:            " + FEC_Verbose);
+		System.out.println("print_SPORT_Options: FEC_TraceLevel:         " + FEC_TraceLevel);
 		System.out.println("print_SPORT_Options: ModuleName:             " + getModuleName());
 		System.out.println("print_SPORT_Options: SourceDirName:          " + SourceDirName);
 		System.out.println("print_SPORT_Options: SPORT_SourceFileName:   " + SPORT_SourceFileName);
 		System.out.println("print_SPORT_Options: SPORT_SysInsertDirName: " + SPORT_SysInsertDirName);
 		System.out.println("print_SPORT_Options: ListingFileName:        " + ListingFileName);
 		System.out.println("print_SPORT_Options: SCodeFileName():        " + getSCodeFileName());
+		System.out.println("print_SPORT_Options: FEC_TraceScode:         " + FEC_TraceScode);
 	}
 
 	/**
@@ -66,6 +74,7 @@ public class RTS_SPORT_Option {
 	 * @return the S-Code file name
 	 */
 	static String getSCodeFileName() {
+		if(SPORT_SCodeFileName != null)	return SPORT_SCodeFileName;
 		return (createSubfileName("scode", getModuleName() + ".scd"));
 	}
 
@@ -152,30 +161,15 @@ public class RTS_SPORT_Option {
 	 */
 	static String XmessageFileName = "C:/WorkSpaces/SPort-System/S_Port/src/sport/fec/FECERROR.txt";
 	
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int GenerateScode = 1;
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int MaxErrors = 50;
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int GiveNotes = 1;
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int TraceLevel = 0;
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int Recompilation = 0;
-	/**
-	 * Used by getIntInfo.
-	 */
-	static int SimobLevel = 0;
+	/** Used by getIntInfo. */ static int GenerateScode = 1;
+	/** Used by getIntInfo. */ static int MaxErrors = 50;
+	/** Used by getIntInfo. */ static int GiveNotes = 1;
+//	/** Used by getIntInfo. */ static int TraceLevel = 0;
+	/** Used by getIntInfo. */ static int Recompilation = 0;
+	/** Used by getIntInfo. */ static int SimobLevel = 0;
+	/** Used by getIntInfo. */ static int FEC_Verbose = 0;
+	/** Used by getIntInfo. */ static int FEC_TraceScode = 0;
+	/** Used by getIntInfo. */ static int FEC_TraceLevel = 0;
 
 	/**
 	 * Used by giveTextInfo(1) The identifier of a class or procedure being separately compiled.

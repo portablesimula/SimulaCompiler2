@@ -449,7 +449,11 @@ public final class RTS_UTIL {
 	static void endProgram(final int exitValue) {
 		// _SYSIN.close();
 		// _SYSOUT.close();
-		RTS_BASICIO._SYSOUT.outimage();
+		
+//		RTS_BASICIO._SYSOUT.outimage();
+		String img = RTS_BASICIO._SYSOUT.image.edStripedText();
+		if(img.length() > 0) RTS_BASICIO._SYSOUT.outimage();
+		
 		long timeUsed = System.currentTimeMillis() - RTS_RTObject.startTimeMs;
 		if (RTS_Option.VERBOSE) {
 			RTS_UTIL.println("\nEnd program: " + RTS_UTIL.progamIdent);
@@ -524,7 +528,7 @@ public final class RTS_UTIL {
 	 */
 	private static void help() {
 		println(RTS_ENVIRONMENT.simulaReleaseID + " See: https://github.com/portablesimula\n");
-		println("Usage: java -jar simula.jar  [options]\n\n"
+		println("Usage: java -jar simula.jar  [options]  sourceFile\n\n"
 				+ "jarFile			Any output jar file from the simula compiler\n\n" + "possible options include:\n"
 				+ "  -help                 Print this synopsis of standard options\n"
 				+ "  -verbose              Output messages about what the RTS is doing\n"
@@ -535,12 +539,13 @@ public final class RTS_UTIL {
 				+ "  -smlTracing           Debug: Trace Simulation events\n"
 				+ "  -userDir <directory>  Specify where Simula files (Outfile, Infile, ...) are written and read\n"
 				+ "                        Default: User working directory. System.property(\"user.dir\")\n"
-				+ "\n  -source <fileName>    Specify the SPORT source simula file\n"
-				+ "  -listing <fileName>   Specify the SPORT listing file\n"
-				+ "  -select <string>      Specify the SPORT selection string\n"
-				+ "  -trace <traceLevel>   Debug: The SPORT trace level\n"
+				+ "\n"
+				+ "  -SPORT:listing              Print the SPORT source listing on sysout\n"
+				+ "  -SPORT:SCodeFile <fileName> The SPORT Scode file\n"
+				+ "  -SPORT:select <string>      The SPORT selection string\n"
+				+ "  -SPORT:trace <traceLevel>   Debug: The SPORT trace level\n"
 		);
-		System.exit(0);
+		System.exit(-2);
 	}
 
 	/**
@@ -553,11 +558,11 @@ public final class RTS_UTIL {
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-//			System.out.println("RTS_UTIL.setRuntimeOptions: arg = "+arg);
+//			System.out.println("RTS_UTIL.setRuntimeOptions: arg["+i+"] = "+arg);
 			if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();
-				else if (arg.equalsIgnoreCase("-verbose"))			RTS_Option.VERBOSE = true;
+				else if (arg.equalsIgnoreCase("-verbose"))			{ RTS_Option.VERBOSE = true; RTS_SPORT_Option.FEC_Verbose = 1; }
 				else if (arg.equalsIgnoreCase("-useConsole"))		RTS_Option.USE_CONSOLE = true;
 				else if (arg.equalsIgnoreCase("-blockTracing"))		RTS_Option.BLOCK_TRACING = true;
 				else if (arg.equalsIgnoreCase("-gotoTracing"))		RTS_Option.GOTO_TRACING = true;
@@ -571,9 +576,10 @@ public final class RTS_UTIL {
 					File sourceFile = new File(RTS_SPORT_Option.SPORT_SourceFileName);
 					RTS_SPORT_Option.SourceDirName = sourceFile.getParent();
 				}
-				else if (arg.equalsIgnoreCase("-select"))				RTS_SPORT_Option.Selectors = args[++i];
-				else if (arg.equalsIgnoreCase("-listing"))				RTS_SPORT_Option.ListingFileName = args[++i];
-				else if (arg.equalsIgnoreCase("-trace"))				RTS_SPORT_Option.TraceLevel = Integer.decode(args[++i]);
+				else if (arg.equalsIgnoreCase("-SPORT:SCodeFile"))		RTS_SPORT_Option.SPORT_SCodeFileName = args[++i];
+				else if (arg.equalsIgnoreCase("-SPORT:select"))			RTS_SPORT_Option.Selectors = args[++i];
+				else if (arg.equalsIgnoreCase("-SPORT:listing"))		RTS_SPORT_Option.ListingFileName = "#sysout";
+				else if (arg.equalsIgnoreCase("-SPORT:trace"))			RTS_SPORT_Option.FEC_TraceLevel = Integer.decode(args[++i]);
 
 				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
 
@@ -584,9 +590,15 @@ public final class RTS_UTIL {
 			} else {
 				if (file == null) {
 					file = new File(arg);
+//					System.out.println("RTS_UTIL.setRuntimeOptions: file = "+file);
+					RTS_SPORT_Option.SPORT_SourceFileName = arg;
 					RTS_SPORT_Option.SourceDirName = file.getParent();
-				} else
-					error("multiple input files specified");
+				} else{
+					System.out.println("ERROR: multiple input files specified");
+					System.out.println("File 1: " + file);
+					System.out.println("File 2: " + arg);
+					help();
+				}
 			}
 		}
 		if (RTS_Option.VERBOSE) {
@@ -763,7 +775,7 @@ public final class RTS_UTIL {
 	 */
 	static void printStaticChain(final RTS_RTObject ins) {
 		RTS_RTObject x = ins;
-		println("*** STATIC CHAIN:");
+		println("RTS_UTIL: printStaticChain: *** STATIC CHAIN:");
 		while (x != null) {
 			boolean qps = x.isQPSystemBlock();
 			boolean dau = x.isDetachUsed();
@@ -771,7 +783,7 @@ public final class RTS_UTIL {
 					+ ']');
 			x = x._SL;
 		}
-
+		Thread.dumpStack();
 	}
 
 	/**
