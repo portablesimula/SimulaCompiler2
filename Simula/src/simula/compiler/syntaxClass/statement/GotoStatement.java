@@ -9,17 +9,11 @@ package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.GeneratedJavaClass;
 import simula.compiler.syntaxClass.Type;
-import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
-import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
-import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
-import simula.compiler.syntaxClass.declaration.VirtualSpecification;
-import simula.compiler.syntaxClass.expression.ConditionalExpression;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.Global;

@@ -10,8 +10,6 @@ package simula.compiler;
 import java.io.File;
 import java.io.IOException;
 
-import javax.swing.JLabel;
-
 import simula.compiler.parsing.SimulaScanner;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;

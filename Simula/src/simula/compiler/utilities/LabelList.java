@@ -5,9 +5,7 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.Label;
 import java.lang.classfile.CodeBuilder.BlockCodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
-import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.classfile.instruction.SwitchCase;
-import java.lang.constant.ConstantDescs;
 import java.util.List;
 import java.util.Vector;
 

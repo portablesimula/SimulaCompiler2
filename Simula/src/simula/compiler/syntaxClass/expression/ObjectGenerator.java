@@ -9,7 +9,6 @@ package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
@@ -256,7 +255,7 @@ public final class ObjectGenerator extends Expression {
 		codeBuilder.invokespecial(CD_cls, "<init>", cls.getConstructorMethodTypeDesc());
 
 		// _STM(); or _START
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(cls.isDetachUsed()) {
 			String resultType="Lsimula/runtime/RTS_RTObject;";
 			codeBuilder.invokevirtual(CD_cls, "_START", MethodTypeDesc.ofDescriptor("()" + resultType));

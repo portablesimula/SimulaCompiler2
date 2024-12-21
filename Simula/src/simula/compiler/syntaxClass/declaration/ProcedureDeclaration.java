@@ -778,7 +778,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			.withCode(codeBuilder -> {
 				ASSERT_SEMANTICS_CHECKED();
 				Global.enterScope(this);
-					ConstantPoolBuilder pool=codeBuilder.constantPool();
+//					ConstantPoolBuilder pool=codeBuilder.constantPool();
 					Label begScope = codeBuilder.newLabel();
 					Label endScope = codeBuilder.newLabel();
 					codeBuilder

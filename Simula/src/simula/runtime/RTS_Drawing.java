@@ -17,12 +17,7 @@ import java.awt.Rectangle;
 import java.awt.Stroke;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.awt.image.BufferStrategy;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.Vector;
-
 import javax.swing.JFrame;
 
 /**

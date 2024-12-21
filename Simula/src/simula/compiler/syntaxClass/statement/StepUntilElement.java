@@ -18,7 +18,6 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
-import simula.runtime.RTS_UTIL;
 
 // ************************************************************************************
 // *** ForListElement -- Step Until Element

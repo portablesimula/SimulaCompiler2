@@ -26,13 +26,10 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
-import java.util.Vector;
 
 /**
  * This is an implementation of a Console Panel.
@@ -44,11 +41,6 @@ import java.util.Vector;
  */
 @SuppressWarnings("serial")
 public final class RTS_ConsolePanel extends JPanel {
-	
-	/**
-	 * DEBUG on/off
-	 */
-	private static boolean DEBUG = false;
 	
 	/**
 	 * The text pane.

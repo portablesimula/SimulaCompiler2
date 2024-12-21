@@ -37,7 +37,6 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
-import simula.compiler.syntaxClass.statement.ConnectionStatement;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
@@ -301,7 +300,7 @@ public final class VariableExpression extends Expression {
 				Iterator<Parameter> paramIterator = null;
 				if (decl instanceof ClassDeclaration cdecl)
 					paramIterator = cdecl.new ClassParameterIterator();
-				else if (decl instanceof ProcedureDeclaration proc) {
+				else if (decl instanceof ProcedureDeclaration) {
 					paramIterator = ((ProcedureDeclaration) decl).parameterList.iterator();
 					if(Option.compilerMode != Option.CompilerMode.viaJavaSource) {
 						if(decl instanceof StandardProcedure prc) {

@@ -8,9 +8,6 @@
 package simula.runtime;
 
 import java.io.IOException;
-import java.io.PrintWriter;
-
-import simula.compiler.utilities.Util;
 
 /**
  * System class PrintFile.

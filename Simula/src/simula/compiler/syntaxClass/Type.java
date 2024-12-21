@@ -9,7 +9,6 @@ package simula.compiler.syntaxClass;
 
 import java.lang.classfile.ClassSignature;
 import java.lang.classfile.CodeBuilder;
-import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.ConstantDescs;
 import java.lang.constant.MethodTypeDesc;

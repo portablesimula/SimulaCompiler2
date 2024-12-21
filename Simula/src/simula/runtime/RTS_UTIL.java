@@ -12,9 +12,6 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
-import simula.compiler.utilities.Global;
-import simula.compiler.utilities.Util;
-
 /**
  * Utility class containing a lot of common stuff.
  * <p>
@@ -608,14 +605,14 @@ public final class RTS_UTIL {
 		}
 	}
 
-	/**
-	 * Utility: Print an error message in a popup panel.
-	 * @param msg the error message
-	 */
-	private static void error(final String msg) {
-		System.err.println("Simula runtime: " + msg + "\n");
-		popUpError(msg);
-	}
+//	/**
+//	 * Utility: Print an error message in a popup panel.
+//	 * @param msg the error message
+//	 */
+//	private static void error(final String msg) {
+//		System.err.println("Simula runtime: " + msg + "\n");
+//		popUpError(msg);
+//	}
 
 	/**
 	 * Popup an error message box.

@@ -41,7 +41,6 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
-import simula.runtime.RTS_Option;
 
 /**
  * The editor's menues.
