@@ -40,6 +40,8 @@ import simula.editor.SimulaEditor;
  *      
  *      -caseSensitive          Source file is case sensitive. See next page.
  *      
+ *      -compilerMode modeString   Simula Compiler mode *) see below.
+ *      
  *      -noexec                 Don't execute generated .jar file
  *      
  *      -nowarn                 Generate no warnings
@@ -60,6 +62,32 @@ import simula.editor.SimulaEditor;
  *                              
  *      -extLib directory       Specify where to search for precompiled classes and
  *                              procedures. If not found, output directory is also searched.
+ *                              
+ *                              
+ *      sourceFile ::= Simula Source File
+ *
+ *      modeString ::= viaJavaSource | directClassFiles | simulaClassLoader
+ *
+ *
+ *      viaJavaSource
+ *         The Simula Compiler will generate Java source files and use
+ *         the Java compiler to generate JavaClass files which in turn
+ *         are collected together with the Runtime System into the
+ *         resulting executable jar-file.
+ *
+ *
+ *      directClassFiles
+ *         The Simula Compiler will generate JavaClass files directly
+ *         which in turn are collected together with the Runtime System
+ *         into the resulting executable jar-file.
+ *         No Java source files are generated.
+ *
+ *
+ *      simulaClassLoader
+ *         The Simula Compiler will generate ClassFile byte array and
+ *         load it directly. No intermediate files are created.
+ *
+ *         NOTE: In this mode, the editor will terminate after the first program execution
  * </pre>
  * <p>
  * Link to GitHub: <a href=

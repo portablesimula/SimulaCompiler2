@@ -31,12 +31,12 @@ import simula.compiler.utilities.Util;
  *
  */
 public final class RTOption {
-	/** Runtime Option */ public static boolean VERBOSE = false;//true;
-	/** Runtime Option */ public static boolean USE_CONSOLE=false; //true;
-	/** Runtime Option */ public static boolean BLOCK_TRACING = false;// true;
-	/** Runtime Option */ public static boolean GOTO_TRACING = false;// true;
-	/** Runtime Option */ public static boolean QPS_TRACING = false; // true;
-	/** Runtime Option */ public static boolean SML_TRACING = false; // true;
+	/** Runtime Option */ public static boolean VERBOSE = false;
+	/** Runtime Option */ public static boolean USE_CONSOLE=false;
+	/** Runtime Option */ public static boolean BLOCK_TRACING = false;
+	/** Runtime Option */ public static boolean GOTO_TRACING = false;
+	/** Runtime Option */ public static boolean QPS_TRACING = false;
+	/** Runtime Option */ public static boolean SML_TRACING = false;
 	/** Runtime Option */ public static String SPORT_SOURCE_FILE;
 
 
