@@ -32,6 +32,11 @@ public final class OverLoad extends Type {
 		this.type=type;
 	}
 	
+	/**
+	 * Check if this Overload type contains the given type.
+	 * @param type a type
+	 * @return true: if this Overload type contains the given type.
+	 */
 	public boolean contains(Type type) {
 		for(Type tp:this.type) {
 //			if(tp.equals(type)) return(true);

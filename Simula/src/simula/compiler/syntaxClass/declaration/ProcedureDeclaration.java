@@ -635,6 +635,11 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return(MethodTypeDesc.ofDescriptor(sb.toString()));
 	}
 
+	/**
+	 * Coding utility: getResultFieldRefEntry
+	 * @param pool the ConstantPoolBuilder to use
+	 * @return a FieldRefEntry
+	 */
 	public FieldRefEntry getResultFieldRefEntry(ConstantPoolBuilder pool) {
 		return(pool.fieldRefEntry(RTS.CD.classDesc(this.getJavaIdentifier()), "_RESULT", type.toClassDesc()));
 	}

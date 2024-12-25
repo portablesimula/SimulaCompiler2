@@ -491,6 +491,8 @@ public class Type extends SyntaxClass {
 
 	/**
 	 * Coding utility: toJVMType.
+	 * @param kind kind code.
+	 * @param mode mode code.
 	 * @return the resulting code string.
 	 */
 	public String toJVMType(int kind,int mode) {
@@ -498,6 +500,10 @@ public class Type extends SyntaxClass {
 		return(jvmType);
 	}
 	
+	/**
+	 * Coding utility: toJVMType.
+	 * @return the resulting code string.
+	 */
 	public String toJVMType() {
 		switch(keyWord) {
 			case T_VOID:		return("V");
@@ -521,7 +527,12 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	// Used by: Thunk.buildClassFile
+	/**
+	 * Coding utility: toJVMType. Used by: Thunk.buildClassFile.
+	 * @param type a type
+	 * @param kind a kind code
+	 * @return the resulting code string.
+	 */
 	public static String toJVMClassType(Type type,int kind) {
 		if(kind == Parameter.Kind.Procedure) return("Lsimula/runtime/RTS_PRCQNT;");
 		switch(type.keyWord) {
@@ -548,6 +559,7 @@ public class Type extends SyntaxClass {
 
 	/**
 	 * Coding utility: toClassDesc.
+	 * @param declaredIn the owner.
 	 * @return the resulting Class Descriptor.
 	 */
 	public ClassDesc toClassDesc(Declaration declaredIn) {
@@ -587,6 +599,12 @@ public class Type extends SyntaxClass {
 		}
 	}
 
+	/**
+	 * Coding utility: toClassDesc.
+	 * @param kind a kind code
+	 * @param mode a mode code
+	 * @return the resulting Class Descriptor.
+	 */
 	public ClassDesc toClassDesc(int kind,int mode) {
 		if (mode == Parameter.Mode.name) return(RTS.CD.RTS_NAME);
 		else switch(kind) { // Parameter.Kind
@@ -597,6 +615,10 @@ public class Type extends SyntaxClass {
 		}
 	}
 
+	/**
+	 * Coding utility: toClassDesc.
+	 * @return the resulting Class Descriptor.
+	 */
 	public ClassDesc toObjectClassDesc() {
 		switch(keyWord) {
 			case T_VOID:		return(ConstantDescs.CD_void);
@@ -653,24 +675,40 @@ public class Type extends SyntaxClass {
 		return ClassSignature.parseFrom(CSS);
 	}
 	
+	/**
+	 * Coding utility: code instruction dup acording to type.
+	 * @param codeBuilder the codeBuilder
+	 */
 	public void dup(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.dup2();
 		else codeBuilder.dup();
 	}		
 	
+	/**
+	 * Coding utility: code instruction dup_x1 acording to type.
+	 * @param codeBuilder the codeBuilder
+	 */
 	public void dup_x1(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.dup2_x1();
 		else codeBuilder.dup_x1();
 	}		
 	
+	/**
+	 * Coding utility: code instruction pop acording to type.
+	 * @param codeBuilder the codeBuilder
+	 */
 	public void pop(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.pop2();
 		else codeBuilder.pop();
 	}		
 
+	/**
+	 * Coding utility: code instruction checkcast acording to type.
+	 * @param codeBuilder the codeBuilder
+	 */
 	public void checkCast(CodeBuilder codeBuilder) {
 		switch(keyWord) {
 		case Type.T_INTEGER   -> codeBuilder.checkcast(ConstantDescs.CD_Integer);
@@ -702,6 +740,10 @@ public class Type extends SyntaxClass {
 		}
 	}
 	
+	/**
+	 * Coding utility: buildObjectValueOf
+	 * @param codeBuilder the CodeBuilder to use
+	 */
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {
 		switch(keyWord) {
 		case T_BOOLEAN ->	codeBuilder.invokestatic(ConstantDescs.CD_Boolean,   "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;"));

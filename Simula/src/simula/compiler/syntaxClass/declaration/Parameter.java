@@ -69,8 +69,15 @@ public final class Parameter extends Declaration {
 	public class Mode {
 		/** Parameter transfered by value */ public static final int value = 1;
 		/** Parameter transfered by name */  public static final int name = 2;
+
+		/** Default constructor: Not used */ public Mode() {}
 	}
 	
+	/**
+	 * Utility: edMode
+	 * @param mode a mode code
+	 * @return the resulting String
+	 */
 	public static String edMode(int mode) {
 		switch(mode) {
 			case 1: return("value");
@@ -88,8 +95,15 @@ public final class Parameter extends Declaration {
 		/** Procedure parameter */ public static final int Procedure = 2;
 		/** Array parameter */     public static final int Array = 3;
 		/** Label parameter */     public static final int Label = 4;
+		
+		/** Default constructor: Not used */ public Kind() {}
 	}
 	
+	/**
+	 * Utility: edKind
+	 * @param kind a kind code
+	 * @return the resulting String
+	 */
 	public static String edKind(int kind) {
 		switch(kind) {
 			case 1: return("Simple");
@@ -292,6 +306,11 @@ public final class Parameter extends Declaration {
 		return (toJavaType() + ' ' + externalIdent);
 	}
 	
+	/**
+	 * Coding utility: buildParamCode
+	 * @param codeBuilder the codeBuilder to use
+	 * @param expr parameter value expression
+	 */
 	public void buildParamCode(CodeBuilder codeBuilder,Expression expr) {
 //		ASSERT_SEMANTICS_CHECKED();
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
@@ -365,16 +384,32 @@ public final class Parameter extends Declaration {
 		}
 	}
 	
+	/**
+	 * Coding utility: buildNameParam
+	 * @param codeBuilder to use
+	 * @param expr the Thunk expression to be evaluated.
+	 */
 	public static void buildNameParam(CodeBuilder codeBuilder,Expression expr) {
 //		buildNameParam(codeBuilder,null,expr);
 		Thunk.buildInvoke(0, expr, codeBuilder);
 	}	
 	
+	/**
+	 * Coding utility: buildNameParam
+	 * @param codeBuilder to use
+	 * @param par the parameter used decide parameter kind
+	 * @param expr the Thunk expression to be evaluated.
+	 */
 	private static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
 		Thunk.buildInvoke((par==null)?0:par.kind, expr, codeBuilder);
 	}
 	
 
+	/**
+	 * Coding utility: get FieldRefEntry of this Parameter.
+	 * @param pool the ConstantPoolBuilder to use.
+	 * @return the FieldRefEntry of this Parameter.
+	 */
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		ClassDesc CD_type=null; //type.toClassDesc(kind,mode);
@@ -384,6 +419,10 @@ public final class Parameter extends Declaration {
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD_type));
 	}
 	
+	/**
+	 * Coding utility: get getFieldIdentifier of this Parameter.
+	 * @return the resulting String.
+	 */
 	@Override
 	public String getFieldIdentifier() {
 		if(declaredIn instanceof ClassDeclaration cls)
@@ -391,6 +430,9 @@ public final class Parameter extends Declaration {
 		else return("p_"+identifier);
 	}
 
+	/**
+	 * Coding utility: buildDeclaration of this Parameter.
+	 */
 	@Override
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		String ident = getFieldIdentifier();
@@ -415,6 +457,10 @@ public final class Parameter extends Declaration {
 		}
 	}
 	
+	/**
+	 * Coding utility: Parameter type toClassDesc.
+	 * @return the resulting CalssDesc
+	 */
 	public ClassDesc type_toClassDesc() {
 		switch(this.kind) {
 		case Kind.Array: return(this.type.toClassDesc(this.kind,this.mode));
@@ -426,6 +472,11 @@ public final class Parameter extends Declaration {
 		}
 	}
 
+	/**
+	 * Coding utility: generate load instruction dependent of type.
+	 * @param codeBuilder the codeBuilder to use
+	 * @param ofst the parameter offset.
+	 */
 	public void loadParameter(CodeBuilder codeBuilder,int ofst) {
 		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
