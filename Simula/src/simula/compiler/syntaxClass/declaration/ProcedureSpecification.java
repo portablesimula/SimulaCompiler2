@@ -163,6 +163,12 @@ public final class ProcedureSpecification {
 	public ProcedureSpecification() {
 	}
 
+	/**
+	 * Write a ProcedureSpecification to a AttributeOutputStream.
+	 * @param spec the ProcedureSpecification to be written.
+	 * @param oupt the AttributeOutputStream to write to.
+	 * @throws IOException if something went wrong.
+	 */
 	public static void writeProcedureSpec(ProcedureSpecification spec,AttributeOutputStream oupt) throws IOException {
 		if(spec == null) {
 			oupt.writeBoolean(false);
@@ -181,6 +187,12 @@ public final class ProcedureSpecification {
 		}
 	}
 	
+	/**
+	 * Read and return a ProcedureSpecification.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the ProcedureSpecification read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();
