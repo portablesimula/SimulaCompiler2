@@ -29,7 +29,7 @@ import simula.compiler.utilities.Util;
  * Coding Utilities: Call Procedure
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/CallProcedure.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/CallProcedure.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen

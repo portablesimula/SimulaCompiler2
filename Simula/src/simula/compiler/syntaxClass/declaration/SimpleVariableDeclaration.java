@@ -53,7 +53,7 @@ import simula.compiler.utilities.Util;
  *   
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SimpleVariableDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SimpleVariableDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -283,6 +283,12 @@ public class SimpleVariableDeclaration extends Declaration {
 		oupt.writeObj(constantElement);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
 		var.OBJECT_SEQU = inpt.readSEQU(var);

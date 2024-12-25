@@ -44,7 +44,7 @@ import java.io.Reader;
  * procedure "endfile" gives access to the value of ENDFILE.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_Infile.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_Infile.java"><b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen

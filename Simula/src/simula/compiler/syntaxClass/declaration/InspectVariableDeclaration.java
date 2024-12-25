@@ -174,6 +174,12 @@ public class InspectVariableDeclaration extends Declaration {
 		oupt.writeObj(connectionStatement);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static InspectVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		InspectVariableDeclaration var = new InspectVariableDeclaration();
 		var.OBJECT_SEQU = inpt.readSEQU(var);

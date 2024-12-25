@@ -80,7 +80,7 @@ import simula.compiler.utilities.Util;
  * "T1 &amp; (T2.sub(1,2)) &amp; (T3.main)" are equivalent.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TextExpression.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TextExpression.java">
  * <b>Source File</b></a>.
  * 
  * @author Simula Standard
@@ -185,6 +185,12 @@ public final class TextExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static TextExpression readObject(AttributeInputStream inpt) throws IOException {
 		TextExpression expr = new TextExpression();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

@@ -107,7 +107,7 @@ import simula.compiler.utilities.Util;
  * outside its associated bounds causes a run time error.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Variable.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Variable.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -748,7 +748,6 @@ public final class VariableExpression extends Expression {
 
 	/**
 	 * Coding Utility: Edit identifier access.
-	 * @param id the identifier
 	 * @param destination true if destination
 	 * @param codeBuilder the CodeBuilder
 	 */
@@ -1022,6 +1021,12 @@ public final class VariableExpression extends Expression {
 		}
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
 		VariableExpression var = new VariableExpression();
 		var.OBJECT_SEQU = inpt.readSEQU(var);

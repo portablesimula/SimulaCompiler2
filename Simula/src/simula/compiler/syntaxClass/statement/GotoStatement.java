@@ -43,7 +43,7 @@ import simula.compiler.utilities.Util;
  * Sect. 6.1 Goto Statement
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/GotoStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/GotoStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -158,6 +158,12 @@ public final class GotoStatement extends Statement {
 		oupt.writeObj(label);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
 		GotoStatement stm = new GotoStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

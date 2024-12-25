@@ -31,7 +31,7 @@ import simula.compiler.utilities.Util;
  * Label Declaration.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/LabelDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/LabelDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -258,6 +258,12 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeObj(movedTo);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		LabelDeclaration lab = new LabelDeclaration(identifier);

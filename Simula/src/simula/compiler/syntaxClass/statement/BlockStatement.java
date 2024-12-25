@@ -46,7 +46,7 @@ import simula.compiler.utilities.Util;
  *               | BEGIN statement { ; statement } END
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/BlockStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/BlockStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -164,6 +164,12 @@ public final class BlockStatement extends Statement {
 		oupt.writeObj(blockDeclaration);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static BlockStatement readObject(AttributeInputStream inpt) throws IOException {
 		BlockStatement stm = new BlockStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

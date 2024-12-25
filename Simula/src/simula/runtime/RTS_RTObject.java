@@ -10,7 +10,7 @@ package simula.runtime;
 /**
  * This class is the main superclass used to form all other Simula classes
  * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_RTObject.java"><b>Source File</b></a>.
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_RTObject.java"><b>Source File</b></a>.
  * @author Øystein Myhre Andersen
  */
 public abstract class RTS_RTObject {

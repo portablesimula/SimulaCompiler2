@@ -136,7 +136,7 @@ import simula.compiler.utilities.Util;
  *           }
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ForStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ForStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -426,6 +426,12 @@ public final class ForStatement extends Statement {
 		oupt.writeObj(doStatement);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		ForStatement stm = new ForStatement();

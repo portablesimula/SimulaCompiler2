@@ -158,6 +158,12 @@ public class ForWhileElement extends ForListElement {
 		oupt.writeObj(expr2);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ForWhileElement readObject(AttributeInputStream inpt) throws IOException {
 		ForWhileElement elt = new ForWhileElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

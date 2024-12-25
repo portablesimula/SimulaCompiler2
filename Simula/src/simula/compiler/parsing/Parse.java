@@ -49,7 +49,7 @@ import simula.compiler.utilities.Util;
  * ***********************************************************************
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/parsing/Parse.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/parsing/Parse.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *

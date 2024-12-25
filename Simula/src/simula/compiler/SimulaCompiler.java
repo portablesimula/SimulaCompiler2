@@ -45,7 +45,7 @@ import simula.editor.RTOption;
  * </ul>
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/SimulaCompiler.java"><b>Source
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/SimulaCompiler.java"><b>Source
  * File</b></a>.
  *
  * @author Øystein Myhre Andersen
@@ -377,11 +377,6 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			Vector<String> cmds = new Vector<String>();
 			cmds.add("java");
-			
-			if(! Option.internal.TESTING_JDK24) {
-				cmds.add("--enable-preview"); // TODO: Change when ClassFile API is released
-			}
-			
        		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
     			cmds.add("-jar");
     			cmds.add(jarFile);
@@ -531,12 +526,6 @@ public final class SimulaCompiler {
 	 */
 	private int callJavaSystemCompiler(final JavaCompiler compiler, final String classPath) throws IOException {
 		Vector<String> arguments = new Vector<String>();
-		
-		if(! Option.internal.TESTING_JDK24) {
-			arguments.add("--release"); arguments.add("23"); // TODO: Change when ClassFile API is released
-			arguments.add("--enable-preview");               // TODO: Change when ClassFile API is released
-		}
-		
 		if (Option.internal.DEBUGGING) {
 			arguments.add("-version");
 		}
@@ -586,12 +575,6 @@ public final class SimulaCompiler {
 	private int callJavacCompiler(final String classPath) throws IOException {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("javac");
-		
-		if(! Option.internal.TESTING_JDK24) {
-			cmds.add("--release"); cmds.add("23"); // TODO: Change when ClassFile API is released
-			cmds.add("--enable-preview");          // TODO: Change when ClassFile API is released
-		}
-
 		if (Option.internal.DEBUGGING) {
 			cmds.add("-version");
 		}

@@ -83,7 +83,7 @@ import simula.compiler.utilities.Util;
  * This class is prefix to StandardProcedure and SwitchDeclaration.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -607,9 +607,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 
 					classBuilder
 						.withMethod("<init>", MTD_Constructor(true), ClassFile.ACC_PUBLIC,
-							codeBuilder -> buildConstructor(codeBuilder));
-					
-					classBuilder
+							codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC,
 							codeBuilder -> buildMethod_STM(codeBuilder));
 				}
@@ -1097,6 +1095,12 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();

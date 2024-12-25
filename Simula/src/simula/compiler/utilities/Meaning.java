@@ -22,7 +22,7 @@ import simula.compiler.syntaxClass.expression.VariableExpression;
  * Holding the semantic meaning of an identifier.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/utilities/Meaning.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Meaning.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *
@@ -100,6 +100,10 @@ public final class Meaning {
 		else return (null);
 	}
 
+	/**
+	 * Get the inspectedVariable of the enclosing ConnectionBlock or null.
+	 * @return the inspectedVariable of the enclosing ConnectionBlock or null.
+	 */
 	public VariableExpression getInspectedVariable() {
 		if (declaredIn instanceof ConnectionBlock conn)
 			 return (conn.inspectedVariable);
@@ -151,6 +155,7 @@ public final class Meaning {
 	// ***************************************************************************************
 	/**
 	 * Coding utility: Build qualified static link chain.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	public void buildQualifiedStaticLink(CodeBuilder codeBuilder) {
 		// Edit staticLink reference
@@ -182,10 +187,9 @@ public final class Meaning {
 //	}
 
 	/**
-	 * Coding Utility: Edit identifier access.
-	 * @param id the identifier
+	 * Coding Utility: Build identifier access.
 	 * @param destination true if destination
-	 * @return a suitable java code
+	 * @param codeBuilder the CodeBuilder
 	 */
 	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
 		Meaning meaning=this;

@@ -102,7 +102,7 @@ import simula.compiler.utilities.Util;
  * This class is prefix to StandardClass and PrefixedBlockDeclaration.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ClassDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ClassDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -1636,6 +1636,12 @@ public class ClassDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();

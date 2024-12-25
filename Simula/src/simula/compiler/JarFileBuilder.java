@@ -30,6 +30,9 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 
+/**
+ * Utilities to manipulate jarFiles.
+ */
 public class JarFileBuilder {
 	
 	/**
@@ -300,7 +303,7 @@ public class JarFileBuilder {
 
 	/**
 	 * Add the jarFile to the includeQueue.
-	 * @param jarFile
+	 * @param jarFile the jarFile to be added
 	 * @throws IOException if something went wrong
 	 */
 	public static void addToIncludeQueue(final JarFile jarFile) throws IOException {
@@ -308,6 +311,10 @@ public class JarFileBuilder {
 		Global.includeQueue.add(jarFile);			
 	}
 
+	/**
+	 * Add the jarFiles in the includeQueue.
+	 * @throws IOException if something went wrong
+	 */
 	public void addIncludeQueue() throws IOException {
 //		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
 		if(Global.includeQueue != null) {
@@ -320,6 +327,10 @@ public class JarFileBuilder {
 		}
 	}
 
+	/**
+	 * Load the jarFiles in the includeQueue using simulaClassLoader.
+	 * @throws IOException if something went wrong
+	 */
 	public static void loadIncludeQueue() throws IOException {
 //		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
 		if(Global.includeQueue != null) {
@@ -332,6 +343,10 @@ public class JarFileBuilder {
 		}
 	}
 
+	/**
+	 * Load the Runtime System using simulaClassLoader.
+	 * @throws IOException if something went wrong
+	 */
 	public static void loadRuntimeSystem() throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.loadRuntimeSystem: "+Global.simulaRtsLib);
 		File rtsLib = new File(Global.simulaRtsLib.getParentFile(), "RTS.jar");

@@ -57,7 +57,7 @@ package simula.runtime;
  *         end;
  *     end;    
  * </pre>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_CatchingErrors.java"><b>Source File</b></a>.
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_CatchingErrors.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *

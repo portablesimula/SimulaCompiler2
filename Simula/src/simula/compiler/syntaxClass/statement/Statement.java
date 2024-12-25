@@ -51,7 +51,7 @@ import simula.compiler.utilities.Util;
  * </pre>
  * 
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/Statement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/Statement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group

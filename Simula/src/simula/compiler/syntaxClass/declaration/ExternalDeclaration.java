@@ -91,7 +91,7 @@ import simula.compiler.utilities.Util;
  * a formal procedure.
  * <p> 
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ExternalDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ExternalDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -124,7 +124,7 @@ public final class ExternalDeclaration extends Declaration {
 	 *            | EXTERNAL kind PROCEDURE external-item  IS procedure-declaration
 	 * </pre>
 	 * Precondition: EXTERNAL  is already read.
-	 * @param declarationList the declaration list which is updated
+	 * @param enclosure the BlockDeclaration which is updated
 	 */
 	public static Vector<ExternalDeclaration> expectExternalHead(final BlockDeclaration enclosure) {
 		String kind = Parse.acceptIdentifier();
@@ -221,6 +221,12 @@ public final class ExternalDeclaration extends Declaration {
 //		oupt.writeObj(declaredIn);// Declaration
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ExternalDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		ExternalDeclaration ext = new ExternalDeclaration();
 		ext.OBJECT_SEQU = inpt.readSEQU(ext);

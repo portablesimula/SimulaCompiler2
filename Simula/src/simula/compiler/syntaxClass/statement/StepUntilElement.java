@@ -175,7 +175,7 @@ public class StepUntilElement extends ForListElement {
 	 * 
 	 * controlVariable = expr1();
 	 * DELTA = expr2();
-	 * while( sign(DELTA) * (controlVariable - expr3() ) <= 0) {
+	 * while( sign(DELTA) * (controlVariable - expr3() ) &lt;= 0) {
 	 * 		STATEMENT();
 	 * 		DELTA = expr2();
 	 * 		controlVariable = controlVariable + DELTA;
@@ -380,6 +380,12 @@ public class StepUntilElement extends ForListElement {
 		oupt.writeObj(expr3);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static StepUntilElement readObject(AttributeInputStream inpt) throws IOException {
 		StepUntilElement elt = new StepUntilElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

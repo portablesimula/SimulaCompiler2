@@ -99,7 +99,7 @@ import simula.compiler.utilities.Util;
  *           array  a,b,c(7:n,2:m), s(-2:10)            ! any value of n or m legal;
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ArrayDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ArrayDeclaration.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -574,6 +574,12 @@ public final class ArrayDeclaration extends Declaration {
 		}
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ArrayDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		ArrayDeclaration arr = new ArrayDeclaration();
 		arr.OBJECT_SEQU = inpt.readSEQU(arr);

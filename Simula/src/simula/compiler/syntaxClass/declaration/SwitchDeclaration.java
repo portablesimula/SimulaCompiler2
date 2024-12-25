@@ -40,7 +40,7 @@ import simula.compiler.utilities.Util;
  *     switch-list = designational-expression { , designational-expression }
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SwitchDeclaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SwitchDeclaration.java">
  * <b>Source File</b></a>.
  *
  * @author SIMULA Standards Group

@@ -36,7 +36,7 @@ import simula.compiler.utilities.Util;
  *
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/StandaloneExpression.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/StandaloneExpression.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -146,6 +146,12 @@ public final class StandaloneExpression extends Statement {
 		oupt.writeObj(expression);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		StandaloneExpression stm = new StandaloneExpression();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

@@ -57,7 +57,7 @@ import simula.compiler.utilities.Util;
  * match exists, it is that of the virtual specification.
  * </ul>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/QualifiedObject.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/QualifiedObject.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -155,6 +155,12 @@ public final class QualifiedObject extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
 		QualifiedObject expr = new QualifiedObject();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

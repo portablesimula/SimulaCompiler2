@@ -23,7 +23,7 @@ import simula.compiler.syntaxClass.SyntaxClass;
 /**
  * A set of all static Utility Methods
  * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/utilities/Util.java"><b>Source File</b></a>.
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Util.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *
@@ -89,8 +89,7 @@ public final class Util {
 	}
 
 	/**
-	 * Print a internal error message.
-	 * @param msg the message
+	 * Print the internal error message: IMPOSSIBLE.
 	 */
 	public static void IERR() {
 		IERR("IMPOSSIBLE");

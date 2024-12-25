@@ -49,7 +49,7 @@ import simula.compiler.utilities.Util;
  * containing its declaration.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/LocalObject.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/LocalObject.java">
  * <b>Source File</b></a>.
  * 
  * @author Simula Standard
@@ -210,6 +210,12 @@ public final class LocalObject extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		LocalObject expr = new LocalObject();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

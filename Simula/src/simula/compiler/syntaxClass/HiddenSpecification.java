@@ -25,7 +25,7 @@ import simula.compiler.utilities.Util;
  *         | protected hidden identifier-list
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/HiddenSpecification.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/HiddenSpecification.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *
@@ -185,6 +185,12 @@ public final class HiddenSpecification extends SyntaxClass {
 		oupt.writeObj(definedIn);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		HiddenSpecification spec = new HiddenSpecification();
 		spec.OBJECT_SEQU = inpt.readSEQU(spec);

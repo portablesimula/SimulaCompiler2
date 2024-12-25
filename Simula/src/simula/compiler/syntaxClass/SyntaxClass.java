@@ -82,7 +82,7 @@ import simula.compiler.utilities.Util;
  * </pre>
  * 
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/SyntaxClass.java"><b>Source
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/SyntaxClass.java"><b>Source
  * File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -250,11 +250,21 @@ public abstract class SyntaxClass {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
-	
+	/**
+	 * Write an object to a AttributeOutputStream.
+	 * @param oupt the AttributeOutputStream to write to.
+	 * @throws IOException if something went wrong.
+	 */
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.IERR("Method 'writeObject' needs a redefinition in "+this.getClass().getSimpleName());
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Util.IERR("Method 'readObject' needs a redefiniton");
 		return(null);

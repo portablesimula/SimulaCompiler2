@@ -50,7 +50,7 @@ import simula.compiler.utilities.Util;
  * 
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectGenerator.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectGenerator.java"><b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
  * @author Øystein Myhre Andersen
@@ -301,6 +301,12 @@ public final class ObjectGenerator extends Expression {
 		}
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		ObjectGenerator gen = new ObjectGenerator();
 		gen.OBJECT_SEQU = inpt.readSEQU(gen);

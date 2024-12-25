@@ -40,7 +40,7 @@ import simula.compiler.utilities.Util;
  * SimpleVariableDeclaration, VirtualSpecification, VirtualMatch, ArrayDeclaration
  * <p> 
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Declaration.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Declaration.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen

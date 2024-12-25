@@ -14,7 +14,7 @@ import static simula.runtime.RTS_UTIL.*;
  * <p>
  * This is an implementation of a balanced tree used to support the sequencing set in class Simulation.
  * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_Ranking.java"><b>Source File</b></a>.
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_Ranking.java"><b>Source File</b></a>.
  *
  * @author Øystein Myhre Andersen
  */

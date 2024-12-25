@@ -45,7 +45,7 @@ import simula.compiler.utilities.Util;
  *
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualSpecification.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualSpecification.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -318,6 +318,12 @@ public final class VirtualSpecification extends Declaration {
 		ProcedureSpecification.writeProcedureSpec(procedureSpec,oupt);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		VirtualSpecification virt = new VirtualSpecification();
 		virt.OBJECT_SEQU = inpt.readSEQU(virt);

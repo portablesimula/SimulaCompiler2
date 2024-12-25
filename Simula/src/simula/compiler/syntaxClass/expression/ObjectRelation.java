@@ -69,7 +69,7 @@ import simula.compiler.utilities.Util;
  * match exists, it is that of the virtual specification.
  * </ul>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectRelation.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectRelation.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -198,6 +198,12 @@ public final class ObjectRelation extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		ObjectRelation expr = new ObjectRelation();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

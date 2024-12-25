@@ -76,7 +76,7 @@ import simula.compiler.utilities.Util;
  *   
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/SwitchStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/SwitchStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -463,6 +463,12 @@ public final class SwitchStatement extends Statement {
 		oupt.writeObj(switchKey);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		SwitchStatement stm = new SwitchStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

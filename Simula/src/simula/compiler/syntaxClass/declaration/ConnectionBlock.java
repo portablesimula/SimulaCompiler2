@@ -38,7 +38,7 @@ import simula.compiler.utilities.Util;
  * See Simula Standard 4.8 Connection statement.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ConnectionBlock.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ConnectionBlock.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -303,6 +303,12 @@ public final class ConnectionBlock extends DeclarationScope {
 		Util.TRACE_OUTPUT("END Write ConnectionBlock: "+identifier);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ConnectionBlock readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		ConnectionBlock blk = new ConnectionBlock(identifier);

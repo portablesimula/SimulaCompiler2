@@ -173,6 +173,12 @@ public class ForListElement extends SyntaxClass {
 		oupt.writeObj(expr1);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ForListElement readObject(AttributeInputStream inpt) throws IOException {
 		ForListElement elt = new ForListElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

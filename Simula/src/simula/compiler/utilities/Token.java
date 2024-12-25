@@ -11,7 +11,7 @@ package simula.compiler.utilities;
  * Utility class Token.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/utilities/Token.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Token.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *

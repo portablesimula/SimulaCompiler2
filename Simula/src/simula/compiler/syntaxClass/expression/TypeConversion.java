@@ -27,7 +27,7 @@ import simula.compiler.utilities.Util;
  * Type Conversion.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TypeConversion.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TypeConversion.java">
  * <b>Source File</b></a>.
  *
  */
@@ -279,6 +279,12 @@ public final class TypeConversion extends Expression {
 		oupt.writeObj(expression);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		TypeConversion expr = new TypeConversion();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

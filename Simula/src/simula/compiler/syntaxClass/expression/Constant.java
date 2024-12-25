@@ -34,7 +34,7 @@ import simula.compiler.utilities.Util;
  *   Constant = unsigned-number | string | character-constant | NONE | NOTEXT
  *   
  * </pre>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Constant.java">
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Constant.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -338,6 +338,12 @@ public final class Constant extends Expression {
 		oupt.writeConstant(value);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Constant cnst = new Constant();
 		cnst.OBJECT_SEQU = inpt.readSEQU(cnst);

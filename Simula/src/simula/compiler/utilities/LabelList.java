@@ -17,6 +17,15 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 
+/***
+ * A list of LabelDeclarations.
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/LabelList.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ */
 public class LabelList {
 	private static boolean TRACING = false;
 	private static int LABEL_SEQU = 0;
@@ -30,7 +39,10 @@ public class LabelList {
 	private Label defaultTarget; // beginning of the default handler block. Set by MAKE_READY_FOR_CODING
 	private Vector<SwitchCase> tableSwitchCases;  // Set by MAKE_READY_FOR_CODING
 	
-
+	/**
+	 * A list of LabelDeclarations.
+	 * @param declaredIn the DeclarationScope owning this list.
+	 */
 	public LabelList(DeclarationScope declaredIn) {
 		if(declaredIn == null) Util.IERR();
 		this.sequ = (LABEL_SEQU++);
@@ -39,6 +51,9 @@ public class LabelList {
 		if(TRACING) System.out.println("NEW " + this);
 	}
 	
+	/**
+	 * Clears this list.
+	 */
 	public void clear() {
 		tableSwitchCases = null;
 		READY_FOR_CODING = false;
@@ -48,24 +63,43 @@ public class LabelList {
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public Vector<LabelDeclaration> getDeclaredLabels(){
 		return declaredLabels;
 	}
 	
+	/**
+	 * Get all labels ( accumulated through the prefix chain for classes and prefixed blocks).
+	 * @return a Vector of LabelDeclarations
+	 */
 	public Vector<LabelDeclaration> getAccumLabels(){
 		return accumLabels;
 	}
 	
+	/**
+	 * Get number of accumulated labels ( accumulated through the prefix chain for classes and prefixed blocks).
+	 * @return number of accumulated labels.
+	 */
 	public int accumLabelSize() {
 		return (accumLabels == null)?0:accumLabels.size();
 	}
 	
+	/**
+	 * Get number of local labels.
+	 * @return number of local labels.
+	 */
 	public int declaredLabelSize() {
 		return (declaredLabels == null)?0:declaredLabels.size();
 	}
 	
+	/**
+	 * Get last declared local label with the given ident.
+	 * @return number of accumulated labels.
+	 */
 	public LabelDeclaration getLastDeclaredLabel(String ident) {
-//		int n = tableSize();
 		int n = declaredLabelSize();
 		if(n > 0) {
 			for(int i=n-1;i>=0;i--) {
@@ -76,6 +110,10 @@ public class LabelList {
 		return null;
 	}
 	
+	/**
+	 * Add a label to the local label list. 
+	 * @param lab the label to add.
+	 */
 	public void add(LabelDeclaration lab) {
 		if(TRACING) System.out.println(ident()+".add: "+lab.identifier+'['+lab.externalIdent+']');
 		if(READY_FOR_CODING) Util.IERR("Can't add a new Label when LabelLisit is marked READY_FOR_CODING");
@@ -83,7 +121,13 @@ public class LabelList {
 		if(TRACING) System.out.println(ident()+".add: DONE: LabelList = "+this);
 	}
 	
-	// Used when generating .java source
+	/**
+	 * Accumulate the label list for the given block. 
+	 * accumulated through the prefix chain for classes and prefixed blocks.
+	 * <p>
+	 * This method is used when generating .java source.
+	 * @param blk the given BlockDeclaration.
+	 */
 	public static void accumLabelList(BlockDeclaration blk) {
 		Vector<LabelDeclaration> accumLabels = new Vector<LabelDeclaration>();
 		if(blk instanceof ClassDeclaration cls) {
@@ -99,12 +143,17 @@ public class LabelList {
 		if(blk.labelList != null) 
 			for(LabelDeclaration lab:blk.labelList.declaredLabels)
 				accumLabels.add(lab);
-//		if(accumLabels != null) {
-			if(blk.labelList == null) blk.labelList = new LabelList(blk);
-			blk.labelList.accumLabels = accumLabels;
-//		}					
+		if(blk.labelList == null) blk.labelList = new LabelList(blk);
+		blk.labelList.accumLabels = accumLabels;
 	}
 	
+	/**
+	 * Get a List<SwitchCase> suitable for the 'tableswitch' instruction.
+	 * <p>
+	 * This method is used when generating classFile using the codeBuilder.
+	 * @param codeBuilder the codeBuilder
+	 * @return a List<SwitchCase>
+	 */
 	public List<SwitchCase> getTableSwitchCases(CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		if(TRACING) System.out.println(ident()+".getTableSwitchCases: "+this);
@@ -113,6 +162,11 @@ public class LabelList {
 		return tableSwitchCases;
 	}
 
+	/**
+	 * Sets the label indexes suitable for the 'tableswitch' instruction.
+	 * <p>
+	 * This method is used when generating classFile using the codeBuilder.
+	 */
 	public void setLabelIdexes() {
 		if(accumLabels != null) {
 			int nextIndex = 1;
@@ -124,8 +178,6 @@ public class LabelList {
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {
 		if(READY_FOR_CODING) return;
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
-//		Vector<LabelDeclaration> accumLabels = doAccumLabels(declaredIn);
-//		accumLabels = doAccumLabels(declaredIn);
 		if(accumLabelSize() > 0) {
 			defaultTarget = codeBuilder.newLabel();
 			tableSwitchCases = new Vector<SwitchCase>();
@@ -235,6 +287,11 @@ public class LabelList {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
+	/**
+	 * Write a LabelList to a AttributeOutputStream.
+	 * @param oupt the AttributeOutputStream to write to.
+	 * @throws IOException if something went wrong.
+	 */
 	public static void writeLabelList(LabelList labelList,AttributeOutputStream oupt) throws IOException {
 		if(labelList == null) {
 //		if(labelList == null || labelList.initialList == null) {
@@ -251,6 +308,12 @@ public class LabelList {
 		}
 	}
 
+	/**
+	 * Read and return a LabelList.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the LabelList object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static LabelList readLabelList(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();
 		LabelList labelList = null;

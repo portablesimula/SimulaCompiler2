@@ -103,6 +103,12 @@ public class ConnectionDoPart extends SyntaxClass {
 		oupt.writeObj(connectionBlock);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ConnectionDoPart readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionDoPart dop = new ConnectionDoPart();
 		dop.OBJECT_SEQU = inpt.readSEQU(dop);

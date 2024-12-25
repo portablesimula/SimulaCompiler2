@@ -28,14 +28,17 @@ import javax.swing.JPanel;
  * Compile Time Options.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/utilities/Option.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Option.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *
  */
 public final class Option {
 
-    public enum CompilerMode { 
+	/**
+	 * The Compiler Modes.
+	 */
+	public enum CompilerMode { 
     	/** Generate Java source and use Java compiler to generate JavaClass files. */					viaJavaSource,
     	/** Generate JavaClass files directly. No Java source files are generated. */ 					directClassFiles,
     	/** Generate ClassFile byte array and load it directly. No intermediate files are created. */	simulaClassLoader
@@ -79,8 +82,6 @@ public final class Option {
 	 */
 	public static class internal {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
-
-		public static boolean TESTING_JDK24 = true;
 
 		/**
 		 * Used to insert code to enforce 'stack size mismatch'
@@ -193,6 +194,7 @@ public final class Option {
 	
 	/**
 	 * Get Compiler options from property file.
+	 * @param properties the properties used.
 	 */
 	public static void getCompilerOptions(Properties properties) {
 //		System.out.println("Option.getCompilerOptions(properties)");
@@ -206,6 +208,7 @@ public final class Option {
 	
 	/**
 	 * Set Compiler options in property file.
+	 * @param properties the properties used.
 	 */
 	public static void setCompilerOptions(Properties properties) {
 //		System.out.println("Option.setCompilerOptions(properties)");
@@ -259,6 +262,7 @@ public final class Option {
 
 	/**
 	 * Editor Utility: Set Compiler Mode.
+	 * @param id the mode String.
 	 */
 	public static void setCompilerMode(String id) {
 //		System.out.println("Option.setCompilerMode: "+id);
@@ -271,6 +275,11 @@ public final class Option {
 		}
 	}
 	
+	/**
+	 * Utility to get SelectedButtonText.
+	 * @param buttonGroup the button group to inspect.
+	 * @return the selected String.
+	 */
 	public String getSelectedButtonText(ButtonGroup buttonGroup) {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();

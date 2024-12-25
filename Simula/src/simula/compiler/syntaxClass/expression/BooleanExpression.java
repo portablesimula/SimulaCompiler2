@@ -101,7 +101,7 @@ import simula.compiler.utilities.Util;
  * operand alone.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BooleanExpression.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BooleanExpression.java">
  * <b>Source File</b></a>.
  * 
  * @author Simula Standard
@@ -288,6 +288,12 @@ public final class BooleanExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static BooleanExpression readObject(AttributeInputStream inpt) throws IOException {
 		BooleanExpression expr = new BooleanExpression();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);

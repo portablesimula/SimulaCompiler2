@@ -45,7 +45,7 @@ import java.util.StringTokenizer;
  * The Source text Panel.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/editor/SourceTextPanel.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/SourceTextPanel.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  *

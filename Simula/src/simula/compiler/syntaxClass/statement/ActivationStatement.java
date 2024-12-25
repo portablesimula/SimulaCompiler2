@@ -65,7 +65,7 @@ import simula.compiler.utilities.Util;
  * See runtime module RTS_Simulation for details.  
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ActivationStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ActivationStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -364,6 +364,12 @@ public final class ActivationStatement extends Statement {
 		oupt.writeBoolean(prior);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static ActivationStatement readObject(AttributeInputStream inpt) throws IOException {
 		ActivationStatement stm = new ActivationStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

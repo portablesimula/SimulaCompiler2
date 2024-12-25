@@ -3,7 +3,7 @@ package simula.runtime;
 /**
  * Simula Runtime Error
  * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/runtime/RTS_SimulaRuntimeError.java"><b>Source File</b></a>.
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_SimulaRuntimeError.java"><b>Source File</b></a>.
 
  * @author Øystein Myhre Andersen
  *

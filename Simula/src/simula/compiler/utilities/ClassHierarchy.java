@@ -204,6 +204,12 @@ public abstract class ClassHierarchy {
 		oupt.writeString(mark);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static void readObject(AttributeInputStream inpt) throws IOException {
 		String next = inpt.readString();
 		while(! next.equals(mark)) {

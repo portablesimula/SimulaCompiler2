@@ -1,6 +1,15 @@
 package simula.compiler.utilities;
 
-public class ObjectKind {
+/**
+ * Object Kind Codes.
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ObjectKind.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ */
+public final class ObjectKind {
 
 	/** Standard Class */		public static final int StandardClass = 1;
 	/** Connection Block */		public static final int ConnectionBlock = 2;
@@ -73,6 +82,16 @@ public class ObjectKind {
 	/** Max Value */				public static final int MAX_VALUE = 63;
 
 	
+	/**
+	 * Default constructor.
+	 */
+	public ObjectKind() {}
+	
+	/**
+	 * Edit a Kind Code.
+	 * @param kind the Kind Code.
+	 * @return a String version of the Kind Code.
+	 */
 	public static String edit(int kind) {
 		switch(kind) {
 			case NULL:						return "null";

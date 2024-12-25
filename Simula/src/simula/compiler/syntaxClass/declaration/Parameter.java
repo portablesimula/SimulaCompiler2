@@ -36,7 +36,7 @@ import simula.compiler.utilities.Util;
  * A parameter models class and procedure parameters.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Parameter.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Parameter.java">
  * <b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
@@ -519,6 +519,12 @@ public final class Parameter extends Declaration {
 		oupt.writeShort(mode);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Parameter par = new Parameter();
 		par.OBJECT_SEQU = inpt.readSEQU(par);

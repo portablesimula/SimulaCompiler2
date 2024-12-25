@@ -91,7 +91,7 @@ import simula.editor.SimulaEditor;
  * </pre>
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/Simula.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/Simula.java"><b>Source File</b></a>.
 
  * @author Øystein Myhre Andersen
  *
@@ -196,7 +196,7 @@ public final class Simula {
 //				else if (arg.equalsIgnoreCase("-noConsole")) RTOption.USE_CONSOLE = false;
 				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
 
-				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
+//				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
 
 //				else error("Unknown option "+arg);
 				else {

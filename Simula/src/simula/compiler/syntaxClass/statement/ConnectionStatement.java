@@ -84,7 +84,7 @@ import simula.compiler.utilities.Util;
  * 
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConnectionStatement.java">
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConnectionStatement.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -326,6 +326,12 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeBoolean(hasWhenPart);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionStatement stm = new ConnectionStatement();

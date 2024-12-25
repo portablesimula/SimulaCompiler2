@@ -20,7 +20,7 @@ import simula.compiler.syntaxClass.declaration.Declaration;
  * This is a utility class to hold local declaration lists in declaration scopes.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/DeclarationList.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/DeclarationList.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen
  */
@@ -85,6 +85,12 @@ public final class DeclarationList extends Vector<Declaration> {
 		for(Declaration dcl:this) oupt.writeObj(dcl);
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	public static DeclarationList readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		DeclarationList list = new DeclarationList(identifier);
