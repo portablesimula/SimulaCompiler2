@@ -17,8 +17,12 @@ public class SimulaClassLoader extends ClassLoader {
 	 */
 	public SimulaClassLoader() {}
 	
-	public void loadClass(String name, byte[] bytes, String origin) {
-		if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " from  " + origin);
+	/**
+	 * Load a class
+	 * @param name class name
+	 * @param bytes classFile bytes
+	 */
+	public void loadClass(String name, byte[] bytes) {
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		if(clazz != null) {
 			if(TESTING) System.out.println("SimulaClassLoader.loadClass: " + name + " FAILED: " + clazz);
@@ -30,11 +34,21 @@ public class SimulaClassLoader extends ClassLoader {
 		}
 	}
 	
+	/**
+	 * Check if a named class is loaded
+	 * @param name class name
+	 * @return true: if a named class is loaded
+	 */
 	public boolean isClassLoaded(String name) {
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		return clazz != null;
 	}
 	
+	/**
+	 * Run loaded class 'name'
+	 * @param name class name
+	 * @param cmd command vector
+	 */
 	public void runClass(String name, final Vector<String> cmd) {
 		
 //		System.out.print("SimulaClassLoader.runClass: " + name);

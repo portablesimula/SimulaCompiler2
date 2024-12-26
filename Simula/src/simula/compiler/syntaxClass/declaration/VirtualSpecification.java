@@ -64,6 +64,7 @@ public final class VirtualSpecification extends Declaration {
 		/** Virtual procedure */ public static final int Procedure = 1;
 		/** Virtual label */	 public static final int Label     = 2;
 		/** Virtual switch */	 public static final int Switch    = 3;
+		/** Default Constructor. NOT USED */ private Kind() {} 
 	}
 
 	/**
@@ -257,6 +258,10 @@ public final class VirtualSpecification extends Declaration {
 		GeneratedJavaClass.code("public " + qnt + getVirtualIdentifier() + matchCode);
 	}
 
+	/**
+	 * Build the default virtual match method RTS_LABEL or RTS_PRCQNT.
+	 * @param classBuilder the classBuilder to use.
+	 */
 	public void buildMethod(ClassBuilder classBuilder) {
 	    String ident=getSimpleVirtualIdentifier();
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
@@ -265,6 +270,11 @@ public final class VirtualSpecification extends Declaration {
 				codeBuilder -> Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder));
 	}
 
+	/**
+	 * Build call virtual method.
+	 * @param owner the class owning the virtual.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public void buildCallMethod(ClassDesc owner, CodeBuilder codeBuilder) {
 	    String name=getSimpleVirtualIdentifier();
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
@@ -274,7 +284,7 @@ public final class VirtualSpecification extends Declaration {
 		codeBuilder.invokevirtual(owner, name, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/" + qnt));
 	}
 
-
+	@Override
 	public void printTree(int indent, final Object head) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);
 	}

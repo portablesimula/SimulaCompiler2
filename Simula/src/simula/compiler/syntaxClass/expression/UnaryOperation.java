@@ -134,6 +134,10 @@ public final class UnaryOperation extends Expression {
 		}
 	}
 
+	/**
+	 * Build code for the NOT operation.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public static void buildNOT(CodeBuilder codeBuilder) {
 		//    ifne  L1
 		//    iconst_1

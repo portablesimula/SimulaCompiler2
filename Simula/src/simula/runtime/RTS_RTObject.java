@@ -475,6 +475,8 @@ public abstract class RTS_RTObject {
 	// ************************************************************
 	/**
 	 * Utility method to set current object terminated and re-throw the label.
+	 * @param _THIS current object
+	 * @param q the label quant
 	 */
 	public static void _TREAT_GOTO_CATCH_BLOCK(RTS_RTObject _THIS, RTS_LABEL q) {
 //		System.out.println("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK: "+q);

@@ -243,6 +243,11 @@ public final class RemoteVariable extends Expression {
 		} else Util.IERR();;
 	}
 
+	/**
+	 * Return the FieldRefEntry of this RemoteVariable
+	 * @param pool the ConstantPoolBuilder to use
+	 * @return the FieldRefEntry of this RemoteVariable
+	 */
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDeclaration cls=obj.type.getQual();
 		String ident=var.meaning.declaredAs.getFieldIdentifier();

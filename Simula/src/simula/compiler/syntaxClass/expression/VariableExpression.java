@@ -898,6 +898,11 @@ public final class VariableExpression extends Expression {
 	// ***************************************************************************************
 	// *** JVM CODING: getFieldRefEntry
 	// ***************************************************************************************
+	/**
+	 * Return the field ref entry for this variable.
+	 * @param pool the ConstantPoolBuilder to use.
+	 * @return the field ref entry for this variable.
+	 */
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 //		System.out.println("VariableExpression.getFieldRefEntry: "+this.identifier);
 		ClassDesc owner=meaning.declaredIn.getClassDesc();

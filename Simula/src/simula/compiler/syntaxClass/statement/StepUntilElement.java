@@ -38,12 +38,11 @@ public class StepUntilElement extends ForListElement {
 
 	/**
 	 * Create a new StepUntilElement.
+	 * @param forStatement the ForStatement
 	 * @param expr1 The first expression
 	 * @param expr2 The second expression
 	 * @param expr3 The third expression
 	 */
-//	public StepUntilElement(final Expression expr1, final Expression expr2, final Expression expr3) {
-//		super(ForStatement.this, expr1);
 	public StepUntilElement(final ForStatement forStatement, final Expression expr1, final Expression expr2, final Expression expr3) {
 		super(forStatement, expr1);
 		this.expr2 = expr2;

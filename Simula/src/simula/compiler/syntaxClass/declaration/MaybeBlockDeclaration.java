@@ -530,7 +530,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 	private void build_STMS(CodeBuilder codeBuilder) {
 		for (Statement stm : statements) {
-			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
 			stm.buildByteCode(codeBuilder);
 		}
 	}
@@ -610,6 +610,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		}
 	}
 	
+	/**
+	 * Read and return a MaybeBlockDeclaration object.
+	 * @param inpt the AttributeInputStream to read from
+	 * @param declarationKind the declarationKind code
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	@SuppressWarnings("unchecked")
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt,int declarationKind) throws IOException {
 		DeclarationScope scope = Global.getCurrentScope();

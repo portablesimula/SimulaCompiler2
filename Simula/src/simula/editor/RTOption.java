@@ -77,6 +77,7 @@ public final class RTOption {
 	
 	/**
 	 * Get Compiler options from property file.
+	 * @param properties the properties to decode.
 	 */
 	public static void getRuntimeOptions(Properties properties) {
 //		System.out.println("Option.getRuntimeOptions(properties)");	
@@ -90,6 +91,7 @@ public final class RTOption {
 	
 	/**
 	 * Set Compiler options in property file.
+	 * @param properties the properties to encode.
 	 */
 	public static void setRuntimeOptions(Properties properties) {
 //		System.out.println("Option.setRuntimeOptions(properties)");

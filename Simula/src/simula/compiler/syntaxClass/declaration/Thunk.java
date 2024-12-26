@@ -24,6 +24,9 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
+/**
+ * Thunk Declaration
+ */
 public final class Thunk extends DeclarationScope {
 
 	private static int OBJECT_SEQU = 0;
@@ -58,6 +61,12 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** buildInvoke
 	// ***********************************************************************************************
+	/**
+	 * Build invoke Thunk
+	 * @param kind a kind code
+	 * @param expr the Thunk expression
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public static void buildInvoke(int kind,Expression expr,CodeBuilder codeBuilder) {
 		//  new RTS_NAME< TYPE >() {
 		//     public TYPE get() {

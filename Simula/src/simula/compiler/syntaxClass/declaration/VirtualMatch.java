@@ -60,6 +60,10 @@ public final class VirtualMatch extends Declaration {
 		GeneratedJavaClass.code("    public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
 	}
 
+	/**
+	 * Build virtual match method.
+	 * @param classBuilder the classBuilder to use.
+	 */
 	public void buildMethod(ClassBuilder classBuilder) {
 	    String ident=virtualSpec.getSimpleVirtualIdentifier();
 		MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;");
@@ -77,6 +81,7 @@ public final class VirtualMatch extends Declaration {
 				});
 	}
 
+	@Override
 	public void printTree(final int indent, final Object head) {
 		System.out.println(SyntaxClass.edIndent(indent)+this.getClass().getSimpleName()+"    "+this);
 	}

@@ -483,7 +483,7 @@ public abstract class DeclarationScope extends Declaration  {
     		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
     				String name = Global.packetName + "." + externalIdent;
-    				Global.simulaClassLoader.loadClass(name, bytes, "SourceFile " + Global.sourceFileName);
+    				Global.simulaClassLoader.loadClass(name, bytes);
     			} else {
         			String entryName = Global.packetName + "/" + externalIdent + ".class";
         			Global.jarFileBuilder.writeJarEntry(entryName, bytes);

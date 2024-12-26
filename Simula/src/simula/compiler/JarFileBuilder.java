@@ -391,7 +391,7 @@ public class JarFileBuilder {
 				}
 			}
 			if(readyToLoad) {
-				try { loader.loadClass(name, bytes, jarFile.getName()); }
+				try { loader.loadClass(name, bytes); }
 				catch(NoClassDefFoundError e) {
 					if(delayedLoadings == null) delayedLoadings = new HashMap<String,byte[]>();
 					delayedLoadings.put(name, bytes);						
@@ -422,7 +422,7 @@ public class JarFileBuilder {
 					if(TESTING)
 						System.out.println("JarFileBuilder.loadJarEntries: Load Class: "+name);
 					try {	
-						loader.loadClass(name, bytes, jarFile.getName());
+						loader.loadClass(name, bytes);
 						loaded.add(name);
 					} catch(NoClassDefFoundError e) { }
 				}

@@ -81,6 +81,11 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		SET_SEMANTICS_CHECKED();
 	}
 	
+	/**
+	 * Get OverLoadMatch.
+	 * @param params the actual parameters
+	 * @return OverLoadMatch
+	 */
 	public ProcedureSpecification getOverLoadMatch(Vector<Expression> params) {
 		if(mtdSet != null) for(String mtd:mtdSet) {
 			ProcedureSpecification legal = getLegalMatch(mtd,params);
@@ -108,6 +113,11 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		return(spec);
 	}
 	
+	/**
+	 * Return the getProcedureSpecification obtained from the given MethodTypeDesc.
+	 * @param mtd the MethodTypeDesc
+	 * @return the getProcedureSpecification obtained from the given MethodTypeDesc.
+	 */
 	public ProcedureSpecification getProcedureSpecification(String mtd) {
 		Type type = null;
 //		Vector<Parameter> pList = new Vector<Parameter>();
@@ -158,12 +168,19 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		return(new ProcedureSpecification(identifier, type, pList)); 
 	}
 	
+	/**
+	 * Get MethodTypeDesc
+	 * @param beforeDot the Expression beforeDot
+	 * @param params the actual parameters
+	 * @return MethodTypeDesc
+	 */
 	public MethodTypeDesc getMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
 		if(overLoadMatch !=null) {
 			getOverLoadMatch(params);
 			return(MethodTypeDesc.ofDescriptor(mtdPicked));
 		} else return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
 	}
+	
 	private String edMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
 		// MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_Printfile;");
 		StringBuilder sb=new StringBuilder("(");

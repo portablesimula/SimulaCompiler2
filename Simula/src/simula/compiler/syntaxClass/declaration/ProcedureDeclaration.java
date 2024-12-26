@@ -995,7 +995,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		stmStack.push(labelContext);
 		labelContext = this;
 		for (Statement stm : statements) {
-			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
 			stm.buildByteCode(codeBuilder);
 		}
 		labelContext = stmStack.pop();

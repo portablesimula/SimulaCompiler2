@@ -107,7 +107,7 @@ public final class SimulaCompiler {
 //		if(p > 0)
 //			Global.sourceName = name.substring(0, p);
 		Global.sourceFileName = inputFile.getName();
-		Global.sourceName = Util.getSimpleName(inputFile.getName());
+		Global.sourceName = Util.getBaseName(inputFile.getName());
 		Global.sourceFileDir = inputFile.getParentFile();
 
 		if (Option.internal.TRACING)

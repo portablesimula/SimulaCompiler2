@@ -127,6 +127,11 @@ public class Type extends SyntaxClass {
 		this.keyWord = keyWord;
 	}
 	
+	/**
+	 * Create a new simple Type with the given keyWord and classIdent
+	 * @param key the given keyWord
+	 * @param classIdent the given class identifier
+	 */
 	public Type(int keyWord, String classIdent) {
 		if(classIdent != null && !Option.CaseSensitive) classIdent = classIdent.toUpperCase();
 		this.keyWord = keyWord;
@@ -168,6 +173,12 @@ public class Type extends SyntaxClass {
 		return (qual);
 	}
 
+	/**
+	 * Check if types are equals or subordinate.
+	 * @param t1 a type
+	 * @param t2 a type
+	 * @return
+	 */
 	public static boolean equalsOrSubordinate(Type t1, Type t2) {
 		if(t1 == null) return(t2 == null);
 		if(t2 == null) return(t1 == null);
@@ -476,6 +487,10 @@ public class Type extends SyntaxClass {
 
 	}
 	
+	/**
+	 * Return RTS Array type String.
+	 * @return RTS Array type String.
+	 */
 	public String getArrayType() {
 		switch(keyWord) {
 			case T_BOOLEAN:		return("RTS_BOOLEAN_ARRAY");

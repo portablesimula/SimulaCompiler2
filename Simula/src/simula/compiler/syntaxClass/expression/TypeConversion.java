@@ -63,6 +63,13 @@ public final class TypeConversion extends Expression {
 		}
         return("=("+toType.toJavaType()+")("+expr+");");
 	}
+	
+	/**
+	 * Test if a TypeConversion is necessary and then create it.
+	 * @param fromType convert from this type
+	 * @param toType convert to this type
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public static void buildMayBeConvert(final Type fromType, final Type toType, CodeBuilder codeBuilder) {
 		// NOTE: 'expr' is top of operand stack
 		switch(fromType.keyWord) {

@@ -168,7 +168,7 @@ public final class ProgramModule extends Statement {
 
 	/**
 	 * Create Java ClassFile.
-	 * @throws IOException 
+	 * @throws IOException if something went wrong
 	 */
 	public void createJavaClassFile() throws IOException {
 		Global.sourceLineNumber = lineNumber;

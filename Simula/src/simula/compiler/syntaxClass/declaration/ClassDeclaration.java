@@ -1508,7 +1508,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (prfx != null) prfx.buildStatementsBeforeInner(codeBuilder);
 		}
 		if(statements1 != null) for (Statement stm : statements1) {
-			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
 //			System.out.println("ClassDeclaration.buildStatementsBeforeInner: "+stm.getClass().getSimpleName()+"  "+stm);
 			stm.buildByteCode(codeBuilder);
 		}
@@ -1522,7 +1522,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 */
 	private void buildStatementsAfterInner(CodeBuilder codeBuilder) {
 		for (Statement stm : statements){
-			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm);
+			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
 //			System.out.println("ClassDeclaration.buildStatementsAfterInner: "+stm.getClass().getSimpleName()+"  "+stm);
 			stm.buildByteCode(codeBuilder);
 		}

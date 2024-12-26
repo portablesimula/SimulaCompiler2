@@ -110,6 +110,9 @@ public abstract class SyntaxClass {
 	 */
 	public int lineNumber;
 	
+	/**
+	 * Set source line number.
+	 */
 	protected void setLineNumber() {
 		Global.sourceLineNumber = lineNumber;
 	}

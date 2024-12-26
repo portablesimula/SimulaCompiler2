@@ -152,7 +152,7 @@ public final class Util {
 //		System.out.println("Util.edLINE: CurrentScope'sourceFileName = "+Global.getCurrentScope().sourceFileName);
 		if(Global.getCurrentScope() != null) {
 			if(Global.getCurrentScope().sourceFileName!=null) {
-				String sourceName = getSimpleName(Global.getCurrentScope().sourceFileName);
+				String sourceName = getBaseName(Global.getCurrentScope().sourceFileName);
 				line = sourceName + ':' + line;
 			}
 		}
@@ -160,12 +160,14 @@ public final class Util {
 		return(line);
 	}
 	
-	public static String getSimpleName(String name) {
-//		String name = file.getName();
-		int p=name.lastIndexOf(".");
-		if(p > 0)
-			name = name.substring(0, p);
-		return name;
+	/**
+	 * Return the base name part of a File Name
+	 * @param fileName a File Name.
+	 * @return the base name part of a File Name
+	 */
+	public static String getBaseName(String fileName) {
+		int p=fileName.lastIndexOf(".");
+		return (p > 0)? fileName.substring(0, p) : fileName;
 	}
 
 	/**
@@ -393,7 +395,11 @@ public final class Util {
 		return (process.exitValue());
 	}
   
-	
+	/**
+	 * Build invoke Simula Runtime Error.
+	 * @param mss the error message.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public static void buildSimulaRuntimeError(String mss,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ClassDesc CD = ClassDesc.of("simula.runtime.RTS_SimulaRuntimeError");
@@ -405,8 +411,13 @@ public final class Util {
 			.athrow();		
 	}
 
-	public static void buildLineNumber(CodeBuilder codeBuilder, SyntaxClass stx) {
-		codeBuilder.lineNumber(stx.lineNumber);
+	/**
+	 * Build line number method call.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param lineNumber the line number
+	 */
+	public static void buildLineNumber(CodeBuilder codeBuilder, int lineNumber) {
+		codeBuilder.lineNumber(lineNumber);
 	}
 
   

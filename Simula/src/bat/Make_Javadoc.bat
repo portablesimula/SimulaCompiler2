@@ -4,5 +4,5 @@ rem javadoc --release 24 --enable-preview -d C:\GitHub\SimulaCompiler2\Simula\do
 rem javadoc --release 24 --enable-preview -d C:\GitHub\SimulaCompiler2\Simula\doc -sourcepath C:\GitHub\SimulaCompiler2\Simula\src simula.compiler
 rem javadoc --release 24 --enable-preview -d C:\GitHub\SimulaCompiler2\Simula\doc -sourcepath C:\GitHub\SimulaCompiler2\Simula\src simula.compiler
 
-javadoc --release 24 --enable-preview -d C:\GitHub\SimulaCompiler2\Simula\doc -sourcepath C:\GitHub\SimulaCompiler2\Simula\src -subpackages simula
+javadoc -Xmaxwarns 1000 --release 24 --enable-preview -d C:\GitHub\SimulaCompiler2\Simula\doc -sourcepath C:\GitHub\SimulaCompiler2\Simula\src -subpackages simula
 pause
