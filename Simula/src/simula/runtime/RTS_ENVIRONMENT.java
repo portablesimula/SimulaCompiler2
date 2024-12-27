@@ -2179,11 +2179,11 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @return requested integer info
 	 */
 	public static int getIntInfo(final int index) {
-		int info = getIntInfo2(index);
-		if(RTS_SPORT_Option.FEC_Verbose > 0) System.out.println("RTS_ENVIRONMENT.getIntInfo("+index+") = "+info);
-		return(info);
-	}
-	public static int getIntInfo2(final int index) {
+//		int info = getIntInfo2(index);
+//		if(RTS_SPORT_Option.FEC_Verbose > 0) System.out.println("RTS_ENVIRONMENT.getIntInfo("+index+") = "+info);
+//		return(info);
+//	}
+//	public static int getIntInfo2(final int index) {
 		// _RT.println("getIntInfo: index="+index);
 		switch (index) {
 		case 1:
@@ -2221,6 +2221,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		return (0);
 	}
 
+	private static int exitCode = 0;
 	/**
 	 * S-PORT Extension Procedure giveIntInfo.
 	 * <pre>
@@ -2255,7 +2256,6 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 	 * @param index case index
 	 * @param info the integer info
 	 */
-	private static int exitCode = 0;
 	public static void giveIntInfo(final int index, final int info) {
 		StringBuilder sb = new StringBuilder();
 		switch (index) {

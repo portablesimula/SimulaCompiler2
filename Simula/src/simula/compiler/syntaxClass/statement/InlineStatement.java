@@ -6,9 +6,30 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
+/**
+ * Inline Statement.
+ * 
+ * <pre>
+ * detach
+ * terminate
+ * try
+ * catch
+ * </pre>
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InlineStatement.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author SIMULA Standards Group
+ * @author Øystein Myhre Andersen
+ */
 public final class InlineStatement extends Statement {
 	String kind;
 	
+	/**
+	 * Create a new InlineStatement.
+	 * @param kind the kind code string.
+	 */
 	public InlineStatement(String kind) {
 		super(1);
 		this.kind = kind;

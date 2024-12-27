@@ -12,7 +12,18 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
+/**
+ * Coding Utilities: Build Call Procedure Formal (CPF).
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPF.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ *
+ */
 public abstract class BuildCPF {
+	/** Default Constructor: NOT USED */ private BuildCPF() {}
 
 	// ********************************************************************
 	// *** BuildCP.formal

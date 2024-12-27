@@ -791,22 +791,22 @@ public class ClassDeclaration extends BlockDeclaration {
 		return (null);
 	}
 	
-	public String edCallChain() {
-		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
-		StringBuilder sb = new StringBuilder();
-		int n = stackTraceElement.length;
-		if(n > 6) n = 6;
-		for (int i = 3; i < n; i++) {
-			String methodName =stackTraceElement[i].getMethodName();
-			String className = stackTraceElement[i].getClassName();
-			int lno = stackTraceElement[i].getLineNumber();
-			int p = className.lastIndexOf('.');
-			className = className.substring(p+1);
-			if(i > 3) sb.append(", ");
-			sb.append(className+'.'+methodName+'('+lno+')');
-		}
-		return(sb.toString());
-	}
+//	public String edCallChain() {
+//		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
+//		StringBuilder sb = new StringBuilder();
+//		int n = stackTraceElement.length;
+//		if(n > 6) n = 6;
+//		for (int i = 3; i < n; i++) {
+//			String methodName =stackTraceElement[i].getMethodName();
+//			String className = stackTraceElement[i].getClassName();
+//			int lno = stackTraceElement[i].getLineNumber();
+//			int p = className.lastIndexOf('.');
+//			className = className.substring(p+1);
+//			if(i > 3) sb.append(", ");
+//			sb.append(className+'.'+methodName+'('+lno+')');
+//		}
+//		return(sb.toString());
+//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: hasRealPrefix
@@ -1131,6 +1131,10 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding Utility: superClassDesc
 	// ***********************************************************************************************
+	/**
+	 * Get super class ClassDesc.
+	 * @return super class ClassDesc.
+	 */
 	public ClassDesc superClassDesc() {
 		if(hasRealPrefix())
 			return getPrefixClass().getClassDesc();
@@ -1141,7 +1145,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	private boolean isLoaded;
     /**
      * Defined in DeclarationScope - Redefined in ClassDeclaration
-     * @throws IOException
+     * @throws IOException if something went wrong.
      */
 	@Override
     protected void buildAndLoadOrAddClassFile() throws IOException {
@@ -1304,7 +1308,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * </pre>
 	 * Also used by PrefixedBlockDeclaration
 	 * @param codeBuilder the CodeBuilder
-	 * @param pool the ConstantPoolBuilder
 	 */
 	protected void buildConstructor(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
@@ -1418,7 +1421,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			prefix = prefix.getPrefixClass();
 		}
 		clearLabelList();
-		stmStack.push(labelContext);
+		labelContextStack.push(labelContext);
 		labelContext = this;
 		if(this.getPrefixClass() == StandardClass.CatchingErrors) {	
 			if(this instanceof PrefixedBlockDeclaration)
@@ -1432,7 +1435,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			buildStatementsBeforeInner(codeBuilder);
 			buildStatementsAfterInner(codeBuilder);
 		}
-		labelContext = stmStack.pop();
+		labelContext = labelContextStack.pop();
 
 		codeBuilder.aload(0);
 		RTS.invokevirtual_RTObject_EBLK(codeBuilder);

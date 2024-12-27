@@ -184,7 +184,7 @@ public final class AttributeFileIO {
 		int declarationKind = inpt.readKind();
 		while(declarationKind == ObjectKind.ExternalDeclaration) {
 			ExternalDeclaration xdecl = ExternalDeclaration.readObject(inpt);
-			xdecl.readExternal();
+			xdecl.readExternalAttributeFile();
 			declarationKind = inpt.readKind();
 		}
 		

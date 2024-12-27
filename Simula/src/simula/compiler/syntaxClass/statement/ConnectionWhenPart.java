@@ -38,6 +38,7 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 
 	/**
 	 * Create a new when-part.
+	 * @param connectionStatement the connectionStatement
 	 * @param classIdentifier the WHEN class-identifier
 	 * @param connectionBlock The associated connection block
 	 * @param statement the statement after DO

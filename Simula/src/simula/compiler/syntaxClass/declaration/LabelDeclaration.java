@@ -90,10 +90,14 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		SET_SEMANTICS_CHECKED();
 	}
 	
-	public void updateDeclaredIn(DeclarationScope declaredIn) {
-		this.declaredIn = declaredIn;
-	}
+//	public void updateDeclaredIn(DeclarationScope declaredIn) {
+//		this.declaredIn = declaredIn;
+//	}
 	
+	/**
+	 * Declare a local Label.
+	 * @param encloser the BlockDeclaration to update.
+	 */
 	public void declareLocalLabel(BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		String ident = getJavaIdentifier();
@@ -192,6 +196,10 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 	}
 	
+	/**
+	 * Build binding for this Label.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public void doBind(CodeBuilder codeBuilder) {
 		if(isBinded) Util.IERR();
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
@@ -199,6 +207,10 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		isBinded = true;
 	}
 	
+	/**
+	 * Build Label Quantity
+	 * @param codeBuilder the codeBuilder to use
+	 */
 	public void buildLabelQuant(CodeBuilder codeBuilder) {
 		int prefixLevel=0;
 		if(movedTo != null) {

@@ -19,7 +19,7 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
 /**
- * Coding Utilities: Call Procedure
+ * Coding Utilities: Call Procedure (CP)
  * <p>
  * Link to GitHub: <a href=
  * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCP.java">
@@ -28,7 +28,8 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  *
  */
-public abstract class BuildCP {
+public class BuildCP {
+	/** Default Constructor: NOT USED */ private BuildCP() {}
 
 	// ********************************************************************
 	// *** BuildCP.normal

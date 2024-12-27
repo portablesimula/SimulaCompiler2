@@ -1,5 +1,8 @@
 package simula.runtime;
 
+/**
+ * The RTS End Program Exception
+ */
 @SuppressWarnings("serial")
 public final class RTS_EndProgram extends RuntimeException {
 

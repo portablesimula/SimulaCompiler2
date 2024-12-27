@@ -44,43 +44,30 @@ import simula.compiler.utilities.Util;
  */
 public abstract class BlockDeclaration extends DeclarationScope {
 	
-	/**
-	 * If true; this is the outermost Subblock or Prefixed Block.
-	 */
+	/// If true; this is the outermost Subblock or Prefixed Block.
 	protected boolean isMainModule;
 	
-	/**
-	 * The statements belonging to this block.
-	 */
+	/// The statements belonging to this block.
 	public ObjectList<Statement> statements = new ObjectList<Statement>();
 
-	/**
-	 * Last source line number
-	 */
+	/// Last source line number
 	public int lastLineNumber;
 	
-	/**
-	 * If true; all member methods are independent of context
-	 */
+	/// If true; all member methods are independent of context
 	public boolean isContextFree;
 
-	/**
-	 * Compiler state: Points to the BlockDeclaration whose Statements are being built.
-	 * Used by LabelList.labelBinding to find the right JUMP_TABLE.
-	 */
+	/// Compiler state: Points to the BlockDeclaration whose Statements are being built.
+	/// Used by LabelList.labelBinding to find the right JUMP_TABLE.
 	public static BlockDeclaration labelContext;
 
-	public static Stack<BlockDeclaration> stmStack = new Stack<BlockDeclaration>();
+	/// Label Context Stack
+	public static Stack<BlockDeclaration> labelContextStack = new Stack<BlockDeclaration>();
 
 
-	/**
-	 * The DeclarationScope that currently is being built
-	 */
+	/// The DeclarationScope that currently is being built
 	public static BlockDeclaration currentBlock;
 	
-	/**
-	 * The previous value of 'currentBlock'
-	 */
+	/// The previous value of 'currentBlock'
 	protected BlockDeclaration prevBlock;
 	
 	/**
@@ -90,10 +77,19 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	public int nLocalVariables = 1;
 	
+	/**
+	 * Get current ClassDesc.
+	 * @return the current ClassDesc.
+	 */
 	public static ClassDesc currentClassDesc() {
 		return(currentBlock.getClassDesc());
 	}
 	
+	/**
+	 * Allocate slot for a local variable.
+	 * @param type variable's type.
+	 * @return slot for a local variable.
+	 */
 	public int allocateLocalVariable(Type type) {
 		int res = nLocalVariables++;
 		if(type.keyWord == Type.T_LONG_REAL) {
@@ -405,11 +401,19 @@ public abstract class BlockDeclaration extends DeclarationScope {
     // ***********************************************************************************************
     // *** ByteCoding: edConstructorSignature
     // ***********************************************************************************************
+	/**
+	 * Edit the ConstructorSignature.
+	 * @return the ConstructorSignature String.
+	 */
     public String edConstructorSignature() {
         Util.IERR("Method edConstructorSignature need a redefinition in "+this.getClass().getSimpleName());
         return(null);
     }
     
+    /**
+     * Get the Constructors MethodTypeDesc.
+     * @return the Constructors MethodTypeDesc.
+     */
     public MethodTypeDesc getConstructorMethodTypeDesc() {
     	return(MethodTypeDesc.ofDescriptor(this.edConstructorSignature()));
     }
@@ -458,6 +462,12 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Global.exitScope();
 	}
 	
+	/**
+	 * Coding utility: Build byteCode for the '_STM' method.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param begScope label
+	 * @param endScope label
+	 */
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		Util.IERR("Method build_STM_BODY need a redefinition in "+this.getClass().getSimpleName());
 	}
@@ -465,27 +475,28 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: build_TRY_CATCH
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the try-catch part of the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
-	// ==================================================================================
-    //    adHoc000 _THIS=(adHoc000)_CUR;
-    //    _LOOP:while(_JTX>=0) {
-    //        try {
-    //            _JUMPTABLE(_JTX); // For ByteCode Engineering
-    //            // ... Simple Statement code
-    //            break _LOOP;
-    //        }
-    //        catch(RTS_LABEL q) {
-    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
-    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-    //        }
-    //    }
-	// ==================================================================================
 	private int local_THIS;
 	int local_LABEL_q;
+	/**
+	 * Coding utility: Build byteCode for the try-catch part of the '_STM' method.
+	 * <pre>
+     *    adHoc000 _THIS=(adHoc000)_CUR;
+     *    _LOOP:while(_JTX>=0) {
+     *        try {
+     *            _JUMPTABLE(_JTX); // For ByteCode Engineering
+     *            // ... Simple Statement code
+     *            break _LOOP;
+     *        }
+     *        catch(RTS_LABEL q) {
+     *            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+     *            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+     *        }
+     *    }
+	 * </pre>
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param begScope label
+	 * @param endScope label
+	 */
 	protected void build_TRY_CATCH(CodeBuilder codeBuilder,Label begScope,Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		Label loopWhile = codeBuilder.newLabel();
@@ -604,7 +615,10 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			.labelBinding(endScope);
 	}
     
-	
+	/**
+	 * Debug utility: print StatementList.
+	 * @param indent the indentation.
+	 */
 	protected void printStatementList(int indent) {
 		if(Option.internal.PRINT_SYNTAX_TREE > 2) {
 			for(Statement s:statements) s.printTree(indent, this);

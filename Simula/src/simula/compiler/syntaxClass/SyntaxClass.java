@@ -197,6 +197,7 @@ public abstract class SyntaxClass {
 
 	/**
 	 * Build Java ByteCode.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName()
@@ -216,6 +217,7 @@ public abstract class SyntaxClass {
 	 * Utility print syntax tree method.
 	 * 
 	 * @param indent number of spaces leading the lines
+	 * @param head the head of the tree.
 	 */
 	public void printTree(final int indent, final Object head) {
 		Util.IERR("Method printTree need a redefinition in "+this.getClass().getSimpleName());

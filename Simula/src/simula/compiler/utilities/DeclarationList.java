@@ -78,6 +78,11 @@ public final class DeclarationList extends Vector<Declaration> {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 	
+	/**
+	 * Write a DeclarationList object to a AttributeOutputStream.
+	 * @param oupt the AttributeOutputStream to write to.
+	 * @throws IOException if something went wrong.
+	 */
 	public void writeObject(AttributeOutputStream oupt) throws IOException {
 		oupt.writeString(identifier);
 		oupt.writeShort(this.size());

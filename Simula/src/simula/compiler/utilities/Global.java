@@ -191,7 +191,7 @@ public final class Global {
 	public static int Object_SEQU;
 
 	/**
-	 * 
+	 * The Simula ClassLoader.
 	 */
 	public static SimulaClassLoader simulaClassLoader;
 

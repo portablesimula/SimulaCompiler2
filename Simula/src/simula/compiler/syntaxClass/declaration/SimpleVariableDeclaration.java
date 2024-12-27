@@ -200,6 +200,12 @@ public class SimpleVariableDeclaration extends Declaration {
 		return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + '=' + value + ';');
 	}
 
+	
+	/**
+	 * Coding utility: get FieldRefEntry of this SimpleVariable.
+	 * @param pool the ConstantPoolBuilder to use.
+	 * @return the FieldRefEntry of this SimpleVariable.
+	 */
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), type.toClassDesc()));

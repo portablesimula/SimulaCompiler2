@@ -97,6 +97,9 @@ public class RTS_Coroutine implements Runnable {
 		}
 	};
 	
+	/**
+	 * Initiate local data.
+	 */
 	public static void INIT() {
 		current = null;
 		mainSemaphore = new Semaphore(0);

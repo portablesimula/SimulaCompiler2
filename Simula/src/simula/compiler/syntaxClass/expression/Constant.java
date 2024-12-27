@@ -286,10 +286,20 @@ public final class Constant extends Expression {
 		}
 	}
 
+	/**
+	 * Build boolean const as an integer 1:true or 0:false.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param b the actual boolean value.
+	 */
 	public static void buildIntConst(CodeBuilder codeBuilder, boolean b) {
 		if(b) codeBuilder.iconst_1(); else codeBuilder.iconst_0();
 	}
 	
+	/**
+	 * Build integer const.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param i the actual integer value.
+	 */
 	public static void buildIntConst(CodeBuilder codeBuilder, int i) {
 		switch(i) {
 			case 0 -> codeBuilder.iconst_0();

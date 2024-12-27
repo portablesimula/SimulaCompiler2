@@ -17,6 +17,7 @@ package simula.compiler.utilities;
  *
  */
 public class KeyWord {
+	/* Default Constructor: Not used */ private KeyWord() {}
 	// Simula Reserved Words
 	/** Simula Keyword */ public final static int ACTIVATE   = 1;
 	/** Simula Keyword */ public final static int AND        = 2;
@@ -112,7 +113,12 @@ public class KeyWord {
 	/** Simula Symbol */ public final static int DOT = 91;
 	/** Simula Symbol */ public final static int NEWLINE = 92;
 	/** Simula Symbol */ public final static int STRING = 93;
-	
+
+	/**
+	 * Returns the corresponding String.
+	 * @param key the argument key.
+	 * @return the corresponding String.
+	 */
 	public static String edit(int key) {
 		switch (key) {
 		case ACTIVATE   : return("ACTIVATE"); // 1;
@@ -215,6 +221,7 @@ public class KeyWord {
 	
 	/**
 	 * Returns the corresponding Java code.
+	 * @param key the argument key.
 	 * @return the corresponding Java code
 	 */
 	public static String toJavaCode(int key) {

@@ -64,8 +64,8 @@ public class LabelList {
 	}
 	
 	/**
-	 * 
-	 * @return
+	 * Get DeclaredLabels
+	 * @return DeclaredLabels
 	 */
 	public Vector<LabelDeclaration> getDeclaredLabels(){
 		return declaredLabels;
@@ -97,6 +97,7 @@ public class LabelList {
 	
 	/**
 	 * Get last declared local label with the given ident.
+	 * @param ident label identifier
 	 * @return number of accumulated labels.
 	 */
 	public LabelDeclaration getLastDeclaredLabel(String ident) {
@@ -148,11 +149,11 @@ public class LabelList {
 	}
 	
 	/**
-	 * Get a List<SwitchCase> suitable for the 'tableswitch' instruction.
+	 * Get a List of SwitchCase suitable for the 'tableswitch' instruction.
 	 * <p>
 	 * This method is used when generating classFile using the codeBuilder.
 	 * @param codeBuilder the codeBuilder
-	 * @return a List<SwitchCase>
+	 * @return a List of SwitchCase
 	 */
 	public List<SwitchCase> getTableSwitchCases(CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
@@ -195,6 +196,10 @@ public class LabelList {
 //		Util.IERR();
 	}
 	
+	/**
+	 * Build the TableSwitch Instruction.
+	 * @param codeBuilder the codeBuilder to use
+	 */
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		if(TRACING) System.out.println(ident()+".build_JUMPTABLE: "+this);
@@ -223,6 +228,11 @@ public class LabelList {
 			.labelBinding(defaultTarget);
 	}
 	
+	/**
+	 * Build a labelBinding.
+	 * @param label the label to bind
+	 * @param codeBuilder the codeBuilder to use
+	 */
 	public void labelBinding(LabelDeclaration label,CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
@@ -234,7 +244,12 @@ public class LabelList {
 		codeBuilder.labelBinding(switchCase.target());
 	}
 
-	public void printTree(final int indent, final Object head) {
+	/**
+	 * Debug utility: Print Syntax tree
+	 * @param indent indentation
+	 * @param owner the BlockDeclaration owning this LabelList
+	 */
+	public void printTree(final int indent, final BlockDeclaration owner) {
 		if(Option.internal.PRINT_SYNTAX_TREE > 2) {
 			System.out.println(SyntaxClass.edIndent(indent)+this);
 		} else {
@@ -242,6 +257,10 @@ public class LabelList {
 		}
 	}
 	
+	/**
+	 * Debug utility: print the LabelList
+	 * @param title title String
+	 */
 	public void print(String title) {
 		System.out.println("\n************ BEGIN LabelList[" +sequ + "]: "+title+" ************");
 		System.out.println("*** DeclaredIn: "+declaredIn.identifier+"  READY_FOR_CODING="+READY_FOR_CODING);
@@ -289,6 +308,7 @@ public class LabelList {
 
 	/**
 	 * Write a LabelList to a AttributeOutputStream.
+	 * @param labelList the LabelList to write.
 	 * @param oupt the AttributeOutputStream to write to.
 	 * @throws IOException if something went wrong.
 	 */

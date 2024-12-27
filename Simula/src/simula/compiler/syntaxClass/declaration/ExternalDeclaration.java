@@ -125,6 +125,7 @@ public final class ExternalDeclaration extends Declaration {
 	 * </pre>
 	 * Precondition: EXTERNAL  is already read.
 	 * @param enclosure the BlockDeclaration which is updated
+	 * @return a Vector of ExternalDeclaration
 	 */
 	public static Vector<ExternalDeclaration> expectExternalHead(final BlockDeclaration enclosure) {
 		String kind = Parse.acceptIdentifier();
@@ -184,8 +185,10 @@ public final class ExternalDeclaration extends Declaration {
 		return true;
 	}
 
-	
-	public void readExternal() {
+	/**
+	 * Read external Attribute file.
+	 */
+	public void readExternalAttributeFile() {
 		File jarFile = JarFileBuilder.findJarFile(identifier, externalIdent);
 		if (jarFile != null) {
 			if(checkJarFiles(jarFile)) {

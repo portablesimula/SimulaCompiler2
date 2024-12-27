@@ -29,11 +29,16 @@ import simula.compiler.utilities.Util;
  */
 public final class Thunk extends DeclarationScope {
 
-	private static int OBJECT_SEQU = 0;
-	private ClassDesc CD_ThisClass;
-	private int kind; //Parameter.Kind kind;
-	private Expression expr;
+	/** Local variable */ private static int OBJECT_SEQU = 0;
+	/** Local variable */ private ClassDesc CD_ThisClass;
+	/** Local variable */ private int kind; //Parameter.Kind kind;
+	/** Local variable */ private Expression expr;
 	
+	/**
+	 * Create a new Thunk object.
+	 * @param kind the kind code
+	 * @param expr the Thunk expression.
+	 */
 	private Thunk(int kind,Expression expr) {
 		super(Global.sourceName + "$THUNK$" + (++OBJECT_SEQU));
 		this.declarationKind = ObjectKind.Thunk;
@@ -231,6 +236,8 @@ public final class Thunk extends DeclarationScope {
 	 *  }
 	 *
 	 * @param codeBuilder the CodeBuilder
+	 * @param beforeDot expression.
+	 * @param expr the Thunk expression.
 	 */
 	void buildMethod_put(CodeBuilder codeBuilder, Expression beforeDot, Expression expr) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
@@ -327,6 +334,10 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_put2    Build syntetic bridge to the 'put' method
 	// ***********************************************************************************************
+	/**
+	 * Build syntetic bridge to the 'put' method.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildMethod_put2(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();

@@ -55,6 +55,9 @@ public class RTS_SPORT_Option {
 	 */
 	static String ListingFileName = null; //"#sysout";
 	
+	/**
+	 * Utility: Print SPORT Options
+	 */
 	public static void print_SPORT_Options() {
 		System.out.println("print_SPORT_Options: FEC_Verbose:            " + FEC_Verbose);
 		System.out.println("print_SPORT_Options: FEC_TraceLevel:         " + FEC_TraceLevel);

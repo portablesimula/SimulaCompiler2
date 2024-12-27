@@ -163,7 +163,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			lab.movedTo=enc;
 			if(enc.labelList == null) enc.labelList = new LabelList(enc);
 			enc.labelList.add(lab);
-			lab.updateDeclaredIn(enc);
+//			lab.updateDeclaredIn(enc);
+			lab.declaredIn = enc;
 		}
 		block.labelList = null;
 	}
@@ -522,10 +523,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
-		stmStack.push(labelContext);
+		labelContextStack.push(labelContext);
 		labelContext = this;
 		build_STMS(codeBuilder);
-		labelContext = stmStack.pop();
+		labelContext = labelContextStack.pop();
 	}
 
 	private void build_STMS(CodeBuilder codeBuilder) {

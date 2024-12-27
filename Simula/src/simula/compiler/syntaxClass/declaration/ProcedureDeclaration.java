@@ -992,13 +992,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 */
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
-		stmStack.push(labelContext);
+		labelContextStack.push(labelContext);
 		labelContext = this;
 		for (Statement stm : statements) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
 			stm.buildByteCode(codeBuilder);
 		}
-		labelContext = stmStack.pop();
+		labelContext = labelContextStack.pop();
 	}
 
 	// ***********************************************************************************************

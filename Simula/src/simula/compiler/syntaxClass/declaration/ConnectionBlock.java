@@ -266,6 +266,7 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	/**
 	 * Default constructor used by Attribute File I/O
+	 * @param identifier the block identifier.
 	 */
 	public ConnectionBlock(String identifier) {
 		super(identifier);

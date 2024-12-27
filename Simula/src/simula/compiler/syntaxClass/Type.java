@@ -129,7 +129,7 @@ public class Type extends SyntaxClass {
 	
 	/**
 	 * Create a new simple Type with the given keyWord and classIdent
-	 * @param key the given keyWord
+	 * @param keyWord the given keyWord
 	 * @param classIdent the given class identifier
 	 */
 	public Type(int keyWord, String classIdent) {
@@ -177,7 +177,7 @@ public class Type extends SyntaxClass {
 	 * Check if types are equals or subordinate.
 	 * @param t1 a type
 	 * @param t2 a type
-	 * @return
+	 * @return true: if types are equals or subordinate.
 	 */
 	public static boolean equalsOrSubordinate(Type t1, Type t2) {
 		if(t1 == null) return(t2 == null);

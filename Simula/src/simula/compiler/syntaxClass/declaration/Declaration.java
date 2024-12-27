@@ -151,8 +151,7 @@ public abstract class Declaration extends SyntaxClass {
 
 	/**
 	 * Parse a declaration and add it to the given declaration list.
-	 * 
-	 * @param declarationList the given declaration list
+	 * @param enclosure the owning block.
 	 * @return true if a declaration was found, false otherwise
 	 */
 	protected static boolean acceptDeclaration(final BlockDeclaration enclosure) {
@@ -227,13 +226,16 @@ public abstract class Declaration extends SyntaxClass {
 
 	/**
 	 * Output Java ByteCode. Treat Declaration.
+	 * @param classBuilder the classBuilder to use.
+	 * @param encloser the owning block.
 	 */
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		Util.IERR("Method buildDeclaration need a redefinition in "+this.getClass().getSimpleName());
 	}
 
 	/**
-	 * 
+	 * Coding utility: get getFieldIdentifier.
+	 * @return the resulting String.
 	 */
 	public String getFieldIdentifier() {
 		Util.IERR("Method getFieldIdentifier need a redefinition in "+this.getClass().getSimpleName());
@@ -242,6 +244,7 @@ public abstract class Declaration extends SyntaxClass {
 
 	/**
 	 * Output Java ByteCode. Build init code for an Attribute.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
@@ -250,12 +253,17 @@ public abstract class Declaration extends SyntaxClass {
 
 	/**
 	 * Output Java ByteCode. Build declaration code for an Attribute.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	public void buildDeclarationCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
 		// Default: No code
 	}
 	
+	/**
+	 * Debug utility: verifyTree.
+	 * @param head of the tree.
+	 */
 	protected void verifyTree(final Object head) {
 		if(head instanceof Declaration decl) {
 			if(! decl.identifier.equals(this.declaredIn.identifier)) {

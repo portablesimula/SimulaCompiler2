@@ -37,11 +37,10 @@ public class ForWhileElement extends ForListElement {
 
 	/**
 	 * Create a new WhileElement.
+	 * @param forStatement the ForStatement
 	 * @param expr1 first expression 
 	 * @param expr2 second expression
 	 */
-//	public WhileElement(final Expression expr1, final Expression expr2) {
-//		super(ForStatement.this, expr1);
 	public ForWhileElement(final ForStatement forStatement, final Expression expr1, final Expression expr2) {
 		super(forStatement, expr1);
 		this.expr2 = expr2;

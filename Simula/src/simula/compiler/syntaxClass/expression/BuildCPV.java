@@ -20,7 +20,18 @@ import simula.compiler.utilities.Util;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 
-public class BuildCPV {
+/**
+ * Coding Utilities: Build Call Procedure Virtual (CPV).
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPV.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ *
+ */
+public abstract class BuildCPV {
+	/** Default Constructor: NOT USED */ private BuildCPV() {}
 
 	// ********************************************************************
 	// *** BuildProcedureCall.virtual

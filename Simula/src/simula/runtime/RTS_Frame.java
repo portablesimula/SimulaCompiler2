@@ -6,10 +6,16 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
+/**
+ * RTS Frame used by RTS_Drawing and RTS_ConsolePanel
+ */
 @SuppressWarnings("serial")
 public class RTS_Frame extends JFrame {
 	private static Vector<JFrame> openFrames;
 	
+	/**
+	 * Create a new RTS_Frame
+	 */
 	public RTS_Frame() {
 		addWindowListener(this);
 		if(openFrames == null) openFrames = new Vector<JFrame>();

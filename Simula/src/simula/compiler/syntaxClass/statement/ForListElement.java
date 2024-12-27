@@ -41,9 +41,9 @@ public class ForListElement extends SyntaxClass {
 
 	/**
 	 * Create a new ForListElement.
+	 * @param forStatement the ForStatement
 	 * @param expr1 The first expression
 	 */
-//	public ForListElement(final Expression expr1) {
 	public ForListElement(final ForStatement forStatement, final Expression expr1) {
 		this.forStatement = forStatement;
 		this.expr1 = expr1;
@@ -110,7 +110,10 @@ public class ForListElement extends SyntaxClass {
 		GeneratedJavaClass.code("}");
 	}
 
-//	@Override
+	/**
+	 * Build SingleElement ByteCoding
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	public void doSingleElementByteCoding(CodeBuilder codeBuilder) {
         // 0: aload_0
         // 1: aload_0
@@ -128,6 +131,11 @@ public class ForListElement extends SyntaxClass {
 		forStatement.doStatement.buildByteCode(codeBuilder);
 	}
 
+	/**
+	 * Build byte code.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param controlVariable the ForStatement's controlVariable.
+	 */
 	public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
 		codeBuilder
 			.new_(RTS.CD.FOR_SingleElt)

@@ -17,6 +17,15 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
+/**
+ * InspectVariable Declaration.
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/InspectVariableDeclaration.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ */
 public class InspectVariableDeclaration extends Declaration {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
@@ -33,6 +42,8 @@ public class InspectVariableDeclaration extends Declaration {
 	 * 
 	 * @param type       the variable type
 	 * @param identifier the variable identifier
+	 * @param connectionScope the connectionScope
+	 * @param connectionStatement the connectionStatement
 	 */
 	public InspectVariableDeclaration(final Type type, final String identifier,final DeclarationScope connectionScope, final ConnectionStatement connectionStatement) {
 		super(identifier);
@@ -89,6 +100,11 @@ public class InspectVariableDeclaration extends Declaration {
 		return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + '=' + value + ';');
 	}
 
+	/**
+	 * Coding utility: get FieldRefEntry of this InspectVariable.
+	 * @param pool the ConstantPoolBuilder to use.
+	 * @return the FieldRefEntry of this InspectVariable.
+	 */
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), type.toClassDesc()));

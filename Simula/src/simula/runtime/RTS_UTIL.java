@@ -326,6 +326,11 @@ public final class RTS_UTIL {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
 	
+	/**
+	 * Treat Exception
+	 * @param e the Throwable Object
+	 * @param obj the RTObject which object that received the exception
+	 */
 	public static void treatException(final Throwable e, final RTS_RTObject obj) {
 		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
 		if (RTS_Option.GOTO_TRACING) {
@@ -480,6 +485,7 @@ public final class RTS_UTIL {
 	 * routine. It will initiate the global data in the runtime system.
 	 * 
 	 * @param ident the program identifier
+	 * @param args the arguments
 	 */
 	public static void BPRG(final String ident, final String[] args) {
 		setRuntimeOptions(args);

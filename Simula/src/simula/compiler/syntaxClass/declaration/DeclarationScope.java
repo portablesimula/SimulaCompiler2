@@ -128,6 +128,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// ***********************************************************************************************
 	/**
 	 * Utility: Get Runtime BlockLevel.
+	 * @return true: the Runtime BlockLevel.
 	 */
 //	@Override
 	public int getRTBlockLevel() {
@@ -285,11 +286,19 @@ public abstract class DeclarationScope extends Declaration  {
 	// ***********************************************************************************************
 	/**
 	 * Coding utility: Build current context chain.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @return true: if resulting field need a cast.
 	 */
 	public boolean buildCTX(CodeBuilder codeBuilder) {
 		return(buildCTX(0, codeBuilder));
 	}
 	
+	/**
+	 * Coding utility: Build current context chain.
+	 * @param corr correction .
+	 * @param codeBuilder the codeBuilder to use.
+	 * @return true: if resulting field need a cast.
+	 */
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
@@ -342,7 +351,8 @@ public abstract class DeclarationScope extends Declaration  {
 	 * Coding utility: Build context chain.
 	 *
 	 * @param ctxDiff block level difference.
-	 * @return edited context chain
+	 * @param codeBuilder the codeBuilder to use.
+	 * @return  true: if resulting field need a cast.
 	 */
 	public static boolean buildCTX2(int ctxDiff,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
@@ -359,6 +369,11 @@ public abstract class DeclarationScope extends Declaration  {
 		return(withFollowSL);
 	}
 	
+	/**
+	 * Debug utility: printScopeChain
+	 * @param scope the DeclarationScope
+	 * @param title title String
+	 */
 	public static void printScopeChain(DeclarationScope scope,String title) {
 		System.out.println("\n   ================== Current Scope Chain: "+title+" ==================");
 		while(scope != null) {
@@ -387,10 +402,19 @@ public abstract class DeclarationScope extends Declaration  {
 	// ***********************************************************************************************
 	// *** ByteCoding Utility: getClassDesc -- Redefined in StandardClass, SubBlock and ConnectionBlock
 	// ***********************************************************************************************
+	/**
+	 * Return the ClassDesc
+	 * @return the ClassDesc
+	 */
 	public ClassDesc getClassDesc() {
 		return(RTS.CD.classDesc(externalIdent));
 	}
 	
+	/**
+	 * Debug utility: printStaticChain
+	 * @param title title String
+	 * @param details level of details
+	 */
 	public void printStaticChain(String title,int details) {
 		System.out.println("\nDeclarationScope.printStaticChain: **************** "+title+" ****************");
 		DeclarationScope scope=this;//.declaredIn;
@@ -406,11 +430,19 @@ public abstract class DeclarationScope extends Declaration  {
 		}
 	}
 	
+	/**
+	 * Debug utility: print DeclarationList.
+	 * @param indent the indentation.
+	 */
 	protected void printDeclarationList(int indent) {
 		for(Declaration d:declarationList) d.printTree(indent,this);
 		if(labelList != null) for(LabelDeclaration d:labelList.getDeclaredLabels()) d.printTree(indent,this);
 	}
 	
+	/**
+	 * Debug utility: edScope
+	 * @return edited scope String
+	 */
 	public String edScope() {
 		return "DeclarationScope: BL=" + getRTBlockLevel() + "  "
 				+ getClass().getSimpleName() + ' ' + identifier + '[' + externalIdent + "] declaredIn="+declaredIn;
@@ -419,6 +451,10 @@ public abstract class DeclarationScope extends Declaration  {
 	// ***********************************************************************************************
     // *** ByteCoding: buildClassFile
     // ***********************************************************************************************
+	/**
+	 * Build Class File
+	 * @return Class File bytes
+	 */
     public abstract byte[] buildClassFile();
 
 	// ***********************************************************************************************
@@ -431,7 +467,7 @@ public abstract class DeclarationScope extends Declaration  {
     protected boolean CLASSFILE_ALREADY_GENERATED;
 	/**
 	 * Create Java ClassFile.
-	 * @throws IOException 
+	 * @throws IOException  if something went wrong.
 	 */
     public void createJavaClassFile() throws IOException {
     	if (this.isPreCompiledFromFile != null) {
@@ -448,7 +484,7 @@ public abstract class DeclarationScope extends Declaration  {
 	
     /**
      * Redefined in ClassDeclaration
-     * @throws IOException
+     * @throws IOException if something went wrong.
      */
     protected void buildAndLoadOrAddClassFile() throws IOException {
 		if (this.isPreCompiledFromFile != null) {
@@ -459,6 +495,10 @@ public abstract class DeclarationScope extends Declaration  {
     	}
     }
     
+    /**
+     * Build ClassFile.
+     * @return ClassFile bytes.
+     */
     protected byte[] doBuildClassFile() {  // TODO: TESTING
     	byte[] bytes;
     	if(this instanceof BlockDeclaration blk) {
@@ -472,12 +512,21 @@ public abstract class DeclarationScope extends Declaration  {
     	return bytes;
     }
     
+    /**
+     * Get ClassFile bytes from file.
+     * @return ClassFile bytes from file.
+     */
     protected byte[] getBytesFromFile() {  // TODO: TESTING
     	System.out.println("DeclarationScope.getBytesFromFile: ");
-    	Util.IERR();
+    	Util.IERR("NOT IMPLEMENTED");
     	return null;
     }
     
+    /**
+     * Load or add a ClassFile depending on the Option.compilerMode
+     * @param bytes the ClassFile bytes
+     * @throws IOException if something went wrong
+     */
     protected void loadOrAddClassFile(byte[] bytes) throws IOException {  // TODO: TESTING
     	if(bytes != null) {
     		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
@@ -518,8 +567,8 @@ public abstract class DeclarationScope extends Declaration  {
 	/**
 	 * Prepare the declaration list for attribute output.
 	 * 
-	 * @param declarationList
-	 * @return
+	 * @param declarationList the input declarationList.
+	 * @return a new prepped declarationList.
 	 */
 	protected DeclarationList prep(DeclarationList declarationList) {
 		DeclarationList res = new DeclarationList("");

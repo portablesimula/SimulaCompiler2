@@ -19,7 +19,17 @@ import java.lang.classfile.MethodModel;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-public class ClassFileTransform {
+/**
+ * ClassFileTransform.
+ * <p>
+ * Link to GitHub: <a href=
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/transform/ClassFileTransform.java">
+ * <b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
+ */
+public abstract class ClassFileTransform {
+	/** Default Constructor: NOT USED */ private ClassFileTransform() {}
 
 	/**
 	 * Repair a single .class file.
@@ -38,15 +48,12 @@ public class ClassFileTransform {
 		inpt.close();
 		if (Option.internal.TRACE_REPAIRING_INPUT)
 			Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Input=" + inputFileName);
-//		Util.IERR("UN-COMMENT FOLLOWING LINES ...");
-//		ClassModel classModel = ClassFile.parse(bytes);
 		ClassFile cf = ClassFile.of();
 		ClassModel classModel = cf.parse(bytes);
 		
 		Predicate<MethodModel> filter = model -> (model.methodName().equalsString("_STM"));
 		ClassTransform transform = ClassTransform.transformingMethodBodies(filter, new SimulaCodeTransform());
 		if (transform != null) {
-//			byte[] bytes2 = classModel.transform(transform);
 			byte[] bytes2 = cf.transformClass(classModel, transform);
 			if (Option.internal.TRACE_REPAIRING_OUTPUT)
 				Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Output=" + outputFileName);
