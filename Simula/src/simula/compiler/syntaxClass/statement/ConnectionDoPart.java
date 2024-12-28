@@ -29,6 +29,7 @@ public class ConnectionDoPart extends SyntaxClass {
 
 	/**
 	 * Create a new do-part.
+	 * @param connectionStatement The owner.
 	 * @param connectionBlock The associated connection block
 	 * @param statement the statement after DO
 	 */

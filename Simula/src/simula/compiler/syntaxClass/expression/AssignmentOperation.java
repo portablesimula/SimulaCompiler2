@@ -246,7 +246,10 @@ public final class AssignmentOperation extends Expression {
 			buildAssignment(codeBuilder);
 	}
 
-
+	/**
+	 * Coding utility: Build Text Value Assignment.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildTextValueAssignment(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
@@ -299,6 +302,10 @@ public final class AssignmentOperation extends Expression {
 		if(this.backLink == null) codeBuilder.pop();
 	}
 
+	/**
+	 * Coding utility: Build Assigment.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildAssignment(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		System.out.println("AssignmentOperation.buildAssignment: "+lhs.getClass().getSimpleName()+"  "+lhs+" opr "+rhs);
@@ -392,6 +399,12 @@ public final class AssignmentOperation extends Expression {
 		else Util.IERR();
 	}
 	
+	/**
+	 * Coding utility: Try to build remote array.
+	 * @param remvar remote variable.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @return true: if success.
+	 */
 	private boolean tryRemoteArray(RemoteVariable remvar, CodeBuilder codeBuilder) {
 		if(remvar.var instanceof VariableExpression) {
 			Declaration decl = remvar.var.meaning.declaredAs;
@@ -416,6 +429,13 @@ public final class AssignmentOperation extends Expression {
 		return(false);
 	}
 	
+	/**
+	 * Coding utility: Build Simple Parameter
+	 * @param par the parameter
+	 * @param var the variable
+	 * @param assignRef true: assign by reference.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildSimpleParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		FieldRefEntry FRE_par = par.getFieldRefEntry(pool);
@@ -452,6 +472,13 @@ public final class AssignmentOperation extends Expression {
 		}
 	}
 	
+	/**
+	 * Coding utility: Build Array Parameter
+	 * @param par the parameter
+	 * @param var the variable
+	 * @param assignRef true: assign by reference.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildArrayParameter(Parameter par,VariableExpression var,boolean assignRef,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(par.mode == Parameter.Mode.name) {

@@ -38,6 +38,7 @@ public class BuildCP {
 	 * BuildCP.normal
 	 * 
 	 * @param variable the procedure variable
+	 * @param prc Procedure Declaration
 	 * @param codeBuilder the CodeBuilder
 	 */
 	static void normal(final VariableExpression variable,final ProcedureDeclaration prc,final CodeBuilder codeBuilder) {
@@ -132,8 +133,11 @@ public class BuildCP {
 	// *** callRemoteStandardProcedure
 	// ********************************************************************
 	/**
-	 * callRemoteStandardProcedure
-	 *
+	 * callRemoteStandardProcedure.
+	 * @param beforeDot expression.
+	 * @param pro StandardProcedure.
+	 * @param variable the variable.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private static void callRemoteStandardProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable,CodeBuilder codeBuilder) {
 //		System.out.println("BuildCP.callRemoteStandardProcedure: "+beforeDot);
@@ -173,8 +177,9 @@ public class BuildCP {
 	// *** BuildCP.normalStandardProcedure
 	// ********************************************************************
 	/**
-	 * BuildCP.normalStandardProcedure
-	 *
+	 * Coding utility: BuildCP.normalStandardProcedure
+	 * @param variable the variable.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	static void normalStandardProcedure(final VariableExpression variable,CodeBuilder codeBuilder) {
 		Meaning meaning=variable.meaning;
@@ -212,8 +217,9 @@ public class BuildCP {
 	// *** BuildCP.staticStandardProcedure
 	// ********************************************************************
 	/**
-	 * BuildCP.staticStandardProcedure
-	 *
+	 * Coding utility: BuildCP.staticStandardProcedure
+	 * @param variable the variable.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	static void staticStandardProcedure(final VariableExpression variable,CodeBuilder codeBuilder) {
 		Meaning meaning=variable.meaning;
@@ -249,8 +255,9 @@ public class BuildCP {
 	// *** checkForExtraParameter
 	// ********************************************************************
 	/**
-	 * checkForExtraParameter
-	 *
+	 * Check for Extra Parameter sourceLineNumber
+	 * @param variable the variable
+	 * @return true: if extra parameter 'sourceLineNumber' is pushed.
 	 */
 	private static boolean checkForExtraParameter(VariableExpression variable) {
 		String id = variable.identifier;
@@ -274,54 +281,5 @@ public class BuildCP {
 		return false;
 	}
 
-//	// ********************************************************************
-//	// *** BuildCP.asNormalMethod
-//	// ********************************************************************
-//	/**
-//	 * BuildCP.asNormalMethod
-//	 *
-//	 * @param variable the procedure variable
-//	 */
-//
-//	private static void asNormalMethod(final VariableExpression variable,CodeBuilder codeBuilder) {
-//		Meaning meaning=variable.meaning;
-//		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
-//		if(meaning.declaredAs instanceof StandardProcedure) {
-//			callStandardProcedure(variable,codeBuilder);
-//		} else { // Normal Simula Procedure
-//			Util.IERR("ER DETTE MULIG ?");
-//			//      P(777);
-//			// ==>  new adHoc00_P((_CUR),777);
-//			//
-//			//   0: new           #46                 // class simulaTestPrograms/adHoc00_P
-//			//   3: getstatic     #48                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
-//			//   6: sipush        777
-//			//   9: invokespecial #51                 // Method simulaTestPrograms/adHoc00_P."<init>":(Lsimula/runtime/RTS_RTObject;I)V
-//			//
-//			//  	kkk := P(444);
-//			// ==>  kkk=new adHoc00_P((_CUR),444)._RESULT;
-//			//
-//			//    1: new           #46                 // class simulaTestPrograms/adHoc00_P
-//			// *  4: dup
-//			//    5: getstatic     #48                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
-//			//    8: sipush        444
-//			//   11: invokespecial #51                 // Method simulaTestPrograms/adHoc00_P."<init>":(Lsimula/runtime/RTS_RTObject;I)V
-//			// * 14: getfield      #54                 // Field simulaTestPrograms/adHoc00_P._RESULT:I
-//			ClassDesc CD_prc=procedure.getClassDesc();
-//			codeBuilder.new_(CD_prc);
-//			if(variable.backLink != null) codeBuilder.dup();
-//			codeBuilder.getstatic(RTS.CD.RTS_RTObject,"_CUR",RTS.CD.RTS_RTObject);
-//
-//			// Push parameters
-//			for(Expression expr:variable.checkedParams)
-//				expr.buildEvaluation(null,codeBuilder);
-//
-//			codeBuilder.invokespecial(CD_prc, "<init>", procedure.getConstructorMethodTypeDesc());
-//			ConstantPoolBuilder pool=codeBuilder.constantPool();
-//			
-//			if(variable.backLink != null)
-//				codeBuilder.getfield(procedure.getResultFieldRefEntry(pool));
-//		}
-//	}
 
 }

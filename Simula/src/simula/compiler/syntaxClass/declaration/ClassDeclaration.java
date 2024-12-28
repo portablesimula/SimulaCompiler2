@@ -1141,7 +1141,7 @@ public class ClassDeclaration extends BlockDeclaration {
 		return RTS.CD.RTS_CLASS;
 	}
 	
-	
+	/// Indicates if this class is loaded.
 	private boolean isLoaded;
     /**
      * Defined in DeclarationScope - Redefined in ClassDeclaration
@@ -1442,6 +1442,9 @@ public class ClassDeclaration extends BlockDeclaration {
 		codeBuilder.aload(0).areturn();
 	}
 	
+	/**
+	 * Clear the LabelList.
+	 */
 	private void clearLabelList() {
 //		System.out.println("ClassDeclaration.clearLabelList: ");
 		if(labelList != null) {
@@ -1459,6 +1462,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Generate byteCode for the '_STM' method.
 	 *
 	 * @param codeBuilder the CodeBuilder
+	 * @param begScope label
+	 * @param endScope label
 	 */
 	private void buildMethod_CatchingErrors_TRY_CATCH(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		codeBuilder.trying(
@@ -1470,6 +1475,12 @@ public class ClassDeclaration extends BlockDeclaration {
 				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder, begScope, endScope)));
 	}
 
+	/**
+	 * Coding utility: buildMyCatchBlock.
+	 * @param codeBuilder the codeBuilder to use.
+	 * @param begScope label
+	 * @param endScope label
+	 */
 	private void buildMyCatchBlock(CodeBuilder  codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
 		int local_EXEPTN = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
@@ -1504,6 +1515,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	/**
 	 * Coding utility: buildStatementsBeforeInner
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildStatementsBeforeInner(CodeBuilder codeBuilder) {
 		if (hasRealPrefix()) {
@@ -1522,6 +1534,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	/**
 	 * Coding utility: buildStatementsAfterInner
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildStatementsAfterInner(CodeBuilder codeBuilder) {
 		for (Statement stm : statements){

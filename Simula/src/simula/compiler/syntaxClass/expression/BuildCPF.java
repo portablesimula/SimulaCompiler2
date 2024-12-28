@@ -117,6 +117,11 @@ public abstract class BuildCPF {
 		maybeBuildLoad_RESULT(variable, codeBuilder);
 	}
 	
+	/**
+	 * Coding utility: May be Build Load_RESULT.
+	 * @param variable the variable
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	static void maybeBuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;

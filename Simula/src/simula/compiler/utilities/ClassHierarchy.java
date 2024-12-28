@@ -52,7 +52,10 @@ import java.util.Vector;
 /// `ClassHierarchyResolver.defaultResolver().orElse(classDesc -> isInterface ? :
 /// ClassHierarchyInfo.ofInterface() : ClassHierarchyInfo.ofClass(ClassDesc superClass))`
 public abstract class ClassHierarchy {
+	/// The classToSuperClass Map.
 	private static Map<ClassDesc, ClassDesc> classToSuperClass;
+	
+	/// The interfaces.
 	private static Collection<ClassDesc> interfaces;
 	
 	/** Default Constructor: NOT USED */ private ClassHierarchy() {}
@@ -132,6 +135,7 @@ public abstract class ClassHierarchy {
 	// ***********************************************************************************************
 	// *** ClassHierarchy list and print tree
 	// ***********************************************************************************************
+	/// list of all Nodes.
 	private static Vector<Node> allNodes;
 	
 	/**
@@ -166,10 +170,21 @@ public abstract class ClassHierarchy {
 		lookup("simula.runtime.RTS_PROCEDURE").print(1);
 	}
 	
+	/**
+	 * Utility class Node.
+	 */
 	private static class Node implements Comparable<Node> {
+		/// Node's name
 		String name;
+		
+		/// Node's children.
 		TreeSet<Node> children = new TreeSet<Node>();
 		
+		/** Default Constructor: NOT USED */ private Node() {}
+		/**
+		 * Utility method: print.
+		 * @param indent the indentation.
+		 */
 		void print(int indent) {
 			System.out.println(SyntaxClass.edIndent(indent) + this.name);
 			for(Node child:children) child.print(indent + 1);
@@ -181,6 +196,11 @@ public abstract class ClassHierarchy {
 		}
 	}
 	
+	/**
+	 * Debug utility: Lookup a node.
+	 * @param name node's name.
+	 * @return the node.
+	 */
 	private static Node lookup(String name) {
 		for(Node node:allNodes) if(node.name.equals(name)) return(node);
 		Node n = new Node(); n.name = name;
@@ -192,6 +212,7 @@ public abstract class ClassHierarchy {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/// Marker in the AttributeOutputStream.
 	private static final String mark = "]END ClassHierarchy";
 	
 	/**

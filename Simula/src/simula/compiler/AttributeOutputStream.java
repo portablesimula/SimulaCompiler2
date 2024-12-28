@@ -15,8 +15,10 @@ import simula.compiler.utilities.Util;
  * Attribute output stream.
  */
 public class AttributeOutputStream {
+	/// The underlying DataOutputStream.
 	DataOutputStream oupt;
 
+	/// Debug utility.
 	private boolean TRACE = false; //true;
 
 	/**

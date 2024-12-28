@@ -475,8 +475,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: build_TRY_CATCH
 	// ***********************************************************************************************
-	private int local_THIS;
-	int local_LABEL_q;
+//	private int local_THIS;
+//	private int local_LABEL_q;
 	/**
 	 * Coding utility: Build byteCode for the try-catch part of the '_STM' method.
 	 * <pre>
@@ -502,8 +502,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		Label loopWhile = codeBuilder.newLabel();
 		Label loopEnd = codeBuilder.newLabel();
 		
-		local_THIS = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
-		local_LABEL_q = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
+		int local_THIS = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
+		int local_LABEL_q = ((BlockDeclaration)BlockDeclaration.currentBlock).allocateLocalVariable(Type.Ref);
 		codeBuilder.localVariable(local_THIS,"_THIS",RTS.CD.RTS_RTObject,begScope,endScope);
 		codeBuilder.localVariable(local_LABEL_q,"label_q",RTS.CD.RTS_LABEL,begScope,endScope);
 		
@@ -528,37 +528,76 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
 				},
 				catchBuilder -> catchBuilder.catching(RTS.CD.RTS_LABEL,
-						blockCodeBuilder -> buildCatchBlock(blockCodeBuilder,loopWhile)));
+					blockCodeBuilder -> {
+						// Build Catch-Block:
+						// ==================================================================================
+					    //        catch(RTS_LABEL q) {
+					    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+					    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+					    //        }
+						// ==================================================================================
+						
+						//buildCatchBlock(blockCodeBuilder, loopWhile, local_THIS, local_LABEL_q);
+
+						//private void buildCatchBlock(CodeBuilder blockCodeBuilder,Label loopWhile, int local_THIS, int local_LABEL_q) {
+						//	ConstantPoolBuilder pool=blockCodeBuilder.constantPool();
+
+							// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+							blockCodeBuilder
+								.astore(local_LABEL_q)
+								.aload(local_THIS)
+								.aload(local_LABEL_q)
+								.invokestatic(RTS.CD.RTS_RTObject,
+										"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
+
+							// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+							blockCodeBuilder
+								.aload(0)
+								.aload(local_LABEL_q)
+//								.getfield(pool.fieldRefEntry(RTS.CD.RTS_LABEL,"index", ConstantDescs.CD_int))
+//								.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+								.getfield(RTS.FRE.LABEL_index(pool))
+								.putfield(RTS.FRE.RTObject_JTX(pool))
+								.goto_(loopWhile);
+						//}
+
+					
+					}));
 		codeBuilder.labelBinding(loopEnd);
 	}
 
-	// ==================================================================================
-    //        catch(RTS_LABEL q) {
-    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
-    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-    //        }
-	// ==================================================================================
-	private void buildCatchBlock(CodeBuilder  codeBuilder,Label contLabel) {
-		ConstantPoolBuilder pool=codeBuilder.constantPool();
-
-		// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
-		codeBuilder
-			.astore(local_LABEL_q)
-			.aload(local_THIS)
-			.aload(local_LABEL_q)
-			.invokestatic(RTS.CD.RTS_RTObject,
-					"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
-
-		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-		codeBuilder
-			.aload(0)
-			.aload(local_LABEL_q)
-//			.getfield(pool.fieldRefEntry(RTS.CD.RTS_LABEL,"index", ConstantDescs.CD_int))
-//			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
-			.getfield(RTS.FRE.LABEL_index(pool))
-			.putfield(RTS.FRE.RTObject_JTX(pool))
-			.goto_(contLabel);
-	}
+//	// ==================================================================================
+//    //        catch(RTS_LABEL q) {
+//    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+//    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+//    //        }
+//	// ==================================================================================
+//	/**
+//	 * Coding utility: Build CatchBlock.
+//	 * @param codeBuilder the codeBuilder to use.
+//	 * @param contLabel continuation label
+//	 */
+//	private void buildCatchBlock(CodeBuilder blockCodeBuilder,Label loopWhile, int local_THIS, int local_LABEL_q) {
+//		ConstantPoolBuilder pool=blockCodeBuilder.constantPool();
+//
+//		// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+//		blockCodeBuilder
+//			.astore(local_LABEL_q)
+//			.aload(local_THIS)
+//			.aload(local_LABEL_q)
+//			.invokestatic(RTS.CD.RTS_RTObject,
+//					"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
+//
+//		// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+//		blockCodeBuilder
+//			.aload(0)
+//			.aload(local_LABEL_q)
+////			.getfield(pool.fieldRefEntry(RTS.CD.RTS_LABEL,"index", ConstantDescs.CD_int))
+////			.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
+//			.getfield(RTS.FRE.LABEL_index(pool))
+//			.putfield(RTS.FRE.RTObject_JTX(pool))
+//			.goto_(loopWhile);
+//	}
 	
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethodMain
@@ -572,7 +611,6 @@ public abstract class BlockDeclaration extends DeclarationScope {
      *     }
      * </pre>
      * @param codeBuilder the CodeBuilder
-     * @param pool the ConstantPoolBuilder
      */
 	void buildMethodMain(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();

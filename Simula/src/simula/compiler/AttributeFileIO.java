@@ -86,8 +86,9 @@ public final class AttributeFileIO {
 
 	/**
 	 * Build a module's attribute file.
-	 * @param module the module
-	 * @throws IOException if an io-error occurs
+	 * @param program the program module.
+	 * @return the attribute file's bytes.
+	 * @throws IOException if an io-error occurs.
 	 */
 	private static byte[] buildAttrFile(final ProgramModule program) throws IOException {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -144,7 +145,7 @@ public final class AttributeFileIO {
 
 			InputStream inputStream = jarFile.getInputStream(zipEntry);
 			byte[] bytes = inputStream.readAllBytes(); inputStream.close();
-			BlockDeclaration module = AttributeFileIO.buildSyntaxTree(file.toString(),bytes);
+			BlockDeclaration module = AttributeFileIO.readPrecompiled(file.toString(),bytes);
 			moduleType = module.type;
 
 			Declaration d=declarationList.find(module.identifier);
@@ -171,8 +172,15 @@ public final class AttributeFileIO {
 		return (moduleType);
 	}
 	
-	private static BlockDeclaration buildSyntaxTree(String fileID,byte[] attrFile) throws IOException {
-//		System.out.println("AttributeFileIO.buildSyntaxTree: size="+attrFile.length+", File="+fileID);
+	/**
+	 * Read and return precompiled class or procedure.
+	 * @param fileID the file ident.
+	 * @param attrFile the attribute file.
+	 * @return the resulting class or procedure.
+	 * @throws IOException if somthing went wrong.
+	 */
+	private static BlockDeclaration readPrecompiled(String fileID,byte[] attrFile) throws IOException {
+//		System.out.println("AttributeFileIO.readPrecompiled: size="+attrFile.length+", File="+fileID);
 		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile), fileID);
 
 		String vers = inpt.readString();
@@ -195,7 +203,7 @@ public final class AttributeFileIO {
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + fileID);
 		
-//		System.out.println("AttributeFileIO.buildSyntaxTree: =========== Resulting ObjectReference Map ================");
+//		System.out.println("AttributeFileIO.readPrecompiled: =========== Resulting ObjectReference Map ================");
 //		inpt.objectReference.print();
 
 		module.isPreCompiledFromFile = fileID;

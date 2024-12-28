@@ -35,7 +35,7 @@ public final class RunFullTestBatch {
 	public static void main(String[] args) {
 
 		// Set Compiler Options.
-		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 //		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 		Option.CaseSensitive=true;

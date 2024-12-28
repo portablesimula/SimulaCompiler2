@@ -92,44 +92,28 @@ import simula.compiler.utilities.Util;
  */
 public final class ConnectionStatement extends Statement {
 	
-	/**
-	 * The inspected object.
-	 */
+	/// The inspected object.
 	Expression objectExpression;
 	
-	/**
-	 * Utility Variable to hold the evaluated object-expression.
-	 */
+	/// Utility Variable to hold the evaluated object-expression.
 	VariableExpression inspectedVariable;
 	
-	/**
-	 * The inspected variable's declaration.
-	 */
+	/// The inspected variable's declaration.
 	public InspectVariableDeclaration inspectVariableDeclaration;
 	
-	/**
-	 * The connection parts. A ConnectionDoPart or a list of WhenParts.
-	 */
+	/// The connection parts. A ConnectionDoPart or a list of WhenParts.
 	private ObjectList<ConnectionDoPart> connectionPart = new ObjectList<ConnectionDoPart>();
 	
-	/**
-	 * The otherwise statement.
-	 */
+	/// The otherwise statement.
 	private Statement otherwise;
 	
-	/**
-	 * True if this connection statement contains ConnectionWhenPart(s).
-	 */
+	/// True if this connection statement contains ConnectionWhenPart(s).
 	private boolean hasWhenPart;
 	
-	/**
-	 * Utility to help generate unique identifiers to the inspected variable.
-	 */
+	/// Utility to help generate unique identifiers to the inspected variable.
 	private static int SEQUX = 4444; //0;
 
-	/**
-	 * 
-	 */	
+	/// The end Label.
 	Label endLabel;
 
 	/**

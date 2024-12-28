@@ -163,7 +163,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit direct (re)activation
+	 * Coding utility: Build direct (re)activation
 	 * @return the resulting Java source code
 	 */
 	private String edActivateDirect() {
@@ -174,7 +174,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process AT ...
+	 * Coding utility: Build (Re)Activate Process AT ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateAt() {
@@ -184,7 +184,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process DELAY ...
+	 * Coding utility: Build (Re)Activate Process DELAY ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateDelay() {
@@ -194,7 +194,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process BEFORE ...
+	 * Coding utility: Build (Re)Activate Process BEFORE ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateBefore() {
@@ -206,7 +206,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process AFTER ...
+	 * Coding utility: Build (Re)Activate Process AFTER ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateAfter() {
@@ -241,8 +241,8 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit direct (re)activation
-	 * @return the resulting Java source code
+	 * Coding utility: Build direct (re)activation
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateDirect(CodeBuilder codeBuilder) {
 //        0: getstatic     #47                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
@@ -259,8 +259,8 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process AT ...
-	 * @return the resulting Java source code
+	 * Coding utility: Build (Re)Activate Process AT ...
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateAt(CodeBuilder codeBuilder) {
 //        29: getstatic     #49                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
@@ -281,8 +281,8 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process DELAY ...
-	 * @return the resulting Java source code
+	 * Coding utility: Build (Re)Activate Process DELAY ...
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateDelay(CodeBuilder codeBuilder) {
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateDelay");
@@ -295,8 +295,8 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process BEFORE ...
-	 * @return the resulting Java source code
+	 * Coding utility: Build (Re)Activate Process BEFORE ...
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateBefore(CodeBuilder codeBuilder) {
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateBefore");
@@ -308,8 +308,8 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Edit (Re)Activate Process AFTER ...
-	 * @return the resulting Java source code
+	 * Coding utility: Build (Re)Activate Process AFTER ...
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateAfter(CodeBuilder codeBuilder) {
 		Meaning activate1 = Global.getCurrentScope().findMeaning("ActivateAfter");

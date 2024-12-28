@@ -63,20 +63,20 @@ import simula.compiler.utilities.Util;
  * Attribute input stream.
  */
 public class AttributeInputStream {
+	/// The module ident.
 	String moduleID;
+	
+	/// The underlying DataInputStream.
 	DataInputStream inpt;
 	
-	/**
-	 * The jarFile being read.
-	 */
+	/// The jarFile being read.
 	public String jarFileName;
 	
-	/**
-	 * The Object Reference Table.
-	 * Used during Attribute File Input to fixup Object References.
-	 */
+	/// The Object Reference Table.
+	/// Used during Attribute File Input to fixup Object References.
 	public ObjectReferenceMap objectReference;
 	
+	/// Debug utility.
 	private boolean TRACE = false; //true;
 
 	/**
@@ -246,6 +246,13 @@ public class AttributeInputStream {
 		}	
 	}
 
+	/**
+	 * Read and return an object.
+	 * @param kind the object kind code.
+	 * @param inpt the AttributeInputStream to read from.
+	 * @return the object read from the stream.
+	 * @throws IOException if something went wrong.
+	 */
 	private SyntaxClass readObj(int kind,AttributeInputStream inpt) throws IOException {
 		switch(kind) {
 			case ObjectKind.NULL:						return null;

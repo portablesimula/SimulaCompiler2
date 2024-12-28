@@ -124,7 +124,8 @@ public abstract class BuildCPV {
 	 * @param obj Object Expression before DOT
 	 * @param variable the procedure variable
 	 * @param virtual Virtual Specification
-	 * @param codeBuilder the CodeBuilder
+	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	 * @param codeBuilder the CodeBuilder to use
 	 */
 	static void remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual,final SyntaxClass backLink,CodeBuilder codeBuilder) {
 		if(! variable.hasArguments()) {
@@ -154,7 +155,6 @@ public abstract class BuildCPV {
 	// ********************************************************************
 	/**
 	 * Coding Utility: Build Call Specified Virtual Procedure.
-	 * @param ident the procedure identifier
 	 * @param variable the procedure variable
 	 * @param procedureSpec the procedure spec
 	 * @param codeBuilder the CodeBuilder
@@ -198,6 +198,11 @@ public abstract class BuildCPV {
 	// ********************************************************************
 	// *** prepareForValueType
 	// ********************************************************************
+	/**
+	 * Coding utility: Prepare for ValueType.
+	 * @param variable the variable
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private static void prepareForValueType(final VariableExpression variable, CodeBuilder codeBuilder) {
 	    // Prepare for possible _RESULT to Object conversion in buildCPF.
 		Type resultType = functionResultType(variable);
@@ -212,6 +217,11 @@ public abstract class BuildCPV {
 		}
 	}
 	
+	/**
+	 * Coding utility: Get function ResultType.
+	 * @param variable the variable.
+	 * @return the function ResultType.
+	 */
 	private static Type functionResultType(VariableExpression variable) {
 		Declaration proc = variable.meaning.declaredAs;
 		Type resultType = proc.type;
@@ -224,6 +234,11 @@ public abstract class BuildCPV {
 		return resultType;
 	}
 	
+	/**
+	 * Coding utility: Build Load_RESULT.
+	 * @param variable the variable
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private static void BuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;

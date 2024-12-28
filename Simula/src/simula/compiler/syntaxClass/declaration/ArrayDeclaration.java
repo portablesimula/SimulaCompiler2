@@ -399,6 +399,15 @@ public final class ArrayDeclaration extends Declaration {
 	// **************************************** buildGetArrayField ****************************************
 	// ********************************************************************************************
 	
+	/**
+	 * Coding utility: Build 'Get Array Field'
+	 * @param type the array type.
+	 * @param meaning the meaning.
+	 * @param declaredIn the owner.
+	 * @param arrayIdent the array identifier.
+	 * @param isParameter true: array is a parameter.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private static void buildGetArrayField(Type type,Meaning meaning,DeclarationScope declaredIn,String arrayIdent,boolean isParameter,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 //		System.out.println("ArrayDeclaration.buildGetArrayField: type="+type+", isParameter="+isParameter);
@@ -418,7 +427,11 @@ public final class ArrayDeclaration extends Declaration {
 		}
 	}
 	
-	
+	/**
+	 * Coding utility: Prepare for indexing.
+	 * @param checkedParams the checked parameters
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private static void prepIndexing(Vector<Expression> checkedParams, CodeBuilder codeBuilder) {
 		Constant.buildIntConst(codeBuilder, checkedParams.size());
 		codeBuilder.newarray(TypeKind.INT);
@@ -653,47 +666,5 @@ public final class ArrayDeclaration extends Declaration {
 		Util.TRACE_INPUT("Array: " + arr);
 		return(arr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//
-//		// *** ArrayDeclaration
-//		oupt.writeShort(nDim);
-//		for(BoundPair boundPair:boundPairList) {
-//			oupt.writeObj(boundPair.LB);
-//			oupt.writeObj(boundPair.UB);
-//		}
-//	}
-
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//
-//		// *** ArrayDeclaration
-//		nDim = inpt.readShort();
-//		boundPairList = new Vector<BoundPair>();
-//		for(int i=0;i<nDim;i++) {
-//			Expression LB = (Expression) inpt.readObj();
-//			Expression UB = (Expression) inpt.readObj();
-//			boundPairList.add(new BoundPair(LB,UB));
-//		}
-//	}
 	
 }
