@@ -553,6 +553,11 @@ public abstract class DeclarationScope extends Declaration  {
     	
     }
 
+    /**
+     * Debug utility: listGeneratedClassFile.
+     * @param bytes the classFile bytes.
+     * @throws IOException if something went wrong.
+     */
 	private void listGeneratedClassFile(byte[] bytes) throws IOException {
         File outputFile = new File(Global.tempClassFileDir + "\\" + Global.packetName + "\\" + externalIdent + ".class");
         outputFile.getParentFile().mkdirs();

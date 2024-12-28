@@ -24,6 +24,8 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 public final class InlineStatement extends Statement {
+	
+	/// The kind String: detach | terminate | try | catch
 	String kind;
 	
 	/**

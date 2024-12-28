@@ -1953,6 +1953,12 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		if(RTS_SPORT_Option.FEC_Verbose > 0) System.out.println("RTS_ENVIRONMENT.getTextInfo("+index+") = "+info2);
 		return(info);
 	}
+	
+	/**
+	 * Utility method for getTextInfo.
+	 * @param index case index
+	 * @return requested text info
+	 */
 	private static RTS_TXT getTextInfo2(final int index) {
 		switch (index) {
 		case 1:
@@ -2221,6 +2227,7 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 		return (0);
 	}
 
+	/// The exit code.
 	private static int exitCode = 0;
 	/**
 	 * S-PORT Extension Procedure giveIntInfo.

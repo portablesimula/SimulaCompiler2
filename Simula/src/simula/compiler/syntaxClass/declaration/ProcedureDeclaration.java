@@ -182,6 +182,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 *   identifier-list = identifier { , identifier }
 	 * </pre>
 	 * @param pList the parameter list
+	 * @return true: if mode-part was present.
 	 */
 	private static boolean acceptModePart(Vector<Parameter> pList) {
 		if (Parse.accept(KeyWord.VALUE, KeyWord.NAME)) {
@@ -624,6 +625,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * Example: (Lsimula/runtime/RTS_RTObject;IID)V
 	 * <p>
 	 * Also used by PrefixedBlockDeclaration.
+	 * @param withParams true: create MethodTypeDesc with parameters.
 	 * @return the MethodTypeDesc for the constructor
 	 */
 	private MethodTypeDesc MTD_Constructor(boolean withParams) {
@@ -680,7 +682,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 *		   _STM();
 	 *	   }
 	 * </pre>
-	 * @param codeBuilder the CodeBuilder
+	 * @param methodBuilder the MethodBuilder to use.
 	 */
 	private void buildConstructor(MethodBuilder methodBuilder) {
 		methodBuilder
@@ -772,7 +774,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 *        super(_SL,n); // Expecting n parameters
 	 *    }
 	 * </pre>
-	 * @param codeBuilder the CodeBuilder
+	 * @param methodBuilder the MethodBuilder to use.
 	 */
 	private void buildConstructor2(MethodBuilder methodBuilder) {
 		methodBuilder
@@ -825,7 +827,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 *        return(this);
 	 *     }
 	 * </pre>
-	 * @param codeBuilder the CodeBuilder
+	 * @param methodBuilder the MethodBuilder to use.
 	 */
 	private void buildSetPar(MethodBuilder methodBuilder) {
 		methodBuilder
@@ -860,6 +862,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		}	);
 	}
 	
+	/**
+	 * Coding utility: Build switch
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void build_SWITCH(BlockCodeBuilder codeBuilder) {
 		//  switch(_nParLeft--) {
 		//     case 1: p_SFD=procValue(param); break;

@@ -121,7 +121,7 @@ public class Type extends SyntaxClass {
 	  
 	/**
 	 * Create a new simple Type with the given keyWord
-	 * @param key the given keyWord
+	 * @param keyWord the given keyWord
 	 */
 	private Type(int keyWord) {
 		this.keyWord = keyWord;

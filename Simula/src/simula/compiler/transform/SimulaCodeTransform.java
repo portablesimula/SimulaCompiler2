@@ -31,7 +31,7 @@ import simula.compiler.utilities.Util;
 //=========================================
 
 
-/*
+/**
  * Simula .class file transformer.
  * <p>
  * CASE 1: Repair the JUMPTABLE.
@@ -63,11 +63,14 @@ import simula.compiler.utilities.Util;
  *    LABEL (pseudo instruction)
  * </pre>
  */
-
 final class SimulaCodeTransform implements CodeTransform {
-
+	/// The switch cases.
 	private List<SwitchCase> cases;
+	
+	/// The previous CodeElement
 	private CodeElement prevElement;
+	
+	/** Default Constructor. */ SimulaCodeTransform() {}
 
 	@Override
 	public void atEnd(CodeBuilder builder) {
@@ -146,7 +149,7 @@ final class SimulaCodeTransform implements CodeTransform {
 	/**
 	 * ConstantInstruction: ICONST n or BIPUSH or SIPUSH
 	 * 
-	 * @param element
+	 * @param element a CodeElement: ICONST n or BIPUSH or SIPUSH
 	 * @return the integer constant value
 	 * @throws RuntimeException if something went wrong
 	 */

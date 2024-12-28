@@ -17,7 +17,7 @@ package simula.compiler.utilities;
  *
  */
 public class KeyWord {
-	/* Default Constructor: Not used */ private KeyWord() {}
+	/** Default Constructor: Not used */ private KeyWord() {}
 	// Simula Reserved Words
 	/** Simula Keyword */ public final static int ACTIVATE   = 1;
 	/** Simula Keyword */ public final static int AND        = 2;

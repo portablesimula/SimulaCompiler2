@@ -10,6 +10,7 @@ import simula.runtime.RTS_EndProgram;
  * SimulaClassLoader.
  */
 public class SimulaClassLoader extends ClassLoader {
+	/// Debug utility.
 	private final static boolean TESTING = false;
 	
 	/**

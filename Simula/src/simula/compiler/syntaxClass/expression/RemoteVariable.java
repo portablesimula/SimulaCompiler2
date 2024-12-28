@@ -233,6 +233,13 @@ public final class RemoteVariable extends Expression {
 		String var="(("+cast+')'+obj+'.'+array.edIdentifierAccess(false)+')';
 		return(array.doGetELEMENT(var));
 	}
+	
+	/**
+	 * Coding Utility: Build Access Remote Array.
+	 * @param beforeDot expression before dot
+	 * @param array the array variable
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void doAccessRemoteArray(final Expression beforeDot, final VariableExpression array,CodeBuilder codeBuilder) {
 		beforeDot.buildEvaluation(null, codeBuilder);
 		Declaration declaredAs=array.meaning.declaredAs;
@@ -284,8 +291,12 @@ public final class RemoteVariable extends Expression {
 	// *** BuildProcedureCall.callStandardTextProcedure
 	// ********************************************************************
 	/**
-	 * callStandardTextProcedure
-	 *
+	 * Coding utility: Call Standard TextProcedure.
+	 * @param beforeDot expression before dot.
+	 * @param pro the StandardProcedure.
+	 * @param variable the VariableExpression.
+	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private static void callStandardTextProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable, Object backLink,CodeBuilder codeBuilder) {
 		beforeDot.buildEvaluation(null,codeBuilder);

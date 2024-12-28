@@ -257,6 +257,10 @@ public final class RelationalOperation extends Expression {
 			.labelBinding(lab2);
 	}
 
+	/**
+	 * Coding utility: Build Text Relation.
+	 * @param codeBuilder the codeBuiløder to use.
+	 */
 	private void buildTextRelation(CodeBuilder codeBuilder) {
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);

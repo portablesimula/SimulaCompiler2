@@ -380,15 +380,16 @@ public final class Option {
 		return checkBox(id, tooltip,Option.getOption(id));
 	}
 
-		/**
-		 * Editor Utility: Create a checkBox with tooltips.
-		 * @param id option id
-		 * @param tooltip option's tooltip or null
-		 * @return the resulting check box
-		 */
-		private static JCheckBox checkBox(String id,String tooltip,boolean selected) {
-        JCheckBox item = new JCheckBox(id);
-    	item.setBackground(Color.white);
+	/**
+	 * Editor Utility: Create a checkBox with tooltips.
+	 * @param id option id.
+	 * @param tooltip option's tooltip or null.
+	 * @param selected true: this checkBox is selected.
+	 * @return the resulting check box.
+	 */
+	private static JCheckBox checkBox(String id,String tooltip,boolean selected) {
+		JCheckBox item = new JCheckBox(id);
+		item.setBackground(Color.white);
         item.setSelected(selected);
         item.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {

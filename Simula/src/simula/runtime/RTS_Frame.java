@@ -11,6 +11,8 @@ import javax.swing.JFrame;
  */
 @SuppressWarnings("serial")
 public class RTS_Frame extends JFrame {
+	
+	/// The opened frames.
 	private static Vector<JFrame> openFrames;
 	
 	/**
@@ -22,6 +24,9 @@ public class RTS_Frame extends JFrame {
 		openFrames.add(this);
 	}
 
+	/**
+	 * Close this RTS_Frame.
+	 */
 	private void close() {
 		openFrames.remove(this);
 //		System.out.println("Close Frame "+frame);
@@ -31,6 +36,10 @@ public class RTS_Frame extends JFrame {
 		}
 	}
 	
+	/**
+	 * Add WindowListener to a RTS_Frame.
+	 * @param frame a Frame.
+	 */
 	private static void addWindowListener(RTS_Frame frame) {
 		frame.addWindowListener(new WindowListener() {
 			@Override public void windowOpened(WindowEvent e) {}

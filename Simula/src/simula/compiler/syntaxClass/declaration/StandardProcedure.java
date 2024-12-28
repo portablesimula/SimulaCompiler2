@@ -28,8 +28,13 @@ import simula.compiler.utilities.Util;
  * @author Øystein Myhre Andersen
  */
 public final class StandardProcedure extends ProcedureDeclaration {
+	/// Set of method type descriptors.
 	private String[] mtdSet;
+	
+	/// The overload match
 	private ProcedureSpecification overLoadMatch;
+	
+	/// The mtd picked by 'getLegalOverLoadMatch'
 	private String mtdPicked;
 	
 	/**
@@ -88,7 +93,7 @@ public final class StandardProcedure extends ProcedureDeclaration {
 	 */
 	public ProcedureSpecification getOverLoadMatch(Vector<Expression> params) {
 		if(mtdSet != null) for(String mtd:mtdSet) {
-			ProcedureSpecification legal = getLegalMatch(mtd,params);
+			ProcedureSpecification legal = getLegalOverLoadMatch(mtd,params);
 			if(legal != null) {
 				this.overLoadMatch = legal;
 				return(legal);
@@ -97,7 +102,13 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		return null;
 	}
 	
-	private ProcedureSpecification getLegalMatch(String mtd,Vector<Expression> params) {
+	/**
+	 * Get LegalOverLoadMatch.
+	 * @param mtd a method type descriptor
+	 * @param params the actual parameters.
+	 * @return a legal OverLoadMatch or null.
+	 */
+	private ProcedureSpecification getLegalOverLoadMatch(String mtd,Vector<Expression> params) {
 		ProcedureSpecification spec = getProcedureSpecification(mtd);
 		int n = params.size();
 		int m = spec.parameterList.size();
@@ -181,6 +192,12 @@ public final class StandardProcedure extends ProcedureDeclaration {
 		} else return(MethodTypeDesc.ofDescriptor(this.edMethodTypeDesc(beforeDot,params)));
 	}
 	
+	/**
+	 * Edit MethodTypeDesc
+	 * @param beforeDot the Expression beforeDot
+	 * @param params the actual parameters
+	 * @return MethodTypeDesc String
+	 */
 	private String edMethodTypeDesc(Expression beforeDot,Vector<Expression> params) {
 		// MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_Printfile;");
 		StringBuilder sb=new StringBuilder("(");

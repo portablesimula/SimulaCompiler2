@@ -27,17 +27,32 @@ import simula.compiler.syntaxClass.declaration.LabelDeclaration;
  * @author Øystein Myhre Andersen
  */
 public class LabelList {
+	/// Debug utility.
 	private static boolean TRACING = false;
+	
+	/// Utility to help make unique sequence numbers.
 	private static int LABEL_SEQU = 0;
+	
+	/// The sequence number of this label list.
 	private int sequ;
 	
+	/// The owner of this label list.
 	private DeclarationScope declaredIn;
+	
+	/// The labels in this list.
 	private Vector<LabelDeclaration> declaredLabels;
 	
+	/// true: this LabelList is ready for coding.
 	private boolean READY_FOR_CODING;
-	private Vector<LabelDeclaration> accumLabels; // Set by MAKE_READY_FOR_CODING  or  accumLabelList
-	private Label defaultTarget; // beginning of the default handler block. Set by MAKE_READY_FOR_CODING
-	private Vector<SwitchCase> tableSwitchCases;  // Set by MAKE_READY_FOR_CODING
+	
+	/// Set by MAKE_READY_FOR_CODING  or  accumLabelList
+	private Vector<LabelDeclaration> accumLabels;
+	
+	/// beginning of the default handler block. Set by MAKE_READY_FOR_CODING
+	private Label defaultTarget;
+	
+	/// Set by MAKE_READY_FOR_CODING
+	private Vector<SwitchCase> tableSwitchCases;
 	
 	/**
 	 * A list of LabelDeclarations.
@@ -59,6 +74,10 @@ public class LabelList {
 		READY_FOR_CODING = false;
 	}
 	
+	/**
+	 * Debug utility: Return identification String.
+	 * @return identification String.
+	 */
 	private String ident() {
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
 	}
@@ -176,6 +195,10 @@ public class LabelList {
 //		print("setLabelIdexes: Testing");
 	}
 	
+	/**
+	 * Coding utility: Make this LabelList ready for coding.
+	 * @param codeBuilder the codeBuilder to use
+	 */
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {
 		if(READY_FOR_CODING) return;
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
@@ -197,7 +220,7 @@ public class LabelList {
 	}
 	
 	/**
-	 * Build the TableSwitch Instruction.
+	 * Coding utility: Build the TableSwitch Instruction.
 	 * @param codeBuilder the codeBuilder to use
 	 */
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
@@ -229,7 +252,7 @@ public class LabelList {
 	}
 	
 	/**
-	 * Build a labelBinding.
+	 * Coding utility: Build a labelBinding.
 	 * @param label the label to bind
 	 * @param codeBuilder the codeBuilder to use
 	 */

@@ -422,7 +422,13 @@ public final class SimulaCompiler {
 	// ***************************************************************
 	// *** EXECUTE .jar FILE
 	// ***************************************************************
-	private void doExecuteJarFile(String jarFile,Vector<String> cmds) throws IOException {
+	/**
+	 * Execute JarFile.
+	 * @param jarFile a jarFile
+	 * @param arg the arguments
+	 * @throws IOException if something went wrong.
+	 */
+	private void doExecuteJarFile(String jarFile,Vector<String> arg) throws IOException {
 	if (!programModule.isExecutable()) {
 		if (Option.internal.TRACING)
 			Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
@@ -434,7 +440,7 @@ public final class SimulaCompiler {
 			Util.println("------------  EXECUTION SUMMARY  ------------");
 		if (Option.internal.TRACING)
 			Util.println("Execute .jar File");
-		int exitValue3 = Util.execute(cmds);
+		int exitValue3 = Util.execute(arg);
 		if (Option.verbose)
 			Util.println("END Execute .jar File. Exit value=" + exitValue3);
 		if(exitValue3 != 0) {
@@ -447,6 +453,10 @@ public final class SimulaCompiler {
 	// ***************************************************************
 	// *** CALL JAVA COMPILER
 	// ***************************************************************
+	/**
+	 * Call Java compiler 'javac'
+	 * @throws IOException if something went wrong.
+	 */
 	private void doCallJavaCompiler() throws IOException {
 		String classPath = Global.simulaRtsLib.toString();
 
@@ -601,6 +611,10 @@ public final class SimulaCompiler {
 	// ***************************************************************
 	// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
 	// ***************************************************************
+	/**
+	 * doByteCodeEngineering reintroducing labels and goto.
+	 * @throws IOException if something went wrong.
+	 */
 	private void doByteCodeEngineering() throws IOException {
 		if (Option.internal.keepJava == null) {
 			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
@@ -631,6 +645,9 @@ public final class SimulaCompiler {
 	// ***************************************************************
 	// *** LIST GENERATED .class FILES
 	// ***************************************************************
+	/**
+	 * Debug utility: listGeneratedClassFiles.
+	 */
 	private void listGeneratedClassFiles() {
 		File classFiles = new File(Global.tempClassFileDir, Global.packetName);
 		for (File classFile : classFiles.listFiles()) {

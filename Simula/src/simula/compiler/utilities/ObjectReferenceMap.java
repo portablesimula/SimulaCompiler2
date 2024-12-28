@@ -16,6 +16,8 @@ import simula.compiler.syntaxClass.SyntaxClass;
  * @author Øystein Myhre Andersen
  */
 public class ObjectReferenceMap {
+	
+	/// The underlying ObjectReference Map
 	Map<Integer,SyntaxClass> objectReference;
 	
 	/**

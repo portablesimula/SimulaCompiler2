@@ -529,6 +529,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		labelContext = labelContextStack.pop();
 	}
 
+	/**
+	 * Coding utility: Build the statements.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void build_STMS(CodeBuilder codeBuilder) {
 		for (Statement stm : statements) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);

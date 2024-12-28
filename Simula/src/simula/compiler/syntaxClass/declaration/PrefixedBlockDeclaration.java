@@ -77,7 +77,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	/**
 	 * PrefixedBlock.
-	 * 
+	 * @param isMainModule true: this is the main module.
 	 */
 	private PrefixedBlockDeclaration(boolean isMainModule) {
 		super(null);
@@ -372,6 +372,9 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
+	/**
+	 * Private Constructor used by Attribute File I/O.
+	 */
 	private PrefixedBlockDeclaration() {
 		super(null);
 	}

@@ -117,7 +117,10 @@ public class StepUntilElement extends ForListElement {
 		GeneratedJavaClass.code("}");
 	}
 	
+	/// Used to make deltaID unique.
+	private static int DELTA_SEQU=0;
 	/**
+	 * Coding utility: generalCase.
 	 * <pre>
 	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
 	 *
@@ -127,15 +130,13 @@ public class StepUntilElement extends ForListElement {
 	 * 
 	 *		controlVariable = expr1();
 	 * 		DELTA = expr2();
-	 * 		while( sign(DELTA)*(controlVariable-expr3()) <= 0) {
+	 * 		while( sign(DELTA)*(controlVariable-expr3()) &lt;= 0) {
 	 * 			STATEMENT();
 	 * 			DELTA = expr2();
 	 * 			controlVariable = controlVariable + DELTA;
 	 * 		}  // end while;
-	 *
-	 *
+	 * </pre>
 	*/
-	private static int DELTA_SEQU=0;
 	private void generalCase() {
 //		System.out.println("ForStatement.generalCase: "+this);
 		String cv = forStatement.controlVariable.toJavaCode();
@@ -166,6 +167,7 @@ public class StepUntilElement extends ForListElement {
 
 	
 	/**
+	 * Coding utility: doSingleElementByteCoding
 	 * <pre>
 	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
 	 *

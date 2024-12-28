@@ -35,36 +35,25 @@ import simula.compiler.utilities.Util;
  */
 public class JarFileBuilder {
 	
-	/**
-	 * The ProgramModule.
-	 */
+	/// The ProgramModule.
 	private ProgramModule programModule;
 	
-	/**
-	 * The output .jar file
-	 */
+	/// The output .jar file
 	private File outputJarFile;
 	
-	/**
-	 * Main entry name.
-	 */
+	/// Main entry name.
 	String mainEntry;
 
-	/**
-	 * The intermediate classFileMap.
-	 */
+	/// The intermediate classFileMap.
 	private final HashMap<String,byte[]> classFileMap;
 
-	/**
-	 * The target JarOutputStream.
-	 */
+	/// The target JarOutputStream.
 	private JarOutputStream jarOutputStream;
 
+	/// Debug utility.
 	private final static boolean TESTING = false;
 	
-	/**
-	 * Construct a new JarFileBuilder.
-	 */
+	/// Construct a new JarFileBuilder.
 	public JarFileBuilder() {
 		if(TESTING) System.out.println("\nNEW JarFileBuilder");
 		this.classFileMap = new HashMap<String,byte[]>();
@@ -257,6 +246,10 @@ public class JarFileBuilder {
 		if(TESTING) printClassFileMap("END JarFileBuilder.expandJarFile");
 	}
 	
+	/**
+	 * Debug utility: printClassFileMap.
+	 * @param title the title String.
+	 */
 	private void printClassFileMap(String title) {
 		System.out.println("============================== printClassFileMap: "+title+" ==============================");
         for (Entry<String, byte[]> entry : classFileMap.entrySet()) {
@@ -358,7 +351,13 @@ public class JarFileBuilder {
 		loadJarEntries(jarFile, "simula/runtime/", Global.simulaClassLoader);
 	}
 	
-	
+	/**
+	 * Load jarFile entries.
+	 * @param jarFile the jarFile.
+	 * @param packetName the packet name.
+	 * @param loader the SimulaClassLoader to use.
+	 * @throws IOException if something went wrong.
+	 */
 	private static void loadJarEntries(final JarFile jarFile, final String packetName, final SimulaClassLoader loader) throws IOException {
 		if(TESTING) System.out.println("\nJarFileBuilder.loadJarEntries: JarFileName="+jarFile.getName());
 		if (Option.verbose)

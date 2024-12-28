@@ -83,33 +83,28 @@ import simula.compiler.utilities.Util;
  */
 public final class SwitchStatement extends Statement {
 	
-	/**
-	 * The low key.
-	 */
+	/// The low key.
 	private Expression lowKey;
 	
-	/**
-	 * The high key
-	 */
+	/// The high key
 	private Expression hiKey;
 	
-	/**
-	 * The switchKey
-	 */
+	/// The switchKey
 	private Expression switchKey;
 	
-	/**
-	 * The list of When parts
-	 */
+	/// The list of When parts
 	private final Vector<SwitchWhenPart> switchCases=new Vector<SwitchWhenPart>();
 
-	
+	/// The lookupSwitc cases.
 	private	List<SwitchCase> lookupSwitchCases;
 
+	/// Indicator: har NONE case.
 	private boolean has_NONE_case;
 	
-	private Label defaultTarget; // beginning of the default handler block.
+	/// The beginning of the default handler block.
+	private Label defaultTarget;
 	
+	/// The end label.
 	private Label endLabel;
 
 	/**
@@ -163,19 +158,13 @@ public final class SwitchStatement extends Statement {
 	 * Utility class SwitchInterval
 	 */
     private class SwitchInterval {
-    	/**
-    	 * The lower case key
-    	 */
+    	/// The lower case key
     	Expression lowCase;
     	
-    	/**
-    	 * The high case key
-    	 */
+    	/// The high case key
     	Expression hiCase;
     	
-    	/**
-    	 * 
-    	 */
+    	/// First case table index.
     	int firstTableIndex;
 
     	
@@ -242,6 +231,12 @@ public final class SwitchStatement extends Statement {
     		GeneratedJavaClass.code("break;");
     	}
        	
+    	/**
+    	 * Coding utility: initLookupSwitchCases.
+    	 * @param index starting case index.
+    	 * @param codeBuilder the codeBuilder to use.
+    	 * @return final case index.
+    	 */
     	private int initLookupSwitchCases(int index,CodeBuilder codeBuilder) {
     		for(SwitchInterval casePair:this.caseKeyList) {
     			if(casePair != null) {
@@ -262,6 +257,10 @@ public final class SwitchStatement extends Statement {
     		return(index);
     	}
 	
+    	/**
+    	 * Coding utility: buildByteCode.
+    	 * @param codeBuilder the codeBuilder to use.
+    	 */
     	private void buildByteCode(CodeBuilder codeBuilder) {
         	for(SwitchInterval casePair:this.caseKeyList) {
         		if(casePair==null) {
@@ -314,6 +313,11 @@ public final class SwitchStatement extends Statement {
     		return(s.toString());
     	}
     	
+    	/**
+    	 * Debug utility: printTree.
+    	 * @param indent the indentation.
+    	 * @param head the head of the tree.
+    	 */
     	public void printTree(final int indent, final Object head) {
     		System.out.println(edTreeIndent(indent)+edWhen());
     		statement.printTree(indent+1,this);
@@ -402,6 +406,10 @@ public final class SwitchStatement extends Statement {
 
 	}
 	
+	/**
+	 * Coding utility: buildSwitchKeyTest.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildSwitchKeyTest(CodeBuilder codeBuilder) {
 		Label L1 = codeBuilder.newLabel();
 		Label L2 = codeBuilder.newLabel();

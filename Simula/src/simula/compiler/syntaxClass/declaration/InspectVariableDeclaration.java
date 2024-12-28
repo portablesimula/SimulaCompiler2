@@ -31,12 +31,12 @@ public class InspectVariableDeclaration extends Declaration {
 	// String externalIdent; // Inherited
 	// Type type; // Inherited
 
-	/**
-	 * The assosiated ConnectionStatement 
-	 */
-	DeclarationScope connectionScope;
+	/// The assosiated ConnectionStatement 
 	ConnectionStatement connectionStatement;
 	
+	/// The owner.
+	DeclarationScope connectionScope;
+
 	/**
 	 * Create a new InspectVariableDeclaration.
 	 * 

@@ -139,6 +139,11 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 	}
 	
+	/**
+	 * Check if this label is the last label in the owner's label list.
+	 * @param encloser the owner.
+	 * @return true: if this label is the last label in the owner's label list.
+	 */
 	private boolean isLatestVirtualLabel(DeclarationScope encloser) {
 		LabelDeclaration last = encloser.labelList.getLastDeclaredLabel(this.identifier);
 		if(this.index == last.index) {
@@ -147,6 +152,10 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		return false;
 	}
 	
+	/**
+	 * Returns the prefix level.
+	 * @return the prefix level.
+	 */
 	private int getPrefixLevel() {
 		int prefixLevel=0;
 		if(movedTo != null) {
@@ -157,6 +166,11 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		return prefixLevel;
 	}
 	
+	/**
+	 * Coding utility: Build Virtual Match Method Body.
+	 * @param prefixLevel the prefix level.
+	 * @param codeBuilder the codeBuilder to use.
+	 */
 	private void buildVirtualMatchMethodBody(int prefixLevel,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		// Build virtual match method:

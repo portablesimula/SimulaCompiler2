@@ -1354,7 +1354,7 @@ public final class StandardClass extends ClassDeclaration {
 	 * Create and add a new constant standard attribute
 	 * @param type the attribute type
 	 * @param ident the attribute identifier
-	 * @param iValue the constant integer value
+	 * @param value the constant integer value
 	 */
 	private void addStandardAttribute(Type type,String ident,Number value) {
 		declarationList.add(new SimpleVariableDeclaration(type,ident,true,new Constant(type,value))); }

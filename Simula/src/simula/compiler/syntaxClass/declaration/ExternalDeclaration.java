@@ -101,12 +101,16 @@ public final class ExternalDeclaration extends Declaration {
 	
 	/**
 	 * Create a new ExternalDeclaration.
+	 * @param identifier the identifier.
+	 * @param extIdentitier the external identifier.
 	 */
 	private ExternalDeclaration(String identifier,String extIdentitier) {
 		super(identifier);
 		this.declarationKind = ObjectKind.ExternalDeclaration;
 		this.externalIdent = extIdentitier;
 	}
+	
+	/// Private Constructor used by Attribute File I/O.
 	private ExternalDeclaration() {
 		super(null);
 		this.declarationKind = ObjectKind.ExternalDeclaration;
@@ -177,9 +181,14 @@ public final class ExternalDeclaration extends Declaration {
 		return externalDeclarations;
 	}
 
-	private static boolean checkJarFiles(File file) {
-		for(File f:Global.externalJarFiles) if(f.equals(file)) {
-			Util.warning("External already included: "+file.getName());
+	/**
+	 * Check if the jarFile is already included.
+	 * @param jarFile the jarFile.
+	 * @return false: if the jarFile is already included.
+	 */
+	private static boolean checkJarFiles(File jarFile) {
+		for(File f:Global.externalJarFiles) if(f.equals(jarFile)) {
+			Util.warning("External already included: "+jarFile.getName());
 			return(false);
 		}
 		return true;

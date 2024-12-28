@@ -115,6 +115,10 @@ public final class GotoStatement extends Statement {
 		RTS.invokevirtual_RTS_GOTO(codeBuilder);
 	}
 	
+	/**
+	 * Check if label is a parameter procedure.
+	 * @return true: if label is a parameter procedure.
+	 */
 	private boolean labelIsParameterProcedure() {
 		if(label instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;

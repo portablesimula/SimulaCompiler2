@@ -250,6 +250,11 @@ public class RTS_Infile extends RTS_Imagefile {
 		setpos(1);
 	}
 	
+	/**
+	 * Read and return next line.
+	 * @return line String.
+	 * @throws IOException if something went wrong.
+	 */
 	private String readLine() throws IOException {
 //		if(System.console()!=null) 
 //			 System.out.println("RTS:Infile.readLine: readFromSystem="+readFromSystem+", System.console()="+System.console().getClass().getSimpleName());
