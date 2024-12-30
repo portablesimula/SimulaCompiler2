@@ -441,8 +441,8 @@ public abstract class BlockDeclaration extends DeclarationScope {
 				if(Option.internal.TESTING_STACK_SIZE) {
 					checkStackSize = codeBuilder.newLabel();
 					codeBuilder
-						.aconst_null()                // TESTING_STACK_SIZE
-						.ifnonnull(checkStackSize);   // TESTING_STACK_SIZE
+						.aconst_null()               // TESTING_STACK_SIZE
+						.ifnonnull(checkStackSize);  // TESTING_STACK_SIZE
 				}
 				if (hasAccumLabel())	
 					 build_TRY_CATCH(codeBuilder, begScope, endScope);
@@ -516,53 +516,41 @@ public abstract class BlockDeclaration extends DeclarationScope {
 		codeBuilder
 			.labelBinding(loopWhile)
 			.aload(0)
-//			.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
 			.getfield(RTS.FRE.RTObject_JTX(pool))
 			.iflt(loopEnd);
 		
 		codeBuilder.trying(
+			blockCodeBuilder -> {
+				labelList.build_JUMPTABLE(blockCodeBuilder);
+				build_STM_BODY(blockCodeBuilder, begScope, endScope);  // Virtual
+				// break _LOOP;
+				blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
+			},
+			catchBuilder -> catchBuilder.catching(RTS.CD.RTS_LABEL,
 				blockCodeBuilder -> {
-					labelList.build_JUMPTABLE(blockCodeBuilder);
-					build_STM_BODY(blockCodeBuilder, begScope, endScope);  // Virtual
-					// break _LOOP;
-					blockCodeBuilder.goto_(blockCodeBuilder.breakLabel());
-				},
-				catchBuilder -> catchBuilder.catching(RTS.CD.RTS_LABEL,
-					blockCodeBuilder -> {
-						// Build Catch-Block:
-						// ==================================================================================
-					    //        catch(RTS_LABEL q) {
-					    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
-					    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-					    //        }
-						// ==================================================================================
-						
-						//buildCatchBlock(blockCodeBuilder, loopWhile, local_THIS, local_LABEL_q);
+					// Build Catch-Block:
+					// ==================================================================================
+				    //        catch(RTS_LABEL q) {
+				    //            RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+				    //            _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+				    //        }
+					// ==================================================================================
 
-						//private void buildCatchBlock(CodeBuilder blockCodeBuilder,Label loopWhile, int local_THIS, int local_LABEL_q) {
-						//	ConstantPoolBuilder pool=blockCodeBuilder.constantPool();
-
-							// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
-							blockCodeBuilder
-								.astore(local_LABEL_q)
-								.aload(local_THIS)
-								.aload(local_LABEL_q)
-								.invokestatic(RTS.CD.RTS_RTObject,
-										"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
-
-							// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
-							blockCodeBuilder
-								.aload(0)
-								.aload(local_LABEL_q)
-//								.getfield(pool.fieldRefEntry(RTS.CD.RTS_LABEL,"index", ConstantDescs.CD_int))
-//								.putfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int))
-								.getfield(RTS.FRE.LABEL_index(pool))
-								.putfield(RTS.FRE.RTObject_JTX(pool))
-								.goto_(loopWhile);
-						//}
-
-					
-					}));
+					// RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);
+					blockCodeBuilder
+						.astore(local_LABEL_q)
+						.aload(local_THIS)
+						.aload(local_LABEL_q)
+						.invokestatic(RTS.CD.RTS_RTObject,
+								"_TREAT_GOTO_CATCH_BLOCK", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;Lsimula/runtime/RTS_LABEL;)V"));
+					// _JTX=q.index; continue _LOOP; // EG. GOTO Lx
+					blockCodeBuilder
+						.aload(0)
+						.aload(local_LABEL_q)
+						.getfield(RTS.FRE.LABEL_index(pool))
+						.putfield(RTS.FRE.RTObject_JTX(pool))
+						.goto_(loopWhile);
+				}));
 		codeBuilder.labelBinding(loopEnd);
 	}
 

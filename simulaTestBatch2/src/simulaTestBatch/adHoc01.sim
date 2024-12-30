@@ -1,16 +1,25 @@
- external class AdHoc_SimulaTest;
-
- AdHoc_SimulaTest(999,"---")
 begin
-   
-   integer i, j, t;
-   boolean b,BBB;
-   
-   begin
-      switch st := T1, T2;
-      go to st(1);
 
-	  T1: T2: L1: L2: L3:
-   end;  
+   text t;
+
+   class A;
+   begin
+      integer         i, j, k;
+   end of class A;
+
+   A class B;;
+
+   ref(A)            ra;
+   integer            l;
+
+   ra :- new A;
+
+
+
+   inspect ra
+%   when A do outtext("Case A")
+   when B do outtext("Case B")
+   otherwise outtext("Case Otherwise");
+
 
 end;

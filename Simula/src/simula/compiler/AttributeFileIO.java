@@ -40,23 +40,11 @@ import simula.compiler.utilities.Util;
  *
  */
 public final class AttributeFileIO {
-	/**
-	 * The Simula version.
-	 */
+	/// The Simula version.
 	private final static String version="SimulaAttributeFile: Version 2.0";
-
-	/**
-	 * The attribute file.
-	 */
-//	final File attributeFile;
 	
-	/**
-	 * Create a new AttributeFileIO.
-	 * @param aFile the attributeFile 
-	 */
-	private AttributeFileIO(final File aFile) {
-//		this.attributeFile = aFile;
-	}
+	/// Default Constructor: NOT USED
+	private AttributeFileIO() {}
 
 	/**
 	 * Write an attribute file.
@@ -93,24 +81,14 @@ public final class AttributeFileIO {
 	private static byte[] buildAttrFile(final ProgramModule program) throws IOException {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		AttributeOutputStream oupt = new AttributeOutputStream(byteArrayOutputStream);
-		// writeVersion:
 		oupt.writeString(version);
-
 		ClassHierarchy.writeObject(oupt);
-
-		// Write External Head
 		if(program.externalHead != null) {
 			for(ExternalDeclaration xdecl:program.externalHead) {
 				oupt.writeObj(xdecl);
 			}
 		}
-		
-//		if(program.module instanceof ProcedureDeclaration pro)  pro.writeObject(oupt);
-//		else if(program.module instanceof ClassDeclaration cls) cls.writeObject(oupt);
-//		else Util.IERR();
-		
 		oupt.writeObj(program.mainModule);
-
 		oupt.close();
 		return(byteArrayOutputStream.toByteArray());
 	}
@@ -180,7 +158,6 @@ public final class AttributeFileIO {
 	 * @throws IOException if somthing went wrong.
 	 */
 	private static BlockDeclaration readPrecompiled(String fileID,byte[] attrFile) throws IOException {
-//		System.out.println("AttributeFileIO.readPrecompiled: size="+attrFile.length+", File="+fileID);
 		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile), fileID);
 
 		String vers = inpt.readString();
@@ -202,10 +179,6 @@ public final class AttributeFileIO {
 		else Util.IERR();
 		inpt.close();
 		if (Option.verbose)	Util.TRACE("*** ENDOF Read SimulaAttributeFile: " + fileID);
-		
-//		System.out.println("AttributeFileIO.readPrecompiled: =========== Resulting ObjectReference Map ================");
-//		inpt.objectReference.print();
-
 		module.isPreCompiledFromFile = fileID;
 		return module;
 	}

@@ -45,7 +45,7 @@ public final class RunSingleClassTest {
 //		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -85,7 +85,7 @@ public final class RunSingleClassTest {
 		Vector<String> names=new Vector<String>();
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
-//		names.add("adHoc01.sim"); // For ad'hoc testing
+		names.add("adHoc01.sim"); // For ad'hoc testing
 		
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
@@ -94,7 +94,7 @@ public final class RunSingleClassTest {
 //		names.add("adHoc00.sim");
 //		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
-		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
+//		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
 //		names.add("simtst03.sim"); // OK:  Test Text Value Relations
 //		names.add("simtst04.sim"); // OK:  To test putint and putreal.

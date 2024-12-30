@@ -1,0 +1,76 @@
+
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA TEST NO 162
+%
+%  PURPOSE:     Test Inspect when, when, otherwise (selected)
+%
+%  METHOD:      Try it and see if it work as expected.
+%
+%  WRITTEN BY:  MYH
+% ==============================================================================
+external class SimulaTest;
+
+SimulaTest(163,"--- Test Inspect when, when, otherwise (selected)") begin
+	text array facit(0:17);
+	integer traceCase;
+   
+	procedure trace(msg); text msg; begin
+		if verbose then
+		begin outtext(msg); outimage; end;
+		if msg ne facit(traceCase) then begin
+			err("Case " & edit(traceCase));
+			outtext("Trace: """ & msg & """"); outimage;
+			outtext("Facit: """ & facit(traceCase) & """"); outimage;
+		end;
+		traceCase:=traceCase+1;
+	end;
+
+
+   class A;;
+
+   A class B;;
+
+   ref(A) ra;
+	
+% ========================================================
+	
+	facit(0) :- "At START";
+	
+	facit(1) :- "Case Otherwise";
+	facit(2) :- "Case A";
+	facit(3) :- "Case A";
+	facit(4) :- "Case B";
+	
+	facit(5) :- "At END";
+	
+% ========================================================
+
+	trace("At START");
+
+   ra :- new A;
+
+   inspect ra
+%   when A do trace("Case A")
+   when B do trace("Case B")
+   otherwise trace("Case Otherwise");
+
+   inspect ra
+   when A do trace("Case A")
+   when B do trace("Case B")
+   otherwise trace("Case Otherwise");
+
+   ra :- new B;
+
+   inspect ra
+   when A do trace("Case A")
+   when B do trace("Case B")
+   otherwise trace("Case Otherwise");
+
+   inspect ra
+   when B do trace("Case B")
+   when A do trace("Case A")
+   otherwise trace("Case Otherwise");
+
+	trace("At END");
+
+ end;

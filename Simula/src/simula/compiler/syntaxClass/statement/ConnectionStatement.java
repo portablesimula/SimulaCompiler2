@@ -223,6 +223,37 @@ public final class ConnectionStatement extends Statement {
 	}
 
 	@Override
+//	public void buildByteCode(CodeBuilder codeBuilder) {
+//		ASSERT_SEMANTICS_CHECKED();
+//		ConstantPoolBuilder pool=codeBuilder.constantPool();
+//		codeBuilder.aload(0);
+//		objectExpression.buildEvaluation(null,codeBuilder);
+////		System.out.println("ConnectionStatement.buildByteCode: "+inspectedVariable.meaning.declaredIn);
+//		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
+//		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
+//		codeBuilder.putfield(FRE);
+//
+//		Label otwLabel = null;
+//		endLabel = codeBuilder.newLabel();
+//		if (!hasWhenPart) {
+//			codeBuilder.aload(0);
+//			codeBuilder.getfield(FRE);
+//			if(otherwise != null) {
+//				otwLabel = codeBuilder.newLabel();
+//				codeBuilder.ifnull(otwLabel);
+//			} else codeBuilder.ifnull(endLabel);
+//		}
+//		
+//		for(ConnectionDoPart part:connectionPart) 
+//			part.buildByteCode(codeBuilder);
+//		
+//		if (otherwise != null) {
+//			codeBuilder.labelBinding(otwLabel);				
+//			otherwise.buildByteCode(codeBuilder);
+//		}
+//		
+//		codeBuilder.labelBinding(endLabel);
+//	}
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
@@ -248,7 +279,10 @@ public final class ConnectionStatement extends Statement {
 			part.buildByteCode(codeBuilder);
 		
 		if (otherwise != null) {
-			codeBuilder.labelBinding(otwLabel);				
+//			System.out.println("ConnectionStatement.buildByteCode: otwLabel="+otwLabel);
+			if(otwLabel != null) {
+				codeBuilder.labelBinding(otwLabel);	
+			}
 			otherwise.buildByteCode(codeBuilder);
 		}
 		

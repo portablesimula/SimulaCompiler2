@@ -25,7 +25,7 @@ import simula.editor.RTOption;
  */
 public final class RunSingleTest {
 	private static final File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
-	private static final File userDir=new File("C:/GitHub/SimulaCompiler2/SimulaTestBatch");
+	private static final File userDir=new File("C:/GitHub/SimulaCompiler2/SimulaTestBatch2");
 	private static final String sourceDir = userDir+"/src/simulaTestBatch/";
 
 	public static void main(String[] args) {
@@ -91,10 +91,10 @@ public final class RunSingleTest {
 		Vector<String> names=new Vector<String>();
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
-//		names.add("adHoc01.sim"); // For ad'hoc testing
+		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
-		names.add("SimulaTest.sim"); // Simula TestBatch Framework
+//		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -273,8 +273,8 @@ public final class RunSingleTest {
 //		names.add("simtst152.sim"); // OK: Test nested connection statements
 //		names.add("simtst153.sim"); // OK: Test GOTO ConditionalExpression
 //		names.add("simtst154.sim"); // OK: Test function result assignment
-		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
-		names.add("simtst155.sim"); // OK: Test inspection in SubBlock in Precompiled inner class
+//		names.add("Pre155.sim");    // OK: Precompile this for Simtst 155.
+//		names.add("simtst155.sim"); // OK: Test inspection in SubBlock in Precompiled inner class
 //		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 //		names.add("simtst157.sim"); // OK: Test identifier access
 //		

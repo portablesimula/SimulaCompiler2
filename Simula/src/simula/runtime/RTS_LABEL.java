@@ -1,7 +1,7 @@
 package simula.runtime;
 
 // ************************************************************
-// *** FRAMEWORK for NonLocal Label-Parameters in Java Coding
+// *** FRAMEWORK for NonLocal Label-Variable in Java Coding
 // ************************************************************
 /**
  * This class represent a Simula Label quantity
@@ -9,28 +9,20 @@ package simula.runtime;
  */
 @SuppressWarnings("serial")
 public final class RTS_LABEL extends RuntimeException {
-//	static final long serialVersionUID = 42L;
 	/**
 	 * Static link, i.e. the block in which the label is defined.
 	 */
 	public final RTS_RTObject _SL;
 	
-	/**
-	 * Prefix level.
-	 */
-	public final int _PRFX;
+	/// Prefix level.
+	public final int _PRFX; // Prefix level.
 	
-	/**
-	 * Index, I.e. ordinal number of the Label within its Scope(staticLink).
-	 */
+	/// Index, I.e. ordinal number of the Label within its Scope(staticLink).
 	public final int index;
 	
-	/**
-	 * Label identifier. To improve error and trace messages.
-	 */
+	/// Label identifier. To improve error and trace messages.
 	public final String identifier; // To improve error and trace messages.
 
-	// Constructor
 	/**
 	 * Create a label quantity
 	 * @param _SL static link

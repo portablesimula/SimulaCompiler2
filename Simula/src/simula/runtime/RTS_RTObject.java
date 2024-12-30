@@ -462,10 +462,6 @@ public abstract class RTS_RTObject {
 	public void _GOTO(final RTS_LABEL q) {
 		if (RTS_Option.GOTO_TRACING) {
 			RTS_UTIL.TRACE("RTS_RTObject.GOTO: " + q);
-		
-//			System.out.println("\nRTS_RTObject._GOTO: "+q.identifier + ", CUR="+_CUR);
-//			System.out.println("RTS_RTObject._GOTO: "+q.identifier+" = "+q);
-//	        new Exception("With Operating Chain:").printStackTrace(System.out);
 		}
 		throw q;
 	}
@@ -474,7 +470,10 @@ public abstract class RTS_RTObject {
 	// *** GOTO: _TREAT_GOTO_CATCH_BLOCK
 	// ************************************************************
 	/**
-	 * Utility method to set current object terminated and re-throw the label.
+	 * Utility method to test if the label belongs to THIS RTObject.
+	 * <p>
+	 * If the label belong to THIS RTObject simply return, otherwise
+	 * set current object terminated and re-throw the label.
 	 * @param _THIS current object
 	 * @param q the label quant
 	 */

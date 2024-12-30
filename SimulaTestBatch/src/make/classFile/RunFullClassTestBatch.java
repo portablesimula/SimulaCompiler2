@@ -45,6 +45,9 @@ public final class RunFullClassTestBatch {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+//		Option.compilerMode = Option.CompilerMode.directClassFiles;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
@@ -253,6 +256,7 @@ public final class RunFullClassTestBatch {
 		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
 		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
 		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
+		names.add("simtst163.sim"); // OK: Test Inspect when, when, otherwise (selected)
 
 		names.add("RT_ErrorTest.sim"); // Simula Error TestBatch Framework
 		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

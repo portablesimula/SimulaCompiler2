@@ -50,7 +50,7 @@ public final class RunCompilerTest {
 //
 //		// Scanner Trace Options
 //		Option.TRACE_SCAN=true;
-//		Option.TRACE_COMMENTS=true;
+//		Option.TRACE_COMMENTS=true; 
 //
 //		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;

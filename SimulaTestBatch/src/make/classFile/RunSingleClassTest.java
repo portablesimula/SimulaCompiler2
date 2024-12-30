@@ -42,9 +42,12 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
+//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+		Option.compilerMode = Option.CompilerMode.directClassFiles;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -90,8 +93,6 @@ public final class RunSingleClassTest {
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 		
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
-//		names.add("adHoc00.sim");
-//		names.add("adHoc01.sim");
 //		names.add("simtst00.sim"); // OK:  Empty test
 //		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements,
 //		names.add("simtst02.sim"); // OK:  Test boolean operators/expressions
@@ -280,8 +281,9 @@ public final class RunSingleClassTest {
 
 //		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
 //		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
-		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
-//		
+//		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
+		names.add("simtst163.sim"); // OK: Test Inspect when, when, otherwise (selected)
+		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
