@@ -15,7 +15,7 @@ import java.lang.constant.ConstantDescs;
 import java.util.List;
 import java.util.Vector;
 
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
@@ -93,20 +93,20 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	protected void codeProcedureBody() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=false;
-		GeneratedJavaClass.debug("// Switch Body");
-		GeneratedJavaClass.code("@Override");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		JavaSourceFileCoder.debug("// Switch Body");
+		JavaSourceFileCoder.code("@Override");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + " _STM() {");
 		Global.duringSTM_Coding=true;
-		GeneratedJavaClass.code("switch(p__SW-1) {");
+		JavaSourceFileCoder.code("switch(p__SW-1) {");
 		int n = 0;
 		for (Expression expr : ((SwitchDeclaration) this).switchList) {
-			GeneratedJavaClass.code("case " + (n++) + ": _RESULT=" + expr.toJavaCode() + "; break;");				
+			JavaSourceFileCoder.code("case " + (n++) + ": _RESULT=" + expr.toJavaCode() + "; break;");				
 		}
-		GeneratedJavaClass.code("default: throw new RTS_SimulaRuntimeError(\"Illegal switch index: \"+p__SW);");
-		GeneratedJavaClass.code("}");
-		GeneratedJavaClass.code("EBLK();");
-		GeneratedJavaClass.code("return(this);");
-		GeneratedJavaClass.code("}","End of Switch BODY");
+		JavaSourceFileCoder.code("default: throw new RTS_SimulaRuntimeError(\"Illegal switch index: \"+p__SW);");
+		JavaSourceFileCoder.code("}");
+		JavaSourceFileCoder.code("EBLK();");
+		JavaSourceFileCoder.code("return(this);");
+		JavaSourceFileCoder.code("}","End of Switch BODY");
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
 
@@ -139,7 +139,7 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 		
 		int n = 0;
 		for (Expression expr : ((SwitchDeclaration) this).switchList) {
-			//GeneratedJavaClass.code("case " + (n++) + ": _RESULT=" + expr.toJavaCode() + "; break;");
+			//JavaSourceFileCoder.code("case " + (n++) + ": _RESULT=" + expr.toJavaCode() + "; break;");
 			Label lab = tableSwitchCases.get(n++).target();
 			codeBuilder
 				.labelBinding(lab)

@@ -24,48 +24,36 @@ import simula.compiler.utilities.Util;
  * Generated Java class.
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/GeneratedJavaClass.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/JavaSourceFileCoder.java"><b>Source File</b></a>.
  * 
  * @author Øystein Myhre Andersen 
  *
  */
-public final class GeneratedJavaClass {
+public final class JavaSourceFileCoder {
 	
-	/**
-	 * The enclosing JavaModule
-	 */
-	private GeneratedJavaClass enclosingJavaModule;
+	/// The enclosing JavaModule
+	private JavaSourceFileCoder enclosingJavaModule;
 	
-	/**
-	 * The Java output writer.
-	 */
+	/// The Java output writer.
 	private final Writer writer;
 	
-	/**
-	 * The line number map
-	 */
+	/// The line number map
 	private final Vector<Integer> lineMap = new Vector<Integer>();
 	
-	/**
-	 * The output file for generated Java code.
-	 */
+	/// The output file for generated Java code.
 	final File javaOutputFile;
 
-	/**
-	 * Given as argument.
-	 */
+	/// Given as argument. Class, Procedure, Prefixed Block or Sub-Block.
 	public final BlockDeclaration blockDeclaration;
 	
-	/**
-	 * Signals that ByteCodeEngineering is necessary.
-	 */
+	/// Signals that ByteCodeEngineering is necessary.
 	public boolean mustDoByteCodeEngineering;
 
 	/**
-	 * Create a new GeneratedJavaClass.
+	 * Create a new JavaSourceFileCoder.
 	 * @param blockDeclaration argument
 	 */
-	public GeneratedJavaClass(final BlockDeclaration blockDeclaration) {
+	public JavaSourceFileCoder(final BlockDeclaration blockDeclaration) {
 		this.blockDeclaration = blockDeclaration;
 		Global.generatedJavaClass.add(this);
 		enclosingJavaModule = Global.currentJavaModule;
@@ -76,9 +64,9 @@ public final class GeneratedJavaClass {
 			if (Option.verbose)
 				Util.TRACE("Output: " + javaOutputFile.getCanonicalPath());
 			writer = new OutputStreamWriter(new FileOutputStream(javaOutputFile), Global._CHARSET);
-			GeneratedJavaClass.code("package " + Global.packetName + ";");
-			GeneratedJavaClass.code("// " + Global.simulaReleaseID + " Compiled at " + new Date());
-			GeneratedJavaClass.code("import simula.runtime.*;");
+			JavaSourceFileCoder.code("package " + Global.packetName + ";");
+			JavaSourceFileCoder.code("// " + Global.simulaReleaseID + " Compiled at " + new Date());
+			JavaSourceFileCoder.code("import simula.runtime.*;");
 		} catch (IOException e) {
 			throw new RuntimeException("Writing .java output failed", e);
 		}
@@ -146,28 +134,13 @@ public final class GeneratedJavaClass {
 		code(line + " // " + comment);
 	}
 
-//	/**
-//	 * Output a code line.
-//	 * 
-//	 * @param c a code line
-//	 */
-//	public static void code(final CodeLine c) {
-//		Global.currentJavaModule.write(c.sourceLineNumber, c.codeLine, c.modid);
-//	}
-
-	/**
-	 * Current Java line number
-	 */
+	/// Current Java line number
 	private int currentJavaLineNumber = 0;
 
-	/**
-	 * Previous source line number.
-	 */
+	/// Previous source line number.
 	private static int prevLineNumber = 0;
 	
-	/**
-	 * Current indentation
-	 */
+	/// Current indentation
 	private int indent;
 
 	/**

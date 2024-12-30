@@ -6,7 +6,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
@@ -105,9 +105,9 @@ public class ForListElement extends SyntaxClass {
 				}
 			}
 		}
-		GeneratedJavaClass.code(cv + "=" + val + "; {");
+		JavaSourceFileCoder.code(cv + "=" + val + "; {");
 		forStatement.doStatement.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 	/**
@@ -125,7 +125,7 @@ public class ForListElement extends SyntaxClass {
 		forStatement.controlVariable.buildIdentifierAccess(true, codeBuilder);
 		expr1.buildEvaluation(null,codeBuilder); // evaluate expr1
 		
-		// GeneratedJavaClass.code(cv + "=" + val + "; {");
+		// JavaSourceFileCoder.code(cv + "=" + val + "; {");
 		codeBuilder.putfield(decl.getFieldRefEntry(codeBuilder.constantPool()));
 
 		forStatement.doStatement.buildByteCode(codeBuilder);

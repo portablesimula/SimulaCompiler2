@@ -17,7 +17,7 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -110,12 +110,12 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		VirtualSpecification virtSpec = VirtualSpecification.getVirtualSpecification(this);
 		if (virtSpec != null) {
 			if(this.isLatestVirtualLabel(encloser)) {
-				GeneratedJavaClass.code("    public RTS_LABEL " + virtSpec.getVirtualIdentifier()
+				JavaSourceFileCoder.code("    public RTS_LABEL " + virtSpec.getVirtualIdentifier()
 					+ " { return(new RTS_LABEL(this," + prefixLevel + ',' + index + ",\"" + identifier + "\")); }",
 					" // Virtual Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
 			}
 		} else {
-			GeneratedJavaClass.code(
+			JavaSourceFileCoder.code(
 					"final RTS_LABEL " + ident + "=new RTS_LABEL(this," +prefixLevel + ',' + index + ",\"" + identifier + "\");",
 					"Local Label #" + index + '=' + identifier + " At PrefixLevel " + prefixLevel);
 		}

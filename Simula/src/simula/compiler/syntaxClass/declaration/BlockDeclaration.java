@@ -16,7 +16,7 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Stack;
 import java.util.Vector;
 
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -285,24 +285,24 @@ public abstract class BlockDeclaration extends DeclarationScope {
 	 */
 	protected void codeSTMBody() {
 		if (hasAccumLabel()) {
-			GeneratedJavaClass.code(externalIdent + " _THIS=(" + externalIdent + ")_CUR;");
-			GeneratedJavaClass.code("_LOOP:while(_JTX>=0) {");
-			GeneratedJavaClass.code("try {");
-//			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
-			GeneratedJavaClass.code("_JUMPTABLE(_JTX,"+labelList.accumLabelSize()+");","For ByteCode Engineering");			
+			JavaSourceFileCoder.code(externalIdent + " _THIS=(" + externalIdent + ")_CUR;");
+			JavaSourceFileCoder.code("_LOOP:while(_JTX>=0) {");
+			JavaSourceFileCoder.code("try {");
+//			JavaSourceFileCoder.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
+			JavaSourceFileCoder.code("_JUMPTABLE(_JTX,"+labelList.accumLabelSize()+");","For ByteCode Engineering");			
 			Global.currentJavaModule.mustDoByteCodeEngineering=true;
 		}
 		codeStatements();
 		if (hasAccumLabel()) {
-			GeneratedJavaClass.code("break _LOOP;");
-			GeneratedJavaClass.code("}");
-			GeneratedJavaClass.code("catch(RTS_LABEL q) {");
+			JavaSourceFileCoder.code("break _LOOP;");
+			JavaSourceFileCoder.code("}");
+			JavaSourceFileCoder.code("catch(RTS_LABEL q) {");
 			
-			GeneratedJavaClass.code("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);");
+			JavaSourceFileCoder.code("RTS_RTObject._TREAT_GOTO_CATCH_BLOCK(_THIS, q);");
 			
-			GeneratedJavaClass.code("_JTX=q.index; continue _LOOP;","EG. GOTO Lx");
-			GeneratedJavaClass.code("}");
-			GeneratedJavaClass.code("}");
+			JavaSourceFileCoder.code("_JTX=q.index; continue _LOOP;","EG. GOTO Lx");
+			JavaSourceFileCoder.code("}");
+			JavaSourceFileCoder.code("}");
 		}
 	}
 
@@ -336,10 +336,10 @@ public abstract class BlockDeclaration extends DeclarationScope {
     	//	 RTS_UTIL.RUN_STM(new adHoc04(_CTX));
     	// } // End of main
     	String progid = this.externalIdent;
-		GeneratedJavaClass.code("");
-		GeneratedJavaClass.code("public static void main(String[] args) {");
-		GeneratedJavaClass.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
-		GeneratedJavaClass.code("RTS_UTIL.BPRG(\""+progid+"\", args);");
+		JavaSourceFileCoder.code("");
+		JavaSourceFileCoder.code("public static void main(String[] args) {");
+		JavaSourceFileCoder.debug("//System.setProperty(\"file.encoding\",\"UTF-8\");");
+		JavaSourceFileCoder.code("RTS_UTIL.BPRG(\""+progid+"\", args);");
 		if(this instanceof PrefixedBlockDeclaration pblk) {
 			StringBuilder sb = new StringBuilder();
 			sb.append("new " + getJavaIdentifier() + "(_CTX");
@@ -348,11 +348,11 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					sb.append(',').append(par.toJavaCode());
 				}
 			} sb.append(")");
-			GeneratedJavaClass.code("RTS_UTIL.RUN_STM(" + sb + ");");
+			JavaSourceFileCoder.code("RTS_UTIL.RUN_STM(" + sb + ");");
 		} else {
-			GeneratedJavaClass.code("RTS_UTIL.RUN_STM(new " + getJavaIdentifier() + "(_CTX));");			
+			JavaSourceFileCoder.code("RTS_UTIL.RUN_STM(new " + getJavaIdentifier() + "(_CTX));");			
 		}
-		GeneratedJavaClass.code("}", "End of main");
+		JavaSourceFileCoder.code("}", "End of main");
     }
 	
 	

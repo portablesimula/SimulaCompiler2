@@ -15,7 +15,7 @@ import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.ClassDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -204,22 +204,22 @@ public final class ConnectionStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code("{");
-		GeneratedJavaClass.debug("// BEGIN INSPECTION ");
+		JavaSourceFileCoder.code("{");
+		JavaSourceFileCoder.debug("// BEGIN INSPECTION ");
 		Expression assignment = new AssignmentOperation(inspectedVariable, KeyWord.ASSIGNREF, objectExpression);
 		assignment.doChecking();
-		GeneratedJavaClass.code(assignment.toJavaCode() + ';');
-		if (!hasWhenPart) GeneratedJavaClass.code("if(" + inspectedVariable.toJavaCode() + "!=null) {","INSPECT " + inspectedVariable);
+		JavaSourceFileCoder.code(assignment.toJavaCode() + ';');
+		if (!hasWhenPart) JavaSourceFileCoder.code("if(" + inspectedVariable.toJavaCode() + "!=null) {","INSPECT " + inspectedVariable);
 		boolean first = true;
 		for(ConnectionDoPart part:connectionPart) { part.doCoding(first);	first = false; }
-		if (!hasWhenPart) GeneratedJavaClass.code("}");
+		if (!hasWhenPart) JavaSourceFileCoder.code("}");
 		if (otherwise != null) {
-			GeneratedJavaClass.code("else {","OTHERWISE ");
+			JavaSourceFileCoder.code("else {","OTHERWISE ");
 			otherwise.doJavaCoding();
-			GeneratedJavaClass.code("}","END OTHERWISE ");
+			JavaSourceFileCoder.code("}","END OTHERWISE ");
 		}
 		// JavaModule.debug("// END INSPECTION ");
-		GeneratedJavaClass.code("}","END INSPECTION");
+		JavaSourceFileCoder.code("}","END INSPECTION");
 	}
 
 	@Override

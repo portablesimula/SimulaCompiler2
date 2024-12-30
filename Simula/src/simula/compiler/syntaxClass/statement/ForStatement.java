@@ -15,7 +15,7 @@ import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -255,7 +255,7 @@ public final class ForStatement extends Statement {
 		ASSERT_SEMANTICS_CHECKED();
 		boolean refType = controlVariable.type.isReferenceType();
 		String CB = "CB_" + lineNumber;
-		GeneratedJavaClass.code("for(boolean " + CB + ":new FOR_List(");
+		JavaSourceFileCoder.code("for(boolean " + CB + ":new FOR_List(");
 		char del = ' ';
 		for (ForListElement elt : forList) {
 			String classIdent = (refType) ? elt.expr1.type.getJavaRefIdent() : "Number";
@@ -264,12 +264,12 @@ public final class ForStatement extends Statement {
 				case Type.T_BOOLEAN -> classIdent = "Boolean"; // AD'HOC
 				case Type.T_TEXT -> classIdent = "RTS_TXT"; // AD'HOC
 			}
-			GeneratedJavaClass.code("   " + del + elt.edCode(classIdent, elt.expr1.type));
+			JavaSourceFileCoder.code("   " + del + elt.edCode(classIdent, elt.expr1.type));
 			del = ',';
 		}
-		GeneratedJavaClass.code("   )) { if(!" + CB + ") continue;");
+		JavaSourceFileCoder.code("   )) { if(!" + CB + ") continue;");
 		doStatement.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 	/**

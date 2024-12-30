@@ -19,7 +19,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.statement.BlockStatement;
 import simula.compiler.syntaxClass.statement.DummyStatement;
@@ -240,14 +240,14 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Util.ASSERT(declarationList.isEmpty(), "Invariant");
 		Util.ASSERT(labelList == null || labelList.declaredLabelSize() == 0, "Invariant");
 		Global.enterScope(this);
-		GeneratedJavaClass.code("{");
+		JavaSourceFileCoder.code("{");
 		if(labelcodeList!=null) {
 			for(String labCode:labelcodeList) {
-				GeneratedJavaClass.code(labCode);
+				JavaSourceFileCoder.code(labCode);
 			}
 		}
 		for (Statement stm : statements) stm.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 		Global.exitScope();
 	}
 
@@ -260,24 +260,24 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	private void doSubBlockCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
+		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			boolean duringSTM_Coding=Global.duringSTM_Coding;
 			Global.duringSTM_Coding=false;
-			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-			GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
-			GeneratedJavaClass.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel() + ", firstLine="
+			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
+			JavaSourceFileCoder.code("public final class " + getJavaIdentifier() + " extends RTS_BASICIO" + " {");
+			JavaSourceFileCoder.debug("// SubBlock: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel() + ", firstLine="
 					+ lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 			if (isQPSystemBlock())
-				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+				JavaSourceFileCoder.code("public boolean isQPSystemBlock() { return(true); }");
 			if(this.hasAccumLabel()) {
-				GeneratedJavaClass.debug("// Declare local labels");
+				JavaSourceFileCoder.debug("// Declare local labels");
 				for (LabelDeclaration lab : labelList.getAccumLabels())
 					lab.declareLocalLabel(this);
 			}
-			GeneratedJavaClass.debug("// Declare locals as attributes");
+			JavaSourceFileCoder.debug("// Declare locals as attributes");
 			for (Declaration decl : declarationList) decl.doJavaCoding();
 			doCodeConstructor();
 			Global.duringSTM_Coding=true;
@@ -285,7 +285,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			Global.duringSTM_Coding=duringSTM_Coding;
 			if (this.isMainModule) codeMethodMain();
 			javaModule.codeProgramInfo();
-			GeneratedJavaClass.code("}", "End of SubBlock");
+			JavaSourceFileCoder.code("}", "End of SubBlock");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -297,13 +297,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 * Code utility: Code constructor
 	 */
 	private void doCodeConstructor() {
-		GeneratedJavaClass.debug("// Normal Constructor");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + "(RTS_RTObject staticLink) {");
-		GeneratedJavaClass.code("super(staticLink);");
-		GeneratedJavaClass.code("BBLK();");
-		GeneratedJavaClass.debug("// Declaration Code");
+		JavaSourceFileCoder.debug("// Normal Constructor");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + "(RTS_RTObject staticLink) {");
+		JavaSourceFileCoder.code("super(staticLink);");
+		JavaSourceFileCoder.code("BBLK();");
+		JavaSourceFileCoder.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 	// ***********************************************************************************************
@@ -313,13 +313,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	 * Code utility: Code statements
 	 */
 	private void doCodeStatements() {
-		GeneratedJavaClass.debug("// " + declarationKind + " Statements");
-		GeneratedJavaClass.code("@Override");
-		GeneratedJavaClass.code("public RTS_RTObject _STM() {");
+		JavaSourceFileCoder.debug("// " + declarationKind + " Statements");
+		JavaSourceFileCoder.code("@Override");
+		JavaSourceFileCoder.code("public RTS_RTObject _STM() {");
 		codeSTMBody();
-		GeneratedJavaClass.code("EBLK();");
-		GeneratedJavaClass.code("return(this);");
-		GeneratedJavaClass.code("}", "End of " + declarationKind + " Statements");
+		JavaSourceFileCoder.code("EBLK();");
+		JavaSourceFileCoder.code("return(this);");
+		JavaSourceFileCoder.code("}", "End of " + declarationKind + " Statements");
 	}
 	
 	// ***********************************************************************************************

@@ -12,7 +12,7 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
@@ -183,7 +183,7 @@ public abstract class SyntaxClass {
 	 */
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
-		GeneratedJavaClass.code(toJavaCode());
+		JavaSourceFileCoder.code(toJavaCode());
 	}
 
 	/**

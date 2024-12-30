@@ -12,7 +12,7 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.PrefixedBlockDeclaration;
@@ -113,7 +113,7 @@ public final class BlockStatement extends Statement {
 			if(blockDeclaration.declarationKind==ObjectKind.PrefixedBlock && ((ClassDeclaration)blockDeclaration).isDetachUsed())
 				s.append("._START();");
 			else s.append("._STM();");
-			GeneratedJavaClass.code(s.toString());
+			JavaSourceFileCoder.code(s.toString());
 		}
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=false;

@@ -246,7 +246,7 @@ public final class SimulaCompiler {
 			// ***************************************************************
 			// *** Scanning and Parsing
 			// ***************************************************************
-			Global.generatedJavaClass = new Vector<GeneratedJavaClass>();
+			Global.generatedJavaClass = new Vector<JavaSourceFileCoder>();
 			Parse.initiate(reader);
 			programModule = new ProgramModule();
 			Global.programModule = programModule;
@@ -327,7 +327,7 @@ public final class SimulaCompiler {
 				programModule.doJavaCoding();
 				if (Option.internal.TRACING) {
 					Util.println("END Generate .java Output Code");
-					for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+					for (JavaSourceFileCoder javaClass : Global.generatedJavaClass)
 						Util.println(javaClass.javaOutputFile.toString());
 				}
 			}
@@ -513,7 +513,7 @@ public final class SimulaCompiler {
 			exitValue = callJavacCompiler(classPath);
 		if (Option.internal.DEBUGGING) {
 			Util.println("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
-			for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+			for (JavaSourceFileCoder javaClass : Global.generatedJavaClass)
 				Util.println(javaClass.getClassOutputFileName());
 			list(Global.tempClassFileDir);
 		}
@@ -547,7 +547,7 @@ public final class SimulaCompiler {
 		arguments.add(Global.tempClassFileDir.toString()); // Specifies output directory.
 		if (!Option.WARNINGS)
 			arguments.add("-nowarn");
-		for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+		for (JavaSourceFileCoder javaClass : Global.generatedJavaClass)
 			arguments.add(javaClass.javaOutputFile.toString()); // Add .java Files
 		int nArg = arguments.size();
 		String[] args = new String[nArg];
@@ -596,13 +596,13 @@ public final class SimulaCompiler {
 		cmds.add(Global.tempClassFileDir.toString()); // Specifies output directory.
 		if (!Option.WARNINGS)
 			cmds.add("-nowarn");
-		for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+		for (JavaSourceFileCoder javaClass : Global.generatedJavaClass) {
 			cmds.add(javaClass.javaOutputFile.toString()); // Add .java Files
 		}
 		int exitValue = Util.execute(cmds);
 		if (Option.internal.TRACING) {
 			Util.println("END Generate .class Output Code. Exit value=" + exitValue);
-			for (GeneratedJavaClass javaClass : Global.generatedJavaClass)
+			for (JavaSourceFileCoder javaClass : Global.generatedJavaClass)
 				Util.println(javaClass.getClassOutputFileName());
 		}
 		return (exitValue);
@@ -619,12 +619,12 @@ public final class SimulaCompiler {
 		if (Option.internal.keepJava == null) {
 			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
 				Util.println("------------  LIST ByteCode Before Engineering  ------------");
-				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+				for (JavaSourceFileCoder javaClass : Global.generatedJavaClass) {
 					String classFile = javaClass.getClassOutputFileName();
 					Util.doListClassFile(classFile);
 				}
 			}
-			for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+			for (JavaSourceFileCoder javaClass : Global.generatedJavaClass) {
 				if (javaClass.mustDoByteCodeEngineering) {
 					String classFileName = javaClass.getClassOutputFileName();
 					ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
@@ -632,7 +632,7 @@ public final class SimulaCompiler {
 			}
 			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
 				Util.println("------------  LIST ByteCode After Engineering  ------------");
-				for (GeneratedJavaClass javaClass : Global.generatedJavaClass) {
+				for (JavaSourceFileCoder javaClass : Global.generatedJavaClass) {
 					String classFile = javaClass.getClassOutputFileName();
 					Util.doListClassFile(classFile);
 				}

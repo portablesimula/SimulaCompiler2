@@ -1,7 +1,7 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
@@ -47,10 +47,10 @@ public final class InlineStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		if(kind.equalsIgnoreCase("detach")) GeneratedJavaClass.code("detach();","Process'detach");
-		else if(kind.equalsIgnoreCase("terminate")) GeneratedJavaClass.code("terminate();","Process'terminate");
-		else if(kind.equals("try")) GeneratedJavaClass.code("try {");
-		else if(kind.equals("catch")) GeneratedJavaClass.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
+		if(kind.equalsIgnoreCase("detach")) JavaSourceFileCoder.code("detach();","Process'detach");
+		else if(kind.equalsIgnoreCase("terminate")) JavaSourceFileCoder.code("terminate();","Process'terminate");
+		else if(kind.equals("try")) JavaSourceFileCoder.code("try {");
+		else if(kind.equals("catch")) JavaSourceFileCoder.code("} catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }");
 		else Util.IERR();
 	}
 

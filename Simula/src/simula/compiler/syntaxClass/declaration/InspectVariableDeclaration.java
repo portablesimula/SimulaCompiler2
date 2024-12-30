@@ -75,7 +75,7 @@ public class InspectVariableDeclaration extends Declaration {
 //		if (constantElement != null && !(constantElement instanceof Constant)) {
 //			// Initiate Final Variable
 //			String value = constantElement.toJavaCode();
-//			GeneratedJavaClass.code(getJavaIdentifier() + '=' + value + ';');
+//			JavaSourceFileCoder.code(getJavaIdentifier() + '=' + value + ';');
 //		}
 	}
 

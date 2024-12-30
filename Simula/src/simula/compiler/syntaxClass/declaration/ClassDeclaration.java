@@ -23,7 +23,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -924,32 +924,32 @@ public class ClassDeclaration extends BlockDeclaration {
 			return;
 		}
 		Global.sourceLineNumber = lineNumber;
-		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
+		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
-			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
 			String line = "public class " + getJavaIdentifier();
 			line = line + " extends " + getPrefixClass().getJavaIdentifier();
-			GeneratedJavaClass.code(line + " {");
-			GeneratedJavaClass.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+			JavaSourceFileCoder.code(line + " {");
+			JavaSourceFileCoder.debug("// ClassDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
 					+ ", PrefixLevel=" + prefixLevel() + ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber
 					+ ", hasLocalClasses=" + ((hasLocalClasses) ? "true" : "false") + ", System="
 					+ ((isQPSystemBlock()) ? "true" : "false") + ", detachUsed=" + ((detachUsed) ? "true" : "false"));
 			if (isQPSystemBlock())
-				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+				JavaSourceFileCoder.code("public boolean isQPSystemBlock() { return(true); }");
 			if (isDetachUsed())
-				GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
-			GeneratedJavaClass.debug("// Declare parameters as attributes");
+				JavaSourceFileCoder.code("public boolean isDetachUsed() { return(true); }");
+			JavaSourceFileCoder.debug("// Declare parameters as attributes");
 			for (Parameter par : parameterList) {
 				String tp = par.toJavaType();
-				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+				JavaSourceFileCoder.code("public " + tp + ' ' + par.externalIdent + ';');
 			}
 			if(this.hasAccumLabel()) {
-				GeneratedJavaClass.debug("// Declare local labels");
+				JavaSourceFileCoder.debug("// Declare local labels");
 				for (LabelDeclaration lab : labelList.getAccumLabels())
 					lab.declareLocalLabel(this);
 			}
-			GeneratedJavaClass.debug("// Declare locals as attributes");
+			JavaSourceFileCoder.debug("// Declare locals as attributes");
 			for (Declaration decl : declarationList)
 				decl.doJavaCoding();
 	
@@ -962,7 +962,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			doCodeConstructor();
 			codeClassStatements();
 			javaModule.codeProgramInfo();
-			GeneratedJavaClass.code("}", "End of Class");
+			JavaSourceFileCoder.code("}", "End of Class");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -974,24 +974,24 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Coding Utility: Code the constructor.
 	 */
 	private void doCodeConstructor() {
-		GeneratedJavaClass.debug("// Normal Constructor");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + edFormalParameterList());
+		JavaSourceFileCoder.debug("// Normal Constructor");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList());
 		if (prefix != null) {
 			ClassDeclaration prefixClass = this.getPrefixClass();
-			GeneratedJavaClass.code("super" + prefixClass.edCompleteParameterList());
+			JavaSourceFileCoder.code("super" + prefixClass.edCompleteParameterList());
 		} else
-			GeneratedJavaClass.code("super(staticLink);");
-		GeneratedJavaClass.debug("// Parameter assignment to locals");
+			JavaSourceFileCoder.code("super(staticLink);");
+		JavaSourceFileCoder.debug("// Parameter assignment to locals");
 		for (Parameter par : parameterList)
-			GeneratedJavaClass.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
+			JavaSourceFileCoder.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
 
 		if (!hasRealPrefix())
-			GeneratedJavaClass.code("BBLK(); // Iff no prefix");
+			JavaSourceFileCoder.code("BBLK(); // Iff no prefix");
 
-		GeneratedJavaClass.debug("// Declaration Code");
+		JavaSourceFileCoder.debug("// Declaration Code");
 		for (Declaration decl : declarationList)
 			decl.doDeclarationCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 	// ***********************************************************************************************
@@ -1071,7 +1071,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			if (prfx != null) prfx.codeStatementsBeforeInner();
 		}
 		if(statements1 != null) for (Statement stm : statements1) stm.doJavaCoding();
-		GeneratedJavaClass.code("// BEGIN "+identifier+" INNER PART");
+		JavaSourceFileCoder.code("// BEGIN "+identifier+" INNER PART");
 	}
 
 	// ***********************************************************************************************
@@ -1081,7 +1081,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	 * Coding utility: codeStatementsAfterInner
 	 */
 	private void codeStatementsAfterInner() {
-		GeneratedJavaClass.code("// ENDOF "+identifier+" INNER PART");
+		JavaSourceFileCoder.code("// ENDOF "+identifier+" INNER PART");
 		for (Statement stm : statements) stm.doJavaCoding();
 		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
@@ -1098,14 +1098,14 @@ public class ClassDeclaration extends BlockDeclaration {
 	protected void codeClassStatements() {
 		boolean duringSTM_Coding = Global.duringSTM_Coding;
 		Global.duringSTM_Coding = false;
-		GeneratedJavaClass.debug("// Class Statements");
-		GeneratedJavaClass.code("@Override");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		JavaSourceFileCoder.debug("// Class Statements");
+		JavaSourceFileCoder.code("@Override");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + " _STM() {");
 		Global.duringSTM_Coding = true;
 		codeSTMBody();
-		GeneratedJavaClass.code("EBLK();");
-		GeneratedJavaClass.code("return(this);");
-		GeneratedJavaClass.code("}", "End of Class Statements");
+		JavaSourceFileCoder.code("EBLK();");
+		JavaSourceFileCoder.code("return(this);");
+		JavaSourceFileCoder.code("}", "End of Class Statements");
 		Global.duringSTM_Coding = duringSTM_Coding;
 	}
 

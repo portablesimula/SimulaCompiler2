@@ -16,7 +16,7 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -160,36 +160,36 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);	
 			return;
 		}
-		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
+		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			boolean duringSTM_Coding=Global.duringSTM_Coding;
 			Global.duringSTM_Coding=false;
-			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
+			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
 			String line = "public final class " + getJavaIdentifier();
 			if (prefix != null)
 				 line = line + " extends " + getPrefixClass().getJavaIdentifier();
 			else line = line + " extends RTS_BASICIO";
-			GeneratedJavaClass.code(line + " {");
-			GeneratedJavaClass.debug("// PrefixedBlockDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+			JavaSourceFileCoder.code(line + " {");
+			JavaSourceFileCoder.debug("// PrefixedBlockDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
 					+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
 					+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false")
 					+ ", detachUsed=" + ((detachUsed) ? "true" : "false"));
 			if (isQPSystemBlock())
-				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+				JavaSourceFileCoder.code("public boolean isQPSystemBlock() { return(true); }");
 			if (isDetachUsed())
-				GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
-			GeneratedJavaClass.debug("// Declare parameters as attributes");
+				JavaSourceFileCoder.code("public boolean isDetachUsed() { return(true); }");
+			JavaSourceFileCoder.debug("// Declare parameters as attributes");
 			for (Parameter par : parameterList) {
 				String tp = par.toJavaType();
-				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+				JavaSourceFileCoder.code("public " + tp + ' ' + par.externalIdent + ';');
 			}
 			if(this.hasAccumLabel()) {
-				GeneratedJavaClass.debug("// Declare local labels");
+				JavaSourceFileCoder.debug("// Declare local labels");
 				for (LabelDeclaration lab : labelList.getAccumLabels())
 					lab.declareLocalLabel(this);
 			}
-			GeneratedJavaClass.debug("// Declare locals as attributes");
+			JavaSourceFileCoder.debug("// Declare locals as attributes");
 			for (Declaration decl : declarationList) decl.doJavaCoding();
 			for (VirtualMatch match : virtualMatchList)	match.doJavaCoding();
 			doCodeConstructor();
@@ -200,7 +200,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			if (this.isMainModule) codeMethodMain();
 			
 			javaModule.codeProgramInfo();
-			GeneratedJavaClass.code("}", "End of Class");
+			JavaSourceFileCoder.code("}", "End of Class");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -212,18 +212,18 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	 * Coding Utility: Code the constructor.
 	 */
 	private void doCodeConstructor() {
-		GeneratedJavaClass.debug("// Normal Constructor");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + edFormalParameterList());
+		JavaSourceFileCoder.debug("// Normal Constructor");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList());
 		if (prefix != null) {
 			ClassDeclaration prefixClass = this.getPrefixClass();
-			GeneratedJavaClass.code("super" + prefixClass.edCompleteParameterList());
-		} else GeneratedJavaClass.code("super(staticLink);");
-		GeneratedJavaClass.debug("// Parameter assignment to locals");
+			JavaSourceFileCoder.code("super" + prefixClass.edCompleteParameterList());
+		} else JavaSourceFileCoder.code("super(staticLink);");
+		JavaSourceFileCoder.debug("// Parameter assignment to locals");
 		for (Parameter par : parameterList)
-			GeneratedJavaClass.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
-		GeneratedJavaClass.debug("// Declaration Code");
+			JavaSourceFileCoder.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
+		JavaSourceFileCoder.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 
@@ -316,7 +316,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 								codeBuilder -> buildIsQPSystemBlock(codeBuilder));
 					
 					if (isDetachUsed())
-						//GeneratedJavaClass.code("public boolean isDetachUsed() { return(true); }");
+						//JavaSourceFileCoder.code("public boolean isDetachUsed() { return(true); }");
 						classBuilder
 							.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildIsMethodDetachUsed(codeBuilder));

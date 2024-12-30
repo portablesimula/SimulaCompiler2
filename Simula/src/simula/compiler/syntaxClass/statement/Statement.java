@@ -8,7 +8,7 @@
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
@@ -140,7 +140,7 @@ public abstract class Statement extends SyntaxClass {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code(toJavaCode() + ';');
+		JavaSourceFileCoder.code(toJavaCode() + ';');
 	}
 
 	/**

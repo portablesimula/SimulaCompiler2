@@ -16,7 +16,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -218,17 +218,17 @@ public final class SwitchStatement extends Statement {
     		ASSERT_SEMANTICS_CHECKED();
     		for(SwitchInterval casePair:caseKeyList)
     		if(casePair==null)
-    			 GeneratedJavaClass.code("default:");
+    			 JavaSourceFileCoder.code("default:");
     		else {
     			int low=casePair.lowCase.getInt();
     			if(casePair.hiCase!=null) {
         			int hi=casePair.hiCase.getInt();
         			for(int i=low;i<=hi;i++)
-        			GeneratedJavaClass.code("case "+i+": ");
-    			} else GeneratedJavaClass.code("case "+low+": ");
+        			JavaSourceFileCoder.code("case "+i+": ");
+    			} else JavaSourceFileCoder.code("case "+low+": ");
     		}
     		statement.doJavaCoding();
-    		GeneratedJavaClass.code("break;");
+    		JavaSourceFileCoder.code("break;");
     	}
        	
     	/**
@@ -264,7 +264,7 @@ public final class SwitchStatement extends Statement {
     	private void buildByteCode(CodeBuilder codeBuilder) {
         	for(SwitchInterval casePair:this.caseKeyList) {
         		if(casePair==null) {
-        			//GeneratedJavaClass.code("default:");
+        			//JavaSourceFileCoder.code("default:");
     				codeBuilder.labelBinding(defaultTarget);
         		}
         		else {
@@ -273,13 +273,13 @@ public final class SwitchStatement extends Statement {
         			if(casePair.hiCase!=null) {
         				int hi=casePair.hiCase.getInt();
         				for(int i=low;i<=hi;i++) {
-        					//GeneratedJavaClass.code("case "+i+": ");
+        					//JavaSourceFileCoder.code("case "+i+": ");
             				SwitchCase switchCase=lookupSwitchCases.get(tableIndex-1);
             				codeBuilder.labelBinding(switchCase.target());
             				tableIndex++;
         				}
         			} else{
-        				//GeneratedJavaClass.code("case "+low+": ");
+        				//JavaSourceFileCoder.code("case "+low+": ");
         				SwitchCase switchCase=lookupSwitchCases.get(tableIndex-1);
         				codeBuilder.labelBinding(switchCase.target());
         			}
@@ -360,10 +360,10 @@ public final class SwitchStatement extends Statement {
 	    sb.append("if(").append(switchKey.toJavaCode()).append("<").append(lowKey.toJavaCode());
 	    sb.append(" || ").append(switchKey.toJavaCode()).append(">").append(hiKey.toJavaCode());
 	    sb.append(") throw new RTS_SimulaRuntimeError(\"Switch key outside key interval\");");
-	    GeneratedJavaClass.code(sb.toString());
-        GeneratedJavaClass.code("switch("+switchKey.toJavaCode()+") { // BEGIN SWITCH STATEMENT");
+	    JavaSourceFileCoder.code(sb.toString());
+        JavaSourceFileCoder.code("switch("+switchKey.toJavaCode()+") { // BEGIN SWITCH STATEMENT");
         for(SwitchWhenPart when:switchCases) when.doCoding(false);
-        GeneratedJavaClass.code("} // END SWITCH STATEMENT");
+        JavaSourceFileCoder.code("} // END SWITCH STATEMENT");
     }
 
 	@Override

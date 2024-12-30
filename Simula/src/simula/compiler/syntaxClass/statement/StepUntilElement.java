@@ -7,7 +7,7 @@ import java.lang.classfile.constantpool.FieldRefEntry;
 import java.lang.constant.MethodTypeDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
@@ -111,10 +111,10 @@ public class StepUntilElement extends ForListElement {
 			else
 				incrClause = cv + "=" + cv + step;
 		}
-		GeneratedJavaClass
+		JavaSourceFileCoder
 				.code("for(" + cv + "=" + this.expr1.toJavaCode() + ";" + stepClause + incrClause + ") {");
 		forStatement.doStatement.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 	
 	/// Used to make deltaID unique.
@@ -142,11 +142,11 @@ public class StepUntilElement extends ForListElement {
 		String cv = forStatement.controlVariable.toJavaCode();
 		String deltaType=expr2.type.toJavaType();
 		String deltaID = "DELTA_" + (DELTA_SEQU++);
-		GeneratedJavaClass.debug("// ForStatement:");
+		JavaSourceFileCoder.debug("// ForStatement:");
 		
-		GeneratedJavaClass.code(deltaType + " " + deltaID + ';');
-		GeneratedJavaClass.code(cv + " = " + this.expr1.toJavaCode() + ";");
-		GeneratedJavaClass.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
+		JavaSourceFileCoder.code(deltaType + " " + deltaID + ';');
+		JavaSourceFileCoder.code(cv + " = " + this.expr1.toJavaCode() + ";");
+		JavaSourceFileCoder.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
 		
 		String deltaSign = null;
 		switch(expr2.type.keyWord) {
@@ -155,14 +155,14 @@ public class StepUntilElement extends ForListElement {
 			case Type.T_LONG_REAL: deltaSign = "RTS_UTIL.dsign("+deltaID+")"; break;
 			default: Util.IERR();
 		}
-//		GeneratedJavaClass.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
-		GeneratedJavaClass.code("while( "+ deltaSign + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
+//		JavaSourceFileCoder.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
+		JavaSourceFileCoder.code("while( "+ deltaSign + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
 		
 		forStatement.doStatement.doJavaCoding();
 		
-		GeneratedJavaClass.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
-		GeneratedJavaClass.code(cv + " = " + cv + " + " + deltaID + ';');
-		GeneratedJavaClass.code("}","end while");
+		JavaSourceFileCoder.code(deltaID + " = " + this.expr2.toJavaCode() + ";");
+		JavaSourceFileCoder.code(cv + " = " + cv + " + " + deltaID + ';');
+		JavaSourceFileCoder.code("}","end while");
 	}
 
 	

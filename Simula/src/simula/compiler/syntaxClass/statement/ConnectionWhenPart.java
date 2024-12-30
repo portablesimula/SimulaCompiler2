@@ -6,7 +6,7 @@ import java.lang.classfile.Label;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.ConnectionBlock;
@@ -76,11 +76,11 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 		String prfx = (first) ? "" : "else ";
 		String cid = classDeclaration.getJavaIdentifier();
 		if (!impossibleWhenPart) {
-			GeneratedJavaClass.code(prfx + "if(" + connectionStatement.inspectedVariable.toJavaCode() + " instanceof " + cid + ") {","WHEN "	+ cid + " DO ");
+			JavaSourceFileCoder.code(prfx + "if(" + connectionStatement.inspectedVariable.toJavaCode() + " instanceof " + cid + ") {","WHEN "	+ cid + " DO ");
 			connectionBlock.doJavaCoding();
-			GeneratedJavaClass.code("}");
+			JavaSourceFileCoder.code("}");
 		} else
-			GeneratedJavaClass.code(prfx,"WHEN " + cid + " DO -- IMPOSSIBLE REMOVED");
+			JavaSourceFileCoder.code(prfx,"WHEN " + cid + " DO -- IMPOSSIBLE REMOVED");
 	}
 
 	@Override

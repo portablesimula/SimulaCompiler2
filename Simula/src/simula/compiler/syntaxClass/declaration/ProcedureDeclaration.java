@@ -27,7 +27,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -435,39 +435,39 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if(Option.verbose) System.out.println("Skip  doProcedureCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
 			return;
 		}
-		GeneratedJavaClass javaModule = new GeneratedJavaClass(this);
+		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
-			GeneratedJavaClass.code("@SuppressWarnings(\"unchecked\")");
-			GeneratedJavaClass.code("public final class " + getJavaIdentifier() + " extends RTS_PROCEDURE {");
-			GeneratedJavaClass.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
+			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
+			JavaSourceFileCoder.code("public final class " + getJavaIdentifier() + " extends RTS_PROCEDURE {");
+			JavaSourceFileCoder.debug("// ProcedureDeclaration: Kind=" + declarationKind + ", BlockLevel=" + getRTBlockLevel()
 						+ ", firstLine=" + lineNumber + ", lastLine=" + lastLineNumber + ", hasLocalClasses="
 						+ ((hasLocalClasses) ? "true" : "false") + ", System=" + ((isQPSystemBlock()) ? "true" : "false"));
 			if (isQPSystemBlock())
-				GeneratedJavaClass.code("public boolean isQPSystemBlock() { return(true); }");
+				JavaSourceFileCoder.code("public boolean isQPSystemBlock() { return(true); }");
 			if ( declarationKind == ObjectKind.Procedure && type != null) {
-				GeneratedJavaClass.code("@Override");
-				GeneratedJavaClass.code("public Object _RESULT() { return("+this.result.identifier+"); }");
+				JavaSourceFileCoder.code("@Override");
+				JavaSourceFileCoder.code("public Object _RESULT() { return("+this.result.identifier+"); }");
 			}
-			GeneratedJavaClass.debug("// Declare parameters as attributes");
+			JavaSourceFileCoder.debug("// Declare parameters as attributes");
 			boolean hasParameter = false;
 			for (Parameter par : parameterList) {
 				String tp = par.toJavaType();
 				hasParameter = true;
-				GeneratedJavaClass.code("public " + tp + ' ' + par.externalIdent + ';');
+				JavaSourceFileCoder.code("public " + tp + ' ' + par.externalIdent + ';');
 			}
 			if(this.hasAccumLabel()) {
-				GeneratedJavaClass.debug("// Declare local labels");
+				JavaSourceFileCoder.debug("// Declare local labels");
 				for (LabelDeclaration lab : labelList.getAccumLabels())
 					lab.declareLocalLabel(this);
 			}
-			GeneratedJavaClass.debug("// Declare locals as attributes");
+			JavaSourceFileCoder.debug("// Declare locals as attributes");
 			for (Declaration decl : declarationList) decl.doJavaCoding();
 			if (declarationKind == ObjectKind.Procedure && hasParameter) doCodePrepareFormal();
 			doCodeConstructor();
 			codeProcedureBody();
 			javaModule.codeProgramInfo();
-			GeneratedJavaClass.code("}", "End of Procedure");
+			JavaSourceFileCoder.code("}", "End of Procedure");
 		Global.exitScope();
 		javaModule.closeJavaOutput();
 	}
@@ -479,17 +479,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * Generate Java source code for the constructor.
 	 */
 	private void doCodeConstructor() {
-		GeneratedJavaClass.debug("// Normal Constructor");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + edFormalParameterList(false, true));
-		GeneratedJavaClass.code("super(_SL);");
-		GeneratedJavaClass.debug("// Parameter assignment to locals");
+		JavaSourceFileCoder.debug("// Normal Constructor");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList(false, true));
+		JavaSourceFileCoder.code("super(_SL);");
+		JavaSourceFileCoder.debug("// Parameter assignment to locals");
 		for (Parameter par : parameterList)
-			GeneratedJavaClass.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
-		GeneratedJavaClass.code("BBLK();");
-		GeneratedJavaClass.debug("// Declaration Code");
+			JavaSourceFileCoder.code("this." + par.externalIdent + " = s" + par.externalIdent + ';');
+		JavaSourceFileCoder.code("BBLK();");
+		JavaSourceFileCoder.debug("// Declaration Code");
 		for (Declaration decl : declarationList) decl.doDeclarationCoding();
-		GeneratedJavaClass.code("_STM();");
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("_STM();");
+		JavaSourceFileCoder.code("}");
 	}
 
 	// ***********************************************************************************************
@@ -499,11 +499,11 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	 * Generate Java source code prepared for 'call formal procedure'.
 	 */
 	private void doCodePrepareFormal() {
-		GeneratedJavaClass.debug("// Parameter Transmission in case of Formal/Virtual Procedure Call");
-		GeneratedJavaClass.code("@Override");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + " setPar(Object param) {");
-		GeneratedJavaClass.code("try {");
-		GeneratedJavaClass.code("switch(_nParLeft--) {");
+		JavaSourceFileCoder.debug("// Parameter Transmission in case of Formal/Virtual Procedure Call");
+		JavaSourceFileCoder.code("@Override");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + " setPar(Object param) {");
+		JavaSourceFileCoder.code("try {");
+		JavaSourceFileCoder.code("switch(_nParLeft--) {");
 		int nPar = 0;
 		for (Parameter par : parameterList) {
 			String tp = par.toJavaType();
@@ -528,18 +528,18 @@ public class ProcedureDeclaration extends BlockDeclaration {
 					default -> typeValue = ("(" + tp + ")param");
 				}
 			}
-			GeneratedJavaClass.code("case " + ( parameterList.size() - (nPar++)) + ": " + par.externalIdent + "=" + typeValue + "; break;");
+			JavaSourceFileCoder.code("case " + ( parameterList.size() - (nPar++)) + ": " + par.externalIdent + "=" + typeValue + "; break;");
 		}
-		GeneratedJavaClass.code("default: throw new RTS_SimulaRuntimeError(\"Too many parameters\");");
-		GeneratedJavaClass.code("}");
-		GeneratedJavaClass.code("}");
-		GeneratedJavaClass.code("catch(ClassCastException e) { throw new RTS_SimulaRuntimeError(\"Wrong type of parameter: \"+param,e);}");
-		GeneratedJavaClass.code("return(this);");
-		GeneratedJavaClass.code("}");
-		GeneratedJavaClass.debug("// Constructor in case of Formal/Virtual Procedure Call");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + "(RTS_RTObject _SL) {");
-		GeneratedJavaClass.code("super(_SL,"+parameterList.size()+");","Expecting "+parameterList.size()+" parameters");
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("default: throw new RTS_SimulaRuntimeError(\"Too many parameters\");");
+		JavaSourceFileCoder.code("}");
+		JavaSourceFileCoder.code("}");
+		JavaSourceFileCoder.code("catch(ClassCastException e) { throw new RTS_SimulaRuntimeError(\"Wrong type of parameter: \"+param,e);}");
+		JavaSourceFileCoder.code("return(this);");
+		JavaSourceFileCoder.code("}");
+		JavaSourceFileCoder.debug("// Constructor in case of Formal/Virtual Procedure Call");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + "(RTS_RTObject _SL) {");
+		JavaSourceFileCoder.code("super(_SL,"+parameterList.size()+");","Expecting "+parameterList.size()+" parameters");
+		JavaSourceFileCoder.code("}");
 	}
 
 	// ***********************************************************************************************
@@ -551,14 +551,14 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	protected void codeProcedureBody() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=false;
-		GeneratedJavaClass.debug("// Procedure Statements");
-		GeneratedJavaClass.code("@Override");
-		GeneratedJavaClass.code("public " + getJavaIdentifier() + " _STM() {");
+		JavaSourceFileCoder.debug("// Procedure Statements");
+		JavaSourceFileCoder.code("@Override");
+		JavaSourceFileCoder.code("public " + getJavaIdentifier() + " _STM() {");
 		Global.duringSTM_Coding=true;
 		codeSTMBody();
-		GeneratedJavaClass.code("EBLK();");
-		GeneratedJavaClass.code("return(this);");
-		GeneratedJavaClass.code("}", "End of Procedure BODY");
+		JavaSourceFileCoder.code("EBLK();");
+		JavaSourceFileCoder.code("return(this);");
+		JavaSourceFileCoder.code("}", "End of Procedure BODY");
 		Global.duringSTM_Coding=duringSTM_Coding;
 	}
 

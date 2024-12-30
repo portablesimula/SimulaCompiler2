@@ -61,6 +61,10 @@ import simula.compiler.utilities.Util;
 
 /**
  * Attribute input stream.
+ * <p>
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeInputStream.java"><b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
  */
 public class AttributeInputStream {
 	/// The module ident.

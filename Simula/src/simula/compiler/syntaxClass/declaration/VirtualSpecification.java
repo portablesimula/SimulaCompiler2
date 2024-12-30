@@ -16,7 +16,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
@@ -255,7 +255,7 @@ public final class VirtualSpecification extends Declaration {
 		ASSERT_SEMANTICS_CHECKED();
 		String matchCode = "{ throw new RTS_SimulaRuntimeError(\"No Virtual Match: " + identifier + "\"); }";
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL " : "RTS_PRCQNT ";
-		GeneratedJavaClass.code("public " + qnt + getVirtualIdentifier() + matchCode);
+		JavaSourceFileCoder.code("public " + qnt + getVirtualIdentifier() + matchCode);
 	}
 
 	/**

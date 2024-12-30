@@ -22,7 +22,7 @@ import java.util.Vector;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
@@ -252,7 +252,7 @@ public final class ArrayDeclaration extends Declaration {
 		// --------------------------------------------------------------------
 		String arrType = this.type.toJavaArrayType();
 		String arrayIdent = this.getJavaIdentifier();
-		GeneratedJavaClass.code("public " + arrType + " " + arrayIdent + "=null;");
+		JavaSourceFileCoder.code("public " + arrType + " " + arrayIdent + "=null;");
 	}
 
 	@Override
@@ -276,7 +276,7 @@ public final class ArrayDeclaration extends Declaration {
 					.append(')');
 		}
 		sb.append(");");
-		GeneratedJavaClass.code(sb.toString());
+		JavaSourceFileCoder.code(sb.toString());
 	}
 
 

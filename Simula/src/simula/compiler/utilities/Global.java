@@ -20,7 +20,7 @@ import java.util.jar.JarFile;
 
 import javax.swing.ImageIcon;
 
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.JarFileBuilder;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.StandardClass;
@@ -205,12 +205,12 @@ public final class Global {
 	/**
 	 * Current Java output Module. Maintained by JavaModule during Java Coding
 	 */
-	public static GeneratedJavaClass currentJavaModule;
+	public static JavaSourceFileCoder currentJavaModule;
 	
 	/**
 	 * The set of generated Java files
 	 */
-	public static Vector<GeneratedJavaClass> generatedJavaClass;
+	public static Vector<JavaSourceFileCoder> generatedJavaClass;
 
 	/**
 	 * The console

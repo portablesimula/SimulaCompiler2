@@ -13,7 +13,7 @@ import java.lang.classfile.Label;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -113,14 +113,14 @@ public final class ConditionalStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code("if(_VALUE(" + condition.toJavaCode() + ")) {");
+		JavaSourceFileCoder.code("if(_VALUE(" + condition.toJavaCode() + ")) {");
 		thenStatement.doJavaCoding();
 		if (elseStatement != null) {
-			GeneratedJavaClass.code("} else {");
+			JavaSourceFileCoder.code("} else {");
 			elseStatement.doJavaCoding();
-			GeneratedJavaClass.code("}");
+			JavaSourceFileCoder.code("}");
 		} else
-			GeneratedJavaClass.code("}");
+			JavaSourceFileCoder.code("}");
 	}
 
 	@Override

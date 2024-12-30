@@ -12,7 +12,7 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
@@ -56,7 +56,7 @@ public final class DummyStatement extends Statement {
 	@Override
 	public void doJavaCoding() { /* No Coding */
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code(";");
+		JavaSourceFileCoder.code(";");
 	}
 
 	@Override

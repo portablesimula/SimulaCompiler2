@@ -12,7 +12,7 @@ import java.lang.classfile.CodeBuilder;
 import java.lang.constant.ClassDesc;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
@@ -192,9 +192,9 @@ public final class ConnectionBlock extends DeclarationScope {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
-		GeneratedJavaClass.code("{");
+		JavaSourceFileCoder.code("{");
 		statement.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 		Global.exitScope();
 	}
 

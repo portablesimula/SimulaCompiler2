@@ -12,7 +12,7 @@ import java.lang.classfile.CodeBuilder;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.expression.AssignmentOperation;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -95,7 +95,7 @@ public final class StandaloneExpression extends Statement {
 	@Override
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
-		GeneratedJavaClass.code(toJavaCode() + ';');
+		JavaSourceFileCoder.code(toJavaCode() + ';');
 	}
 
 	@Override

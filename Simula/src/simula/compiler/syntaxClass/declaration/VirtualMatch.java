@@ -12,7 +12,7 @@ import java.lang.classfile.ClassFile;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.MethodTypeDesc;
 
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
@@ -57,7 +57,7 @@ public final class VirtualMatch extends Declaration {
 		String matchCode = "{ throw new RTS_SimulaRuntimeError(\"No Virtual Match: " + identifier + "\"); }";
 		if (match != null)
 			matchCode = "{ return(new RTS_PRCQNT(this," + match.getJavaIdentifier() + ".class)); }";
-		GeneratedJavaClass.code("    public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
+		JavaSourceFileCoder.code("    public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
 	}
 
 	/**

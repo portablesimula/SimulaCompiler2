@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectKind;
@@ -79,7 +79,7 @@ public final class LabeledStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code("{");
+		JavaSourceFileCoder.code("{");
 		for (LabelDeclaration decl:labels) {
 			String comment = "DeclaredIn: "+decl.declaredIn.identifier;
 			if(decl.movedTo != null) comment = comment+" -> "+decl.movedTo;
@@ -87,10 +87,10 @@ public final class LabeledStatement extends Statement {
 			labelcode="_SIM_LABEL("+decl.index+");";
 			if(statement instanceof BlockStatement stat && stat.isCompoundStatement())
 				     stat.addLeadingLabel(labelcode);
-				else GeneratedJavaClass.code(labelcode,comment);
+				else JavaSourceFileCoder.code(labelcode,comment);
 		}
 		statement.doJavaCoding();
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code("}");
 	}
 
 	@Override

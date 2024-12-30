@@ -13,6 +13,10 @@ import simula.compiler.utilities.Util;
 
 /**
  * Attribute output stream.
+ * <p>
+ * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeOutputStream.java"><b>Source File</b></a>.
+ * 
+ * @author Øystein Myhre Andersen
  */
 public class AttributeOutputStream {
 	/// The underlying DataOutputStream.
@@ -29,8 +33,6 @@ public class AttributeOutputStream {
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
     }
-	
-//	public void flush() throws IOException { oupt.flush(); }
 
     /**
      * Closes this AttributeOutputStream.

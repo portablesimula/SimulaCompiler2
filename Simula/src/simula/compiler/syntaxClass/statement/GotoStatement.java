@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.expression.Expression;
@@ -81,7 +81,7 @@ public final class GotoStatement extends Statement {
 		ASSERT_SEMANTICS_CHECKED();
   		Type type = label.type;
 		Util.ASSERT(type.keyWord == Type.T_LABEL, "Invariant");
-		GeneratedJavaClass.code("_GOTO(" + label.toJavaCode() + ");","GOTO EVALUATED LABEL");
+		JavaSourceFileCoder.code("_GOTO(" + label.toJavaCode() + ");","GOTO EVALUATED LABEL");
 	}
 	
 	@Override

@@ -8,7 +8,7 @@ import java.lang.constant.MethodTypeDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
@@ -81,11 +81,11 @@ public class ForWhileElement extends ForListElement {
 		// ------------------------------------------------------------
 		// cv=expr1; while(cond) { Statements ... cv=expr1; }
 		// ------------------------------------------------------------
-		GeneratedJavaClass.code(cv + "=" + this.expr1.toJavaCode() + ";");
-		GeneratedJavaClass.code("while(" + cond + ") {");
+		JavaSourceFileCoder.code(cv + "=" + this.expr1.toJavaCode() + ";");
+		JavaSourceFileCoder.code("while(" + cond + ") {");
 		forStatement.doStatement.doJavaCoding();
-		GeneratedJavaClass.code(cv + "=" + this.expr1.toJavaCode() + ";");
-		GeneratedJavaClass.code("}");
+		JavaSourceFileCoder.code(cv + "=" + this.expr1.toJavaCode() + ";");
+		JavaSourceFileCoder.code("}");
 	}
 
 	@Override

@@ -17,7 +17,7 @@ import java.lang.constant.ClassDesc;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -175,7 +175,7 @@ public class SimpleVariableDeclaration extends Declaration {
 		if (constantElement != null && !(constantElement instanceof Constant)) {
 			// Initiate Final Variable
 			String value = constantElement.toJavaCode();
-			GeneratedJavaClass.code(getJavaIdentifier() + '=' + value + ';');
+			JavaSourceFileCoder.code(getJavaIdentifier() + '=' + value + ';');
 		}
 	}
 

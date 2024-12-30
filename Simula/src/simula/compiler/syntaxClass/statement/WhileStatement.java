@@ -6,7 +6,7 @@ import java.lang.classfile.Label;
 
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.GeneratedJavaClass;
+import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Constant;
@@ -73,11 +73,11 @@ public final class WhileStatement extends Statement {
 	public void doJavaCoding() {
 		Global.sourceLineNumber=lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		GeneratedJavaClass.code("while(" + condition.toJavaCode() + ") {");
+		JavaSourceFileCoder.code("while(" + condition.toJavaCode() + ") {");
 		doStatement.doJavaCoding();
 		if(isWhileTrueDo())
-			GeneratedJavaClass.code("if(_CTX==null) break; // Ad'Hoc to prevent JAVAC error: 'dead code' and terminate");
-		GeneratedJavaClass.code("}");
+			JavaSourceFileCoder.code("if(_CTX==null) break; // Ad'Hoc to prevent JAVAC error: 'dead code' and terminate");
+		JavaSourceFileCoder.code("}");
 	}
 	
 	/**
