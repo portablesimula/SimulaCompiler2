@@ -56,34 +56,22 @@ import simula.compiler.utilities.Util;
  */
 public final class Parse {
 	
-	/**
-	 * The saved Token used by 'pushBack'
-	 */
+	/// The saved Token used by 'pushBack'
 	private static Token savedToken; // Used by 'pushBack'
 	
-	/**
-	 * Indicate that endOfFile error is given
-	 */
+	/// Indicate that endOfFile error is given
 	private static boolean endOfFileErrorGiven;
 	
-	/**
-	 * The SimulaScanner
-	 */
+	/// The SimulaScanner
 	private static SimulaScanner simulaScanner;
 	
-	/**
-	 * The previous Token.
-	 */
+	/// The previous Token.
 	public static Token prevToken;
 	
-	/**
-	 * The current Token.
-	 */
+	/// The current Token.
 	public static Token currentToken;
 	
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	Parse(){}
 
 	// *********************************************************************************
@@ -106,9 +94,7 @@ public final class Parse {
 	// *********************************************************************************
 	// *** Close
 	// *********************************************************************************
-	/**
-	 * Close the Simula scanner.
-	 */
+	/// Close the Simula parser.
 	public static void close() {
 		simulaScanner.close();
 		simulaScanner = null;
@@ -117,9 +103,7 @@ public final class Parse {
 	// *********************************************************************************
 	// *** Parser Utilities
 	// *********************************************************************************
-	/**
-	 * Save current Token
-	 */
+	/// Save current Token
 	public static void saveCurrentToken() {
 		if (savedToken != null) Util.IERR("saveCurrentToken: Already called");
 		savedToken = Parse.currentToken;
@@ -127,9 +111,7 @@ public final class Parse {
 		Parse.prevToken = null;
 	}
 	
-	/**
-	 * Advance to next Token.
-	 */
+	/// Advance to next Token.
 	public static void nextToken() {
 		Parse.prevToken = Parse.currentToken;
 		if (savedToken == null) {
@@ -180,13 +162,10 @@ public final class Parse {
 	public static boolean expect(final int key) {
 		if (accept(key)) return (true);
 		Util.error("Got symbol '" + Parse.currentToken + "' while expecting KeyWord " + KeyWord.edit(key).toLowerCase());
-//		Thread.dumpStack();
 		return (false);
 	}
 
-	/**
-	 * Skip misplaced current symbol.
-	 */
+	/// Skip misplaced current symbol.
 	public static void skipMisplacedCurrentSymbol() {
 		Util.error("Misplaced symbol: "+Parse.currentToken+" -- Ignored");
 		nextToken();
@@ -273,7 +252,7 @@ public final class Parse {
 
 	
 	/**
-	 * Utility TRACE.
+	 * Debug utility: Utility TRACE.
 	 * @param msg a message
 	 */
 	public static void TRACE(final String msg) {

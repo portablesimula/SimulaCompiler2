@@ -13,11 +13,8 @@ import simula.compiler.utilities.Util;
  *
  */
 public class Directive {
-	/**
-	 * Default constructor.
-	 */
-	Directive() {
-	}
+	/// Default constructor.
+	Directive() {}
 
 	/**
 	 * Treat a directive line.
@@ -27,22 +24,14 @@ public class Directive {
 	 * @param arg     the directive argument
 	 */
 	static void treatDirectiveLine(final SimulaScanner scanner, final String id, final String arg) {
-		if (id.equalsIgnoreCase("OPTION"))
-			Directive.setOption();
-		else if (id.equalsIgnoreCase("INSERT"))
-			Directive.insert(scanner, arg);
-		else if (id.equalsIgnoreCase("SPORT"))
-			Directive.setSport(arg);
-		else if (id.equalsIgnoreCase("TITLE"))
-			Directive.setTitle(arg);
-		else if (id.equalsIgnoreCase("PAGE"))
-			Directive.page();
-		else if (id.equalsIgnoreCase("KEEP_JAVA"))
-			Directive.setKeepJava(arg);
-		else if (id.equalsIgnoreCase("EOF"))
-			Directive.eof(scanner);
-		else
-			Util.warning("Unknown Compiler Directive: " + id + ' ' + arg);
+		if (id.equalsIgnoreCase("OPTION"))			Directive.setOption();
+		else if (id.equalsIgnoreCase("INSERT"))		Directive.insert(scanner, arg);
+		else if (id.equalsIgnoreCase("SPORT"))		Directive.setSport(arg);
+		else if (id.equalsIgnoreCase("TITLE"))		Directive.setTitle(arg);
+		else if (id.equalsIgnoreCase("PAGE"))		Directive.page();
+		else if (id.equalsIgnoreCase("KEEP_JAVA"))	Directive.setKeepJava(arg);
+		else if (id.equalsIgnoreCase("EOF"))		Directive.eof(scanner);
+		else Util.warning("Unknown Compiler Directive: " + id + ' ' + arg);
 	}
 
 	/**

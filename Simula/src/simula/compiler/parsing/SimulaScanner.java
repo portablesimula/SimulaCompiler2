@@ -29,51 +29,37 @@ import simula.compiler.utilities.Util;
  */
 public final class SimulaScanner extends DefaultScanner { 
 	
-	/**
-	 * ISO EM(EndMedia) character used to denote end-of-input
-	 */
+	/// ISO EM(EndMedia) character used to denote end-of-input
     private static final int EOF_MARK=25;
     
-    /**
-     * Set 'true' when EOF-character ( -1 ) was read.
-     */
+    /// Set 'true' when EOF-character ( -1 ) was read.
     private boolean EOF_SEEN=false;
     
-    /**
-     * The pushBack stack
-     */
+    /// The pushBack stack
     private Stack<Character> puchBackStack=new Stack<Character>();
     
-    /**
-     * StringBuilder used to accumulate input strings for Simula Editor.
-     */
+    /// StringBuilder used to accumulate input strings for Simula Editor.
     private StringBuilder accum;
     
-    /**
-     * Editor mode. Set when the scanner is used by Simula Editor
-     */
+    /// Editor mode. Set when the scanner is used by Simula Editor
     private final boolean editorMode;
 
-    /**
-     * The Token queue. The method nextToken will pick Tokens from the queue first.
-     * 
-     */
+    /// The Token queue. The method nextToken will pick Tokens from the queue first.
     private LinkedList<Token> tokenQueue=new LinkedList<Token>();
 
-    /**
-     * The current source file reader;
-     */
+    /// The current source file reader;
     SourceFileReader sourceFileReader;
     
-    /**
-     * The selector array.
-     */
+    /// The selector array.
     public static boolean selector[]=new boolean[256];
 
 
 	/**
-	 * NOTE: An initial "-" in array upper bound may follow : directly (cf. 1.3).
-	 * The scanner will treat ":-" within parentheses (round brackets) as two
+	 * The depth of nested parentheses (round brackets).
+	 * <p>
+	 * NOTE: An initial "-" in array upper bound may follow directly after : (cf. 1.3).
+	 * <p>
+	 * The scanner will treat ":-" within parentheses as two
 	 * separate symbols ":" and "-" thus solving this ambiguity in the syntax.
 	 * <p>
 	 * This variable is used to cover such situations.
@@ -115,7 +101,6 @@ public final class SimulaScanner extends DefaultScanner {
 	 */
 	void close() {
 		SEARCH:while(!EOF_SEEN) {
-//			int c=readNextCharacter();
 			int c=getNext();
 			if(!EOF_SEEN && !isWhiteSpace(c)) {
 				Util.warning("Text after final END");
@@ -708,8 +693,6 @@ public final class SimulaScanner extends DefaultScanner {
     private Token scanTextConstant() {
     	if(Option.internal.TRACE_SCAN) Util.TRACE("scanTextConstant, "+edcurrent());
     	StringBuilder accumulatedTextConstant=new StringBuilder();
-//    	int firstLine=Global.sourceLineNumber;
-//    	int lastLine=firstLine;
     	LOOP:while(true) {
         	int firstLine=Global.sourceLineNumber;
         	int lastLine=firstLine;
@@ -827,7 +810,8 @@ public final class SimulaScanner extends DefaultScanner {
 					thirdchar = (char) current;
 					if (getNext() == '!') { // ! digit digit digit ! Found
 						int value = (((firstchar - '0') * 10 + secondchar - '0') * 10 + thirdchar - '0');
-						if (Option.internal.TRACE_SCAN) Util.TRACE("scanPossibleIsoCode:Got three digits: "+(char)firstchar+(char)secondchar+(char)thirdchar+"value="+value);
+						if (Option.internal.TRACE_SCAN)
+							Util.TRACE("scanPossibleIsoCode:Got three digits: "+(char)firstchar+(char)secondchar+(char)thirdchar+"value="+value);
 						if (value < 256)
 							return (value);
 						Util.warning("ISO-Code " + value + " is out of range (0:255)"
@@ -1093,10 +1077,6 @@ public final class SimulaScanner extends DefaultScanner {
 			}
 		}
 		
-		if (skipped.length() > 0 && current==EOF_MARK) {
-			//Util.warning("END-Comment is not terminated: Skipped="+skipped);
-//			if(editorMode) tokenQueue.add(newToken(KeyWord.COMMENT));
-		}
 		if(editorMode && accum.length()>0) tokenQueue.add(newToken(KeyWord.COMMENT));
 		if (Option.internal.TRACE_COMMENTS)
 			Util.TRACE("ENDCOMMENT:\"" + skipped + '"');
@@ -1110,14 +1090,10 @@ public final class SimulaScanner extends DefaultScanner {
     //**	                                                                 UTILITIES 
     //********************************************************************************
 	
-	/**
-	 * The previous character read.
-	 */
+	/// The previous character read.
     private int prevChar;
 	
-	/**
-	 * The current character read.
-	 */
+	/// The current character read.
     private int current;
     
     /**

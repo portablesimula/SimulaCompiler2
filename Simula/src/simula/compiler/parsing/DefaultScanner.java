@@ -25,19 +25,14 @@ import simula.compiler.utilities.KeyWord;
  */
 public class DefaultScanner {
 
-	/**
-	 * The LineNumberReader.
-	 */
+	/// The LineNumberReader.
 	private LineNumberReader lineNumberReader;
 
 	// ********************************************************************************
 	// *** CONSTRUCTORS: Scanner
 	// ********************************************************************************
-	/**
-	 * Default constructor.
-	 */
-	protected DefaultScanner() {
-	}
+	/// Default constructor.
+	protected DefaultScanner() {}
 
 	/**
 	 * Constructs a new Default Scanner that produces Tokens scanned from the
@@ -59,12 +54,8 @@ public class DefaultScanner {
 	 */
 	public Token nextToken() {
 		String line = null;
-		try {
-			line = lineNumberReader.readLine();
-		} catch (IOException e) {
-		}
-		if (line == null)
-			return (null);
+		try { line = lineNumberReader.readLine(); } catch (IOException e) {}
+		if (line == null) return (null);
 		return (new Token(line + '\n', KeyWord.NEWLINE, lineNumberReader.getLineNumber()));
 	}
 

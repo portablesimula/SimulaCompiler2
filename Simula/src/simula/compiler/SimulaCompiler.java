@@ -37,11 +37,28 @@ import simula.editor.RTOption;
  * <li>Initiate global variables.
  * <li>Do Parsing: Read source file through the scanner building program syntax tree.
  * <li>Do Checking: Traverse the syntax tree performing semantic checking.
- * <li>Do JavaCoding: Traverse the syntax tree generating .java code.
- * <li>Call Java Compiler to generate .class files.
- * <li>Do ByteCodeEngineering updating .class files.
- * <li>Create executable .jar of program.
- * <li>Execute .jar file.
+ * <li>Do Coding dependent on the CompilerMode:
+ * 		<ul>
+ * 			<li> CompilerMode = viaJavaSource:
+ * 				<ul>
+ * 					<li>Do JavaCoding: Traverse the syntax tree generating .java code.
+ * 					<li>Call Java Compiler to generate .class files.
+ * 					<li>Do ByteCodeEngineering updating .class files.
+ * 					<li>Create executable .jar of program.
+ * 					<li>Execute .jar file.
+ * 				</ul>
+ * 			<li> CompilerMode = directClassFiles:
+ * 				<ul>
+ * 					<li>Traverse the syntax tree generating ClassFile code.
+ * 					<li>Create executable .jar of program.
+ * 					<li>Execute .jar file.
+ * 				</ul>
+ * 			<li> CompilerMode = simulaClassLoader:
+ * 				<ul>
+ * 					<li>Traverse the syntax tree generate and load ClassFile code.
+ * 					<li>Run the loaded program
+ * 				</ul>
+ * 		</ul>
  * </ul>
  * <p>
  * Link to GitHub: <a href=
@@ -53,19 +70,13 @@ import simula.editor.RTOption;
  */
 public final class SimulaCompiler {
 	
-	/**
-	 * The Reader in case of SimulaEditor.
-	 */
+	/// The Reader in case of SimulaEditor.
 	final private Reader reader;
 
-	/**
-	 * The ProgramModule.
-	 */
+	/// The ProgramModule.
 	private ProgramModule programModule;
 	
-	/**
-	 * The output .jar file
-	 */
+	/// The output .jar file
 	private File outputJarFile;
 
 	/**
@@ -87,7 +98,6 @@ public final class SimulaCompiler {
 		Global.initiate();
 		if (reader == null) {
 			try {
-//				reader = new InputStreamReader(new FileInputStream(inputFileName), Global._CHARSET);
 				File file = new File(inputFileName);
 				reader = new InputStreamReader(new FileInputStream(file), Global._CHARSET);
 			} catch (IOException e) {
@@ -100,12 +110,6 @@ public final class SimulaCompiler {
 
 		File inputFile = new File(inputFileName);
 
-		// Create Output File Path
-//		String name = inputFile.getName();
-//		Global.sourceFileName = name;
-//		int p=name.lastIndexOf(".");
-//		if(p > 0)
-//			Global.sourceName = name.substring(0, p);
 		Global.sourceFileName = inputFile.getName();
 		Global.sourceName = Util.getBaseName(inputFile.getName());
 		Global.sourceFileDir = inputFile.getParentFile();
@@ -230,192 +234,184 @@ public final class SimulaCompiler {
 	 * @throws IOException when it fails
 	 */
 	public void doCompile() throws IOException {
-//		try {
-			Util.nError = 0;
-			if (!Util.isJavaIdentifier(Global.sourceName)) {
-				String sourceName = Global.sourceName;
-				Global.sourceName = Util.makeJavaIdentifier(sourceName);
-				Util.warning("The source file name '" + sourceName + "' is not a legal class identifier. Modified to: "
-						+ Global.sourceName);
-			}
-			
-       		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
-    			Global.jarFileBuilder = new JarFileBuilder();
-    		}
-			
-			// ***************************************************************
-			// *** Scanning and Parsing
-			// ***************************************************************
-			Global.javaSourceFileCoders = new Vector<JavaSourceFileCoder>();
-			Parse.initiate(reader);
-			programModule = new ProgramModule();
-			Global.programModule = programModule;
-			if (Option.internal.TRACING) {
-				Util.println("END Parsing, resulting Program: \"" + programModule + "\"");
-				if (Option.internal.TRACE_PARSE && programModule != null)
-					programModule.print(0);
-			}
-			Parse.close();
-			Global.duringParsing = false;
-			if(Option.internal.PRINT_SYNTAX_TREE > 1) {
-				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Parsing ================");
-				programModule.printTree(1,this);
-			}
-			if (Util.nError > 0) {
-				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during parsing";
-				Util.println(msg);
-				throw new RuntimeException(msg);
-			}
-			
-			// ***************************************************************
-			// *** Generate .java files or ClassFileBuilder -> jarFile
-			// ***************************************************************
-//			System.out.println("SimulaCompiler.doCompile: Option.compilerMode="+Option.compilerMode);
-	   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
-				if (!programModule.isExecutable()) {
-					// Separate Compilation
-					Global.jarFileBuilder = new JarFileBuilder();
-					Global.jarFileBuilder.open(programModule);
-				} else {
-					Global.simulaClassLoader = new SimulaClassLoader();
-					if(! Option.internal.INLINE_TESTING)
-						JarFileBuilder.loadRuntimeSystem();
-					JarFileBuilder.loadIncludeQueue();
-				}
-			} else {
+		Util.nError = 0;
+		if (!Util.isJavaIdentifier(Global.sourceName)) {
+			String sourceName = Global.sourceName;
+			Global.sourceName = Util.makeJavaIdentifier(sourceName);
+			Util.warning("The source file name '" + sourceName + "' is not a legal class identifier. Modified to: "
+					+ Global.sourceName);
+		}
+		
+   		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
+			Global.jarFileBuilder = new JarFileBuilder();
+		}
+		
+		// ***************************************************************
+		// *** Scanning and Parsing
+		// ***************************************************************
+		Global.javaSourceFileCoders = new Vector<JavaSourceFileCoder>();
+		Parse.initiate(reader);
+		programModule = new ProgramModule();
+		Global.programModule = programModule;
+		if (Option.internal.TRACING) {
+			Util.println("END Parsing, resulting Program: \"" + programModule + "\"");
+			if (Option.internal.TRACE_PARSE && programModule != null)
+				programModule.print(0);
+		}
+		Parse.close();
+		Global.duringParsing = false;
+		if(Option.internal.PRINT_SYNTAX_TREE > 1) {
+			System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Parsing ================");
+			programModule.printTree(1,this);
+		}
+		if (Util.nError > 0) {
+			String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during parsing";
+			Util.println(msg);
+			throw new RuntimeException(msg);
+		}
+		
+		// ***************************************************************
+		// *** Generate .java files or ClassFileBuilder -> jarFile
+		// ***************************************************************
+   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
+			if (!programModule.isExecutable()) {
+				// Separate Compilation
+				Global.jarFileBuilder = new JarFileBuilder();
 				Global.jarFileBuilder.open(programModule);
-				Global.jarFileBuilder.addIncludeQueue();
-			}
-			
-			if (Option.internal.TRACING)
-				Util.println("BEGIN Possible Generate AttributeFile");
-			
-			// ***************************************************************
-			// *** Semantic Checker
-			// ***************************************************************
-			if (Option.internal.TRACING)
-				Util.println("BEGIN Semantic Checker");
-			Global.duringChecking = true;
-			programModule.doChecking();
-			if (Option.internal.TRACING) {
-				Util.println("END Semantic Checker: \"" + programModule + "\"");
-				if (Option.internal.TRACE_CHECKER_OUTPUT && programModule != null)
-					programModule.print(0);
-			}
-			Global.duringChecking = false;
-			if(Option.internal.PRINT_SYNTAX_TREE > 0) {
-				System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
-				programModule.printTree(1,this);
-			}
-			
-			if (Util.nError > 0) {
-				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during semantic checking";
-				Util.println(msg);
-				Thread.dumpStack();
-				throw new RuntimeException(msg);
-			}
-			
-			if (Option.compilerMode != Option.CompilerMode.viaJavaSource) {
-				if (Option.internal.TRACING)
-					Util.println("BEGIN Generate .class Output Code");
-				// *** Generate .class files
-				programModule.createJavaClassFile();
 			} else {
-				if (Option.internal.TRACING)
-					Util.println("BEGIN Generate .java Output Code");
-				// *** Generate .java intermediate code
-				programModule.doJavaCoding();
-				if (Option.internal.TRACING) {
-					Util.println("END Generate .java Output Code");
-					for (JavaSourceFileCoder javaClass : Global.javaSourceFileCoders)
-						Util.println(javaClass.javaOutputFile.toString());
-				}
+				Global.simulaClassLoader = new SimulaClassLoader();
+				if(! Option.internal.INLINE_TESTING)
+					JarFileBuilder.loadRuntimeSystem();
+				JarFileBuilder.loadIncludeQueue();
 			}
-			if (Util.nError > 0) {
-				String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during code generation";
-				Util.println(msg);
-				throw new RuntimeException(msg);
+		} else {
+			Global.jarFileBuilder.open(programModule);
+			Global.jarFileBuilder.addIncludeQueue();
+		}
+		
+		if (Option.internal.TRACING)
+			Util.println("BEGIN Possible Generate AttributeFile");
+		
+		// ***************************************************************
+		// *** Semantic Checker
+		// ***************************************************************
+		if (Option.internal.TRACING)
+			Util.println("BEGIN Semantic Checker");
+		Global.duringChecking = true;
+		programModule.doChecking();
+		if (Option.internal.TRACING) {
+			Util.println("END Semantic Checker: \"" + programModule + "\"");
+			if (Option.internal.TRACE_CHECKER_OUTPUT && programModule != null)
+				programModule.print(0);
+		}
+		Global.duringChecking = false;
+		if(Option.internal.PRINT_SYNTAX_TREE > 0) {
+			System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
+			programModule.printTree(1,this);
+		}
+		
+		if (Util.nError > 0) {
+			String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during semantic checking";
+			Util.println(msg);
+			Thread.dumpStack();
+			throw new RuntimeException(msg);
+		}
+		
+		if (Option.compilerMode != Option.CompilerMode.viaJavaSource) {
+			if (Option.internal.TRACING)
+				Util.println("BEGIN Generate .class Output Code");
+			// *** Generate .class files
+			programModule.createJavaClassFile();
+		} else {
+			if (Option.internal.TRACING)
+				Util.println("BEGIN Generate .java Output Code");
+			// *** Generate .java intermediate code
+			programModule.doJavaCoding();
+			if (Option.internal.TRACING) {
+				Util.println("END Generate .java Output Code");
+				for (JavaSourceFileCoder javaClass : Global.javaSourceFileCoders)
+					Util.println(javaClass.javaOutputFile.toString());
 			}
+		}
+		if (Util.nError > 0) {
+			String msg="Compiler terminate " + Global.sourceName + " after " + Util.nError + " errors during code generation";
+			Util.println(msg);
+			throw new RuntimeException(msg);
+		}
 
-			if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
-				// ***************************************************************
-				// *** CALL JAVA COMPILER
-				// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
-				// *** POSSIBLE - LIST GENERATED .class FILES
-				// ***************************************************************
-				doCallJavaCompiler();
-				doByteCodeEngineering();
-				if(Option.internal.LIST_GENERATED_CLASS_FILES)
-					listGeneratedClassFiles();
-			}
-			AttributeFileIO.writeAttributeFile(programModule);
+		if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
+			// ***************************************************************
+			// *** CALL JAVA COMPILER
+			// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
+			// *** POSSIBLE - LIST GENERATED .class FILES
+			// ***************************************************************
+			doCallJavaCompiler();
+			doByteCodeEngineering();
+			if(Option.internal.LIST_GENERATED_CLASS_FILES)
+				listGeneratedClassFiles();
+		}
+		AttributeFileIO.writeAttributeFile(programModule);
 
-			// ***************************************************************
-			// *** CRERATE .jar FILE INLINE
-			// ***************************************************************
-			String jarFile = null;
-       		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
-    			if(Global.jarFileBuilder != null) {
-    				if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
-    					Global.jarFileBuilder.addTempClassFiles();
-    				}
-    				outputJarFile = Global.jarFileBuilder.close();
-    				jarFile = outputJarFile.toString(); 				
-    			}
-    		} else {
+		// ***************************************************************
+		// *** CRERATE .jar FILE INLINE
+		// ***************************************************************
+		String jarFile = null;
+   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
+			if(Global.jarFileBuilder != null) {
 				if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
 					Global.jarFileBuilder.addTempClassFiles();
 				}
 				outputJarFile = Global.jarFileBuilder.close();
-				jarFile = outputJarFile.toString();
-    		}
-    		
-			if (Option.verbose) printSummary();
+				jarFile = outputJarFile.toString(); 				
+			}
+		} else {
+			if(Option.compilerMode == Option.CompilerMode.viaJavaSource) {
+				Global.jarFileBuilder.addTempClassFiles();
+			}
+			outputJarFile = Global.jarFileBuilder.close();
+			jarFile = outputJarFile.toString();
+		}
+		
+		if (Option.verbose) printSummary();
 
-			// ***************************************************************
-			// *** EXECUTE .jar FILE
-			// ***************************************************************
-			Vector<String> cmds = new Vector<String>();
-			cmds.add("java");
-       		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
-    			cmds.add("-jar");
-    			cmds.add(jarFile);
-    		}
-			if (Option.internal.RUNTIME_USER_DIR.length() > 0) {
-				cmds.add("-userDir");
-				cmds.add(Option.internal.RUNTIME_USER_DIR);
+		// ***************************************************************
+		// *** EXECUTE .jar FILE
+		// ***************************************************************
+		Vector<String> cmds = new Vector<String>();
+		cmds.add("java");
+   		if(Option.compilerMode != Option.CompilerMode.simulaClassLoader) {
+			cmds.add("-jar");
+			cmds.add(jarFile);
+		}
+		if (Option.internal.RUNTIME_USER_DIR.length() > 0) {
+			cmds.add("-userDir");
+			cmds.add(Option.internal.RUNTIME_USER_DIR);
+		} else {
+			cmds.add("-userDir");
+			cmds.add(Global.outputDir.getParentFile().getAbsolutePath());
+		}
+		RTOption.addRTArguments(cmds);
+		if (Option.internal.SOURCE_FILE.length() > 0) {
+			cmds.add(Option.internal.SOURCE_FILE);
+		}
+   		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
+			if(Global.simulaClassLoader != null) {
+				String name = Global.packetName + '.' + programModule.getIdentifier();
+				Global.simulaClassLoader.runClass(name, cmds);
 			} else {
-				cmds.add("-userDir");
-				cmds.add(Global.outputDir.getParentFile().getAbsolutePath());
+				if(Global.jarFileBuilder != null) {
+	    			doExecuteJarFile(jarFile,cmds);    					
+				} else
+				Util.IERR();
 			}
-			RTOption.addRTArguments(cmds);
-			if (Option.internal.SOURCE_FILE.length() > 0) {
-				cmds.add(Option.internal.SOURCE_FILE);
-			}
-       		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
-    			if(Global.simulaClassLoader != null) {
-    				String name = Global.packetName + '.' + programModule.getIdentifier();
-//    				System.out.println(""+name);
-    				Global.simulaClassLoader.runClass(name, cmds);
-//    				Util.IERR();
-    			} else {
-    				if(Global.jarFileBuilder != null) {
-    	    			doExecuteJarFile(jarFile,cmds);    					
-    				} else
-    				Util.IERR();
-    			}
-    		} else {
-    			doExecuteJarFile(jarFile,cmds);
-    		}
-			
-			
-			if (Option.internal.DEBUGGING)
-				Util.println("------------  CLEANING UP TEMP FILES  ------------");
-			deleteTempFiles(Global.simulaTempDir);
-
-//		} catch (IOException e) {
-//			Util.IERR("Compiler Error: ", e);
-//		}
+		} else {
+			doExecuteJarFile(jarFile,cmds);
+		}
+		
+		
+		if (Option.internal.DEBUGGING)
+			Util.println("------------  CLEANING UP TEMP FILES  ------------");
+		deleteTempFiles(Global.simulaTempDir);
 	}
 
 
@@ -429,25 +425,25 @@ public final class SimulaCompiler {
 	 * @throws IOException if something went wrong.
 	 */
 	private void doExecuteJarFile(String jarFile,Vector<String> arg) throws IOException {
-	if (!programModule.isExecutable()) {
-		if (Option.internal.TRACING)
-			Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
-	} else if (Option.noExecution) {
-		if (Option.internal.TRACING)
-			Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
-	} else {
-		if (Option.verbose)
-			Util.println("------------  EXECUTION SUMMARY  ------------");
-		if (Option.internal.TRACING)
-			Util.println("Execute .jar File");
-		int exitValue3 = Util.execute(arg);
-		if (Option.verbose)
-			Util.println("END Execute .jar File. Exit value=" + exitValue3);
-		if(exitValue3 != 0) {
-			System.out.println("SimulaCompiler.doCompile: Exit value = " + exitValue3);
-			throw new RuntimeException("Execution of "+jarFile+" failed. ExitValue = "+exitValue3);
+		if (!programModule.isExecutable()) {
+			if (Option.internal.TRACING)
+				Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
+		} else if (Option.noExecution) {
+			if (Option.internal.TRACING)
+				Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
+		} else {
+			if (Option.verbose)
+				Util.println("------------  EXECUTION SUMMARY  ------------");
+			if (Option.internal.TRACING)
+				Util.println("Execute .jar File");
+			int exitValue3 = Util.execute(arg);
+			if (Option.verbose)
+				Util.println("END Execute .jar File. Exit value=" + exitValue3);
+			if(exitValue3 != 0) {
+				System.out.println("SimulaCompiler.doCompile: Exit value = " + exitValue3);
+				throw new RuntimeException("Execution of "+jarFile+" failed. ExitValue = "+exitValue3);
+			}
 		}
-	}
 	}
 
 	// ***************************************************************
@@ -653,10 +649,7 @@ public final class SimulaCompiler {
 		for (File classFile : classFiles.listFiles()) {
 			if(classFile.getName().endsWith(".class"))
 				Util.doListClassFile("" + classFile); // List generated .class file
-//			UUtil.analyse("" + classFile);
 		}
-//		File xFile = new File("C:/GitHub/SimulaCompiler2/CompilerTests/bin/SimulaTestPrograms","adHocXX.class");
-//		Util.doListClassFile(""+xFile); // List explicit .class file
 	}
 
 
@@ -700,9 +693,6 @@ public final class SimulaCompiler {
     			Util.println("No executable jar-file is generated");    			
     		}
 		}
-//		if(outputJarFile != null) {
-//			JarFileBuilder.listJarFile(outputJarFile);
-//		}
 	}
 
 }
