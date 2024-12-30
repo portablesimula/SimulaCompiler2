@@ -290,7 +290,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 			JavaSourceFileCoder.code("try {");
 //			JavaSourceFileCoder.code("_JUMPTABLE(_JTX,"+this.getNlabels()+");","For ByteCode Engineering");			
 			JavaSourceFileCoder.code("_JUMPTABLE(_JTX,"+labelList.accumLabelSize()+");","For ByteCode Engineering");			
-			Global.currentJavaModule.mustDoByteCodeEngineering=true;
+			Global.currentJavaFileCoder.mustDoByteCodeEngineering=true;
 		}
 		codeStatements();
 		if (hasAccumLabel()) {

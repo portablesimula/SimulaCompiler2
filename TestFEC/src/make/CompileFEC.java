@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.util.Vector;
 
-import simula.compiler.Simula;
+import simula.Simula;
 import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;

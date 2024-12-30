@@ -157,7 +157,7 @@ public final class CallProcedure {
 		}
 		BlockDeclaration staticLink=(BlockDeclaration)meaning.declaredAs.declaredIn;
 		if(!staticLink.isContextFree) {
-			BlockDeclaration currentModule=Global.currentJavaModule.blockDeclaration; // Class, Procedure, ...
+			BlockDeclaration currentModule=Global.currentJavaFileCoder.blockDeclaration; // Class, Procedure, ...
 			String castIdent=meaning.declaredIn.getJavaIdentifier();
 			int n=meaning.declaredIn.getRTBlockLevel();
 			if(n!=currentModule.getRTBlockLevel())
@@ -192,7 +192,7 @@ public final class CallProcedure {
 			return(connID+'.'+methodCall);
 		}
 		if(!isContextFree) {
-			BlockDeclaration currentModule=Global.currentJavaModule.blockDeclaration; // Class, Procedure, ...
+			BlockDeclaration currentModule=Global.currentJavaFileCoder.blockDeclaration; // Class, Procedure, ...
 			String castIdent=meaning.declaredIn.getJavaIdentifier();
 			int n=meaning.declaredIn.getRTBlockLevel();
 			if(n!=currentModule.getRTBlockLevel())

@@ -21,7 +21,7 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
 /**
- * Generated Java class.
+ * Java source-file coder.
  * <p>
  * Link to GitHub: <a href=
  * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/JavaSourceFileCoder.java"><b>Source File</b></a>.
@@ -31,10 +31,10 @@ import simula.compiler.utilities.Util;
  */
 public final class JavaSourceFileCoder {
 	
-	/// The enclosing JavaModule
-	private JavaSourceFileCoder enclosingJavaModule;
+	/// The enclosing JavaSourceFileCoder
+	private JavaSourceFileCoder enclosingJavaCoder;
 	
-	/// The Java output writer.
+	/// The underlying Java output writer.
 	private final Writer writer;
 	
 	/// The line number map
@@ -55,9 +55,9 @@ public final class JavaSourceFileCoder {
 	 */
 	public JavaSourceFileCoder(final BlockDeclaration blockDeclaration) {
 		this.blockDeclaration = blockDeclaration;
-		Global.generatedJavaClass.add(this);
-		enclosingJavaModule = Global.currentJavaModule;
-		Global.currentJavaModule = this;
+		Global.javaSourceFileCoders.add(this);
+		enclosingJavaCoder = Global.currentJavaFileCoder;
+		Global.currentJavaFileCoder = this;
 		javaOutputFile = new File(Global.tempJavaFileDir, blockDeclaration.getJavaIdentifier() + ".java");
 		try {
 			javaOutputFile.getParentFile().mkdirs();
@@ -77,7 +77,7 @@ public final class JavaSourceFileCoder {
 	 * @return the current module's identification
 	 */
 	private String modid() {
-		BlockDeclaration blk = Global.currentJavaModule.blockDeclaration;
+		BlockDeclaration blk = Global.currentJavaFileCoder.blockDeclaration;
 		return (blk.declarationKind + " " + blk.scopeID());
 	}
 
@@ -100,8 +100,8 @@ public final class JavaSourceFileCoder {
 		} catch (IOException e) {
 			throw new RuntimeException("Writing .java output failed", e);
 		}
-		Global.currentJavaModule = enclosingJavaModule;
-		enclosingJavaModule = null;
+		Global.currentJavaFileCoder = enclosingJavaCoder;
+		enclosingJavaCoder = null;
 	}
 
 	/**
@@ -121,7 +121,7 @@ public final class JavaSourceFileCoder {
 	 * @param line a code line
 	 */
 	public static void code(final String line) {
-		Global.currentJavaModule.write(Global.sourceLineNumber, line, Global.currentJavaModule.modid());
+		Global.currentJavaFileCoder.write(Global.sourceLineNumber, line, Global.currentJavaFileCoder.modid());
 	}
 
 	/**

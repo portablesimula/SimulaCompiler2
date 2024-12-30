@@ -260,7 +260,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	private void doSubBlockCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
-		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
+		JavaSourceFileCoder javaCoder = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			boolean duringSTM_Coding=Global.duringSTM_Coding;
@@ -284,10 +284,10 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			doCodeStatements();
 			Global.duringSTM_Coding=duringSTM_Coding;
 			if (this.isMainModule) codeMethodMain();
-			javaModule.codeProgramInfo();
+			javaCoder.codeProgramInfo();
 			JavaSourceFileCoder.code("}", "End of SubBlock");
 		Global.exitScope();
-		javaModule.closeJavaOutput();
+		javaCoder.closeJavaOutput();
 	}
 
 	// ***********************************************************************************************

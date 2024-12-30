@@ -205,12 +205,12 @@ public final class Global {
 	/**
 	 * Current Java output Module. Maintained by JavaModule during Java Coding
 	 */
-	public static JavaSourceFileCoder currentJavaModule;
+	public static JavaSourceFileCoder currentJavaFileCoder;
 	
 	/**
-	 * The set of generated Java files
+	 * The set of Java SourceFile Coders.
 	 */
-	public static Vector<JavaSourceFileCoder> generatedJavaClass;
+	public static Vector<JavaSourceFileCoder> javaSourceFileCoders;
 
 	/**
 	 * The console

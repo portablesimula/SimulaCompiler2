@@ -160,7 +160,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			if(Option.verbose) System.out.println("Skip  doJavaCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);	
 			return;
 		}
-		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
+		JavaSourceFileCoder javaCoder = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			boolean duringSTM_Coding=Global.duringSTM_Coding;
@@ -199,10 +199,10 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	
 			if (this.isMainModule) codeMethodMain();
 			
-			javaModule.codeProgramInfo();
+			javaCoder.codeProgramInfo();
 			JavaSourceFileCoder.code("}", "End of Class");
 		Global.exitScope();
-		javaModule.closeJavaOutput();
+		javaCoder.closeJavaOutput();
 	}
 
 	// ***********************************************************************************************

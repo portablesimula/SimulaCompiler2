@@ -435,7 +435,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if(Option.verbose) System.out.println("Skip  doProcedureCoding: "+this.identifier+" -- It is read from "+isPreCompiledFromFile);		
 			return;
 		}
-		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
+		JavaSourceFileCoder javaCoder = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
@@ -466,10 +466,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if (declarationKind == ObjectKind.Procedure && hasParameter) doCodePrepareFormal();
 			doCodeConstructor();
 			codeProcedureBody();
-			javaModule.codeProgramInfo();
+			javaCoder.codeProgramInfo();
 			JavaSourceFileCoder.code("}", "End of Procedure");
 		Global.exitScope();
-		javaModule.closeJavaOutput();
+		javaCoder.closeJavaOutput();
 	}
 
 	// ***********************************************************************************************

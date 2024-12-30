@@ -5,11 +5,12 @@
  * You find a copy of the License on the following
  * page: https://creativecommons.org/licenses/by/4.0/
  */
-package simula.compiler;
+package simula;
 
 import java.io.File;
 import java.io.IOException;
 
+import simula.compiler.SimulaCompiler;
 import simula.compiler.parsing.SimulaScanner;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
@@ -91,20 +92,16 @@ import simula.editor.SimulaEditor;
  * </pre>
  * <p>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/Simula.java"><b>Source File</b></a>.
+ * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/Simula.java"><b>Source File</b></a>.
 
  * @author Øystein Myhre Andersen
  *
  */
 public final class Simula {
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	private Simula(){}
 
-	/**
-	 * Print synopsis of standard options
-	 */
+	/// Print synopsis of standard options
 	private static void help() {
 		Util.println(Global.simulaReleaseID+" See: https://github.com/portablesimula");
 		Util.println("");
@@ -192,13 +189,7 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-extLib")) Global.extLib=new File(argv[++i]);
 				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
 				else if (arg.equalsIgnoreCase("-runtimeUserDir")) Option.internal.RUNTIME_USER_DIR=argv[++i];
-
-//				else if (arg.equalsIgnoreCase("-noConsole")) RTOption.USE_CONSOLE = false;
 				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
-
-//				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
-
-//				else error("Unknown option "+arg);
 				else {
 					System.out.println("ERROR: Unknown option " + arg);
 					help();

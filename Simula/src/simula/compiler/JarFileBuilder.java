@@ -31,7 +31,7 @@ import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 
 /**
- * Utilities to manipulate jarFiles.
+ * Utilities to build and manipulate jarFiles.
  */
 public class JarFileBuilder {
 	
@@ -173,7 +173,6 @@ public class JarFileBuilder {
 	 */
 	public void addTempClassFiles() throws IOException {
 		if(Option.compilerMode != Option.CompilerMode.viaJavaSource) Util.IERR();
-		// ADD TEMP .class FILES
 		add(true, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
 	}	
 	
@@ -274,12 +273,10 @@ public class JarFileBuilder {
 				// If present search extLib
 				if (Global.extLib != null) {
 					jarFile = new File(Global.extLib, identifier + ".jar");
-//					System.out.println("JarFileBuilder.findJarFile(1) "+jarFile);
 					if (jarFile.exists())
 						return (jarFile);
 				}
 				jarFile = new File(Global.outputDir, identifier + ".jar");
-//				System.out.println("JarFileBuilder.findJarFile(2) "+jarFile);
 				if (jarFile.exists())
 					return (jarFile);
 			} else {
@@ -309,13 +306,11 @@ public class JarFileBuilder {
 	 * @throws IOException if something went wrong
 	 */
 	public void addIncludeQueue() throws IOException {
-//		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
 		if(Global.includeQueue != null) {
 			for(JarFile jarFile:Global.includeQueue) {
 				if(TESTING)
 					System.out.println("JarFileBuilder.addIncludeQueue: expandJarFile: "+jarFile.getName());
 				expandJarFile(jarFile);	
-//				jarFile.close();
 			}
 		}
 	}
@@ -325,13 +320,11 @@ public class JarFileBuilder {
 	 * @throws IOException if something went wrong
 	 */
 	public static void loadIncludeQueue() throws IOException {
-//		System.out.println("JarFileBuilder.loadIncludeQueue: "+Global.includeQueue);
 		if(Global.includeQueue != null) {
 			for(JarFile jarFile:Global.includeQueue) {
 				if(TESTING)
 					System.out.println("JarFileBuilder.loadIncludeQueue: loadJarEntries: "+jarFile.getName());
 				loadJarEntries(jarFile, Global.packetName, Global.simulaClassLoader);	
-//				jarFile.close();
 			}
 		}
 	}
@@ -345,9 +338,7 @@ public class JarFileBuilder {
 		File rtsLib = new File(Global.simulaRtsLib.getParentFile(), "RTS.jar");
 		if(TESTING) System.out.println("JarFileBuilder.loadRuntimeSystem: rtsLib="+rtsLib);
 		JarFile jarFile = new JarFile(rtsLib);
-//		listJarFile(rtsLib);
 
-//		JarFileBuilder.addToIncludeQueue(jarFile);
 		loadJarEntries(jarFile, "simula/runtime/", Global.simulaClassLoader);
 	}
 	
@@ -370,7 +361,6 @@ public class JarFileBuilder {
 
 			String entryName = inputEntry.getName();
 			if(TESTING) System.out.println("JarFileBuilder.loadJarEntries: entryName="+entryName);
-//			if (!entryName.startsWith(Global.packetName))	continue LOOP;
 			if (!entryName.startsWith(packetName))	continue LOOP;
 			if (!entryName.endsWith(".class"))		continue LOOP;
 
@@ -434,10 +424,7 @@ public class JarFileBuilder {
 				delayedLoadings.remove(name);
 				if(delayedLoadings.size() == 0) delayedLoadings = null;
 			}
-			//			Util.IERR();
 		}
-		//		if (Option.verbose)
-		//			Util.println("---------  END INCLUDE .jar File, " + (jarEntryNames.size()) + " Entries Added  ---------");
 	}
 
 	
@@ -445,7 +432,7 @@ public class JarFileBuilder {
 	// *** LIST .jar file
 	// ***************************************************************
 	/**
-	 * List .jar file
+	 * Debug utility: List .jar file
 	 * @param file the .jar file
 	 */
 	public static void listJarFile(final File file) {

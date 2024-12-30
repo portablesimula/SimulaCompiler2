@@ -924,7 +924,7 @@ public class ClassDeclaration extends BlockDeclaration {
 			return;
 		}
 		Global.sourceLineNumber = lineNumber;
-		JavaSourceFileCoder javaModule = new JavaSourceFileCoder(this);
+		JavaSourceFileCoder javaCoder = new JavaSourceFileCoder(this);
 		Global.enterScope(this);
 			labelList.setLabelIdexes();
 			JavaSourceFileCoder.code("@SuppressWarnings(\"unchecked\")");
@@ -961,10 +961,10 @@ public class ClassDeclaration extends BlockDeclaration {
 				match.doJavaCoding();
 			doCodeConstructor();
 			codeClassStatements();
-			javaModule.codeProgramInfo();
+			javaCoder.codeProgramInfo();
 			JavaSourceFileCoder.code("}", "End of Class");
 		Global.exitScope();
-		javaModule.closeJavaOutput();
+		javaCoder.closeJavaOutput();
 	}
 
 	// ***********************************************************************************************
