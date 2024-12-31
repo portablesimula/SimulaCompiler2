@@ -1,3 +1,9 @@
+
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.DataInputStream;
@@ -59,13 +65,11 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.ObjectReferenceMap;
 import simula.compiler.utilities.Util;
 
-/**
- * Attribute input stream.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeInputStream.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Attribute input stream.
+/// <p>
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeInputStream.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class AttributeInputStream {
 	/// The module ident.
 	String moduleID;
@@ -83,12 +87,10 @@ public class AttributeInputStream {
 	/// Debug utility.
 	private boolean TRACE = false; //true;
 
-	/**
-	 * Creates a new AttributeInputStream to read data from the specified InputStream.
-	 * @param inpt the underlying InputStream.
-	 * @param jarFileName the name of the jarFile containing this Attribute file.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Creates a new AttributeInputStream to read data from the specified InputStream.
+	/// @param inpt the underlying InputStream.
+	/// @param jarFileName the name of the jarFile containing this Attribute file.
+	/// @throws IOException if an I/O error occurs.
     public AttributeInputStream(InputStream inpt, String jarFileName) throws IOException {
     	this.inpt = new DataInputStream(inpt);
     	this.jarFileName = jarFileName;
@@ -99,28 +101,22 @@ public class AttributeInputStream {
 		this.moduleID = name.substring(0, name.indexOf('.'));
     }
 
-    /**
-     * Closes this AttributeInputStream.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Closes this AttributeInputStream.
+    /// @throws IOException if an I/O error occurs.
 	public void close() throws IOException { inpt.close(); }
     
-	/**
-	 * Reads and returns a kind code from the underlying DataInputStream.
-	 * @return the kind code read.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Reads and returns a kind code from the underlying DataInputStream.
+	/// @return the kind code read.
+	/// @throws IOException if an I/O error occurs.
     public int readKind() throws IOException {
     	int kind = inpt.readByte();
     	if(TRACE) System.out.println("AttributeInputStream.readKind: "+kind+':'+ObjectKind.edit(kind));
     	return kind;
 	}
 	
-    /**
-     * Reads and returns a type from the underlying DataInputStream.
-     * @return the type read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns a type from the underlying DataInputStream.
+    /// @return the type read.
+    /// @throws IOException if an I/O error occurs.
     public Type readType() throws IOException {
 		int keyWord = inpt.readUnsignedByte();
 		if(keyWord == 0) {
@@ -133,33 +129,27 @@ public class AttributeInputStream {
     	return type;
     }
 	
-    /**
-     * Reads and returns a boolean from the underlying DataInputStream.
-     * @return the boolean read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns a boolean from the underlying DataInputStream.
+    /// @return the boolean read.
+    /// @throws IOException if an I/O error occurs.
     public boolean readBoolean() throws IOException {
     	boolean b = inpt.readBoolean();
     	if(TRACE) System.out.println("AttributeInputStream.readBoolean: "+b);
     	return b;
     }
 	
-    /**
-     * Reads and returns a short from the underlying DataInputStream.
-     * @return the short read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns a short from the underlying DataInputStream.
+    /// @return the short read.
+    /// @throws IOException if an I/O error occurs.
     public int readShort() throws IOException {
     	short i = inpt.readShort();
     	if(TRACE) System.out.println("AttributeInputStream.readInt: "+i);
     	return i;
 	}
 
-    /**
-     * Reads and returns a typed constant from the underlying DataInputStream.
-     * @return the typed constant read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns a typed constant from the underlying DataInputStream.
+    /// @return the typed constant read.
+    /// @throws IOException if an I/O error occurs.
     public Object readConstant() throws IOException {
     	int key = inpt.readByte();
     	if(TRACE) System.out.println("AttributeInputStream.readConstant: key=" + (int)key + " \"" + key +"\"");
@@ -178,11 +168,9 @@ public class AttributeInputStream {
     	return res;
 	}
 
-    /**
-     * Reads and returns a String from the underlying DataInputStream.
-     * @return the String read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns a String from the underlying DataInputStream.
+    /// @return the String read.
+    /// @throws IOException if an I/O error occurs.
     public String readString() throws IOException {
     	int lng = inpt.readShort()-1;
     	if(lng < 0) {
@@ -196,22 +184,17 @@ public class AttributeInputStream {
     	return s;
     }
 
-    /**
-     * Reads and returns an Object list from the underlying DataInputStream.
-     * @return the Object list read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns an Object list from the underlying DataInputStream.
+    /// @return the Object list read.
+    /// @throws IOException if an I/O error occurs.
 	public ObjectList<?> readObjectList() throws IOException {
 		return ObjectList.read(this);
 	}
 
-
-	/**
-	 * Reads and returns an Object sequence number from the underlying DataInputStream.
-	 * @param obj the corresponding SyntaxClass object.
-	 * @return the Object sequence number read.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Reads and returns an Object sequence number from the underlying DataInputStream.
+	/// @param obj the corresponding SyntaxClass object.
+	/// @return the Object sequence number read.
+	/// @throws IOException if an I/O error occurs.
     public int readSEQU(SyntaxClass obj) throws IOException {
     	int OBJECT_SEQU = inpt.readShort();
     	if(TRACE) System.out.println("AttributeInputStream.readSEQU: " + OBJECT_SEQU + "  ====>  " + obj.getClass().getSimpleName());
@@ -219,12 +202,9 @@ public class AttributeInputStream {
     	return OBJECT_SEQU;
 	}
     
-
-    /**
-     * Reads and returns an Object from the underlying DataInputStream.
-     * @return the Object read.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Reads and returns an Object from the underlying DataInputStream.
+    /// @return the Object read.
+    /// @throws IOException if an I/O error occurs.
 	public SyntaxClass readObj() throws IOException {
 		int kind = readKind();
 		switch(kind) {
@@ -250,13 +230,11 @@ public class AttributeInputStream {
 		}	
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param kind the object kind code.
-	 * @param inpt the AttributeInputStream to read from.
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param kind the object kind code.
+	/// @param inpt the AttributeInputStream to read from.
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	private SyntaxClass readObj(int kind,AttributeInputStream inpt) throws IOException {
 		switch(kind) {
 			case ObjectKind.NULL:						return null;

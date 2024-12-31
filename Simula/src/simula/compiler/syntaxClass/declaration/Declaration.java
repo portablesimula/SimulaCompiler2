@@ -234,7 +234,7 @@ public abstract class Declaration extends SyntaxClass {
 	}
 
 	/**
-	 * Coding utility: get getFieldIdentifier.
+	 * ClassFile coding utility: get getFieldIdentifier.
 	 * @return the resulting String.
 	 */
 	public String getFieldIdentifier() {

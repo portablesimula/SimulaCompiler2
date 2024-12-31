@@ -232,7 +232,7 @@ public final class SwitchStatement extends Statement {
     	}
        	
     	/**
-    	 * Coding utility: initLookupSwitchCases.
+    	 * ClassFile coding utility: initLookupSwitchCases.
     	 * @param index starting case index.
     	 * @param codeBuilder the codeBuilder to use.
     	 * @return final case index.
@@ -258,7 +258,7 @@ public final class SwitchStatement extends Statement {
     	}
 	
     	/**
-    	 * Coding utility: buildByteCode.
+    	 * ClassFile coding utility: buildByteCode.
     	 * @param codeBuilder the codeBuilder to use.
     	 */
     	private void buildByteCode(CodeBuilder codeBuilder) {
@@ -407,7 +407,7 @@ public final class SwitchStatement extends Statement {
 	}
 	
 	/**
-	 * Coding utility: buildSwitchKeyTest.
+	 * ClassFile coding utility: buildSwitchKeyTest.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildSwitchKeyTest(CodeBuilder codeBuilder) {

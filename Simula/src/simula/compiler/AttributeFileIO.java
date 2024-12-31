@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.ByteArrayInputStream;
@@ -31,14 +29,11 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Simula attribute file input/output.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeFileIO.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Simula attribute file input/output.
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeFileIO.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class AttributeFileIO {
 	/// The Simula version.
 	private final static String version="SimulaAttributeFile: Version 2.0";
@@ -46,11 +41,9 @@ public final class AttributeFileIO {
 	/// Default Constructor: NOT USED
 	private AttributeFileIO() {}
 
-	/**
-	 * Write an attribute file.
-	 * @param program the program module
-	 * @throws IOException if an output operation fail
-	 */
+	/// Write an attribute file.
+	/// @param program the program module
+	/// @throws IOException if an output operation fail
 	static void writeAttributeFile(final ProgramModule program) throws IOException {
 		String relativeAttributeFileName = program.getRelativeAttributeFileName();
 		if (relativeAttributeFileName == null) return;
@@ -72,12 +65,10 @@ public final class AttributeFileIO {
 		if (Option.verbose)	Util.TRACE("*** ENDOF Generate SimulaAttributeFile: " + file);
 	}
 
-	/**
-	 * Build a module's attribute file.
-	 * @param program the program module.
-	 * @return the attribute file's bytes.
-	 * @throws IOException if an io-error occurs.
-	 */
+	/// Build a module's attribute file.
+	/// @param program the program module.
+	/// @return the attribute file's bytes.
+	/// @throws IOException if an io-error occurs.
 	private static byte[] buildAttrFile(final ProgramModule program) throws IOException {
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		AttributeOutputStream oupt = new AttributeOutputStream(byteArrayOutputStream);
@@ -94,13 +85,11 @@ public final class AttributeFileIO {
 	}
 
 	
-	/**
-	 * Read an attribute file.
-	 * @param identifier class or procedure identifier
-	 * @param file the .jar file to read
-	 * @param enclosure the declaration list to update
-	 * @return the module type
-	 */
+	/// Read an attribute file.
+	/// @param identifier class or procedure identifier
+	/// @param file the .jar file to read
+	/// @param enclosure the declaration list to update
+	/// @return the module type
 	public static Type readAttributeFile(final String identifier, final File file, final BlockDeclaration enclosure) {
 		Type moduleType = null;
 		Util.warning("Separate Compiled Module is read from: \"" + file + "\"");
@@ -150,13 +139,11 @@ public final class AttributeFileIO {
 		return (moduleType);
 	}
 	
-	/**
-	 * Read and return precompiled class or procedure.
-	 * @param fileID the file ident.
-	 * @param attrFile the attribute file.
-	 * @return the resulting class or procedure.
-	 * @throws IOException if somthing went wrong.
-	 */
+	/// Read and return precompiled class or procedure.
+	/// @param fileID the file ident.
+	/// @param attrFile the attribute file.
+	/// @return the resulting class or procedure.
+	/// @throws IOException if somthing went wrong.
 	private static BlockDeclaration readPrecompiled(String fileID,byte[] attrFile) throws IOException {
 		AttributeInputStream inpt = new AttributeInputStream(new ByteArrayInputStream(attrFile), fileID);
 

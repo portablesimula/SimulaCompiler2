@@ -253,7 +253,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** Coding Utility: edCTX
 	// ***********************************************************************************************
 	/**
-	 * Coding utility: Edit current context chain.
+	 * ClassFile coding utility: Edit current context chain.
 	 * 
 	 * @return edited context chain
 	 */
@@ -269,7 +269,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** Coding Utility: edCTX
 	// ***********************************************************************************************
 	/**
-	 * Coding utility: Edit context chain.
+	 * ClassFile coding utility: Edit context chain.
 	 * 
 	 * @param ctxDiff block level difference.
 	 * @return edited context chain
@@ -285,7 +285,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** Byte Coding Utility: buildCTX
 	// ***********************************************************************************************
 	/**
-	 * Coding utility: Build current context chain.
+	 * ClassFile coding utility: Build current context chain.
 	 * @param codeBuilder the codeBuilder to use.
 	 * @return true: if resulting field need a cast.
 	 */
@@ -294,7 +294,7 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 	
 	/**
-	 * Coding utility: Build current context chain.
+	 * ClassFile coding utility: Build current context chain.
 	 * @param corr correction .
 	 * @param codeBuilder the codeBuilder to use.
 	 * @return true: if resulting field need a cast.
@@ -348,7 +348,7 @@ public abstract class DeclarationScope extends Declaration  {
 	// *** Coding Utility: buildCTX
 	// ***********************************************************************************************
 	/**
-	 * Coding utility: Build context chain.
+	 * ClassFile coding utility: Build context chain.
 	 *
 	 * @param ctxDiff block level difference.
 	 * @param codeBuilder the codeBuilder to use.
@@ -400,7 +400,7 @@ public abstract class DeclarationScope extends Declaration  {
 	}
 
 	// ***********************************************************************************************
-	// *** ByteCoding Utility: getClassDesc -- Redefined in StandardClass, SubBlock and ConnectionBlock
+	// *** ClassFile coding Utility: getClassDesc -- Redefined in StandardClass, SubBlock and ConnectionBlock
 	// ***********************************************************************************************
 	/**
 	 * Return the ClassDesc

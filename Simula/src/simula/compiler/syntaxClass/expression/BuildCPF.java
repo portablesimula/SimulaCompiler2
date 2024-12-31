@@ -118,7 +118,7 @@ public abstract class BuildCPF {
 	}
 	
 	/**
-	 * Coding utility: May be Build Load_RESULT.
+	 * ClassFile coding utility: May be Build Load_RESULT.
 	 * @param variable the variable
 	 * @param codeBuilder the codeBuilder to use.
 	 */

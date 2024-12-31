@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.File;
@@ -29,45 +27,32 @@ import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 
-/**
- * The Simula Compiler.
- * <p>
- * The compiler consists of the following steps:
- * <ul>
- * <li>Initiate global variables.
- * <li>Do Parsing: Read source file through the scanner building program syntax tree.
- * <li>Do Checking: Traverse the syntax tree performing semantic checking.
- * <li>Do Coding dependent on the CompilerMode:
- * 		<ul>
- * 			<li> CompilerMode = viaJavaSource:
- * 				<ul>
- * 					<li>Do JavaCoding: Traverse the syntax tree generating .java code.
- * 					<li>Call Java Compiler to generate .class files.
- * 					<li>Do ByteCodeEngineering updating .class files.
- * 					<li>Create executable .jar of program.
- * 					<li>Execute .jar file.
- * 				</ul>
- * 			<li> CompilerMode = directClassFiles:
- * 				<ul>
- * 					<li>Traverse the syntax tree generating ClassFile code.
- * 					<li>Create executable .jar of program.
- * 					<li>Execute .jar file.
- * 				</ul>
- * 			<li> CompilerMode = simulaClassLoader:
- * 				<ul>
- * 					<li>Traverse the syntax tree generate and load ClassFile code.
- * 					<li>Run the loaded program
- * 				</ul>
- * 		</ul>
- * </ul>
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/SimulaCompiler.java"><b>Source
- * File</b></a>.
- *
- * @author Øystein Myhre Andersen
- *
- */
+/// The Simula Compiler.
+/// <p>
+/// The compiler consists of the following steps:
+///
+/// 	- Initiate global variables.
+/// 	- Do Parsing: Read source file through the scanner building program syntax tree.
+/// 	- Do Checking: Traverse the syntax tree performing semantic checking.
+/// 	- Do Coding dependent on the CompilerMode:
+/// 		-  CompilerMode = viaJavaSource:
+/// 			- Do JavaCoding: Traverse the syntax tree generating .java code.
+/// 			- Call Java Compiler to generate .class files.
+/// 			- Do ByteCodeEngineering updating .class files.
+/// 			- Create executable .jar of program.
+/// 			- Execute .jar file.
+/// 		-  CompilerMode = directClassFiles:
+/// 			- Traverse the syntax tree generating ClassFile code.
+/// 			- Create executable .jar of program.
+/// 			- Execute .jar file.
+/// 		-  CompilerMode = simulaClassLoader:
+/// 			- Traverse the syntax tree generate and load ClassFile code.
+/// 			- Run the loaded program
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/SimulaCompiler.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class SimulaCompiler {
 	
 	/// The Reader in case of SimulaEditor.
@@ -79,21 +64,15 @@ public final class SimulaCompiler {
 	/// The output .jar file
 	private File outputJarFile;
 
-	/**
-	 * Create a new SimulaCompiler.
-	 * 
-	 * @param inputFileName the source file name
-	 */
+	/// Create a new SimulaCompiler.
+	/// @param inputFileName the source file name
 	public SimulaCompiler(final String inputFileName) {
 		this(inputFileName, null);
 	}
 
-	/**
-	 * Create a new SimulaCompiler.
-	 * 
-	 * @param inputFileName the source file name
-	 * @param reader        Reader in case of SimulaEditor
-	 */
+	/// Create a new SimulaCompiler.
+	/// @param inputFileName the source file name
+	/// @param reader        Reader in case of SimulaEditor
 	public SimulaCompiler(final String inputFileName, Reader reader) {
 		Global.initiate();
 		if (reader == null) {
@@ -167,10 +146,8 @@ public final class SimulaCompiler {
 		}
 	}
 
-	/**
-	 * List temp class file directory tree
-	 * @param dir tempClassFileDir
-	 */
+	/// List temp class file directory tree
+	/// @param dir tempClassFileDir
 	private void list(final File dir) {
 		try {
 			Util.println("------------ BEGIN LIST tempClassFileDir: " + dir + "  ------------");
@@ -182,11 +159,9 @@ public final class SimulaCompiler {
 		}
 	}
 
-	/**
-	 * List a directory tree.
-	 * @param indent the indentation
-	 * @param dir the directory
-	 */
+	/// List a directory tree.
+	/// @param indent the indentation
+	/// @param dir the directory
 	private void list(String indent, final File dir) {
 		try {
 			File[] elt = dir.listFiles();
@@ -205,10 +180,8 @@ public final class SimulaCompiler {
 		}
 	}
 
-	/**
-	 * Delete temporary .class files.
-	 * @param dir temporary .class directory
-	 */
+	/// Delete temporary .class files.
+	/// @param dir temporary .class directory
 	private void deleteTempFiles(final File dir) {
 		try {
 			File[] elt = dir.listFiles();
@@ -229,10 +202,8 @@ public final class SimulaCompiler {
 		}
 	}
 
-	/**
-	 * Do Compile
-	 * @throws IOException when it fails
-	 */
+	/// Do Compile
+	/// @throws IOException when it fails
 	public void doCompile() throws IOException {
 		Util.nError = 0;
 		if (!Util.isJavaIdentifier(Global.sourceName)) {
@@ -415,15 +386,10 @@ public final class SimulaCompiler {
 	}
 
 
-	// ***************************************************************
-	// *** EXECUTE .jar FILE
-	// ***************************************************************
-	/**
-	 * Execute JarFile.
-	 * @param jarFile a jarFile
-	 * @param arg the arguments
-	 * @throws IOException if something went wrong.
-	 */
+	/// Execute JarFile.
+	/// @param jarFile a jarFile
+	/// @param arg the arguments
+	/// @throws IOException if something went wrong.
 	private void doExecuteJarFile(String jarFile,Vector<String> arg) throws IOException {
 		if (!programModule.isExecutable()) {
 			if (Option.internal.TRACING)
@@ -446,13 +412,8 @@ public final class SimulaCompiler {
 		}
 	}
 
-	// ***************************************************************
-	// *** CALL JAVA COMPILER
-	// ***************************************************************
-	/**
-	 * Call Java compiler 'javac'
-	 * @throws IOException if something went wrong.
-	 */
+	/// Call Java compiler 'javac'
+	/// @throws IOException if something went wrong.
 	private void doCallJavaCompiler() throws IOException {
 		String classPath = Global.simulaRtsLib.toString();
 
@@ -520,16 +481,11 @@ public final class SimulaCompiler {
 		}
 	}
 
-	// ***************************************************************
-	// *** CALL JAVA SYSTEM COMPILER
-	// ***************************************************************
-	/**
-	 * Call Java system compiler
-	 * @param compiler the Java compiler
-	 * @param classPath the classPath
-	 * @return return value from the Java compiler
-	 * @throws IOException if something went wrong
-	 */
+	/// Call Java system compiler
+	/// @param compiler the Java compiler
+	/// @param classPath the classPath
+	/// @return return value from the Java compiler
+	/// @throws IOException if something went wrong
 	private int callJavaSystemCompiler(final JavaCompiler compiler, final String classPath) throws IOException {
 		Vector<String> arguments = new Vector<String>();
 		if (Option.internal.DEBUGGING) {
@@ -566,18 +522,10 @@ public final class SimulaCompiler {
 		return (exitValue);
 	}
 
-	// ***************************************************************************
-	// *** CALL JAVA COMMAND LINE COMPILER
-	//
-	// https://docs.oracle.com/javase/7/docs/technotes/tools/windows/javac.html
-	// https://docs.oracle.com/javase/10/tools/tools-and-command-reference.htm
-	// ***************************************************************************
-	/**
-	 * Call Java command line compiler.
-	 * @param classPath the classPath
-	 * @return return value from the Java compiler
-	 * @throws IOException if something went wrong
-	 */
+	/// Call Java command line compiler.
+	/// @param classPath the classPath
+	/// @return return value from the Java compiler
+	/// @throws IOException if something went wrong
 	private int callJavacCompiler(final String classPath) throws IOException {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("javac");
@@ -604,13 +552,8 @@ public final class SimulaCompiler {
 		return (exitValue);
 	}
 	
-	// ***************************************************************
-	// *** POSSIBLE -- DO BYTE_CODE_ENGINEERING
-	// ***************************************************************
-	/**
-	 * doByteCodeEngineering reintroducing labels and goto.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Possible doByteCodeEngineering reintroducing labels and goto.
+	/// @throws IOException if something went wrong.
 	private void doByteCodeEngineering() throws IOException {
 		if (Option.internal.keepJava == null) {
 			if (Option.internal.TRACE_BYTECODE_OUTPUT) {
@@ -638,12 +581,7 @@ public final class SimulaCompiler {
 		}
 	}
 
-	// ***************************************************************
-	// *** LIST GENERATED .class FILES
-	// ***************************************************************
-	/**
-	 * Debug utility: listGeneratedClassFiles.
-	 */
+	/// Debug utility: listGeneratedClassFiles.
 	private void listGeneratedClassFiles() {
 		File classFiles = new File(Global.tempClassFileDir, Global.packetName);
 		for (File classFile : classFiles.listFiles()) {
@@ -652,13 +590,7 @@ public final class SimulaCompiler {
 		}
 	}
 
-
-	// ***************************************************************
-	// *** FILE SUMMARY
-	// ***************************************************************
-	/**
-	 * File Summary
-	 */
+	/// File Summary
 	private void fileSummary() {
 		Util.println("------------  FILE SUMMARY  ------------");
 		Util.println("Package Name:    \"" + Global.packetName + "\"");
@@ -675,9 +607,7 @@ public final class SimulaCompiler {
 	// ***************************************************************
 	// *** PRINT SUMMARY
 	// ***************************************************************
-	/**
-	 * Print summary at program end.
-	 */
+	/// Print summary at program end.
 	private void printSummary() {
 		Util.println("------------  COMPILATION SUMMARY  ------------");
 		Util.println("Compiler Mode:   \"" + Option.compilerMode + "\"");

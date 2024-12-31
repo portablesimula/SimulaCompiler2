@@ -291,7 +291,7 @@ public final class RemoteVariable extends Expression {
 	// *** BuildProcedureCall.callStandardTextProcedure
 	// ********************************************************************
 	/**
-	 * Coding utility: Call Standard TextProcedure.
+	 * ClassFile coding utility: Call Standard TextProcedure.
 	 * @param beforeDot expression before dot.
 	 * @param pro the StandardProcedure.
 	 * @param variable the VariableExpression.

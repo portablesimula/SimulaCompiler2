@@ -1,10 +1,9 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
+
 package simula;
 
 import java.io.File;
@@ -18,85 +17,82 @@ import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 import simula.editor.SimulaEditor;
 
-/**
- * Simula Main class containing the 'main' entry.
- * <p>
- * The Simula Compiler is normally activated through a command-line of this form:
- * <pre>
- *		java -jar releaseHome\simula.jar
- *</pre>
- * In this simple case the Simula Editor is started.
- * <h2>General Case:</h2>
- * In special rare situations you may use the general version of the command-line form:
- * <pre>
- * 		java [java-options] -jar releaseHome\simula.jar [simula-options] simula-sourceFile
- * </pre>
- * Java-options are described in the relevant Java Technical Dokumentation.
- * <p>
- * Simula-sourceFile is the file containing the Simula text to be compiled and executed.
- * <p>
- * Possible simula-options include:
- * <pre>
- *      -help                   Print this synopsis of standard options
- *      
- *      -caseSensitive          Source file is case sensitive. See next page.
- *      
- *      -compilerMode modeString   Simula Compiler mode *) see below.
- *      
- *      -noexec                 Don't execute generated .jar file
- *      
- *      -nowarn                 Generate no warnings
- *      
- *      -noextension            Disable all language extensions.
- *                              In other words, follow the Simula Standard literally
- *                              
- *      -select characters      First, all selectors are reset.
- *                              Then, for each character, the corresponding selector is set
- *                              
- *      -verbose                Output messages about what the compiler is doing
- *      
- *      -keepJava directory     Specify where to place generated .java files
- *                              Default: Temp directory which is deleted upon exit
- *                              
- *      -output directory       Specify where to place generated executable .jar file
- *                              Default: Current workspace\bin
- *                              
- *      -extLib directory       Specify where to search for precompiled classes and
- *                              procedures. If not found, output directory is also searched.
- *                              
- *                              
- *      sourceFile ::= Simula Source File
- *
- *      modeString ::= viaJavaSource | directClassFiles | simulaClassLoader
- *
- *
- *      viaJavaSource
- *         The Simula Compiler will generate Java source files and use
- *         the Java compiler to generate JavaClass files which in turn
- *         are collected together with the Runtime System into the
- *         resulting executable jar-file.
- *
- *
- *      directClassFiles
- *         The Simula Compiler will generate JavaClass files directly
- *         which in turn are collected together with the Runtime System
- *         into the resulting executable jar-file.
- *         No Java source files are generated.
- *
- *
- *      simulaClassLoader
- *         The Simula Compiler will generate ClassFile byte array and
- *         load it directly. No intermediate files are created.
- *
- *         NOTE: In this mode, the editor will terminate after the first program execution
- * </pre>
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/Simula.java"><b>Source File</b></a>.
-
- * @author Øystein Myhre Andersen
- *
- */
+/// Simula Main class containing the 'main' entry.
+/// <p>
+/// The Simula Compiler is normally activated through a command-line of this form:
+///
+/// 		java -jar releaseHome\simula.jar
+///
+/// In this simple case the Simula Editor is started.
+/// <h2>General Case:</h2>
+/// In special rare situations you may use the general version of the command-line form:
+///
+/// 		java [java-options] -jar releaseHome\simula.jar [simula-options] simula-sourceFile
+///
+/// Java-options are described in the relevant Java Technical Dokumentation.
+/// <p>
+/// Simula-sourceFile is the file containing the Simula text to be compiled and executed.
+/// <p>
+/// Possible simula-options include:
+///
+///      -help                   Print this synopsis of standard options
+///      
+///      -caseSensitive          Source file is case sensitive. See next page.
+///      
+///      -compilerMode modeString   Simula Compiler mode. see below.
+///      
+///      -noexec                 Don't execute generated .jar file
+///      
+///      -nowarn                 Generate no warnings
+///      
+///      -noextension            Disable all language extensions.
+///                              In other words, follow the Simula Standard literally
+///                              
+///      -select characters      First, all selectors are reset.
+///                              Then, for each character, the corresponding selector is set
+///                              
+///      -verbose                Output messages about what the compiler is doing
+///      
+///      -keepJava directory     Specify where to place generated .java files
+///                              Default: Temp directory which is deleted upon exit
+///                              
+///      -output directory       Specify where to place generated executable .jar file
+///                              Default: Current workspace\bin
+///                              
+///      -extLib directory       Specify where to search for precompiled classes and
+///                              procedures. If not found, output directory is also searched.
+///                              
+///                              
+///      sourceFile ::= Simula Source File
+/// 
+///      modeString ::= viaJavaSource | directClassFiles | simulaClassLoader
+/// 
+/// 
+///      viaJavaSource
+///         The Simula Compiler will generate Java source files and use
+///         the Java compiler to generate JavaClass files which in turn
+///         are collected together with the Runtime System into the
+///         resulting executable jar-file.
+/// 
+/// 
+///      directClassFiles
+///         The Simula Compiler will generate JavaClass files directly
+///         which in turn are collected together with the Runtime System
+///         into the resulting executable jar-file.
+///         No Java source files are generated.
+/// 
+/// 
+///      simulaClassLoader
+///         The Simula Compiler will generate ClassFile byte array and
+///         load it directly. No intermediate files are created.
+/// 
+///         NOTE: In this mode, the editor will terminate after the first program execution
+///
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/Simula.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
+/// 
 public final class Simula {
 	/// Default constructor.
 	private Simula(){}
@@ -157,10 +153,8 @@ public final class Simula {
 		System.exit(0);
 	}
 
-	/**
-	 * Main entry.
-	 * @param argv arguments
-	 */
+	/// Main entry.
+	/// @param argv arguments
 	public static void main(String[] argv) {
 		String fileName = null;
 		Option.verbose=false;
@@ -218,25 +212,19 @@ public final class Simula {
 		}
 	}
 
-	/**
-	 * Utility: Print an error message on a popup panel.
-	 * @param msg the error message
-	 */
+	/// Utility: Print an error message on a popup panel.
+	/// @param msg the error message
 	private static void error(final String msg) {
 		System.err.println("Simula: " + msg + "\n");
 		Util.popUpError(msg);
 		help();
 	}
 
-	/**
-	 * Set selectors for conditional compilation.
-	 * 
-	 * <pre>
-	 * %SELECT select-character { select-character }
-	 * </pre>
-	 * 
-	 * @param chars select characters
-	 */
+	/// Set selectors for conditional compilation.
+	/// 
+	/// %SELECT select-character { select-character }
+	/// 
+	/// @param chars select characters
 	public static void setSelectors(String chars) {
 		for (int i = 0; i < 255; i++)
 			SimulaScanner.selector[i] = false;
@@ -248,25 +236,21 @@ public final class Simula {
 		}
 	}
 
-	/**
-	 * Set keep .java files.
-	 * <p>
-	 * Option: -keepJava &lt;directory> Specify where to place generated .java files
-	 * 
-	 * @param dir the .java output directory-
-	 */
+	/// Set keep .java files.
+	/// <p>
+	/// Option: -keepJava &lt;directory> Specify where to place generated .java files
+	/// 
+	/// @param dir the .java output directory-
 	private static void setKeepJava(final String dir) {
 		Option.internal.keepJava = new File(dir);
 		Util.TRACE("KEEP_JAVA: " + Option.internal.keepJava);
 	}
 
-	/**
-	 * Set output directory.
-	 * <p>
-	 * Option: -output &lt;directory> Specify where to place generated executable .jar file
-	 * 
-	 * @param dir the output directory-
-	 */
+	/// Set output directory.
+	/// <p>
+	/// Option: -output &lt;directory> Specify where to place generated executable .jar file
+	/// 
+	/// @param dir the output directory-
 	private static void setOutputDir(final String dir) {
 		Global.outputDir = new File(dir);
 		Util.TRACE("OUTPUT_DIR: " + Global.outputDir);

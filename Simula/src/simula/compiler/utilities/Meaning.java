@@ -114,7 +114,7 @@ public final class Meaning {
 	// *** CODING: edUnqualifiedStaticLink
 	// ***************************************************************************************
 	/**
-	 * Coding utility: Edit unqualified static link chain.
+	 * ClassFile coding utility: Edit unqualified static link chain.
 	 * @return the resulting string
 	 */
 	public String edUnqualifiedStaticLink() {
@@ -133,7 +133,7 @@ public final class Meaning {
 	// *** CODING: edQualifiedStaticLink
 	// ***************************************************************************************
 	/**
-	 * Coding utility: Edit qualified static link chain.
+	 * ClassFile coding utility: Edit qualified static link chain.
 	 * @return the resulting string
 	 */
 	public String edQualifiedStaticLink() {
@@ -154,7 +154,7 @@ public final class Meaning {
 	// *** CODING: buildQualifiedStaticLink
 	// ***************************************************************************************
 	/**
-	 * Coding utility: Build qualified static link chain.
+	 * ClassFile coding utility: Build qualified static link chain.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	public void buildQualifiedStaticLink(CodeBuilder codeBuilder) {

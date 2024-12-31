@@ -163,7 +163,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build direct (re)activation
+	 * ClassFile coding utility: Build direct (re)activation
 	 * @return the resulting Java source code
 	 */
 	private String edActivateDirect() {
@@ -174,7 +174,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process AT ...
+	 * ClassFile coding utility: Build (Re)Activate Process AT ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateAt() {
@@ -184,7 +184,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process DELAY ...
+	 * ClassFile coding utility: Build (Re)Activate Process DELAY ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateDelay() {
@@ -194,7 +194,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process BEFORE ...
+	 * ClassFile coding utility: Build (Re)Activate Process BEFORE ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateBefore() {
@@ -206,7 +206,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process AFTER ...
+	 * ClassFile coding utility: Build (Re)Activate Process AFTER ...
 	 * @return the resulting Java source code
 	 */
 	private String edActivateAfter() {
@@ -241,7 +241,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build direct (re)activation
+	 * ClassFile coding utility: Build direct (re)activation
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateDirect(CodeBuilder codeBuilder) {
@@ -259,7 +259,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process AT ...
+	 * ClassFile coding utility: Build (Re)Activate Process AT ...
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateAt(CodeBuilder codeBuilder) {
@@ -281,7 +281,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process DELAY ...
+	 * ClassFile coding utility: Build (Re)Activate Process DELAY ...
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateDelay(CodeBuilder codeBuilder) {
@@ -295,7 +295,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process BEFORE ...
+	 * ClassFile coding utility: Build (Re)Activate Process BEFORE ...
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateBefore(CodeBuilder codeBuilder) {
@@ -308,7 +308,7 @@ public final class ActivationStatement extends Statement {
 	}
 
 	/**
-	 * Coding utility: Build (Re)Activate Process AFTER ...
+	 * ClassFile coding utility: Build (Re)Activate Process AFTER ...
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildActivateAfter(CodeBuilder codeBuilder) {

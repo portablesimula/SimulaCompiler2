@@ -1390,7 +1390,7 @@ public final class StandardClass extends ClassDeclaration {
 		declarationList.add(new StandardProcedure(this,kind,mtdSet,type,ident,param)); }
 
 	// ***********************************************************************************************
-	// *** ByteCoding Utility: getClassDesc   -- Defined in DeclarationScope
+	// *** ClassFile coding Utility: getClassDesc   -- Defined in DeclarationScope
 	// ***********************************************************************************************
 	@Override
 	public ClassDesc getClassDesc() {

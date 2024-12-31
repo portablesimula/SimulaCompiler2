@@ -199,7 +199,7 @@ public abstract class BuildCPV {
 	// *** prepareForValueType
 	// ********************************************************************
 	/**
-	 * Coding utility: Prepare for ValueType.
+	 * ClassFile coding utility: Prepare for ValueType.
 	 * @param variable the variable
 	 * @param codeBuilder the codeBuilder to use.
 	 */
@@ -218,7 +218,7 @@ public abstract class BuildCPV {
 	}
 	
 	/**
-	 * Coding utility: Get function ResultType.
+	 * ClassFile coding utility: Get function ResultType.
 	 * @param variable the variable.
 	 * @return the function ResultType.
 	 */
@@ -235,7 +235,7 @@ public abstract class BuildCPV {
 	}
 	
 	/**
-	 * Coding utility: Build Load_RESULT.
+	 * ClassFile coding utility: Build Load_RESULT.
 	 * @param variable the variable
 	 * @param codeBuilder the codeBuilder to use.
 	 */

@@ -458,7 +458,7 @@ public final class VariableExpression extends Expression {
 	// *** Coding: doGetELEMENT
 	// ******************************************************************
 	/**
-	 * Coding utility: doGetELEMENT.
+	 * ClassFile coding utility: doGetELEMENT.
 	 * 
 	 * @param var the variable
 	 * @return a suitable java code
@@ -482,7 +482,7 @@ public final class VariableExpression extends Expression {
 	// *** Coding: doPutELEMENT
 	// ******************************************************************
 	/**
-	 * Coding utility: doPutELEMENT.
+	 * ClassFile coding utility: doPutELEMENT.
 	 * 
 	 * @param var       the variable
 	 * @param rightPart the right hand side
@@ -687,7 +687,7 @@ public final class VariableExpression extends Expression {
 	// *** Coding: edIdentifierAccess
 	// ***********************************************************************
 	/**
-	 * Coding utility: Edit identifier access.
+	 * ClassFile coding utility: Edit identifier access.
 	 * 
 	 * @param destination true if this variable is a destination
 	 * @return a suitable java code

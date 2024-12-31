@@ -638,7 +638,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 
 	/**
-	 * Coding utility: getResultFieldRefEntry
+	 * ClassFile coding utility: getResultFieldRefEntry
 	 * @param pool the ConstantPoolBuilder to use
 	 * @return a FieldRefEntry
 	 */
@@ -863,7 +863,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	}
 	
 	/**
-	 * Coding utility: Build switch
+	 * ClassFile coding utility: Build switch
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void build_SWITCH(BlockCodeBuilder codeBuilder) {

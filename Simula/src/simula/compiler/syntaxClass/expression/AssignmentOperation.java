@@ -247,7 +247,7 @@ public final class AssignmentOperation extends Expression {
 	}
 
 	/**
-	 * Coding utility: Build Text Value Assignment.
+	 * ClassFile coding utility: Build Text Value Assignment.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildTextValueAssignment(CodeBuilder codeBuilder) {
@@ -303,7 +303,7 @@ public final class AssignmentOperation extends Expression {
 	}
 
 	/**
-	 * Coding utility: Build Assigment.
+	 * ClassFile coding utility: Build Assigment.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void buildAssignment(CodeBuilder codeBuilder) {
@@ -400,7 +400,7 @@ public final class AssignmentOperation extends Expression {
 	}
 	
 	/**
-	 * Coding utility: Try to build remote array.
+	 * ClassFile coding utility: Try to build remote array.
 	 * @param remvar remote variable.
 	 * @param codeBuilder the codeBuilder to use.
 	 * @return true: if success.
@@ -430,7 +430,7 @@ public final class AssignmentOperation extends Expression {
 	}
 	
 	/**
-	 * Coding utility: Build Simple Parameter
+	 * ClassFile coding utility: Build Simple Parameter
 	 * @param par the parameter
 	 * @param var the variable
 	 * @param assignRef true: assign by reference.
@@ -473,7 +473,7 @@ public final class AssignmentOperation extends Expression {
 	}
 	
 	/**
-	 * Coding utility: Build Array Parameter
+	 * ClassFile coding utility: Build Array Parameter
 	 * @param par the parameter
 	 * @param var the variable
 	 * @param assignRef true: assign by reference.

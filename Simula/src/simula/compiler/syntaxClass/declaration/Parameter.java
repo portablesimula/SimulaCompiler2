@@ -277,7 +277,7 @@ public final class Parameter extends Declaration {
 	}
 
 	/**
-	 * Coding utility: edit Java code version of this parameter's type.
+	 * ClassFile coding utility: edit Java code version of this parameter's type.
 	 * @return the resulting Java code
 	 */
 	String toJavaType() {
@@ -307,7 +307,7 @@ public final class Parameter extends Declaration {
 	}
 	
 	/**
-	 * Coding utility: buildParamCode
+	 * ClassFile coding utility: buildParamCode
 	 * @param codeBuilder the codeBuilder to use
 	 * @param expr parameter value expression
 	 */
@@ -385,7 +385,7 @@ public final class Parameter extends Declaration {
 	}
 	
 	/**
-	 * Coding utility: buildNameParam
+	 * ClassFile coding utility: buildNameParam
 	 * @param codeBuilder to use
 	 * @param expr the Thunk expression to be evaluated.
 	 */
@@ -395,7 +395,7 @@ public final class Parameter extends Declaration {
 	}	
 	
 	/**
-	 * Coding utility: buildNameParam
+	 * ClassFile coding utility: buildNameParam
 	 * @param codeBuilder to use
 	 * @param par the parameter used decide parameter kind
 	 * @param expr the Thunk expression to be evaluated.
@@ -406,7 +406,7 @@ public final class Parameter extends Declaration {
 	
 
 	/**
-	 * Coding utility: get FieldRefEntry of this Parameter.
+	 * ClassFile coding utility: get FieldRefEntry of this Parameter.
 	 * @param pool the ConstantPoolBuilder to use.
 	 * @return the FieldRefEntry of this Parameter.
 	 */
@@ -420,7 +420,7 @@ public final class Parameter extends Declaration {
 	}
 	
 	/**
-	 * Coding utility: get getFieldIdentifier of this Parameter.
+	 * ClassFile coding utility: get getFieldIdentifier of this Parameter.
 	 * @return the resulting String.
 	 */
 	@Override
@@ -431,7 +431,7 @@ public final class Parameter extends Declaration {
 	}
 
 	/**
-	 * Coding utility: buildDeclaration of this Parameter.
+	 * ClassFile coding utility: buildDeclaration of this Parameter.
 	 */
 	@Override
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
@@ -458,7 +458,7 @@ public final class Parameter extends Declaration {
 	}
 	
 	/**
-	 * Coding utility: Parameter type toClassDesc.
+	 * ClassFile coding utility: Parameter type toClassDesc.
 	 * @return the resulting CalssDesc
 	 */
 	public ClassDesc type_toClassDesc() {
@@ -473,7 +473,7 @@ public final class Parameter extends Declaration {
 	}
 
 	/**
-	 * Coding utility: generate load instruction dependent of type.
+	 * ClassFile coding utility: generate load instruction dependent of type.
 	 * @param codeBuilder the codeBuilder to use
 	 * @param ofst the parameter offset.
 	 */

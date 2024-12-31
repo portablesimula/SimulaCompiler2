@@ -258,7 +258,7 @@ public final class RelationalOperation extends Expression {
 	}
 
 	/**
-	 * Coding utility: Build Text Relation.
+	 * ClassFile coding utility: Build Text Relation.
 	 * @param codeBuilder the codeBuiløder to use.
 	 */
 	private void buildTextRelation(CodeBuilder codeBuilder) {

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -43,133 +41,105 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Simula Class Declaration.
- * 
- * <pre>
- * 
- * Simula Standard: 5.5 Class declaration
- * 
- * class-declaration = [ prefix ] main-part
- * 
- *   prefix = class-identifier
- *
- *   main-part = CLASS class-identifier
- *               [ formal-parameter-part ; [ value-part ] specification-part ] ;
- *               [ protection-part ; ]
- *               [ virtual-part ; ]
- *               class-body
- *   
- *      class-identifier = identifier
- * 
- *      formal-parameter-part = "(" FormalParameter { , FormalParameter } ")"
- *            FormalParameter = identifier
- *
- *      value-part = VALUE identifier-list
- *
- *      specification-part = class-parameter-specifier  identifier-list ; { class-parameter-specifier  identifier-list ; }
- *               class-parameter-specifier = Type | [Type] ARRAY 
- *
- *      protection-part = protection-specification { ; protection-specification }
- *               protection-specification = HIDDEN identifier-list | HIDDEN PROTECTED identifier-list
- *                                        | PROTECTED identifier-list | PROTECTED HIDDEN identifier-list
- *
- *      virtual-part = VIRTUAL: virtual-spec ; { virtual-spec ; }
- *         virtual-spec
- *             = virtual-specifier identifier-list
- *             | PROCEDURE procedure-identifier  procedure-specification
- *             
- *                virtual-Specifier = [ type ] PROCEDURE | LABEL | SWITCH
- *                
- *                procedure-specification = IS procedure-declaration
- *
- *      
- *      class-body = statement | split-body
- *      
- *         split-body = initial-operations inner-part final-operations
- *         
- *            initial-operations = ( BEGIN | block-head ; ) { statement ; }
- *         
- *            inner-part = [ label : ] INNER ;
- *'
- *            final-operations
- *               = END
- *               | ; statement { ; statement } END
- *
- * </pre>
- * 
- * <p>
- * This class is prefix to StandardClass and PrefixedBlockDeclaration.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ClassDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Simula Class Declaration.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 5.5 Class declaration
+/// 
+/// class-declaration = [ prefix ] main-part
+/// 
+///   prefix = class-identifier
+/// 
+///   main-part = CLASS class-identifier
+///               [ formal-parameter-part ; [ value-part ] specification-part ] ;
+///               [ protection-part ; ]
+///               [ virtual-part ; ]
+///               class-body
+///   
+///      class-identifier = identifier
+/// 
+///      formal-parameter-part = "(" FormalParameter { , FormalParameter } ")"
+///            FormalParameter = identifier
+/// 
+///      value-part = VALUE identifier-list
+/// 
+///      specification-part = class-parameter-specifier  identifier-list ; { class-parameter-specifier  identifier-list ; }
+///               class-parameter-specifier = Type | [Type] ARRAY 
+/// 
+///      protection-part = protection-specification { ; protection-specification }
+///               protection-specification = HIDDEN identifier-list | HIDDEN PROTECTED identifier-list
+///                                        | PROTECTED identifier-list | PROTECTED HIDDEN identifier-list
+/// 
+///      virtual-part = VIRTUAL: virtual-spec ; { virtual-spec ; }
+///         virtual-spec
+///             = virtual-specifier identifier-list
+///             | PROCEDURE procedure-identifier  procedure-specification
+///             
+///                virtual-Specifier = [ type ] PROCEDURE | LABEL | SWITCH
+///                
+///                procedure-specification = IS procedure-declaration
+/// 
+///      
+///      class-body = statement | split-body
+///      
+///         split-body = initial-operations inner-part final-operations
+///         
+///            initial-operations = ( BEGIN | block-head ; ) { statement ; }
+///         
+///            inner-part = [ label : ] INNER ;
+/// 
+///            final-operations
+///               = END
+///               | ; statement { ; statement } END
+/// 
+/// </pre>
+/// 
+/// 
+/// This class is prefix to StandardClass and PrefixedBlockDeclaration.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ClassDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public class ClassDeclaration extends BlockDeclaration {
-	/**
-	 * The external prefix'identifier.
-	 */
-//	private String externalPrefixIdent;
 
-	/**
-	 * The parameter list.
-	 */
+	/// The parameter list.
 	ObjectList<Parameter> parameterList = new ObjectList<Parameter>();
 
-	/**
-	 * The virtual spec list.
-	 */
+	/// The virtual spec list.
 	protected ObjectList<VirtualSpecification> virtualSpecList = new ObjectList<VirtualSpecification>();
 
-	/**
-	 * The virtual match list.
-	 */
+	/// The virtual match list.
 	protected Vector<VirtualMatch> virtualMatchList = new Vector<VirtualMatch>();
 
-	/**
-	 * The protected list.
-	 */
+	/// The protected list.
 	ObjectList<ProtectedSpecification> protectedList = new ObjectList<ProtectedSpecification>();
 
-	/**
-	 * The hidden list.
-	 */
+	/// The hidden list.
 	public ObjectList<HiddenSpecification> hiddenList = new ObjectList<HiddenSpecification>();
 
-	/**
-	 * Possible statements before inner.
-	 * If this is non-null then 'statements' contains the statements after inner
-	 */
+	/// Possible statements before inner.
+	/// If this is non-null then 'statements' contains the statements after inner
 	public ObjectList<Statement> statements1; // Statement code before inner
 
-	/**
-	 * Class Prefix in case of a SubClass or Prefixed Block.
-	 */
+	/// Class Prefix in case of a SubClass or Prefixed Block.
 	public String prefix;
 
-	/**
-	 * Class Prefix in case of a SubClass or Prefixed Block.
-	 * <p>
-	 * Set by coChecking
-	 */
+	/// Class Prefix in case of a SubClass or Prefixed Block.
+	/// Set by coChecking
 	public ClassDeclaration prefixClass;
 
-	/**
-	 * Set true when attribute procedure 'detach' is used in/on this class.
-	 */
+	/// Set true when attribute procedure 'detach' is used in/on this class.
 	public boolean detachUsed = false;
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTOR
 	// ***********************************************************************************************
-	/**
-	 * Create a new ClassDeclaration.
-	 * 
-	 * @param identifier the given identifier
-	 */
+	/// Create a new ClassDeclaration.
+	/// @param identifier the given identifier
 	protected ClassDeclaration(String identifier) {
 		super(identifier);
 		this.declarationKind = ObjectKind.Class;
@@ -178,27 +148,24 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Parsing: expectClassDeclaration
 	// ***********************************************************************************************
-	/**
-	 * Parse Class Declaration.
- * <pre>
- * 
- * Syntax:
- * 
- * class-declaration = [ prefix ] main-part
- * 
- *   prefix = class-identifier
- *
- *   main-part = CLASS class-identifier
- *               [ formal-parameter-part ; [ value-part ] specification-part ] ;
- *               [ protection-part ; ]
- *               [ virtual-part ; ]
- *               class-body
- *
- * </pre>
-	 * 
-	 * @param prefix class identifier
-	 * @return the resulting ClassDeclaration
-	 */
+	/// Parse Class Declaration.
+	/// <pre>
+	/// 
+	/// Syntax:
+	/// 
+	/// class-declaration = [ prefix ] main-part
+	/// 
+	///   prefix = class-identifier
+	/// 
+	///   main-part = CLASS class-identifier
+	///               [ formal-parameter-part ; [ value-part ] specification-part ] ;
+	///               [ protection-part ; ]
+	///               [ virtual-part ; ]
+	///               class-body
+	/// 
+	/// </pre>
+	/// @param prefix class identifier
+	/// @return the resulting ClassDeclaration
 	public static ClassDeclaration expectClassDeclaration(final String prefix) {
 		ClassDeclaration cls = new ClassDeclaration(null);
 		cls.sourceFileName = Global.sourceFileName;
@@ -232,16 +199,12 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** PARSING: acceptValuePart
 	// ***********************************************************************************************
-	/**
-	 * Parse utility: Accept value part and set matching parameter's mode.
-	 * 
-	 * <pre>
-	 * Syntax:
-	 *              VALUE identifier-list ;
-	 * </pre>
-	 * 
-	 * @param pList Parameter list
-	 */
+	/// Parse utility: Accept value part and set matching parameter's mode.
+	/// <pre>
+	/// Syntax:
+	///              VALUE identifier-list ;
+	/// </pre>
+	/// @param pList Parameter list
 	private static void acceptValuePart(final Vector<Parameter> pList) {
 		if (Parse.accept(KeyWord.VALUE)) {
 			do {
@@ -265,18 +228,16 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** PARSING: acceptParameterSpecificationPart
 	// ***********************************************************************************************
-	/**
-	 * Parse Utility: Accept Class Parameter specification-part updating Parameter's type and kind.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *     specification-part
-     *           = class-parameter-specifier identifier-list { ; class-parameter-specifier identifier-list }
-	 *     
-	 *        class-parameter-specifier = Type | [Type] ARRAY
-	 * </pre>
-	 * @param pList the parameter list
-	 */
+	/// Parse Utility: Accept Class Parameter specification-part updating Parameter's type and kind.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///     specification-part
+    ///           = class-parameter-specifier identifier-list { ; class-parameter-specifier identifier-list }
+	///     
+	///        class-parameter-specifier = Type | [Type] ARRAY
+	/// </pre>
+	/// @param pList the parameter list
 	private static void acceptParameterSpecificationPart(final Vector<Parameter> pList) {
 		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse ParameterSpecifications");
@@ -317,21 +278,19 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** PARSING: acceptProtectionPart
 	// ***********************************************************************************************
-	/**
-	 * Parse Utility: Accept protection-part updating Hidden and Protected lists.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *      protection-part = protection-specification { ; protection-specification }
-	 *      
-	 *           protection-specification
-	 *                = HIDDEN identifier-list
-	 *                | HIDDEN PROTECTED identifier-list
-	 *                | PROTECTED identifier-list
-	 *                | PROTECTED HIDDEN identifier-list
-	 * </pre>
-	 * @param cls the ClassDeclaration
-	 */
+	/// Parse Utility: Accept protection-part updating Hidden and Protected lists.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///      protection-part = protection-specification { ; protection-specification }
+	///      
+	///           protection-specification
+	///                = HIDDEN identifier-list
+	///                | HIDDEN PROTECTED identifier-list
+	///                | PROTECTED identifier-list
+	///                | PROTECTED HIDDEN identifier-list
+	/// </pre>
+	/// @param cls the ClassDeclaration
 	private static void acceptProtectionPart(ClassDeclaration cls) {
 		while (true) {
 			if (Parse.accept(KeyWord.HIDDEN)) {
@@ -349,17 +308,15 @@ public class ClassDeclaration extends BlockDeclaration {
 		}	
 	}
 	
-	/**
-	 * Parse Utility: Expect Hidden Protected list.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *      identifier-list
-	 * </pre>
-	 * @param cls the ClassDeclaration
-	 * @param hidden if true, update the hidden list
-	 * @param prtected if true, update the protected list
-	 */
+	/// Parse Utility: Expect Hidden Protected list.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///      identifier-list
+	/// </pre>
+	/// @param cls the ClassDeclaration
+	/// @param hidden if true, update the hidden list
+	/// @param prtected if true, update the protected list
 	private static void expectHiddenProtectedList(final ClassDeclaration cls, final boolean hidden, final boolean prtected) {
 		do {
 			String identifier = Parse.expectIdentifier();
@@ -374,27 +331,24 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** PARSING: expectClassBody
 	// ***********************************************************************************************
-	/**
-	 * Parse Utility: Expect class-body.
-	 * In case of a split-body, updating the class's declaration and statement lists.
-	 * <pre>
-	 * Syntax:
-	 *                
-	 *      class-body = statement | split-body
-	 *      
-	 *         split-body = initial-operations inner-part final-operations
-	 *         
-	 *            initial-operations = ( BEGIN | block-head ; ) { statement ; }
-	 *         
-	 *            inner-part = [ label : ] INNER ;
-	 *'
-	 *            final-operations
-	 *               = END
-	 *               | ; statement { ; statement } END
-	 * </pre>
-	 * 
-	 * @param cls the ClassDeclaration
-	 */
+	/// Parse Utility: Expect class-body.
+	/// In case of a split-body, updating the class's declaration and statement lists.
+	/// <pre>
+	/// Syntax:
+	///                
+	///      class-body = statement | split-body
+	///      
+	///         split-body = initial-operations inner-part final-operations
+	///         
+	///            initial-operations = ( BEGIN | block-head ; ) { statement ; }
+	///         
+	///            inner-part = [ label : ] INNER ;
+	/// 
+	///            final-operations
+	///               = END
+	///               | ; statement { ; statement } END
+	/// </pre>
+	/// @param cls the ClassDeclaration
 	private static void expectClassBody(ClassDeclaration cls) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
@@ -429,24 +383,20 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: isSubClassOf
 	// ***********************************************************************************************
-	/**
-	 * Checks if this class is a subclass of the 'other' class.
-	 * <p>
-	 * Consider the class definitions:
-	 * 
-	 * <pre>
-	 *  
-	 *      Class A ......;
-	 *    A Class B ......;
-	 *    B Class C ......;
-	 * </pre>
-	 * 
-	 * Then Class B is a subclass of Class A, While Class C is subclass of both B
-	 * and A.
-	 * 
-	 * @param other the other ClassDeclaration
-	 * @return Boolean true iff this class is a subclass of the 'other' class.
-	 */
+	/// Checks if this class is a subclass of the 'other' class.
+	/// 
+	/// Consider the class definitions:
+	/// 
+	/// <pre>
+	///  
+	///      Class A ......;
+	///    A Class B ......;
+	///    B Class C ......;
+	/// </pre>
+	/// 
+	/// Then Class B is a subclass of Class A, While Class C is subclass of both B and A.
+	/// @param other the other ClassDeclaration
+	/// @return Boolean true iff this class is a subclass of the 'other' class.
 	public boolean isSubClassOf(final ClassDeclaration other) {
 		ClassDeclaration prefixClass = getPrefixClass();
 		if (prefixClass != null)
@@ -466,11 +416,11 @@ public class ClassDeclaration extends BlockDeclaration {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
-		if(Option.internal.TRACE_CHECKER) Util.TRACE("BEGIN ClassDeclaration("+this.identifier+").doChecking");
+		if(Option.internal.TRACE_CHECKER)
+			Util.TRACE("BEGIN ClassDeclaration("+this.identifier+").doChecking");
 		
 		if (hasRealPrefix()) {
 			prefixClass = getPrefixClass();
-//			System.out.println("ClassDeclaration.doChecking: "+this+"   PREFIX="+prefixClass);
 			prefixClass.doChecking();
 			if (prefixClass.declarationKind != ObjectKind.StandardClass) {
 				if (sourceBlockLevel != prefixClass.sourceBlockLevel)
@@ -496,18 +446,16 @@ public class ClassDeclaration extends BlockDeclaration {
 			stm.doChecking();
 		checkProtectedList();
 		checkHiddenList();
-//		doCheckLabelList(prefixClass);
 		Global.exitScope();
-		if(Option.internal.TRACE_CHECKER) Util.TRACE("END ClassDeclaration("+this.identifier+").doChecking");
+		if(Option.internal.TRACE_CHECKER)
+			Util.TRACE("END ClassDeclaration("+this.identifier+").doChecking");
 		SET_SEMANTICS_CHECKED();
 	}
 
 	// ***********************************************************************************************
 	// *** Utility: checkHiddenList
 	// ***********************************************************************************************
-	/**
-	 * Perform sematic checking of the Hidden list.
-	 */
+	/// Perform sematic checking of the Hidden list.
 	private void checkHiddenList() {
 		for (HiddenSpecification hdn : hiddenList)
 			hdn.doChecking();
@@ -516,9 +464,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: checkProtectedList
 	// ***********************************************************************************************
-	/**
-	 * Perform sematic checking of the Protected list.
-	 */
+	/// Perform sematic checking of the Protected list.
 	private void checkProtectedList() {
 		for (ProtectedSpecification pct : protectedList) {
 			pct.doChecking();
@@ -528,12 +474,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: searchVirtualSpecList -- - Search VirtualSpec-list for 'ident'
 	// ***********************************************************************************************
-	/**
-	 * Utility: Search VirtualSpec-list for 'ident'
-	 * 
-	 * @param ident argument
-	 * @return a VirtualSpecification when it was found, otherwise null
-	 */
+	/// Utility: Search VirtualSpec-list for 'ident'
+	/// @param ident argument
+	/// @return a VirtualSpecification when it was found, otherwise null
 	public VirtualSpecification searchVirtualSpecList(final String ident) {
 		for (VirtualSpecification virtual : virtualSpecList) {
 			if (Util.equals(ident, virtual.identifier))
@@ -545,11 +488,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: prefixLevel
 	// ***********************************************************************************************
-	/**
-	 * Returns the prefix level.
-	 * 
-	 * @return the prefix level
-	 */
+	/// Returns the prefix level.
+	/// @return the prefix level
 	@Override
 	public int prefixLevel() {
 		if (!hasRealPrefix())
@@ -563,12 +503,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: findLocalAttribute
 	// ***********************************************************************************************
-	/**
-	 * Utility: Search for an attribute named 'ident'
-	 * 
-	 * @param ident argument
-	 * @return a ProcedureDeclaration when it was found, otherwise null
-	 */
+	/// Utility: Search for an attribute named 'ident'
+	/// @param ident argument
+	/// @return a ProcedureDeclaration when it was found, otherwise null
 	public Declaration findLocalAttribute(final String ident) {
 		if (Option.internal.TRACE_FIND_MEANING > 0)
 			Util.println("BEGIN Checking Class for " + ident + " ================================== " + identifier + " ==================================");
@@ -610,12 +547,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: findLocalProcedure
 	// ***********************************************************************************************
-	/**
-	 * Utility: Search Declaration-list for a procedure named 'ident'
-	 * 
-	 * @param ident argument
-	 * @return a ProcedureDeclaration when it was found, otherwise null
-	 */
+	/// Utility: Search Declaration-list for a procedure named 'ident'
+	/// @param ident argument
+	/// @return a ProcedureDeclaration when it was found, otherwise null
 	ProcedureDeclaration findLocalProcedure(final String ident) {
 		for (Declaration decl : declarationList)
 			if (Util.equals(ident, decl.identifier)) {
@@ -629,12 +563,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: findRemoteAttributeMeaning
 	// ***********************************************************************************************
-	/**
-	 * Find Remote Attribute's Meaning.
-	 * 
-	 * @param ident attribute identifier
-	 * @return the resulting Meaning
-	 */
+	/// Find Remote Attribute's Meaning.
+	/// @param ident attribute identifier
+	/// @return the resulting Meaning
 	public Meaning findRemoteAttributeMeaning(final String ident) {
 		boolean behindProtected = false;
 		ClassDeclaration scope = this;
@@ -671,12 +602,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: searchProtectedList - Search Protected-list for 'ident'
 	// ***********************************************************************************************
-	/**
-	 * Utility: Search Protected-list for 'ident'
-	 * 
-	 * @param ident argument
-	 * @return a ProtectedSpecification when it was found, otherwise null
-	 */
+	/// Utility: Search Protected-list for 'ident'
+	/// @param ident argument
+	/// @return a ProtectedSpecification when it was found, otherwise null
 	public ProtectedSpecification searchProtectedList(final String ident) {
 		for (ProtectedSpecification pct : protectedList)
 			if (Util.equals(ident, pct.identifier))
@@ -687,11 +615,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: withinScope -- Used by findRemoteAttributeMeaning
 	// ***********************************************************************************************
-	/**
-	 * Checks if the other scope is this scope or any of the prefixes.
-	 * @param otherScope the other scope
-	 * @return true if the other scope is this scope or any of the prefixes
-	 */
+	/// Checks if the other scope is this scope or any of the prefixes.
+	/// @param otherScope the other scope
+	/// @return true if the other scope is this scope or any of the prefixes
 	private static boolean withinScope(final DeclarationScope otherScope) {
 		DeclarationScope scope = Global.getCurrentScope();
 		while (scope != null) {
@@ -747,12 +673,9 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: searchHiddenList -- Search Hidden-list for 'ident'
 	// ***********************************************************************************************
-	/**
-	 * Utility: Search Hidden-list for 'ident'
-	 * 
-	 * @param ident argument
-	 * @return a HiddenSpecification when it was found, otherwise null
-	 */
+	/// Utility: Search Hidden-list for 'ident'
+	/// @param ident argument
+	/// @return a HiddenSpecification when it was found, otherwise null
 	HiddenSpecification searchHiddenList(final String ident) {
 		for (HiddenSpecification hdn : hiddenList)
 			if (Util.equals(ident, hdn.identifier))
@@ -763,11 +686,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: getPrefixClass
 	// ***********************************************************************************************
-	/**
-	 * Returns the prefix ClassDeclaration or null.
-	 * 
-	 * @return the prefix ClassDeclaration or null
-	 */
+	/// Returns the prefix ClassDeclaration or null.
+	/// @return the prefix ClassDeclaration or null
 	public ClassDeclaration getPrefixClass() {
 		if (prefix == null)
 			return (null);
@@ -790,31 +710,12 @@ public class ClassDeclaration extends BlockDeclaration {
 		printStaticChain("",0);
 		return (null);
 	}
-	
-//	public String edCallChain() {
-//		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
-//		StringBuilder sb = new StringBuilder();
-//		int n = stackTraceElement.length;
-//		if(n > 6) n = 6;
-//		for (int i = 3; i < n; i++) {
-//			String methodName =stackTraceElement[i].getMethodName();
-//			String className = stackTraceElement[i].getClassName();
-//			int lno = stackTraceElement[i].getLineNumber();
-//			int p = className.lastIndexOf('.');
-//			className = className.substring(p+1);
-//			if(i > 3) sb.append(", ");
-//			sb.append(className+'.'+methodName+'('+lno+')');
-//		}
-//		return(sb.toString());
-//	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: hasRealPrefix
 	// ***********************************************************************************************
-	/**
-	 * Check if this class has a real prefix.
-	 * @return true if this class has a real prefix, otherwise false.
-	 */
+	/// Check if this class has a real prefix.
+	/// @return true if this class has a real prefix, otherwise false.
 	boolean hasRealPrefix() {
 		String prfx = prefix;
 		boolean res = false;
@@ -835,11 +736,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// hvilke slike som har forekommet i eksterne "moduler" (som f.eks. SIMULATION), uten at det
 	// burde være problematisk.
 	// ***********************************************************************************************
-	/**
-	 * Returns true if detach is called in/on this class.
-	 * 
-	 * @return true if detach is called in/on this class
-	 */
+	/// Returns true if detach is called in/on this class.
+	/// @return true if detach is called in/on this class
 	public boolean isDetachUsed() {
 		// TRAVERSER PREFIX LOOKING FOR (detachUsed==true)
 		if (this.detachUsed)
@@ -855,23 +753,14 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Utility: ClassParameterIterator - Iterates through prefix-chain
 	// ***********************************************************************************************
-	/**
-	 * Utility: ClassParameterIterator - Iterates through prefix-chain.
-	 *
-	 */
+	/// Utility: ClassParameterIterator - Iterates through prefix-chain.
 	public final class ClassParameterIterator implements Iterator<Parameter>, Iterable<Parameter> {
-		/**
-		 * The prefix Iterator
-		 */
+		/// The prefix Iterator
 		private Iterator<Parameter> prefixIterator;
-		/**
-		 * The local Iterator
-		 */
+		/// The local Iterator
 		private Iterator<Parameter> localIterator;
 
-		/**
-		 * Constructor
-		 */
+		/// Constructor
 		public ClassParameterIterator() {
 			ClassDeclaration prefix = getPrefixClass();
 			if (prefix != null)
@@ -904,11 +793,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		}
 	}
 
-	/**
-	 * Iterates through all class parameters.
-	 * 
-	 * @return a ClassParameterIterator
-	 */
+	/// Iterates through all class parameters.
+	/// @return a ClassParameterIterator
 	public Iterator<Parameter> parameterIterator() {
 		return (new ClassParameterIterator());
 	}
@@ -970,9 +856,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodeConstructor
 	// ***********************************************************************************************
-	/**
-	 * Coding Utility: Code the constructor.
-	 */
+	/// Java Coding Utility: Code the constructor.
 	private void doCodeConstructor() {
 		JavaSourceFileCoder.debug("// Normal Constructor");
 		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList());
@@ -997,13 +881,10 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: edFormalParameterList
 	// ***********************************************************************************************
-	/**
-	 * Edit the formal parameter list
-	 * <p>
-	 * Also used by subclass PrefixedBlockDeclaration.
-	 * 
-	 * @return the resulting Java code
-	 */
+	/// Edit the formal parameter list
+	/// 
+	/// Also used by subclass PrefixedBlockDeclaration.
+	/// @return the resulting Java code
 	protected String edFormalParameterList() {
 		// Accumulates through prefix-chain when class
 		StringBuilder s = new StringBuilder();
@@ -1020,38 +901,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		return (s.toString());
 	}
 
-//	// ***********************************************************************************************
-//	// *** Utility: hasLabel
-//	// ***********************************************************************************************
-//	@Override
-//	protected boolean hasLabel() {
-//		if (labelList != null && !labelList.isEmpty())
-//			return (true);
-//		if (hasRealPrefix()) {
-//			ClassDeclaration prfx = this.getPrefixClass();
-//			if (prfx != null)
-//				return (prfx.hasLabel());
-//		}
-//		return (false);
-//	}
-
-//	// ***********************************************************************************************
-//	// *** Utility: getNlabels
-//	// ***********************************************************************************************
-//	/**
-//	 * Returns the number of labels in this class.
-//	 * 
-//	 * @return the number of labels in this class
-//	 */
-//	@Override
-//	public int getNlabels() {
-//		ASSERT_SEMANTICS_CHECKED();
-//		int size = (labelList==null)?0:labelList.declaredLabelSize();
-//		return size;
-//	}
-
 	// ***********************************************************************************************
-	// *** Coding Utility: codeStatements
+	// *** Java Coding Utility: codeStatements
 	// ***********************************************************************************************
 	@Override
 	public void codeStatements() {
@@ -1062,9 +913,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: codeStatementsBeforeInner
 	// ***********************************************************************************************
-	/**
-	 * Coding utility: codeStatementsBeforeInner
-	 */
+	/// Java coding utility: codeStatementsBeforeInner
 	private void codeStatementsBeforeInner() {
 		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
@@ -1077,9 +926,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: codeStatementsAfterInner
 	// ***********************************************************************************************
-	/**
-	 * Coding utility: codeStatementsAfterInner
-	 */
+	/// Java coding utility: codeStatementsAfterInner
 	private void codeStatementsAfterInner() {
 		JavaSourceFileCoder.code("// ENDOF "+identifier+" INNER PART");
 		for (Statement stm : statements) stm.doJavaCoding();
@@ -1092,9 +939,7 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: codeClassStatements
 	// ***********************************************************************************************
-	/**
-	 * Coding utility: Code class statements.
-	 */
+	/// Java coding utility: Code class statements.
 	protected void codeClassStatements() {
 		boolean duringSTM_Coding = Global.duringSTM_Coding;
 		Global.duringSTM_Coding = false;
@@ -1112,11 +957,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: edCompleteParameterList
 	// ***********************************************************************************************
-	/**
-	 * Coding Utility: Edit the complete parameter list including all prefixes.
-	 * 
-	 * @return the resulting Java code
-	 */
+	/// Coding Utility: Edit the complete parameter list including all prefixes.
+	/// @return the resulting Java code
 	protected String edCompleteParameterList() {
 		StringBuilder s = new StringBuilder();
 		s.append("(staticLink");
@@ -1129,12 +971,10 @@ public class ClassDeclaration extends BlockDeclaration {
 
 
 	// ***********************************************************************************************
-	// *** ByteCoding Utility: superClassDesc
+	// *** ClassFile coding Utility: superClassDesc
 	// ***********************************************************************************************
-	/**
-	 * Get super class ClassDesc.
-	 * @return super class ClassDesc.
-	 */
+	/// Get super class ClassDesc.
+	/// @return super class ClassDesc.
 	public ClassDesc superClassDesc() {
 		if(hasRealPrefix())
 			return getPrefixClass().getClassDesc();
@@ -1143,20 +983,16 @@ public class ClassDeclaration extends BlockDeclaration {
 	
 	/// Indicates if this class is loaded.
 	private boolean isLoaded;
-    /**
-     * Defined in DeclarationScope - Redefined in ClassDeclaration
-     * @throws IOException if something went wrong.
-     */
+
+	/// Defined in DeclarationScope - Redefined in ClassDeclaration
+    /// @throws IOException if something went wrong.
 	@Override
     protected void buildAndLoadOrAddClassFile() throws IOException {
 		if(this.isLoaded) return;
 		if(this instanceof StandardClass) return;
 		if(hasRealPrefix()) {
 			ClassDeclaration prefix = this.getPrefixClass();
-//			System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: prefix="+prefix);
 			if(!prefix.isLoaded) {
-//				System.out.println("ClassDeclaration.buildAndLoadOrAddClassFile: prefix.buildAndLoadOrAddClassFile");
-//				Util.IERR();
 				prefix.buildAndLoadOrAddClassFile();
 			}
 		}
@@ -1232,7 +1068,6 @@ public class ClassDeclaration extends BlockDeclaration {
 					System.out.println("ClassDeclaration.buildClassFile: DONE: "+CD_ThisClass+" extends "+CD_SuperClass);
 				return(bytes);
 			} catch(IllegalArgumentException e) {
-				// Could not resolve class CLASS_CHECKER1_semchecker1_exp
 				System.out.println("ClassDeclaration.buildClassFile: FATAL ERROR CAUSED BY "+e);
 //				ClassHierarchy.print();
 				
@@ -1250,17 +1085,7 @@ public class ClassDeclaration extends BlockDeclaration {
 						System.out.println("ClassDeclaration.buildClassFile: classInfo("+CD+") = " + classInfo);
 						feasibleToReTry = classInfo != null;
 					}
-//					Util.IERR("STOP");
 				}
-				
-//				ClassHierarchyResolver resolver = ClassHierarchy.getResolver();
-//				System.out.println("ClassDeclaration.buildClassFile: ThisClass'classInfo("+CD_ThisClass+") = " + resolver.getClassInfo(CD_ThisClass));
-//				System.out.println("ClassDeclaration.buildClassFile: SuperClass'classInfo("+CD_SuperClass+") = " + resolver.getClassInfo(CD_SuperClass));
-//				ClassDesc desc = ClassDesc.of("simulaFEC.CLASS_CHECKER1_semchecker1_exp");
-//				System.out.println("ClassDeclaration.buildClassFile: classInfo("+desc+") = " + resolver.getClassInfo(desc));
-//				e.printStackTrace(System.out);
-				
-//	//			return null;
 				if(Option.verbose)
 					System.out.println("ClassDeclaration.buildClassFile: FAILED: "+CD_ThisClass+" extends "+CD_SuperClass+"  feasibleToReTry="+feasibleToReTry);
 				if(count <= 0 || !feasibleToReTry) throw e;
@@ -1272,14 +1097,12 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: edConstructorSignature
 	// ***********************************************************************************************
-	/**
-	 * Edit the constructor signature.
-	 * <p>
-	 * Example: (Lsimula/runtime/RTS_RTObject;IID)V
-	 * <p>
-	 * Also used by PrefixedBlockDeclaration.
-	 * @return the MethodTypeDesc for the constructor
-	 */
+	/// Edit the constructor signature.
+	/// 
+	/// Example: (Lsimula/runtime/RTS_RTObject;IID)V
+	/// 
+	/// Also used by PrefixedBlockDeclaration.
+	/// @return the MethodTypeDesc for the constructor
 	@Override
 	public String edConstructorSignature() {
 		StringBuilder sb = new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
@@ -1295,20 +1118,18 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public Program'name(RTS_RTObject staticLink, par, par ...) {
-	 *         super(staticLink);
-	 *		   // Parameter assignment to locals
-	 *		   BBLK();
-	 *		   // Declaration Code
-	 *		   _STM();
-	 *	   }
-	 * </pre>
-	 * Also used by PrefixedBlockDeclaration
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public Program'name(RTS_RTObject staticLink, par, par ...) {
+	///         super(staticLink);
+	/// 		   // Parameter assignment to locals
+	/// 		   BBLK();
+	/// 		   // Declaration Code
+	/// 		   _STM();
+	/// 	   }
+	/// </pre>
+	/// Also used by PrefixedBlockDeclaration
+	/// @param codeBuilder the CodeBuilder
 	protected void buildConstructor(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
@@ -1390,7 +1211,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	public void buildDeclaration(ClassBuilder classBuilder, BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		try {
-//			System.out.println("ClassDeclaration.buildDeclaration: "+this.externalIdent+", encloser="+encloser);
 			this.createJavaClassFile();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -1405,11 +1225,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the '_STM' method.
+	/// @param codeBuilder the CodeBuilder
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		int nStat = this.statements.size();
@@ -1442,11 +1259,8 @@ public class ClassDeclaration extends BlockDeclaration {
 		codeBuilder.aload(0).areturn();
 	}
 	
-	/**
-	 * Clear the LabelList.
-	 */
+	/// Clear the LabelList.
 	private void clearLabelList() {
-//		System.out.println("ClassDeclaration.clearLabelList: ");
 		if(labelList != null) {
 			if(labelList.accumLabelSize() > 0)
 			for(LabelDeclaration lab:labelList.getAccumLabels()) lab.isBinded = false;
@@ -1456,15 +1270,12 @@ public class ClassDeclaration extends BlockDeclaration {
 
 
 	// ***********************************************************************************************
-	// *** ByteCoding: buildMethod_STM
+	// *** ByteCoding: buildMethod_CatchingErrors_TRY_CATCH
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 * @param begScope label
-	 * @param endScope label
-	 */
+	/// Generate byteCode for the 'CatchingErrors_TRY_CATCH' method.
+	/// @param codeBuilder the CodeBuilder
+	/// @param begScope label
+	/// @param endScope label
 	private void buildMethod_CatchingErrors_TRY_CATCH(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		codeBuilder.trying(
 			tryCodeBuilder -> {
@@ -1472,51 +1283,27 @@ public class ClassDeclaration extends BlockDeclaration {
 				buildStatementsAfterInner(tryCodeBuilder);
 			},
 			catchBuilder -> catchBuilder.catching(RTS.CD.JAVA_LANG_RUNTIME_EXCEPTION,
-				catchCodeBuilder -> buildMyCatchBlock(catchCodeBuilder, begScope, endScope)));
-	}
-
-	/**
-	 * Coding utility: buildMyCatchBlock.
-	 * @param codeBuilder the codeBuilder to use.
-	 * @param begScope label
-	 * @param endScope label
-	 */
-	private void buildMyCatchBlock(CodeBuilder  codeBuilder, Label begScope, Label endScope) {
-		ConstantPoolBuilder pool = codeBuilder.constantPool();
-		int local_EXEPTN = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
-		codeBuilder.localVariable(local_EXEPTN,"exception",RTS.CD.JAVA_LANG_RUNTIME_EXCEPTION,begScope,endScope);
-		// catch(RuntimeException e) { _CUR=this; _onError(e,onError_0()); }
-        //  astore_1
-        //  aload_0
-        //  putstatic     #28                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
-        //  aload_0
-        //  aload_1
-        //  aload_0
-        //  invokevirtual #32                 // Method onError_0:()Lsimula/runtime/RTS_PRCQNT;
-        //  invokevirtual #36                 // Method _onError:(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V
-
-		codeBuilder
-			.astore(local_EXEPTN)  // The caught exception will be on top of the operand stack when the catch block is entered.
-			.aload(0)
-//			.putstatic(pool.fieldRefEntry(currentClassDesc(), "_CUR", RTS.CD.RTS_RTObject))
-			.putstatic(RTS.FRE.RTObject_CUR(pool))
-			.aload(0)
-			.aload(local_EXEPTN)
-			.aload(0)
-			.invokevirtual(currentClassDesc(), "onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"))
-//			.invokevirtual(currentClassDesc(), "_onError", MethodTypeDesc.ofDescriptor("(Ljava/lang/RuntimeException;Lsimula/runtime/RTS_PRCQNT;)V"))
-			;
-//		RTS.invokevirtual_CatchingErrors_onError_0(codeBuilder);
-		RTS.invokevirtual_CatchingErrors_onError(codeBuilder);
+				catchCodeBuilder -> {
+					ConstantPoolBuilder pool = codeBuilder.constantPool();
+					int local_EXEPTN = BlockDeclaration.currentBlock.allocateLocalVariable(Type.Ref);
+					codeBuilder
+						.localVariable(local_EXEPTN,"exception",RTS.CD.JAVA_LANG_RUNTIME_EXCEPTION,begScope,endScope)
+						.astore(local_EXEPTN)  // The caught exception will be on top of the operand stack when the catch block is entered.
+						.aload(0)
+						.putstatic(RTS.FRE.RTObject_CUR(pool))
+						.aload(0)
+						.aload(local_EXEPTN)
+						.aload(0)
+						.invokevirtual(currentClassDesc(), "onError_0", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"));
+					RTS.invokevirtual_CatchingErrors_onError(codeBuilder);
+				}));
 	}
 
 	// ***********************************************************************************************
 	// *** Coding Utility: buildStatementsBeforeInner
 	// ***********************************************************************************************
-	/**
-	 * Coding utility: buildStatementsBeforeInner
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: buildStatementsBeforeInner
+	/// @param codeBuilder the codeBuilder to use.
 	private void buildStatementsBeforeInner(CodeBuilder codeBuilder) {
 		if (hasRealPrefix()) {
 			ClassDeclaration prfx = this.getPrefixClass();
@@ -1524,7 +1311,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		}
 		if(statements1 != null) for (Statement stm : statements1) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
-//			System.out.println("ClassDeclaration.buildStatementsBeforeInner: "+stm.getClass().getSimpleName()+"  "+stm);
 			stm.buildByteCode(codeBuilder);
 		}
 	}
@@ -1532,10 +1318,8 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: buildStatementsAfterInner
 	// ***********************************************************************************************
-	/**
-	 * Coding utility: buildStatementsAfterInner
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: buildStatementsAfterInner
+	/// @param codeBuilder the codeBuilder to use.
 	private void buildStatementsAfterInner(CodeBuilder codeBuilder) {
 		for (Statement stm : statements){
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
@@ -1554,7 +1338,6 @@ public class ClassDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	@Override
 	public void print(final int indent) {
-//		Util.IERR();
 		String spc = edIndent(indent);
 		StringBuilder s = new StringBuilder(spc);
 		s.append('[').append(sourceBlockLevel).append(':').append(getRTBlockLevel()).append("] ");
@@ -1627,7 +1410,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		//oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
@@ -1638,7 +1420,6 @@ public class ClassDeclaration extends BlockDeclaration {
 
 		// *** BlockDeclaration
 		oupt.writeBoolean(isMainModule);
-//		oupt.writeObjectList(statements, oupt);
 		oupt.writeObjectList(statements);
 		
 		// *** ClassDeclaration
@@ -1652,12 +1433,10 @@ public class ClassDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("END Write ClassDeclaration: " + identifier);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ClassDeclaration object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static ClassDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = (String) inpt.readString();
@@ -1673,7 +1452,6 @@ public class ClassDeclaration extends BlockDeclaration {
 		//identifier = inpt.readString();
 		cls.externalIdent = inpt.readString();
 		cls.type = inpt.readType();
-//		cls.declaredIn = (DeclarationScope) inpt.readObj();
 
 		// *** DeclarationScope
 		cls.sourceFileName = inpt.readString();

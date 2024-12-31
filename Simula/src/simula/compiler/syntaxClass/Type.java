@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass;
 
 import java.lang.classfile.ClassSignature;
@@ -25,61 +23,46 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Utility class Type.
- * <pre>
- * Syntax: 
- *     type = value-type
- *          | reference-type
- *          
- *        value-type = arithmetic-type
- *                   | boolean
- *                   | character
- *                   
- *           arithmetic-type = integer-type
- *                           | real-type
- *                           
- *              integer-type = [ short ] integer
- *              
- *              real-type = [ long ] real
- *              
- *              reference-type = object-reference-type
- *                             | text
- *                             
- *                 object-reference-type = ref "(" qualification ")"
- *                 
- *                    qualification = class-identifier
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Type.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Utility class Type.
+/// <pre>
+/// Syntax: 
+///     type = value-type
+///          | reference-type
+///          
+///        value-type = arithmetic-type
+///                   | boolean
+///                   | character
+///                   
+///           arithmetic-type = integer-type
+///                           | real-type
+///                           
+///              integer-type = [ short ] integer
+///              
+///              real-type = [ long ] real
+///              
+///              reference-type = object-reference-type
+///                             | text
+///                             
+///                 object-reference-type = ref "(" qualification ")"
+///                 
+///                    qualification = class-identifier
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Type.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class Type extends SyntaxClass {
 
-//	/**
-//	 * KeyWord or ref(classIdentifier)
-//	 */
-//	Token key;
-	/**
-	 * The keyWord attribute
-	 */
+	/// The keyWord attribute
 	public int keyWord;
 	
-	/**
-	 * The Class Identifier in case of ref(classIdent)
-	 */
+	/// The Class Identifier in case of ref(classIdent)
 	public String classIdent;
 	
-	/**
-	 * Qual in case of ref(Qual) type. Set by doChecking
-	 */
+	/// Qual in case of ref(Qual) type. Set by doChecking
 	protected ClassDeclaration qual;   // Qual in case of ref(Qual) type; Set by doChecking below
 	
-	/**
-	 * Qual's scope in case of ref(Qual) type. Set by doChecking
-	 */
+	/// Qual's scope in case of ref(Qual) type. Set by doChecking
 	public ConnectionBlock declaredIn; // Qual'scope in case of ref(Qual) type; Set by special constructor
 
 	// **************************************************************************************************
@@ -107,11 +90,9 @@ public class Type extends SyntaxClass {
 	/** Simula's Procedure type */	public static final Type Procedure = new Type(Type.T_PROCEDURE);
 	/** Simula's Label type */		public static final Type Label = new Type(Type.T_LABEL);
 	
-	/**
-	 * Simula's Ref(classIdent) type
-	 * @param classIdent the class name
-	 * @return a new ref(classIdent) type.
-	 */
+	/// Simula's Ref(classIdent) type
+	/// @param classIdent the class name
+	/// @return a new ref(classIdent) type.
 	public static final Type Ref(String classIdent) { return (new Type(Type.T_REF,classIdent)); }
 	
 
@@ -119,38 +100,30 @@ public class Type extends SyntaxClass {
 	// *** TYPE CREATION - CONSTRUCTORES 
 	// **************************************************************************************************
 	  
-	/**
-	 * Create a new simple Type with the given keyWord
-	 * @param keyWord the given keyWord
-	 */
+	/// Create a new simple Type with the given keyWord
+	/// @param keyWord the given keyWord
 	private Type(int keyWord) {
 		this.keyWord = keyWord;
 	}
 	
-	/**
-	 * Create a new simple Type with the given keyWord and classIdent
-	 * @param keyWord the given keyWord
-	 * @param classIdent the given class identifier
-	 */
+	/// Create a new simple Type with the given keyWord and classIdent
+	/// @param keyWord the given keyWord
+	/// @param classIdent the given class identifier
 	public Type(int keyWord, String classIdent) {
 		if(classIdent != null && !Option.CaseSensitive) classIdent = classIdent.toUpperCase();
 		this.keyWord = keyWord;
 		this.classIdent = classIdent;
 	}
 
-	/**
-	 * Create a new ref(classIdent) type.
-	 * @param classIdent the class name
-	 */
+	/// Create a new ref(classIdent) type.
+	/// @param classIdent the class name
 	public Type(String classIdent) {
 		this(T_REF,classIdent);
 	}
 	
-	/**
-	 * Create a new Type based on the given Type and ConnectionBlock.
-	 * @param tp the given Type
-	 * @param declaredIn the ConnectionBlock
-	 */
+	/// Create a new Type based on the given Type and ConnectionBlock.
+	/// @param tp the given Type
+	/// @param declaredIn the ConnectionBlock
 	public Type(Type tp,ConnectionBlock declaredIn) {
 		this.keyWord = tp.keyWord;
 		this.classIdent = tp.classIdent;
@@ -164,21 +137,17 @@ public class Type extends SyntaxClass {
 	// *** UTILITIES
 	// **************************************************************************************************
 
-	/**
-	 * Returns the qualifying ClassDeclaration or null.
-	 * @return the qualifying ClassDeclaration or null
-	 */
+	/// Returns the qualifying ClassDeclaration or null.
+	/// @return the qualifying ClassDeclaration or null
 	public ClassDeclaration getQual() {
 		ASSERT_SEMANTICS_CHECKED();
 		return (qual);
 	}
 
-	/**
-	 * Check if types are equals or subordinate.
-	 * @param t1 a type
-	 * @param t2 a type
-	 * @return true: if types are equals or subordinate.
-	 */
+	/// Check if types are equals or subordinate.
+	/// @param t1 a type
+	/// @param t2 a type
+	/// @return true: if types are equals or subordinate.
 	public static boolean equalsOrSubordinate(Type t1, Type t2) {
 		if(t1 == null) return(t2 == null);
 		if(t2 == null) return(t1 == null);
@@ -199,19 +168,15 @@ public class Type extends SyntaxClass {
 		return (true);
 	}
 	
-	/**
-	 * Returns the ref-identifier or null.
-	 * @return the ref-identifier or null
-	 */
+	/// Returns the ref-identifier or null.
+	/// @return the ref-identifier or null
 	public String getRefIdent() {
 		if(keyWord == Type.T_REF) return(classIdent);
 		return(null); 
 	}
   
-	/**
-	 * Returns the Java ref-identifier or null.
-	 * @return the Java ref-identifier or null
-	 */
+	/// Returns the Java ref-identifier or null.
+	/// @return the Java ref-identifier or null
 	public String getJavaRefIdent() {
 		if(keyWord == Type.T_REF) {
 			if(classIdent == null) return("RTS_RTObject");
@@ -222,10 +187,8 @@ public class Type extends SyntaxClass {
 		return(null); 
 	}
 	
-    /**
-     * Perform semantic checking in the given scope.
-	 * @param scope the given scope
-	 */
+	/// Perform semantic checking in the given scope.
+	/// @param scope the given scope
 	public void doChecking(final DeclarationScope scope) {
 		if(qual!=null) SET_SEMANTICS_CHECKED(); // This Ref-Type is read from attribute file
 		if(IS_SEMANTICS_CHECKED()) return;
@@ -242,11 +205,9 @@ public class Type extends SyntaxClass {
 		SET_SEMANTICS_CHECKED();
 	}
 
-	/**
-	 * Returns true if this type is an arithmetic type.
-	 * Integer, real or long real.
-	 * @return true if this type is an arithmetic type.
-	 */
+	/// Returns true if this type is an arithmetic type.
+	/// Integer, real or long real.
+	/// @return true if this type is an arithmetic type.
 	public boolean isArithmeticType() {
 		switch(keyWord) {
 			case T_INTEGER,T_REAL,T_LONG_REAL: return true;
@@ -254,12 +215,9 @@ public class Type extends SyntaxClass {
 		}
 	}
 		
-
-	/**
-	 * Returns true if this type is a value type.
-	 * Integer, real or long real.
-	 * @return true if this type is a value type.
-	 */
+	/// Returns true if this type is a value type.
+	/// Integer, real or long real.
+	/// @return true if this type is a value type.
 	public boolean isValueType() {
 		switch(keyWord) {
 			case T_INTEGER,T_REAL,T_LONG_REAL,T_BOOLEAN,T_CHARACTER: return true;
@@ -267,51 +225,43 @@ public class Type extends SyntaxClass {
 		}
 	}
   
-	/**
-	 * Returns true if this type is ref or text type.
-	 * @return true if this type is ref or text type
-	 */
+	/// Returns true if this type is ref or text type.
+	/// @return true if this type is ref or text type
 	public boolean isReferenceType() {
 		if(keyWord == Type.T_REF) return(true);
 		if(keyWord == Type.T_TEXT) return(true);
-//		return(getRefIdent()!=null);
 		return false;
 	}
 	  
-	/**
-	 * Returns true if this type is ref type.
-	 * @return true if this type is ref type
-	 */
+	/// Returns true if this type is ref type.
+	/// @return true if this type is ref type
 	public boolean isRefClassType() {
 		if(keyWord == Type.T_REF) return(true);
-//		return(getRefIdent()!=null);
 		return false;
 	}
   
-	/**
-	 * Utility enum ConversionKind.
-	 *
-	 */
+	/// Utility enum ConversionKind.
     public enum ConversionKind { 
-    	/** Type conversion is illegal. */ 																			Illegal,
-    	/** No type-conversion is necessary. E.g. integer to integer */ 											DirectAssignable,
-    	/** Type-conversion with possible Runtime check is necessary. E.g. real to integer. */						ConvertValue,
-    	/** Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A. */	ConvertRef
+    	/// Type conversion is illegal.
+    	Illegal,
+    	/// No type-conversion is necessary. E.g. integer to integer.
+    	DirectAssignable,
+    	/// Type-conversion with possible Runtime check is necessary. E.g. real to integer.
+    	ConvertValue,
+    	/// Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A.
+    	ConvertRef
     }
 
-	/**
-     * Checks if a type-conversion is legal.
-     * <p>
-     * The possible return values are:
-     * <ul>
-     * <li>DirectAssignable - No type-conversion is necessary. E.g. integer to integer
-     * <li>ConvertValue - Type-conversion with possible Runtime check is necessary. E.g. real to integer.
-     * <li>ConvertRef - Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A.
-     * <li>Illegal - Conversion is illegal
-     * </ul>
-     * @param to the to type-
-     * @return the resulting ConversionKind
-     */
+    /// Checks if a type-conversion is legal.
+    /// 
+    /// The possible return values are:
+    /// 
+    ///  - DirectAssignable - No type-conversion is necessary. E.g. integer to integer
+    ///  - ConvertValue - Type-conversion with possible Runtime check is necessary. E.g. real to integer.
+    ///  - ConvertRef - Type-conversion with Runtime check is necessary. E.g. ref(A) to ref(B) where B is a subclass of A.
+    ///  - Illegal - Conversion is illegal
+    /// @param to the to type-
+    /// @return the resulting ConversionKind
     public ConversionKind isConvertableTo(final Type to) {
 	    ConversionKind result;
 	    if(to==null) result=ConversionKind.Illegal;
@@ -324,16 +274,14 @@ public class Type extends SyntaxClass {
 	    return(result); 
     }
   
-    /**
-     * Utility method isSubReferenceOf.
-     * <p>
-     * ref(B) is a sub-reference of ref(A) iff B is a subclass of A.
-     * <p>
-     * Any ref is a sub-reference of NONE
-     * 
-     * @param other the other type
-     * @return true if the condition holds
-     */
+    /// Utility method isSubReferenceOf.
+    /// 
+    /// ref(B) is a sub-reference of ref(A) iff B is a subclass of A.
+    /// 
+    /// Any ref is a sub-reference of NONE
+    /// 
+    /// @param other the other type
+    /// @return true if the condition holds
 	public boolean isSubReferenceOf(final Type other) {
 		String thisRef=this.getRefIdent(); // May be null for NONE
 		String otherRef=other.getRefIdent(); // May be null for NONE
@@ -346,28 +294,23 @@ public class Type extends SyntaxClass {
 			if(thisDecl==null) result=false; // Error Recovery
 			else result=thisDecl.isSubClassOf(otherDecl);
 		}
-		//System.out.println("Type.isSubReferenceOf: "+thisRef+"  ==>  " + otherRef + "   RESULT="+result);
 		return(result); 
 	}
   
-	/**
-	 * Returns the type to which both types can be converted.
-	 * @param type1 argument
-	 * @param type2 argument
-	 * @return the resulting Type
-	 */
+	/// Returns the type to which both types can be converted.
+	/// @param type1 argument
+	/// @param type2 argument
+	/// @return the resulting Type
 	public static Type commonRefType(final Type type1,final Type type2) {
 		if(type1.isSubReferenceOf(type2)) return(type2);
 	    if(type2.isSubReferenceOf(type1)) return(type1);
 		return(type1);
 	}
   
-	/**
-	 * Returns the type to which both types can be converted.
-	 * @param type1 argument
-	 * @param type2 argument
-	 * @return the resulting Type
-	 */
+	/// Returns the type to which both types can be converted.
+	/// @param type1 argument
+	/// @param type2 argument
+	/// @return the resulting Type
 	public static Type commonTypeConversion(final Type type1,final Type type2) {
 		if(type1.equals(type2)) return(type1);
 		Type atype=arithmeticTypeConversion(type1,type2);
@@ -382,12 +325,10 @@ public class Type extends SyntaxClass {
 		return(null);
 	}
 	
-	/**
-	 * Returns the most dominant type.
-	 * @param type1 argument
-	 * @param type2 argument
-	 * @return the most dominant type
-	 */
+	/// Returns the most dominant type.
+	/// @param type1 argument
+	/// @param type2 argument
+	/// @return the most dominant type
 	public static Type arithmeticTypeConversion(final Type type1,final Type type2) {
 		switch(type1.keyWord) {
 			case T_INTEGER:
@@ -412,10 +353,8 @@ public class Type extends SyntaxClass {
 		return null;
 	}
   
-	/**
-	 * Returns an edited default value of this Type.
-	 * @return an edited default value of this Type
-	 */
+	/// Returns an edited default value of this Type.
+	/// @return an edited default value of this Type
 	public String edDefaultValue() {
 		switch(keyWord) {
 			case T_VOID:		return("void");
@@ -431,10 +370,8 @@ public class Type extends SyntaxClass {
 		}
 	}
   
-	/**
-	 * Coding utility: toJavaType.
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJavaType.
+	/// @return the resulting code string.
 	public String toJavaType() {
 		switch(keyWord) {
 			case T_VOID:		return("void");
@@ -450,10 +387,8 @@ public class Type extends SyntaxClass {
 		}
 	}
 	 
-	/**
-	 * Coding utility: toJavaTypeClass.
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJavaTypeClass.
+	/// @return the resulting code string.
 	public String toJavaTypeClass() {
 		switch(keyWord) {
 			case T_VOID:		return("void");
@@ -469,10 +404,8 @@ public class Type extends SyntaxClass {
 		}
 	}
 	
-	/**
-	 * Coding utility: toJavaArrayType.
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJavaArrayType.
+	/// @return the resulting code string.
 	public String toJavaArrayType() {
 		switch(keyWord) {
 			case T_BOOLEAN:		return("RTS_BOOLEAN_ARRAY");
@@ -487,10 +420,8 @@ public class Type extends SyntaxClass {
 
 	}
 	
-	/**
-	 * Return RTS Array type String.
-	 * @return RTS Array type String.
-	 */
+	/// Return RTS Array type String.
+	/// @return RTS Array type String.
 	public String getArrayType() {
 		switch(keyWord) {
 			case T_BOOLEAN:		return("RTS_BOOLEAN_ARRAY");
@@ -504,21 +435,17 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toJVMType.
-	 * @param kind kind code.
-	 * @param mode mode code.
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJVMType.
+	/// @param kind kind code.
+	/// @param mode mode code.
+	/// @return the resulting code string.
 	public String toJVMType(int kind,int mode) {
 		String jvmType=toClassDesc(kind,mode).descriptorString();
 		return(jvmType);
 	}
 	
-	/**
-	 * Coding utility: toJVMType.
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJVMType.
+	/// @return the resulting code string.
 	public String toJVMType() {
 		switch(keyWord) {
 			case T_VOID:		return("V");
@@ -542,12 +469,10 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toJVMType. Used by: Thunk.buildClassFile.
-	 * @param type a type
-	 * @param kind a kind code
-	 * @return the resulting code string.
-	 */
+	/// ClassFile coding utility: toJVMType. Used by: Thunk.buildClassFile.
+	/// @param type a type
+	/// @param kind a kind code
+	/// @return the resulting code string.
 	public static String toJVMClassType(Type type,int kind) {
 		if(kind == Parameter.Kind.Procedure) return("Lsimula/runtime/RTS_PRCQNT;");
 		switch(type.keyWord) {
@@ -572,11 +497,9 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toClassDesc.
-	 * @param declaredIn the owner.
-	 * @return the resulting Class Descriptor.
-	 */
+	/// ClassFile coding utility: toClassDesc.
+	/// @param declaredIn the owner.
+	/// @return the resulting Class Descriptor.
 	public ClassDesc toClassDesc(Declaration declaredIn) {
 		if(keyWord == Type.T_REF) {
 			String refID=getJavaRefIdent();
@@ -594,10 +517,8 @@ public class Type extends SyntaxClass {
 		return(toClassDesc());
 	}
 
-	/**
-	 * Coding utility: toClassDesc.
-	 * @return the resulting Class Descriptor.
-	 */
+	/// ClassFile coding utility: toClassDesc.
+	/// @return the resulting Class Descriptor.
 	public ClassDesc toClassDesc() {
 		switch(keyWord) {
 			case T_VOID:		return(ConstantDescs.CD_void);
@@ -614,12 +535,10 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toClassDesc.
-	 * @param kind a kind code
-	 * @param mode a mode code
-	 * @return the resulting Class Descriptor.
-	 */
+	/// ClassFile coding utility: toClassDesc.
+	/// @param kind a kind code
+	/// @param mode a mode code
+	/// @return the resulting Class Descriptor.
 	public ClassDesc toClassDesc(int kind,int mode) {
 		if (mode == Parameter.Mode.name) return(RTS.CD.RTS_NAME);
 		else switch(kind) { // Parameter.Kind
@@ -630,10 +549,8 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toClassDesc.
-	 * @return the resulting Class Descriptor.
-	 */
+	/// ClassFile coding utility: toClassDesc.
+	/// @return the resulting Class Descriptor.
 	public ClassDesc toObjectClassDesc() {
 		switch(keyWord) {
 			case T_VOID:		return(ConstantDescs.CD_void);
@@ -650,16 +567,14 @@ public class Type extends SyntaxClass {
 		}
 	}
 
-	/**
-	 * Coding utility: toNameClassSignature.
-	 * @return the resulting Class Signature.
-	 */
+	/// ClassFile coding utility: toNameClassSignature.
+	/// @return the resulting Class Signature.
 	public ClassSignature toNameClassSignature() {
 		String CSS=null;
 		switch(keyWord) {
-			case T_BOOLEAN ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;";
+			case T_BOOLEAN ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Boolean;>;";
 			case T_CHARACTER ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Character;>;";
-			case T_INTEGER ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;";
+			case T_INTEGER ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Integer;>;";
 			case T_REAL ->		CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Float;>;";
 			case T_LONG_REAL ->	CSS = "Lsimula/runtime/RTS_NAME<Ljava/lang/Double;>;";
 			case T_TEXT ->		CSS = "Lsimula/runtime/RTS_NAME<Lsimula/runtime/TXT;>;";
@@ -671,10 +586,8 @@ public class Type extends SyntaxClass {
 		return ClassSignature.parseFrom(CSS);
 	}
 
-	/**
-	 * Coding utility: toArrayClassSignature.
-	 * @return the resulting Array Class Signature.
-	 */
+	/// ClassFile coding utility: toArrayClassSignature.
+	/// @return the resulting Array Class Signature.
 	public ClassSignature toArrayClassSignature() {
 		String CSS=null;
 		switch(keyWord) {
@@ -690,40 +603,32 @@ public class Type extends SyntaxClass {
 		return ClassSignature.parseFrom(CSS);
 	}
 	
-	/**
-	 * Coding utility: code instruction dup acording to type.
-	 * @param codeBuilder the codeBuilder
-	 */
+	/// ClassFile coding utility: code instruction dup acording to type.
+	/// @param codeBuilder the codeBuilder
 	public void dup(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.dup2();
 		else codeBuilder.dup();
 	}		
 	
-	/**
-	 * Coding utility: code instruction dup_x1 acording to type.
-	 * @param codeBuilder the codeBuilder
-	 */
+	/// ClassFile coding utility: code instruction dup_x1 acording to type.
+	/// @param codeBuilder the codeBuilder
 	public void dup_x1(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.dup2_x1();
 		else codeBuilder.dup_x1();
 	}		
 	
-	/**
-	 * Coding utility: code instruction pop acording to type.
-	 * @param codeBuilder the codeBuilder
-	 */
+	/// ClassFile coding utility: code instruction pop acording to type.
+	/// @param codeBuilder the codeBuilder
 	public void pop(CodeBuilder codeBuilder) {
 		if(keyWord == Type.T_LONG_REAL)
 			 codeBuilder.pop2();
 		else codeBuilder.pop();
 	}		
 
-	/**
-	 * Coding utility: code instruction checkcast acording to type.
-	 * @param codeBuilder the codeBuilder
-	 */
+	/// ClassFile coding utility: code instruction checkcast acording to type.
+	/// @param codeBuilder the codeBuilder
 	public void checkCast(CodeBuilder codeBuilder) {
 		switch(keyWord) {
 		case Type.T_INTEGER   -> codeBuilder.checkcast(ConstantDescs.CD_Integer);
@@ -739,12 +644,9 @@ public class Type extends SyntaxClass {
 
 	}
 	
-	/**
-	 * Convert JVM Object value to primitive type value.
-	 * @param codeBuilder the CodeBuilder to use
-	 */
+	/// Convert JVM Object value to primitive type value.
+	/// @param codeBuilder the CodeBuilder to use
 	public void valueToPrimitiveType(CodeBuilder codeBuilder) {
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		// Object TOS value ==> Primitive type
 		switch(keyWord) {
 			case Type.T_BOOLEAN   -> codeBuilder.invokevirtual(ConstantDescs.CD_Boolean, "booleanValue", MethodTypeDesc.ofDescriptor("()Z"));
@@ -755,10 +657,8 @@ public class Type extends SyntaxClass {
 		}
 	}
 	
-	/**
-	 * Coding utility: buildObjectValueOf
-	 * @param codeBuilder the CodeBuilder to use
-	 */
+	/// ClassFile coding utility: buildObjectValueOf
+	/// @param codeBuilder the CodeBuilder to use
 	public void buildObjectValueOf(CodeBuilder codeBuilder) {
 		switch(keyWord) {
 		case T_BOOLEAN ->	codeBuilder.invokestatic(ConstantDescs.CD_Boolean,   "valueOf", MethodTypeDesc.ofDescriptor("(Z)Ljava/lang/Boolean;"));
@@ -783,8 +683,6 @@ public class Type extends SyntaxClass {
 			case T_LABEL:		return "Label";
 			case T_REF:			//return "Ref()";
 				if(declaredIn==null) {
-//					if(qual==null) return("ref("+classIdent+')');
-//					return("ref("+classIdent+") qualified by Class "+qual.identifier);
 					return("ref("+classIdent+')');
 				}
 				return("ref("+classIdent+") declared in "+declaredIn.identifier);

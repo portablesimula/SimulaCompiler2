@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.File;
@@ -30,9 +35,7 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.SimulaClassLoader;
 import simula.compiler.utilities.Util;
 
-/**
- * Utilities to build and manipulate jarFiles.
- */
+/// Utilities to build and manipulate jarFiles.
 public class JarFileBuilder {
 	
 	/// The ProgramModule.
@@ -59,11 +62,9 @@ public class JarFileBuilder {
 		this.classFileMap = new HashMap<String,byte[]>();
 	}
 	
-	/**
-	 * Open the JarFileBuilder.
-	 * @param program the relevant ProgramModule
-	 * @throws IOException if something went wrong
-	 */
+	/// Open the JarFileBuilder.
+	/// @param program the relevant ProgramModule
+	/// @throws IOException if something went wrong
 	public void open(final ProgramModule program) throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.open: " + program);
 		if(jarOutputStream != null) Util.IERR();
@@ -95,11 +96,9 @@ public class JarFileBuilder {
 		}
 	}
 	
-	/**
-	 * Put a JarEntry to the intermediate classFileMap.
-	 * @param entryName the entry name
-	 * @param bytes the bytes, may be null
-	 */
+	/// Put a JarEntry to the intermediate classFileMap.
+	/// @param entryName the entry name
+	/// @param bytes the bytes, may be null
 	public void putMapEntry(String entryName, byte[] bytes) {
 		if(TESTING)	System.out.println("JarOutputSet.putMapEntry: "+entryName);
 		byte[] prev = classFileMap.put(entryName,bytes);
@@ -109,12 +108,10 @@ public class JarFileBuilder {
 		}
 	}
 	
-	/**
-	 * Write a JarEntry to the JarOutputStream.
-	 * @param entryName the entry name
-	 * @param bytes the bytes, may be null
-	 * @throws IOException if something went wrong
-	 */
+	/// Write a JarEntry to the JarOutputStream.
+	/// @param entryName the entry name
+	/// @param bytes the bytes, may be null
+	/// @throws IOException if something went wrong
 	public void writeJarEntry(String entryName, byte[] bytes) throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.writeJarEntry: "+entryName);
 		JarEntry entry = new JarEntry(entryName);
@@ -123,11 +120,9 @@ public class JarFileBuilder {
 		jarOutputStream.closeEntry();
 	}
 	
-	/**
-	 * Close the JarFileBuilder by writing the .jar file.
-	 * @return the outputJarFile
-	 * @throws IOException if something went wrong
-	 */
+	/// Close the JarFileBuilder by writing the .jar file.
+	/// @return the outputJarFile
+	/// @throws IOException if something went wrong
 	public File close() throws IOException {
 		// Write the actual .jar file
 		if(TESTING) printClassFileMap("END JarFileBuilder.close");
@@ -167,23 +162,19 @@ public class JarFileBuilder {
 		return (outputJarFile);
 	}
 	
-	/**
-	 * Add temp .class files to jarOutputStream.
-	 * @throws IOException if something went wrong
-	 */
+	/// Add temp .class files to jarOutputStream.
+	/// @throws IOException if something went wrong
 	public void addTempClassFiles() throws IOException {
 		if(Option.compilerMode != Option.CompilerMode.viaJavaSource) Util.IERR();
 		add(true, new File(Global.tempClassFileDir, Global.packetName), Global.tempClassFileDir.toString().length());
 	}	
 	
-	/**
-	 * Add directory or a file to a JarOutputStream, or
-	 * Put it into the intermediate classFileMap.
-	 * @param doPut true:put it, otherwise add it
-	 * @param source source file or directory
-	 * @param pathSize the path size
-	 * @throws IOException if something went wrong
-	 */
+	/// Add directory or a file to a JarOutputStream, or
+	/// Put it into the intermediate classFileMap.
+	/// @param doPut true:put it, otherwise add it
+	/// @param source source file or directory
+	/// @param pathSize the path size
+	/// @throws IOException if something went wrong
 	private void add(final boolean doPut, final File source, final int pathSize) throws IOException {
 		if(!source.exists())
 			Util.IERR("SimulaCompiler.add: source="+source+", exists="+source.exists());
@@ -218,11 +209,9 @@ public class JarFileBuilder {
 		}
 	}
 	
-	/**
-	 * Expand .jar file entries into the classFileMap.
-	 * @param jarFile the .jar file to read
-	 * @throws IOException if something went wrong
-	 */
+	/// Expand .jar file entries into the classFileMap.
+	/// @param jarFile the .jar file to read
+	/// @throws IOException if something went wrong
 	public void expandJarFile(final JarFile jarFile) throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.expandJarFile: JarFileName="+jarFile.getName());
 		if (Option.verbose)
@@ -245,10 +234,8 @@ public class JarFileBuilder {
 		if(TESTING) printClassFileMap("END JarFileBuilder.expandJarFile");
 	}
 	
-	/**
-	 * Debug utility: printClassFileMap.
-	 * @param title the title String.
-	 */
+	/// Debug utility: printClassFileMap.
+	/// @param title the title String.
 	private void printClassFileMap(String title) {
 		System.out.println("============================== printClassFileMap: "+title+" ==============================");
         for (Entry<String, byte[]> entry : classFileMap.entrySet()) {
@@ -260,12 +247,10 @@ public class JarFileBuilder {
 	}
 
 
-	/**
-	 * Find the .jar file containing an external class or procedure.
-	 * @param identifier class or procedure identifier
-	 * @param externalIdentifier the external identifier if any
-	 * @return the resulting File
-	 */
+	/// Find the .jar file containing an external class or procedure.
+	/// @param identifier class or procedure identifier
+	/// @param externalIdentifier the external identifier if any
+	/// @return the resulting File
 	public static File findJarFile(final String identifier, final String externalIdentifier) {
 		File jarFile = null;
 		try {
@@ -291,20 +276,16 @@ public class JarFileBuilder {
 		return (null);
 	}
 
-	/**
-	 * Add the jarFile to the includeQueue.
-	 * @param jarFile the jarFile to be added
-	 * @throws IOException if something went wrong
-	 */
+	/// Add the jarFile to the includeQueue.
+	/// @param jarFile the jarFile to be added
+	/// @throws IOException if something went wrong
 	public static void addToIncludeQueue(final JarFile jarFile) throws IOException {
 		if(Global.includeQueue == null) Global.includeQueue = new LinkedList<JarFile>();
 		Global.includeQueue.add(jarFile);			
 	}
 
-	/**
-	 * Add the jarFiles in the includeQueue.
-	 * @throws IOException if something went wrong
-	 */
+	/// Add the jarFiles in the includeQueue.
+	/// @throws IOException if something went wrong
 	public void addIncludeQueue() throws IOException {
 		if(Global.includeQueue != null) {
 			for(JarFile jarFile:Global.includeQueue) {
@@ -315,10 +296,8 @@ public class JarFileBuilder {
 		}
 	}
 
-	/**
-	 * Load the jarFiles in the includeQueue using simulaClassLoader.
-	 * @throws IOException if something went wrong
-	 */
+	/// Load the jarFiles in the includeQueue using simulaClassLoader.
+	/// @throws IOException if something went wrong
 	public static void loadIncludeQueue() throws IOException {
 		if(Global.includeQueue != null) {
 			for(JarFile jarFile:Global.includeQueue) {
@@ -329,10 +308,8 @@ public class JarFileBuilder {
 		}
 	}
 
-	/**
-	 * Load the Runtime System using simulaClassLoader.
-	 * @throws IOException if something went wrong
-	 */
+	/// Load the Runtime System using simulaClassLoader.
+	/// @throws IOException if something went wrong
 	public static void loadRuntimeSystem() throws IOException {
 		if(TESTING) System.out.println("JarFileBuilder.loadRuntimeSystem: "+Global.simulaRtsLib);
 		File rtsLib = new File(Global.simulaRtsLib.getParentFile(), "RTS.jar");
@@ -342,13 +319,11 @@ public class JarFileBuilder {
 		loadJarEntries(jarFile, "simula/runtime/", Global.simulaClassLoader);
 	}
 	
-	/**
-	 * Load jarFile entries.
-	 * @param jarFile the jarFile.
-	 * @param packetName the packet name.
-	 * @param loader the SimulaClassLoader to use.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Load jarFile entries.
+	/// @param jarFile the jarFile.
+	/// @param packetName the packet name.
+	/// @param loader the SimulaClassLoader to use.
+	/// @throws IOException if something went wrong.
 	private static void loadJarEntries(final JarFile jarFile, final String packetName, final SimulaClassLoader loader) throws IOException {
 		if(TESTING) System.out.println("\nJarFileBuilder.loadJarEntries: JarFileName="+jarFile.getName());
 		if (Option.verbose)
@@ -431,10 +406,8 @@ public class JarFileBuilder {
 	// ***************************************************************
 	// *** LIST .jar file
 	// ***************************************************************
-	/**
-	 * Debug utility: List .jar file
-	 * @param file the .jar file
-	 */
+	/// Debug utility: List .jar file
+	/// @param file the .jar file
 	public static void listJarFile(final File file) {
 		Util.println("---------  LIST .jar File: " + file + "  ---------");
 		if (!(file.exists() && file.canRead())) {

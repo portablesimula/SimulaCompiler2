@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.parsing;
 
 import java.io.File;
@@ -17,56 +15,36 @@ import java.util.Stack;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
-//*************************************************************************************
-//**                                                            CLASS SourceFileReader
-//*************************************************************************************
-
-/**
-* Utility class SourceFileReader.
-* <p>
-* Input Utilities for the Simula Scanner.
-* <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/parsing/SourceFileReader.java"><b>Source File</b></a>.
-* 
-* @author Øystein Myhre Andersen
-*
-*/
+/// Utility class SourceFileReader.
+/// <p>
+/// Input Utilities for the Simula Scanner.
+/// <p>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/parsing/SourceFileReader.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class SourceFileReader {
 	
-	/**
-	 * The stack of readers
-	 */
+	/// The stack of readers
 	private final Stack<Reader> stack = new Stack<Reader>();
 	
-	/**
-	 * The current Reader
-	 */
+	/// The current Reader
 	private Reader current; // current source file reader;
 	
-	/**
-	 * The stack of file names
-	 */
+	/// The stack of file names
 	private final Stack<String> nameStack = new Stack<String>();
 	
-	/**
-	 * The stack of line numbers
-	 */
+	/// The stack of line numbers
 	private final Stack<Integer> lineStack = new Stack<Integer>();
 
-	/**
-	 * Create a new SourceFileReader.
-	 * @param reader the initial underlying Reader
-	 */
+	/// Create a new SourceFileReader.
+	/// @param reader the initial underlying Reader
 	SourceFileReader(final Reader reader) {
 		current = reader;
 	}
 
-	/**
-	 * Read next character.
-	 * 
-	 * @return next character
-	 */
+	/// Read next character.
+	/// @return next character
 	int read() {
 		int c = -1;
 		try {
@@ -83,11 +61,8 @@ public final class SourceFileReader {
 		return (c);
 	}
 
-	/**
-	 * Insert a file.
-	 * 
-	 * @param file the file to be inserted
-	 */
+	/// Insert a file.
+	/// @param file the file to be inserted
 	void insert(final File file) {
 		lineStack.push(Global.sourceLineNumber);
 		Global.sourceLineNumber = 1;
@@ -95,7 +70,6 @@ public final class SourceFileReader {
 			Reader reader = new InputStreamReader(new FileInputStream(file), Global._CHARSET);
 			nameStack.push(Global.insertName);
 			Global.insertName = file.getName();
-//			System.out.println("SourceFileReader.insert: Global.insertName="+Global.insertName);
 			stack.push(current);
 			current = reader;
 		} catch (IOException e) {
@@ -103,18 +77,14 @@ public final class SourceFileReader {
 		}
 	}
 
-	/**
-	 * Force EOF on the current underlying reader.
-	 */
+	/// Force EOF on the current underlying reader.
 	void forceEOF() {
 		Global.insertName = nameStack.pop();
 		Global.sourceLineNumber = lineStack.pop();
 		current = stack.pop();
 	}
 
-	/**
-	 * Close this source file reader
-	 */
+	/// Close this source file reader
 	void close() {
 		try {
 			current.close();

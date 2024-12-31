@@ -549,7 +549,7 @@ public abstract class Expression extends SyntaxClass {
 	}
 	
 	/**
-	 * Coding utility: Build Evaluation Code.
+	 * ClassFile coding utility: Build Evaluation Code.
 	 * @param rightPart expression
 	 * @param codeBuilder the codeBuilder used.
 	 */

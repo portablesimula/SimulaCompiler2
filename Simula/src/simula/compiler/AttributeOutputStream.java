@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.DataOutputStream;
@@ -11,13 +16,11 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Util;
 
-/**
- * Attribute output stream.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeOutputStream.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Attribute output stream.
+/// <p>
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeOutputStream.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class AttributeOutputStream {
 	/// The underlying DataOutputStream.
 	DataOutputStream oupt;
@@ -25,37 +28,29 @@ public class AttributeOutputStream {
 	/// Debug utility.
 	private boolean TRACE = false; //true;
 
-	/**
-	 * Creates a new AttributeOutputStream to write data to the specified OutputStream.
-	 * @param oupt the underlying OutputStream.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Creates a new AttributeOutputStream to write data to the specified OutputStream.
+	/// @param oupt the underlying OutputStream.
+	/// @throws IOException if an I/O error occurs.
     public AttributeOutputStream(OutputStream oupt) throws IOException {
     	this.oupt = new DataOutputStream(oupt);
     }
 
-    /**
-     * Closes this AttributeOutputStream.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Closes this AttributeOutputStream.
+    /// @throws IOException if an I/O error occurs.
 	public void close() throws IOException { oupt.flush(); oupt.close(); }
 
-	/**
-	 * Writes a kind code to the underlying DataOutputStream.
-	 * @param i a kind code to be written.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Writes a kind code to the underlying DataOutputStream.
+	/// @param i a kind code to be written.
+	/// @throws IOException if an I/O error occurs.
     public void writeKind(int i) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeKind: "+i+':'+ObjectKind.edit(i));
 		if(i > ObjectKind.MAX_VALUE || i < 0) throw new IllegalArgumentException("Argument = "+i);
 		oupt.writeByte(i);
 	}
 
-    /**
-     * Writes a type to the underlying DataOutputStream.
-     * @param type a type to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a type to the underlying DataOutputStream.
+    /// @param type a type to be written.
+    /// @throws IOException if an I/O error occurs.
     public void writeType(Type type) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeType: "+type);
 		if(type == null)
@@ -66,32 +61,26 @@ public class AttributeOutputStream {
 		}
 	}
 	
-    /**
-     * Writes a boolean to the underlying DataOutputStream.
-     * @param b a boolean to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a boolean to the underlying DataOutputStream.
+    /// @param b a boolean to be written.
+    /// @throws IOException if an I/O error occurs.
     public void writeBoolean(boolean b) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeBoolean: "+b);
 		oupt.writeBoolean(b);
 	}
 
-    /**
-     * Writes a short to the underlying DataOutputStream.
-     * @param i a short to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a short to the underlying DataOutputStream.
+    /// @param i a short to be written.
+    /// @throws IOException if an I/O error occurs.
     public void writeShort(int i) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeInt: "+i);
 		if(i > Short.MAX_VALUE || i < Short.MIN_VALUE) throw new IllegalArgumentException("Argument = "+i);
 		oupt.writeShort(i);			
 	}
 
-    /**
-     * Writes a typed constant to the underlying DataOutputStream.
-     * @param c a typed constant to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a typed constant to the underlying DataOutputStream.
+    /// @param c a typed constant to be written.
+    /// @throws IOException if an I/O error occurs.
     public void writeConstant(Object c) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeConstant: "+c);
 		if(c == null)						{ oupt.writeByte(Type.T_VOID); }
@@ -105,11 +94,9 @@ public class AttributeOutputStream {
 		else Util.IERR(""+c.getClass().getSimpleName());
 	}
 
-    /**
-     * Writes a String to the underlying DataOutputStream.
-     * @param s a String to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a String to the underlying DataOutputStream.
+    /// @param s a String to be written.
+    /// @throws IOException if an I/O error occurs.
     public void writeString(String s) throws IOException {
 		if(TRACE) System.out.println("AttributeOutputStream.writeString: "+s);
 		if(s == null) oupt.writeShort(0);
@@ -120,20 +107,16 @@ public class AttributeOutputStream {
 		}
 	}
 
-    /**
-     * Writes a Object list to the underlying DataOutputStream.
-     * @param list a Object list to be written.
-     * @throws IOException if an I/O error occurs.
-     */
+    /// Writes a Object list to the underlying DataOutputStream.
+    /// @param list a Object list to be written.
+    /// @throws IOException if an I/O error occurs.
 	public void writeObjectList(ObjectList<?> list) throws IOException {
 		ObjectList.write(list, this);
 	}
 
-	/**
-	 * Writes a Object to the underlying DataOutputStream.
-	 * @param obj a Object to be written.
-	 * @throws IOException if an I/O error occurs.
-	 */
+	/// Writes a Object to the underlying DataOutputStream.
+	/// @param obj a Object to be written.
+	/// @throws IOException if an I/O error occurs.
     public void writeObj(SyntaxClass obj) throws IOException {
 		if(obj == null) {
 			if(TRACE) System.out.println("AttributeOutputStream.writeObj: null");

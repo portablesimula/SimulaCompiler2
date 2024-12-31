@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler;
 
 import java.io.File;
@@ -20,15 +18,12 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Java source-file coder.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/JavaSourceFileCoder.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen 
- *
- */
+/// Java source-file coder.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/JavaSourceFileCoder.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen 
 public final class JavaSourceFileCoder {
 	
 	/// The enclosing JavaSourceFileCoder
@@ -49,10 +44,8 @@ public final class JavaSourceFileCoder {
 	/// Signals that ByteCodeEngineering is necessary.
 	public boolean mustDoByteCodeEngineering;
 
-	/**
-	 * Create a new JavaSourceFileCoder.
-	 * @param blockDeclaration argument
-	 */
+	/// Create a new JavaSourceFileCoder.
+	/// @param blockDeclaration argument
 	public JavaSourceFileCoder(final BlockDeclaration blockDeclaration) {
 		this.blockDeclaration = blockDeclaration;
 		Global.javaSourceFileCoders.add(this);
@@ -72,27 +65,21 @@ public final class JavaSourceFileCoder {
 		}
 	}
 
-	/**
-	 * Edit the current module's identification.
-	 * @return the current module's identification
-	 */
+	/// Edit the current module's identification.
+	/// @return the current module's identification
 	private String modid() {
 		BlockDeclaration blk = Global.currentJavaFileCoder.blockDeclaration;
 		return (blk.declarationKind + " " + blk.scopeID());
 	}
 
-	/**
-	 * Returns the output file for generated Java code.
-	 * @return the output file for generated Java code
-	 */
+	/// Returns the output file for generated Java code.
+	/// @return the output file for generated Java code
 	String getClassOutputFileName() {
 		return (Global.tempClassFileDir + "/" + Global.packetName + '/' + blockDeclaration.getJavaIdentifier() + ".class");
 	}
 
-	/**
-	 * Close Java output file.
-	 * @throws RuntimeException if writing .java output failed
-	 */
+	/// Close Java output file.
+	/// @throws RuntimeException if writing .java output failed
 	public void closeJavaOutput() {
 		try {
 			writer.flush();
@@ -104,32 +91,26 @@ public final class JavaSourceFileCoder {
 		enclosingJavaCoder = null;
 	}
 
-	/**
-	 * Output a debug code line.
-	 * <p>
-	 * To optimize, it is safe to drop such lines
-	 * 
-	 * @param line a debug code line
-	 */
+	/// Output a debug code line.
+	/// <p>
+	/// To optimize, it is safe to drop such lines
+	/// 
+	/// @param line a debug code line
 	public static void debug(final String line) {
 		code(line);
 	}
 
-	/**
-	 * Output a code line without comment.
-	 * 
-	 * @param line a code line
-	 */
+	/// Output a code line without comment.
+	/// 
+	/// @param line a code line
 	public static void code(final String line) {
 		Global.currentJavaFileCoder.write(Global.sourceLineNumber, line, Global.currentJavaFileCoder.modid());
 	}
 
-	/**
-	 * Output a code line with comment.
-	 * 
-	 * @param line a code line
-	 * @param comment a comment string
-	 */
+	/// Output a code line with comment.
+	/// 
+	/// @param line a code line
+	/// @param comment a comment string
 	public static void code(final String line, final String comment) {
 		code(line + " // " + comment);
 	}
@@ -143,12 +124,10 @@ public final class JavaSourceFileCoder {
 	/// Current indentation
 	private int indent;
 
-	/**
-	 * Write a code line to the Java output writer.
-	 * @param sourceLineNumber the source line number
-	 * @param line the code line string
-	 * @param modid module identifier
-	 */
+	/// Write a code line to the Java output writer.
+	/// @param sourceLineNumber the source line number
+	/// @param line the code line string
+	/// @param modid module identifier
 	private void write(final int sourceLineNumber, final String line, final String modid) {
 		Util.ASSERT(sourceLineNumber > 0, "Invariant");
 		try {
@@ -179,17 +158,14 @@ public final class JavaSourceFileCoder {
 		prevLineNumber = sourceLineNumber;
 	}
 
-	/**
-	 * Code Utility: Edit line number comment line.
-	 * <p>
-	 * On the form:
-	 * <pre>
-	 * 		// JavaLine currentJavaLineNumber &lt;== SourceLine simulaLine
-	 * </pre>
-	 * @param simulaLine Simula line number
-	 * @param modid the module identifier
-	 * @return the resulting Java source line
-	 */
+	/// Code Utility: Edit line number comment line.
+	///
+	/// On the form:
+	///
+	/// 		// JavaLine currentJavaLineNumber <== SourceLine simulaLine
+	/// @param simulaLine Simula line number
+	/// @param modid the module identifier
+	/// @return the resulting Java source line
 	private String edLineNumberLine(final int simulaLine, final String modid) {
 		StringBuilder sb = new StringBuilder();
 		if (Global.duringSTM_Coding && Option.internal.GNERATE_LINE_CALLS) {
@@ -199,10 +175,8 @@ public final class JavaSourceFileCoder {
 		return (sb.toString());
 	}
 
-	/** 
-	 * Utility: Edit indent string
-	 * @return the indent string
-	 */
+	/// Utility: Edit indent string
+	/// @return the indent string
 	private String edIndent() {
 		int i = indent;
 		String s = "";
@@ -211,19 +185,15 @@ public final class JavaSourceFileCoder {
 		return (s);
 	}
 
-	/**
-	 * Append an entry to the line map.
-	 * @param javaLine the Java line number
-	 * @param simulaLine the simula line number
-	 */
+	/// Append an entry to the line map.
+	/// @param javaLine the Java line number
+	/// @param simulaLine the simula line number
 	private void appendLine(final int javaLine, final int simulaLine) {
 		lineMap.add(javaLine);
 		lineMap.addElement(simulaLine);
 	}
 
-	/**
-	 * Output program info. I.e. identifier and lineMap.
-	 */
+	/// Output program info. I.e. identifier and lineMap.
 	public void codeProgramInfo() {
 		appendLine(currentJavaLineNumber, blockDeclaration.lastLineNumber);
 		// public static RTS_PROGINFO _INFO=new
@@ -242,10 +212,8 @@ public final class JavaSourceFileCoder {
 		writeCode(s.toString());
 	}
 
-	/**
-	 * Write a code line to the Java output writer.
-	 * @param s the code line string
-	 */
+	/// Write a code line to the Java output writer.
+	/// @param s the code line string
 	private void writeCode(String s) {
 		if (Option.internal.TRACE_CODING)
 			Util.println("CODE " + Global.sourceLineNumber + ": " + s);

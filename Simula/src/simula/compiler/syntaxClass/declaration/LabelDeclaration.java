@@ -167,7 +167,7 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 	}
 	
 	/**
-	 * Coding utility: Build Virtual Match Method Body.
+	 * ClassFile coding utility: Build Virtual Match Method Body.
 	 * @param prefixLevel the prefix level.
 	 * @param codeBuilder the codeBuilder to use.
 	 */

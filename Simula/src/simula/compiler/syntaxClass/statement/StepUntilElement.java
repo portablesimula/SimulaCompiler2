@@ -120,7 +120,7 @@ public class StepUntilElement extends ForListElement {
 	/// Used to make deltaID unique.
 	private static int DELTA_SEQU=0;
 	/**
-	 * Coding utility: generalCase.
+	 * ClassFile coding utility: generalCase.
 	 * <pre>
 	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
 	 *
@@ -167,7 +167,7 @@ public class StepUntilElement extends ForListElement {
 
 	
 	/**
-	 * Coding utility: doSingleElementByteCoding
+	 * ClassFile coding utility: doSingleElementByteCoding
 	 * <pre>
 	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
 	 *

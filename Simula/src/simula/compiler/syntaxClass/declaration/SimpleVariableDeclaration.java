@@ -202,7 +202,7 @@ public class SimpleVariableDeclaration extends Declaration {
 
 	
 	/**
-	 * Coding utility: get FieldRefEntry of this SimpleVariable.
+	 * ClassFile coding utility: get FieldRefEntry of this SimpleVariable.
 	 * @param pool the ConstantPoolBuilder to use.
 	 * @return the FieldRefEntry of this SimpleVariable.
 	 */

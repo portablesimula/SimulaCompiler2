@@ -530,7 +530,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	}
 
 	/**
-	 * Coding utility: Build the statements.
+	 * ClassFile coding utility: Build the statements.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
 	private void build_STMS(CodeBuilder codeBuilder) {

@@ -177,7 +177,7 @@ public class BuildCP {
 	// *** BuildCP.normalStandardProcedure
 	// ********************************************************************
 	/**
-	 * Coding utility: BuildCP.normalStandardProcedure
+	 * ClassFile coding utility: BuildCP.normalStandardProcedure
 	 * @param variable the variable.
 	 * @param codeBuilder the codeBuilder to use.
 	 */
@@ -217,7 +217,7 @@ public class BuildCP {
 	// *** BuildCP.staticStandardProcedure
 	// ********************************************************************
 	/**
-	 * Coding utility: BuildCP.staticStandardProcedure
+	 * ClassFile coding utility: BuildCP.staticStandardProcedure
 	 * @param variable the variable.
 	 * @param codeBuilder the codeBuilder to use.
 	 */

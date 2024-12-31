@@ -101,7 +101,7 @@ public class InspectVariableDeclaration extends Declaration {
 	}
 
 	/**
-	 * Coding utility: get FieldRefEntry of this InspectVariable.
+	 * ClassFile coding utility: get FieldRefEntry of this InspectVariable.
 	 * @param pool the ConstantPoolBuilder to use.
 	 * @return the FieldRefEntry of this InspectVariable.
 	 */

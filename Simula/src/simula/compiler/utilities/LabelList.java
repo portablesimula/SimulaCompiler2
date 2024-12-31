@@ -196,7 +196,7 @@ public class LabelList {
 	}
 	
 	/**
-	 * Coding utility: Make this LabelList ready for coding.
+	 * ClassFile coding utility: Make this LabelList ready for coding.
 	 * @param codeBuilder the codeBuilder to use
 	 */
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {
@@ -220,7 +220,7 @@ public class LabelList {
 	}
 	
 	/**
-	 * Coding utility: Build the TableSwitch Instruction.
+	 * ClassFile coding utility: Build the TableSwitch Instruction.
 	 * @param codeBuilder the codeBuilder to use
 	 */
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
@@ -252,7 +252,7 @@ public class LabelList {
 	}
 	
 	/**
-	 * Coding utility: Build a labelBinding.
+	 * ClassFile coding utility: Build a labelBinding.
 	 * @param label the label to bind
 	 * @param codeBuilder the codeBuilder to use
 	 */
