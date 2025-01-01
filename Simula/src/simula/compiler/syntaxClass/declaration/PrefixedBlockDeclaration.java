@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -34,51 +32,47 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Prefixed Block Declaration.
- * <pre>
- * Simula Standard: 4.10.1 Prefixed blocks
- *
- *  prefixed-block = block-prefix main-block
- *  
- *     block-prefix = class-identifier [ actual-parameter-part ]
- *     
- *     main-block
- *        = block
- *        | compound-statement
- *        
- *       actual-parameter-part = "(" actual-parameter { , actual-parameter } ")"
- *       
- *          actual-parameter = expression
- *                           | array-identifier-1
- *                           | switch-identifier
- *                           | procedure-identifier-1
- *          
- *          compound-statement = BEGIN statement { ; statement } END
- *
- * </pre>
- * 
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/PrefixedBlockDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Prefixed Block Declaration.
+/// <pre>
+/// Simula Standard: 4.10.1 Prefixed blocks
+/// 
+///  prefixed-block = block-prefix main-block
+///  
+///     block-prefix = class-identifier [ actual-parameter-part ]
+///     
+///     main-block
+///        = block
+///        | compound-statement
+///        
+///       actual-parameter-part = "(" actual-parameter { , actual-parameter } ")"
+///       
+///          actual-parameter = expression
+///                           | array-identifier-1
+///                           | switch-identifier
+///                           | procedure-identifier-1
+///          
+///          compound-statement = BEGIN statement { ; statement } END
+/// 
+/// </pre>
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/PrefixedBlockDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	
 	/**
-	 * The block prefix.
+	/// The block prefix.
 	 */
 	public VariableExpression blockPrefix;
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTOR
 	// ***********************************************************************************************
-	/**
-	 * PrefixedBlock.
-	 * @param isMainModule true: this is the main module.
-	 */
+	/// PrefixedBlock.
+	/// @param isMainModule true: this is the main module.
 	private PrefixedBlockDeclaration(boolean isMainModule) {
 		super(null);
 		if(isMainModule)
@@ -89,12 +83,10 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	// *** Expect Prefixed Block
 	// ***********************************************************************************************
-	/**
-	 * Parse Utility: Expect PrefixedBlockDeclaration
-	 * @param blockPrefix the block prefix
-	 * @param isMainModule true if main module
-	 * @return the resulting PrefixedBlockDeclaration
-	 */
+	/// Parse Utility: Expect PrefixedBlockDeclaration
+	/// @param blockPrefix the block prefix
+	/// @param isMainModule true if main module
+	/// @return the resulting PrefixedBlockDeclaration
 	public static PrefixedBlockDeclaration expectPrefixedBlock(final VariableExpression blockPrefix,boolean isMainModule) {
 		PrefixedBlockDeclaration block=new PrefixedBlockDeclaration(isMainModule);
 		block.lineNumber=Parse.prevToken.lineNumber;
@@ -109,7 +101,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			Statement stm = Statement.expectStatement();
 			if (stm != null) block.statements.add(stm);
 		}
-//		block.externalIdent = block.identifier;
 		block.lastLineNumber = Global.sourceLineNumber;
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+block.lineNumber+": PrefixedBlockDeclaration: "+block);
 		Global.setScope(block.declaredIn);
@@ -131,7 +122,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 			ClassDeclaration prefix=this.getPrefixClass();
 			if(prefix!=null) {
 				prefix.doChecking();
-//				LabelList.accumLabelList(this);
 			}
 			LabelList.accumLabelList(this);
 			Global.exitScope();
@@ -144,7 +134,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 
 		for (Declaration dcl : declarationList)	dcl.doChecking();
 		for (Statement stm : statements) stm.doChecking();
-//		doCheckLabelList(this.getPrefixClass());
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -208,9 +197,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodeConstructor
 	// ***********************************************************************************************
-	/**
-	 * Coding Utility: Code the constructor.
-	 */
+	/// Coding Utility: Code the constructor.
 	private void doCodeConstructor() {
 		JavaSourceFileCoder.debug("// Normal Constructor");
 		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList());
@@ -226,8 +213,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		JavaSourceFileCoder.code("}");
 	}
 
-
-
+	
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber=lineNumber;
@@ -285,7 +271,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 						.withFlags(ClassFile.ACC_PUBLIC + ClassFile.ACC_SUPER)
 						.withSuperclass(this.superClassDesc());
 
-					// Add Fields (Attributes and parameters)
 					if(this.hasAccumLabel())
 						for (LabelDeclaration lab : labelList.getAccumLabels())
 							lab.buildDeclaration(classBuilder,this);
@@ -298,7 +283,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 					
 					for (VirtualSpecification virtual : virtualSpecList)
 						if (!virtual.hasDefaultMatch)
-							//virtual.doJavaCoding();
 							virtual.buildMethod(classBuilder);
 					
 					for (VirtualMatch match : virtualMatchList)
@@ -316,7 +300,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 								codeBuilder -> buildIsQPSystemBlock(codeBuilder));
 					
 					if (isDetachUsed())
-						//JavaSourceFileCoder.code("public boolean isDetachUsed() { return(true); }");
 						classBuilder
 							.withMethodBody("isDetachUsed", MethodTypeDesc.ofDescriptor("()Z"), ClassFile.ACC_PUBLIC,
 								codeBuilder -> buildIsMethodDetachUsed(codeBuilder));
@@ -372,9 +355,7 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Private Constructor used by Attribute File I/O.
-	 */
+	/// Private Constructor used by Attribute File I/O.
 	private PrefixedBlockDeclaration() {
 		super(null);
 	}
@@ -391,7 +372,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		//oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
@@ -417,12 +397,10 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		oupt.writeObj(blockPrefix);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static PrefixedBlockDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		PrefixedBlockDeclaration pbl = new PrefixedBlockDeclaration();
@@ -436,7 +414,6 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 		//pbl.identifier = inpt.readString();
 		pbl.externalIdent = inpt.readString();
 		pbl.type = inpt.readType();
-//		pbl.declaredIn = (DeclarationScope) inpt.readObj();
 
 		// *** DeclarationScope
 		pbl.sourceFileName = inpt.readString();

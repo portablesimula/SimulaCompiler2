@@ -5,12 +5,15 @@
  * You find a copy of the License on the following
  * page: https://creativecommons.org/licenses/by/4.0/
  */
-package simula.compiler.syntaxClass.declaration;
+package simula.compiler.utilities;
 
 import java.io.IOException;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.syntaxClass.Type;
+import simula.compiler.syntaxClass.declaration.DeclarationScope;
+import simula.compiler.syntaxClass.declaration.Parameter;
+import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
@@ -53,7 +56,7 @@ import simula.compiler.utilities.Util;
  *             identifier-list = identifier { , identifier }
  * </pre>
  * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureSpecification.java">
+ * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureSpecification.java">
  * <b>Source File</b></a>.
  * 
  * @author SIMULA Standards Group
@@ -117,7 +120,7 @@ public final class ProcedureSpecification {
 	 * @param type procedure's type
 	 * @return a newly created ProcedureSpecification
 	 */
-	static ProcedureSpecification expectProcedureSpecification(final Type type) {
+	public static ProcedureSpecification expectProcedureSpecification(final Type type) {
 		ProcedureDeclaration block = ProcedureDeclaration.expectProcedureDeclaration(type);
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ProcedureSpecification: " + block);
@@ -135,7 +138,7 @@ public final class ProcedureSpecification {
 	 * 
 	 * @param scope the DeclarationScope
 	 */
-	void doChecking(final DeclarationScope scope) {
+	public void doChecking(final DeclarationScope scope) {
 		if (type != null)
 			type.doChecking(scope);
 		// Check parameters
@@ -163,12 +166,6 @@ public final class ProcedureSpecification {
 	public ProcedureSpecification() {
 	}
 
-	/**
-	 * Write a ProcedureSpecification to a AttributeOutputStream.
-	 * @param spec the ProcedureSpecification to be written.
-	 * @param oupt the AttributeOutputStream to write to.
-	 * @throws IOException if something went wrong.
-	 */
 	public static void writeProcedureSpec(ProcedureSpecification spec,AttributeOutputStream oupt) throws IOException {
 		if(spec == null) {
 			oupt.writeBoolean(false);
@@ -187,12 +184,6 @@ public final class ProcedureSpecification {
 		}
 	}
 	
-	/**
-	 * Read and return a ProcedureSpecification.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the ProcedureSpecification read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
 	@SuppressWarnings("unchecked")
 	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();

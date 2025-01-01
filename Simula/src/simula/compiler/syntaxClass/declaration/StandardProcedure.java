@@ -16,6 +16,7 @@ import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.Util;
 
 /**

@@ -32,7 +32,6 @@ import simula.compiler.syntaxClass.declaration.InspectVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
-import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.SwitchDeclaration;
@@ -42,6 +41,7 @@ import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
+import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 

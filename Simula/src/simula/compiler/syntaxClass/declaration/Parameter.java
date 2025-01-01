@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -30,42 +28,27 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 	
-/**
- * Parameter Declaration.
- * <p>
- * A parameter models class and procedure parameters.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Parameter.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Parameter Declaration.
+/// 
+/// A parameter models class and procedure parameters.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Parameter.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class Parameter extends Declaration {
-	// String identifier; // Inherited
-	// String externalIdent; // Inherited
-	// Type type; // Inherited:
-	
-	/**
-	 * Parameter transfer Mode.
-	 */
+	/// Parameter transfer Mode.
 	public int mode;
 	
-	/**
-	 * Parameter Kind.
-	 */
+	/// Parameter Kind.
 	public int kind;
 	
-	/**
-	 * Parameter's number of dimension in case of array kind.
-	 * Set during doChecking
-	 */
+	/// Parameter's number of dimension in case of array kind.
+	/// Set during doChecking
 	public int nDim = -1;
 
-	/**
-	 * Procedure parameter transfer Mode.
-	 */
+	/// Procedure parameter transfer Mode.
 	public class Mode {
 		/** Parameter transfered by value */ public static final int value = 1;
 		/** Parameter transfered by name */  public static final int name = 2;
@@ -73,11 +56,9 @@ public final class Parameter extends Declaration {
 		/** Default constructor: Not used */ public Mode() {}
 	}
 	
-	/**
-	 * Utility: edMode
-	 * @param mode a mode code
-	 * @return the resulting String
-	 */
+	/// Utility: edMode
+	/// @param mode a mode code
+	/// @return the resulting String
 	public static String edMode(int mode) {
 		switch(mode) {
 			case 1: return("value");
@@ -86,10 +67,7 @@ public final class Parameter extends Declaration {
 		return("default");
 	}
 	
-
-	/**
-	 * Procedure parameter Kind.
-	 */
+	/// Procedure parameter Kind.
 	public class Kind {
 		/** Simple parameter */    public static final int Simple = 1;
 		/** Procedure parameter */ public static final int Procedure = 2;
@@ -99,11 +77,9 @@ public final class Parameter extends Declaration {
 		/** Default constructor: Not used */ public Kind() {}
 	}
 	
-	/**
-	 * Utility: edKind
-	 * @param kind a kind code
-	 * @return the resulting String
-	 */
+	/// Utility: edKind
+	/// @param kind a kind code
+	/// @return the resulting String
 	public static String edKind(int kind) {
 		switch(kind) {
 			case 1: return("Simple");
@@ -114,34 +90,28 @@ public final class Parameter extends Declaration {
 		return("Default");
 	}
 
-	/**
-	 * Create a new Parameter.
-	 * @param identifier parameter identifier
-	 */
+	/// Create a new Parameter.
+	/// @param identifier parameter identifier
 	Parameter(final String identifier) {
 		super(identifier);
 		this.declarationKind = ObjectKind.Parameter;
 	}
 
-	/**
-	 * Create a new Parameter.
-	 * @param identifier parameter identifier
-	 * @param type parameter type
-	 * @param kind parameter kind
-	 */
+	/// Create a new Parameter.
+	/// @param identifier parameter identifier
+	/// @param type parameter type
+	/// @param kind parameter kind
 	Parameter(final String identifier, final Type type, final int kind) {
 		this(identifier);
 		this.type = type;
 		this.kind = kind;
 	}
 
-	/**
-	 * Create a new Parameter.
-	 * @param identifier parameter identifier
-	 * @param type parameter type
-	 * @param kind parameter kind
-	 * @param nDim parameter's number of dimension in case of array kind.
-	 */
+	/// Create a new Parameter.
+	/// @param identifier parameter identifier
+	/// @param type parameter type
+	/// @param kind parameter kind
+	/// @param nDim parameter's number of dimension in case of array kind.
 	public Parameter(final String identifier, final Type type, final int kind, final int nDim) {
 		this(identifier, type, kind);
 		this.nDim = nDim;
@@ -150,10 +120,8 @@ public final class Parameter extends Declaration {
 	// ***********************************************************************************************
 	// *** Utility: into
 	// ***********************************************************************************************
-	/**
-	 * Add this parameter to the given parameter list.
-	 * @param parameterList the given parameter list
-	 */
+	/// Add this parameter to the given parameter list.
+	/// @param parameterList the given parameter list
 	void into(final Vector<Parameter> parameterList) {
 		for (Parameter par : parameterList)
 			if (Util.equals(par.identifier, this.identifier)) {
@@ -177,30 +145,24 @@ public final class Parameter extends Declaration {
 		return (true);
 	}
 
-	/**
-	 * Utility: Set new parameter mode.
-	 * @param mode the new mode
-	 */
+	/// Utility: Set new parameter mode.
+	/// @param mode the new mode
 	void setMode(final int mode) {
 		if (this.mode != 0)
 			Util.error("Parameter " + identifier + " is already specified by " + this.mode);
 		this.mode = mode;
 	}
 
-	/**
-	 * Utility: Set new type and kind.
-	 * @param type the new type
-	 * @param kind the new kind
-	 */
+	/// Utility: Set new type and kind.
+	/// @param type the new type
+	/// @param kind the new kind
 	void setTypeAndKind(final Type type, final int kind) {
 		this.type = type;
 		this.kind = kind;
 	}
 
-	/**
-	 * Utility: Set new external identifier based on the given prefix level.
-	 * @param prefixLevel the given prefix level
-	 */
+	/// Utility: Set new external identifier based on the given prefix level.
+	/// @param prefixLevel the given prefix level
 	void setExternalIdentifier(final int prefixLevel) {
 		if (prefixLevel > 0)
 			 externalIdent = "p" + prefixLevel + '_' + identifier;
@@ -224,33 +186,31 @@ public final class Parameter extends Declaration {
 		SET_SEMANTICS_CHECKED();
 	}
 
-	/**
-	 * Check if the parameter has a legal transmission mode.
-	 * <p>
-	 * The available transmission modes for the different kinds of parameters to
-	 * procedures.
-	 * 
-	 * <pre>
-	 *     --------------------------------------------------------------
-	 *    |                       |         Transmission modes           |
-	 *    |   Parameter           | - - - - - - - - - - - - - - - - - - -|
-	 *    |                       |  by value | by reference |  by name  |
-	 *    |--------------------------------------------------------------|
-	 *    |   value type          |     D     |       I      |     O     |
-	 *    |   object ref. type    |     I     |       D      |     O     |
-	 *    |   text                |     O     |       D      |     O     |
-	 *    |   value type array    |     O     |       D      |     O     |
-	 *    |   reference type array|     I     |       D      |     O     |
-	 *    |   procedure           |     I     |       D      |     O     |
-	 *    |   type procedure      |     I     |       D      |     O     |
-	 *    |   label               |     I     |       D      |     O     |
-	 *    |   switch              |     I     |       D      |     O     |
-	 *     --------------------------------------------------------------
-	 *
-	 *        D:  default mode       O:  optional mode       I:  illegal
-	 * </pre>
-	 * @return true if the parameter has a legal transmission mode
-	 */
+	/// Check if the parameter has a legal transmission mode.
+	/// 
+	/// The available transmission modes for the different kinds of parameters to
+	/// procedures.
+	/// 
+	/// <pre>
+	///     --------------------------------------------------------------
+	///    |                       |         Transmission modes           |
+	///    |   Parameter           | - - - - - - - - - - - - - - - - - - -|
+	///    |                       |  by value | by reference |  by name  |
+	///    |--------------------------------------------------------------|
+	///    |   value type          |     D     |       I      |     O     |
+	///    |   object ref. type    |     I     |       D      |     O     |
+	///    |   text                |     O     |       D      |     O     |
+	///    |   value type array    |     O     |       D      |     O     |
+	///    |   reference type array|     I     |       D      |     O     |
+	///    |   procedure           |     I     |       D      |     O     |
+	///    |   type procedure      |     I     |       D      |     O     |
+	///    |   label               |     I     |       D      |     O     |
+	///    |   switch              |     I     |       D      |     O     |
+	///     --------------------------------------------------------------
+	/// 
+	///        D:  default mode       O:  optional mode       I:  illegal
+	/// </pre>
+	/// @return true if the parameter has a legal transmission mode
 	private boolean legalTransmitionMode() {
 		boolean illegal = false;
 		switch (kind) {
@@ -276,10 +236,8 @@ public final class Parameter extends Declaration {
 		return (!illegal);
 	}
 
-	/**
-	 * ClassFile coding utility: edit Java code version of this parameter's type.
-	 * @return the resulting Java code
-	 */
+	/// Java coding utility: edit Java code version of this parameter's type.
+	/// @return the resulting Java code
 	String toJavaType() {
 		ASSERT_SEMANTICS_CHECKED();
 		if (mode == Parameter.Mode.name) {
@@ -306,13 +264,10 @@ public final class Parameter extends Declaration {
 		return (toJavaType() + ' ' + externalIdent);
 	}
 	
-	/**
-	 * ClassFile coding utility: buildParamCode
-	 * @param codeBuilder the codeBuilder to use
-	 * @param expr parameter value expression
-	 */
+	/// ClassFile coding utility: buildParamCode
+	/// @param codeBuilder the codeBuilder to use
+	/// @param expr parameter value expression
 	public void buildParamCode(CodeBuilder codeBuilder,Expression expr) {
-//		ASSERT_SEMANTICS_CHECKED();
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if (mode == Parameter.Mode.name) {
 			buildNameParam(codeBuilder,this,expr);
@@ -376,40 +331,31 @@ public final class Parameter extends Declaration {
 			case Kind.Simple ->  {
 				expr.buildEvaluation(null,codeBuilder);
 				if(mode == Parameter.Mode.value && type.keyWord == Type.T_TEXT) {
-//					codeBuilder.invokestatic(RTS.CD.RTS_ENVIRONMENT,
-//							"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 					RTS.invokestatic_ENVIRONMENT_copy(codeBuilder);
 				}
 			}
 		}
 	}
 	
-	/**
-	 * ClassFile coding utility: buildNameParam
-	 * @param codeBuilder to use
-	 * @param expr the Thunk expression to be evaluated.
-	 */
+	/// ClassFile coding utility: buildNameParam
+	/// @param codeBuilder to use
+	/// @param expr the Thunk expression to be evaluated.
 	public static void buildNameParam(CodeBuilder codeBuilder,Expression expr) {
-//		buildNameParam(codeBuilder,null,expr);
 		Thunk.buildInvoke(0, expr, codeBuilder);
 	}	
 	
-	/**
-	 * ClassFile coding utility: buildNameParam
-	 * @param codeBuilder to use
-	 * @param par the parameter used decide parameter kind
-	 * @param expr the Thunk expression to be evaluated.
-	 */
+	/// ClassFile coding utility: buildNameParam
+	/// @param codeBuilder to use
+	/// @param par the parameter used decide parameter kind
+	/// @param expr the Thunk expression to be evaluated.
 	private static void buildNameParam(CodeBuilder codeBuilder,Parameter par,Expression expr) {
 		Thunk.buildInvoke((par==null)?0:par.kind, expr, codeBuilder);
 	}
 	
 
-	/**
-	 * ClassFile coding utility: get FieldRefEntry of this Parameter.
-	 * @param pool the ConstantPoolBuilder to use.
-	 * @return the FieldRefEntry of this Parameter.
-	 */
+	/// ClassFile coding utility: get FieldRefEntry of this Parameter.
+	/// @param pool the ConstantPoolBuilder to use.
+	/// @return the FieldRefEntry of this Parameter.
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		ClassDesc CD_type=null; //type.toClassDesc(kind,mode);
@@ -419,10 +365,8 @@ public final class Parameter extends Declaration {
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), CD_type));
 	}
 	
-	/**
-	 * ClassFile coding utility: get getFieldIdentifier of this Parameter.
-	 * @return the resulting String.
-	 */
+	/// ClassFile coding utility: get getFieldIdentifier of this Parameter.
+	/// @return the resulting String.
 	@Override
 	public String getFieldIdentifier() {
 		if(declaredIn instanceof ClassDeclaration cls)
@@ -430,9 +374,7 @@ public final class Parameter extends Declaration {
 		else return("p_"+identifier);
 	}
 
-	/**
-	 * ClassFile coding utility: buildDeclaration of this Parameter.
-	 */
+	/// ClassFile coding utility: buildDeclaration of this Parameter.
 	@Override
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		String ident = getFieldIdentifier();
@@ -457,10 +399,8 @@ public final class Parameter extends Declaration {
 		}
 	}
 	
-	/**
-	 * ClassFile coding utility: Parameter type toClassDesc.
-	 * @return the resulting CalssDesc
-	 */
+	/// ClassFile coding utility: Parameter type toClassDesc.
+	/// @return the resulting CalssDesc
 	public ClassDesc type_toClassDesc() {
 		switch(this.kind) {
 		case Kind.Array: return(this.type.toClassDesc(this.kind,this.mode));
@@ -472,11 +412,9 @@ public final class Parameter extends Declaration {
 		}
 	}
 
-	/**
-	 * ClassFile coding utility: generate load instruction dependent of type.
-	 * @param codeBuilder the codeBuilder to use
-	 * @param ofst the parameter offset.
-	 */
+	/// ClassFile coding utility: generate load instruction dependent of type.
+	/// @param codeBuilder the codeBuilder to use
+	/// @param ofst the parameter offset.
 	public void loadParameter(CodeBuilder codeBuilder,int ofst) {
 		if (mode == Parameter.Mode.name) codeBuilder.aload(ofst);
 		else if (kind == Parameter.Kind.Array) codeBuilder.aload(ofst);
@@ -501,12 +439,10 @@ public final class Parameter extends Declaration {
 	// ***********************************************************************************************
 	// *** Printing Utility: editParameterList
 	// ***********************************************************************************************
-	/**
-	 * Printing Utility: edit parameter list.
-	 * @param parameterList the given parameter list
-	 * @return the resulting string
-	 */
-	static String editParameterList(Vector<Parameter> parameterList) {
+	/// Printing Utility: edit parameter list.
+	/// @param parameterList the given parameter list
+	/// @return the resulting string
+	public static String editParameterList(Vector<Parameter> parameterList) {
 		StringBuilder s = new StringBuilder();
 		s.append('(');
 		boolean first = true;
@@ -524,7 +460,6 @@ public final class Parameter extends Declaration {
 	
 	@Override
 	public void printTree(final int indent, final Object head) {
-//		if(head != this.declaredIn) Util.IERR();
 		System.out.println(edTreeIndent(indent)+this);
 	}
 	
@@ -549,9 +484,7 @@ public final class Parameter extends Declaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private Parameter() {
 		super(null);
 		this.declarationKind = ObjectKind.Parameter;
@@ -570,12 +503,10 @@ public final class Parameter extends Declaration {
 		oupt.writeShort(mode);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		Parameter par = new Parameter();
 		par.OBJECT_SEQU = inpt.readSEQU(par);
@@ -588,25 +519,5 @@ public final class Parameter extends Declaration {
 		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
 		return(par);
 	}
-
-//	public void writeParameter(AttributeOutputStream oupt) throws IOException {
-//		Util.TRACE_OUTPUT("Parameter: " + type + ' ' + identifier + ' ' + kind + ' ' + mode);
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);
-//		oupt.writeShort(kind);
-//		oupt.writeShort(mode);
-//	}
-//	
-//	public static Parameter readParameter(AttributeInputStream inpt) throws IOException {
-//		Parameter par = new Parameter();
-//		par.identifier = inpt.readString();
-//		par.externalIdent = inpt.readString();
-//		par.type = inpt.readType();
-//		par.kind = inpt.readShort();
-//		par.mode = inpt.readShort();
-//		Util.TRACE_INPUT("Parameter: " + par.type + ' ' + par.identifier + ' ' + par.kind + ' ' + par.mode);
-//		return(par);
-//	}
 
 }

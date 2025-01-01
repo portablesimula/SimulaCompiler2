@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -36,56 +34,47 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Maybe Block Declaration. I.e: CompoundStatement or SubBlock depends on
- * whether it contains declarations.
- * 
- * <pre>
- * Simula Standard: 4.9 Compound statement
- * Simula Standard: 4.9 Blocks
- *  
- *   MaybeBlockDeclaration = compound-statement | subblock
- * 
- *	    compound-statement = BEGIN [ { statement ; } ] END
- *
- * 	    subblock = BEGIN [ { declaration ; } ]  [ { statement ; } ] END
- *
- * </pre>
- * 
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/MaybeBlockDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Maybe Block Declaration. I.e: CompoundStatement or SubBlock depends on
+/// whether it contains declarations.
+/// 
+/// <pre>
+/// Simula Standard: 4.9 Compound statement
+/// Simula Standard: 4.9 Blocks
+///  
+///   MaybeBlockDeclaration = compound-statement | subblock
+/// 
+/// 	    compound-statement = BEGIN [ { statement ; } ] END
+/// 
+/// 	    subblock = BEGIN [ { declaration ; } ]  [ { statement ; } ] END
+/// 
+/// </pre>
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/MaybeBlockDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class MaybeBlockDeclaration extends BlockDeclaration {
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
 	// ***********************************************************************************************
-	// Used by expectMaybeBlock, i.e. CompoundStatement or SubBlock.
-	/**
-	 * Create a new MaybeBlockDeclaration.
-	 * 
-	 * @param identifier block identifier
-	 */
+	/// Create a new MaybeBlockDeclaration, i.e. CompoundStatement or SubBlock.
+	/// @param identifier block identifier
 	public MaybeBlockDeclaration(final String identifier) {
 		super(identifier);
 		if(identifier != null)
 			modifyIdentifier(identifier);
 		else modifyIdentifier("Block" + lineNumber);
-//		System.out.println("NEW MaybeBlockDeclaration: "+this.identifier+", declaredIn="+this.declaredIn+", CurrentScope="+Global.getCurrentScope());
 	}
 
 	// ***********************************************************************************************
 	// *** createMainProgramBlock
 	// ***********************************************************************************************
-	/**
-	 * Create the main program block. Used by ProgramModule.
-	 * 
-	 * @return the main program block
-	 */
+	/// Create the main program block. Used by ProgramModule.
+	/// 
+	/// @return the main program block
 	public static MaybeBlockDeclaration createMainProgramBlock() {
 		int lineNumber=Parse.prevToken.lineNumber;
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("BlockStatement.createMainProgramBlock: line="+lineNumber+" "+Parse.prevToken);
@@ -99,23 +88,21 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Parsing: expectMaybeBlock
 	// ***********************************************************************************************
-	/**
-	 * Parse CompoundStatement or SubBlock.
-	 * 
-	 * <pre>
-	 * Syntax:
-	 * 
-	 * Block = CompoundStatement | SubBlock
-	 * 
-	 *	 CompoundStatement = BEGIN [ { Statement ; } ] END
-	 *
-	 * 	 SubBlock = BEGIN [ { Declaration ; } ]  [ { Statement ; } ] END
-	 *
-	 * </pre>
-	 * Pre-condition: BEGIN is already read.
-	 * @param line source line number
-	 * @return a BlockStatement
-	 */
+	/// Parse CompoundStatement or SubBlock.
+	/// 
+	/// <pre>
+	/// Syntax:
+	/// 
+	/// Block = CompoundStatement | SubBlock
+	/// 
+	/// 	 CompoundStatement = BEGIN [ { Statement ; } ] END
+	/// 
+	/// 	 SubBlock = BEGIN [ { Declaration ; } ]  [ { Statement ; } ] END
+	/// 
+	/// </pre>
+	/// Pre-condition: BEGIN is already read.
+	/// @param line source line number
+	/// @return a BlockStatement
 	public BlockStatement expectMaybeBlock(int line) {
 		this.lineNumber=line;
 		if (Option.internal.TRACE_PARSE)
@@ -141,15 +128,13 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		return (blk);
 	}
 
-	/**
-	 * Utility: Moves labels from the givent block.
-	 * <p>
-	 * Special case: Labels in a CompoundStatement or ConnectionBlock.
-	 * <p>
-	 * Move Label Declaration to nearest enclosing Block which is not
-	 * a CompoundStatement or ConnectionBlock.
-	 * @param block the block containing labels to be moved
-	 */
+	/// Utility: Moves labels from the givent block.
+	/// 
+	/// Special case: Labels in a CompoundStatement or ConnectionBlock.
+	/// 
+	/// Move Label Declaration to nearest enclosing Block which is not
+	/// a CompoundStatement or ConnectionBlock.
+	/// @param block the block containing labels to be moved
 	static void moveLabelsFrom(DeclarationScope block) {
 		DeclarationScope declaredIn = block.declaredIn;
 		Vector<LabelDeclaration> labelList = block.labelList.getDeclaredLabels();
@@ -163,7 +148,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			lab.movedTo=enc;
 			if(enc.labelList == null) enc.labelList = new LabelList(enc);
 			enc.labelList.add(lab);
-//			lab.updateDeclaredIn(enc);
 			lab.declaredIn = enc;
 		}
 		block.labelList = null;
@@ -180,7 +164,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 			LabelList.accumLabelList(this);
 			for (Declaration dcl : declarationList)	dcl.doChecking();
 			for (Statement stm : statements) stm.doChecking();
-//			doCheckLabelList(null);
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
 	}
@@ -191,7 +174,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		int rtBlockLevel = declaredIn.getRTBlockLevel();
 		if(declarationKind == ObjectKind.SubBlock)
 			rtBlockLevel = rtBlockLevel+1;
-//		System.out.println("DeclarationScope.getRTBlockLevel: "+this.getClass().getSimpleName()+" "+this);
 		return rtBlockLevel;
 	}
 
@@ -231,9 +213,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding: CompoundStatement as Java Subblock
 	// ***********************************************************************************************
-	/**
-	 * Code utility: Code compound statement
-	 */
+	/// Java Coding utility: Code compound statement
 	private void doCompoundStatementCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
@@ -254,9 +234,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding: SUBBLOCK ==> .java file
 	// ***********************************************************************************************
-	/**
-	 * Code utility: Code sub-block
-	 */
+	/// Java Coding utility: Code sub-block
 	private void doSubBlockCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
@@ -293,9 +271,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodeConstructor
 	// ***********************************************************************************************
-	/**
-	 * Code utility: Code constructor
-	 */
+	/// Java Coding utility: Code constructor
 	private void doCodeConstructor() {
 		JavaSourceFileCoder.debug("// Normal Constructor");
 		JavaSourceFileCoder.code("public " + getJavaIdentifier() + "(RTS_RTObject staticLink) {");
@@ -309,9 +285,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodeStatements
 	// ***********************************************************************************************
-	/**
-	 * Code utility: Code statements
-	 */
+	/// Java Coding utility: Code statements
 	private void doCodeStatements() {
 		JavaSourceFileCoder.debug("// " + declarationKind + " Statements");
 		JavaSourceFileCoder.code("@Override");
@@ -366,10 +340,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 							MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_RTObject;)V"), ClassFile.ACC_PUBLIC, codeBuilder -> buildConstructor(codeBuilder))
 						.withMethodBody("_STM",
 							MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC, codeBuilder -> buildMethod_STM(codeBuilder));
-
-//					classBuilder
-//						.withMethodBody("_TESTING",
-//							MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_RTObject;"), ClassFile.ACC_PUBLIC, codeBuilder -> buildMethod_TESTING(codeBuilder));
 					
 					if (this.isMainModule)
 						classBuilder
@@ -380,67 +350,24 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		return(bytes);
 	}
 
-
-	// ***********************************************************************************************
-	// *** ByteCoding: buildMethod_TESTING
-	// ***********************************************************************************************
-//	private void buildMethod_TESTING(CodeBuilder codeBuilder) {
-//		ASSERT_SEMANTICS_CHECKED();
-//		Global.enterScope(this);
-//			Label begScope = codeBuilder.newLabel();
-//			Label endScope = codeBuilder.newLabel();
-//			Label checkStackSize = null; // TESTING_STACK_SIZE
-//			if(labelList != null) labelList.clear();
-//			codeBuilder
-//				.labelBinding(begScope)
-//				.localVariable(0,"this",currentClassDesc(),begScope,endScope);
-//			
-//			Label endLabel = codeBuilder.newLabel();
-//			Label otwLabel = codeBuilder.newLabel();
-//
-//			codeBuilder.aconst_null();
-////			codeBuilder.if_null(endLabel);
-//			codeBuilder.if_null(otwLabel);
-//			// do statement
-//			RTS.buildSNAPSHOT(codeBuilder, "DO STATEMENT");
-//
-//			codeBuilder.goto_(endLabel);
-//
-//			codeBuilder.labelBinding(otwLabel);
-//			// do statement
-//			RTS.buildSNAPSHOT(codeBuilder, "OTHERWISE STATEMENT");
-//				
-//			codeBuilder.labelBinding(endLabel);
-//
-//				codeBuilder
-//					.aload(0)
-//					.areturn()
-//					
-//			.labelBinding(endScope);
-//		Global.exitScope();
-//	}
-
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public Program'name(RTS_RTObject staticLink) {
-	 *         super(staticLink);
-	 *         // Initiate local variables
-	 *         // Declaration Code
-	 *         BBLK();
-	 *     }
-	 * </pre>
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public Program'name(RTS_RTObject staticLink) {
+	///         super(staticLink);
+	///         // Initiate local variables
+	///         // Declaration Code
+	///         BBLK();
+	///     }
+	/// </pre>
+	/// @param codeBuilder the CodeBuilder
 	private void buildConstructor(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();
 		ASSERT_SEMANTICS_CHECKED();
 		Global.enterScope(this);
-//			ConstantPoolBuilder pool=codeBuilder.constantPool();
 			codeBuilder
 				.labelBinding(begScope)
 				.localVariable(0,"this",currentClassDesc(),begScope,endScope)
@@ -500,7 +427,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		codeBuilder
 			.new_(CD_cls)
 			.dup()
-//			.getstatic(BlockDeclaration.currentClassDesc(),"_CUR",RTS.CD.RTS_RTObject);
 			.getstatic(RTS.FRE.RTObject_CUR(pool));
 
 		codeBuilder.invokespecial(CD_cls, "<init>", this.getConstructorMethodTypeDesc());
@@ -529,10 +455,8 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		labelContext = labelContextStack.pop();
 	}
 
-	/**
-	 * ClassFile coding utility: Build the statements.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Build the statements.
+	/// @param codeBuilder the codeBuilder to use.
 	private void build_STMS(CodeBuilder codeBuilder) {
 		for (Statement stm : statements) {
 			if(!(stm instanceof DummyStatement)) Util.buildLineNumber(codeBuilder,stm.lineNumber);
@@ -580,9 +504,7 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public MaybeBlockDeclaration() { super(null); }
 
 	@Override
@@ -590,7 +512,6 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("BEGIN Write "+this.getClass().getSimpleName());
 		oupt.writeKind(declarationKind);
 		oupt.writeShort(OBJECT_SEQU);
-//		writeAttributes(oupt);
 
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -615,18 +536,15 @@ public final class MaybeBlockDeclaration extends BlockDeclaration {
 		}
 	}
 	
-	/**
-	 * Read and return a MaybeBlockDeclaration object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @param declarationKind the declarationKind code
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a MaybeBlockDeclaration object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @param declarationKind the declarationKind code
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static MaybeBlockDeclaration readObject(AttributeInputStream inpt,int declarationKind) throws IOException {
 		DeclarationScope scope = Global.getCurrentScope();
 		MaybeBlockDeclaration blk = new MaybeBlockDeclaration();
-//		blk.declarationKind = ObjectKind.CompoundStatement;
 		blk.declarationKind = declarationKind;
 		blk.OBJECT_SEQU = inpt.readSEQU(blk);
 		// *** SyntaxClass

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -27,44 +25,32 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Label Declaration.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/LabelDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Label Declaration.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/LabelDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class LabelDeclaration extends SimpleVariableDeclaration {
-	/**
-	 * The label index. Set by BlockDeclaration.doAccumLabels.
-	 */
+	/// The label index. Set by BlockDeclaration.doAccumLabels.
 	public int index;
 
-	/**
-	 * Special case: Labels in a CompoundStatement or ConnectionBlock are moved to
-	 * nearest enclosing Block which is not a CompoundStatement or ConnectionBlock.
-	 */
+	/// Special case: Labels in a CompoundStatement or ConnectionBlock are moved to
+	/// nearest enclosing Block which is not a CompoundStatement or ConnectionBlock.
 	public DeclarationScope movedTo;
 	
-	/**
-	 * Indicates that codeBuilder.labelBinding is called.
-	 */
+	/// Indicates that codeBuilder.labelBinding is called.
 	public boolean isBinded;
 	
 
-	/**
-	 * Create a new Label Declaration.
-	 * 
-	 * @param identifier label identifier
-	 */
+	/// Create a new Label Declaration.
+	/// 
+	/// @param identifier label identifier
 	public LabelDeclaration(final String identifier) {
 		super(Type.Label, identifier);
 		this.externalIdent = "_LABEL_" + identifier;
 		this.declarationKind = ObjectKind.LabelDeclaration;
-//		System.out.println("NEW LabelDeclaration: "+this);
-//		Thread.dumpStack();
 	}
 
 	@Override
@@ -90,14 +76,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		SET_SEMANTICS_CHECKED();
 	}
 	
-//	public void updateDeclaredIn(DeclarationScope declaredIn) {
-//		this.declaredIn = declaredIn;
-//	}
-	
-	/**
-	 * Declare a local Label.
-	 * @param encloser the BlockDeclaration to update.
-	 */
+	/// Declare a local Label.
+	/// @param encloser the BlockDeclaration to update.
 	public void declareLocalLabel(BlockDeclaration encloser) {
 		Global.sourceLineNumber = lineNumber;
 		String ident = getJavaIdentifier();
@@ -139,11 +119,9 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 	}
 	
-	/**
-	 * Check if this label is the last label in the owner's label list.
-	 * @param encloser the owner.
-	 * @return true: if this label is the last label in the owner's label list.
-	 */
+	/// Check if this label is the last label in the owner's label list.
+	/// @param encloser the owner.
+	/// @return true: if this label is the last label in the owner's label list.
 	private boolean isLatestVirtualLabel(DeclarationScope encloser) {
 		LabelDeclaration last = encloser.labelList.getLastDeclaredLabel(this.identifier);
 		if(this.index == last.index) {
@@ -152,10 +130,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		return false;
 	}
 	
-	/**
-	 * Returns the prefix level.
-	 * @return the prefix level.
-	 */
+	/// Returns the prefix level.
+	/// @return the prefix level.
 	private int getPrefixLevel() {
 		int prefixLevel=0;
 		if(movedTo != null) {
@@ -166,11 +142,9 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		return prefixLevel;
 	}
 	
-	/**
-	 * ClassFile coding utility: Build Virtual Match Method Body.
-	 * @param prefixLevel the prefix level.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Build Virtual Match Method Body.
+	/// @param prefixLevel the prefix level.
+	/// @param codeBuilder the codeBuilder to use.
 	private void buildVirtualMatchMethodBody(int prefixLevel,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		// Build virtual match method:
@@ -210,10 +184,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		}
 	}
 	
-	/**
-	 * Build binding for this Label.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Build binding for this Label.
+	/// @param codeBuilder the codeBuilder to use.
 	public void doBind(CodeBuilder codeBuilder) {
 		if(isBinded) Util.IERR();
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
@@ -221,10 +193,8 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		isBinded = true;
 	}
 	
-	/**
-	 * Build Label Quantity
-	 * @param codeBuilder the codeBuilder to use
-	 */
+	/// Build Label Quantity
+	/// @param codeBuilder the codeBuilder to use
 	public void buildLabelQuant(CodeBuilder codeBuilder) {
 		int prefixLevel=0;
 		if(movedTo != null) {
@@ -263,8 +233,6 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeKind(declarationKind);
 		oupt.writeString(identifier);
 		oupt.writeShort(OBJECT_SEQU);
-//		writeAttributes(oupt);
-//		super.writeAttributes(oupt);
 
 		// *** SyntaxClass
 		oupt.writeShort(lineNumber);
@@ -273,7 +241,6 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);// Declaration
-//		oupt.writeObj(declaredIn);// Declaration
 		
 		// *** SimpleVariableDeclaration
 		oupt.writeBoolean(constant);
@@ -284,12 +251,10 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		oupt.writeObj(movedTo);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static LabelDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		LabelDeclaration lab = new LabelDeclaration(identifier);
@@ -302,7 +267,6 @@ public final class LabelDeclaration extends SimpleVariableDeclaration {
 		lab.identifier = inpt.readString();
 		lab.externalIdent = inpt.readString();
 		lab.type = inpt.readType();
-//		lab.declaredIn = (DeclarationScope) inpt.readObj();
 		
 		// *** SimpleVariableDeclaration
 		lab.constant = inpt.readBoolean();

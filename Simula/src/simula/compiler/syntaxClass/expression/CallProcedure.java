@@ -17,12 +17,12 @@ import simula.compiler.syntaxClass.declaration.Declaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
-import simula.compiler.syntaxClass.declaration.ProcedureSpecification;
 import simula.compiler.syntaxClass.declaration.StandardProcedure;
 import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
+import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.Util;
 
 /**

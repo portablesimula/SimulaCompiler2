@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -44,80 +42,70 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Procedure Declaration.
- * <pre>
- * Simula Standard: 5.4 Procedure declaration
- * 
- *      procedure-declaration
- *          = [ type ] PROCEDURE procedure-heading ; procedure-body
- *      
- *            procedure-heading
- *                = procedure-identifier [ formal-parameter-part ; [ mode-part ] specification-part ] 
- *                
- *               procedure-identifier = identifier
- *                
- *               formal-parameter-part = "(" formal-parameter { , formal-parameter } ")"
- *            
- *                  formal-parameter = identifier
- *            
- *               specification-part = specifier identifier-list { ; specifier identifier-list }
- *            
- *                  specifier
- *                      = type [ ARRAY | PROCEDURE ]
- *                      | LABEL
- *                      | SWITCH 
- *                
- *               mode-part
- *                   = name-part [ value-part ]
- *                   | value-part [ name-part ]
- *            
- *                  name-part = NAME identifier-list ;
- *            
- *                  value-part = VALUE identifier-list ;
- *            
- *               identifier-list = identifier { , identifier }
- *                
- *            procedure-body = statement
- * </pre>
- * This class is prefix to StandardProcedure and SwitchDeclaration.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Procedure Declaration.
+/// <pre>
+/// Simula Standard: 5.4 Procedure declaration
+/// 
+///      procedure-declaration
+///          = [ type ] PROCEDURE procedure-heading ; procedure-body
+///      
+///            procedure-heading
+///                = procedure-identifier [ formal-parameter-part ; [ mode-part ] specification-part ] 
+///                
+///               procedure-identifier = identifier
+///                
+///               formal-parameter-part = "(" formal-parameter { , formal-parameter } ")"
+///            
+///                  formal-parameter = identifier
+///            
+///               specification-part = specifier identifier-list { ; specifier identifier-list }
+///            
+///                  specifier
+///                      = type [ ARRAY | PROCEDURE ]
+///                      | LABEL
+///                      | SWITCH 
+///                
+///               mode-part
+///                   = name-part [ value-part ]
+///                   | value-part [ name-part ]
+///            
+///                  name-part = NAME identifier-list ;
+///            
+///                  value-part = VALUE identifier-list ;
+///            
+///               identifier-list = identifier { , identifier }
+///                
+///            procedure-body = statement
+/// </pre>
+/// This class is prefix to StandardProcedure and SwitchDeclaration.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public class ProcedureDeclaration extends BlockDeclaration {
 
-	/**
-	 * Result in case of Type Procedure 
-	 */
+	/// Result in case of Type Procedure 
 	public SimpleVariableDeclaration result;
 
-	/**
-	 * Parameter list.
-	 */
+	/// Parameter list.
 	public ObjectList<Parameter> parameterList = new ObjectList<Parameter>();
 	
-	/**
-	 * Virtual Match indicator. 
-	 * <p>
-	 * If myVirtual != null, this Procedure is a Virtual Match.
-	 * <p>
-	 * Set during doChecking.
-	 */
+	/// Virtual Match indicator. 
+	/// 
+	/// If myVirtual != null, this Procedure is a Virtual Match.
+	/// 
+	/// Set during doChecking.
 	public VirtualMatch myVirtual; // Set during doChecking
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
 	// ***********************************************************************************************
-	/**
-	 * Create a new ProcedureDeclaration.
-	 * @param identifier procedure identifier
-	 * @param declarationKind procedure or switch
-	 */
+	/// Create a new ProcedureDeclaration.
+	/// @param identifier procedure identifier
+	/// @param declarationKind procedure or switch
 	protected ProcedureDeclaration(final String identifier,final int declarationKind) {
 		super(identifier);
 		this.declarationKind = declarationKind;
@@ -126,26 +114,24 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Parsing: expectProcedureDeclaration
 	// ***********************************************************************************************
-	/**
-	 * Parse and build a ProcedureDeclaration.
-	 * 
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *      procedure-declaration
-	 *          = [ type ] PROCEDURE procedure-heading ; procedure-body
-	 *      
-	 *            procedure-heading
-	 *                = procedure-identifier [ formal-parameter-part ; [ mode-part ] specification-part ] 
-	 *                
-	 *            procedure-identifier = identifier
-	 * </pre>
-	 * 
-	 * Precondition: [ type ] PROCEDURE is already read.
-	 * 
-	 * @param type procedure's type
-	 * @return a newly created ProcedureDeclaration
-	 */
+	/// Parse and build a ProcedureDeclaration.
+	/// 
+	/// <pre>
+	/// Syntax:
+	/// 
+	///      procedure-declaration
+	///          = [ type ] PROCEDURE procedure-heading ; procedure-body
+	///      
+	///            procedure-heading
+	///                = procedure-identifier [ formal-parameter-part ; [ mode-part ] specification-part ] 
+	///                
+	///            procedure-identifier = identifier
+	/// </pre>
+	/// 
+	/// Precondition: [ type ] PROCEDURE is already read.
+	/// 
+	/// @param type procedure's type
+	/// @return a newly created ProcedureDeclaration
 	public static ProcedureDeclaration expectProcedureDeclaration(final Type type) {
 		ProcedureDeclaration proc = new ProcedureDeclaration(null, ObjectKind.Procedure);
 		proc.sourceFileName = Global.sourceFileName;
@@ -168,22 +154,20 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return (proc);
 	}
 	
-	/**
-	 * Parse Utility: Accept mode-part and set matching parameter's mode.
-	 * <pre>
-	 *   mode-part
-	 *      = name-part [ value-part ]
-	 *      | value-part [ name-part ]
-	 *            
-	 *   name-part = NAME identifier-list ;
-	 *            
-	 *   value-part = VALUE identifier-list ;
-	 *            
-	 *   identifier-list = identifier { , identifier }
-	 * </pre>
-	 * @param pList the parameter list
-	 * @return true: if mode-part was present.
-	 */
+	/// Parse Utility: Accept mode-part and set matching parameter's mode.
+	/// <pre>
+	///   mode-part
+	///      = name-part [ value-part ]
+	///      | value-part [ name-part ]
+	///            
+	///   name-part = NAME identifier-list ;
+	///            
+	///   value-part = VALUE identifier-list ;
+	///            
+	///   identifier-list = identifier { , identifier }
+	/// </pre>
+	/// @param pList the parameter list
+	/// @return true: if mode-part was present.
 	private static boolean acceptModePart(Vector<Parameter> pList) {
 		if (Parse.accept(KeyWord.VALUE, KeyWord.NAME)) {
 			int mode = (Parse.prevToken.getKeyWord() == KeyWord.VALUE)
@@ -209,18 +193,16 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return(false);
 	}
 	
-	/**
-	 * Parse Utility: Accept Procedure Parameter specification-part updating Parameter's type and kind.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *     specification-part
-     *           = specifier identifier-list { ; specifier identifier-list }
-	 *     
-	 *        specifier = Type | [Type] ARRAY | [Type] PROCEDURE ] | LABEL | SWITCH
-	 * </pre>
-	 * @param proc the procedure declaration
-	 */
+	/// Parse Utility: Accept Procedure Parameter specification-part updating Parameter's type and kind.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///     specification-part
+    ///           = specifier identifier-list { ; specifier identifier-list }
+	///     
+	///        specifier = Type | [Type] ARRAY | [Type] PROCEDURE ] | LABEL | SWITCH
+	/// </pre>
+	/// @param proc the procedure declaration
 	private static void expectSpecificationPart(ProcedureDeclaration proc) {
 		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse ParameterSpecifications");
 		LOOP: while(true) {
@@ -274,17 +256,15 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		}
 	}
 
-	/**
-	 * Parse Utility: Expect procedure-body.
-	 * In case of a compound-statement, updating the procedure's declaration and statement lists.
-	 * <pre>
-	 * Syntax:
-	 *                
-	 *        procedure-body = statement
-	 * </pre>
-	 * 
-	 * @param proc the procedure
-	 */
+	/// Parse Utility: Expect procedure-body.
+	/// In case of a compound-statement, updating the procedure's declaration and statement lists.
+	/// <pre>
+	/// Syntax:
+	///                
+	///        procedure-body = statement
+	/// </pre>
+	/// 
+	/// @param proc the procedure
 	private static void expectProcedureBody(ProcedureDeclaration proc) {
 		if (Parse.accept(KeyWord.BEGIN)) {
 			Statement stm;
@@ -311,20 +291,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		Global.enterScope(this);
-//			System.out.println("PrpcedureDeclaration.doChecking: "+this);
 			LabelList.accumLabelList(this);
 			if(type != null) {
 				this.result = new SimpleVariableDeclaration(type, "_RESULT");
 				declarationList.add(result);
 			}
 			int prfx = 0;// prefixLevel();
-//			if (declarationKind == ObjectKind.Procedure || declarationKind == ObjectKind.Switch)
 			if (declarationKind == ObjectKind.Procedure)
 				for (Parameter par : this.parameterList) par.setExternalIdentifier(prfx);
 			for (Declaration par : this.parameterList) par.doChecking();
 			for (Declaration dcl : declarationList)	dcl.doChecking();
 			for (Statement stm : statements) stm.doChecking();
-//			doCheckLabelList(null);
 			VirtualSpecification virtualSpec = VirtualSpecification.getVirtualSpecification(this);
 			if (virtualSpec != null) {
 				// This Procedure is a Virtual Match
@@ -366,7 +343,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			if (Util.equals(ident, parameter.identifier))
 				return (new Meaning(parameter, this, this, false));
 		}
-//		if(labelList != null) for (LabelDeclaration label : labelList.labels) {
 		if(labelList != null) for (LabelDeclaration label : labelList.getDeclaredLabels()) {
 			if(Option.internal.TRACE_FIND_MEANING>1) Util.println("Checking Label "+label);
 			if (Util.equals(ident, label.identifier))
@@ -395,12 +371,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: edFormalParameterList
 	// ***********************************************************************************************
-	/**
-	 * Edit the formal parameter list
-	 * @param isInlineMethod true if generating an inline method, otherwise false
-	 * @param addStaticLink add static link as 0'th parameter
-	 * @return the resulting Java code
-	 */
+	/// Java Coding Utility: Edit the formal parameter list
+	/// @param isInlineMethod true if generating an inline method, otherwise false
+	/// @param addStaticLink add static link as 0'th parameter
+	/// @return the resulting Java code
 	private String edFormalParameterList(final boolean isInlineMethod,final boolean addStaticLink) {
 		// Accumulates through prefix-chain when class
 		StringBuilder s = new StringBuilder();
@@ -425,9 +399,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding: PROCEDURE
 	// ***********************************************************************************************
-	/**
-	 * Generate java source code for this Procedure.
-	 */
+	/// Generate java source code for this Procedure.
 	private void doProcedureCoding() {
 		Global.sourceLineNumber = lineNumber;
 		ASSERT_SEMANTICS_CHECKED();
@@ -475,9 +447,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodeConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate Java source code for the constructor.
-	 */
+	/// Generate Java source code for the constructor.
 	private void doCodeConstructor() {
 		JavaSourceFileCoder.debug("// Normal Constructor");
 		JavaSourceFileCoder.code("public " + getJavaIdentifier() + edFormalParameterList(false, true));
@@ -495,9 +465,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: doCodePrepareFormal
 	// ***********************************************************************************************
-	/**
-	 * Generate Java source code prepared for 'call formal procedure'.
-	 */
+	/// Generate Java source code prepared for 'call formal procedure'.
 	private void doCodePrepareFormal() {
 		JavaSourceFileCoder.debug("// Parameter Transmission in case of Formal/Virtual Procedure Call");
 		JavaSourceFileCoder.code("@Override");
@@ -545,9 +513,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Coding Utility: codeProcedureBody -- Redefined in SwitchDeclaration
 	// ***********************************************************************************************
-	/**
-	 * Coding Utility: codeProcedureBody. Redefined in SwitchDeclaration.
-	 */
+	/// Coding Utility: codeProcedureBody. Redefined in SwitchDeclaration.
 	protected void codeProcedureBody() {
 		boolean duringSTM_Coding=Global.duringSTM_Coding;
 		Global.duringSTM_Coding=false;
@@ -619,15 +585,13 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: MTD_Constructor
 	// ***********************************************************************************************
-	/**
-	 * Create the MethodTypeDesc for the constructor.
-	 * <p>
-	 * Example: (Lsimula/runtime/RTS_RTObject;IID)V
-	 * <p>
-	 * Also used by PrefixedBlockDeclaration.
-	 * @param withParams true: create MethodTypeDesc with parameters.
-	 * @return the MethodTypeDesc for the constructor
-	 */
+	/// Create the MethodTypeDesc for the constructor.
+	/// 
+	/// Example: (Lsimula/runtime/RTS_RTObject;IID)V
+	/// 
+	/// Also used by PrefixedBlockDeclaration.
+	/// @param withParams true: create MethodTypeDesc with parameters.
+	/// @return the MethodTypeDesc for the constructor
 	private MethodTypeDesc MTD_Constructor(boolean withParams) {
 		StringBuilder sb=new StringBuilder("(Lsimula/runtime/RTS_RTObject;");
 		if(withParams) for(Parameter par:parameterList) {
@@ -637,11 +601,9 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		return(MethodTypeDesc.ofDescriptor(sb.toString()));
 	}
 
-	/**
-	 * ClassFile coding utility: getResultFieldRefEntry
-	 * @param pool the ConstantPoolBuilder to use
-	 * @return a FieldRefEntry
-	 */
+	/// ClassFile coding utility: getResultFieldRefEntry
+	/// @param pool the ConstantPoolBuilder to use
+	/// @return a FieldRefEntry
 	public FieldRefEntry getResultFieldRefEntry(ConstantPoolBuilder pool) {
 		return(pool.fieldRefEntry(RTS.CD.classDesc(this.getJavaIdentifier()), "_RESULT", type.toClassDesc()));
 	}
@@ -663,7 +625,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			}
 		}
 		sb.append(")V");
-//		System.out.println("ProcedureDeclaration.edConstructorSignature: "+this+"  ===>  "+sb);
 		return(sb.toString());
 	}
 
@@ -671,19 +632,17 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public Program'name(RTS_RTObject staticLink, par, par ...) {
-	 *         super(staticLink);
-	 *		   // Parameter assignment to locals
-	 *		   BBLK();
-	 *		   // Declaration Code
-	 *		   _STM();
-	 *	   }
-	 * </pre>
-	 * @param methodBuilder the MethodBuilder to use.
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public Program'name(RTS_RTObject staticLink, par, par ...) {
+	///         super(staticLink);
+	/// 		   // Parameter assignment to locals
+	/// 		   BBLK();
+	/// 		   // Declaration Code
+	/// 		   _STM();
+	/// 	   }
+	/// </pre>
+	/// @param methodBuilder the MethodBuilder to use.
 	private void buildConstructor(MethodBuilder methodBuilder) {
 		methodBuilder
 			.withFlags(ClassFile.ACC_PUBLIC)
@@ -758,24 +717,22 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public Program'name(RTS_RTObject staticLink, par, par ...) {
-	 *         super(staticLink);
-	 *		   // Parameter assignment to locals
-	 *		   BBLK();
-	 *		   // Declaration Code
-	 *		   _STM();
-	 *	   }
-	 *
-	 *    // Constructor in case of Formal/Virtual Procedure Call
-	 *    public adHoc000_PPP(RTS_RTObject _SL) {
-	 *        super(_SL,n); // Expecting n parameters
-	 *    }
-	 * </pre>
-	 * @param methodBuilder the MethodBuilder to use.
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public Program'name(RTS_RTObject staticLink, par, par ...) {
+	///         super(staticLink);
+	/// 		   // Parameter assignment to locals
+	/// 		   BBLK();
+	/// 		   // Declaration Code
+	/// 		   _STM();
+	/// 	   }
+	/// 
+	///    // Constructor in case of Formal/Virtual Procedure Call
+	///    public adHoc000_PPP(RTS_RTObject _SL) {
+	///        super(_SL,n); // Expecting n parameters
+	///    }
+	/// </pre>
+	/// @param methodBuilder the MethodBuilder to use.
 	private void buildConstructor2(MethodBuilder methodBuilder) {
 		methodBuilder
 			.withFlags(ClassFile.ACC_PUBLIC)
@@ -783,7 +740,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 			.withCode(codeBuilder -> {
 				ASSERT_SEMANTICS_CHECKED();
 				Global.enterScope(this);
-//					ConstantPoolBuilder pool=codeBuilder.constantPool();
 					Label begScope = codeBuilder.newLabel();
 					Label endScope = codeBuilder.newLabel();
 					codeBuilder
@@ -811,24 +767,22 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildSetPar
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public adHoc000_R setPar(Object param) {
-	 *        try {
-	 *           switch(_nParLeft--) {
-	 *              case 1: p_SFD=procValue(param); break;
-	 *              case 2: ... ...
-	 *              default: throw new RTS_SimulaRuntimeError("Too many parameters");
-	 *           }
-	 *        } catch(ClassCastException e) {
-	 *            throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
-	 *        }
-	 *        return(this);
-	 *     }
-	 * </pre>
-	 * @param methodBuilder the MethodBuilder to use.
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public adHoc000_R setPar(Object param) {
+	///        try {
+	///           switch(_nParLeft--) {
+	///              case 1: p_SFD=procValue(param); break;
+	///              case 2: ... ...
+	///              default: throw new RTS_SimulaRuntimeError("Too many parameters");
+	///           }
+	///        } catch(ClassCastException e) {
+	///            throw new RTS_SimulaRuntimeError("Wrong type of parameter: "+param,e);
+	///        }
+	///        return(this);
+	///     }
+	/// </pre>
+	/// @param methodBuilder the MethodBuilder to use.
 	private void buildSetPar(MethodBuilder methodBuilder) {
 		methodBuilder
 			.withFlags(ClassFile.ACC_PUBLIC)
@@ -862,10 +816,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		}	);
 	}
 	
-	/**
-	 * ClassFile coding utility: Build switch
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Build switch
+	/// @param codeBuilder the codeBuilder to use.
 	private void build_SWITCH(BlockCodeBuilder codeBuilder) {
 		//  switch(_nParLeft--) {
 		//     case 1: p_SFD=procValue(param); break;
@@ -881,7 +833,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Label breakLabel = codeBuilder.newLabel(); // beginning of the default handler block.
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		
-//		FieldRefEntry FRE_nParLeft=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_nParLeft",ConstantDescs.CD_int);
 		FieldRefEntry FRE_nParLeft=RTS.FRE.PROCEDURE_nParLeft(pool);
 		codeBuilder
 			.aload(0)
@@ -991,11 +942,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM_BODY
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the '_STM' method.
+	/// @param codeBuilder the CodeBuilder
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		labelContextStack.push(labelContext);
@@ -1010,11 +958,8 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM_BODY
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_RESULT' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the '_RESULT' method.
+	/// @param codeBuilder the CodeBuilder
 	private void buildMethod_RESULT(CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ClassDesc DC_RESULT = type.toClassDesc(declaredIn);
@@ -1076,9 +1021,7 @@ public class ProcedureDeclaration extends BlockDeclaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public ProcedureDeclaration() {	super(null); }
 
 	@Override
@@ -1092,7 +1035,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		oupt.writeShort(lineNumber);
 
 		// *** Declaration
-//		oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
 		oupt.writeType(type);
 
@@ -1106,12 +1048,10 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		Util.TRACE_OUTPUT("END Write ProcedureDeclaration: "+identifier);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static ProcedureDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
@@ -1122,7 +1062,6 @@ public class ProcedureDeclaration extends BlockDeclaration {
 		pro.lineNumber = inpt.readShort();
 
 		// *** Declaration
-//		pro.identifier = inpt.readString();
 		pro.externalIdent = inpt.readString();
 		pro.type = inpt.readType();
 
