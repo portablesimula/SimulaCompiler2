@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.lang.classfile.ClassBuilder;
@@ -21,71 +19,54 @@ import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Declaration.
- * 
- * <pre>
- * 
- * Simula Standard: Chapter 5. Declarations
- * 
- *   declaration
- *      = simple-variable-declaration
- *      | array-declaration
- *      | switch-declaration
- *      | procedure-declaration
- *      | class-declaration
- *      | external-declaration
- * </pre>
- * This class is prefix to DeclarationScope, ExternalDeclaration, Parameter,
- * SimpleVariableDeclaration, VirtualSpecification, VirtualMatch, ArrayDeclaration
- * <p> 
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Declaration.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Declaration.
+///  
+/// <pre>
+///  
+/// Simula Standard: Chapter 5. Declarations
+///  
+///    declaration
+///       = simple-variable-declaration
+///       | array-declaration
+///       | switch-declaration
+///       | procedure-declaration
+///       | class-declaration
+///       | external-declaration
+///  </pre>
+/// This class is prefix to DeclarationScope, ExternalDeclaration, Parameter,
+/// SimpleVariableDeclaration, VirtualSpecification, VirtualMatch, ArrayDeclaration
+///  
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/Declaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public abstract class Declaration extends SyntaxClass {
 
-	/**
-	 * The type
-	 */
+	/// The type
 	public Type type = null;
 
-	/**
-	 * Indicates that this declaration is protected.
-	 */
+	/// Indicates that this declaration is protected.
 	public ProtectedSpecification isProtected; // Set during Checking
 
-	/**
-	 * Simula Identifier from Source Text
-	 */
+	/// Simula Identifier from Source Text
 	public String identifier;
 
-	/**
-	 * External Identifier set by doChecking
-	 */
+	/// External Identifier set by doChecking
 	public String externalIdent;
 
-	/**
-	 * The DeclarationScope in which this Declaration is defined.
-	 */
+	/// The DeclarationScope in which this Declaration is defined.
 	public DeclarationScope declaredIn;
 
-	/**
-	 * The declarationKind.
-	 */
+	/// The declarationKind.
 	public int declarationKind;
 
 
 	// ***********************************************************************************************
 	// *** Constructor
 	// ***********************************************************************************************
-	/**
-	 * Create a new Declaration.
-	 * 
-	 * @param identifier the given identifier
-	 */
+	/// Create a new Declaration.
+	/// @param identifier the given identifier
 	protected Declaration(final String identifier) {
 		this.identifier = identifier;
 		this.externalIdent = identifier; // May be overwritten
@@ -93,18 +74,13 @@ public abstract class Declaration extends SyntaxClass {
 		checkAlreadyDefined();
 	}
 
-	/**
-	 * Returns the Java identifier for this declaration.
-	 * 
-	 * @return the Java identifier for this declaration
-	 */
+	/// Returns the Java identifier for this declaration.
+	/// @return the Java identifier for this declaration
 	public final String getJavaIdentifier() {
 		return (this.externalIdent);
 	} // May be redefined
 
-	/**
-	 * Check if a declaration with this identifier is already defined.
-	 */
+	/// Check if a declaration with this identifier is already defined.
 	protected void checkAlreadyDefined() {
 		boolean error = false;
 		boolean warning = false;
@@ -149,11 +125,9 @@ public abstract class Declaration extends SyntaxClass {
 			Util.warning(identifier + " is alrerady defined in " + declaredIn.identifier);
 	}
 
-	/**
-	 * Parse a declaration and add it to the given declaration list.
-	 * @param enclosure the owning block.
-	 * @return true if a declaration was found, false otherwise
-	 */
+	/// Parse a declaration and add it to the given declaration list.
+	/// @param enclosure the owning block.
+	/// @return true if a declaration was found, false otherwise
 	protected static boolean acceptDeclaration(final BlockDeclaration enclosure) {
 		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse Declaration");
@@ -207,12 +181,9 @@ public abstract class Declaration extends SyntaxClass {
 	// ***********************************************************************************************
 	// *** Utility: isCompatibleClasses -- Used by IS/IN/QUA-checking and Inspect WHEN
 	// ***********************************************************************************************
-	/**
-	 * Check if these classes are compatible.
-	 * 
-	 * @param other the other ClassDeclaration
-	 * @return the resulting boolean value
-	 */
+	/// Check if these classes are compatible.
+	/// @param other the other ClassDeclaration
+	/// @return the resulting boolean value
 	public boolean isCompatibleClasses(final Declaration other) {
 		if (!(this instanceof ClassDeclaration))
 			Util.error("" + this + " is not a class");
@@ -224,46 +195,36 @@ public abstract class Declaration extends SyntaxClass {
 		return (((ClassDeclaration) other).isSubClassOf((ClassDeclaration) this));
 	}
 
-	/**
-	 * Output Java ByteCode. Treat Declaration.
-	 * @param classBuilder the classBuilder to use.
-	 * @param encloser the owning block.
-	 */
+	/// Output Java ByteCode. Treat Declaration.
+	/// @param classBuilder the classBuilder to use.
+	/// @param encloser the owning block.
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
 		Util.IERR("Method buildDeclaration need a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	/**
-	 * ClassFile coding utility: get getFieldIdentifier.
-	 * @return the resulting String.
-	 */
+	/// ClassFile coding utility: get getFieldIdentifier.
+	/// @return the resulting String.
 	public String getFieldIdentifier() {
 		Util.IERR("Method getFieldIdentifier need a redefinition in "+this.getClass().getSimpleName());
 		return(null);
 	}
 
-	/**
-	 * Output Java ByteCode. Build init code for an Attribute.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Output Java ByteCode. Build init code for an Attribute.
+	/// @param codeBuilder the codeBuilder to use.
 	public void buildInitAttribute(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
 		Util.IERR("Method buildInitAttribute need a redefinition in "+this.getClass().getSimpleName());
 	}
 
-	/**
-	 * Output Java ByteCode. Build declaration code for an Attribute.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Output Java ByteCode. Build declaration code for an Attribute.
+	/// @param codeBuilder the codeBuilder to use.
 	public void buildDeclarationCode(CodeBuilder codeBuilder) {
 		Global.sourceLineNumber = lineNumber;
 		// Default: No code
 	}
 	
-	/**
-	 * Debug utility: verifyTree.
-	 * @param head of the tree.
-	 */
+	/// Debug utility: verifyTree.
+	/// @param head of the tree.
 	protected void verifyTree(final Object head) {
 		if(head instanceof Declaration decl) {
 			if(! decl.identifier.equals(this.declaredIn.identifier)) {
@@ -275,37 +236,5 @@ public abstract class Declaration extends SyntaxClass {
 			}
 		}
 	}
-
-//	// ***********************************************************************************************
-//	// *** Attribute File I/O
-//	// ***********************************************************************************************
-//
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-////		super.writeAttributes(oupt);
-//
-//		// *** SyntaxClass
-//		oupt.writeShort(lineNumber);
-//
-//		// *** Declaration
-//		oupt.writeString(identifier);
-//		oupt.writeString(externalIdent);
-//		oupt.writeType(type);// Declaration
-////		oupt.writeObj(declaredIn);// Declaration
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-////		super.readAttributes(inpt);
-//
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//	}
 
 }

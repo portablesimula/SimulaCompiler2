@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -17,15 +22,13 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * InspectVariable Declaration.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/InspectVariableDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// InspectVariable Declaration.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/InspectVariableDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class InspectVariableDeclaration extends Declaration {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
@@ -37,14 +40,12 @@ public class InspectVariableDeclaration extends Declaration {
 	/// The owner.
 	DeclarationScope connectionScope;
 
-	/**
-	 * Create a new InspectVariableDeclaration.
-	 * 
-	 * @param type       the variable type
-	 * @param identifier the variable identifier
-	 * @param connectionScope the connectionScope
-	 * @param connectionStatement the connectionStatement
-	 */
+	/// Create a new InspectVariableDeclaration.
+	/// 
+	/// @param type       the variable type
+	/// @param identifier the variable identifier
+	/// @param connectionScope the connectionScope
+	/// @param connectionStatement the connectionStatement
 	public InspectVariableDeclaration(final Type type, final String identifier,final DeclarationScope connectionScope, final ConnectionStatement connectionStatement) {
 		super(identifier);
 		this.declarationKind = ObjectKind.InspectVariableDeclaration;
@@ -53,58 +54,27 @@ public class InspectVariableDeclaration extends Declaration {
 		this.connectionStatement = connectionStatement;
 	}
 
-
 	@Override
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
 		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ConnectionStatement(" + toString() + ").doChecking - Current Scope Chain: " + Global.getCurrentScope().edScopeChain());
-
 		connectionStatement.doChecking();
-//		connectionScope.doChecking();
-//		type.doChecking(connectionScope);
-
 		SET_SEMANTICS_CHECKED();
-	}
-
-
-
-	@Override
-	public void doDeclarationCoding() {
-//		if (constantElement != null && !(constantElement instanceof Constant)) {
-//			// Initiate Final Variable
-//			String value = constantElement.toJavaCode();
-//			JavaSourceFileCoder.code(getJavaIdentifier() + '=' + value + ';');
-//		}
 	}
 
 	@Override
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
 		String modifier = "public ";
-//		if (this.isConstant())
-//			modifier = modifier + "final ";
-//		if (constantElement != null) {
-//			constantElement = TypeConversion.testAndCreate(type, constantElement.evaluate());
-//			constantElement.doChecking();
-//			if (constantElement instanceof Constant) {
-//				String value = constantElement.toJavaCode();
-//				String putValue = TypeConversion.mayBeConvert(constantElement.type, type, value);
-//				return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + putValue);
-//			} else {
-//				return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + ';');
-//			}
-//		}
 		String value = type.edDefaultValue();
 		return (modifier + type.toJavaType() + ' ' + getJavaIdentifier() + '=' + value + ';');
 	}
 
-	/**
-	 * ClassFile coding utility: get FieldRefEntry of this InspectVariable.
-	 * @param pool the ConstantPoolBuilder to use.
-	 * @return the FieldRefEntry of this InspectVariable.
-	 */
+	/// ClassFile coding utility: get FieldRefEntry of this InspectVariable.
+	/// @param pool the ConstantPoolBuilder to use.
+	/// @return the FieldRefEntry of this InspectVariable.
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), type.toClassDesc()));
@@ -117,11 +87,6 @@ public class InspectVariableDeclaration extends Declaration {
 
 	@Override
 	public void buildDeclaration(ClassBuilder classBuilder,BlockDeclaration encloser) {
-//		System.out.println("InspectVariableDeclaration.buildDeclaration: "+this.externalIdent);
-//		if(externalIdent.equals("_inspect_339_4664")) {
-//			System.out.println("InspectVariableDeclaration.buildDeclaration: "+this);
-//			Thread.dumpStack();
-//		}
 		ClassDesc CD=type.toClassDesc();
 		classBuilder.withField(getFieldIdentifier(), CD, ClassFile.ACC_PUBLIC);
 	}
@@ -153,18 +118,14 @@ public class InspectVariableDeclaration extends Declaration {
 
 	@Override
 	public String toString() {
-//		String s = "Type=" + type + ", identifier=" + identifier;
 		String s = identifier + ", type=" + type + ", connectionScope=" + connectionScope;
-//		return ("InspectVariableDeclaration "+s);
 		return (s);
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public InspectVariableDeclaration() {
 		super(null);
 		this.declarationKind = ObjectKind.InspectVariableDeclaration;
@@ -190,12 +151,10 @@ public class InspectVariableDeclaration extends Declaration {
 		oupt.writeObj(connectionStatement);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an InspectVariableDeclaration object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static InspectVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		InspectVariableDeclaration var = new InspectVariableDeclaration();
 		var.OBJECT_SEQU = inpt.readSEQU(var);

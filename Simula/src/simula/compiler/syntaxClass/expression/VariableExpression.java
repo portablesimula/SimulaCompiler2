@@ -191,13 +191,6 @@ public final class VariableExpression extends Expression {
 	 */
 	public Meaning getMeaning() {
 		if (meaning == null) {
-			
-//			if(identifier.equals("fpar")) {
-//				DeclarationScope currentScope = Global.getCurrentScope();
-//				System.out.println("VariableExpression.getMeaning: currentScope="+currentScope.getClass().getSimpleName()+"  "+currentScope);
-//				DeclarationScope.printScopeChain(currentScope, "VariableExpression.getMeaning");
-//			}
-			
 			meaning = Global.getCurrentScope().findMeaning(identifier);
 		}
 		return (meaning);

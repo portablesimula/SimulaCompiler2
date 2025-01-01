@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -26,53 +24,40 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Connection Block.
- * <p>
- * A Connection Block is a Statement within a Connection Statement.
- * It acts as a block, whether it takes the form of a block or not.
- * It further acts as if enclosed by a second fictitious block, called a
- * "connection block". During the execution of a connection block the object X is said to be
- * "connected".
- * <p>
- * See Simula Standard 4.8 Connection statement.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ConnectionBlock.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Connection Block.
+/// 
+/// A Connection Block is a Statement within a Connection Statement.
+/// It acts as a block, whether it takes the form of a block or not.
+/// It further acts as if enclosed by a second fictitious block, called a
+/// "connection block". During the execution of a connection block the object X is said to be
+/// "connected".
+/// 
+/// See Simula Standard 4.8 Connection statement.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ConnectionBlock.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class ConnectionBlock extends DeclarationScope {
-	/**
-	 * The Connection Statement.
-	 */
+	/// The Connection Statement.
 	public Statement statement;
-	/**
-	 * When clause class identifier.
-	 */
+	
+	/// When clause class identifier.
 	private String whenClassIdentifier;
-	/**
-	 * When clause class Declaration. Set during checking.
-	 */
+	
+	/// When clause class Declaration. Set during checking.
 	private Declaration whenClassDeclaration; // Set during checking
 
-	/**
-	 * The inspected variable.
-	 */
+	/// The inspected variable.
 	public VariableExpression inspectedVariable;
 
-	/**
-	 * The when class declaration. Set during checking.
-	 */
+	/// The when class declaration. Set during checking.
 	public ClassDeclaration classDeclaration;
 
-	/**
-	 * Create a new ConnectionBlock.
-	 * 
-	 * @param inspectedVariable   the inspected variable
-	 * @param whenClassIdentifier the when class identifier
-	 */
+	/// Create a new ConnectionBlock.
+	/// @param inspectedVariable   the inspected variable
+	/// @param whenClassIdentifier the when class identifier
 	public ConnectionBlock(final VariableExpression inspectedVariable, final String whenClassIdentifier) {
 		super("Connection block at line " + (Global.sourceLineNumber - 1));
 		declarationKind = ObjectKind.ConnectionBlock;
@@ -82,19 +67,14 @@ public final class ConnectionBlock extends DeclarationScope {
 		externalIdent = inspectedVariable.identifier;
 	}
 
-	/**
-	 * Get inspected variable.
-	 * 
-	 * @return inspected variable.
-	 */
+	/// Get inspected variable.
+	/// @return inspected variable.
 	public Expression getTypedInspectedVariable() {
 		Type type = classDeclaration.type;
 		return ((Expression) TypeConversion.testAndCreate(type, inspectedVariable));
 	}
 
-	/**
-	 * Connection block end.
-	 */
+	/// Connection block end.
 	public void end() {
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ConnectionBlock: " + this.edScopeChain());
@@ -103,21 +83,14 @@ public final class ConnectionBlock extends DeclarationScope {
 		Global.setScope(declaredIn);
 	}
 
-	/**
-	 * Set the Connected ClassDeclaration.
-	 * 
-	 * @param classDeclaration the Connected ClassDeclaration.
-	 */
+	/// Set the Connected ClassDeclaration.
+	/// @param classDeclaration the Connected ClassDeclaration.
 	public void setClassDeclaration(final ClassDeclaration classDeclaration) {
-//		System.out.println("ConnectionBlock.setClassDeclaration: "+identifier+"  classDeclaration="+classDeclaration);
 		this.classDeclaration = classDeclaration;
 	}
 
-	/**
-	 * Set the Connection Statement.
-	 * 
-	 * @param statement the Connection Statement
-	 */
+	/// Set the Connection Statement.
+	/// @param statement the Connection Statement
 	public void setStatement(final Statement statement) {
 		this.statement = statement;
 	}
@@ -264,10 +237,8 @@ public final class ConnectionBlock extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 * @param identifier the block identifier.
-	 */
+	/// Default constructor used by Attribute File I/O
+	/// @param identifier the block identifier.
 	public ConnectionBlock(String identifier) {
 		super(identifier);
 		declarationKind = ObjectKind.ConnectionBlock;
@@ -304,12 +275,10 @@ public final class ConnectionBlock extends DeclarationScope {
 		Util.TRACE_OUTPUT("END Write ConnectionBlock: "+identifier);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConnectionBlock object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ConnectionBlock readObject(AttributeInputStream inpt) throws IOException {
 		String identifier = inpt.readString();
 		ConnectionBlock blk = new ConnectionBlock(identifier);
