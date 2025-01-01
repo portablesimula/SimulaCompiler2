@@ -598,7 +598,8 @@ public final class SimulaExtractor extends JFrame {
 		msg +="\n\nDo you want to start it now ?\n\n";
 		int answer=optionDialog(msg,title,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, "Start Simula", "Exit");
 
-		if(DEBUG) System.out.println("SimulaExtractor.extract: answer="+answer); // TODO: MYH
+		if(DEBUG)
+			System.out.println("SimulaExtractor.extract: answer="+answer); // TODO: MYH
 		if(answer==0) {
 			new Thread() {
 				public void run() {	startJar(simulaJarFileName); }
@@ -630,6 +631,7 @@ public final class SimulaExtractor extends JFrame {
 		Runtime rt = Runtime.getRuntime();
 //		String cmd = getJavaProg() + " -jar " + jar;
 		String[] cmd = { getJavaProg(), "-jar", jar };
+//		System.out.println("SimulaExtractor.startJar: "+ getJavaProg() + " -jar " + jar);
 		try { rt.exec(cmd);
 		} catch (IOException ex) {
 			JOptionPane.showMessageDialog(null, "Can't run " + cmd, "Error Running Java", JOptionPane.ERROR_MESSAGE);

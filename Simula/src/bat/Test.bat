@@ -1,3 +1,6 @@
+java -jar C:\Users\omyhr\Simula\Simula-2.0\simula.jar
+pause
+
 echo off
 
 cd C:\USER_HOME\Simula\Simula-2.0

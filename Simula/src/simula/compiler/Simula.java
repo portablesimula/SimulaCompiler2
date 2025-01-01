@@ -4,12 +4,11 @@
 /// You find a copy of the License on the following
 /// page: https://creativecommons.org/licenses/by/4.0/
 
-package simula;
+package simula.compiler;
 
 import java.io.File;
 import java.io.IOException;
 
-import simula.compiler.SimulaCompiler;
 import simula.compiler.parsing.SimulaScanner;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
