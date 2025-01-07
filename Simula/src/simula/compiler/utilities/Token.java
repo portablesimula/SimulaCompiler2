@@ -1,47 +1,30 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
-/**
- * Utility class Token.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Token.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Utility class Token.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Token.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class Token {
-	/**
-	 * The Token's text attribute
-	 */
+	/// The Token's text attribute
 	private String text;
-	/**
-	 * The Token's keyWord attribute
-	 */
+	/// The Token's keyWord attribute
 	public int keyWord;
-	/**
-	 * The Token's value attribute
-	 */
+	/// The Token's value attribute
 	public Object value;
-	/**
-	 * The Token's line number
-	 */
+	/// The Token's line number
 	public int lineNumber;
 
-	/**
-	 * The line number before scan basic.
-	 */
+	/// The line number before scan basic.
 	public static int lineNumberBeforeScanBasic;
 
-	/**
-	 * The style codes used by Simula Editor.
-	 */
+	/// The style codes used by Simula Editor.
 	public enum StyleCode {
 		/** Regular */  regular,
 		/** Keyword */  keyword,
@@ -49,13 +32,10 @@ public final class Token {
 		/** Constant */ constant
 	};
 
-	/**
-	 * Create a new Token.
-	 * 
-	 * @param text    the Token's text attribute
-	 * @param keyWord the Token's keyword attribute
-	 * @param value   the Token's value attribute
-	 */
+	/// Create a new Token.
+	/// @param text    the Token's text attribute
+	/// @param keyWord the Token's keyword attribute
+	/// @param value   the Token's value attribute
 	public Token(final String text, final int keyWord, final Object value) {
 		this.text = text;
 		this.keyWord = keyWord;
@@ -63,66 +43,45 @@ public final class Token {
 		this.lineNumber = lineNumberBeforeScanBasic;
 	}
 
-	/**
-	 * Create a new Token.
-	 * 
-	 * @param text    the Token's text attribute
-	 * @param keyWord the Token's keyword attribute
-	 */
+	/// Create a new Token.
+	/// @param text    the Token's text attribute
+	/// @param keyWord the Token's keyword attribute
 	public Token(final String text, final int keyWord) {
 		this(text, keyWord, null);
 	}
 
-	/**
-	 * Create a new Token.
-	 * 
-	 * @param keyWord the Token's keyword attribute
-	 * @param value   the Token's value attribute
-	 */
+	/// Create a new Token.
+	/// @param keyWord the Token's keyword attribute
+	/// @param value   the Token's value attribute
 	public Token(final int keyWord, final Object value) {
 		this(null, keyWord, value);
 	}
 
-	/**
-	 * Create a new Token.
-	 * 
-	 * @param keyWord the Token's keyword attribute
-	 */
+	/// Create a new Token.
+	/// @param keyWord the Token's keyword attribute
 	public Token(final int keyWord) {
 		this(keyWord, null);
 	}
 
-	/**
-	 * The default constructor used by Attribute File I/O
-	 */
-	public Token() {
-	} // Externalization
+	/// The default constructor.
+	public Token() {}
 
-	/**
-	 * Set this Token's text attribute.
-	 * 
-	 * @param text new text attribute
-	 */
+	/// Set this Token's text attribute.
+	/// @param text new text attribute
 	public void setText(final String text) {
 		this.text = text;
 	}
 
-	/**
-	 * Get this Token's text attribute.
-	 * 
-	 * @return this Token's text attribute
-	 */
+	/// Get this Token's text attribute.
+	/// @return this Token's text attribute
 	public String getText() {
 		if (text == null)
 			return (toString());
 		return (text);
 	}
 
-	/**
-	 * Returns the style code for this Token's keyword.
-	 * 
-	 * @return the style code for this Token's keyword
-	 */
+	/// Returns the style code for this Token's keyword.
+	/// @return the style code for this Token's keyword
 	public StyleCode getStyleCode() {
 		switch(keyWord) {
 		    case KeyWord.ASSIGNVALUE: case KeyWord.ASSIGNREF: case KeyWord.COMMA: case KeyWord.COLON: case KeyWord.SEMICOLON:
@@ -143,45 +102,33 @@ public final class Token {
 		}
 	}
 
-	/**
-	 * Get this Token's keyword attribute.
-	 * 
-	 * @return this Token's keyword attribute
-	 */
+	/// Get this Token's keyword attribute.
+	/// @return this Token's keyword attribute
 	public int getKeyWord() {
 		return (keyWord);
 	}
 
-	/**
-	 * Get this Token's keyword code.
-	 * 
-	 * @return this Token's keyword code
-	 */
+	/// Get this Token's keyword code.
+	/// @return this Token's keyword code
 	public int getKeyWordCode() {
 		return (keyWord);
 	}
 
-	/**
-	 * Get this Token's value attribute.
-	 * 
-	 * @return this Token's value attribute
-	 */
+	/// Get this Token's value attribute.
+	/// @return this Token's value attribute
 	public Object getValue() {
 		return (value);
 	}
 
-	/**
-	 * Get this Token's value string.
-	 * 
-	 * @return this Token's value string
-	 */
+	/// Get this Token's value string.
+	/// @return this Token's value string
 	public String getIdentifier() {
 		return ((String) value);
 	}
 
+	@Override
 	public boolean equals(final Object other) {
 		Token othr = (Token) other;
-//		if (!this.keyWord.equals(othr.keyWord))
 		if (this.keyWord != othr.keyWord)
 			return (false);
 		if (this.value == othr.value)
@@ -195,6 +142,7 @@ public final class Token {
 		return (true);
 	}
 
+	@Override
 	public String toString() {
 		switch (keyWord) {
 		case KeyWord.COMMA:			return (",");

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
 import java.awt.Color;
@@ -18,50 +16,36 @@ import java.util.Vector;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
-import simula.compiler.syntaxClass.SyntaxClass;
-
-/**
- * A set of all static Utility Methods
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Util.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// A set of all static Utility Methods
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Util.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class Util { 
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	Util(){}
 	
-	/**
-	 * Pop up a message box.
-	 * @param msg the message
-	 */
+	/// Pop up a message box.
+	/// @param msg the message
 	public static void popUpMessage(final Object msg) {
 		Util.optionDialog(msg,"Message",JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, "OK");
 	}
 	
-	/**
-	 * Pop up an error message box.
-	 * @param msg the error message
-	 */
+	/// Pop up an error message box.
+	/// @param msg the error message
 	public static void popUpError(final String msg) {
 		int res=Util.optionDialog(msg+"\nDo you want to continue ?","Error",JOptionPane.YES_NO_OPTION, JOptionPane.ERROR_MESSAGE, "Yes", "No");
 		if(res!=JOptionPane.YES_OPTION) System.exit(0);
 	}
 
-	/**
-	 * Brings up an option dialog.
-	 * @param msg the message to display
-	 * @param title the title string for the dialog
-	 * @param optionType an integer designating the options available on the dialog
-	 * @param messageType an integer designating the kind of message this is
-	 * @param option an array of objects indicating the possible choices the user can make
-	 * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
-	 */
-	public static int optionDialog(final Object msg, final String title, final int optionType, final int messageType,
-			final String... option) {
+	/// Brings up an option dialog.
+	/// @param msg the message to display
+	/// @param title the title string for the dialog
+	/// @param optionType an integer designating the options available on the dialog
+	/// @param messageType an integer designating the kind of message this is
+	/// @param option an array of objects indicating the possible choices the user can make
+	/// @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
+	public static int optionDialog(final Object msg, final String title, final int optionType, final int messageType, final String... option) {
 		Object OptionPaneBackground = UIManager.get("OptionPane.background");
 		Object PanelBackground = UIManager.get("Panel.background");
 		UIManager.put("OptionPane.background", Color.WHITE);
@@ -73,32 +57,24 @@ public final class Util {
 		return (answer);
 	}
 
-	/**
-	 * Number of error messages.
-	 */
+	/// Number of error messages.
 	public static int nError;
 
-	/**
-	 * Print a error message.
-	 * @param msg the message
-	 */
+	/// Print a error message.
+	/// @param msg the message
 	public static void error(final String msg) {
 		String err = edLINE(": Error: " + msg);
 		nError++;
 		printError(err);
 	}
 
-	/**
-	 * Print the internal error message: IMPOSSIBLE.
-	 */
+	/// Print the internal error message: IMPOSSIBLE.
 	public static void IERR() {
 		IERR("IMPOSSIBLE");
 	}
 
-	/**
-	 * Print a internal error message.
-	 * @param msg the message
-	 */
+	/// Print a internal error message.
+	/// @param msg the message
 	public static void IERR(final String msg) {
 		String err = edLINE(": Internal error - " + msg);
 		nError++;
@@ -107,19 +83,15 @@ public final class Util {
 		FORCED_EXIT();
 	}
 
-	/**
-	 * Perform FORCED EXIT.
-	 */
+	/// Perform FORCED EXIT.
 	private static void FORCED_EXIT() {
 		System.out.println("FORCED EXIT");
 		if (Global.console == null) System.exit(-1);
 	}
 
-	/**
-	 * Print a internal error message.
-	 * @param msg the message
-	 * @param e any Throwable
-	 */
+	/// Print a internal error message.
+	/// @param msg the message
+	/// @param e any Throwable
 	public static void IERR(final String msg,final Throwable e) {
 		String err = edLINE(": Internal error - " + msg +"  "+ e);
 		nError++;
@@ -128,10 +100,8 @@ public final class Util {
 		FORCED_EXIT();
 	}
 
-	/**
-	 * Print a warning message.
-	 * @param msg the message
-	 */
+	/// Print a warning message.
+	/// @param msg the message
 	public static void warning(final String msg) {
 		String line = edLINE(": WARNING: " + msg);
 		if (Option.WARNINGS) {
@@ -139,17 +109,12 @@ public final class Util {
 		}
 	}
 	
-	/**
-	 * Edit a line with source line number etc.
-	 * @param s the line string
-	 * @return the resulting string
-	 */
+	/// Edit a line with source line number etc.
+	/// @param s the line string
+	/// @return the resulting string
 	private static String edLINE(String s) {		
 		String line = "LINE " + Global.sourceLineNumber + s;
 		if(Global.insertName!=null) line = Global.insertName + ':' + line;
-		
-//		System.out.println("Util.edLINE: Global.sourceName = "+Global.sourceName);
-//		System.out.println("Util.edLINE: CurrentScope'sourceFileName = "+Global.getCurrentScope().sourceFileName);
 		if(Global.getCurrentScope() != null) {
 			if(Global.getCurrentScope().sourceFileName!=null) {
 				String sourceName = getBaseName(Global.getCurrentScope().sourceFileName);
@@ -160,58 +125,46 @@ public final class Util {
 		return(line);
 	}
 	
-	/**
-	 * Return the base name part of a File Name
-	 * @param fileName a File Name.
-	 * @return the base name part of a File Name
-	 */
+	/// Return the base name part of a File Name
+	/// @param fileName a File Name.
+	/// @return the base name part of a File Name
 	public static String getBaseName(String fileName) {
 		int p=fileName.lastIndexOf(".");
 		return (p > 0)? fileName.substring(0, p) : fileName;
 	}
 
-	/**
-	 * Utility method: TRACE
-	 * @param msg the message to print
-	 */
+	/// Utility method: TRACE
+	/// @param msg the message to print
 	public static void TRACE(final String msg) {
 		if (Option.internal.TRACING)
 			println("TRACE " + Global.sourceLineNumber + ": " + msg);
 	}
 
-	/**
-	 * Utility method: TRACE_OUTPUT
-	 * @param msg the message to print
-	 */
+	/// Utility method: TRACE_OUTPUT
+	/// @param msg the message to print
 	public static void TRACE_OUTPUT(final String msg) {
 		if (Option.internal.TRACE_ATTRIBUTE_OUTPUT)
 			Util.println("ATTR OUTPUT: " + msg);
 	}
 
-	/**
-	 * Utility method: TRACE_INPUT
-	 * @param msg the message to print
-	 */
+	/// Utility method: TRACE_INPUT
+	/// @param msg the message to print
 	public static void TRACE_INPUT(final String msg) {
 		if (Option.internal.TRACE_ATTRIBUTE_INPUT)
 			Util.println("ATTR INPUT: " + msg);
 	}
 
-	/**
-	 * Utility method: ASSERT
-	 * @param test this test must be true
-	 * @param msg the message when test = false
-	 */
+	/// Utility method: ASSERT
+	/// @param test this test must be true
+	/// @param msg the message when test = false
 	public static void ASSERT(final boolean test, final String msg) {
 		if (!test) {
 			IERR("ASSERT(" + msg + ") -- FAILED");
 		}
 	}
 
-	/**
-	 * Print a string.
-	 * @param s the string
-	 */
+	/// Print a string.
+	/// @param s the string
 	public static void println(final String s) {
 		if (Global.console != null) {
 			String u = s.replace('\r', (char) 0);
@@ -221,20 +174,16 @@ public final class Util {
 		else System.out.println(s);
 	}  
 
-	/**
-	 * Print a error message.
-	 * @param s the message
-	 */
+	/// Print a error message.
+	/// @param s the message
 	public static void printError(final String s) {
 		String u = s.replace('\r', (char) 0);
 		if (Global.console != null)	Global.console.writeError(u + '\n');
 		else System.err.println(u);
 	}  
 
-	/**
-	 * Print a warning message.
-	 * @param s the message
-	 */
+	/// Print a warning message.
+	/// @param s the message
 	public static void printWarning(final String s) {
 		String u = s.replace('\r', (char) 0);
 		if (Global.console != null)	Global.console.writeWarning(u + '\n');
@@ -244,11 +193,9 @@ public final class Util {
     //*******************************************************************************
     //*** isJavaIdentifier - Check if 'ident' is a legal Java Identifier
     //*******************************************************************************
-	/**
-	 * Check if 'ident' is a legal Java Identifier.
-	 * @param ident the given identifier
-	 * @return true if 'ident' is a legal Java Identifier otherwise false
-	 */
+	/// Check if 'ident' is a legal Java Identifier.
+	/// @param ident the given identifier
+	/// @return true if 'ident' is a legal Java Identifier otherwise false
 	public static boolean isJavaIdentifier(final String ident) {
 		if (ident.length() == 0 || !Character.isJavaIdentifierStart(ident.charAt(0))) {
 			return false;
@@ -264,11 +211,9 @@ public final class Util {
     //*******************************************************************************
     //*** makeJavaIdentifier - Make 'ident' a legal Java Identifier
     //*******************************************************************************
-	/**
-	 * Make 'ident' a legal Java Identifier.
-	 * @param ident the given identifier
-	 * @return the resulting Java identifier
-	 */
+	/// Make 'ident' a legal Java Identifier.
+	/// @param ident the given identifier
+	/// @return the resulting Java identifier
 	public static String makeJavaIdentifier(final String ident) {
 		StringBuilder sb=new StringBuilder();
 		char c=ident.charAt(0);
@@ -286,12 +231,10 @@ public final class Util {
     //*******************************************************************************
     //*** 
     //*******************************************************************************
-	/**
-	 * Returns true if the two specified strings are equal to one another.
-	 * @param s1 argument string
-	 * @param s2 argument string
-	 * @return true if the two specified strings are equal to one another
-	 */
+	/// Returns true if the two specified strings are equal to one another.
+	/// @param s1 argument string
+	/// @param s2 argument string
+	/// @return true if the two specified strings are equal to one another
 	public static boolean equals(String s1,String s2) {
 		if(Option.CaseSensitive)
 			 return(s1.equals(s2));			
@@ -301,12 +244,10 @@ public final class Util {
     //*******************************************************************************
     //*** IPOW - Integer Power: b ** x
     //*******************************************************************************
-	/**
-	 * Utility: Integer Power: b ** x
-	 * @param base argument base
-	 * @param x argument x
-	 * @return Returns the value of 'base' raised to the power of 'x'
-	 */
+	/// Utility: Integer Power: b ** x
+	/// @param base argument base
+	/// @param x argument x
+	/// @return Returns the value of 'base' raised to the power of 'x'
 	public static int IPOW(final long base, long x) {
 		if (x == 0) {
 			if (base == 0)
@@ -328,11 +269,8 @@ public final class Util {
 	// ***************************************************************
 	// *** LIST .class file
 	// ***************************************************************
-	/**
-	 * Print a .class file listing.
-	 * 
-	 * @param classFileName the .class file name
-	 */
+	/// Print a .class file listing.
+	/// @param classFileName the .class file name
 	public static void doListClassFile(final String classFileName) {
 		System.out.println("\n\n******** BEGIN List ClassFile: "+classFileName + " *****************************************************");
 		try {
@@ -346,25 +284,21 @@ public final class Util {
 	// ***************************************************************
 	// *** EXECUTE OS COMMAND
 	// ***************************************************************
-	/**
-	 * Execute OS Command
-	 * @param cmd command vector
-	 * @return return value from the OS
-	 * @throws IOException if something went wrong
-	 */
+	/// Execute OS Command
+	/// @param cmd command vector
+	/// @return return value from the OS
+	/// @throws IOException if something went wrong
 	public static int execute(final Vector<String> cmd) throws IOException {
 		String[] cmds = new String[cmd.size()];
 		cmd.copyInto(cmds);
 		return (execute(cmds));
 	}
 
-	/**
-	 * Execute an OS command
-	 * 
-	 * @param cmdarray command array
-	 * @return exit value
-	 * @throws IOException if an I/O error occurs
-	 */
+	/// Execute an OS command
+	/// 
+	/// @param cmdarray command array
+	/// @return exit value
+	/// @throws IOException if an I/O error occurs
 	public static int execute(final String... cmdarray) throws IOException {
 		Runtime runtime = Runtime.getRuntime();
 		if (Option.verbose) {
@@ -395,11 +329,9 @@ public final class Util {
 		return (process.exitValue());
 	}
   
-	/**
-	 * Build invoke Simula Runtime Error.
-	 * @param mss the error message.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Build invoke Simula Runtime Error.
+	/// @param mss the error message.
+	/// @param codeBuilder the codeBuilder to use.
 	public static void buildSimulaRuntimeError(String mss,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		ClassDesc CD = ClassDesc.of("simula.runtime.RTS_SimulaRuntimeError");
@@ -411,11 +343,9 @@ public final class Util {
 			.athrow();		
 	}
 
-	/**
-	 * Build line number method call.
-	 * @param codeBuilder the codeBuilder to use.
-	 * @param lineNumber the line number
-	 */
+	/// Build line number method call.
+	/// @param codeBuilder the codeBuilder to use.
+	/// @param lineNumber the line number
 	public static void buildLineNumber(CodeBuilder codeBuilder, int lineNumber) {
 		codeBuilder.lineNumber(lineNumber);
 	}

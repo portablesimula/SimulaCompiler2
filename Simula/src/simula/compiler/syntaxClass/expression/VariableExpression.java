@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -20,6 +18,7 @@ import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.OverLoad;
+import simula.compiler.syntaxClass.ProcedureSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
@@ -41,139 +40,115 @@ import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
-import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Variable.
- * 
- * <pre>
- * 
- * Simula Standard: 3.1 Variables
- * Simula Standard: 3.1.3. Array elements
- * Simula Standard: 3.1.4. Function designators
- * 
- * variable = simple-variable | subscripted-variable | simple-object-expression . variable
- * 
- *    simple-object-expression = NONE | variable | function-designator | object-generator
- *                             | local-object | qualified-object | ( object-expression )
- *                             
- *    simple-variable = identifier
- * 
- *    subscripted-variable = function-designator | array-element
- * 
- *       function-designator = procedure-identifier ( [ actual-parameter-part ] )
- *  
- *          actual-parameter-part = actual-parameter { , actual-parameter }
- *          
- *             actual-parameter = expression | array-identifier1 
- *                              | switch-identifier1 | procedure-identifier1
- *                              
- *                identifier1 = identifier | remote-identifier
- *                
- *                   remote-identifier = simple-object-expression . attribute-identifier
- *                                     | text-primary . attribute-identifier
- *
- *       array-element = array-identifier [ subscript-list ]
- *       
- *          subscript-list = arithmetic-expression { , arithmetic-expression }
- * 
- * </pre>
- * <b>Function designators:</b>
- * <p>
- * A function designator defines a value which results through the application
- * of a given set of rules defined by a procedure declaration (see 5.4) to a
- * fixed set of actual parameters. The rules governing specification of actual
- * parameters are given in 4.6.
- * 
- * Note: Not every procedure declaration defines rules for determining the value
- * of a function designator (cf. 5.4.1).
- * <p>
- * <b>Array elements:</b>
- * <p>
- * Subscripted variables designate values which are components of multi-
- * dimensional arrays. Each arithmetic expression of the subscript list occupies
- * one subscript position of the subscripted variable and is called a subscript.
- * The complete list of subscripts is enclosed by the subscript parentheses ( ).
- * The array component referred to by a subscripted variable is specified by
- * the actual value of its subscripts.
- * <p>
- * Each subscript position acts like a variable of type integer and the
- * evaluation of the subscript is understood to be equivalent to an assignment
- * to this fictitious variable. The value of the subscripted variable is defined
- * only if the actual integer value of each subscript expression is within the
- * associated subscript bounds of the array. A subscript expression value
- * outside its associated bounds causes a run time error.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Variable.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Variable.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 3.1 Variables
+/// Simula Standard: 3.1.3. Array elements
+/// Simula Standard: 3.1.4. Function designators
+/// 
+/// variable = simple-variable | subscripted-variable | simple-object-expression . variable
+/// 
+///    simple-object-expression = NONE | variable | function-designator | object-generator
+///                             | local-object | qualified-object | ( object-expression )
+///                             
+///    simple-variable = identifier
+/// 
+///    subscripted-variable = function-designator | array-element
+/// 
+///       function-designator = procedure-identifier ( [ actual-parameter-part ] )
+///  
+///          actual-parameter-part = actual-parameter { , actual-parameter }
+///          
+///             actual-parameter = expression | array-identifier1 
+///                              | switch-identifier1 | procedure-identifier1
+///                              
+///                identifier1 = identifier | remote-identifier
+///                
+///                   remote-identifier = simple-object-expression . attribute-identifier
+///                                     | text-primary . attribute-identifier
+/// 
+///       array-element = array-identifier [ subscript-list ]
+///       
+///          subscript-list = arithmetic-expression { , arithmetic-expression }
+/// 
+/// </pre>
+/// <b>Function designators:</b>
+/// 
+/// A function designator defines a value which results through the application
+/// of a given set of rules defined by a procedure declaration (see 5.4) to a
+/// fixed set of actual parameters. The rules governing specification of actual
+/// parameters are given in 4.6.
+/// 
+/// Note: Not every procedure declaration defines rules for determining the value
+/// of a function designator (cf. 5.4.1).
+/// 
+/// <b>Array elements:</b>
+/// 
+/// Subscripted variables designate values which are components of multi-
+/// dimensional arrays. Each arithmetic expression of the subscript list occupies
+/// one subscript position of the subscripted variable and is called a subscript.
+/// The complete list of subscripts is enclosed by the subscript parentheses ( ).
+/// The array component referred to by a subscripted variable is specified by
+/// the actual value of its subscripts.
+/// 
+/// Each subscript position acts like a variable of type integer and the
+/// evaluation of the subscript is understood to be equivalent to an assignment
+/// to this fictitious variable. The value of the subscripted variable is defined
+/// only if the actual integer value of each subscript expression is within the
+/// associated subscript bounds of the array. A subscript expression value
+/// outside its associated bounds causes a run time error.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Variable.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class VariableExpression extends Expression {
 
-	/**
-	 * The variable's identifier.
-	 */
+	/// The variable's identifier.
 	public String identifier;
 
-	/**
-	 * The meaning of this variable.
-	 */
+	/// The meaning of this variable.
 	public Meaning meaning;
 
-	/**
-	 * Indicates that this variable is remotely accessed.
-	 */
+	/// Indicates that this variable is remotely accessed.
 	private boolean remotelyAccessed;
 
-	/**
-	 * The parsed parameters.
-	 */
+	/// The parsed parameters.
 	Vector<Expression> params;
 
-	/**
-	 * The checked parameters set by doChecking.
-	 */
+	/// The checked parameters set by doChecking.
 	public Vector<Expression> checkedParams; // Set by doChecking
 
-	/**
-	 * Create a new Variable.
-	 * 
-	 * @param identifier the variable's identifier
-	 */
+	/// Create a new Variable.
+	/// @param identifier the variable's identifier
 	public VariableExpression(final String identifier) {
 		this.identifier = identifier;
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("NEW Variable: " + identifier);
 	}
 
-	/**
-	 * Returns true if this variable has arguments.
-	 * 
-	 * @return true if this variable has arguments
-	 */
+	/// Returns true if this variable has arguments.
+	/// @return true if this variable has arguments
 	public boolean hasArguments() {
 		return (params != null);
 	}
 
-	/**
-	 * Returns a suitable java identifier for this variable.
-	 * 
-	 * @return a suitable java identifier
-	 */
+	/// Returns a suitable java identifier for this variable.
+	/// 
+	/// @return a suitable java identifier
 	public String getJavaIdentifier() {
 		return (meaning.declaredAs.getJavaIdentifier());
 	}
 
-	/**
-	 * This variable is remotely accessed through 'meaning'.
-	 * 
-	 * @param meaning before dot
-	 */
+	/// This variable is remotely accessed through 'meaning'.
+	/// @param meaning before dot
 	void setRemotelyAccessed(final Meaning meaning) {
 		this.meaning = meaning;
 		remotelyAccessed = true;
@@ -181,14 +156,11 @@ public final class VariableExpression extends Expression {
 		SET_SEMANTICS_CHECKED(); // Checked as remote attribute
 	}
 
-	/**
-	 * Returns the meaning.
-	 * <p>
-	 * If meaning is not set by setRemotelyAccessed then meaning by identifier will
-	 * be set.
-	 * 
-	 * @return the meaning
-	 */
+	/// Returns the meaning.
+	/// 
+	/// If meaning is not set by setRemotelyAccessed then meaning by identifier will
+	/// be set.
+	/// @return the meaning
 	public Meaning getMeaning() {
 		if (meaning == null) {
 			meaning = Global.getCurrentScope().findMeaning(identifier);
@@ -196,16 +168,14 @@ public final class VariableExpression extends Expression {
 		return (meaning);
 	}
 
-	/**
-	 * Parse Utility: Expect Variable.
-	 * <pre>
-	 * Variable  =  Identifier  |  SubscriptedVariable
-	 *	SubscriptedVariable  =  Identifier  "("  Expression  {  ,  Expression  }  ")"
-	 * </pre>
-	 * Precondition: Identifier  is already read.
-	 * @param ident the variable identifier
-	 * @return the created Variable
-	 */
+	/// Parse Utility: Expect Variable.
+	/// <pre>
+	/// Variable  =  Identifier  |  SubscriptedVariable
+	/// 	SubscriptedVariable  =  Identifier  "("  Expression  {  ,  Expression  }  ")"
+	/// </pre>
+	/// Precondition: Identifier  is already read.
+	/// @param ident the variable identifier
+	/// @return the created Variable
 	public static VariableExpression expectVariable(final String ident) {
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse Variable, current=" + Parse.currentToken + ", prev=" + Parse.prevToken);
@@ -240,7 +210,6 @@ public final class VariableExpression extends Expression {
 			return;
 		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN Variable(" + identifier + ").doChecking: type=" + type);
-//		System.out.println("VariableExpression.doChecking: "+this);
 		Global.sourceLineNumber = lineNumber;
 		Declaration declaredAs = getMeaning().declaredAs;
 		if (declaredAs != null)
@@ -310,7 +279,6 @@ public final class VariableExpression extends Expression {
 				} else Util.IERR();
 				if (params == null) {
 					if(decl.declarationKind != ObjectKind.Procedure) {
-//						System.out.println("VariableExpression.doChecking: NOT Procedure'backLink="+this.backLink);
 						if (paramIterator.hasNext())
 							Util.error("Missing parameter(s) to " + decl.identifier);
 					} else {
@@ -379,7 +347,6 @@ public final class VariableExpression extends Expression {
 				}
 				break;
 			case ObjectKind.VirtualSpecification:
-//				System.out.println("VariableExpression.doChecking: VirtualSpecification: "+decl);
 				VirtualSpecification vspec = (VirtualSpecification) decl;
 				this.type = vspec.type;
 				if(params != null) {
@@ -450,12 +417,9 @@ public final class VariableExpression extends Expression {
 	// ******************************************************************
 	// *** Coding: doGetELEMENT
 	// ******************************************************************
-	/**
-	 * ClassFile coding utility: doGetELEMENT.
-	 * 
-	 * @param var the variable
-	 * @return a suitable java code
-	 */
+	/// Java coding utility: doGetELEMENT.
+	/// @param var the variable
+	/// @return a suitable java code
 	public String doGetELEMENT(final String var) {
 		StringBuilder s = new StringBuilder();
 		s.append(var);
@@ -474,13 +438,10 @@ public final class VariableExpression extends Expression {
 	// ******************************************************************
 	// *** Coding: doPutELEMENT
 	// ******************************************************************
-	/**
-	 * ClassFile coding utility: doPutELEMENT.
-	 * 
-	 * @param var       the variable
-	 * @param rightPart the right hand side
-	 * @return a suitable java code
-	 */
+	/// Java coding utility: doPutELEMENT.
+	/// @param var       the variable
+	/// @param rightPart the right hand side
+	/// @return a suitable java code
 	public String doPutELEMENT(final String var, final String rightPart) {
 		StringBuilder s = new StringBuilder();
 		s.append(var);
@@ -523,20 +484,15 @@ public final class VariableExpression extends Expression {
 	// ******************************************************************
 	// *** Coding: editVariable
 	// ******************************************************************
-	/**
-	 * Coding Utility: Edit this Variable.
-	 * @param rightPart When destination, this is the right part of the assignment
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit this Variable.
+	/// @param rightPart When destination, this is the right part of the assignment
+	/// @return the resulting Java source code
 	private String editVariable(final String rightPart) {
 		boolean destination = (rightPart != null);
 		Declaration decl = meaning.declaredAs;
 		ASSERT_SEMANTICS_CHECKED();
 		StringBuilder s;
-		
-//		System.out.println("VariableExpression.editVariable: "+ObjectKind.edit(decl.declarationKind)+" "+decl);
 		switch (decl.declarationKind) {
-
 			case ObjectKind.ArrayDeclaration:
 				s = new StringBuilder();
 				if (this.hasArguments()) { // Array Element Access
@@ -679,12 +635,9 @@ public final class VariableExpression extends Expression {
 	// ***********************************************************************
 	// *** Coding: edIdentifierAccess
 	// ***********************************************************************
-	/**
-	 * ClassFile coding utility: Edit identifier access.
-	 * 
-	 * @param destination true if this variable is a destination
-	 * @return a suitable java code
-	 */
+	/// Java coding utility: Edit identifier access.
+	/// @param destination true if this variable is a destination
+	/// @return a suitable java code
 	public String edIdentifierAccess(boolean destination) {
 		Declaration decl = meaning.declaredAs;
 		String id = decl.getJavaIdentifier();
@@ -692,12 +645,10 @@ public final class VariableExpression extends Expression {
 		return (res);
 	}
 
-	/**
-	 * Coding Utility: Edit identifier access.
-	 * @param id the identifier
-	 * @param destination true if destination
-	 * @return a suitable java code
-	 */
+	/// Java Coding Utility: Edit identifier access.
+	/// @param id the identifier
+	/// @param destination true if destination
+	/// @return a suitable java code
 	private String edIdentifierAccess(String id, boolean destination) {
 		Expression constantElement = meaning.getConstant();
 		if (constantElement != null) {
@@ -731,19 +682,9 @@ public final class VariableExpression extends Expression {
 	}
 
 
-	// **********************************************************************************************************************************
-	// **********************************************************************************************************************************
-	// **********************************************************************************************************************************
-	// **********************************************************************************************************************************
-	// **********************************************************************************************************************************
-	// **********************************************************************************************************************************
-
-
-	/**
-	 * Coding Utility: Edit identifier access.
-	 * @param destination true if destination
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// ClassFile Coding Utility: Edit identifier access.
+	/// @param destination true if destination
+	/// @param codeBuilder the CodeBuilder
 	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
 		if (remotelyAccessed) return;
 		meaning.buildIdentifierAccess(destination, codeBuilder);
@@ -752,11 +693,9 @@ public final class VariableExpression extends Expression {
 	// ******************************************************************
 	// *** Coding: buildEvaluation
 	// ******************************************************************
-	/**
-	 * Coding Utility: Build this Variable.
-	 * @param rightPart When destination, this is the right part of the assignment
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// ClassFile Coding Utility: Build this Variable.
+	/// @param rightPart When destination, this is the right part of the assignment
+	/// @param codeBuilder the CodeBuilder
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
@@ -764,12 +703,8 @@ public final class VariableExpression extends Expression {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
 		VariableExpression inspectedVariable = meaning.getInspectedVariable();
-		
-//		System.out.println("VariableExpression.buildEvaluation: "+this+"="+rightPart+"  "+ObjectKind.edit(decl.declarationKind));
 		switch (decl.declarationKind) {
-
 			case ObjectKind.ArrayDeclaration:
-//				if (destination) Util.IERR();
 				ArrayDeclaration arr=(ArrayDeclaration)decl;
 				buildIdentifierAccess(false,codeBuilder);
 				if (this.hasArguments())
@@ -814,7 +749,6 @@ public final class VariableExpression extends Expression {
 //			case ObjectKind.Switch:
 				ProcedureDeclaration procedure = (ProcedureDeclaration) decl;
 				if (destination) {
-//					System.out.println("VariableExpression.buildEvaluation'Procedure: "+procedure.result);
 					codeBuilder
 						.aload(0)
 						.getfield(procedure.result.getFieldRefEntry(pool));
@@ -891,13 +825,10 @@ public final class VariableExpression extends Expression {
 	// ***************************************************************************************
 	// *** JVM CODING: getFieldRefEntry
 	// ***************************************************************************************
-	/**
-	 * Return the field ref entry for this variable.
-	 * @param pool the ConstantPoolBuilder to use.
-	 * @return the field ref entry for this variable.
-	 */
+	/// ClassFile Coding Utility: Return the field ref entry for this variable.
+	/// @param pool the ConstantPoolBuilder to use.
+	/// @return the field ref entry for this variable.
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-//		System.out.println("VariableExpression.getFieldRefEntry: "+this.identifier);
 		ClassDesc owner=meaning.declaredIn.getClassDesc();
 		Declaration declaredAs = meaning.declaredAs;
 		return(pool.fieldRefEntry(owner, declaredAs.getJavaIdentifier(), declaredAs.type.toClassDesc()));
@@ -907,19 +838,14 @@ public final class VariableExpression extends Expression {
 	// ******************************************************************
 	// *** Coding: buildEvaluateParameter
 	// ******************************************************************
-	/**
-	 * Coding Utility: Build this Parameter.
-	 * @param par the Parameter
-	 * @param inspectedVariable then inspected variable or null
-	 * @param rightPart When destination, this is the right part of the assignment
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// ClassFile Coding Utility: Build this Parameter.
+	/// @param par the Parameter
+	/// @param inspectedVariable then inspected variable or null
+	/// @param rightPart When destination, this is the right part of the assignment
+	/// @param codeBuilder the CodeBuilder
 	private void buildEvaluateParameter(Parameter par,Expression inspectedVariable,Expression rightPart,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		boolean destination = (rightPart != null);
-				
-//		System.out.println("VariableExpression.buildEvaluateParameter: "+par+"  kind="+Parameter.edKind(par.kind));
-		
 		switch (par.kind) {
 		case Parameter.Kind.Array: // Parameter Array
 			buildIdentifierAccess(destination,codeBuilder);
@@ -956,19 +882,15 @@ public final class VariableExpression extends Expression {
 			break;
 
 		case Parameter.Kind.Simple, Parameter.Kind.Label:
-//			System.out.println("VariableExpression.buildEvaluateParameter'Simple: "+this);
 			buildIdentifierAccess(destination,codeBuilder); // Kind: Simple/Label
 			codeBuilder.getfield(par.getFieldRefEntry(pool));
-//			System.out.println("VariableExpression.buildEvaluateParameter'Simple: destination="+destination+", mode="+Parameter.edMode(par.mode));
-//			Thread.dumpStack();
-			
 			if (!destination && par.mode == Parameter.Mode.name) {
 				RTS.invokevirtual_NAME_get(codeBuilder);
 				par.type.checkCast(codeBuilder);
 				par.type.valueToPrimitiveType(codeBuilder);
 
 			}
-			break; // OK
+			break;
 		}
 	}
 
@@ -991,9 +913,7 @@ public final class VariableExpression extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O.
-	 */
+	/// Default constructor used by Attribute File I/O.
 	public VariableExpression() {
 	}
 
@@ -1019,12 +939,10 @@ public final class VariableExpression extends Expression {
 		}
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a VariableExpression object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the VariableExpression object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static VariableExpression readObject(AttributeInputStream inpt) throws IOException {
 		VariableExpression var = new VariableExpression();
 		var.OBJECT_SEQU = inpt.readSEQU(var);

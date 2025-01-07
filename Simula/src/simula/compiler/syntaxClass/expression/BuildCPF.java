@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.lang.classfile.CodeBuilder;
@@ -12,35 +17,28 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Coding Utilities: Build Call Procedure Formal (CPF).
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPF.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Coding Utilities: Build Call Procedure Formal (CPF).
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPF.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public abstract class BuildCPF {
 	/** Default Constructor: NOT USED */ private BuildCPF() {}
 
 	// ********************************************************************
 	// *** BuildCP.formal
 	// ********************************************************************
-	/**
-	 * BuildCP.formal
-	 * 
-	 * @param variable the procedure variable
-	 * @param par declared as parameter 'par'
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// BuildCP.formal
+	/// @param variable the procedure variable
+	/// @param par declared as parameter 'par'
+	/// @param codeBuilder the CodeBuilder
 	static void formal(final VariableExpression variable,final Parameter par,CodeBuilder codeBuilder) {
 		//return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
 		Declaration decl=variable.meaning.declaredAs;
-//		System.out.println("BuildCPF.formal: type="+decl.type+", backLink="+backLink);
 		if(decl.type != null && backLink != null) {
 			codeBuilder.aload(0);
 		}
@@ -59,11 +57,9 @@ public abstract class BuildCPF {
 	// ********************************************************************
 	// *** buildCPF
 	// ********************************************************************
-	/**
-	 * Coding Utility: Build Call Procedure Formal.
-	 * @param variable the procedure variable
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Coding Utility: Build Call Procedure Formal.
+	/// @param variable the procedure variable
+	/// @param codeBuilder the CodeBuilder
 	static void buildCPF(final VariableExpression variable, CodeBuilder codeBuilder) {
 //		s.append(ident).append(".CPF()");
 //	    p_SFD.CPF().setPar(new RTS_NAME<Integer>(){ public Integer get() { return(1); } })._ENT();
@@ -98,7 +94,7 @@ public abstract class BuildCPF {
 						case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
 						case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
 						case ObjectKind.Procedure -> kind=Parameter.Kind.Procedure;
-//						case ObjectKind.Switch -> kind=Parameter.Kind.Procedure;
+					//	case ObjectKind.Switch -> kind=Parameter.Kind.Procedure;
 						case ObjectKind.ContextFreeMethod -> kind=Parameter.Kind.Simple;
 						case ObjectKind.ArrayDeclaration -> kind=Parameter.Kind.Array;
 						case ObjectKind.LabelDeclaration -> kind=Parameter.Kind.Label;
@@ -117,11 +113,9 @@ public abstract class BuildCPF {
 		maybeBuildLoad_RESULT(variable, codeBuilder);
 	}
 	
-	/**
-	 * ClassFile coding utility: May be Build Load_RESULT.
-	 * @param variable the variable
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: May be Build Load_RESULT.
+	/// @param variable the variable
+	/// @param codeBuilder the codeBuilder to use.
 	static void maybeBuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -18,39 +16,30 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Inner Statement.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- *   inner-statement = INNER
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InnerStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Inner Statement.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+///   inner-statement = INNER
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InnerStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class InnerStatement extends Statement {
 
-	/**
-	 * Create a new InnerStatement.
-	 * @param line the source line number
-	 */
+	/// Create a new InnerStatement.
+	/// @param line the source line number
 	 public InnerStatement(final int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": InnerStatement: "+this);
 		ClassDeclaration cls=(ClassDeclaration)Global.getCurrentScope();
 		cls.statements1 = cls.statements;
-//		cls.statements = new Vector<Statement>();
 		cls.statements = new ObjectList<Statement>();
-//		System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENTS BEFORE INNER: "+cls.statements1);
-//		for(Statement stm:cls.statements1) {
-//			System.out.println("NEW InnerStatement: Class " + cls.identifier+ ": STATEMENT BEFORE INNER: "+stm);
-//		}
 	}
 
 	@Override
@@ -90,9 +79,7 @@ public final class InnerStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public InnerStatement() {
 		super(0);
 	}
@@ -106,12 +93,10 @@ public final class InnerStatement extends Statement {
 		oupt.writeShort(lineNumber);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an InnerStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the InnerStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static InnerStatement readObject(AttributeInputStream inpt) throws IOException {
 		InnerStatement stm = new InnerStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

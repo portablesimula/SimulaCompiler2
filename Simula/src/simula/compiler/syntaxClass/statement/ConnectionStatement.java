@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -33,63 +31,61 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Connection Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.8 Connection statement
- *
- *	connection-statement
- *			= INSPECT object-expression when-clause { when-clause } [ otherwise-clause ]
- *			| INSPECT object-expression DO statement [ otherwise-clause ]
- *
- *			when-clause = WHEN class-identifier DO statement
- *
- *			otherwise-clause = OTHERWISE statement
- *
- *
- * The connection statement is implemented using Java's <b>instanceof</b> operator and the
- * if statement. For example, the connection statement:
- * 
- *         <b>inspect</b> x <b>do</b> image:-t;
- *         
- * Where 'x' is declared as a reference to an ImageFile, is compiled to:
- * 
- *         if(x!=null) x.image=t;
- *         
- * Other examples that also use '<b>ref</b>(Imagefile) x' may be:
- * 
- *      1) <b>inspect</b> x <b>do</b> image:-t <b>otherwise</b> t:-<b>notext</b>;
- *      
- *      2) <b>inspect</b> x
- *            <b>when</b> infile <b>do</b> t:-intext(12)
- *            <b>when</b> outfile <b>do</b> outtext(t);
- *            
- *      3) <b>inspect</b> x
- *            <b>when</b> infile <b>do</b> t:-intext(12)
- *            <b>when</b> outfile <b>do</b> outtext(t)
- *         <b>otherwise</b> t:-<b>notext</b>;
- * 
- * These examples are compiled to:
- * 
- *      1) <b>if</b>(x!=<b>null</b>) x.image=t; <b>else</b> t=null;
- *      
- *      2) <b>if</b>(x <b>instanceof</b> RTS_Infile) t=((RTS_Infile)x).intext(12);
- *         <b>else</b> <b>if</b>(x <b>instanceof</b> RTS_Outfile) ((RTS_Outfile)x).outtext(t);
- *          
- *      3) <b>if</b>(x <b>instanceof</b> RTS_Infile) t=((RTS_Infile)x).intext(12);
- *         <b>else</b> <b>if</b>(x <b>instanceof</b> RTS_Outfile) ((RTS_Outfile)x).outtext(t);
- *         <b>else</b> t=null;
- * 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConnectionStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Connection Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.8 Connection statement
+/// 
+/// 	connection-statement
+/// 			= INSPECT object-expression when-clause { when-clause } [ otherwise-clause ]
+/// 			| INSPECT object-expression DO statement [ otherwise-clause ]
+/// 
+/// 			when-clause = WHEN class-identifier DO statement
+/// 
+/// 			otherwise-clause = OTHERWISE statement
+/// 
+/// 
+/// The connection statement is implemented using Java's <b>instanceof</b> operator and the
+/// if statement. For example, the connection statement:
+/// 
+///         <b>inspect</b> x <b>do</b> image:-t;
+///         
+/// Where 'x' is declared as a reference to an ImageFile, is compiled to:
+/// 
+///         if(x!=null) x.image=t;
+///         
+/// Other examples that also use '<b>ref</b>(Imagefile) x' may be:
+/// 
+///      1) <b>inspect</b> x <b>do</b> image:-t <b>otherwise</b> t:-<b>notext</b>;
+///      
+///      2) <b>inspect</b> x
+///            <b>when</b> infile <b>do</b> t:-intext(12)
+///            <b>when</b> outfile <b>do</b> outtext(t);
+///            
+///      3) <b>inspect</b> x
+///            <b>when</b> infile <b>do</b> t:-intext(12)
+///            <b>when</b> outfile <b>do</b> outtext(t)
+///         <b>otherwise</b> t:-<b>notext</b>;
+/// 
+/// These examples are compiled to:
+/// 
+///      1) <b>if</b>(x!=<b>null</b>) x.image=t; <b>else</b> t=null;
+///      
+///      2) <b>if</b>(x <b>instanceof</b> RTS_Infile) t=((RTS_Infile)x).intext(12);
+///         <b>else</b> <b>if</b>(x <b>instanceof</b> RTS_Outfile) ((RTS_Outfile)x).outtext(t);
+///          
+///      3) <b>if</b>(x <b>instanceof</b> RTS_Infile) t=((RTS_Infile)x).intext(12);
+///         <b>else</b> <b>if</b>(x <b>instanceof</b> RTS_Outfile) ((RTS_Outfile)x).outtext(t);
+///         <b>else</b> t=null;
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConnectionStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ConnectionStatement extends Statement {
 	
 	/// The inspected object.
@@ -116,12 +112,10 @@ public final class ConnectionStatement extends Statement {
 	/// The end Label.
 	Label endLabel;
 
-	/**
-	 * Create a new ConnectionStatement.
-	 * <p>
-	 * Pre-Condition: INSPECT  is already read.
-	 * @param line the source line number
-	 */
+	/// Create a new ConnectionStatement.
+	/// 
+	/// Pre-Condition: INSPECT  is already read.
+	/// @param line the source line number
 	ConnectionStatement(final int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE)
@@ -132,16 +126,10 @@ public final class ConnectionStatement extends Statement {
 		inspectedVariable = new VariableExpression(ident);
 		DeclarationScope scope = Global.getCurrentScope();
 		inspectVariableDeclaration = new InspectVariableDeclaration(Type.Ref("RTObject"), ident, scope, this);
-//		System.out.println("NEW ConnectionStatement: inspectedVariable="+inspectedVariable);
-//		System.out.println("NEW ConnectionStatement: inspectVariableDeclaration="+inspectVariableDeclaration);
-		
-		
-//		DeclarationScope scope = Global.getCurrentScope();
 		while (scope instanceof ConnectionBlock
 				|| (scope instanceof MaybeBlockDeclaration && scope.declarationList.size() == 0 )) {
 			scope = scope.declaredIn;
 		}
-//		System.out.println("NEW ConnectionStatement: "+ident+" ===> "+scope);
 		scope.declarationList.add(inspectVariableDeclaration);
 		inspectVariableDeclaration.declaredIn = scope;
 
@@ -155,7 +143,6 @@ public final class ConnectionStatement extends Statement {
 			Statement statement = Statement.expectStatement();
 			Global.setScope(prevScope);
 			
-//			System.out.println("NEW ConnectionStatement(3): CurrentScope = "+Global.getCurrentScope());
 			connectionPart.add(new ConnectionDoPart(this,connectionBlock, statement));
 			connectionBlock.end();
 		} else {
@@ -163,7 +150,6 @@ public final class ConnectionStatement extends Statement {
 				String classIdentifier = Parse.expectIdentifier();
 				Parse.expect(KeyWord.DO);
 				ConnectionBlock connectionBlock = new ConnectionBlock(inspectedVariable, classIdentifier);
-//				connectionBlock.declaredIn = scope;
 				hasWhenPart = true;
 				Statement statement = Statement.expectStatement();
 				connectionPart.add(new ConnectionWhenPart(this,classIdentifier, connectionBlock, statement));
@@ -223,43 +209,11 @@ public final class ConnectionStatement extends Statement {
 	}
 
 	@Override
-//	public void buildByteCode(CodeBuilder codeBuilder) {
-//		ASSERT_SEMANTICS_CHECKED();
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		codeBuilder.aload(0);
-//		objectExpression.buildEvaluation(null,codeBuilder);
-////		System.out.println("ConnectionStatement.buildByteCode: "+inspectedVariable.meaning.declaredIn);
-//		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
-//		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
-//		codeBuilder.putfield(FRE);
-//
-//		Label otwLabel = null;
-//		endLabel = codeBuilder.newLabel();
-//		if (!hasWhenPart) {
-//			codeBuilder.aload(0);
-//			codeBuilder.getfield(FRE);
-//			if(otherwise != null) {
-//				otwLabel = codeBuilder.newLabel();
-//				codeBuilder.ifnull(otwLabel);
-//			} else codeBuilder.ifnull(endLabel);
-//		}
-//		
-//		for(ConnectionDoPart part:connectionPart) 
-//			part.buildByteCode(codeBuilder);
-//		
-//		if (otherwise != null) {
-//			codeBuilder.labelBinding(otwLabel);				
-//			otherwise.buildByteCode(codeBuilder);
-//		}
-//		
-//		codeBuilder.labelBinding(endLabel);
-//	}
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
-//		System.out.println("ConnectionStatement.buildByteCode: "+inspectedVariable.meaning.declaredIn);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
@@ -279,7 +233,6 @@ public final class ConnectionStatement extends Statement {
 			part.buildByteCode(codeBuilder);
 		
 		if (otherwise != null) {
-//			System.out.println("ConnectionStatement.buildByteCode: otwLabel="+otwLabel);
 			if(otwLabel != null) {
 				codeBuilder.labelBinding(otwLabel);	
 			}
@@ -321,9 +274,7 @@ public final class ConnectionStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ConnectionStatement() {
 		super(0);
 	}
@@ -344,12 +295,10 @@ public final class ConnectionStatement extends Statement {
 		oupt.writeBoolean(hasWhenPart);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConnectionStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ConnectionStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static ConnectionStatement readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionStatement stm = new ConnectionStatement();

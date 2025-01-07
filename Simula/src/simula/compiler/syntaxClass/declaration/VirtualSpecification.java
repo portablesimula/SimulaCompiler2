@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -19,48 +17,42 @@ import simula.compiler.AttributeOutputStream;
 import simula.compiler.JavaSourceFileCoder;
 import simula.compiler.parsing.Parse;
 import simula.compiler.syntaxClass.HiddenSpecification;
+import simula.compiler.syntaxClass.ProcedureSpecification;
 import simula.compiler.syntaxClass.ProtectedSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.KeyWord;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.Util;
 
-/**
- * Virtual Quantities.
- * <pre>
- * Simula Standard: 5.5.3 Virtual quantities
- * 
- *    virtual-part  =  VIRTUAL  :  virtual-spec  ;  {  virtual-spec  ;  }
- *    
- *    virtual-spec  =  virtual-specifier  identifier-list
- *                  |  PROCEDURE  procedure-identifier  procedure-specification
- *                  
- *      procedure-specification =  IS  procedure-declaration
- *        
- *   	virtual-specifier = LABEL | SWITCH |  [ type ] PROCEDURE
- *   
- *    	identifier-list  =  identifier  { , identifier }
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualSpecification.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- *
- */
+/// Virtual Quantities.
+/// <pre>
+/// Simula Standard: 5.5.3 Virtual quantities
+/// 
+///    virtual-part  =  VIRTUAL  :  virtual-spec  ;  {  virtual-spec  ;  }
+///    
+///    virtual-spec  =  virtual-specifier  identifier-list
+///                  |  PROCEDURE  procedure-identifier  procedure-specification
+///                  
+///      procedure-specification =  IS  procedure-declaration
+///        
+///   	virtual-specifier = LABEL | SWITCH |  [ type ] PROCEDURE
+///   
+///    	identifier-list  =  identifier  { , identifier }
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualSpecification.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class VirtualSpecification extends Declaration {
 	// String identifier; // Inherited
 	// String externalIdent; // Inherited
 	// Type type; // Inherited: Procedure's type if any
 
-	/**
-	 * Virtual Kind.
-	 */
+	/// Virtual Kind.
 	public class Kind {
 		/** Virtual procedure */ public static final int Procedure = 1;
 		/** Virtual label */	 public static final int Label     = 2;
@@ -68,36 +60,26 @@ public final class VirtualSpecification extends Declaration {
 		/** Default Constructor. NOT USED */ private Kind() {} 
 	}
 
-	/**
-	 * Virtual kind.
-	 */
+	/// Virtual kind.
 	public int kind;
 
-	/**
-	 * The prefix level of the class with this virtual specification.
-	 */
+	/// The prefix level of the class with this virtual specification.
 	public int prefixLevel;
 
-	/**
-	 * The procedure specification if present.
-	 */
+	/// The procedure specification if present.
 	public ProcedureSpecification procedureSpec; // From: IS ProcedureSpecification
 	
-	/**
-	 * Indicates if this virtual has a default match.
-	 * <p>
-	 * Set during doChecking
-	 */
+	/// Indicates if this virtual has a default match.
+	/// 
+	/// Set during doChecking.
 	boolean hasDefaultMatch;
 
-	/**
-	 * VirtualSpecification.
-	 * @param identifier virtual identifier
-	 * @param type the virtual's type
-	 * @param kind the vitual Kind
-	 * @param prefixLevel the prefix level of the class with this virtual specification
-	 * @param procedureSpec the ProcedureSpecification or null if not present
-	 */
+	/// VirtualSpecification.
+	/// @param identifier virtual identifier
+	/// @param type the virtual's type
+	/// @param kind the vitual Kind
+	/// @param prefixLevel the prefix level of the class with this virtual specification
+	/// @param procedureSpec the ProcedureSpecification or null if not present
 	VirtualSpecification(final String identifier, final Type type, final int kind, final int prefixLevel, final ProcedureSpecification procedureSpec) {
 		super(identifier);
 		this.declarationKind = ObjectKind.VirtualSpecification;
@@ -108,26 +90,23 @@ public final class VirtualSpecification extends Declaration {
 		this.procedureSpec = procedureSpec;
 	}
 
-	/**
-	 * Parse a virtual-part and put it into the given class.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *      virtual-part = VIRTUAL: virtual-spec ; { virtual-spec ; }
-	 *         virtual-spec
-	 *             = virtual-specifier identifier-list
-	 *             | PROCEDURE procedure-identifier  procedure-specification
-	 *             
-	 *                virtual-Specifier = [ type ] PROCEDURE | LABEL | SWITCH
-	 *                
-	 *                identifier-list = identifier { , identifier }
-	 *                
-	 *                procedure-specification = IS procedure-declaration
-	 *
-	 * </pre>
-	 * Precondition: VIRTUAL  is already read.
-	 * @param cls the ClassDeclaration
-	 */
+	/// Parse a virtual-part and put it into the given class.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///      virtual-part = VIRTUAL: virtual-spec ; { virtual-spec ; }
+	///         virtual-spec
+	///             = virtual-specifier identifier-list
+	///             | PROCEDURE procedure-identifier  procedure-specification
+	///             
+	///                virtual-Specifier = [ type ] PROCEDURE | LABEL | SWITCH
+	///                
+	///                identifier-list = identifier { , identifier }
+	///                
+	///                procedure-specification = IS procedure-declaration
+	/// </pre>
+	/// Precondition: VIRTUAL  is already read.
+	/// @param cls the ClassDeclaration
 	static void expectVirtualPart(final ClassDeclaration cls) {
 		Parse.expect(KeyWord.COLON);
 		LOOP: while (true) {
@@ -162,17 +141,15 @@ public final class VirtualSpecification extends Declaration {
 		if(cls.virtualSpecList.size()==0) Util.error("Missing virtual specifier after VIRTUAL:");
 	}
 
-	/**
-	 * Parse a virtual identifier list.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *        identifier-list = identifier { , identifier
-	 * </pre>
-	 * @param cls the ClassDeclaration
-	 * @param type the specifiers type
-	 * @param kind the specifiers kind
-	 */
+	/// Parse a virtual identifier list.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///        identifier-list = identifier { , identifier
+	/// </pre>
+	/// @param cls the ClassDeclaration
+	/// @param type the specifiers type
+	/// @param kind the specifiers kind
 	private static void expectIdentifierList(final ClassDeclaration cls, final Type type, final int kind) {
 		do {
 			String identifier = Parse.expectIdentifier();
@@ -196,18 +173,14 @@ public final class VirtualSpecification extends Declaration {
 		SET_SEMANTICS_CHECKED();
 	}
 
-	/**
-	 * Returns the virtual identifier used i Java code.
-	 * @return the virtual identifier used i Java code
-	 */
+	/// Returns the virtual identifier used i Java code.
+	/// @return the virtual identifier used i Java code
 	public String getVirtualIdentifier() {
 		return(getSimpleVirtualIdentifier() + "()");
 	}
 
-	/**
-	 * Returns the virtual identifier used in JVM code.
-	 * @return the virtual identifier used in JVM code
-	 */
+	/// Returns the virtual identifier used in JVM code.
+	/// @return the virtual identifier used in JVM code
 	public String getSimpleVirtualIdentifier() {
 		return (getJavaIdentifier() + '_' + prefixLevel);
 	}
@@ -215,11 +188,9 @@ public final class VirtualSpecification extends Declaration {
 	// ***********************************************************************************************
 	// *** Utility: getVirtualSpecification
 	// ***********************************************************************************************
-	/**
-	 * Get virtual specification.
-	 * @param decl the declaration to search for
-	 * @return a VirtualSpecification or null
-	 */
+	/// Get virtual specification.
+	/// @param decl the declaration to search for
+	/// @return a VirtualSpecification or null
 	public static VirtualSpecification getVirtualSpecification(final Declaration decl) {
 		if (!(decl.declaredIn instanceof ClassDeclaration))
 			return (null);
@@ -259,10 +230,8 @@ public final class VirtualSpecification extends Declaration {
 		JavaSourceFileCoder.code("public " + qnt + getVirtualIdentifier() + matchCode);
 	}
 
-	/**
-	 * Build the default virtual match method RTS_LABEL or RTS_PRCQNT.
-	 * @param classBuilder the classBuilder to use.
-	 */
+	/// Build the default virtual match method RTS_LABEL or RTS_PRCQNT.
+	/// @param classBuilder the classBuilder to use.
 	public void buildMethod(ClassBuilder classBuilder) {
 	    String ident=getSimpleVirtualIdentifier();
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
@@ -271,17 +240,15 @@ public final class VirtualSpecification extends Declaration {
 				codeBuilder -> Util.buildSimulaRuntimeError("No Virtual Match: " + identifier, codeBuilder));
 	}
 
-	/**
-	 * Build call virtual method.
-	 * @param owner the class owning the virtual.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Build call virtual method.
+	/// @param owner the class owning the virtual.
+	/// @param codeBuilder the codeBuilder to use.
 	public void buildCallMethod(ClassDesc owner, CodeBuilder codeBuilder) {
 	    String name=getSimpleVirtualIdentifier();
 		String qnt = (kind == Kind.Label) ? "RTS_LABEL;" : "RTS_PRCQNT;";
 		
-        // 4: getfield      #13                 // Field simulaTestPrograms/adHoc000.x:LsimulaTestPrograms/adHoc000_A;
-        // 7: invokevirtual #19                 // Method simulaTestPrograms/adHoc000_A.vP_0:()Lsimula/runtime/RTS_PRCQNT;
+        // 4: getfield      #13  // Field simulaTestPrograms/adHoc000.x:LsimulaTestPrograms/adHoc000_A;
+        // 7: invokevirtual #19  // Method simulaTestPrograms/adHoc000_A.vP_0:()Lsimula/runtime/RTS_PRCQNT;
 		codeBuilder.invokevirtual(owner, name, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/" + qnt));
 	}
 
@@ -307,9 +274,7 @@ public final class VirtualSpecification extends Declaration {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private VirtualSpecification() {
 		super(null);
 		this.declarationKind = ObjectKind.VirtualSpecification;
@@ -329,12 +294,10 @@ public final class VirtualSpecification extends Declaration {
 		ProcedureSpecification.writeProcedureSpec(procedureSpec,oupt);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static SyntaxClass readObject(AttributeInputStream inpt) throws IOException {
 		VirtualSpecification virt = new VirtualSpecification();
 		virt.OBJECT_SEQU = inpt.readSEQU(virt);
@@ -348,36 +311,5 @@ public final class VirtualSpecification extends Declaration {
 		Util.TRACE_INPUT("VirtualSpec: " + virt);
 		return(virt);
 	}
-
-//	public static void writeVirtSpec(VirtualSpecification virt,AttributeOutputStream oupt) throws IOException {
-//		if(virt == null) {
-//			oupt.writeBoolean(false);
-//		} else {
-//			oupt.writeBoolean(true);
-//			Util.TRACE_OUTPUT("VirtualSpec: " + virt.type + ' ' + virt.identifier + ' ' + virt.kind);
-//			oupt.writeString(virt.identifier);
-//			oupt.writeString(virt.externalIdent);
-//			oupt.writeType(virt.type);
-//			oupt.writeShort(virt.kind);
-//			oupt.writeShort(virt.prefixLevel);
-//			ProcedureSpecification.writeProcedureSpec(virt.procedureSpec,oupt);
-//		}
-//	}
-//
-//	public static VirtualSpecification readVirtSpec(AttributeInputStream inpt) throws IOException {
-//		boolean present = inpt.readBoolean();
-//		VirtualSpecification virt = null;
-//		if(present) {
-//			virt = new VirtualSpecification();
-//			virt.identifier = inpt.readString();
-//			virt.externalIdent = inpt.readString();
-//			virt.type = inpt.readType();
-//			virt.kind = inpt.readShort();
-//			virt.prefixLevel = inpt.readShort();
-//			virt.procedureSpec = ProcedureSpecification.readProcedureSpec(inpt);
-//		}
-//		Util.TRACE_INPUT("VirtualSpec: " + virt);
-//		return(virt);
-//	}
 
 }

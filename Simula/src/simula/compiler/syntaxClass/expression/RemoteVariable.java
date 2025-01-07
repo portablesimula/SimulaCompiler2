@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -31,62 +29,46 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Remote Variable.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- *   remote-variable = expression  DOT  variable
- * 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/RemoteVariable.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Remote Variable.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+///   remote-variable = expression  DOT  variable
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/RemoteVariable.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class RemoteVariable extends Expression {
 	
-	/**
-	 * The remote attribute's semantic meaning.
-	 * Set by doChecking.
-	 */
+	/// The remote attribute's semantic meaning.
+	/// Set by doChecking.
 	private Meaning remoteAttribute; // Set by doChecking
 	
-	/**
-	 * If the remoteAttribute is declared as a ProcedureDeclaration 'callRemoteProcedure' is the procedure to be called.
-	 * Set by doChecking.
-	 */
+	/// Call Remote Procedure. If the remoteAttribute is declared as a ProcedureDeclaration 'callRemoteProcedure' is the procedure to be called.
+	/// Set by doChecking.
 	private ProcedureDeclaration callRemoteProcedure = null;  // Set by doChecking
 	
-	/**
-	 * If the remoteAttribute is declared as a VirtualSpecification 'callRemoteVirtual' is the procedure to be called.
-	 * Set by doChecking.
-	 */
+	/// Call Remote Virtual. If the remoteAttribute is declared as a VirtualSpecification 'callRemoteVirtual' is the procedure to be called.
+	/// Set by doChecking.
 	private VirtualSpecification callRemoteVirtual = null;  // Set by doChecking
 	
-	/**
-	 * The object expression
-	 */
+	/// The object expression before the dot.
 	public Expression obj;
 	
-	/**
-	 * The variable
-	 */
+	/// The variable after the dot.
 	public VariableExpression var;
 
-	/**
-	 * Used to indicate access remote array. Set by doChecking.
-	 */
+	/// Used to indicate access remote array. Set by doChecking.
 	private boolean accessRemoteArray = false;
 
-	/**
-	 * Create a new RemoteVariable
-	 * @param obj object expression
-	 * @param var the variable
-	 */
+	/// Create a new RemoteVariable
+	/// @param obj object expression
+	/// @param var the variable
 	RemoteVariable(final Expression obj, final VariableExpression var) {
 		this.obj = obj;
 		this.var = var;
@@ -109,12 +91,10 @@ public final class RemoteVariable extends Expression {
 		SET_SEMANTICS_CHECKED();
 	}
 
-	/**
-	 * Perform semantic checking
-	 * @param obj remote object
-	 * @param attr remote attribute
-	 * @return the attribute's type
-	 */
+	/// Perform semantic checking
+	/// @param obj remote object
+	/// @param attr remote attribute
+	/// @return the attribute's type
 	private Type doRemoteChecking(final Expression obj, final Expression attr) {
 		Global.sourceLineNumber = lineNumber;
 		Type result;
@@ -166,12 +146,10 @@ public final class RemoteVariable extends Expression {
 		return (result);
 	}
 
-	/**
-	 * Perform semantic checking
-	 * @param obj remote object
-	 * @param attr remote attribute
-	 * @return the attribute's type
-	 */
+	/// Perform semantic checking
+	/// @param obj remote object
+	/// @param attr remote attribute
+	/// @return the attribute's type
 	private Type doRemoteTextChecking(final Expression obj, final Expression attr) {
 		Type result;
 		if (attr instanceof VariableExpression var) { // Covers FunctionDesignator and SubscriptedVariable since they are subclasses
@@ -221,12 +199,10 @@ public final class RemoteVariable extends Expression {
 	// ***********************************************************************
 	// *** CODE: doAccessRemoteArray
 	// ***********************************************************************
-	/**
-	 * Coding Utility: Edit remote array access.
-	 * @param beforeDot expression before dot
-	 * @param array the array variable
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit remote array access.
+	/// @param beforeDot expression before dot
+	/// @param array the array variable
+	/// @return the resulting Java source code
 	private String doAccessRemoteArray(final Expression beforeDot, final VariableExpression array) {
 		String obj = beforeDot.toJavaCode();
 		String cast=array.type.toJavaArrayType();
@@ -234,12 +210,10 @@ public final class RemoteVariable extends Expression {
 		return(array.doGetELEMENT(var));
 	}
 	
-	/**
-	 * Coding Utility: Build Access Remote Array.
-	 * @param beforeDot expression before dot
-	 * @param array the array variable
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile Coding Utility: Build Access Remote Array.
+	/// @param beforeDot expression before dot
+	/// @param array the array variable
+	/// @param codeBuilder the codeBuilder to use.
 	private void doAccessRemoteArray(final Expression beforeDot, final VariableExpression array,CodeBuilder codeBuilder) {
 		beforeDot.buildEvaluation(null, codeBuilder);
 		Declaration declaredAs=array.meaning.declaredAs;
@@ -250,11 +224,9 @@ public final class RemoteVariable extends Expression {
 		} else Util.IERR();;
 	}
 
-	/**
-	 * Return the FieldRefEntry of this RemoteVariable
-	 * @param pool the ConstantPoolBuilder to use
-	 * @return the FieldRefEntry of this RemoteVariable
-	 */
+	/// ClassFile Coding Utility: Return the FieldRefEntry of this RemoteVariable
+	/// @param pool the ConstantPoolBuilder to use
+	/// @return the FieldRefEntry of this RemoteVariable
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDeclaration cls=obj.type.getQual();
 		String ident=var.meaning.declaredAs.getFieldIdentifier();
@@ -288,16 +260,14 @@ public final class RemoteVariable extends Expression {
 
 
 	// ********************************************************************
-	// *** BuildProcedureCall.callStandardTextProcedure
+	// *** callStandardTextProcedure
 	// ********************************************************************
-	/**
-	 * ClassFile coding utility: Call Standard TextProcedure.
-	 * @param beforeDot expression before dot.
-	 * @param pro the StandardProcedure.
-	 * @param variable the VariableExpression.
-	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Call Standard TextProcedure.
+	/// @param beforeDot expression before dot.
+	/// @param pro the StandardProcedure.
+	/// @param variable the VariableExpression.
+	/// @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	/// @param codeBuilder the codeBuilder to use.
 	private static void callStandardTextProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable, Object backLink,CodeBuilder codeBuilder) {
 		beforeDot.buildEvaluation(null,codeBuilder);
 		if(variable.checkedParams != null) 
@@ -318,9 +288,7 @@ public final class RemoteVariable extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private RemoteVariable() {}
 
 	@Override
@@ -338,12 +306,10 @@ public final class RemoteVariable extends Expression {
 		oupt.writeObj(var);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static RemoteVariable readObject(AttributeInputStream inpt) throws IOException {
 		RemoteVariable rem = new RemoteVariable();
 		rem.OBJECT_SEQU = inpt.readSEQU(rem);
@@ -358,20 +324,6 @@ public final class RemoteVariable extends Expression {
 		Util.TRACE_INPUT("readRemoteVariable: " + rem);
 		return(rem);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(obj);
-//		oupt.writeObj(var);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		obj = (Expression) inpt.readObj();
-//		var = (VariableExpression) inpt.readObj();
-//	}
 
 
 }

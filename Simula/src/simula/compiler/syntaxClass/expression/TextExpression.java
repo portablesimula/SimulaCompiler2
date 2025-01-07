@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -19,90 +17,82 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Text expression.
- * 
- * <pre>
- * Simula Standard: 3.7 Text expressions
- * 
- *    text-expression
- *        =  simple-text-expression
- *        |  if-clause  simple-text-expression  else  text-expression
-*
- *    simple-text-expression
- *        =  text-primary  {  &amp;  text-primary  }
-*
- *    text-primary
- *        =  notext
- *        |  string
- *        |  variable
- *        |  function-designator
- *        |  "("  text-expression  ")"
- * </pre>
- * 
- * A text expression is of type text. It is a rule for obtaining an
- * identification of a text variable. Apart from possible if-clauses, all
- * constituents of a text expression must be of type text.
- * <p>
- * Each textual occurrence of a non-empty string corresponds to a unique
- * constant main text frame. A given occurrence always references that same
- * frame, while different occurrences of the same non-empty string always
- * reference different text frames.
- * <p>
- * The empty string ("") is textually equivalent to notext.
- * 
- * 
- * Simula Standard: 3.7.1 Text concatenation
- * <p>
- * The operator &amp; permits text concatenation. The simple text expression "TP1 &amp;
- * TP2 &amp; ... &amp; TPn", where TPi is a text primary (1&lt;=i&lt;=n), references a new
- * alterable main frame whose contents is formed by concatenating copies of the
- * frames referenced by TP1, TP2, ... , TPn (in that order). The expression is
- * equivalent to CONCATENATE_n(T1,T2,...,Tn) defined by
- * 
- * <pre>
- *    text procedure CONCATENATE_ _n(T1,T2,...,Tn);  text T1,T2,...,Tn;
- *    begin  text temp;
- *        CONCATENATE_ _n :- temp :- blanks(T1.length+T2.length+ ... +Tn.length);
- *        temp.sub(1,t1.length) := T1;
- *        temp.sub(1+T1.length,T2.length) := T2;
- *        ...
- *        temp.sub(1+T1.length+T2.length+... ,Tn.length) := Tn;
- *    end;
- * </pre>
- * 
- * Note: It follows that the text primary constituents of a simple text
- * expression are evaluated in strict lexical order. The evaluation of Ti may
- * influence the result of evaluating Tj, if i&lt;j (due to the specified "by
- * reference" transmission of parameters to the procedures CONCATENATE_n).
- * Observe further that it follows from the syntax (cfr. 3.1.5) that . is
- * evaluated before &amp;, thus the two expressions "T1 &amp; T2.sub(1,2) &amp; T3.main" and
- * "T1 &amp; (T2.sub(1,2)) &amp; (T3.main)" are equivalent.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TextExpression.java">
- * <b>Source File</b></a>.
- * 
- * @author Simula Standard
- * @author Øystein Myhre Andersen
- */
+/// Text expression.
+/// 
+/// <pre>
+/// Simula Standard: 3.7 Text expressions
+/// 
+///    text-expression
+///        =  simple-text-expression
+///        |  if-clause  simple-text-expression  else  text-expression
+/// 
+///    simple-text-expression
+///        =  text-primary  {  &  text-primary  }
+/// 
+///    text-primary
+///        =  notext
+///        |  string
+///        |  variable
+///        |  function-designator
+///        |  "("  text-expression  ")"
+/// </pre>
+/// 
+/// A text expression is of type text. It is a rule for obtaining an
+/// identification of a text variable. Apart from possible if-clauses, all
+/// constituents of a text expression must be of type text.
+/// 
+/// Each textual occurrence of a non-empty string corresponds to a unique
+/// constant main text frame. A given occurrence always references that same
+/// frame, while different occurrences of the same non-empty string always
+/// reference different text frames.
+/// 
+/// The empty string ("") is textually equivalent to notext.
+/// 
+/// 
+/// Simula Standard: 3.7.1 Text concatenation
+/// 
+/// The operator & permits text concatenation. The simple text expression "TP1 &
+/// TP2 & ... & TPn", where TPi is a text primary (1<=i<=n), references a new
+/// alterable main frame whose contents is formed by concatenating copies of the
+/// frames referenced by TP1, TP2, ... , TPn (in that order). The expression is
+/// equivalent to CONCATENATE_n(T1,T2,...,Tn) defined by
+/// 
+/// <pre>
+///    text procedure CONCATENATE_ _n(T1,T2,...,Tn);  text T1,T2,...,Tn;
+///    begin  text temp;
+///        CONCATENATE_ _n :- temp :- blanks(T1.length+T2.length+ ... +Tn.length);
+///        temp.sub(1,t1.length) := T1;
+///        temp.sub(1+T1.length,T2.length) := T2;
+///        ...
+///        temp.sub(1+T1.length+T2.length+... ,Tn.length) := Tn;
+///    end;
+/// </pre>
+/// 
+/// Note: It follows that the text primary constituents of a simple text
+/// expression are evaluated in strict lexical order. The evaluation of Ti may
+/// influence the result of evaluating Tj, if i<j (due to the specified "by
+/// reference" transmission of parameters to the procedures CONCATENATE_n).
+/// Observe further that it follows from the syntax (cfr. 3.1.5) that . is
+/// evaluated before &, thus the two expressions "T1 & T2.sub(1,2) & T3.main" and
+/// "T1 & (T2.sub(1,2)) & (T3.main)" are equivalent.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TextExpression.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Simula Standard
+/// @author Øystein Myhre Andersen
 public final class TextExpression extends Expression {
 	
-	/**
-	 * The left hand side of &amp;
-	 */
+	/// The left hand side of &
 	private Expression lhs;
 	
-	/**
-	 * The right hand side of &amp;
-	 */
+	/// The right hand side of &
 	private Expression rhs;
 
-	/**
-	 * Create a new TextExpression
-	 * @param lhs left hand side
-	 * @param rhs rigth hand side
-	 */
+	/// Create a new TextExpression
+	/// @param lhs left hand side
+	/// @param rhs rigth hand side
 	TextExpression(final Expression lhs, final Expression rhs) {
 		this.lhs = lhs;
 		this.rhs = rhs;
@@ -165,9 +155,7 @@ public final class TextExpression extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private TextExpression() {}
 
 	@Override
@@ -185,12 +173,10 @@ public final class TextExpression extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static TextExpression readObject(AttributeInputStream inpt) throws IOException {
 		TextExpression expr = new TextExpression();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -205,19 +191,5 @@ public final class TextExpression extends Expression {
 		Util.TRACE_INPUT("readTextExpression: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(lhs);
-//		oupt.writeObj(rhs);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		lhs = (Expression) inpt.readObj();
-//		rhs = (Expression) inpt.readObj();
-//	}
 
 }

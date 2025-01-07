@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.lang.classfile.CodeBuilder;
@@ -6,6 +11,7 @@ import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Iterator;
 
+import simula.compiler.syntaxClass.ProcedureSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.BlockDeclaration;
@@ -18,35 +24,27 @@ import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
-import simula.compiler.utilities.ProcedureSpecification;
 
-/**
- * Coding Utilities: Build Call Procedure Virtual (CPV).
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPV.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Coding Utilities: Build Call Procedure Virtual (CPV).
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCPV.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public abstract class BuildCPV {
 	/** Default Constructor: NOT USED */ private BuildCPV() {}
 
 	// ********************************************************************
-	// *** BuildProcedureCall.virtual
+	// *** Build ProcedureCall virtual
 	// ********************************************************************
-	/**
-	 * BuildProcedureCall.virtual
-	 * 
-	 * @param variable the procedure variable
-	 * @param virtual the virtual specification
-	 * @param remotelyAccessed true if remotely accessed.
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Build Call Procedure Virtual
+	/// @param variable the procedure variable
+	/// @param virtual the virtual specification
+	/// @param remotelyAccessed true if remotely accessed.
+	/// @param codeBuilder the CodeBuilder
 	static void virtual(final VariableExpression variable,final VirtualSpecification virtual,final boolean remotelyAccessed,CodeBuilder codeBuilder) {
 		if(! variable.hasArguments()) {
-//			System.out.println("CallProcedure.codeCPF: procedureSpec="+virtual.procedureSpec);
 			if(virtual.procedureSpec != null && virtual.procedureSpec.parameterList.size() > 0) {
 				Util.error("Missing parameter(s) to " + variable.identifier);
 			}
@@ -62,7 +60,6 @@ public abstract class BuildCPV {
 			ClassDesc owner = BlockDeclaration.currentClassDesc();
 			variable.buildIdentifierAccess(false, codeBuilder);
 			codeBuilder
-//				.aload(0)
 				.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_LABEL;"));
 
 	    } else {
@@ -80,10 +77,8 @@ public abstract class BuildCPV {
 		    	ClassDesc owner = meaning.declaredIn.getClassDesc();
 		    	inspectedVariable.buildIdentifierAccess(false, codeBuilder);
 				codeBuilder
-//					.aload(0)
 					.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), inspectedVariable.getJavaIdentifier(), inspectedVariable.type.toClassDesc()))
 					.invokevirtual(owner, ident, MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;"));
-//			    BuildCPF.buildCPF(variable,virtual.procedureSpec,codeBuilder);
 				if(virtual.procedureSpec != null) {
 					BuildCPV.buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
 				} else {
@@ -116,20 +111,16 @@ public abstract class BuildCPV {
 	}
 
 	// ********************************************************************
-	// *** BuildProcedureCall.remoteVirtual
+	// *** BuildCPV.remoteVirtual
 	// ********************************************************************
-	/**
-	 * BuildProcedureCall.remoteVirtual
-	 * 
-	 * @param obj Object Expression before DOT
-	 * @param variable the procedure variable
-	 * @param virtual Virtual Specification
-	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
-	 * @param codeBuilder the CodeBuilder to use
-	 */
+	/// BuildCPV.remoteVirtual
+	/// @param obj Object Expression before DOT
+	/// @param variable the procedure variable
+	/// @param virtual Virtual Specification
+	/// @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	/// @param codeBuilder the CodeBuilder to use
 	static void remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual,final SyntaxClass backLink,CodeBuilder codeBuilder) {
 		if(! variable.hasArguments()) {
-//			System.out.println("CallProcedure.codeCPF: procedureSpec="+virtual.procedureSpec);
 			if(virtual.procedureSpec != null && virtual.procedureSpec.parameterList.size() > 0)
 				Util.error("Missing parameter(s) to " + variable.identifier);
 		}
@@ -142,23 +133,16 @@ public abstract class BuildCPV {
 			 buildCSVP(variable, virtual.procedureSpec, codeBuilder);					
 		else BuildCPF.buildCPF(variable, codeBuilder);
 		
-//		System.out.println("BuildCPV.virtual: backLink="+variable.backLink);
 	    if(backLink == null) codeBuilder.pop();
-	    else {
-//			Util.IERR();
-//	    	BuildLoad_RESULT(variable, codeBuilder);
-	    }
 	}
 	
 	// ********************************************************************
 	// *** codeCSVP  -- Call Specified Virtual Procedure
 	// ********************************************************************
-	/**
-	 * Coding Utility: Build Call Specified Virtual Procedure.
-	 * @param variable the procedure variable
-	 * @param procedureSpec the procedure spec
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Coding Utility: Build Call Specified Virtual Procedure.
+	/// @param variable the procedure variable
+	/// @param procedureSpec the procedure spec
+	/// @param codeBuilder the CodeBuilder
 	static void buildCSVP(final VariableExpression variable,final ProcedureSpecification procedureSpec,CodeBuilder codeBuilder) {
 //        25: invokevirtual #46                 // Method simula/runtime/RTS_PRCQNT.CPF:()Lsimula/runtime/RTS_PROCEDURE;
 		
@@ -198,11 +182,9 @@ public abstract class BuildCPV {
 	// ********************************************************************
 	// *** prepareForValueType
 	// ********************************************************************
-	/**
-	 * ClassFile coding utility: Prepare for ValueType.
-	 * @param variable the variable
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Prepare for ValueType.
+	/// @param variable the variable
+	/// @param codeBuilder the codeBuilder to use.
 	private static void prepareForValueType(final VariableExpression variable, CodeBuilder codeBuilder) {
 	    // Prepare for possible _RESULT to Object conversion in buildCPF.
 		Type resultType = functionResultType(variable);
@@ -217,32 +199,26 @@ public abstract class BuildCPV {
 		}
 	}
 	
-	/**
-	 * ClassFile coding utility: Get function ResultType.
-	 * @param variable the variable.
-	 * @return the function ResultType.
-	 */
+	/// ClassFile coding utility: Get function ResultType.
+	/// @param variable the variable.
+	/// @return the function ResultType.
 	private static Type functionResultType(VariableExpression variable) {
 		Declaration proc = variable.meaning.declaredAs;
 		Type resultType = proc.type;
 		if(proc instanceof VirtualSpecification virt) {
 			if(virt.procedureSpec != null) {
 				resultType = virt.procedureSpec.type;
-//				System.out.println("BuildCPV.functionResultType: resultType="+resultType);
 			}
 		}
 		return resultType;
 	}
 	
-	/**
-	 * ClassFile coding utility: Build Load_RESULT.
-	 * @param variable the variable
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Build Load_RESULT.
+	/// @param variable the variable
+	/// @param codeBuilder the codeBuilder to use.
 	private static void BuildLoad_RESULT(VariableExpression variable, CodeBuilder codeBuilder) {
 		SyntaxClass backLink = variable.backLink;
 		if(backLink instanceof RemoteVariable rem) backLink = rem.backLink;
-//		System.out.println("BuildCPV.BuildLoad_RESULT: backLink="+backLink);
 		Type resultType = functionResultType(variable);
 		if(resultType!=null && variable.backLink!=null) {
 			boolean partOfExpression=true;
@@ -251,7 +227,6 @@ public abstract class BuildCPV {
 				if(binOper.backLink==null) partOfExpression=false;
 			}
 			if(partOfExpression) {
-//				s.append("._RESULT()");
 				RTS.invokevirtual_PROCEDURE_RESULT(codeBuilder);
 				if(resultType.isValueType()) {
 					RTS.objectToPrimitiveType(resultType, codeBuilder);

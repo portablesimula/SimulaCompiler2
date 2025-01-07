@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -25,25 +30,17 @@ import simula.compiler.utilities.Util;
 // ************************************************************************************
 // *** ForListElement -- Single Value
 // ************************************************************************************
-/**
- * Utility class ForListElement implementing a single value element.
- */
+/// Utility class ForListElement implementing a single value element.
 public class ForListElement extends SyntaxClass {
-	/**
-	 * The For-statement
-	 */
+	/// The For-statement.
 	ForStatement forStatement;
 
-	/**
-	 * The first expression
-	 */
+	/// The first expression
 	Expression expr1;
 
-	/**
-	 * Create a new ForListElement.
-	 * @param forStatement the ForStatement
-	 * @param expr1 The first expression
-	 */
+	/// Create a new ForListElement.
+	/// @param forStatement the ForStatement
+	/// @param expr1 The first expression
 	public ForListElement(final ForStatement forStatement, final Expression expr1) {
 		this.forStatement = forStatement;
 		this.expr1 = expr1;
@@ -51,9 +48,7 @@ public class ForListElement extends SyntaxClass {
 			Util.TRACE("NEW ForListElement: " + toString());
 	}
 
-	/**
-	 * Perform semantic checking.
-	 */
+	/// Perform semantic checking.
 	public void doChecking() {
 		if (Option.internal.TRACE_CHECKER)
 			Util.TRACE("BEGIN ForListElement(" + this + ").doChecking - Current Scope Chain: "
@@ -64,12 +59,10 @@ public class ForListElement extends SyntaxClass {
 		expr1.backLink = forStatement; // To ensure _RESULT from functions
 	}
 
-	/**
-	 * Edit Java source code for this ForListElement.
-	 * @param classIdent Java class identifier
-	 * @param xType control variable's type
-	 * @return the resulting Java source code for this ForListElement
-	 */
+	/// Edit Java source code for this ForListElement.
+	/// @param classIdent Java class identifier
+	/// @param xType control variable's type
+	/// @return the resulting Java source code for this ForListElement
 	public String edCode(final String classIdent, Type xType) {
 		String forElt = (forStatement.controlVariable.type.keyWord == Type.T_TEXT && forStatement.assignmentOperator == KeyWord.ASSIGNVALUE) ? "TValElt"
 				: "Elt<" + classIdent + ">";
@@ -77,17 +70,13 @@ public class ForListElement extends SyntaxClass {
 				+ classIdent + ">() { public " + classIdent + " get(){return(" + expr1.toJavaCode() + "); }})");
 	}
 
-	/**
-	 * Checks if this ForListElement can be optimized.
-	 * @return this ForListElement if it can be optimized
-	 */
+	/// Checks if this ForListElement can be optimized.
+	/// @return this ForListElement if it can be optimized
 	public ForListElement isOptimisable() {
 		return (this);
 	}
 
-	/**
-	 * Perform simplified JavaCoding.
-	 */
+	/// Perform simplified JavaCoding.
 	public void doSimplifiedJavaCoding() {
 		String cv = forStatement.controlVariable.toJavaCode();
 		String val = this.expr1.toJavaCode();
@@ -110,10 +99,8 @@ public class ForListElement extends SyntaxClass {
 		JavaSourceFileCoder.code("}");
 	}
 
-	/**
-	 * Build SingleElement ByteCoding
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// Build SingleElement ByteCoding
+	/// @param codeBuilder the codeBuilder to use.
 	public void doSingleElementByteCoding(CodeBuilder codeBuilder) {
         // 0: aload_0
         // 1: aload_0
@@ -131,11 +118,9 @@ public class ForListElement extends SyntaxClass {
 		forStatement.doStatement.buildByteCode(codeBuilder);
 	}
 
-	/**
-	 * Build byte code.
-	 * @param codeBuilder the codeBuilder to use.
-	 * @param controlVariable the ForStatement's controlVariable.
-	 */
+	/// Build byte code.
+	/// @param codeBuilder the codeBuilder to use.
+	/// @param controlVariable the ForStatement's controlVariable.
 	public void buildByteCode(CodeBuilder codeBuilder,VariableExpression controlVariable) {
 		codeBuilder
 			.new_(RTS.CD.FOR_SingleElt)
@@ -164,9 +149,7 @@ public class ForListElement extends SyntaxClass {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	protected ForListElement() {}
 
 	@Override
@@ -181,12 +164,10 @@ public class ForListElement extends SyntaxClass {
 		oupt.writeObj(expr1);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ForListElement readObject(AttributeInputStream inpt) throws IOException {
 		ForListElement elt = new ForListElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

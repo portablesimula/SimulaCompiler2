@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -22,27 +27,19 @@ import simula.compiler.utilities.Util;
 // ************************************************************************************
 // *** ForListElement -- Step Until Element
 // ************************************************************************************
-/**
- * Utility class: For-list Step until element.
- */
+/// Utility class: For-list Step until element.
 public class StepUntilElement extends ForListElement {
-	/**
-	 * The second expression.
-	 */
+	/// The second expression.
 	Expression expr2;
 	
-	/**
-	 * The third expression.
-	 */
+	/// The third expression.
 	Expression expr3;
 
-	/**
-	 * Create a new StepUntilElement.
-	 * @param forStatement the ForStatement
-	 * @param expr1 The first expression
-	 * @param expr2 The second expression
-	 * @param expr3 The third expression
-	 */
+	/// Create a new StepUntilElement.
+	/// @param forStatement the ForStatement
+	/// @param expr1 The first expression
+	/// @param expr2 The second expression
+	/// @param expr3 The third expression
 	public StepUntilElement(final ForStatement forStatement, final Expression expr1, final Expression expr2, final Expression expr3) {
 		super(forStatement, expr1);
 		this.expr2 = expr2;
@@ -119,26 +116,23 @@ public class StepUntilElement extends ForListElement {
 	
 	/// Used to make deltaID unique.
 	private static int DELTA_SEQU=0;
-	/**
-	 * ClassFile coding utility: generalCase.
-	 * <pre>
-	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
-	 *
-	 * According to Simula Standard:
-	 *
-	 * 		int/float/double DELTA; // Local
-	 * 
-	 *		controlVariable = expr1();
-	 * 		DELTA = expr2();
-	 * 		while( sign(DELTA)*(controlVariable-expr3()) &lt;= 0) {
-	 * 			STATEMENT();
-	 * 			DELTA = expr2();
-	 * 			controlVariable = controlVariable + DELTA;
-	 * 		}  // end while;
-	 * </pre>
-	*/
+	/// ClassFile coding utility: generalCase.
+	/// <pre>
+	/// FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
+	/// 
+	/// According to Simula Standard:
+	/// 
+	/// 		int/float/double DELTA; // Local
+	/// 
+	/// 		controlVariable = expr1();
+	/// 		DELTA = expr2();
+	/// 		while( sign(DELTA)*(controlVariable-expr3()) <= 0) {
+	/// 			STATEMENT();
+	/// 			DELTA = expr2();
+	/// 			controlVariable = controlVariable + DELTA;
+	/// 		}  // end while;
+	/// </pre>
 	private void generalCase() {
-//		System.out.println("ForStatement.generalCase: "+this);
 		String cv = forStatement.controlVariable.toJavaCode();
 		String deltaType=expr2.type.toJavaType();
 		String deltaID = "DELTA_" + (DELTA_SEQU++);
@@ -155,7 +149,6 @@ public class StepUntilElement extends ForListElement {
 			case Type.T_LONG_REAL: deltaSign = "RTS_UTIL.dsign("+deltaID+")"; break;
 			default: Util.IERR();
 		}
-//		JavaSourceFileCoder.code("while( "+ deltaID + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
 		JavaSourceFileCoder.code("while( "+ deltaSign + " * ( " + cv + " - (" + this.expr3.toJavaCode() + ") ) <= 0 ) {");
 		
 		forStatement.doStatement.doJavaCoding();
@@ -166,67 +159,65 @@ public class StepUntilElement extends ForListElement {
 	}
 
 	
-	/**
-	 * ClassFile coding utility: doSingleElementByteCoding
-	 * <pre>
-	 * FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
-	 *
-	 *
-	 * int/float/double DELTA; // Local
-	 * 
-	 * controlVariable = expr1();
-	 * DELTA = expr2();
-	 * while( sign(DELTA) * (controlVariable - expr3() ) &lt;= 0) {
-	 * 		STATEMENT();
-	 * 		DELTA = expr2();
-	 * 		controlVariable = controlVariable + DELTA;
-	 * }  // end while;
-	 * 
-	 * 
-	 *   // controlVariable = expr1();
-     *   aload_0
-     *   aload_0
-     *   invokevirtual #24                 // Method expr1:()I
-     *   putfield      #12                 // Field controlVariable:I
-     * 
-     * // DELTA = expr2();
-     *   aload_0
-     *   invokevirtual #26                 // Method expr2:()I
-     *   istore_1	   // Local DELTA
-	 *
-     * TST:
-     * // if(DELTA*(controlVariable-expr3()) > 0) goto END
-     *   iload_1       // Local DELTA
-     *   aload_0
-     *   getfield      #12                 // Field controlVariable:I
-     *   aload_0
-     *   invokevirtual #30                 // Method expr3:()I
-     *   isub
-     *   imul
-     *   ifle          END
-	 *
-     * // STATEMENT
-     *   aload_0
-     *   invokevirtual #28                 // Method STATEMENT:()V
-     *   
-     * // DELTA = expr2();
-     *   aload_0
-     *   invokevirtual #26                 // Method expr2:()I
-     *   istore_1      // Local DELTA
-     *   
-     * // controlVariable = controlVariable + DELTA;  
-     *   aload_0
-     *   dup
-     *   getfield      #12                 // Field controlVariable:I
-     *   iload_1       // Local DELTA
-     *   iadd
-     *   putfield      #12                 // Field controlVariable:I
-     *
-     *   goto          TST
-     *   
-     * END:  
-     * </pre>
-	 */
+	/// ClassFile coding utility: doSingleElementByteCoding.
+	/// <pre>
+	/// FOR controlVariable := expr1 STEP expr2 UNTIL expr3 DO statement;
+	/// 
+	/// 
+	/// int/float/double DELTA; // Local
+	/// 
+	/// controlVariable = expr1();
+	/// DELTA = expr2();
+	/// while( sign(DELTA)/// (controlVariable - expr3() ) <= 0) {
+	/// 		STATEMENT();
+	/// 		DELTA = expr2();
+	/// 		controlVariable = controlVariable + DELTA;
+	/// }  // end while;
+	/// 
+	/// 
+	///   // controlVariable = expr1();
+    ///   aload_0
+    ///   aload_0
+    ///   invokevirtual #24                 // Method expr1:()I
+    ///   putfield      #12                 // Field controlVariable:I
+    /// 
+    /// // DELTA = expr2();
+    ///   aload_0
+    ///   invokevirtual #26                 // Method expr2:()I
+    ///   istore_1	   // Local DELTA
+	/// 
+    /// TST:
+    /// // if(DELTA*(controlVariable-expr3()) > 0) goto END
+    ///   iload_1       // Local DELTA
+    ///   aload_0
+    ///   getfield      #12                 // Field controlVariable:I
+    ///   aload_0
+    ///   invokevirtual #30                 // Method expr3:()I
+    ///   isub
+    ///   imul
+    ///   ifle          END
+	/// 
+    /// // STATEMENT
+    ///   aload_0
+    ///   invokevirtual #28                 // Method STATEMENT:()V
+    ///   
+    /// // DELTA = expr2();
+    ///   aload_0
+    ///   invokevirtual #26                 // Method expr2:()I
+    ///   istore_1      // Local DELTA
+    ///   
+    /// // controlVariable = controlVariable + DELTA;  
+    ///   aload_0
+    ///   dup
+    ///   getfield      #12                 // Field controlVariable:I
+    ///   iload_1       // Local DELTA
+    ///   iadd
+    ///   putfield      #12                 // Field controlVariable:I
+    /// 
+    ///   goto          TST
+    ///   
+    /// END:  
+    /// </pre>
 	@Override
 	public void doSingleElementByteCoding(CodeBuilder codeBuilder) {
 		Label tstLabel = codeBuilder.newLabel();
@@ -362,9 +353,7 @@ public class StepUntilElement extends ForListElement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private StepUntilElement() {}
 
 	@Override
@@ -381,12 +370,10 @@ public class StepUntilElement extends ForListElement {
 		oupt.writeObj(expr3);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static StepUntilElement readObject(AttributeInputStream inpt) throws IOException {
 		StepUntilElement elt = new StepUntilElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -20,71 +18,61 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Qualified Object
- * 
- * <pre>
- * Simula Standard: 3.8 Object expressions
- * 
- *   qualified-object
- *        =  simple-object-expression  QUA  class-identifier
- * </pre>
- * 
- * The qualification of an object expression is defined by the following rules:
- * <ul>
- * <li>The expression none is qualified by a fictitious class which is inner to
- * all declared classes.
- * 
- * <li>A variable or function designator is qualified as stated in the
- * declaration (or specification, see below) of the variable or array or
- * procedure in question.
- * 
- * <li>An object generator, local object or qualified object is qualified by the
- * class of the identifier following the symbol new, this or qua respectively.
- * 
- * <li>A conditional object expression is qualified by the innermost class which
- * includes the qualifications of both alternatives. If there is no such class,
- * the expression is illegal.
- * 
- * <li>Any formal parameter of object reference type is qualified according to
- * its specification regardless of the qualification of the corresponding actual
- * parameter.
- * 
- * <li>The qualification of a function designator whose procedure identifier is
- * that of a virtual quantity depends on the access level (see 5.5.5). The
- * qualification is that of the matching declaration, if any, occurring at the
- * innermost prefix level equal or outer to the access level, or, if no such
- * match exists, it is that of the virtual specification.
- * </ul>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/QualifiedObject.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Qualified Object
+/// 
+/// <pre>
+/// Simula Standard: 3.8 Object expressions
+/// 
+///   qualified-object
+///        =  simple-object-expression  QUA  class-identifier
+/// </pre>
+/// 
+/// The qualification of an object expression is defined by the following rules:
+/// <ul>
+/// <li>The expression none is qualified by a fictitious class which is inner to
+/// all declared classes.
+/// 
+/// <li>A variable or function designator is qualified as stated in the
+/// declaration (or specification, see below) of the variable or array or
+/// procedure in question.
+/// 
+/// <li>An object generator, local object or qualified object is qualified by the
+/// class of the identifier following the symbol new, this or qua respectively.
+/// 
+/// <li>A conditional object expression is qualified by the innermost class which
+/// includes the qualifications of both alternatives. If there is no such class,
+/// the expression is illegal.
+/// 
+/// <li>Any formal parameter of object reference type is qualified according to
+/// its specification regardless of the qualification of the corresponding actual
+/// parameter.
+/// 
+/// <li>The qualification of a function designator whose procedure identifier is
+/// that of a virtual quantity depends on the access level (see 5.5.5). The
+/// qualification is that of the matching declaration, if any, occurring at the
+/// innermost prefix level equal or outer to the access level, or, if no such
+/// match exists, it is that of the virtual specification.
+/// </ul>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/QualifiedObject.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class QualifiedObject extends Expression {
 	
-	/**
-	 * The left hand simple-object-expression 
-	 */
+	/// The left hand simple-object-expression 
 	private Expression lhs;
 	
-	/**
-	 * The right hand class identifier.
-	 */
+	/// The right hand class identifier.
 	private String classIdentifier;
 	
-	/**
-	 * The right hand class declaration. Set by doChecking.
-	 */
+	/// The right hand class declaration. Set by doChecking.
 	ClassDeclaration classDeclaration; // Set by doChecking
 
-	/**
-	 * Create a new QualifiedObject
-	 * @param lhs left hand side
-	 * @param classIdentifier class identifier
-	 */
+	/// Create a new QualifiedObject
+	/// @param lhs left hand side
+	/// @param classIdentifier class identifier
 	QualifiedObject(final Expression lhs, final String classIdentifier) {
 		this.lhs = lhs;
 		this.classIdentifier = classIdentifier;
@@ -135,9 +123,7 @@ public final class QualifiedObject extends Expression {
 	// ***********************************************************************************************
 	// *** Externalization
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private QualifiedObject() {}
 
 	@Override
@@ -155,12 +141,10 @@ public final class QualifiedObject extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a QualifiedObject object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the QualifiedObject object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static QualifiedObject readObject(AttributeInputStream inpt) throws IOException {
 		QualifiedObject expr = new QualifiedObject();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -175,19 +159,5 @@ public final class QualifiedObject extends Expression {
 		Util.TRACE_INPUT("readQualifiedObject: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(lhs);
-//		oupt.writeString(classIdentifier);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		lhs = (Expression) inpt.readObj();
-//		classIdentifier = inpt.readString();
-//	}
 
 }

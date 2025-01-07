@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.lang.classfile.CodeBuilder;
@@ -27,38 +25,31 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Switch Declaration.
- * 
- * <pre>
- * 
- * Simula Standard: 5.3 Switch declaration
- * 
- *  switch-declaration
- *     = SWITCH switch-identifier := switch-list
- *     
- *     switch-list = designational-expression { , designational-expression }
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SwitchDeclaration.java">
- * <b>Source File</b></a>.
- *
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Switch Declaration.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 5.3 Switch declaration
+/// 
+///  switch-declaration
+///     = SWITCH switch-identifier := switch-list
+///     
+///     switch-list = designational-expression { , designational-expression }
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SwitchDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class SwitchDeclaration extends ProcedureDeclaration {
 	
-	/**
-	 * The switch list of label expressions.
-	 */
+	/// The switch list of label expressions.
 	Vector<Expression> switchList = new Vector<Expression>();
 
-	/**
-	 * Create a new SwitchDeclaration.
-	 * @param ident switch identifier
-	 */
+	/// Create a new SwitchDeclaration.
+	/// @param ident switch identifier
 	public SwitchDeclaration(final String ident) {
-//		super(ident,ObjectKind.Switch);
 		super(ident,ObjectKind.Procedure);
 		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse SwitchDeclaration");
 		this.type = Type.Label;
@@ -113,11 +104,8 @@ public final class SwitchDeclaration extends ProcedureDeclaration {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_STM_BODY
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the '_STM' method.
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the '_STM' method.
+	/// @param codeBuilder the CodeBuilder
 	@Override
 	protected void build_STM_BODY(CodeBuilder codeBuilder, Label begScope, Label endScope) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();

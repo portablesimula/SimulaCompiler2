@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -27,60 +25,59 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Switch Statement.
- * 
- * This is a S-PORT extension to the language.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- * switch-statement = SWITCH ( lowKey : hiKey ) switchKey BEGIN { switch-case } [ none-case ] END [ otherwise-case ]
- * 
- *      switch-case = WHEN caseKey-list do statement ;
- *      
- *      none-case   = WHEN NONE do statement ;
- *      
- *      otherwise-case = OTHERWISE statement ;
- *      
- *         caseKey-list = caseKey { , caseKey }
- *      
- *            caseKey = caseConstant  | caseConstant : caseConstant
- *            
- *               caseConstant = integer-or-character-constant
- *      
- *      lowKey = integer-or-character-expression
- *      hiKey = integer-or-character-expression
- *      switchKey = integer-or-character-expression
- *
- * Translated into a Java Switch Statement with break after each statement.
- * 
- * Example:
- * 
- *   <b>switch</b>(lowkey:hikey) key
- *   <b>begin</b>
- *      <b>when</b> 0 <b>do</b> statement-0 ;
- *      ...
- *      <b>when</b> <b>none</b> <b>do</b> statement-e ;
- *   <b>end</b>
- *   
- *   Is compiled into Java-code:
- *   
- *   if(key &lt; lowkey || key > hikey) throw new RTS_SimulaRuntimeError("Switch key outside key interval");
- *   switch(key) {
- *       case 0: statement-0; break;
- *       ...
- *       default: statement-e; break;
- *   }
- *   
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/SwitchStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Switch Statement.
+/// 
+/// This is a S-PORT extension to the language.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+/// switch-statement = SWITCH ( lowKey : hiKey ) switchKey
+///                    BEGIN { switch-case } [ none-case ] END [ otherwise-case ]
+/// 
+///      switch-case = WHEN caseKey-list do statement ;
+///      
+///      none-case   = WHEN NONE do statement ;
+///      
+///      otherwise-case = OTHERWISE statement ;
+///      
+///         caseKey-list = caseKey { , caseKey }
+///      
+///            caseKey = caseConstant  | caseConstant : caseConstant
+///            
+///               caseConstant = integer-or-character-constant
+///      
+///      lowKey = integer-or-character-expression
+///      hiKey = integer-or-character-expression
+///      switchKey = integer-or-character-expression
+/// 
+/// Translated into a Java Switch Statement with break after each statement.
+/// 
+/// Example:
+/// 
+///   <b>switch</b>(lowkey:hikey) key
+///   <b>begin</b>
+///      <b>when</b> 0 <b>do</b> statement-0 ;
+///      ...
+///      <b>when</b> <b>none</b> <b>do</b> statement-e ;
+///   <b>end</b>
+///   
+///   Is compiled into Java-code:
+///   
+///   if(key < lowkey || key > hikey) throw new RTS_SimulaRuntimeError("Switch key outside key interval");
+///   switch(key) {
+///       case 0: statement-0; break;
+///       ...
+///       default: statement-e; break;
+///   }
+///   
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/SwitchStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class SwitchStatement extends Statement {
 	
 	/// The low key.
@@ -107,10 +104,8 @@ public final class SwitchStatement extends Statement {
 	/// The end label.
 	private Label endLabel;
 
-	/**
-	 * Create a new SwitchStatement.
-	 * @param line the source line number
-	 */
+	/// Create a new SwitchStatement.
+	/// @param line the source line number
 	SwitchStatement(int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE)	Parse.TRACE("Parse SwitchStatement: line="+line);
@@ -143,10 +138,8 @@ public final class SwitchStatement extends Statement {
 		if (Option.internal.TRACE_PARSE)	Util.TRACE("Line "+lineNumber+": SwitchStatement: "+this);
 	}
 
-	/**
-	 * Parse Utility: Expect case pair.
-	 * @return the resulting SwitchInterval
-	 */
+	/// Parse Utility: Expect case pair.
+	/// @return the resulting SwitchInterval
 	private SwitchInterval expectCasePair() {
 		Expression lowCase=Expression.expectExpression();
 		Expression hiCase=null;
@@ -154,10 +147,8 @@ public final class SwitchStatement extends Statement {
 		return(new SwitchInterval(lowCase,hiCase));
 	}
 
-	/**
-	 * Utility class SwitchInterval
-	 */
-    private class SwitchInterval {
+	/// Utility class SwitchInterval
+	private class SwitchInterval {
     	/// The lower case key
     	Expression lowCase;
     	
@@ -168,11 +159,9 @@ public final class SwitchStatement extends Statement {
     	int firstTableIndex;
 
     	
-    	/**
-    	 * Utility class: SwitchInterval
-    	 * @param lowCase lower case
-    	 * @param hiCase high case
-    	 */
+    	/// Utility class: SwitchInterval
+    	/// @param lowCase lower case
+    	/// @param hiCase high case
     	private SwitchInterval(Expression lowCase,Expression hiCase) {
     		this.lowCase=lowCase; this.hiCase=hiCase;
     	}
@@ -184,36 +173,26 @@ public final class SwitchStatement extends Statement {
     	}
     }
     
-    /**
-     * Utility class SwitchWhenPart.
-     */
+    /// Utility class SwitchWhenPart.
     private class SwitchWhenPart {
     	
-    	/**
-    	 * The case key list.
-    	 */
+    	/// The case key list.
     	Vector<SwitchInterval> caseKeyList;
     	
-    	/**
-    	 * The statement
-    	 */
+    	/// The statement
     	Statement statement;
     	
-    	/**
-    	 * Create a new SwitchWhenPart.
-    	 * @param caseKeyList the case key list
-    	 * @param statement the statement
-    	 */
+    	/// Create a new SwitchWhenPart.
+    	/// @param caseKeyList the case key list
+    	/// @param statement the statement
     	private SwitchWhenPart(Vector<SwitchInterval> caseKeyList,Statement statement)	{
     		this.caseKeyList=caseKeyList;
     		this.statement=statement;
     		if(Option.internal.TRACE_PARSE) Util.TRACE("NEW SwitchWhenPart: " + toString());
     	}
 	
-    	/**
-    	 * Coding Utility: Edit this when-part.
-    	 * @param first true if this when-part is the first being edited
-    	 */
+    	/// Coding Utility: Edit this when-part.
+    	/// @param first true if this when-part is the first being edited
     	private void doCoding(final boolean first)	{
     		ASSERT_SEMANTICS_CHECKED();
     		for(SwitchInterval casePair:caseKeyList)
@@ -231,12 +210,10 @@ public final class SwitchStatement extends Statement {
     		JavaSourceFileCoder.code("break;");
     	}
        	
-    	/**
-    	 * ClassFile coding utility: initLookupSwitchCases.
-    	 * @param index starting case index.
-    	 * @param codeBuilder the codeBuilder to use.
-    	 * @return final case index.
-    	 */
+    	/// ClassFile coding utility: initLookupSwitchCases.
+    	/// @param index starting case index.
+    	/// @param codeBuilder the codeBuilder to use.
+    	/// @return final case index.
     	private int initLookupSwitchCases(int index,CodeBuilder codeBuilder) {
     		for(SwitchInterval casePair:this.caseKeyList) {
     			if(casePair != null) {
@@ -257,11 +234,9 @@ public final class SwitchStatement extends Statement {
     		return(index);
     	}
 	
-    	/**
-    	 * ClassFile coding utility: buildByteCode.
-    	 * @param codeBuilder the codeBuilder to use.
-    	 */
-    	private void buildByteCode(CodeBuilder codeBuilder) {
+    	/// ClassFile coding utility: buildByteCode.
+    	/// @param codeBuilder the codeBuilder to use.
+     	private void buildByteCode(CodeBuilder codeBuilder) {
         	for(SwitchInterval casePair:this.caseKeyList) {
         		if(casePair==null) {
         			//JavaSourceFileCoder.code("default:");
@@ -290,20 +265,16 @@ public final class SwitchStatement extends Statement {
     	}
     	
 	
-    	/**
-    	 * Utility method print.
-    	 * @param indent the indentation
-    	 */
+    	/// Utility method print.
+    	/// @param indent the indentation
     	private void print(final int indent) {
         	String spc=edIndent(indent);
     		System.out.print(spc+edWhen());
     		statement.print(indent);
     	}
     	
-    	/**
-    	 * Utility: Edit when clause.
-    	 * @return the resulting string
-    	 */
+    	/// Utility: Edit when clause.
+    	/// @return the resulting string
     	private String edWhen() {
     		StringBuilder s=new StringBuilder();
     		s.append("WHEN ");
@@ -313,11 +284,9 @@ public final class SwitchStatement extends Statement {
     		return(s.toString());
     	}
     	
-    	/**
-    	 * Debug utility: printTree.
-    	 * @param indent the indentation.
-    	 * @param head the head of the tree.
-    	 */
+     	/// Debug utility: printTree.
+    	/// @param indent the indentation.
+    	/// @param head the head of the tree.
     	public void printTree(final int indent, final Object head) {
     		System.out.println(edTreeIndent(indent)+edWhen());
     		statement.printTree(indent+1,this);
@@ -379,14 +348,6 @@ public final class SwitchStatement extends Statement {
 		defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		endLabel = codeBuilder.newLabel();
 
-//		System.out.println("\nSwitchStatement.buildByteCode: Build LookupSwitch Instruction: ");
-//		System.out.println("SwitchStatement.buildByteCode: defaultTarget = " + defaultTarget);
-//		System.out.println("SwitchStatement.buildByteCode: endLabel = " + endLabel);
-//		for(int i=0;i<switchCases.size();i++) {
-//			System.out.println("SwitchStatement.buildByteCode: LookupSwitchCases("+i+") = " + lookupSwitchCases.get(i));
-//		}
-		
-
 		switchKey.buildEvaluation(null, codeBuilder);
 		codeBuilder
 			.lookupswitch(defaultTarget, lookupSwitchCases);
@@ -397,19 +358,10 @@ public final class SwitchStatement extends Statement {
 			codeBuilder.labelBinding(defaultTarget);
         }
 		codeBuilder.labelBinding(endLabel);
-		
-//		System.out.println("SwitchStatement.buildByteCode: defaultTarget = " + defaultTarget);
-//		System.out.println("SwitchStatement.buildByteCode: endLabel = " + endLabel);
-//		for(int i=0;i<switchCases.size();i++) {
-//			System.out.println("SwitchStatement.buildByteCode: LookupSwitchCases("+i+") = " + lookupSwitchCases.get(i));
-//		}
-
 	}
 	
-	/**
-	 * ClassFile coding utility: buildSwitchKeyTest.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: buildSwitchKeyTest.
+	/// @param codeBuilder the codeBuilder to use.
 	private void buildSwitchKeyTest(CodeBuilder codeBuilder) {
 		Label L1 = codeBuilder.newLabel();
 		Label L2 = codeBuilder.newLabel();
@@ -451,9 +403,7 @@ public final class SwitchStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private SwitchStatement() {
 		super(0);
 	}
@@ -471,12 +421,10 @@ public final class SwitchStatement extends Statement {
 		oupt.writeObj(switchKey);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static SwitchStatement readObject(AttributeInputStream inpt) throws IOException {
 		SwitchStatement stm = new SwitchStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

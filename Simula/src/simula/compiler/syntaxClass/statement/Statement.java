@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
@@ -24,53 +22,47 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Statement.
- * 
- * <pre>
- * 
- * Simula Standard: Chapter 4: Statements
- * 
- *  Statement
- *         =  { label : }  unconditional-statement
- *         |  { label : }  conditional-statement
- *         |  { label : }  for-statement
- * 
- *     Unconditional-statement
- *         =  assignment-statement  NOTE: Treated as a binary operation
- *         |  while-statement
- *         |  goto-statement
- *         |  procedure-statement
- *         |  object-generator
- *         |  connection-statement
- *         |  compound-statement
- *         |  block
- *         |  dummy-statement
- *         |  activation-statement
- * 
- * </pre>
- * 
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/Statement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: Chapter 4: Statements
+/// 
+///  Statement
+///         =  { label : }  unconditional-statement
+///         |  { label : }  conditional-statement
+///         |  { label : }  for-statement
+/// 
+///     Unconditional-statement
+///         =  assignment-statement  NOTE: Treated as a binary operation
+///         |  while-statement
+///         |  goto-statement
+///         |  procedure-statement
+///         |  object-generator
+///         |  connection-statement
+///         |  compound-statement
+///         |  block
+///         |  dummy-statement
+///         |  activation-statement
+/// 
+/// </pre>
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/Statement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public abstract class Statement extends SyntaxClass {
 	
-	/**
-	 * Create a new Statement.
-	 * @param line the source line number
-	 */
+	/// Create a new Statement.
+	/// @param line the source line number
 	protected Statement(int line) {
 		lineNumber=line;
 	}
 
-	/**
-	 * Parse a statement.
-	 * @return the statement
-	 */
+	/// Parse a statement.
+	/// @return the statement
 	public static Statement expectStatement() {
 		ObjectList<LabelDeclaration> labels = null;
 		int lineNumber=Parse.currentToken.lineNumber;
@@ -95,10 +87,8 @@ public abstract class Statement extends SyntaxClass {
 		return (statement);
 	}
 
-	/**
-	 * Parse Utility: Expect a statement.
-	 * @return the resulting statement
-	 */
+	/// Parse Utility: Expect an unlabeled statement.
+	/// @return the resulting statement
 	private static Statement expectUnlabeledStatement() {
 		int lineNumber=Parse.currentToken.lineNumber;
 		if (Option.internal.TRACE_PARSE)
@@ -143,9 +133,7 @@ public abstract class Statement extends SyntaxClass {
 		JavaSourceFileCoder.code(toJavaCode() + ';');
 	}
 
-	/**
-	 * Build Java ByteCode.
-	 */
+	/// Build Java ByteCode.
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		Util.IERR("Method buildByteCode need a redefinition in "+this.getClass().getSimpleName());

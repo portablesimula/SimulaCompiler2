@@ -92,7 +92,7 @@ import simula.compiler.utilities.Util;
 /// Examples
 /// 
 ///           integer array a(2:20)                      ! 19 elements;
-///           real array  q(-7:if c &lt; 0 then 2 else 1)   ! 10 or 9 elements;
+///           real array  q(-7:if c < 0 then 2 else 1)   ! 10 or 9 elements;
 ///           array  a,b,c(7:n,2:m), s(-2:10)            ! any value of n or m legal;
 /// </pre>
 /// Link to GitHub: <a href=

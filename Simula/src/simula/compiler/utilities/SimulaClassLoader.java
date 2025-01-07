@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
 import java.lang.reflect.InvocationTargetException;
@@ -6,23 +11,17 @@ import java.util.Vector;
 
 import simula.runtime.RTS_EndProgram;
 
-/**
- * SimulaClassLoader.
- */
+/// SimulaClassLoader.
 public class SimulaClassLoader extends ClassLoader {
 	/// Debug utility.
 	private final static boolean TESTING = false;
 	
-	/**
-	 * Default Constructor.
-	 */
+	/// Default Constructor.
 	public SimulaClassLoader() {}
 	
-	/**
-	 * Load a class
-	 * @param name class name
-	 * @param bytes classFile bytes
-	 */
+	/// Load a class
+	/// @param name class name
+	/// @param bytes classFile bytes
 	public void loadClass(String name, byte[] bytes) {
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		if(clazz != null) {
@@ -35,33 +34,21 @@ public class SimulaClassLoader extends ClassLoader {
 		}
 	}
 	
-	/**
-	 * Check if a named class is loaded
-	 * @param name class name
-	 * @return true: if a named class is loaded
-	 */
+	/// Check if a named class is loaded
+	/// @param name class name
+	/// @return true: if a named class is loaded
 	public boolean isClassLoaded(String name) {
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
 		return clazz != null;
 	}
 	
-	/**
-	 * Run loaded class 'name'
-	 * @param name class name
-	 * @param cmd command vector
-	 */
+	/// Run loaded class 'name'
+	/// @param name class name
+	/// @param cmd command vector
 	public void runClass(String name, final Vector<String> cmd) {
-		
-//		System.out.print("SimulaClassLoader.runClass: " + name);
-//		for(String s:cmd) System.out.print(" "+s); System.out.println("");
-		
 		String[] cmds = new String[cmd.size()];
 		cmd.copyInto(cmds);
 		Class<?> clazz = Global.simulaClassLoader.findLoadedClass(name);
-		
-//		Method[] methods = clazz.getMethods();
-//		for(Method method:methods) System.out.println(""+method);
-		
 		Class<?> argTypes[] = { (new String[0]).getClass() };
 		Method main = null;
 		try {

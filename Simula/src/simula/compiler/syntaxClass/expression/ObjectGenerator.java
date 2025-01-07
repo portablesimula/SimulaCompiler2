@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -30,58 +28,46 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * ObjectGenerator i.e. new Object expression.
- * 
- * <pre>
- * 
- * Simula Standard: 3.8 Object expressions
- * 
- * object-generator = NEW class-identifier [ ( actual-parameter-part ) ]
- * 
- *    actual-parameter-part
- *         =  "("  actual-parameter  {  ,  actual-parameter  }  ")"
- *
- *       actual-parameter
- *           =  expression
- *           |  array-identifier-1
- *           |  switch-identifier
- *           |  procedure-identifier-1
- * 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectGenerator.java"><b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// ObjectGenerator i.e. new Object expression.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 3.8 Object expressions
+/// 
+/// object-generator = NEW class-identifier [ ( actual-parameter-part ) ]
+/// 
+///    actual-parameter-part
+///         =  "("  actual-parameter  {  ,  actual-parameter  }  ")"
+/// 
+///       actual-parameter
+///           =  expression
+///           |  array-identifier-1
+///           |  switch-identifier
+///           |  procedure-identifier-1
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectGenerator.java"><b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ObjectGenerator extends Expression {
 	
-	/**
-	 * The class-identifier
-	 */
+	/// The class-identifier
 	private String classIdentifier;
 	
-	/**
-	 * The semantic meaning 
-	 */
+	/// The semantic meaning 
 	Meaning meaning;
 	
-	/**
-	 * The actual parameters before checking
-	 */
+	/// The actual parameters before checking
 	private Vector<Expression> params;
 	
-	/**
-	 * The actual parameters after checking
-	 */
+	/// The actual parameters after checking
 	private Vector<Expression> checkedParams = new Vector<Expression>();
 
-	/**
-	 * Create a new ObjectGenerator
-	 * @param ident class-identifier
-	 * @param params the actual parameters
-	 */
+	/// Create a new ObjectGenerator.
+	/// @param ident class-identifier
+	/// @param params the actual parameters
 	private ObjectGenerator(final String ident,final Vector<Expression> params) {
 		this.classIdentifier = ident;
 		this.type = Type.Ref(classIdentifier);
@@ -89,16 +75,14 @@ public final class ObjectGenerator extends Expression {
 		if (Option.internal.TRACE_PARSE) Util.TRACE("NEW ObjectGenerator: " + toString());
 	}
 
-	/**
-	 * Parse an object generator
-	 * <pre>
-	 * object-generator = NEW class-identifier [ ( actual-parameter-part ) ]
-	 * 
-	 *    actual-parameter-part
-	 *         =  "("  actual-parameter  {  ,  actual-parameter  }  ")"
-	 * </pre>
-	 * @return the newly created ObjectGenerator.
-	 */
+	/// Parse an object generator.
+	/// <pre>
+	/// object-generator = NEW class-identifier [ ( actual-parameter-part ) ]
+	/// 
+	///    actual-parameter-part
+	///         =  "("  actual-parameter  {  ,  actual-parameter  }  ")"
+	/// </pre>
+	/// @return the newly created ObjectGenerator.
 	static Expression expectNew() {
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse ObjectGenerator, current=" + Parse.currentToken);
@@ -225,7 +209,6 @@ public final class ObjectGenerator extends Expression {
 		//  14: checkcast     #19                 // class simulaTestPrograms/adHoc07_A
 		//  17: putfield      #7                  // Field x_2:LsimulaTestPrograms/adHoc07_A;
 
-//		System.out.println("Object.buildEvaluation: "+this+", rightPart="+rightPart);
 		ClassDeclaration cls = (ClassDeclaration) meaning.declaredAs;
 		ClassDesc CD_cls=cls.getClassDesc();
 		codeBuilder
@@ -240,13 +223,9 @@ public final class ObjectGenerator extends Expression {
 			Parameter formalParameter = formalIterator.next();
 			if (formalParameter.mode == Parameter.Mode.value) {
 				if (par.type.keyWord == Type.T_TEXT) {
-//					codeBuilder.invokestatic(RTS.CD.RTS_RTObject,
-//								"copy", MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;)Lsimula/runtime/RTS_TXT;"));
 					RTS.invokestatic_ENVIRONMENT_copy(codeBuilder);
 				}
 				else if (formalParameter.kind == Parameter.Kind.Array) {
-//					codeBuilder.invokevirtual(RTS.CD.RTS_ARRAY,
-//							"COPY", MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_ARRAY;"));
 					RTS.invokevirtual_ARRAY_copy(codeBuilder);
 				}
 			}
@@ -255,7 +234,6 @@ public final class ObjectGenerator extends Expression {
 		codeBuilder.invokespecial(CD_cls, "<init>", cls.getConstructorMethodTypeDesc());
 
 		// _STM(); or _START
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		if(cls.isDetachUsed()) {
 			String resultType="Lsimula/runtime/RTS_RTObject;";
 			codeBuilder.invokevirtual(CD_cls, "_START", MethodTypeDesc.ofDescriptor("()" + resultType));
@@ -276,9 +254,7 @@ public final class ObjectGenerator extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ObjectGenerator() {	}
 
 	@Override
@@ -301,12 +277,10 @@ public final class ObjectGenerator extends Expression {
 		}
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an ObjectGenerator object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ObjectGenerator object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ObjectGenerator readObject(AttributeInputStream inpt) throws IOException {
 		ObjectGenerator gen = new ObjectGenerator();
 		gen.OBJECT_SEQU = inpt.readSEQU(gen);

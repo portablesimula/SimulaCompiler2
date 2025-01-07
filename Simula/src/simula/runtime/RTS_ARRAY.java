@@ -1,53 +1,37 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
-/**
- * Utility class ARRAY.
- * <p>
- * This class provides an abstract superclass for Simula arrays.
- * The implementation technique used is called 'dope vector indexing'. The dope vector is
- * calculated in the constructor based on the array bound pairs.
- * A fictitious base is also Calculated.
- * This base is the relative address of the array element (0,0, ... 0).
- * <p>
- * See <a href="https://portablesimula.github.io/github.io/doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
- * Sect. 3.4 Array Quantities
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_ARRAY.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Utility class ARRAY.
+/// 
+/// This class provides an abstract superclass for Simula arrays.
+/// The implementation technique used is called 'dope vector indexing'. The dope vector is
+/// calculated in the constructor based on the array bound pairs.
+/// A fictitious base is also Calculated.
+/// This base is the relative address of the array element (0,0, ... 0).
+/// 
+/// See <a href="https://portablesimula.github.io/github.io/doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
+/// Sect. 3.4 Array Quantities
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_ARRAY.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public abstract class RTS_ARRAY {
-	/**
-	 * The initilal BOUND pairs
-	 */
+	/// The initilal BOUND pairs
 	public final RTS_BOUNDS[] BOUNDS;
-	/**
-	 * The initial calculated SIZE
-	 */
+	/// The initial calculated SIZE
 	public final int SIZE;
-	/**
-	 *  The fictitious base. This base is the relative address of the array element (0,0, ... 0).
-	 */
+	///  The fictitious base. This base is the relative address of the array element (0,0, ... 0).
 	private final int BASE;
-	/**
-	 * The DOPE Vector
-	 */
+	/// The DOPE Vector
 	private final int[] DOPE;
 
-	/**
-	 * Create an _ARRAY with the given BOUNDS.
-	 * 
-	 * @param BOUNDS the ARRAY BOUNDS
-	 */
+	/// Create an _ARRAY with the given BOUNDS.
+	/// @param BOUNDS the ARRAY BOUNDS.
 	public RTS_ARRAY(final RTS_BOUNDS... BOUNDS) {
 		this.BOUNDS = BOUNDS;
 		DOPE = new int[BOUNDS.length];
@@ -63,57 +47,45 @@ public abstract class RTS_ARRAY {
 		this.BASE = BASE;
 	}
 
-	/**
-	 * Returns the number of dimensions for this _ARRAY
-	 * @return the number of dimensions
-	 */
+	/// Returns the number of dimensions for this _ARRAY.
+	/// @return the number of dimensions.
 	public int nDim() {
 		return (BOUNDS.length);
 	}
 
-	/**
-	 * Return the size of the underlying ELT[] array
-	 * @return the size of the underlying ELT[] array
-	 */
+	/// Return the size of the underlying ELT[] array.
+	/// @return the size of the underlying ELT[] array.
 	public int size() {
 		return (SIZE);
 	}
 
-	/**
-	 * The procedure "lowerbound" returns the lower (upper) bound of the dimension of
-	 * the given array corresponding to the given index. The first dimension has index one, the next two,
-	 * etc. An index less than one or greater than the number of dimensions of the given array constitutes
-	 * a run time error
-	 * @param i the given index
-	 * @return lowerbound of index i
-	 */
+	/// The procedure "lowerbound". It returns the lower (upper) bound of the dimension of
+	/// the given array corresponding to the given index. The first dimension has index one, the next two,
+	/// etc. An index less than one or greater than the number of dimensions of the given array constitutes
+	/// a run time error
+	/// @param i the given index
+	/// @return lowerbound of index i
 	public int lowerBound(int i) {
 		return (BOUNDS[i].LB);
 	}
 
-	/**
-	 * The procedure "upperbound" returns the lower (upper) bound of the dimension of
-	 * the given array corresponding to the given index. The first dimension has index one, the next two,
-	 * etc. An index less than one or greater than the number of dimensions of the given array constitutes
-	 * a run time error
-	 * @param i the given index
-	 * @return upperbound of index i
-	 */
+	/// The procedure "upperbound". It returns the lower (upper) bound of the dimension of
+	/// the given array corresponding to the given index. The first dimension has index one, the next two,
+	/// etc. An index less than one or greater than the number of dimensions of the given array constitutes
+	/// a run time error
+	/// @param i the given index
+	/// @return upperbound of index i
 	public int upperBound(int i) {
 		return (BOUNDS[i].LB + BOUNDS[i].SIZE - 1);
 	}
 
-	/**
-	 * Abstract method redefined for all subclass &lt;type>_ARRAY
-	 * @return a copy of this _ARRAY
-	 */
+	/// Abstract method redefined for all subclass <type>_ARRAY.
+	/// @return a copy of this _ARRAY
 	public abstract RTS_ARRAY COPY();
 
-	/**
-	 * General method to calculate index to the ELT array.
-	 * @param x the indicies
-	 * @return the calculated index
-	 */
+	/// General method to calculate index to the ELT array.
+	/// @param x the indicies
+	/// @return the calculated index
 	public int index(int... x) {
 		int idx = 0;
 		for (int k = 0; k < x.length; k++) {
@@ -125,9 +97,7 @@ public abstract class RTS_ARRAY {
 		return (idx - BASE);
 	}
 
-	/**
-	 * Returns a string representation of the object.
-	 */
+	/// Returns a string representation of the object.
 	public String toString() {
 		StringBuilder sb = new StringBuilder();
 		sb.append("ARRAY");

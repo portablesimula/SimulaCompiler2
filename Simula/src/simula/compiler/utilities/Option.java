@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
 import java.awt.Color;
@@ -24,89 +22,58 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-/**
- * Compile Time Options.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Option.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Compile Time Options.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Option.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class Option {
 
-	/**
-	 * The Compiler Modes.
-	 */
+	/// The Compiler Modes.
 	public enum CompilerMode { 
     	/** Generate Java source and use Java compiler to generate JavaClass files. */					viaJavaSource,
     	/** Generate JavaClass files directly. No Java source files are generated. */ 					directClassFiles,
     	/** Generate ClassFile byte array and load it directly. No intermediate files are created. */	simulaClassLoader
     }
 
-	/**
-	 * The Compiler mode.
-	 */
-//	public static CompilerMode compilerMode=CompilerMode.viaJavaSource;
-	public static CompilerMode compilerMode=CompilerMode.directClassFiles;
-//	public static CompilerMode compilerMode=CompilerMode.simulaClassLoader;
+	/// The Compiler mode.
+	public static CompilerMode compilerMode;
 	
-	/**
-	 * Source file is case sensitive.
-	 */
+	/// Source file is case sensitive.
 	public static boolean CaseSensitive=false;
 	
-	/**
-	 * Output messages about what the compiler is doing.
-	 */
+	/// Output messages about what the compiler is doing.
 	public static boolean verbose = false; 
 	
-	/**
-	 * Generate warning messages
-	 */
+	/// Generate warning messages
 	public static boolean WARNINGS=true;
 	
-	/**
-	 * true: Don't execute generated .jar file
-	 */
+	/// true: Don't execute generated .jar file
 	public static boolean noExecution = false;
 	
-	/**
-	 * false: Disable all language extensions. In other words,
-	 * follow the Simula Standard literally
-	 */
+	/// false: Disable all language extensions. In other words,
+	/// follow the Simula Standard literally
 	public static boolean EXTENSIONS=true;
 
-	/**
-	 * Testing and debugging options
-	 */
+	/// Testing and debugging options
 	public static class internal {
 		/** Default Constructor: NOT USED */ public internal() { Util.IERR(); }
 
-		/**
-		 * Used to insert code to enforce 'stack size mismatch'
-		 */
+		/// Used to insert code to enforce 'stack size mismatch'
 		public static boolean TESTING_STACK_SIZE = false;
 
-		/**
-		 * List generated .class files
-		 */
+		/// List generated .class files
 		public static boolean LIST_GENERATED_CLASS_FILES = false;
 
-		/**
-		 * INLINE_TESTING on/off
-		 */
+		/// INLINE_TESTING on/off
 		public static boolean INLINE_TESTING = false; 
 		
-		/**
-		 * S-PORT extensions  on/off
-		 */
+		/// S-PORT extensions  on/off
 		public static boolean SPORT=false;
 		
-		/**
-		 * Used by Java-Coding to save the generated .java files.
-		 * If not set, a temp directory is used/created.
-		 */
+		/// Used by Java-Coding to save the generated .java files.
+		/// If not set, a temp directory is used/created.
 		public static File keepJava = null;
 
 
@@ -144,9 +111,7 @@ public final class Option {
 		/** Runtime Options */ public static String SOURCE_FILE="";
 		/** Runtime Options */ public static String RUNTIME_USER_DIR="";
 		
-		/**
-		 * Initiate Compiler options
-		 */
+		/// Initiate Compiler options
 		public static void InitCompilerOptions() {
 			Option.internal.SPORT=false;
 
@@ -171,14 +136,10 @@ public final class Option {
 
 	}
 	
-	/**
-	 * The default constructor
-	 */
+	/// The default constructor
 	private Option() {}
 	
-	/**
-	 * Initiate Compiler options.
-	 */
+	/// Initiate Compiler options.
 	public static void InitCompilerOptions() {
 //		CompilerMode compilerMode=CompilerMode.viaJavaSource;
 		compilerMode=CompilerMode.directClassFiles;
@@ -192,12 +153,9 @@ public final class Option {
 		Option.internal.InitCompilerOptions();
 	}
 	
-	/**
-	 * Get Compiler options from property file.
-	 * @param properties the properties used.
-	 */
+	/// Get Compiler options from property file.
+	/// @param properties the properties used.
 	public static void getCompilerOptions(Properties properties) {
-//		System.out.println("Option.getCompilerOptions(properties)");
 		setCompilerMode(properties.getProperty("simula.compiler.option.mode", "directClassFiles"));
 		Option.CaseSensitive = properties.getProperty("simula.compiler.option.CaseSensitive", "false").equalsIgnoreCase("true");
 		Option.verbose = properties.getProperty("simula.compiler.option.verbose", "false").equalsIgnoreCase("true");
@@ -206,12 +164,9 @@ public final class Option {
 		Option.EXTENSIONS = properties.getProperty("simula.compiler.option.EXTENSIONS", "true").equalsIgnoreCase("true");
 	}
 	
-	/**
-	 * Set Compiler options in property file.
-	 * @param properties the properties used.
-	 */
+	/// Set Compiler options in property file.
+	/// @param properties the properties used.
 	public static void setCompilerOptions(Properties properties) {
-//		System.out.println("Option.setCompilerOptions(properties)");
 		properties.setProperty("simula.compiler.option.mode", ""+Option.compilerMode);
 		properties.setProperty("simula.compiler.option.CaseSensitive", ""+Option.CaseSensitive);
 		properties.setProperty("simula.compiler.option.verbose", ""+Option.verbose);
@@ -220,9 +175,7 @@ public final class Option {
 		properties.setProperty("simula.compiler.option.EXTENSIONS", ""+Option.EXTENSIONS);
 	}
 
-	/**
-	 * Editor Utility: Set Compiler Mode.
-	 */
+	/// Editor Utility: Set Compiler Mode.
 	public static void setCompilerMode() {
 		JPanel panel=new JPanel();
 		panel.setBackground(Color.white);
@@ -236,7 +189,6 @@ public final class Option {
 		
 		ButtonGroup buttonGroup = new ButtonGroup();
 		panel.add(but1); buttonGroup.add(but1);
-//		panel.add(new JTextArea("Generate Java source and use Java compiler to generate JavaClass files."));
 		panel.add(new JLabel("   The Simula Compiler will generate Java source files and use"));
 		panel.add(new JLabel("   the Java compiler to generate JavaClass files which in turn"));
 		panel.add(new JLabel("   are collected together with the Runtime System into the"));
@@ -260,12 +212,9 @@ public final class Option {
     	Global.storeWorkspaceProperties();
 	}
 
-	/**
-	 * Editor Utility: Set Compiler Mode.
-	 * @param id the mode String.
-	 */
+	/// Editor Utility: Set Compiler Mode.
+	/// @param id the mode String.
 	public static void setCompilerMode(String id) {
-//		System.out.println("Option.setCompilerMode: "+id);
 		if(id.equals("viaJavaSource")) {
 			Option.compilerMode = CompilerMode.viaJavaSource;
 		} else if(id.equals("directClassFiles")) {
@@ -275,11 +224,9 @@ public final class Option {
 		}
 	}
 	
-	/**
-	 * Utility to get SelectedButtonText.
-	 * @param buttonGroup the button group to inspect.
-	 * @return the selected String.
-	 */
+	/// Utility to get SelectedButtonText.
+	/// @param buttonGroup the button group to inspect.
+	/// @return the selected String.
 	public String getSelectedButtonText(ButtonGroup buttonGroup) {
         for (Enumeration<AbstractButton> buttons = buttonGroup.getElements(); buttons.hasMoreElements();) {
             AbstractButton button = buttons.nextElement();
@@ -292,11 +239,9 @@ public final class Option {
         return null;
     }
 
-	/**
-	 * Returns the option name 'id'
-	 * @param id option id
-	 * @return the option name 'id'
-	 */
+	/// Returns the option name 'id'
+	/// @param id option id
+	/// @return the option name 'id'
 	public static boolean getOption(String id) {
 		if(id.equalsIgnoreCase("CaseSensitive")) return(CaseSensitive); 
 		if(id.equalsIgnoreCase("VERBOSE")) return(verbose); 
@@ -317,12 +262,9 @@ public final class Option {
 		return(false);
 	}
 
-
-	/**
-	 * Set the option named 'id' to the given value
-	 * @param id option id
-	 * @param val new option value
-	 */
+	/// Set the option named 'id' to the given value
+	/// @param id option id
+	/// @param val new option value
 	public static void setOption(String id,boolean val) {
 		if(id.equalsIgnoreCase("CaseSensitive")) CaseSensitive=val; 
 		if(id.equalsIgnoreCase("VERBOSE")) verbose=val; 
@@ -342,9 +284,7 @@ public final class Option {
 		if(id.equalsIgnoreCase("TRACE_BYTECODE_OUTPUT")) internal.TRACE_BYTECODE_OUTPUT=val; 
 	}
 
-	/**
-	 * Editor Utility: Select Compiler Options.
-	 */
+	/// Editor Utility: Select Compiler Options.
 	public static void selectCompilerOptions() {
 		JPanel panel=new JPanel();
 		panel.setBackground(Color.white);
@@ -370,23 +310,19 @@ public final class Option {
     	Global.storeWorkspaceProperties();
 	}
 
-	/**
-	 * Editor Utility: Create a checkBox with tooltips.
-	 * @param id option id
-	 * @param tooltip option's tooltip or null
-	 * @return the resulting check box
-	 */
+	/// Editor Utility: Create a checkBox with tooltips.
+	/// @param id option id
+	/// @param tooltip option's tooltip or null
+	/// @return the resulting check box
 	private static JCheckBox checkBox(String id,String tooltip) {
 		return checkBox(id, tooltip,Option.getOption(id));
 	}
 
-	/**
-	 * Editor Utility: Create a checkBox with tooltips.
-	 * @param id option id.
-	 * @param tooltip option's tooltip or null.
-	 * @param selected true: this checkBox is selected.
-	 * @return the resulting check box.
-	 */
+	/// Editor Utility: Create a checkBox with tooltips.
+	/// @param id option id.
+	/// @param tooltip option's tooltip or null.
+	/// @param selected true: this checkBox is selected.
+	/// @return the resulting check box.
 	private static JCheckBox checkBox(String id,String tooltip,boolean selected) {
 		JCheckBox item = new JCheckBox(id);
 		item.setBackground(Color.white);
@@ -415,19 +351,5 @@ public final class Option {
          });
         return(item);
 	}
-
-	
-//	public static JFrame popup(JCheckBox checkBox) {
-//    	JFrame frame=new JFrame();
-////        frame.setSize(800, 500); // Initial frame size
-//        frame.setSize(950, 500); // Initial frame size
-//        frame.setTitle("Runtime Console");
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setLocationRelativeTo(checkBox);
-//
-//        frame.getContentPane().add(new JTextArea("Abracadab"));
-//        frame.setVisible(true);
-//        return(frame);
-//    }
 
 }

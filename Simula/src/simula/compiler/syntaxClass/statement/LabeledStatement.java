@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -19,45 +17,34 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Labeled Statement.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- *   label-statement =  label : { label : } statement 
- * 
- * 	    label = identifier
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/LabeledStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Labeled Statement.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+///   label-statement =  label : { label : } statement 
+/// 
+/// 	    label = identifier
+///  
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/LabeledStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class LabeledStatement extends Statement {
 	
-	/**
-	 * The list of labels.
-	 */
-//	private final Vector<String> labels;
-//	private Vector<LabelDeclaration> labels;
+	/// The list of labels.
 	private ObjectList<LabelDeclaration> labels;
 	
-	/**
-	 * The statement
-	 */
+	/// The statement
 	private Statement statement;
 
-	/**
-	 * Create a new LabeledStatement.
-	 * @param line the source line number
-	 * @param labels the label identifiers
-	 * @param statement the labeled statement
-	 */
-//	LabeledStatement(final int line,final Vector<LabelDeclaration> labels,final Statement statement) {
+	/// Create a new LabeledStatement.
+	/// @param line the source line number
+	/// @param labels the label identifiers
+	/// @param statement the labeled statement
 	LabeledStatement(final int line,final ObjectList<LabelDeclaration> labels,final Statement statement) {
 		super(line);
 		this.labels = labels;
@@ -119,9 +106,7 @@ public final class LabeledStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private LabeledStatement() {
 		super(0);
 	}
@@ -135,17 +120,13 @@ public final class LabeledStatement extends Statement {
 		oupt.writeShort(lineNumber);
 		// *** LabeledStatement
 		oupt.writeObj(statement);
-//		oupt.writeShort(labels.size());
-//		for(LabelDeclaration lab:labels) oupt.writeObj(lab);
 		oupt.writeObjectList(labels);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a LabeledStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the LabeledStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static LabeledStatement readObject(AttributeInputStream inpt) throws IOException {
 		LabeledStatement stm = new LabeledStatement();
@@ -154,12 +135,6 @@ public final class LabeledStatement extends Statement {
 		stm.lineNumber = inpt.readShort();
 		// *** LabeledStatement
 		stm.statement = (Statement) inpt.readObj();
-//		int n = inpt.readShort();
-//		if(n > 0) {
-//			stm.labels = new Vector<LabelDeclaration>();
-//			for(int i=0;i<n;i++)
-//				stm.labels.add((LabelDeclaration) inpt.readObj());
-//		}
 		stm.labels = (ObjectList<LabelDeclaration>) inpt.readObjectList();
 		Util.TRACE_INPUT("LabeledStatement: " + stm);
 		return(stm);

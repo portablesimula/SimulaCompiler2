@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -22,57 +20,47 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Constant.
- * <p>
- * All constants are treated by the Lexicographical Scanner.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- *   Constant = unsigned-number | string | character-constant | NONE | NOTEXT
- *   
- * </pre>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Constant.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- * @see simula.compiler.parsing.SimulaScanner
- */
+/// Constant.
+/// 
+/// All constants are treated by the Lexicographical Scanner.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+///   Constant = unsigned-number | string | character-constant | NONE | NOTEXT
+///   
+/// </pre>
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/Constant.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
+/// @see simula.compiler.parsing.SimulaScanner
 public final class Constant extends Expression {
 	
-	/**
-	 * The constant's value
-	 */
+	/// The constant's value
 	public Object value;
 
-	/**
-	 * Create a new Constant.
-	 * @param type the constant's type
-	 * @param value the constant's value
-	 */
+	/// Create a new Constant.
+	/// @param type the constant's type
+	/// @param value the constant's value
 	public Constant(final Type type,final Object value) {
 		this.type=type;
 		this.value = value;
 	}
 	
-	/**
-	 * Create a real type Constant.
-	 * @param value a real type value
-	 * @return the resulting Constant
-	 */
+	/// Create a real type Constant.
+	/// @param value a real type value
+	/// @return the resulting Constant
     static Constant createRealType(final Object value)
     { Type type=Type.Real;
       if(value instanceof Double) type=Type.LongReal;
       return(new Constant(type,value));
     }
     
-    /**
-     * Returns the type of this number.
-     * @param n the number
-     * @return the type of this number.
-     */
+    /// Returns the type of this number.
+    /// @param n the number
+    /// @return the type of this number.
     private static Type getType(final Number n) {
     	if(n instanceof Integer) return(Type.Integer);
     	if(n instanceof Long) return(Type.Integer);
@@ -80,12 +68,10 @@ public final class Constant extends Expression {
     	return(Type.LongReal);
     }
     
-    /**
-     * Simplify this Constant.
-     * @param opr an unary operation
-     * @param rhn a right hand Number
-     * @return the resulting Constant
-     */
+     /// Simplify this Constant.
+    /// @param opr an unary operation
+    /// @param rhn a right hand Number
+    /// @return the resulting Constant
     static Constant evaluate(final int opr,final Number rhn) { 
     	Type type=getType(rhn);
 		Number result=null;
@@ -113,13 +99,11 @@ public final class Constant extends Expression {
 		return(new Constant(type,result));
     }
   
-    /**
-     * Simplify this Constant.
-     * @param lhn a left hand Number
-     * @param opr an binary operation
-     * @param rhn a right hand Number
-     * @return the resulting Constant
-     */
+    /// Simplify this Constant.
+    /// @param lhn a left hand Number
+    /// @param opr an binary operation
+    /// @param rhn a right hand Number
+    /// @return the resulting Constant
     static Constant evaluate(final Number lhn,final int opr,final Number rhn) { 
     	Type type=Type.arithmeticTypeConversion(getType(lhn),getType(rhn));
 		if(opr==KeyWord.DIV && type.keyWord == Type.T_INTEGER) type=Type.Real;
@@ -200,11 +184,9 @@ public final class Constant extends Expression {
 		}
 	}
 	
-	/**
-	 * Encode a string with escape sequences.
-	 * @param s the string
-	 * @return a string with escape sequences.
-	 */
+	/// Encode a string with escape sequences.
+	/// @param s the string
+	/// @return a string with escape sequences.
 	private String encode(final String s) {
 		StringBuilder b = new StringBuilder();
 		for (char c : s.toCharArray()) {
@@ -228,11 +210,9 @@ public final class Constant extends Expression {
 		return (b.toString());
 	}
 	
-	/**
-	 * Encoding Utility: Edit hex(c) and append it to the given StringBuilder.
-	 * @param sb the StringBuilder
-	 * @param c the input character
-	 */
+	/// Java Encoding Utility: Edit hex(c) and append it to the given StringBuilder.
+	/// @param sb the StringBuilder
+	/// @param c the input character
 	private void appendHex(StringBuilder sb,char c) {
 		String hex=Integer.toHexString(c);
 		switch(hex.length()) {
@@ -286,20 +266,16 @@ public final class Constant extends Expression {
 		}
 	}
 
-	/**
-	 * Build boolean const as an integer 1:true or 0:false.
-	 * @param codeBuilder the codeBuilder to use.
-	 * @param b the actual boolean value.
-	 */
+	/// ClassFile coding: Build boolean const as an integer 1:true or 0:false.
+	/// @param codeBuilder the codeBuilder to use.
+	/// @param b the actual boolean value.
 	public static void buildIntConst(CodeBuilder codeBuilder, boolean b) {
 		if(b) codeBuilder.iconst_1(); else codeBuilder.iconst_0();
 	}
 	
-	/**
-	 * Build integer const.
-	 * @param codeBuilder the codeBuilder to use.
-	 * @param i the actual integer value.
-	 */
+	/// ClassFile coding: Build integer const.
+	/// @param codeBuilder the codeBuilder to use.
+	/// @param i the actual integer value.
 	public static void buildIntConst(CodeBuilder codeBuilder, int i) {
 		switch(i) {
 			case 0 -> codeBuilder.iconst_0();
@@ -329,9 +305,7 @@ public final class Constant extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private Constant() {}
 
 	@Override
@@ -348,12 +322,10 @@ public final class Constant extends Expression {
 		oupt.writeConstant(value);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a Constant.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the Constant read from the stream.
+	/// @throws IOException if something went wrong.
 	public static Constant readObject(AttributeInputStream inpt) throws IOException {
 		Constant cnst = new Constant();
 		cnst.OBJECT_SEQU = inpt.readSEQU(cnst);
@@ -367,17 +339,5 @@ public final class Constant extends Expression {
 		Util.TRACE_INPUT("Constant: "+cnst);
 		return(cnst);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeConstant(value);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		value=inpt.readConstant();
-//	}
 
 }

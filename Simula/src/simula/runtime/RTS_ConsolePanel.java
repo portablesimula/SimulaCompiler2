@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import javax.swing.*;
@@ -31,76 +29,49 @@ import java.io.OutputStream;
 import java.io.Reader;
 import java.io.Writer;
 
-/**
- * This is an implementation of a Console Panel.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_ConsolePanel.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// This is an implementation of a Console Panel.
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_ConsolePanel.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 @SuppressWarnings("serial")
 public final class RTS_ConsolePanel extends JPanel {
 	
-	/**
-	 * The text pane.
-	 */
+	/// The text pane.
 	private static JTextPane textPane;
 
-	/**
-	 * the StyledDocument showed in this panel
-	 */
+	/// the StyledDocument showed in this panel
 	private StyledDocument doc;
 	
-	/**
-	 * Regular style
-	 */
+	/// Regular style
 	private Style styleRegular;
 	
-	/**
-	 * Warning style
-	 */
+	/// Warning style
 	private Style styleWarning;
 
-	/**
-	 * Error style
-	 */
+	/// Error style
 	private Style styleError;
 
-	/**
-	 * the Popup Menu
-	 */
+	/// the Popup Menu
 	private JPopupMenu popupMenu;
 	
-	/**
-	 * Menu item clear
-	 */
+	/// Menu item clear
 	private JMenuItem clearItem;
 	
-	/**
-	 * Menu item copy
-	 */
+	/// Menu item copy
 	private JMenuItem copyItem;
 	
-	/**
-	 * Used by KeyListener and read()
-	 */
+	/// Used by KeyListener and read()
 	private boolean reading;
 	
-	/**
-	 * Used by KeyListener and read()
-	 */
+	/// Used by KeyListener and read()
 	private char keyin;
 
-	/**
-	 * the Reader to read input from the console
-	 */
+	/// the Reader to read input from the console
 	private Reader consoleReader;
 
-	/**
-	 * Reads a single character. 
-	 * @return The character read
-	 */
+	/// Reads a single character. 
+	/// @return The character read
 	public char read() {
 		textPane.requestFocus();
 		reading = true; // Enables KeyListener (see below)
@@ -109,10 +80,8 @@ public final class RTS_ConsolePanel extends JPanel {
 		return (keyin);
 	}
 
-	/**
-	 * Get a reader suitable for reading from this panel
-	 * @return a reader
-	 */
+	/// Get a reader suitable for reading from this panel
+	/// @return a reader
 	public Reader getReader() {
 		if (consoleReader == null) {
 			consoleReader = new Reader() {
@@ -144,10 +113,8 @@ public final class RTS_ConsolePanel extends JPanel {
 		return (consoleReader);
 	}
 
-	/**
-	 * Get a OutputStream suitable for writing on this panel
-	 * @return a OutputStream
-	 */
+	/// Get a OutputStream suitable for writing on this panel
+	/// @return a OutputStream
 	public OutputStream getOutputStream() {
 		return (new OutputStream() {
 			@Override
@@ -158,10 +125,8 @@ public final class RTS_ConsolePanel extends JPanel {
 		});
 	}
 
-	/**
-	 * Get a writer suitable for writing on this panel
-	 * @return a writer
-	 */
+	/// Get a writer suitable for writing on this panel
+	/// @return a writer
 	public Writer getWriter() {
 		return (new Writer() {
 			@Override
@@ -183,10 +148,8 @@ public final class RTS_ConsolePanel extends JPanel {
 		});
 	}
 
-	/**
-	 * Get a OutputStream suitable for writing errors on this panel
-	 * @return a OutputStream
-	 */
+	/// Get a OutputStream suitable for writing errors on this panel
+	/// @return a OutputStream
 	public OutputStream getErrorStream() {
 		return (new OutputStream() {
 			@Override
@@ -197,35 +160,27 @@ public final class RTS_ConsolePanel extends JPanel {
 		});
 	}
 
-	/**
-	 * Write a string on this panel using styleRegular.
-	 * @param s a string to write
-	 */
+	/// Write a string on this panel using styleRegular.
+	/// @param s a string to write
 	public void write(final String s) {
 		write(s, styleRegular);
 	}
 
-	/**
-	 * Write a string on this panel using styleError.
-	 * @param s a string to write
-	 */
+	/// Write a string on this panel using styleError.
+	/// @param s a string to write
 	public void writeError(final String s) {
 		write(s, styleError);
 	}
 
-	/**
-	 * Write a string on this panel using styleWarning.
-	 * @param s a string to write
-	 */
+	/// Write a string on this panel using styleWarning.
+	/// @param s a string to write
 	public void writeWarning(final String s) {
 		write(s, styleWarning);
 	}
 
-	/**
-	 * Write a styled string onto the console
-	 * @param s the string to write
-	 * @param style the Style
-	 */
+	/// Write a styled string onto the console
+	/// @param s the string to write
+	/// @param style the Style
 	private void write(final String s, final Style style) {
 		try {
 			doc.insertString(doc.getLength(), s, style);
@@ -235,9 +190,7 @@ public final class RTS_ConsolePanel extends JPanel {
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 	}
 
-	/**
-	 * Clear the panel. I.e. remove all content from the panel.
-	 */
+	/// Clear the panel. I.e. remove all content from the panel.
 	public void clear() {
 		try {
 			doc.remove(0, doc.getLength());
@@ -248,19 +201,15 @@ public final class RTS_ConsolePanel extends JPanel {
 		textPane.update(textPane.getGraphics());
 	}
 
-	/**
-	 * Print an INTERNAL ERROR and StackTrace
-	 * @param msg the error message
-	 * @param e an Throwable
-	 */
+	/// Print an INTERNAL ERROR and StackTrace
+	/// @param msg the error message
+	/// @param e an Throwable
 	private static void IERR(final String msg, final Throwable e) {
 		System.out.println("IERR: " + msg + "  " + e);
 		e.printStackTrace();
 	}
 
-	/**
-	 * Create a new _RTConsolePanel
-	 */
+	/// Create a new _RTConsolePanel
 	public RTS_ConsolePanel() {
 		super(new BorderLayout());
 		JScrollPane scrollPane;
@@ -288,13 +237,9 @@ public final class RTS_ConsolePanel extends JPanel {
 		this.add(scrollPane);
 	}
 
-	/**
-	 * popup this Console Panel
-	 * @param title for the Panel
-	 */
+	/// popup this Console Panel
+	/// @param title for the Panel
 	public void popup(String title) {
-//		JFrame frame = new JFrame();
-//		RTS_UTIL.openFrame(frame);
 		RTS_Frame frame = new RTS_Frame();
 		frame.setSize(950, 500); // Initial frame size
 		frame.setTitle(title);
@@ -303,10 +248,8 @@ public final class RTS_ConsolePanel extends JPanel {
 		frame.setVisible(true);
 	}
 	
-	/**
-	 * Add styles to a Document
-	 * @param doc the Document
-	 */
+	/// Add styles to a Document
+	/// @param doc the Document
 	private void addStylesToDocument(final StyledDocument doc) {
 		Style defaultStyle = StyleContext.getDefaultStyleContext().getStyle(StyleContext.DEFAULT_STYLE);
 
@@ -329,21 +272,12 @@ public final class RTS_ConsolePanel extends JPanel {
 	// ****************************************************************
 	// *** MouseListener
 	// ****************************************************************
-	/**
-	 * the MouseListener
-	 */
+	/// the MouseListener
 	MouseListener mouseListener = new MouseListener() {
-		public void mousePressed(MouseEvent e) {
-		}
-
-		public void mouseReleased(MouseEvent e) {
-		}
-
-		public void mouseEntered(MouseEvent e) {
-		}
-
-		public void mouseExited(MouseEvent e) {
-		}
+		public void mousePressed(MouseEvent e) {}
+		public void mouseReleased(MouseEvent e) {}
+		public void mouseEntered(MouseEvent e) {}
+		public void mouseExited(MouseEvent e) {}
 
 		public void mouseClicked(MouseEvent e) {
 			if (e.getButton() == 3)
@@ -354,9 +288,7 @@ public final class RTS_ConsolePanel extends JPanel {
 	// ****************************************************************
 	// *** ActionListener
 	// ****************************************************************
-	/**
-	 * the ActionListener
-	 */
+	/// the ActionListener
 	ActionListener actionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			Object item = e.getSource();
@@ -376,9 +308,7 @@ public final class RTS_ConsolePanel extends JPanel {
 	// ****************************************************************
 	// *** KeyListener
 	// ****************************************************************
-	/**
-	 * the KeyListener
-	 */
+	/// the KeyListener
 	private KeyListener listener = new KeyListener() {
 		@Override
 		public void keyPressed(KeyEvent event) {

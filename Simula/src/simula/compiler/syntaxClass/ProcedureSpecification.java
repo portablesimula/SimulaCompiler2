@@ -1,16 +1,13 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
-package simula.compiler.utilities;
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
+package simula.compiler.syntaxClass;
 
 import java.io.IOException;
 import simula.compiler.AttributeInputStream;
 import simula.compiler.AttributeOutputStream;
-import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.Parameter;
 import simula.compiler.syntaxClass.declaration.ProcedureDeclaration;
@@ -19,77 +16,65 @@ import simula.compiler.utilities.ObjectList;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Procedure Specification.
- * <pre>
- * Simula Standard: 5.5.3 Virtual quantities
- * Simula Standard: 6.3 External procedure declaration
- * 
- * procedure-specification
- *     = [ type ] PROCEDURE procedure-identifier procedure-head empty-body
- *     
- *    procedure-head
- *        = [ formal-parameter-part ; [ mode-part ] specification-part  ] ;
- *         
- *    empty-body = dummy-statement
- * 
- *    procedure-identifier = identifier
- * 
- *       formal-parameter-part = "(" formal-parameter { , formal-parameter } ")"
- *       
- *          formal-parameter = identifier
- *          
- *       specification-part = specifier identifier-list ; { specifier identifier-list ; }
- *       
- *          specifier
- *             = type [ array | procedure ]
- *             | label
- *             | switch
- *             
- *       mode-part 
- *          = name-part [ value-part ]
- *          | value-part [ name-part ]
- *          
- *          name-part = name identifier-list ;
- *          value-part = value identifier-list ;
- *          
- *             identifier-list = identifier { , identifier }
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureSpecification.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
-public final class ProcedureSpecification {
+/// Procedure Specification.
+/// <pre>
+/// Simula Standard: 5.5.3 Virtual quantities
+/// Simula Standard: 6.3 External procedure declaration
+/// 
+/// procedure-specification
+///     = [ type ] PROCEDURE procedure-identifier procedure-head empty-body
+///     
+///    procedure-head
+///        = [ formal-parameter-part ; [ mode-part ] specification-part  ] ;
+///         
+///    empty-body = dummy-statement
+/// 
+///    procedure-identifier = identifier
+/// 
+///       formal-parameter-part = "(" formal-parameter { , formal-parameter } ")"
+///       
+///          formal-parameter = identifier
+///          
+///       specification-part = specifier identifier-list ; { specifier identifier-list ; }
+///       
+///          specifier
+///             = type [ array | procedure ]
+///             | label
+///             | switch
+///             
+///       mode-part 
+///          = name-part [ value-part ]
+///          | value-part [ name-part ]
+///          
+///          name-part = name identifier-list ;
+///          value-part = value identifier-list ;
+///          
+///             identifier-list = identifier { , identifier }
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/ProcedureSpecification.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
+public final class ProcedureSpecification extends SyntaxClass {
 	
-	/**
-	 * The procedure identifier.
-	 */
+	/// The procedure identifier.
 	private String identifier;
 
-	/**
-	 * The procedure's type.
-	 */
+	/// The procedure's type.
 	public Type type;
 	
-	/**
-	 * The parameter list.
-	 */
-//	public Vector<Parameter> parameterList;
+	/// The parameter list.
 	public ObjectList<Parameter> parameterList;
 
 	// ***********************************************************************************************
 	// *** CONSTRUCTORS
 	// ***********************************************************************************************
-	/**
-	 * Create a new ProcedureSpecification
-	 * @param identifier procedure-identifier
-	 * @param type procedure's type or null
-	 * @param pList the parameter lList
-	 */
-//	public ProcedureSpecification(final String identifier, final Type type, final Vector<Parameter> pList) {
+	/// Create a new ProcedureSpecification
+	/// @param identifier procedure-identifier
+	/// @param type procedure's type or null
+	/// @param pList the parameter lList
 	public ProcedureSpecification(final String identifier, final Type type, final ObjectList<Parameter> pList) {
 		this.identifier = identifier;
 		this.type = type;
@@ -99,45 +84,40 @@ public final class ProcedureSpecification {
 	// ***********************************************************************************************
 	// *** Parsing: expectProcedureSpecification
 	// ***********************************************************************************************
-	/**
-	 * Procedure Specification.
-	 * 
-	 * <pre>
-	 * Syntax:
-	 * 
-	 * procedure-specification
-	 *     = [ type ] PROCEDURE procedure-identifier procedure-head empty-body
-	 *     
-	 *    procedure-head
-	 *        = [ formal-parameter-part ; [ mode-part ] procedure-specification-part  ] ;
-	 *         
-	 *    empty-body = dummy-statement
-	 * 
-	 *    procedure-identifier = identifier
-	 * 
-	 * </pre>
-	 * Precondition:  [ type ] PROCEDURE  is already read.
-	 * @param type procedure's type
-	 * @return a newly created ProcedureSpecification
-	 */
+	/// Procedure Specification.
+	/// 
+	/// <pre>
+	/// Syntax:
+	/// 
+	/// procedure-specification
+	///     = [ type ] PROCEDURE procedure-identifier procedure-head empty-body
+	///     
+	///    procedure-head
+	///        = [ formal-parameter-part ; [ mode-part ] procedure-specification-part  ] ;
+	///         
+	///    empty-body = dummy-statement
+	/// 
+	///    procedure-identifier = identifier
+	/// 
+	/// </pre>
+	/// Precondition:  [ type ] PROCEDURE  is already read.
+	/// @param type procedure's type
+	/// @return a newly created ProcedureSpecification
 	public static ProcedureSpecification expectProcedureSpecification(final Type type) {
 		ProcedureDeclaration block = ProcedureDeclaration.expectProcedureDeclaration(type);
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("END ProcedureSpecification: " + block);
 		Global.setScope(block.declaredIn);
 		ProcedureSpecification procedureSpecification = new ProcedureSpecification(block.identifier, type, block.parameterList);
-//		System.out.println("ProcedureSpecification.expectProcedureSpecification: "+procedureSpecification);
 		return (procedureSpecification);
 	}
 
 	// ***********************************************************************************************
 	// *** Utility: doChecking
 	// ***********************************************************************************************
-	/**
-	 * Perform semantic checking.
-	 * 
-	 * @param scope the DeclarationScope
-	 */
+	/// Perform semantic checking.
+	/// 
+	/// @param scope the DeclarationScope
 	public void doChecking(final DeclarationScope scope) {
 		if (type != null)
 			type.doChecking(scope);
@@ -160,12 +140,14 @@ public final class ProcedureSpecification {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public ProcedureSpecification() {
 	}
 
+	/// Write a ProcedureSpecification.
+	/// @param spec the ProcedureSpecification.
+	/// @param oupt the AttributeOutputStream.
+	/// @throws IOException if something went wrong.
 	public static void writeProcedureSpec(ProcedureSpecification spec,AttributeOutputStream oupt) throws IOException {
 		if(spec == null) {
 			oupt.writeBoolean(false);
@@ -174,16 +156,14 @@ public final class ProcedureSpecification {
 			oupt.writeBoolean(true);
 			oupt.writeString(spec.identifier);
 			oupt.writeType(spec.type);
-
-//			// oupt.writeObject(parameterList);
-//			oupt.writeShort(spec.parameterList.size());
-//			for(Parameter par:spec.parameterList) {
-//				par.writeParameter(oupt);
-//			}
 			oupt.writeObjectList(spec.parameterList);
 		}
 	}
 	
+	/// Read and return a ProcedureSpecification.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ProcedureSpecification read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static ProcedureSpecification readProcedureSpec(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();
@@ -191,15 +171,6 @@ public final class ProcedureSpecification {
 		ProcedureSpecification spec = new ProcedureSpecification();
 		spec.identifier = inpt.readString();
 		spec.type = inpt.readType();
-
-//		//spec.parameterList = (Vector<Parameter>) inpt.readObject();
-//		int nPar = inpt.readShort();
-//		if(nPar > 0) {
-////			spec.parameterList = new Vector<Parameter>();
-//			spec.parameterList = new ObjectList<Parameter>();
-//			for(int i=0;i<nPar;i++)
-//				spec.parameterList.add(Parameter.readParameter(inpt));
-//		}
 		spec.parameterList = (ObjectList<Parameter>) inpt.readObjectList();
 		
 		Util.TRACE_INPUT("END Read ProcedureSpecification: " + spec.identifier);

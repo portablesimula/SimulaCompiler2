@@ -1,21 +1,16 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
-/**
- * The Simula Keywords and some additional symbols.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ConsolePanel.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// The Simula Keywords and some additional symbols.
+/// <p>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ConsolePanel.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class KeyWord {
 	/** Default Constructor: Not used */ private KeyWord() {}
 	// Simula Reserved Words
@@ -85,40 +80,38 @@ public class KeyWord {
 	/** Simula Keyword */ public final static int WHEN       = 64;
 	/** Simula Keyword */ public final static int WHILE      = 65;
 	// Other Symbols
-	/** Simula Symbol */ public final static int ASSIGNVALUE = 66;
-	/** Simula Symbol */ public final static int ASSIGNREF = 67;
-	/** Simula Symbol */ public final static int COMMA = 68;
-	/** Simula Symbol */ public final static int COLON = 69;
-	/** Simula Symbol */ public final static int SEMICOLON = 70;
-	/** Simula Symbol */ public final static int BEGPAR = 71;
-	/** Simula Symbol */ public final static int ENDPAR = 72;
-	/** Simula Symbol */ public final static int BEGBRACKET =73;
-	/** Simula Symbol */ public final static int ENDBRACKET = 74;
-	/** Simula Symbol */ public final static int EQR = 75;
-	/** Simula Symbol */ public final static int NER = 76;
-	/** Simula Symbol */ public final static int PLUS = 77;
-	/** Simula Symbol */ public final static int MINUS = 78;
-	/** Simula Symbol */ public final static int MUL = 79;
-	/** Simula Symbol */ public final static int DIV = 80;
-	/** Simula Symbol */ public final static int INTDIV = 81;
-	/** Simula Symbol */ public final static int EXP = 82;
-	/** Simula Symbol */ public final static int IDENTIFIER = 83;
-	/** Simula Symbol */ public final static int BOOLEANKONST = 84;
-	/** Simula Symbol */ public final static int INTEGERKONST = 85;
-	/** Simula Symbol */ public final static int CHARACTERKONST = 86;
-	/** Simula Symbol */ public final static int REALKONST = 87;
-	/** Simula Symbol */ public final static int TEXTKONST = 88;
-	/** Simula Symbol */ public final static int OR_ELSE = 89;
-	/** Simula Symbol */ public final static int AND_THEN = 90;
-	/** Simula Symbol */ public final static int DOT = 91;
-	/** Simula Symbol */ public final static int NEWLINE = 92;
-	/** Simula Symbol */ public final static int STRING = 93;
+	/** Other Symbol */ public final static int ASSIGNVALUE = 66;
+	/** Other Symbol */ public final static int ASSIGNREF = 67;
+	/** Other Symbol */ public final static int COMMA = 68;
+	/** Other Symbol */ public final static int COLON = 69;
+	/** Other Symbol */ public final static int SEMICOLON = 70;
+	/** Other Symbol */ public final static int BEGPAR = 71;
+	/** Other Symbol */ public final static int ENDPAR = 72;
+	/** Other Symbol */ public final static int BEGBRACKET =73;
+	/** Other Symbol */ public final static int ENDBRACKET = 74;
+	/** Other Symbol */ public final static int EQR = 75;
+	/** Other Symbol */ public final static int NER = 76;
+	/** Other Symbol */ public final static int PLUS = 77;
+	/** Other Symbol */ public final static int MINUS = 78;
+	/** Other Symbol */ public final static int MUL = 79;
+	/** Other Symbol */ public final static int DIV = 80;
+	/** Other Symbol */ public final static int INTDIV = 81;
+	/** Other Symbol */ public final static int EXP = 82;
+	/** Other Symbol */ public final static int IDENTIFIER = 83;
+	/** Other Symbol */ public final static int BOOLEANKONST = 84;
+	/** Other Symbol */ public final static int INTEGERKONST = 85;
+	/** Other Symbol */ public final static int CHARACTERKONST = 86;
+	/** Other Symbol */ public final static int REALKONST = 87;
+	/** Other Symbol */ public final static int TEXTKONST = 88;
+	/** Other Symbol */ public final static int OR_ELSE = 89;
+	/** Other Symbol */ public final static int AND_THEN = 90;
+	/** Other Symbol */ public final static int DOT = 91;
+	/** Other Symbol */ public final static int NEWLINE = 92;
+	/** Other Symbol */ public final static int STRING = 93;
 
-	/**
-	 * Returns the corresponding String.
-	 * @param key the argument key.
-	 * @return the corresponding String.
-	 */
+	/// Returns the corresponding String.
+	/// @param key the argument key.
+	/// @return the corresponding String.
 	public static String edit(int key) {
 		switch (key) {
 		case ACTIVATE   : return("ACTIVATE"); // 1;
@@ -219,11 +212,9 @@ public class KeyWord {
 		return("Unknown:"+key);
 	}
 	
-	/**
-	 * Returns the corresponding Java code.
-	 * @param key the argument key.
-	 * @return the corresponding Java code
-	 */
+	/// Returns the corresponding Java code.
+	/// @param key the argument key.
+	/// @return the corresponding Java code
 	public static String toJavaCode(int key) {
 		switch (key) {
 		case NONE: return("null");

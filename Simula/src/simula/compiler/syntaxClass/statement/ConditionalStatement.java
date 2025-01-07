@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -23,47 +21,37 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Conditional Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.2 Conditional statement
- * 
- *   conditional-statement = if-clause { Label : } for-statement
- *                         | if-clause { Label : } unconditional-statement  [ ELSE statement ]
- *                         
- *     if-clause = IF boolean-expression THEN
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConditionalStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Conditional Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.2 Conditional statement
+/// 
+///   conditional-statement = if-clause { Label : } for-statement
+///                         | if-clause { Label : } unconditional-statement  [ ELSE statement ]
+///                         
+///     if-clause = IF boolean-expression THEN
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ConditionalStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ConditionalStatement extends Statement {
 	
-	/**
-	 * The if-clause condition
-	 */
+	/// The if-clause condition
 	private Expression condition;
 	
-	/**
-	 * The then-statement
-	 */
+	/// The then-statement
 	private Statement thenStatement;
 	
-	/**
-	 * The else-statement
-	 */
+	/// The else-statement
 	private Statement elseStatement;
 
-	/**
-	 * Create a new ConditionalStatement.
-	 * @param line the source line number
-	 */
+	/// Create a new ConditionalStatement.
+	/// @param line the source line number
 	ConditionalStatement(final int line) {
 		super(line);
 		condition = Expression.expectExpression();
@@ -159,9 +147,7 @@ public final class ConditionalStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ConditionalStatement() {
 		super(0);
 	}
@@ -179,12 +165,10 @@ public final class ConditionalStatement extends Statement {
 		oupt.writeObj(elseStatement);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConditionalStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ConditionalStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ConditionalStatement readObject(AttributeInputStream inpt) throws IOException {
 		ConditionalStatement stm = new ConditionalStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

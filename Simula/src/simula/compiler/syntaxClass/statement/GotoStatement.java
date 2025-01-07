@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -23,42 +21,36 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Goto Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.5 Goto-statement
- * 
- *  goto-statement = GOTO designational-expression
- *                 | GO TO designational-expression
- *
- * </pre>
- * Java does not support labels like Simula. The Java Virtual Machine (JVM), however, has labels.
- * A JVM-label is simply a relative byte-address within the byte-code of a method. We will use Java's
- * exception handling together with byte code engineering to re-introduce goto in the Java Language.
- * This is done by generating Java-code which is prepared for Byte Code Engineering.
- * <p>
- * See <a href="https://portablesimula.github.io/github.io/doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
- * Sect. 6.1 Goto Statement
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/GotoStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Goto Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.5 Goto-statement
+/// 
+///  goto-statement = GOTO designational-expression
+///                 | GO TO designational-expression
+/// 
+/// </pre>
+/// Java does not support labels like Simula. The Java Virtual Machine (JVM), however, has labels.
+/// A JVM-label is simply a relative byte-address within the byte-code of a method. We will use Java's
+/// exception handling together with byte code engineering to re-introduce goto in the Java Language.
+/// This is done by generating Java-code which is prepared for Byte Code Engineering.
+/// 
+/// See <a href="https://portablesimula.github.io/github.io/doc/SimulaRTS.pdf">Mapping Simula to Java (runtime design)</a> 
+/// Sect. 6.1 Goto Statement
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/GotoStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class GotoStatement extends Statement {
-	/**
-	 * The target label.
-	 */
+	/// The target label.
 	private Expression label;
 
-	/**
-	 * Create a new GotoStatement.
-	 * @param line source line
-	 */
+	/// Create a new GotoStatement.
+	/// @param line source line
 	GotoStatement(final int line) {
 		super(line);
 		label = Expression.expectExpression();
@@ -86,39 +78,13 @@ public final class GotoStatement extends Statement {
 	
 	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
-//		ConstantPoolBuilder pool=codeBuilder.constantPool();
-		
-//		if(label instanceof VariableExpression var) { // TODO: DETTE KAN FORENKLES !!!
-//			Meaning meaning = var.meaning;
-//			if(meaning.declaredAs instanceof LabelDeclaration) {
-//				codeBuilder.aload(0);
-//			} else if(meaning.declaredAs instanceof Parameter par) {
-//				if(par.kind != Parameter.Kind.Procedure)
-//					codeBuilder.aload(0);
-//			} else if(meaning.declaredAs instanceof SwitchDeclaration) {
-//				codeBuilder.aload(0);
-//			} else if(meaning.declaredAs instanceof VirtualSpecification) {
-//				codeBuilder.aload(0);
-//			} else if(meaning.declaredAs instanceof ProcedureDeclaration) {
-//				codeBuilder.aload(0);
-//			} else Util.IERR(""+meaning.declaredAs.getClass().getSimpleName());
-//		} else if(label instanceof ConditionalExpression expr) {
-//			codeBuilder.aload(0);
-//		} else Util.IERR(""+label.getClass().getSimpleName()+"  "+label);
-//		label.buildEvaluation(null,codeBuilder);
-//		RTS.invokevirtual_RTS_GOTO(codeBuilder);
-		
-		
-//		System.out.println("GotoStatement.buildByteCode: "+label.getClass().getSimpleName());
 		if(! labelIsParameterProcedure()) codeBuilder.aload(0);
 		label.buildEvaluation(null,codeBuilder);
 		RTS.invokevirtual_RTS_GOTO(codeBuilder);
 	}
 	
-	/**
-	 * Check if label is a parameter procedure.
-	 * @return true: if label is a parameter procedure.
-	 */
+	/// Check if label is a parameter procedure.
+	/// @return true: if label is a parameter procedure.
 	private boolean labelIsParameterProcedure() {
 		if(label instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
@@ -144,9 +110,7 @@ public final class GotoStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public GotoStatement() {
 		super(0);
 	}
@@ -162,12 +126,10 @@ public final class GotoStatement extends Statement {
 		oupt.writeObj(label);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a GotoStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the GotoStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static GotoStatement readObject(AttributeInputStream inpt) throws IOException {
 		GotoStatement stm = new GotoStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

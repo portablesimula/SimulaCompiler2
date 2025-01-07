@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -33,143 +31,128 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-
-/**
- * For Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.4 For-statement
- * 
- *  for-statement = FOR variable :- reference-list DO statement
- *                | FOR variable := value-list DO statement
- *               
- *      reference-list = reference-list-element { , reference-list-element }
- * 
- *          reference-list-element = reference-expression [ WHILE Boolean-expression ]
- * 
- *      value-list = value-list-element { , value-list-element }
- * 
- *          value-list-element = value-expression [ WHILE Boolean-expression ]
- *                             | arithmetic-expression STEP arithmetic-expression UNTIL arithmetic-expression
- *
- * </pre>
- * The Implementation of the for-statement is a bit tricky. The basic idea is to create a
- * ForList iterator that iterates over a set of FOR_Element iterators. The following subclasses of
- * FOR_Element are defined:
- * <pre>
- *                - FOR_SingleELT&lt;T>    for basic types T control variable
- *                - FOR_SingleTValElt   for Text type control variable
- *                - FOR_StepUntil       for numeric types
- *                - FOR_WhileElt&lt;T>     for basic types T control variable
- *                - FOR_WhileTValElt    representing For t:= &lt;TextExpr> while &lt;Cond>
- *                                  With text value assignment
- * </pre>
- * Each of which deliver a boolean value 'CB' used to indicate whether this for-element is
- * exhausted. All parameters to these classes are transferred 'by name'. This is done to
- * ensure that all expressions are evaluated in the right order. The assignment to the
- * 'control variable' is done within the various for-elements when the 'next' method is
- * invoked. To get a full overview of all the details you are encouraged to study the
- * generated code together with the 'FRAMEWORK for for-list iteration' found in the
- * runtime class RTS_RTObject.
- * <p>
- * Example, the following for-statement:
- * <pre>
- *           for i:=1,6,13 step 6 until 66,i+1 while i &lt; 80 do j:=j+i;
- * </pre>
- * Is compiled to:
- * <pre>
- *           for(boolean CB:new ForList(
- *               new FOR_SingleELT&lt;Number>(...)
- *              ,new FOR_SingleELT&lt;Number>(...)
- *              ,new FOR_StepUntil(...)
- *              ,new FOR_WhileElt&lt;Number>(...)
- *           )) { if(!CB) continue;
- *                j=j+i;
- *              }
- *              </pre>
- * Another example with control variable of type Text:
- * <pre>
- *           for t:="one",other while k &lt; 7 do &lt;statement>
- * </pre>
- * Where 'other' is a text procedure, is compiled to:
- * <pre>
- *           for(boolean CB:new ForList(
- *               new FOR_SingleTValElt(...)
- *              ,new FOR_WhileTValElt(...)
- *            )) { if(!CB) continue;
- *                 … // Statement
- *               }
- * </pre>
- * 
- * <h2>Optimized For-Statement</h2>
- * However; most of the for-statements with only one for-list element are optimized.
- * <p>
- * Single for step-until statements are optimized when the step-expression is constant.
- * I.e. the following for-statements:
- * <pre>
- *           for i:=&lt;expr-1> step 1  until &lt;expr-2> do &lt;statements>
- *           for i:=&lt;expr-1> step -1 until &lt;expr-2> do &lt;statements>
- *           for i:=&lt;expr-1> step 6  until &lt;expr-2> do &lt;statements>
- *           for i:=&lt;expr-1> step -6 until &lt;expr-2> do &lt;statements>
- * </pre>
- * are compiled to:
- * <pre>
- *           for(i = &lt;expr-1>; i &lt;= &lt;expr-2>; i++) { &lt;statements> }
- *           for(i = &lt;expr-1>; i >= &lt;expr-2>; i--) { &lt;statements> }
- *           for(i = &lt;expr-1>; i &lt;= &lt;expr-2>; i=i+6) { &lt;statements> }
- *           for(i = &lt;expr-1>; i >= &lt;expr-2>; i=i-6) { &lt;statements> }
- * </pre>
- * The other kinds of single elements are optimized in these ways:
- * <pre>
- *           for i:=&lt;expr> do &lt;statements>
- *           for i:=&lt;expr> while &lt;cond> do &lt;statements>
- * </pre>
- * are compiled to:
- * <pre>
- *           i = &lt;expr>; { &lt;statements> }
- *           
- *           i = &lt;expr>;
- *           While( &lt;cond> ) {
- *                  &lt;statements>;
- *                  i = &lt;expr>;
- *           }
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ForStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// For Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.4 For-statement
+/// 
+///  for-statement = FOR variable :- reference-list DO statement
+///                | FOR variable := value-list DO statement
+///               
+///      reference-list = reference-list-element { , reference-list-element }
+/// 
+///          reference-list-element = reference-expression [ WHILE Boolean-expression ]
+/// 
+///      value-list = value-list-element { , value-list-element }
+/// 
+///          value-list-element = value-expression [ WHILE Boolean-expression ]
+///                             | arithmetic-expression STEP arithmetic-expression UNTIL arithmetic-expression
+/// 
+/// </pre>
+/// The Implementation of the for-statement is a bit tricky. The basic idea is to create a
+/// ForList iterator that iterates over a set of FOR_Element iterators. The following subclasses of
+/// FOR_Element are defined:
+/// <pre>
+///                - FOR_SingleELT<T>    for basic types T control variable
+///                - FOR_SingleTValElt   for Text type control variable
+///                - FOR_StepUntil       for numeric types
+///                - FOR_WhileElt<T>     for basic types T control variable
+///                - FOR_WhileTValElt    representing For t:= <TextExpr> while <Cond>
+///                                      with text value assignment
+/// </pre>
+/// Each of which deliver a boolean value 'CB' used to indicate whether this for-element is
+/// exhausted. All parameters to these classes are transferred 'by name'. This is done to
+/// ensure that all expressions are evaluated in the right order. The assignment to the
+/// 'control variable' is done within the various for-elements when the 'next' method is
+/// invoked. To get a full overview of all the details you are encouraged to study the
+/// generated code together with the 'FRAMEWORK for for-list iteration' found in the
+/// runtime class RTS_RTObject.
+/// 
+/// Example, the following for-statement:
+/// <pre>
+///           for i:=1,6,13 step 6 until 66,i+1 while i < 80 do j:=j+i;
+/// </pre>
+/// Is compiled to:
+/// <pre>
+///           for(boolean CB:new ForList(
+///               new FOR_SingleELT<Number>(...)
+///              ,new FOR_SingleELT<Number>(...)
+///              ,new FOR_StepUntil(...)
+///              ,new FOR_WhileElt<Number>(...)
+///           )) { if(!CB) continue;
+///                j=j+i;
+///              }
+///              </pre>
+/// Another example with control variable of type Text:
+/// <pre>
+///           for t:="one",other while k < 7 do <statement>
+/// </pre>
+/// Where 'other' is a text procedure, is compiled to:
+/// <pre>
+///           for(boolean CB:new ForList(
+///               new FOR_SingleTValElt(...)
+///              ,new FOR_WhileTValElt(...)
+///            )) { if(!CB) continue;
+///                 … // Statement
+///               }
+/// </pre>
+/// 
+/// <h2>Optimized For-Statement</h2>
+/// However; most of the for-statements with only one for-list element are optimized.
+/// 
+/// Single for step-until statements are optimized when the step-expression is constant.
+/// I.e. the following for-statements:
+/// <pre>
+///           for i:=<expr-1> step 1  until <expr-2> do <statements>
+///           for i:=<expr-1> step -1 until <expr-2> do <statements>
+///           for i:=<expr-1> step 6  until <expr-2> do <statements>
+///           for i:=<expr-1> step -6 until <expr-2> do <statements>
+/// </pre>
+/// are compiled to:
+/// <pre>
+///           for(i = <expr-1>; i <= <expr-2>; i++) { <statements> }
+///           for(i = <expr-1>; i >= <expr-2>; i--) { <statements> }
+///           for(i = <expr-1>; i <= <expr-2>; i=i+6) { <statements> }
+///           for(i = <expr-1>; i >= <expr-2>; i=i-6) { <statements> }
+/// </pre>
+/// The other kinds of single elements are optimized in these ways:
+/// <pre>
+///           for i:=<expr> do <statements>
+///           for i:=<expr> while <cond> do <statements>
+/// </pre>
+/// are compiled to:
+/// <pre>
+///           i = <expr>; { <statements> }
+///           
+///           i = <expr>;
+///           While( <cond> ) {
+///                  <statements>;
+///                  i = <expr>;
+///           }
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ForStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ForStatement extends Statement {
 	
-	/**
-	 * The control variable
-	 */
+	/// The control variable
 	VariableExpression controlVariable;
 	
-	/**
-	 * Assignment operator  := or :-
-	 */
+	/// Assignment operator  := or :-
 	int assignmentOperator; // KeyWord := or :-
 	
-	/**
-	 * The list of ForList elements.
-	 */
-//	private Vector<ForListElement> forList = new Vector<ForListElement>();
+	/// The list of ForList elements.
 	private ObjectList<ForListElement> forList = new ObjectList<ForListElement>();
 	
-	/**
-	 * The statement after DO.
-	 */
+	/// The statement after DO.
 	Statement doStatement;
 
-	/**
-	 * Create a new ForStatement.
-	 * 
-	 * @param line the source line number
-	 */
+	/// Create a new ForStatement.
+	/// @param line the source line number
 	ForStatement(final int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE)
@@ -192,10 +175,8 @@ public final class ForStatement extends Statement {
 			Util.TRACE("Line " + this.lineNumber + ": ForStatement: " + this);
 	}
 
-	/**
-	 * Parse a for-list element.
-	 * @return the resulting ForListElement
-	 */
+	/// Parse a for-list element.
+	/// @return the resulting ForListElement
 	private ForListElement expectForListElement() {
 		if (Option.internal.TRACE_PARSE)
 			Parse.TRACE("Parse ForListElement");
@@ -272,10 +253,8 @@ public final class ForStatement extends Statement {
 		JavaSourceFileCoder.code("}");
 	}
 
-	/**
-	 * Check if this ForListElement is a single optimizable element.
-	 * @return a single optimizable element or null
-	 */
+	/// Check if this ForListElement is a single optimizable element.
+	/// @return a single optimizable element or null
 	private ForListElement getSingleOptimizableElement() {
 		if (forList.size() != 1)
 			return (null);
@@ -283,12 +262,10 @@ public final class ForStatement extends Statement {
 		return (elt.isOptimisable());
 	}
 
-	/**
-	 * Coding Utility: Edit control variable by name.
-	 * @param classIdent Java class identifier
-	 * @param xType control variable's type
-	 * @return the resulting Java source code for this ForListElement
-	 */
+	/// Coding Utility: Edit control variable by name.
+	/// @param classIdent Java class identifier
+	/// @param xType control variable's type
+	/// @return the resulting Java source code for this ForListElement
 	String edControlVariableByName(final String classIdent, Type xType) {
 		String cv = controlVariable.toJavaCode();
 		String castVar = "x_;";
@@ -405,9 +382,7 @@ public final class ForStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ForStatement() {
 		super(0);
 	}
@@ -426,12 +401,10 @@ public final class ForStatement extends Statement {
 		oupt.writeObj(doStatement);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	@SuppressWarnings("unchecked")
 	public static ForStatement readObject(AttributeInputStream inpt) throws IOException {
 		ForStatement stm = new ForStatement();

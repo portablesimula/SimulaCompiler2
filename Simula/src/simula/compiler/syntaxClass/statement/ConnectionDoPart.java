@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -12,27 +17,19 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Utility class to hold the single Connection do-part.
- */
+/// Utility class to hold the single Connection do-part.
 public class ConnectionDoPart extends SyntaxClass {
 	
-	/**
-	 * The associated connection statement.
-	 */
+	/// The associated connection statement.
 	ConnectionStatement connectionStatement;
 	
-	/**
-	 * The associated connection block.
-	 */
+	/// The associated connection block.
 	public ConnectionBlock connectionBlock;
 
-	/**
-	 * Create a new do-part.
-	 * @param connectionStatement The owner.
-	 * @param connectionBlock The associated connection block
-	 * @param statement the statement after DO
-	 */
+	/// Create a new do-part.
+	/// @param connectionStatement The owner.
+	/// @param connectionBlock The associated connection block
+	/// @param statement the statement after DO
 	ConnectionDoPart(final ConnectionStatement connectionStatement, final ConnectionBlock connectionBlock,final Statement statement) {
 		this.connectionStatement = connectionStatement;
 		this.connectionBlock = connectionBlock; // this.statement=statement;
@@ -41,9 +38,7 @@ public class ConnectionDoPart extends SyntaxClass {
 			Util.TRACE("NEW ConnectionDoPart: " + toString());
 	}
 
-	/**
-	 * Perform semantic checking.
-	 */
+	/// Perform semantic checking.
 	public void doChecking() {
 		Type type = connectionStatement.inspectVariableDeclaration.type;
 		String refIdentifier = type.getRefIdent();
@@ -54,25 +49,23 @@ public class ConnectionDoPart extends SyntaxClass {
 		SET_SEMANTICS_CHECKED();
 	}
 
-	/**
-	 * Perform Java coding.
-	 * @param first true if coding the first when-part
-	 */
+	/// Perform Java coding.
+	/// @param first true if coding the first when-part
 	public void doCoding(final boolean first) {
 		ASSERT_SEMANTICS_CHECKED();
 		connectionBlock.doJavaCoding();
 	}
 
+	@Override
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		connectionBlock.buildByteCode(codeBuilder);
 		codeBuilder.goto_(connectionStatement.endLabel);
 	}
 
-	/**
-	 * Utility print method.
-	 * @param indent the indent
-	 */
+	/// Utility print method.
+	/// @param indent the indent
+	@Override
 	public void printTree(final int indent, final Object head) {
     	String spc=edTreeIndent(indent);
 		Util.println(spc + "DO " + connectionBlock.statement);
@@ -87,9 +80,7 @@ public class ConnectionDoPart extends SyntaxClass {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	protected ConnectionDoPart() {}
 
 	@Override
@@ -104,12 +95,10 @@ public class ConnectionDoPart extends SyntaxClass {
 		oupt.writeObj(connectionBlock);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConnectionDoPart object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ConnectionDoPart object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ConnectionDoPart readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionDoPart dop = new ConnectionDoPart();
 		dop.OBJECT_SEQU = inpt.readSEQU(dop);

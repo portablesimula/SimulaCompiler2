@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.transform;
 
 import java.io.FileInputStream;
@@ -19,25 +17,24 @@ import java.lang.classfile.MethodModel;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * ClassFileTransform.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/transform/ClassFileTransform.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// ClassFileTransform.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/transform/ClassFileTransform.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public abstract class ClassFileTransform {
 	/** Default Constructor: NOT USED */ private ClassFileTransform() {}
 
-	/**
-	 * Repair a single .class file.
-	 * 
-	 * @param inputFileName  the input .class file name
-	 * @param outputFileName the output .class file name
-	 * @throws IOException if an I/O error occurs
-	 */
+	/// Repair a single .class file.
+	/// 
+	/// A [ClassFile] is read and parsed into a [ClassModel].
+	/// 
+	/// The method '_STM' is filtered from this model and transformed using the [SimulaCodeTransform].
+	/// @param inputFileName  the input .class file name
+	/// @param outputFileName the output .class file name
+	/// @throws IOException if an I/O error occurs
 	public static void doRepairSingleByteCode(final String inputFileName, final String outputFileName) throws IOException {
 		if (Option.internal.TRACE_REPAIRING)
 			Util.TRACE("ClassFileTransform.doRepairSingleByteCode: Input = " + inputFileName);

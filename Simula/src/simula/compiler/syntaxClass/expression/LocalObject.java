@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -25,62 +23,50 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * LocalObject i.e. This class expression.
- * 
- * <pre>
- * 
- * Simula Standard: 3.8 Object expressions
- * 
- * local-object = THIS class-identifier
- * 
- * </pre>
- * 
- * A local object "this C" is valid provided that the expression is used within
- * the class body of C or that of any subclass of C, or a connection block whose
- * block qualification is C or a subclass of C (see 4.8).
- * <p>
- * The value of a local object in a given context is the object which is, or is
- * connected by, the smallest textually enclosing block instance in which the
- * local object is valid.
- * <p>
- * If there is no such block the local object is illegal (in the given context).
- * For an instance of a procedure or a class body, "textually enclosing" means
- * containing its declaration.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/LocalObject.java">
- * <b>Source File</b></a>.
- * 
- * @author Simula Standard
- * @author Øystein Myhre Andersen
- */
+/// LocalObject i.e. This class expression.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 3.8 Object expressions
+/// 
+/// local-object = THIS class-identifier
+/// 
+/// </pre>
+/// 
+/// A local object "this C" is valid provided that the expression is used within
+/// the class body of C or that of any subclass of C, or a connection block whose
+/// block qualification is C or a subclass of C (see 4.8).
+/// 
+/// The value of a local object in a given context is the object which is, or is
+/// connected by, the smallest textually enclosing block instance in which the
+/// local object is valid.
+/// 
+/// If there is no such block the local object is illegal (in the given context).
+/// For an instance of a procedure or a class body, "textually enclosing" means
+/// containing its declaration.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/LocalObject.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Simula Standard
+/// @author Øystein Myhre Andersen
 public final class LocalObject extends Expression {
 	
-	/**
-	 * The class identifier.
-	 */
+	/// The class identifier.
 	private String classIdentifier;
 	
-	/**
-	 * The class declaration. Set by doChecking.
-	 */
+	/// The class declaration. Set by doChecking.
 	ClassDeclaration classDeclaration; // Set by doChecking
 	
-	/**
-	 * THIS scope. Set by doChecking.
-	 */
+	/// THIS scope. Set by doChecking.
 	private DeclarationScope thisScope; // Set by doChecking
 	
-	/**
-	 * Context difference. Set by doChecking.
-	 */
+	/// Context difference. Set by doChecking.
 	private int ctxDiff;  // Set by doChecking
 
-	/**
-	 * Create a new LocalObject
-	 * @param ident class-identifier
-	 */
+	/// Create a new LocalObject
+	/// @param ident class-identifier
 	private LocalObject(final String ident) {
 		this.classIdentifier = ident;
 		this.type=Type.Ref(classIdentifier);
@@ -88,10 +74,8 @@ public final class LocalObject extends Expression {
 			Util.TRACE("NEW ThisObjectExpression: " + toString());
 	}
 
-	/**
-	 * Expect This Identifier.
-	 * @return the newly created LocalObject.
-	 */
+	/// Expect Identifier following THIS.
+	/// @return the newly created LocalObject.
 	static Expression expectThisIdentifier() {
 		if (Option.internal.TRACE_PARSE)
 			Util.TRACE("Parse ThisObjectExpression, current=" + Parse.currentToken);
@@ -117,9 +101,7 @@ public final class LocalObject extends Expression {
     //***********************************************************************************************
     //*** Utility: findThis  --  Follow Static Chain Looking for a Class named 'classIdentifier'
     //***********************************************************************************************
-	/**
-	 * Follow Static Chain Looking for a Class named 'classIdentifier'
-	 */
+	/// Follow Static Chain Looking for a Class named 'classIdentifier'
 	private void findThis() {
 		ctxDiff=0;
 		thisScope=Global.getCurrentScope();
@@ -190,9 +172,7 @@ public final class LocalObject extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public LocalObject() {
 	}
 
@@ -210,12 +190,10 @@ public final class LocalObject extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static LocalObject readObject(AttributeInputStream inpt) throws IOException {
 		LocalObject expr = new LocalObject();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -229,17 +207,5 @@ public final class LocalObject extends Expression {
 		Util.TRACE_INPUT("readLocalObject: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeString(classIdentifier);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		classIdentifier = inpt.readString();
-//	}
 
 }

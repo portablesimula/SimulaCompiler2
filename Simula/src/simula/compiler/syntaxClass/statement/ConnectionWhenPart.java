@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -15,34 +20,24 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Utility class to hold a when-part.
- */
+/// Utility class to hold a when-part.
 public final class ConnectionWhenPart extends ConnectionDoPart {
-	/**
-	 *  The WHEN class-identifier
-	 */
+	///  The WHEN class-identifier
 	String classIdentifier;
 	
-	/**
-	 * The class declaration correspondig to the class identifier.
-	 * Set during checking.
-	 */
+	/// The class declaration correspondig to the class identifier.
+	/// Set during checking.
 	ClassDeclaration classDeclaration;
 	
-	/**
-	 * Indicator to signal an impossible when-part.
-	 * Set during checking if object-expression is not compatible with the WHEN class.
-	 */
+	/// Indicator to signal an impossible when-part.
+	/// Set during checking if object-expression is not compatible with the WHEN class.
 	boolean impossibleWhenPart; // Set by doChecking
 
-	/**
-	 * Create a new when-part.
-	 * @param connectionStatement the connectionStatement
-	 * @param classIdentifier the WHEN class-identifier
-	 * @param connectionBlock The associated connection block
-	 * @param statement the statement after DO
-	 */
+	/// Create a new when-part.
+	/// @param connectionStatement the connectionStatement
+	/// @param classIdentifier the WHEN class-identifier
+	/// @param connectionBlock The associated connection block
+	/// @param statement the statement after DO
 	public ConnectionWhenPart(final ConnectionStatement connectionStatement, final String classIdentifier,final ConnectionBlock connectionBlock,final Statement statement) {
 		super(connectionStatement, connectionBlock, statement);
 		this.classIdentifier = classIdentifier;
@@ -109,9 +104,7 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ConnectionWhenPart() {}
 
 	@Override
@@ -127,12 +120,10 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 		oupt.writeObj(connectionBlock);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConnectionDoPart object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ConnectionDoPart object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ConnectionDoPart readObject(AttributeInputStream inpt) throws IOException {
 		ConnectionWhenPart whn = new ConnectionWhenPart();
 		whn.OBJECT_SEQU = inpt.readSEQU(whn);

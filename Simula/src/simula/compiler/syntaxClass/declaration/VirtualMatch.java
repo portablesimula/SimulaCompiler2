@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.lang.classfile.ClassBuilder;
@@ -17,33 +15,24 @@ import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.RTS;
 
-/**
- * Virtual match.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualMatch.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Virtual match.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/VirtualMatch.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class VirtualMatch extends Declaration {
 	
-	/**
-	 * The matching ProcedureDeclaration. Set during doChecking.
-	 */
+	/// The matching ProcedureDeclaration. Set during doChecking.
 	private ProcedureDeclaration match; // Set during doChecking
 
-	/**
-	 * The virtual specification. Set during doChecking.
-	 */
+	/// The virtual specification. Set during doChecking.
 	public VirtualSpecification virtualSpec; // Set during doChecking
 
-	/**
-	 * Create a new VirtualSpecification.
-	 * @param virtualSpec the virtual specification
-	 * @param match a matching ProcedureDeclaration
-	 */
+	/// Create a new VirtualMatch.
+	/// @param virtualSpec the virtual specification
+	/// @param match a matching ProcedureDeclaration
 	VirtualMatch(final VirtualSpecification virtualSpec, final ProcedureDeclaration match) {
 		super(virtualSpec.identifier);
 		this.declarationKind = ObjectKind.VirtualMatch;
@@ -60,10 +49,8 @@ public final class VirtualMatch extends Declaration {
 		JavaSourceFileCoder.code("    public RTS_PRCQNT " + virtualSpec.getVirtualIdentifier() + " " + matchCode);
 	}
 
-	/**
-	 * Build virtual match method.
-	 * @param classBuilder the classBuilder to use.
-	 */
+	/// Build virtual match method.
+	/// @param classBuilder the classBuilder to use.
 	public void buildMethod(ClassBuilder classBuilder) {
 	    String ident=virtualSpec.getSimpleVirtualIdentifier();
 		MethodTypeDesc MTD_STM=MethodTypeDesc.ofDescriptor("()Lsimula/runtime/RTS_PRCQNT;");

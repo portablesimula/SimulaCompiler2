@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.editor;
 
 import java.awt.Color;
@@ -42,24 +40,19 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * The editor's menues.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/EditorMenues.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// The editor's menues.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/EditorMenues.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 @SuppressWarnings("serial")
 public class EditorMenues extends JMenuBar {
 	
-	/**
-	 * Define a Menu item with toolTip.
-	 * @param ident item identifier
-	 * @param toolTipText the tooltip text
-	 * @return the resulting MenuItem
-	 */
+	/// Create a Menu item with toolTip.
+	/// @param ident item identifier
+	/// @param toolTipText the tooltip text
+	/// @return the resulting MenuItem
 	private JMenuItem defJMenuItem(String ident,String toolTipText) {
 		JMenuItem item = new JMenuItem(ident);
 		if(toolTipText!=null) item.setToolTipText(toolTipText);
@@ -77,10 +70,8 @@ public class EditorMenues extends JMenuBar {
     
     /** Menu */ private JMenu editMenu=new JMenu("Edit");
     
-    /**
-     * Refresh item.
-     */
-	JMenuItem refresh=new JMenuItem("Refresh");
+    /// Refresh item.
+ 	JMenuItem refresh=new JMenuItem("Refresh");
 	/** Menu item */ private JMenuItem cut=new JMenuItem(new DefaultEditorKit.CutAction());
 	/** Menu item */ private JMenuItem copy=new JMenuItem(new DefaultEditorKit.CopyAction());
 	/** Menu item */ private JMenuItem paste = new JMenuItem(new DefaultEditorKit.PasteAction());
@@ -109,9 +100,7 @@ public class EditorMenues extends JMenuBar {
     /** Menu item */ private JMenuItem about = new JMenuItem("About Simula");
     /** Menu item */ private JMenuItem more = new JMenuItem("More Info");
     
-    /**
-     * The popup menu.
-     */
+    /// The popup menu.
     JPopupMenu popupMenu;
     /** Popup Menu item */ private JMenuItem newFile2 = new JMenuItem("New");
     /** Popup Menu item */ private JMenuItem openFile2 = new JMenuItem("Open");
@@ -144,10 +133,8 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** Constructor
 	// ****************************************************************
-    /**
-     * Create a new instance of EditorMenues.
-     */
-	EditorMenues() {
+    /// Create a new instance of EditorMenues.
+ 	EditorMenues() {
     	fileMenu.add(newFile); newFile.addActionListener(actionListener);
     	fileMenu.add(openFile); openFile.addActionListener(actionListener);
     	fileMenu.addSeparator();
@@ -193,9 +180,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** HelpMenu: setAccelerators
 	// ****************************************************************
-	/**
-	 * HelpMenu: setAccelerators
-	 */
+	/// HelpMenu: setAccelerators
 	private void setAccelerators() {
 		newFile.setAccelerator(KeyStroke.getKeyStroke('N', InputEvent.CTRL_DOWN_MASK));
 	    openFile.setAccelerator(KeyStroke.getKeyStroke('O', InputEvent.CTRL_DOWN_MASK));
@@ -228,9 +213,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** HelpMenu: addPopupMenuItems
 	// ****************************************************************
-	/**
-	 * Add popup menu items,
-	 */
+	/// Add popup menu items,
 	private void addPopupMenuItems() {
 	    popupMenu=new JPopupMenu();
         popupMenu.add(newFile2); newFile2.addActionListener(actionListener);
@@ -275,9 +258,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** EditMenu: UpdateMenuItems
 	// ****************************************************************
-	/**
-	 * Update menu items.
-	 */
+	/// Update menu items.
 	void updateMenuItems() {
 		SourceTextPanel current=SimulaEditor.current;
 		boolean source=false;
@@ -286,7 +267,6 @@ public class EditorMenues extends JMenuBar {
 		boolean fileChanged=false;
 		boolean auto=false;
 		boolean canUndo=false;
-//		boolean canRedo=false;
 		if(current!=null) {
 			source=true;
 			String editText=current.editTextPane.getText();
@@ -297,9 +277,7 @@ public class EditorMenues extends JMenuBar {
 			auto=source && current.AUTO_REFRESH;
 			UndoManager undoManager = current.getUndoManager();
 			canUndo=undoManager.canUndo();
-//			canRedo=undoManager.canRedo();
 		}
-		//Util.println("EditMenu.updateMenuItems: src="+source+", chg="+fileChanged+", text="+text+", lang="+current.lang);
 		saveFile.setEnabled(fileChanged); saveFile2.setEnabled(fileChanged);
 		saveAs.setEnabled(mayRun);        saveAs2.setEnabled(mayRun);
 		close.setEnabled(source);         close2.setEnabled(source);
@@ -321,9 +299,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** HelpMenu: ActionListener
 	// ****************************************************************
-	/**
-	 * the ActionListener
-	 */
+	/// the ActionListener
 	ActionListener actionListener = new ActionListener() {
 		public void actionPerformed(ActionEvent e) {
 			Object item=e.getSource();
@@ -358,9 +334,7 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** doOpenFileAction
     // ****************************************************************
-	/**
-	 * Open file action
-	 */
+	/// Open file action
 	private void doOpenFileAction() {
         JFileChooser fileChooser = new JFileChooser(Global.currentWorkspace);
         if (fileChooser.showOpenDialog(SimulaEditor.tabbedPane)==JFileChooser.APPROVE_OPTION) {
@@ -378,11 +352,9 @@ public class EditorMenues extends JMenuBar {
         }
 	}
 	
-	/**
-	 * Test if a file is a text file
-	 * @param lowName the ident after .
-	 * @return true if it is a text file
-	 */
+	/// Test if a file is a text file
+	/// @param lowName the ident after .
+	/// @return true if it is a text file
 	private boolean isTextFile(String lowName) {
 		String[] kind= {".java", ".txt", ".bat", ".sh", ".md", ".html", ".xml" }; // TODO: More ?
 		for(String k:kind) if(lowName.endsWith(k)) return(true);
@@ -392,10 +364,8 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** doSaveCurrentFile
     // ****************************************************************
-	/**
-	 * Do save current source file.
-	 * @param saveAs true if a file chooser is wanted
-	 */
+	/// Do save current source file.
+	/// @param saveAs true if a file chooser is wanted
 	void doSaveCurrentFile(boolean saveAs) {
 		SourceTextPanel current=SimulaEditor.current;
 		if(saveAs || current.sourceFile==null) {
@@ -423,9 +393,7 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** doCloseCurrentFileAction
     // ****************************************************************
-	/**
-	 * Close current file acation.
-	 */
+	/// Close current file acation.
 	private void doCloseCurrentFileAction() {
 			maybeSaveCurrentFile();
 			SimulaEditor.removeSelectedTab();
@@ -434,9 +402,7 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** doCloseAllAction
     // ****************************************************************
-	/**
-	 * Close action.
-	 */
+	/// Close action.
 	void doCloseAllAction() {
 		while(SimulaEditor.tabbedPane.getSelectedIndex()>=0)
 		    doCloseCurrentFileAction();
@@ -445,9 +411,7 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** doExitAction
     // ****************************************************************
-	/**
-	 * Exit action.
-	 */
+	/// Exit action.
 	void doExitAction() {
 		doCloseAllAction();
 		System.exit(0);
@@ -456,42 +420,34 @@ public class EditorMenues extends JMenuBar {
     // ****************************************************************
     // *** maybeSaveCurrentFile
     // ****************************************************************
-	/**
-	 * Maybe save current source file.
-	 * <p>
-	 * Also used by RunMeny[Run]
-	 */
+	/// Maybe save current source file.
+	/// 
+	/// Also used by RunMeny.
 	void maybeSaveCurrentFile() {
 		SourceTextPanel current=SimulaEditor.current;
 		if(current==null) return; if(!current.fileChanged) return;
 		if(saveDialog(current.sourceFile)==JOptionPane.YES_OPTION) doSaveCurrentFile(false);
 	}
 
-	/**
-	 * Popup a warning: The file: 'name' Already exists - Do you want to overwrite it ?
-	 * @param file the file
-	 * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
-	 */
+	/// Popup a warning: The file: 'name' Already exists - Do you want to overwrite it ?
+	/// @param file the file
+	/// @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
 	private int overwriteDialog(File file) {
  		String msg="The file: \n"+file+"\nAlready exists - Do you want to overwrite it ?";
  		return(Util.optionDialog(msg,"Warning",JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,"Yes","No"));
 	}
 
-	/**
-	 * Popup a warning: The file 'name' Does not end with the recomended .sim
-	 * @param file the file
-	 * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
-	 */
+	/// Popup a warning: The file 'name' Does not end with the recomended .sim
+	/// @param file the file
+	/// @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
 	private int noSimTypeDialog(File file) {
         String msg="The file name\n"+file+"\nDoes not end with the recomended \".sim\"";
 		return(Util.optionDialog(msg,"Warning",JOptionPane.OK_CANCEL_OPTION, JOptionPane.WARNING_MESSAGE,"Ok","Cancel"));
 	}
 	
-	/**
-	 * Save file dialog
-	 * @param file the file
-	 * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
-	 */
+	/// Save file dialog
+	/// @param file the file
+	/// @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
 	private int saveDialog(File file) {
 		String msg=(file==null)?"The source text has unsaved changes.\nDo you want to save it in a file ?"
 		                       :"The file: \n"+file+"\nHas changed - do you want to save it ?";
@@ -501,9 +457,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** undoAction
 	// ****************************************************************
-	/**
-	 * The undo action
-	 */
+	/// The undo action
 	private void undoAction() {
 		SourceTextPanel current=SimulaEditor.current;
 		current.getUndoManager().undo();
@@ -524,21 +478,16 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** doRunAction
 	// ****************************************************************
-	/**
-	 * The run action
-	 */
+	/// The run action
 	private void doRunAction() {
 		Option.internal.DEBUGGING=false;
-//		RTOption.internal.DEBUGGING=false;
 		doStartRunning();
 	}
 	
 	// ****************************************************************
 	// *** doDebugAction
 	// ****************************************************************
-	/**
-	 * The debug action
-	 */
+	/// The debug action
 	private void doDebugAction() {
 		Option.internal.DEBUGGING=true;
 //		RTOption.internal.DEBUGGING=true;
@@ -550,9 +499,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** doStartRunning
 	// ****************************************************************
-	/**
-	 * Utility: Start running current Simula program.
-	 */
+	/// Utility: Start running current Simula program.
 	private void doStartRunning() {
 		maybeSaveCurrentFile();
        	File file=SimulaEditor.current.sourceFile;
@@ -586,19 +533,15 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** selectWorkspaceAction
 	// ****************************************************************
-	/**
-	 * Select Workspace action.
-	 */
-    private void selectWorkspaceAction() {
+	/// Select Workspace action.
+	private void selectWorkspaceAction() {
     	SimulaEditor.doSelectWorkspace();
     }	
     
 	// ****************************************************************
 	// *** selectJavaDirAction
 	// ****************************************************************
-	/**
-	 * Select Java directory action.
-	 */
+	/// Select Java directory action.
     private void selectJavaDirAction() {
     	SimulaEditor.doSelectJavaDir();
     }	
@@ -606,9 +549,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** selectOutputDirAction
 	// ****************************************************************
-	/**
-	 * Select output directory action.
-	 */
+	/// Select output directory action.
     private void selectOutputDirAction() {
     	SimulaEditor.doSelectOutputDir();
     }	
@@ -616,9 +557,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** selectExtLibDirAction
 	// ****************************************************************
-	/**
-	 * Select ExtLibDir action.
-	 */
+	/// Select ExtLibDir action.
     private void selectExtLibDirAction() {
     	SimulaEditor.doSelectExtLibDir();
     	Global.storeWorkspaceProperties();
@@ -627,9 +566,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** removeWorkspacesAction
 	// ****************************************************************
-	/**
-	 * Remove Workspace action.
-	 */
+	/// Remove Workspace action.
     private void removeWorkspacesAction() {
     	JPanel panel=new JPanel();
     	panel.setBackground(Color.white);
@@ -655,9 +592,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** doAboutAction
 	// ****************************************************************
-    /**
-     * About action
-     */
+    /// About action
 	private void doAboutAction() {
 		JTextArea msg=new JTextArea(
 			"   This is a new Simula System created by the\n\n"
@@ -675,9 +610,7 @@ public class EditorMenues extends JMenuBar {
 	// ****************************************************************
 	// *** doMoreAction
 	// ****************************************************************
-	/**
-	 * More action
-	 */
+	/// More action
 	private void doMoreAction() {
 		if(Desktop.isDesktopSupported()) {
 			Desktop desktop = Desktop.getDesktop();

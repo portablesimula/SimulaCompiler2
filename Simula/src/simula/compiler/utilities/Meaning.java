@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
 import java.lang.classfile.CodeBuilder;
@@ -16,45 +14,32 @@ import simula.compiler.syntaxClass.declaration.SimpleVariableDeclaration;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.VariableExpression;
 
-/**
- * Utility class Meaning.
- * <p>
- * Holding the semantic meaning of an identifier.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Meaning.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Utility class Meaning.
+/// 
+/// Holding the semantic meaning of an identifier.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/Meaning.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class Meaning {
-	/**
-	 * True if it was found behind invisible
-	 */
+	/// True if it was found behind invisible
 	public boolean foundBehindInvisible; // Behind hidden/protected
 	
-	/**
-	 * The corresponding declaration
-	 */
+	/// The corresponding declaration
 	public Declaration declaredAs;
 	
-	/**
-	 * Where it was declared
-	 */
+	/// Where it was declared
 	public DeclarationScope declaredIn; // Search started here (modified in ConnectionBlock)
 	
-	/**
-	 * Where it was found
-	 */
+	/// Where it was found
 	public DeclarationScope foundIn; // Search ended here
 
-	/**
-	 * Create a new Meaning.
-	 * @param declaredAs the corresponding declaration
-	 * @param declaredIn where it was declared
-	 * @param foundIn where it was found
-	 * @param foundBehindInvisible true if it was found behind invisible
-	 */
+	/// Create a new Meaning.
+	/// @param declaredAs the corresponding declaration
+	/// @param declaredIn where it was declared
+	/// @param foundIn where it was found
+	/// @param foundBehindInvisible true if it was found behind invisible
 	public Meaning(final Declaration declaredAs,final DeclarationScope declaredIn,final DeclarationScope foundIn,final boolean foundBehindInvisible) {
 		this.declaredAs = declaredAs;
 		this.declaredIn = declaredIn;
@@ -62,19 +47,15 @@ public final class Meaning {
 		this.foundBehindInvisible = foundBehindInvisible;
 	}
 
-	/**
-	 * Create a new Meaning.
-	 * @param declaredAs the corresponding declaration
-	 * @param declaredIn where it was declared
-	 */
+	/// Create a new Meaning.
+	/// @param declaredAs the corresponding declaration
+	/// @param declaredIn where it was declared
 	public Meaning(final Declaration declaredAs,final DeclarationScope declaredIn) {
 		this(declaredAs, declaredIn,null,false);
 	}
 
-	/**
-	 * Returns the constant element or null.
-	 * @return the constant element or null
-	 */
+	/// Returns the constant element or null.
+	/// @return the constant element or null
 	public Expression getConstant() {
 		if(declaredAs instanceof SimpleVariableDeclaration simple) {
 			if(simple.isConstant()) return(simple.constantElement);
@@ -82,28 +63,22 @@ public final class Meaning {
 		return(null);
 	}
 
-	/**
-	 * Returns true if it was declared in a ConnectionBlock.
-	 * @return true if it was declared in a ConnectionBlock
-	 */
+	/// Returns true if it was declared in a ConnectionBlock.
+	/// @return true if it was declared in a ConnectionBlock
 	public boolean isConnected() {
 		return (declaredIn instanceof ConnectionBlock);
 	}
 
-	/**
-	 * Returns the inspected expression or null.
-	 * @return the inspected expression or null
-	 */
+	/// Returns the inspected expression or null.
+	/// @return the inspected expression or null
 	public Expression getTypedInspectedVariable() {
 		if (declaredIn instanceof ConnectionBlock conn)
 			 return (conn.getTypedInspectedVariable());
 		else return (null);
 	}
 
-	/**
-	 * Get the inspectedVariable of the enclosing ConnectionBlock or null.
-	 * @return the inspectedVariable of the enclosing ConnectionBlock or null.
-	 */
+	/// Get the inspectedVariable of the enclosing ConnectionBlock or null.
+	/// @return the inspectedVariable of the enclosing ConnectionBlock or null.
 	public VariableExpression getInspectedVariable() {
 		if (declaredIn instanceof ConnectionBlock conn)
 			 return (conn.inspectedVariable);
@@ -113,12 +88,9 @@ public final class Meaning {
 	// ***************************************************************************************
 	// *** CODING: edUnqualifiedStaticLink
 	// ***************************************************************************************
-	/**
-	 * ClassFile coding utility: Edit unqualified static link chain.
-	 * @return the resulting string
-	 */
+	/// Java coding utility: Edit unqualified static link chain.
+	/// @return the resulting string
 	public String edUnqualifiedStaticLink() {
-		// Edit staticLink reference
 		String staticLink;
 		Expression connectedObject = getTypedInspectedVariable();
 		if (connectedObject != null)
@@ -132,12 +104,9 @@ public final class Meaning {
 	// ***************************************************************************************
 	// *** CODING: edQualifiedStaticLink
 	// ***************************************************************************************
-	/**
-	 * ClassFile coding utility: Edit qualified static link chain.
-	 * @return the resulting string
-	 */
+	/// Java coding utility: Edit qualified static link chain.
+	/// @return the resulting string
 	public String edQualifiedStaticLink() {
-		// Edit staticLink reference
 		String staticLink;
 		Expression connectedObject = getTypedInspectedVariable();
 		if (connectedObject != null)
@@ -151,46 +120,28 @@ public final class Meaning {
 	}
 
 	// ***************************************************************************************
-	// *** CODING: buildQualifiedStaticLink
+	// *** JVM CODING: buildQualifiedStaticLink
 	// ***************************************************************************************
-	/**
-	 * ClassFile coding utility: Build qualified static link chain.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Build qualified static link chain.
+	/// @param codeBuilder the codeBuilder to use.
 	public void buildQualifiedStaticLink(CodeBuilder codeBuilder) {
 		// Edit staticLink reference
 		if(this.isConnected()) {
 	    	VariableExpression inspectedVariable = getInspectedVariable();
-//			String id = inspectedVariable.getJavaIdentifier();
-//			ConstantPoolBuilder pool=codeBuilder.constantPool();
-//			System.out.println("Meaning.buildQualifiedStaticLink: "+this);
-//			System.out.println("Meaning.buildQualifiedStaticLink: inspectedVariable="+inspectedVariable);
 			inspectedVariable.buildEvaluation(null, codeBuilder);
-//			codeBuilder
-//				.aload(0)
-//				.getfield(pool.fieldRefEntry(BlockDeclaration.currentClassDesc(), id, inspectedVariable.type.toClassDesc()));
 		}
 		else {
-//			System.out.println("Meaning.buildQualifiedStaticLink: "+this);
-//			System.out.println("Meaning.buildQualifiedStaticLink: declaredIn="+declaredIn);
 			boolean withFollowSL = declaredIn.buildCTX(codeBuilder);
 			if(withFollowSL) codeBuilder.checkcast(declaredIn.getClassDesc());
 		}
 	}
 
-//	// ***************************************************************************************
-//	// *** JVM CODING: getFieldRefEntry
-//	// ***************************************************************************************
-//	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
-//		ClassDesc owner=declaredIn.getClassDesc();
-//		return(pool.fieldRefEntry(owner, declaredAs.getJavaIdentifier(), declaredAs.type.toClassDesc()));
-//	}
-
-	/**
-	 * Coding Utility: Build identifier access.
-	 * @param destination true if destination
-	 * @param codeBuilder the CodeBuilder
-	 */
+	// ***************************************************************************************
+	// *** JVM CODING: buildIdentifierAccess
+	// ***************************************************************************************
+	/// ClassFile Coding Utility: Build identifier access.
+	/// @param destination true if destination
+	/// @param codeBuilder the CodeBuilder
 	public void buildIdentifierAccess(boolean destination,CodeBuilder codeBuilder) {
 		Meaning meaning=this;
 		if (meaning.isConnected()) {

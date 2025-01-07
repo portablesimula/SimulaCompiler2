@@ -201,7 +201,7 @@ public final class Parse {
 	/// Test to accept a relational operator.
 	/// <pre>
 	///	 value-relational-operator
-	///	     =  &lt;  |  &lt;=  |  =  |  >=  |  >  |  &lt;> | == | =/=
+	///	     =  <  |  <=  |  =  |  >=  |  >  |  <> | == | =/=
 	/// </pre>
 	/// @return true if the keyword is accepted, false otherwise.
 	public static boolean acceptRelationalOperator() {

@@ -1,14 +1,13 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.util.Iterator;
 
+import simula.compiler.syntaxClass.ProcedureSpecification;
 import simula.compiler.syntaxClass.SyntaxClass;
 import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.declaration.ArrayDeclaration;
@@ -22,34 +21,25 @@ import simula.compiler.syntaxClass.declaration.VirtualSpecification;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
-import simula.compiler.utilities.ProcedureSpecification;
 import simula.compiler.utilities.Util;
 
-/**
- * Coding Utilities: Call Procedure
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/CallProcedure.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Java Coding Utilities: Call Procedure
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/CallProcedure.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class CallProcedure {
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	CallProcedure(){}
 	
 	// ********************************************************************
 	// *** CallProcedure.normal
 	// ********************************************************************
-	/**
-	 * CallProcedure.normal
-	 * 
-	 * @param variable the procedure variable
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure Normal.
+	/// @param variable the procedure variable
+	/// @return piece of Java source code
 	static String normal(final VariableExpression variable) {
 		StringBuilder s=new StringBuilder();
 		Meaning meaning=variable.meaning;
@@ -69,15 +59,12 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.remote
 	// ********************************************************************
-	/**
-	 * CallProcedure.remote
-	 *   
-	 * @param obj Object Expression before DOT
-	 * @param procedure Procedure Declaration
-	 * @param func Function Designator, may be subscripted
-	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure Remote.
+	/// @param obj Object Expression before DOT
+	/// @param procedure Procedure Declaration
+	/// @param func Function Designator, may be subscripted
+	/// @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	/// @return piece of Java source code
 	static String remote(final Expression obj,final ProcedureDeclaration procedure,final VariableExpression func,final SyntaxClass backLink) {
 		if(procedure.myVirtual!=null) {
 			// Call Remote Virtual Procedure
@@ -102,14 +89,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.asRemoteMethod
 	// ********************************************************************
-	/**
-	 * CallProcedure.remote
-	 *   
-	 * @param obj Object Expression before DOT
-	 * @param procedure Procedure Declaration
-	 * @param func Function Designator, may be subscripted
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure as remote Method.
+	/// @param obj Object Expression before DOT
+	/// @param procedure Procedure Declaration
+	/// @param func Function Designator, may be subscripted
+	/// @return piece of Java source code
 	private static String asRemoteMethod(final Expression obj,final ProcedureDeclaration procedure,final VariableExpression func) {
 		BlockDeclaration declaredIn=(BlockDeclaration)procedure.declaredIn;
 		if(declaredIn.isContextFree) {
@@ -129,12 +113,9 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.asNormalMethod
 	// ********************************************************************
-	/**
-	 * CallProcedure.asNormalMethod
-	 * 
-	 * @param variable the procedure variable
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure as normal Method.
+	/// @param variable the procedure variable
+	/// @return piece of Java source code
 	static String asNormalMethod(final VariableExpression variable) { 
 		Meaning meaning=variable.meaning;
 		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
@@ -169,13 +150,10 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.asStaticMethod
 	// ********************************************************************
-	/**
-	 * CallProcedure.asStaticMethod
-	 * 
-	 * @param variable the procedure variable
-	 * @param isContextFree true if the procedure is independent of context
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure as static Method.
+	/// @param variable the procedure variable
+	/// @param isContextFree true if the procedure is independent of context
+	/// @return piece of Java source code
 	static String asStaticMethod(final VariableExpression variable,final boolean isContextFree) { 
 		Meaning meaning=variable.meaning;
 		ProcedureDeclaration procedure = (ProcedureDeclaration) meaning.declaredAs;
@@ -207,31 +185,25 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.formal
 	// ********************************************************************
-	/**
-	 * CallProcedure.formal
-	 * 
-	 * @param variable the procedure variable
-	 * @param par declared as parameter 'par'
-	 * @return piece of Java source code
-	 */
-	static String formal(final VariableExpression variable,final Parameter par)
-	{ //return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
-	  String ident=variable.edIdentifierAccess(false);
-	  if(par.mode==Parameter.Mode.name) ident=ident+".get()";
-	  return(codeCPF(ident,variable,null));
+	/// Java Coding: Edit Call Procedure Formal.
+	/// @param variable the procedure variable
+	/// @param par declared as parameter 'par'
+	/// @return piece of Java source code
+	static String formal(final VariableExpression variable,final Parameter par) {
+		//return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
+		String ident=variable.edIdentifierAccess(false);
+		if(par.mode==Parameter.Mode.name) ident=ident+".get()";
+		return(codeCPF(ident,variable,null));
 	}
 
 	// ********************************************************************
 	// *** CallProcedure.virtual
 	// ********************************************************************
-	/**
-	 * CallProcedure.virtual
-	 * 
-	 * @param variable the procedure variable
-	 * @param virtual the virtual specification
-	 * @param remotelyAccessed true if remotely accessed.
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure Virtual.
+	/// @param variable the procedure variable
+	/// @param virtual the virtual specification
+	/// @param remotelyAccessed true if remotely accessed.
+	/// @return piece of Java source code
 	static String virtual(final VariableExpression variable,final VirtualSpecification virtual,final boolean remotelyAccessed) {
 		//return("<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 	    String ident=virtual.getVirtualIdentifier();
@@ -249,14 +221,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** CallProcedure.remoteVirtual
 	// ********************************************************************
-	/**
-	 * CallProcedure.remoteVirtual
-	 * 
-	 * @param obj Object Expression before DOT
-	 * @param variable the procedure variable
-	 * @param virtual Virtual Specification
-	 * @return piece of Java source code
-	 */
+	/// Java Coding: Edit Call Procedure Remote Virtual.
+	/// @param obj Object Expression before DOT
+	/// @param variable the procedure variable
+	/// @param virtual Virtual Specification
+	/// @return piece of Java source code
 	static String remoteVirtual(final Expression obj,final VariableExpression variable,final VirtualSpecification virtual) {
 		//return("<Object>.<IDENT>.CPF().setPar(4).setpar(3.14)._ENT()");
 		String ident=obj.get()+'.'+virtual.getVirtualIdentifier();
@@ -266,19 +235,16 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** codeCPF
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit Call Procedure Formal.
-	 * @param ident the procedure identifier
-	 * @param variable the procedure variable
-	 * @param procedureSpec the procedure spec
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit Call Procedure Formal.
+	/// @param ident the procedure identifier
+	/// @param variable the procedure variable
+	/// @param procedureSpec the procedure spec
+	/// @return the resulting Java source code
 	private static String codeCPF(final String ident,final VariableExpression variable,final ProcedureSpecification procedureSpec) {
 		if(! variable.hasArguments()) {
 			if(procedureSpec != null && procedureSpec.parameterList.size() > 0)
 				Util.error("Missing parameter(s) to " + variable.identifier);
 		}
-		
 		StringBuilder s=new StringBuilder();
 		if(procedureSpec!=null) s.append(codeCSVP(ident,variable,procedureSpec));
 		else {
@@ -301,7 +267,7 @@ public final class CallProcedure {
 							case ObjectKind.SimpleVariableDeclaration -> kind=Parameter.Kind.Simple;
 							case ObjectKind.Parameter -> kind=((Parameter)decl).kind;
 							case ObjectKind.Procedure -> kind=Parameter.Kind.Procedure;
-//							case ObjectKind.Switch -> kind=Parameter.Kind.Procedure;
+						//	case ObjectKind.Switch -> kind=Parameter.Kind.Procedure;
 							case ObjectKind.ContextFreeMethod -> kind=Parameter.Kind.Simple;
 							case ObjectKind.ArrayDeclaration -> kind=Parameter.Kind.Array;
 							case ObjectKind.LabelDeclaration -> kind=Parameter.Kind.Label;
@@ -325,13 +291,12 @@ public final class CallProcedure {
 				if(binOper.backLink==null) partOfExpression=false;
 			}
 			if(partOfExpression) {
-					s.append("._RESULT()");
-					String callVirtual=s.toString();
-					String cast=resultType.toJavaType();
-					if(resultType.isArithmeticType())
-						return(cast+"Value("+callVirtual+")");
-					else return("(("+cast+")("+callVirtual+"))");
-//				}
+				s.append("._RESULT()");
+				String callVirtual=s.toString();
+				String cast=resultType.toJavaType();
+				if(resultType.isArithmeticType())
+					return(cast+"Value("+callVirtual+")");
+				else return("(("+cast+")("+callVirtual+"))");
 			}
 		}
 		return(s.toString());
@@ -340,13 +305,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** codeCSVP  -- Call Specified Virtual Procedure
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit Call Specified Virtual Procedure.
-	 * @param ident the procedure identifier
-	 * @param variable the procedure variable
-	 * @param procedureSpec the procedure spec
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit Call Specified Virtual Procedure.
+	/// @param ident the procedure identifier
+	/// @param variable the procedure variable
+	/// @param procedureSpec the procedure spec
+	/// @return the resulting Java source code
 	private static String codeCSVP(final String ident, final VariableExpression variable,	final ProcedureSpecification procedureSpec) {
 		StringBuilder s = new StringBuilder();
 		s.append(ident).append(".CPF()");
@@ -371,13 +334,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** edProcedureParameters
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit procedure parameters.
-	 * @param variable a variable
-	 * @param SL static link
-	 * @param procedure the procedure
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit procedure parameters.
+	/// @param variable a variable
+	/// @param SL static link
+	/// @param procedure the procedure
+	/// @return the resulting Java source code
 	private static String edProcedureParameters(final VariableExpression variable, final String SL, final ProcedureDeclaration procedure) {
 		StringBuilder s = new StringBuilder();
 		boolean prevPar = false;
@@ -413,12 +374,10 @@ public final class CallProcedure {
 		return (s.toString());
 	}
 	
-	/**
-	 * Returns the array's number of dimensions.
-	 * @param actualParameter the array parameter
-	 * @return the array's number of dimensions.
-	 */
-    private static int getNdim(final Expression actualParameter) {
+	/// Returns the array's number of dimensions.
+	/// @param actualParameter the array parameter
+	/// @return the array's number of dimensions.
+	private static int getNdim(final Expression actualParameter) {
     	VariableExpression aVar=null;
     	if(actualParameter instanceof RemoteVariable rem) aVar=rem.var;
     	else if(actualParameter instanceof VariableExpression var) aVar=var;
@@ -432,15 +391,13 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** doParameterTransmition
 	// ********************************************************************
-    /**
-     * Coding Utility: Edit parameter transmission,
-     * @param formalType parameter's formal type
-     * @param kind parameter's kind
-     * @param mode parameter's transmission mode
-     * @param apar the actual parameter
-     * @return the resulting Java source code
-     */
-	private static String doParameterTransmition(final Type formalType,final int kind,final int mode,final Expression apar) {
+    /// Java Coding Utility: Edit parameter transmission,
+    /// @param formalType parameter's formal type
+    /// @param kind parameter's kind
+    /// @param mode parameter's transmission mode
+    /// @param apar the actual parameter
+    /// @return the resulting Java source code
+ 	private static String doParameterTransmition(final Type formalType,final int kind,final int mode,final Expression apar) {
 		StringBuilder s = new StringBuilder();
 		switch(kind) {
 		    case Parameter.Kind.Simple -> doSimpleParameter(s,formalType,mode,apar);
@@ -463,14 +420,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** doSimpleParameter -- Simple Variable as Actual Parameter
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit simple parameter into the given StringBuilder. 
-	 * 
-	 * @param s the StringBuilder
-	 * @param formalType the formal type
-	 * @param mode the parameter's mode
-	 * @param apar actual parameter
-	 */
+	/// Java Coding Utility: Edit simple parameter into the given StringBuilder. 
+	/// @param s the StringBuilder
+	/// @param formalType the formal type
+	/// @param mode the parameter's mode
+	/// @param apar actual parameter
 	private static void doSimpleParameter(final StringBuilder s,final Type formalType,final int mode,final Expression apar) {
 		if(mode==0) // Simple Type/Ref/Text by Default
 		  	s.append(apar.toJavaCode());
@@ -536,13 +490,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** doArrayParameter -- Array as Actual Parameter
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit Array as Actual Parameter into the given StringBuilder.
-	 * @param s the StringBuilder
-	 * @param formalType the formal type
-	 * @param mode the parameter mode
-	 * @param apar actual parameter
-	 */
+	/// Java Coding Utility: Edit Array as Actual Parameter into the given StringBuilder.
+	/// @param s the StringBuilder
+	/// @param formalType the formal type
+	/// @param mode the parameter mode
+	/// @param apar actual parameter
 	private static void doArrayParameter(final StringBuilder s,final Type formalType,final int mode,final Expression apar) {
 		if(mode==Parameter.Mode.value) {
 			s.append(apar.toJavaCode()).append(".COPY()");
@@ -558,13 +510,11 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** doProcedureParameter -- Procedure as Actual Parameter
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit Procedure as Actual Parameter into the given StringBuilder.
-	 * @param s the StringBuilder
-	 * @param formalType the formal type
-	 * @param mode the parameter mode
-	 * @param apar actual parameter
-	 */
+	/// Java Coding Utility: Edit Procedure as Actual Parameter into the given StringBuilder.
+	/// @param s the StringBuilder
+	/// @param formalType the formal type
+	/// @param mode the parameter mode
+	/// @param apar actual parameter
 	private static void doProcedureParameter(final StringBuilder s, final Type formalType, final int mode, final Expression apar) {
 		String procQuant = edProcedureQuant(apar);
 		if (mode == Parameter.Mode.name) {
@@ -584,11 +534,9 @@ public final class CallProcedure {
 	// ********************************************************************
 	// *** edProcedureQuant
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit new procedure quant.
-	 * @param apar the actual parameter
-	 * @return the resulting Java source code
-	 */
+	/// Java Coding Utility: Edit new procedure quant.
+	/// @param apar the actual parameter
+	/// @return the resulting Java source code
 	private static String edProcedureQuant(final Expression apar) {
 	    if (apar instanceof VariableExpression var) {
 			Declaration decl=var.meaning.declaredAs;

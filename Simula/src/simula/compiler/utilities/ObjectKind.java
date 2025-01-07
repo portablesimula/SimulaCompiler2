@@ -1,14 +1,17 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
-/**
- * Object Kind Codes.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ObjectKind.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Object Kind Codes.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ObjectKind.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class ObjectKind {
 
 	/** Standard Class */		public static final int StandardClass = 1;
@@ -82,16 +85,12 @@ public final class ObjectKind {
 	/** Max Value */				public static final int MAX_VALUE = 63;
 
 	
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	public ObjectKind() {}
 	
-	/**
-	 * Edit a Kind Code.
-	 * @param kind the Kind Code.
-	 * @return a String version of the Kind Code.
-	 */
+	/// Edit a Kind Code.
+	/// @param kind the Kind Code.
+	/// @return a String version of the Kind Code.
 	public static String edit(int kind) {
 		switch(kind) {
 			case NULL:						return "null";

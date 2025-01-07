@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.editor;
 
 import javax.swing.JPanel;
@@ -41,30 +39,21 @@ import java.io.Reader;
 import java.io.StringReader;
 import java.util.StringTokenizer;
 
-/**
- * The Source text Panel.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/SourceTextPanel.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// The Source text Panel.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/SourceTextPanel.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 @SuppressWarnings("serial")
 public class SourceTextPanel extends JPanel {
-	/**
-	 * DEBUG on/off
-	 */
+	/// DEBUG on/off
 	private static final boolean DEBUG=false;//true;
 
-	/**
-	 * The line number side-panel.
-	 */
+	/// The line number side-panel.
 	private JTextPane lineNumbers;
 	
-	/**
-	 * The ScrollPane
-	 */
+	/// The ScrollPane
 	private JScrollPane styleScrollPane;
  	
 	/** Style */ private Style styleRegular;
@@ -73,64 +62,42 @@ public class SourceTextPanel extends JPanel {
 	/** Style */ private Style styleConstant;
 	/** Style */ private Style styleLineNumber;
 	
-	/**
-	 * The popup Menu.
-	 */
+	/// The popup Menu.
 	private JPopupMenu popupMenu;
 	
-	/**
-	 * The StyledDocument.
-	 */
+	/// The StyledDocument.
 	private StyledDocument doc;
 	
-	/**
-	 * Editable text pane with undo/redo history.
-	 */
+	/// Editable text pane with undo/redo history.
 	JTextPane editTextPane;
 	
-	/**
-	 * Current language.
-	 */
+	/// Current language.
     SimulaEditor.Language lang;
 
 	
-	/**
-	 * The source file.
-	 */
+	/// The source file.
 	File sourceFile;
 	
-	/**
-	 * Signals auto refresh.
-	 */
+	/// Signals auto refresh.
     boolean AUTO_REFRESH=true;//false;
 
-	/**
-	 * The undo manager.
-	 */
+	/// The undo manager.
 	private UndoManager undoManager = new UndoManager();
 	
-	/**
-	 * Returns the undo manager.
-	 * @return the undo manager
-	 */
+	/// Returns the undo manager.
+	/// @return the undo manager
 	UndoManager getUndoManager() { return(undoManager); }
 	
-    /**
-     * Indicates that the source file has changed.
-     */
+    /// Indicates that the source file has changed.
     boolean fileChanged = false;
     
-    /**
-     * Indicates that refresh is needed.
-     */
+    /// Indicates that refresh is needed.
     boolean refreshNeeded = false;
 
 	// ****************************************************************
 	// *** UndoableEditListener
 	// ****************************************************************
-    /**
-     * The UndoableEditListener.
-     */
+    /// The UndoableEditListener.
     private UndoableEditListener undoListener=new UndoableEditListener() {
 		public void undoableEditHappened(UndoableEditEvent e) {
 			UndoableEdit edit=e.getEdit();
@@ -143,9 +110,7 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** MouseListener
 	// ****************************************************************
-	/**
-	 * The MouseListener.
-	 */
+	/// The MouseListener.
     MouseListener mouseListener = new MouseListener() {
 		public void mousePressed(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
@@ -159,9 +124,7 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** DocumentListener
 	// ****************************************************************
-    /**
-     * The DocumentListener.
-     */
+    /// The DocumentListener.
 	DocumentListener documentListener=new DocumentListener() {
 		public void insertUpdate(DocumentEvent e)  { debugTrace("Insert",e); }
 		public void removeUpdate(DocumentEvent e)  { debugTrace("Remove",e); }
@@ -191,12 +154,10 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** Constructor
 	// ****************************************************************
-	/**
-	 * Create a new SourceTextPanel.
-	 * @param sourceFile the source file
-	 * @param lang the language
-	 * @param popupMenu the popupMenu
-	 */
+	/// Create a new SourceTextPanel.
+	/// @param sourceFile the source file
+	/// @param lang the language
+	/// @param popupMenu the popupMenu
     SourceTextPanel(File sourceFile,SimulaEditor.Language lang,JPopupMenu popupMenu) {
     	this.sourceFile=sourceFile;
     	this.lang=lang;
@@ -228,11 +189,9 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** fillTextPane
 	// ****************************************************************
-    /**
-     * Fill the text pane with text from the source file reader.
-     * @param reader the source file reader
-     * @param caretPosition argument
-     */
+    /// Fill the text pane with text from the source file reader.
+    /// @param reader the source file reader
+    /// @param caretPosition argument
     void fillTextPane(Reader reader,int caretPosition) {
     	switch(lang) {
 			case Simula: fillTextPane(caretPosition,new SimulaScanner(reader,true)); break;
@@ -244,11 +203,9 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** fillTextPane
 	// ****************************************************************
-    /**
-     * Fill the text pane with text delivered from the scanner.
-     * @param caretPosition the caretPosition after the operations
-     * @param preScanner the scanner to use
-     */
+    /// Fill the text pane with text delivered from the scanner.
+    /// @param caretPosition the caretPosition after the operations
+    /// @param preScanner the scanner to use
     private void fillTextPane(int caretPosition,DefaultScanner preScanner) {
 		int lineNumber=1;
 		StyledDocument lin=new DefaultStyledDocument(); addStylesToDocument(lin);
@@ -282,9 +239,7 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** doRefresh
 	// ****************************************************************
-    /**
-     * Do refresh action.
-     */
+    /// Do refresh action.
 	void doRefresh() {
 	    int pos=editTextPane.getCaretPosition();
 	    String txt=editTextPane.getText();
@@ -299,12 +254,10 @@ public class SourceTextPanel extends JPanel {
 	// ****************************************************************
 	// *** Utilities
 	// ****************************************************************
-	/**
-	 * Utility: Edit right justified line number string.
-	 * 
-	 * @param n the length of line number field
-	 * @return the resulting line number string
-	 */
+	/// Utility: Edit right justified line number string.
+	/// 
+	/// @param n the length of line number field
+	/// @return the resulting line number string
     private String edLineNumber(int n) {
 	    String fill="";
 	    if(n<10) fill="   ";
@@ -313,13 +266,11 @@ public class SourceTextPanel extends JPanel {
     	return(fill+n+": \n");
     }
 	
-    /**
-     * Utility: Count extra control characters in the given string
-     * @param s the given string
-     * @param pos limitin position in s
-     * @return the resulting number of control characters
-     */
-	private int countExtraControlCharacters(final String s,int pos) {
+    /// Utility: Count extra control characters in the given string
+    /// @param s the given string
+    /// @param pos limitin position in s
+    /// @return the resulting number of control characters
+ 	private int countExtraControlCharacters(final String s,int pos) {
 		int count=0;
 		for(int i=0;i<pos;i++) {
 			if(s.charAt(i)=='\r') { count++; pos++; }
@@ -327,11 +278,9 @@ public class SourceTextPanel extends JPanel {
 		return(count);
 	}
     
-	/**
-	 * Utility: Get Style
-	 * @param code style code
-	 * @return the resuting Style
-	 */
+	/// Utility: Get Style
+	/// @param code style code
+	/// @return the resuting Style
     private Style getStyle(final Token.StyleCode code) {
     	switch(code) {
     		case regular: return(styleRegular);
@@ -343,10 +292,8 @@ public class SourceTextPanel extends JPanel {
     	return(null);
     }
     
-    /**
-     * Add Styles to the document.
-     * @param doc the document
-     */
+    /// Add Styles to the document.
+    /// @param doc the document
     private void addStylesToDocument(final StyledDocument doc) {
         //Initialize some styles.
         Style defaultStyle = StyleContext.getDefaultStyleContext().

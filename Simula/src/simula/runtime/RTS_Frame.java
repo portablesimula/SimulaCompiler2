@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import java.awt.event.WindowEvent;
@@ -6,40 +11,30 @@ import java.util.Vector;
 
 import javax.swing.JFrame;
 
-/**
- * RTS Frame used by RTS_Drawing and RTS_ConsolePanel
- */
+/// RTS Frame used by [RTS_Drawing] and [RTS_ConsolePanel]
 @SuppressWarnings("serial")
 public class RTS_Frame extends JFrame {
 	
 	/// The opened frames.
 	private static Vector<JFrame> openFrames;
 	
-	/**
-	 * Create a new RTS_Frame
-	 */
+	/// Create a new RTS_Frame
 	public RTS_Frame() {
 		addWindowListener(this);
 		if(openFrames == null) openFrames = new Vector<JFrame>();
 		openFrames.add(this);
 	}
 
-	/**
-	 * Close this RTS_Frame.
-	 */
+	/// Close this RTS_Frame.
 	private void close() {
 		openFrames.remove(this);
-//		System.out.println("Close Frame "+frame);
-//		popUpError("openFrames.size="+openFrames.size());
 		if(openFrames.size() == 0) {
 			System.exit(0);
 		}
 	}
 	
-	/**
-	 * Add WindowListener to a RTS_Frame.
-	 * @param frame a Frame.
-	 */
+	/// Add WindowListener to a RTS_Frame.
+	/// @param frame a Frame.
 	private static void addWindowListener(RTS_Frame frame) {
 		frame.addWindowListener(new WindowListener() {
 			@Override public void windowOpened(WindowEvent e) {}

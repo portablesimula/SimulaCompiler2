@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -25,22 +30,16 @@ import simula.compiler.utilities.Util;
 // ************************************************************************************
 // *** ForListElement -- While Element
 // ************************************************************************************
-/**
- * Utility class: For-list While element.
- */
+/// Utility class: For-list While element.
 public class ForWhileElement extends ForListElement {
 	
-	/**
-	 * The second expression.
-	 */
+	/// The second expression.
 	Expression expr2;
 
-	/**
-	 * Create a new WhileElement.
-	 * @param forStatement the ForStatement
-	 * @param expr1 first expression 
-	 * @param expr2 second expression
-	 */
+	/// Create a new WhileElement.
+	/// @param forStatement the ForStatement
+	/// @param expr1 first expression 
+	/// @param expr2 second expression
 	public ForWhileElement(final ForStatement forStatement, final Expression expr1, final Expression expr2) {
 		super(forStatement, expr1);
 		this.expr2 = expr2;
@@ -139,9 +138,7 @@ public class ForWhileElement extends ForListElement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ForWhileElement() {}
 
 	@Override
@@ -157,12 +154,10 @@ public class ForWhileElement extends ForListElement {
 		oupt.writeObj(expr2);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ForWhileElement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ForWhileElement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ForWhileElement readObject(AttributeInputStream inpt) throws IOException {
 		ForWhileElement elt = new ForWhileElement();
 		elt.OBJECT_SEQU = inpt.readSEQU(elt);

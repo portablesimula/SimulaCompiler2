@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -22,37 +20,31 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Standalone Expression Statement.
- * 
- * <pre>
- * 
- * Syntax:
- * 
- *   standalone-expression = expression | assignment-statement
- *
- *      assignment-statement
- *           = expression { assignment-operator expression }
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/StandaloneExpression.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Standalone Expression Statement.
+/// 
+/// <pre>
+/// 
+/// Syntax:
+/// 
+///   standalone-expression = expression | assignment-statement
+/// 
+///      assignment-statement
+///           = expression { assignment-operator expression }
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/StandaloneExpression.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class StandaloneExpression extends Statement {
 	
-	/**
-	 * The expression.
-	 */
+	/// The expression.
 	private Expression expression;
 
-	/**
-	 * Create a new StandaloneExpression.
-	 * @param line the source line number
-	 * @param expression the expression
-	 */
+	/// Create a new StandaloneExpression.
+	/// @param line the source line number
+	/// @param expression the expression
 	StandaloneExpression(final int line,final Expression expression) {
 		super(line);
 		this.expression = expression;
@@ -62,16 +54,14 @@ public final class StandaloneExpression extends Statement {
 		}		
 	}
 
-	/**
-	 * Parse a standalone expression.
-	 * <pre>
-	 * Syntax:
-	 * 
-	 *    standalone-expression  =  expression  { assignment-operator  expression }
-	 * </pre>
-	 * Pre-Condition: First expression is already read.
-	 * @return the resulting StandaloneExpression
-	 */
+	/// Parse a standalone expression.
+	/// <pre>
+	/// Syntax:
+	/// 
+	///    standalone-expression  =  expression  { assignment-operator  expression }
+	/// </pre>
+	/// Pre-Condition: First expression is already read.
+	/// @return the resulting StandaloneExpression
 	private static Expression expectStandaloneExpression() { 
 		Expression retExpr=Expression.expectExpression();
 		while (Parse.accept(KeyWord.ASSIGNVALUE,KeyWord.ASSIGNREF)) {
@@ -128,9 +118,7 @@ public final class StandaloneExpression extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private StandaloneExpression() {
 		super(0);
 	}
@@ -146,12 +134,10 @@ public final class StandaloneExpression extends Statement {
 		oupt.writeObj(expression);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a StandaloneExpression object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the StandaloneExpression object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static StandaloneExpression readObject(AttributeInputStream inpt) throws IOException {
 		StandaloneExpression stm = new StandaloneExpression();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

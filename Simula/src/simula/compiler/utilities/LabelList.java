@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.utilities;
 
 import java.io.IOException;
@@ -17,15 +22,13 @@ import simula.compiler.syntaxClass.declaration.ClassDeclaration;
 import simula.compiler.syntaxClass.declaration.DeclarationScope;
 import simula.compiler.syntaxClass.declaration.LabelDeclaration;
 
-/***
- * A list of LabelDeclarations.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/LabelList.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// A list of LabelDeclarations.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/LabelList.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class LabelList {
 	/// Debug utility.
 	private static boolean TRACING = false;
@@ -54,10 +57,8 @@ public class LabelList {
 	/// Set by MAKE_READY_FOR_CODING
 	private Vector<SwitchCase> tableSwitchCases;
 	
-	/**
-	 * A list of LabelDeclarations.
-	 * @param declaredIn the DeclarationScope owning this list.
-	 */
+	/// A list of LabelDeclarations.
+	/// @param declaredIn the DeclarationScope owning this list.
 	public LabelList(DeclarationScope declaredIn) {
 		if(declaredIn == null) Util.IERR();
 		this.sequ = (LABEL_SEQU++);
@@ -66,59 +67,45 @@ public class LabelList {
 		if(TRACING) System.out.println("NEW " + this);
 	}
 	
-	/**
-	 * Clears this list.
-	 */
+	/// Clears this list.
 	public void clear() {
 		tableSwitchCases = null;
 		READY_FOR_CODING = false;
 	}
 	
-	/**
-	 * Debug utility: Return identification String.
-	 * @return identification String.
-	 */
+	/// Debug utility: Return identification String.
+	/// @return identification String.
 	private String ident() {
 		return "LabelList["+sequ+':'+declaredIn.identifier+"]";
 	}
 	
-	/**
-	 * Get DeclaredLabels
-	 * @return DeclaredLabels
-	 */
+	/// Get DeclaredLabels
+	/// @return DeclaredLabels
 	public Vector<LabelDeclaration> getDeclaredLabels(){
 		return declaredLabels;
 	}
 	
-	/**
-	 * Get all labels ( accumulated through the prefix chain for classes and prefixed blocks).
-	 * @return a Vector of LabelDeclarations
-	 */
+	/// Get all labels. Accumulated through the prefix chain for classes and prefixed blocks.
+	/// @return a Vector of LabelDeclarations
 	public Vector<LabelDeclaration> getAccumLabels(){
 		return accumLabels;
 	}
 	
-	/**
-	 * Get number of accumulated labels ( accumulated through the prefix chain for classes and prefixed blocks).
-	 * @return number of accumulated labels.
-	 */
+	/// Get number of accumulated labels. Accumulated through the prefix chain for classes and prefixed blocks.
+	/// @return number of accumulated labels.
 	public int accumLabelSize() {
 		return (accumLabels == null)?0:accumLabels.size();
 	}
 	
-	/**
-	 * Get number of local labels.
-	 * @return number of local labels.
-	 */
+	/// Get number of local labels.
+	/// @return number of local labels.
 	public int declaredLabelSize() {
 		return (declaredLabels == null)?0:declaredLabels.size();
 	}
 	
-	/**
-	 * Get last declared local label with the given ident.
-	 * @param ident label identifier
-	 * @return number of accumulated labels.
-	 */
+	/// Get last declared local label with the given ident.
+	/// @param ident label identifier
+	/// @return number of accumulated labels.
 	public LabelDeclaration getLastDeclaredLabel(String ident) {
 		int n = declaredLabelSize();
 		if(n > 0) {
@@ -130,10 +117,8 @@ public class LabelList {
 		return null;
 	}
 	
-	/**
-	 * Add a label to the local label list. 
-	 * @param lab the label to add.
-	 */
+	/// Add a label to the local label list. 
+	/// @param lab the label to add.
 	public void add(LabelDeclaration lab) {
 		if(TRACING) System.out.println(ident()+".add: "+lab.identifier+'['+lab.externalIdent+']');
 		if(READY_FOR_CODING) Util.IERR("Can't add a new Label when LabelLisit is marked READY_FOR_CODING");
@@ -141,13 +126,11 @@ public class LabelList {
 		if(TRACING) System.out.println(ident()+".add: DONE: LabelList = "+this);
 	}
 	
-	/**
-	 * Accumulate the label list for the given block. 
-	 * accumulated through the prefix chain for classes and prefixed blocks.
-	 * <p>
-	 * This method is used when generating .java source.
-	 * @param blk the given BlockDeclaration.
-	 */
+	/// Accumulate the label list for the given block. 
+	/// accumulated through the prefix chain for classes and prefixed blocks.
+	/// 
+	/// This method is used when generating .java source.
+	/// @param blk the given BlockDeclaration.
 	public static void accumLabelList(BlockDeclaration blk) {
 		Vector<LabelDeclaration> accumLabels = new Vector<LabelDeclaration>();
 		if(blk instanceof ClassDeclaration cls) {
@@ -167,13 +150,11 @@ public class LabelList {
 		blk.labelList.accumLabels = accumLabels;
 	}
 	
-	/**
-	 * Get a List of SwitchCase suitable for the 'tableswitch' instruction.
-	 * <p>
-	 * This method is used when generating classFile using the codeBuilder.
-	 * @param codeBuilder the codeBuilder
-	 * @return a List of SwitchCase
-	 */
+	/// Get a List of SwitchCase suitable for the 'tableswitch' instruction.
+	/// 
+	/// This method is used when generating classFile using the codeBuilder.
+	/// @param codeBuilder the codeBuilder
+	/// @return a List of SwitchCase
 	public List<SwitchCase> getTableSwitchCases(CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		if(TRACING) System.out.println(ident()+".getTableSwitchCases: "+this);
@@ -182,23 +163,18 @@ public class LabelList {
 		return tableSwitchCases;
 	}
 
-	/**
-	 * Sets the label indexes suitable for the 'tableswitch' instruction.
-	 * <p>
-	 * This method is used when generating classFile using the codeBuilder.
-	 */
+	/// Sets the label indexes suitable for the 'tableswitch' instruction.
+	/// 
+	/// This method is used when generating classFile using the codeBuilder.
 	public void setLabelIdexes() {
 		if(accumLabels != null) {
 			int nextIndex = 1;
 			for (LabelDeclaration label : accumLabels) label.index = nextIndex++;
 		}
-//		print("setLabelIdexes: Testing");
 	}
 	
-	/**
-	 * ClassFile coding utility: Make this LabelList ready for coding.
-	 * @param codeBuilder the codeBuilder to use
-	 */
+	/// ClassFile coding utility: Make this LabelList ready for coding.
+	/// @param codeBuilder the codeBuilder to use
 	private void MAKE_READY_FOR_CODING(CodeBuilder codeBuilder) {
 		if(READY_FOR_CODING) return;
 		if(TRACING) System.out.println("\n" + ident() +".MAKE_READY_FOR_CODING: "+this);
@@ -209,20 +185,13 @@ public class LabelList {
 			for (int i = 1; i <= accumLabels.size(); i++) {
 				Label lab = codeBuilder.newLabel();
 				tableSwitchCases.add(SwitchCase.of(i, lab));
-//				if(TRACING)
-//				LabelDeclaration labelDecl = accumLabels.get(i-1);
-//				System.out.println(ident()+".MAKE_READY_FOR_CODING: add "+i+"  " + labelDecl.identifier + "(index=" +labelDecl.index + ") = "+lab);
 			}
 		}			
 		READY_FOR_CODING = true;
-//		print("READY_FOR_CODING: Testing");
-//		Util.IERR();
 	}
 	
-	/**
-	 * ClassFile coding utility: Build the TableSwitch Instruction.
-	 * @param codeBuilder the codeBuilder to use
-	 */
+	/// ClassFile coding utility: Build the TableSwitch Instruction.
+	/// @param codeBuilder the codeBuilder to use
 	public void build_JUMPTABLE(BlockCodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		if(TRACING) System.out.println(ident()+".build_JUMPTABLE: "+this);
@@ -238,24 +207,19 @@ public class LabelList {
 		//
 		// *******************************************************************************
 		// Build the TableSwitch Instruction
-//		Label defaultTarget = codeBuilder.newLabel(); // beginning of the default handler block.
 		int lowValue = 1;            // the minimum key value.
 		int highValue = accumLabelSize(); // the maximum key value.
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
-//		FieldRefEntry FDE_JTX=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),"_JTX", ConstantDescs.CD_int);
 		codeBuilder
 			.aload(0)
-//			.getfield(FDE_JTX)
 			.getfield(RTS.FRE.RTObject_JTX(pool))
 			.tableswitch(lowValue, highValue, defaultTarget, this.getTableSwitchCases(codeBuilder))
 			.labelBinding(defaultTarget);
 	}
 	
-	/**
-	 * ClassFile coding utility: Build a labelBinding.
-	 * @param label the label to bind
-	 * @param codeBuilder the codeBuilder to use
-	 */
+	/// ClassFile coding utility: Build a labelBinding.
+	/// @param label the label to bind
+	/// @param codeBuilder the codeBuilder to use
 	public void labelBinding(LabelDeclaration label,CodeBuilder codeBuilder) {
 		if(!READY_FOR_CODING) MAKE_READY_FOR_CODING(codeBuilder);
 		BlockDeclaration labelContext = BlockDeclaration.labelContext;
@@ -267,11 +231,9 @@ public class LabelList {
 		codeBuilder.labelBinding(switchCase.target());
 	}
 
-	/**
-	 * Debug utility: Print Syntax tree
-	 * @param indent indentation
-	 * @param owner the BlockDeclaration owning this LabelList
-	 */
+	/// Debug utility: Print Syntax tree
+	/// @param indent indentation
+	/// @param owner the BlockDeclaration owning this LabelList
 	public void printTree(final int indent, final BlockDeclaration owner) {
 		if(Option.internal.PRINT_SYNTAX_TREE > 2) {
 			System.out.println(SyntaxClass.edIndent(indent)+this);
@@ -280,10 +242,8 @@ public class LabelList {
 		}
 	}
 	
-	/**
-	 * Debug utility: print the LabelList
-	 * @param title title String
-	 */
+	/// Debug utility: print the LabelList
+	/// @param title title String
 	public void print(String title) {
 		System.out.println("\n************ BEGIN LabelList[" +sequ + "]: "+title+" ************");
 		System.out.println("*** DeclaredIn: "+declaredIn.identifier+"  READY_FOR_CODING="+READY_FOR_CODING);
@@ -317,7 +277,6 @@ public class LabelList {
 			for(LabelDeclaration lab:declaredLabels) {
 				s = s + sep + lab.identifier + '[' + lab.declaredIn.externalIdent + ':' + lab.index + ']';				
 				s = s + "atLine:" + lab.lineNumber;
-//				sep = "\n";
 				sep = " ";
 			}
 		} else s = s + " With no labels";
@@ -329,15 +288,12 @@ public class LabelList {
 	// *** Attribute File I/O
 	// ***********************************************************************************************
 
-	/**
-	 * Write a LabelList to a AttributeOutputStream.
-	 * @param labelList the LabelList to write.
-	 * @param oupt the AttributeOutputStream to write to.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Write a LabelList to a AttributeOutputStream.
+	/// @param labelList the LabelList to write.
+	/// @param oupt the AttributeOutputStream to write to.
+	/// @throws IOException if something went wrong.
 	public static void writeLabelList(LabelList labelList,AttributeOutputStream oupt) throws IOException {
 		if(labelList == null) {
-//		if(labelList == null || labelList.initialList == null) {
 			oupt.writeBoolean(false);
 		} else {
 			oupt.writeBoolean(true);
@@ -345,18 +301,15 @@ public class LabelList {
 			oupt.writeObj(labelList.declaredIn);
 			oupt.writeShort(labelList.declaredLabelSize());			
 			for(LabelDeclaration lab:labelList.declaredLabels) {
-//				System.out.println("LabelList.writeLabelList: "+lab+", declaredIn="+lab.declaredIn+"   labelList.declaredIn="+labelList.declaredIn);
 				oupt.writeObj(lab);
 			}
 		}
 	}
 
-	/**
-	 * Read and return a LabelList.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the LabelList object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a LabelList.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the LabelList object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static LabelList readLabelList(AttributeInputStream inpt) throws IOException {
 		boolean present = inpt.readBoolean();
 		LabelList labelList = null;
@@ -368,12 +321,10 @@ public class LabelList {
 				System.out.println("LabelList.readLabelList: Read Label List: "+n);
 			for(int i=0;i<n;i++) {
 				LabelDeclaration lab = (LabelDeclaration) inpt.readObj();
-//				System.out.println("LabelList.readLabelList: Read Label: "+lab.identifier);
 				labelList.add(lab);
 			}
 		}
 		Util.TRACE_INPUT("LabelList: " + labelList);
-//		System.out.println("LabelList.readLabelList: " + labelList);
 		return(labelList);
 	}
 

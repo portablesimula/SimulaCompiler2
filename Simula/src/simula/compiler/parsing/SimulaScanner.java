@@ -415,7 +415,7 @@ public final class SimulaScanner extends DefaultScanner {
 	///      decimal-fraction
 	///        = .  unsigned-integer
 	///      exponent-part
-	///        =  ( &amp; | &amp;&amp; )  [ + | - ]  unsigned-integer
+	///        =  ( & | && )  [ + | - ]  unsigned-integer
 	///      unsigned-integer
 	///        =  digit  {  digit  |  _  }
 	///        |  radix  R  radix-digit  {  radix-digit  |  _  radix-digit  }
@@ -515,9 +515,9 @@ public final class SimulaScanner extends DefaultScanner {
     /// <pre>
     /// Reference-Syntax:
     /// 
-    ///      exponent-part =  ( &amp; | &amp;&amp; )  [ + | - ]  unsigned-integer
+    ///      exponent-part =  ( & | && )  [ + | - ]  unsigned-integer
     /// </pre>
-    /// Pre-Condition: First &amp; is already read
+    /// Pre-Condition: First & is already read
     /// 
     /// End-Condition: current is last character of construct                 
     ///                getNext will return first character after construct

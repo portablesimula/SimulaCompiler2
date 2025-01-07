@@ -237,7 +237,7 @@ public final class Simula {
 
 	/// Set keep .java files.
 	/// <p>
-	/// Option: -keepJava &lt;directory> Specify where to place generated .java files
+	/// Option: -keepJava <directory> Specify where to place generated .java files
 	/// 
 	/// @param dir the .java output directory-
 	private static void setKeepJava(final String dir) {
@@ -247,7 +247,7 @@ public final class Simula {
 
 	/// Set output directory.
 	/// <p>
-	/// Option: -output &lt;directory> Specify where to place generated executable .jar file
+	/// Option: -output <directory> Specify where to place generated executable .jar file
 	/// 
 	/// @param dir the output directory-
 	private static void setOutputDir(final String dir) {

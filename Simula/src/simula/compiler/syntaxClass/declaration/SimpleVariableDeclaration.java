@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -30,110 +28,90 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Simple Variable Declaration.
- * 
- * <pre>
- * 
- * Simula Standard: 5.1 Simple variable declarations
- * 
- *  simple-variable-declaration
- *        =  type  type-list
- *
- *    type-list
- *        =  type-list-element  { , type-list-element }
- *
- *    type-list-element
- *        =  identifier
- *        |  constant-element 
- * 
- *    constant-element
- *        =  identifier  "="  value-expression
- *        |  identifier  "="  text-expression
- *   
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SimpleVariableDeclaration.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Simple Variable Declaration.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 5.1 Simple variable declarations
+/// 
+///  simple-variable-declaration
+///        =  type  type-list
+/// 
+///    type-list
+///        =  type-list-element  { , type-list-element }
+/// 
+///    type-list-element
+///        =  identifier
+///        |  constant-element 
+/// 
+///    constant-element
+///        =  identifier  "="  value-expression
+///        |  identifier  "="  text-expression
+///   
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/declaration/SimpleVariableDeclaration.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public class SimpleVariableDeclaration extends Declaration {
-	// String identifier; // Inherited
-	// String externalIdent; // Inherited
-	// Type type; // Inherited
-
-	/**
-	 * Constant indicator. Is used to prevent assignment of a new value.
-	 */
+	/// Constant indicator. Is used to prevent assignment of a new value.
 	protected boolean constant;
 
-	/**
-	 * The constant initial value.
-	 */
+	/// The constant initial value.
 	public Expression constantElement;
 
-	/**
-	 * Create a new SimpleVariableDeclaration.
-	 * 
-	 * @param type       the variable type
-	 * @param identifier the variable identifier
-	 */
+	/// Create a new SimpleVariableDeclaration.
+	/// 
+	/// @param type       the variable type
+	/// @param identifier the variable identifier
 	public SimpleVariableDeclaration(final Type type, final String identifier) {
 		super(identifier);
 		this.declarationKind = ObjectKind.SimpleVariableDeclaration;
 		this.type = type;
 	}
 
-	/**
-	 * Create a new SimpleVariableDeclaration.
-	 * 
-	 * @param type            the variable type
-	 * @param identifier      the variable identifier
-	 * @param constant        the constant indicator
-	 * @param constantElement a constant initial value
-	 */
+	/// Create a new SimpleVariableDeclaration.
+	/// @param type            the variable type
+	/// @param identifier      the variable identifier
+	/// @param constant        the constant indicator
+	/// @param constantElement a constant initial value
 	SimpleVariableDeclaration(final Type type, final String identifier, final boolean constant, final Constant constantElement) {
 		this(type, identifier);
 		this.constant = constant;
 		this.constantElement = constantElement;
 	}
 
-	/**
-	 * Constant indicator. Is used to prevent assignment of a new value.
-	 * 
-	 * @return the constant indicator
-	 */
+	/// Constant indicator. Is used to prevent assignment of a new value.
+	/// @return the constant indicator
 	public boolean isConstant() {
 		return (constant || constantElement != null);
 	}
 
-	/**
-	 * Parse a simple variable declaration.
-	 * <pre>
-	 * 
-	 * Syntax:
-	 * 
-	 *  simple-variable-declaration
-	 *        =  type  type-list
-	 *
-	 *    type-list
-	 *        =  type-list-element  { , type-list-element }
-	 *
-	 *    type-list-element
-	 *        =  identifier
-	 *        |  constant-element 
-	 * 
-	 *    constant-element
-	 *        =  identifier  "="  value-expression
-	 *        |  identifier  "="  text-expression
-	 *   
-	 * </pre>
-	 * Precodition: Type  is already read.
-	 * @param type            the variable type
-	 * @param declarationList the declaration list to update
-	 */
+	/// Parse a simple variable declaration.
+	/// <pre>
+	/// 
+	/// Syntax:
+	/// 
+	///  simple-variable-declaration
+	///        =  type  type-list
+	/// 
+	///    type-list
+	///        =  type-list-element  { , type-list-element }
+	/// 
+	///    type-list-element
+	///        =  identifier
+	///        |  constant-element 
+	/// 
+	///    constant-element
+	///        =  identifier  "="  value-expression
+	///        |  identifier  "="  text-expression
+	///   
+	/// </pre>
+	/// Precodition: Type  is already read.
+	/// @param type            the variable type
+	/// @param declarationList the declaration list to update
 	static void expectSimpleVariable(final Type type, final DeclarationList declarationList) {
 		// identifier-list = identifier { , identifier }
 		if (Option.internal.TRACE_PARSE)
@@ -201,11 +179,9 @@ public class SimpleVariableDeclaration extends Declaration {
 	}
 
 	
-	/**
-	 * ClassFile coding utility: get FieldRefEntry of this SimpleVariable.
-	 * @param pool the ConstantPoolBuilder to use.
-	 * @return the FieldRefEntry of this SimpleVariable.
-	 */
+	/// ClassFile coding utility: get FieldRefEntry of this SimpleVariable.
+	/// @param pool the ConstantPoolBuilder to use.
+	/// @return the FieldRefEntry of this SimpleVariable.
 	public FieldRefEntry getFieldRefEntry(ConstantPoolBuilder pool) {
 		ClassDesc owner=declaredIn.getClassDesc();
 		return(pool.fieldRefEntry(owner, getFieldIdentifier(), type.toClassDesc()));
@@ -241,7 +217,6 @@ public class SimpleVariableDeclaration extends Declaration {
 			.putfield(codeBuilder.constantPool().fieldRefEntry(BlockDeclaration.currentClassDesc(),this.getFieldIdentifier(), type.toClassDesc()));
 	}
 
-	
 	@Override
 	public void printTree(final int indent, final Object head) {
 		verifyTree(head);
@@ -250,20 +225,16 @@ public class SimpleVariableDeclaration extends Declaration {
 
 	@Override
 	public String toString() {
-//		String s = "Type=" + type + ", identifier=" + identifier;
 		String s = identifier + " Type=" + type;
 		if (constantElement != null)
 			s = s + ", constantElement=" + constantElement.toString();
-//		return ("SimpleVariableDeclaration "+s);
 		return (s);
 	}
 
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	public SimpleVariableDeclaration() {
 		super(null);
 		this.declarationKind = ObjectKind.SimpleVariableDeclaration;
@@ -289,12 +260,10 @@ public class SimpleVariableDeclaration extends Declaration {
 		oupt.writeObj(constantElement);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static SimpleVariableDeclaration readObject(AttributeInputStream inpt) throws IOException {
 		SimpleVariableDeclaration var = new SimpleVariableDeclaration();
 		var.OBJECT_SEQU = inpt.readSEQU(var);
@@ -314,29 +283,5 @@ public class SimpleVariableDeclaration extends Declaration {
 		Util.TRACE_INPUT("Variable: " + var.OBJECT_SEQU + " " + var);
 		return(var);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeBoolean(constant);
-//		oupt.writeObj(constantElement);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//
-//		// *** SyntaxClass
-//		lineNumber = inpt.readShort();
-//
-//		// *** Declaration
-//		identifier = inpt.readString();
-//		externalIdent = inpt.readString();
-//		type = inpt.readType();
-////		declaredIn = (DeclarationScope) inpt.readObj();
-//		
-//		// *** SimpleVariableDeclaration
-//		constant = inpt.readBoolean();
-//		constantElement = (Expression) inpt.readObj();
-//	}
 
 }

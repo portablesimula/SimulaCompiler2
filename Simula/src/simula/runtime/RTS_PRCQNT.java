@@ -1,53 +1,40 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
-/**
-* Procedure quantity.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_PRCQNT.java"><b>Source File</b></a>.
-*  
-* @author Øystein Myhre Andersen
-*/
+/// Procedure quantity.
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_PRCQNT.java"><b>Source File</b></a>.
+///  
+/// @author Øystein Myhre Andersen
 public final class RTS_PRCQNT {
 	
-	/**
-	 * Static link.
-	 */
+	/// Static link.
 	final RTS_RTObject staticLink;
 	
-	/**
-	 * The Java class representing the Simula Procedure.
-	 */
+	/// The Java class representing the Simula Procedure.
 	final Class<?> procedure;
 
 	// Constructor
-	/**
-	 * Creeate a new RTS_PRCQNT.
-	 * @param SL staticLink
-	 * @param procedure procedure class
-	 */
+	/// Creeate a new RTS_PRCQNT.
+	/// @param SL staticLink
+	/// @param procedure procedure class
 	public RTS_PRCQNT(final RTS_RTObject SL, final Class<?> procedure) {
 		this.staticLink = SL;
 		this.procedure = procedure;
 	}
 
-	/**
-	 * Call procedure formal.
-	 * @return the procedure instance
-	 * @throws RTS_SimulaRuntimeError if operation fail
-	 */
+	/// Call procedure formal.
+	/// @return the procedure instance
+	/// @throws RTS_SimulaRuntimeError if operation fail
 	public RTS_PROCEDURE CPF() {
 		try {
-//			System.out.println("RTS_PRCQNT.CPF: "+procedure);
 			// Get 'default' constructor: <Procedure>(_RTObject SL);
 			Constructor<?> constr = procedure.getConstructor(new Class[] { RTS_RTObject.class });
 			Object obj = constr.newInstance(staticLink);

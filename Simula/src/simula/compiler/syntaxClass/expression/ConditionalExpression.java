@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -20,47 +18,37 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Conditional Expression.
- * 
- * <pre>
- * 
- * Syntax: 
- * 
- *   conditional-expression
- *       = IF Boolean-expression THEN simple-expression ELSE expression
- * 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ConditionalExpression.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Conditional Expression.
+/// 
+/// <pre>
+/// 
+/// Syntax: 
+/// 
+///   conditional-expression
+///       = IF Boolean-expression THEN simple-expression ELSE expression
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ConditionalExpression.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class ConditionalExpression extends Expression {
 	
-	/**
-	 * The condition.
-	 */
+	/// The condition.
 	Expression condition;
 	
-	/**
-	 * The then branch expression
-	 */
+	/// The then branch expression
 	Expression thenExpression;
 	
-	/**
-	 * The else branch expression
-	 */
+	/// The else branch expression
 	Expression elseExpression;
 
-	/**
-	 * Create a new ConditionalExpression.
-	 * @param type expression's type
-	 * @param condition the condition
-	 * @param thenExpression then branch expression
-	 * @param elseExpression else branch expression
-	 */
+	/// Create a new ConditionalExpression.
+	/// @param type expression's type
+	/// @param condition the condition
+	/// @param thenExpression then branch expression
+	/// @param elseExpression else branch expression
 	ConditionalExpression(final Type type, final Expression condition, final Expression thenExpression, final Expression elseExpression) {
 		this.condition = condition;
 		this.thenExpression = thenExpression; thenExpression.backLink=this;
@@ -130,9 +118,7 @@ public final class ConditionalExpression extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ConditionalExpression() {}
 
 	@Override
@@ -151,12 +137,10 @@ public final class ConditionalExpression extends Expression {
 		oupt.writeObj(elseExpression);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ConditionalExpression.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ConditionalExpression read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ConditionalExpression readObject(AttributeInputStream inpt) throws IOException {
 		ConditionalExpression expr = new ConditionalExpression();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -172,21 +156,5 @@ public final class ConditionalExpression extends Expression {
 		Util.TRACE_INPUT("readConditionalExpression: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(condition);
-//		oupt.writeObj(thenExpression);
-//		oupt.writeObj(elseExpression);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		condition = (Expression) inpt.readObj();
-//		thenExpression = (Expression) inpt.readObj();
-//		elseExpression = (Expression) inpt.readObj();
-//	}
 
 }

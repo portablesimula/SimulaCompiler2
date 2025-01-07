@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.transform;
 
 import java.util.List;
@@ -24,45 +22,56 @@ import java.lang.classfile.instruction.SwitchCase;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-// ========================================
-// NOTE NOTE NOTE:  PRØV DENNE FØRST
-//=========================================
-// RETT: SimulaCompiler  line  394
-//=========================================
-
-
-/**
- * Simula .class file transformer.
- * <p>
- * CASE 1: Repair the JUMPTABLE.
- * <p>
- * Locate the instruction sequence:
- * <pre>
- *    ... any instruction(s)
- *    GETFIELD _JTX
- *    ICONST n   or  BIPUSH  or SIPUSH
- *    INVOKESTATIC _JUMPTABLE
- * </pre>
- * Replace it by:
- * <pre>
- *    ... any instruction(s)
- *    GETFIELD _JTX
- *    TABLESWITCH ...
- * </pre>
- * <br> 
- * <br> 
- * CASE 2: Repair a LABEL.
- * <p>
- * Locate the instruction sequence:
- * <pre>
- *    ICONST n   or  BIPUSH  or SIPUSH
- *    INVOKESTATIC _LABEL
- * </pre>
- * Replace it by:
- * <pre>
- *    LABEL (pseudo instruction)
- * </pre>
- */
+/// Simula .class file transformer.
+///
+/// To easily modify the code, the Simula Compiler generates certain method call in the .java file:
+/// <br>Process the stream of [CodeElement]s looking for two particular code sequences:
+/// 
+/// CASE 1: Repair the JUMPTABLE(_JTX, n).
+/// 
+/// This method-call is a placeholder for where to put in a Jump-Table.
+/// <br>The parameter 'n' is the number of cases.
+///
+/// JUMPTABLE will always occur before any any labels.
+///
+/// Locate the instruction sequence:
+/// <pre>
+///    ... any instruction(s)
+///    GETFIELD _JTX
+///    ICONST n   or  BIPUSH  or SIPUSH
+///    INVOKESTATIC _JUMPTABLE
+/// </pre>
+/// Replace it by:
+/// <pre>
+///    ... any instruction(s)
+///    GETFIELD _JTX
+///    TABLESWITCH ... uses 'n' labels which is binded later.
+/// </pre>
+///
+///
+/// CASE 2: Repair a LABEL(n).
+/// 
+/// This method-call is used to signal the occurrence of a Simula Label.
+/// <br>The label 'n' in the TABLESWITCH is binded.
+/// 
+/// Locate the instruction sequence:
+/// <pre>
+///    ICONST n   or  BIPUSH  or SIPUSH
+///    INVOKESTATIC _SIM_LABEL
+///    NEXT-INSTRUCTION
+/// </pre>
+/// Replace it by:
+/// <pre>
+///    PREV-INSTRUCTION
+///    LABELBINDING( case n )
+///    NEXT-INSTRUCTION
+/// </pre>
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/transform/SimulaCodeTransform.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 final class SimulaCodeTransform implements CodeTransform {
 	/// The switch cases.
 	private List<SwitchCase> cases;
@@ -146,13 +155,11 @@ final class SimulaCodeTransform implements CodeTransform {
 		prevElement = element;
 	}
 
-	/**
-	 * ConstantInstruction: ICONST n or BIPUSH or SIPUSH
-	 * 
-	 * @param element a CodeElement: ICONST n or BIPUSH or SIPUSH
-	 * @return the integer constant value
-	 * @throws RuntimeException if something went wrong
-	 */
+	/// ConstantInstruction: ICONST n or BIPUSH or SIPUSH
+	/// 
+	/// @param element a CodeElement: ICONST n or BIPUSH or SIPUSH
+	/// @return the integer constant value
+	/// @throws RuntimeException if something went wrong
 	private int getConst(CodeElement element) {
 		if (element instanceof ConstantInstruction instr) {
 			ConstantDesc val = instr.constantValue();

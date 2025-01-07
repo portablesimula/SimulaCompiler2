@@ -1,17 +1,17 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 // ************************************************************
-// *** FRAMEWORK for NonLocal Label-Variable in Java Coding
+// *** FRAMEWORK for Label-Variable in Java Coding
 // ************************************************************
-/**
- * This class represent a Simula Label quantity
- *
- */
+/// This class represent a Simula Label quantity
 @SuppressWarnings("serial")
 public final class RTS_LABEL extends RuntimeException {
-	/**
-	 * Static link, i.e. the block in which the label is defined.
-	 */
+	/// Static link, i.e. the block in which the label is defined.
 	public final RTS_RTObject _SL;
 	
 	/// Prefix level.
@@ -23,13 +23,11 @@ public final class RTS_LABEL extends RuntimeException {
 	/// Label identifier. To improve error and trace messages.
 	public final String identifier; // To improve error and trace messages.
 
-	/**
-	 * Create a label quantity
-	 * @param _SL static link
-	 * @param _PRFX prefix level
-	 * @param index label index
-	 * @param identifier label identifier
-	 */
+	/// Create a label quantity
+	/// @param _SL static link
+	/// @param _PRFX prefix level
+	/// @param index label index
+	/// @param identifier label identifier
 	public RTS_LABEL(final RTS_RTObject _SL, final int _PRFX, final int index, final String identifier) {
 		this._SL = _SL;
 		this._PRFX = _PRFX;

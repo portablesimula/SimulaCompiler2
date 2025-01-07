@@ -1,40 +1,33 @@
 package simula.runtime;
 
-/**
- * For-statement While element, not text
- * 
- * <pre>
- * 		For i:= &lt;Expr> while &lt;Cond>
- * </pre>
- *
- * @param <T> the type of this element
- */
+/// For-statement While element, not text
+/// 
+/// <pre>
+/// 		For i:= <Expr> while <Cond>
+/// </pre>
+/// @param <T> the type of this element
 public final class FOR_WhileElt<T> extends FOR_Element {
-	/**
-	 * The for-statement control variable.
-	 */
+	/// The for-statement control variable.
 	final RTS_NAME<T> cvar;
-	/**
-	 * A Value expression.
-	 */
+	
+	/// A Value expression.
 	final RTS_NAME<T> expr;
-	/**
-	 * The condition that determines whether to continue.
-	 */
+	
+	/// The condition that determines whether to continue.
 	RTS_NAME<Boolean> cond;
 
-	/**
-	 * Create While element. 
-	 * @param cvar the for-statement control variable
-	 * @param expr a Value expression
-	 * @param cond a Boolean exppression
-	 */
+	/// Create While element. 
+	/// @param cvar the for-statement control variable
+	/// @param expr a Value expression
+	/// @param cond a Boolean exppression
 	public FOR_WhileElt(final RTS_NAME<T> cvar, final RTS_NAME<T> expr, final RTS_NAME<Boolean> cond) {
 		this.cvar = cvar;
 		this.expr = expr;
 		this.cond = cond;
 	}
 
+    /// Update the control variable with the next value if any.
+    /// @return {@code true} if the control variable was updated; otherwise {@code false}.
 	@Override
 	public Boolean next() {
 		T val = expr.get();

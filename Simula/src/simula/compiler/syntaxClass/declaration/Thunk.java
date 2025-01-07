@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.declaration;
 
 import java.io.IOException;
@@ -24,9 +29,7 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Thunk Declaration
- */
+/// Thunk Declaration.
 public final class Thunk extends DeclarationScope {
 
 	/** Local variable */ private static int OBJECT_SEQU = 0;
@@ -34,11 +37,9 @@ public final class Thunk extends DeclarationScope {
 	/** Local variable */ private int kind; //Parameter.Kind kind;
 	/** Local variable */ private Expression expr;
 	
-	/**
-	 * Create a new Thunk object.
-	 * @param kind the kind code
-	 * @param expr the Thunk expression.
-	 */
+	/// Create a new Thunk object.
+	/// @param kind the kind code
+	/// @param expr the Thunk expression.
 	private Thunk(int kind,Expression expr) {
 		super(Global.sourceName + "$THUNK$" + (++OBJECT_SEQU));
 		this.declarationKind = ObjectKind.Thunk;
@@ -64,14 +65,12 @@ public final class Thunk extends DeclarationScope {
 	}
 
 	// ***********************************************************************************************
-	// *** buildInvoke
+	// *** ClassFile Coding Utility: buildInvoke
 	// ***********************************************************************************************
-	/**
-	 * Build invoke Thunk
-	 * @param kind a kind code
-	 * @param expr the Thunk expression
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile Coding Utility: Build invoke Thunk
+	/// @param kind a kind code
+	/// @param expr the Thunk expression
+	/// @param codeBuilder the codeBuilder to use.
 	public static void buildInvoke(int kind,Expression expr,CodeBuilder codeBuilder) {
 		//  new RTS_NAME< TYPE >() {
 		//     public TYPE get() {
@@ -91,6 +90,7 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildClassFile
 	// ***********************************************************************************************
+	@Override
 	public byte[] buildClassFile() {
 		if(Option.verbose) System.out.println("Begin buildClassFile: "+CD_ThisClass);
 		ClassHierarchy.addClassToSuperClass(CD_ThisClass, RTS.CD.RTS_NAME);
@@ -156,15 +156,13 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildConstructor
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the Constructor.
-	 * <pre>
-	 *     public ClassIdent(RTS_RTObject staticLink) {
-	 *         super(staticLink);
-	 *	   }
-	 * </pre>
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the Constructor.
+	/// <pre>
+	///     public ClassIdent(RTS_RTObject staticLink) {
+	///         super(staticLink);
+	///    }
+	/// </pre>
+	/// @param codeBuilder the CodeBuilder
 	private void buildConstructor(CodeBuilder codeBuilder) {
 
 		Label begScope = codeBuilder.newLabel();
@@ -186,15 +184,12 @@ public final class Thunk extends DeclarationScope {
 
 
 	// ***********************************************************************************************
-	// *** ByteCoding: buildMethod_get
+	// *** ClassFile Coding Utility: buildMethod_get
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the 'get' method.
-	 * <p>
-	 * 	public Integer get() { return(((adHoc13)(_ENV._SL)).n);
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// Generate byteCode for the 'get' method.
+	/// <p>
+	/// 	public Integer get() { return(((adHoc13)(_ENV._SL)).n);
+	/// @param codeBuilder the CodeBuilder
 	void buildMethod_get(CodeBuilder codeBuilder) {
 		Global.enterScope(this);
 			Label begScope = codeBuilder.newLabel();
@@ -228,17 +223,14 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_put
 	// ***********************************************************************************************
-	/**
-	 * Generate byteCode for the 'put' method.
-	 * <p>
-	 * 	public Integer put(Integer x_) {
-	 * 		return(((adHoc13)(_ENV._SL)).n=(int)x_);
-	 *  }
-	 *
-	 * @param codeBuilder the CodeBuilder
-	 * @param beforeDot expression.
-	 * @param expr the Thunk expression.
-	 */
+	/// Generate byteCode for the 'put' method.
+	/// <p>
+	/// 	public Integer put(Integer x_) {
+	/// 		return(((adHoc13)(_ENV._SL)).n=(int)x_);
+	///  }
+	/// @param codeBuilder the CodeBuilder
+	/// @param beforeDot expression.
+	/// @param expr the Thunk expression.
 	void buildMethod_put(CodeBuilder codeBuilder, Expression beforeDot, Expression expr) {
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
 		VariableExpression writeableVariable=expr.getWriteableVariable();
@@ -334,10 +326,8 @@ public final class Thunk extends DeclarationScope {
 	// ***********************************************************************************************
 	// *** ByteCoding: buildMethod_put2    Build syntetic bridge to the 'put' method
 	// ***********************************************************************************************
-	/**
-	 * Build syntetic bridge to the 'put' method.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile Coding Utility: Build synthetic bridge to the 'put' method.
+	/// @param codeBuilder the codeBuilder to use.
 	private void buildMethod_put2(CodeBuilder codeBuilder) {
 		Label begScope = codeBuilder.newLabel();
 		Label endScope = codeBuilder.newLabel();
@@ -392,11 +382,9 @@ public final class Thunk extends DeclarationScope {
 	// ********************************************************************
 	// *** edProcedureQuant
 	// ********************************************************************
-	/**
-	 * Coding Utility: Edit new procedure quant.
-	 * @param apar the actual parameter
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// ClassFile Coding Utility: Edit new procedure quant.
+	/// @param apar the actual parameter
+	/// @param codeBuilder the CodeBuilder
 	private static void buildProcedureQuant(final Expression apar,CodeBuilder codeBuilder) {
 //        0: new           #7                  // class simula/runtime/RTS_PRCQNT
 //        3: dup

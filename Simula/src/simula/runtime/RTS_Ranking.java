@@ -1,55 +1,40 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import static simula.runtime.RTS_UTIL.*;
 
-/**
- * Utility class Ranking.
- * <p>
- * This is an implementation of a balanced tree used to support the sequencing set in class Simulation.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_Ranking.java"><b>Source File</b></a>.
- *
- * @author Øystein Myhre Andersen
- */
+/// Utility class Ranking.
+/// 
+/// This is an implementation of a balanced tree used to support the sequencing set in class Simulation.
+/// 
+/// Used by [RTS_Simulation], [RTS_Process] and [RTS_EVENT_NOTICE].
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_Ranking.java"><b>Source File</b></a>.
+/// @author Øystein Myhre Andersen
 public class RTS_Ranking {
 	
-	/**
-	 * Back link.
-	 */
+	/// Back link.
 	RTS_Ranking bl;
 	
-	/**
-	 * Left link.
-	 */
+	/// Left link.
 	RTS_Ranking ll;
 	
-	/**
-	 * Right link.
-	 */
+	/// Right link.
 	RTS_Ranking rl;
 	
-	/**
-	 * The ranking value.
-	 */
+	/// The ranking value.
 	double rnk;
 
-	/**
-	 * Default Constructor.
-	 */
+	/// Default Constructor.
 	RTS_Ranking() {}
 
-	/**
-	 * Returns the predecessor of the given instance.
-	 * @param ins the given instance
-	 * @return pred the predecessor of the given instance.
-	 */
+	/// Returns the predecessor of the given instance.
+	/// @param ins the given instance
+	/// @return pred the predecessor of the given instance.
 	static RTS_Ranking PRED(RTS_Ranking ins) {
 		RTS_Ranking prd = null; // Return value
 		if (ins.rl == ins) {
@@ -73,11 +58,9 @@ public class RTS_Ranking {
 		return (prd);
 	}
 
-	/**
-	 * Returns the successor of the given instance.
-	 * @param ins the given instance
-	 * @return suc the successor of the given instance.
-	 */
+	/// Returns the successor of the given instance.
+	/// @param ins the given instance
+	/// @return suc the successor of the given instance.
 	static RTS_Ranking SUC(RTS_Ranking ins) {
 		RTS_Ranking suc = null; // Return value
 		if (ins.bl == null) {
@@ -96,10 +79,8 @@ public class RTS_Ranking {
 		return (suc);
 	}
 
-	/**
-	 * Clear the Ranking tree.
-	 * @param head the head of the tree
-	 */
+	/// Clear the Ranking tree.
+	/// @param head the head of the tree
 	static void CLEAR(RTS_Ranking head) {
 		RTS_Ranking ins = null;
 		RTS_Ranking temp = null;
@@ -136,11 +117,9 @@ public class RTS_Ranking {
 		}
 	}
 
-	/**
-	 * Check if the Ranking tree is empty.
-	 * @param head the head of the tree
-	 * @return true if the Ranking tree is empty, otherwise false
-	 */
+	/// Check if the Ranking tree is empty.
+	/// @param head the head of the tree
+	/// @return true if the Ranking tree is empty, otherwise false
 	static boolean EMPTY(RTS_Ranking head) {
 		boolean empty = false; // Return value
 		if (head.rl != head) {
@@ -150,11 +129,9 @@ public class RTS_Ranking {
 		return (empty);
 	}
 
-	/**
-	 * Returns the first element of the ranking tree.
-	 * @param head the head of the tree
-	 * @return the first element of the ranking tree
-	 */
+	/// Returns the first element of the ranking tree.
+	/// @param head the head of the tree
+	/// @return the first element of the ranking tree
 	static RTS_Ranking FIRST(RTS_Ranking head) {
 		RTS_Ranking first = null; // Return value
 		if (head.rl != head) {
@@ -167,11 +144,9 @@ public class RTS_Ranking {
 		return (first);
 	}
 
-	/**
-	 * Returns the last element of the ranking tree.
-	 * @param head the head of the tree
-	 * @return the last element of the ranking tree
-	 */
+	/// Returns the last element of the ranking tree.
+	/// @param head the head of the tree
+	/// @return the last element of the ranking tree
 	static RTS_Ranking LAST(RTS_Ranking head) {
 		RTS_Ranking last = null; // Return value
 		if (head.rl != head) {
@@ -184,11 +159,9 @@ public class RTS_Ranking {
 		return (last);
 	}
 
-	/**
-	 * Insert 'ins' following 'prd'.
-	 * @param ins argument
-	 * @param prd argument
-	 */
+	/// Insert 'ins' following 'prd'.
+	/// @param ins argument
+	/// @param prd argument
 	static void FOLLOW(RTS_Ranking ins, RTS_Ranking prd) {
 		if (ins.rl == ins) {
 			IERR("RANK_FOLLOW");
@@ -211,10 +184,8 @@ public class RTS_Ranking {
 		}
 	}
 
-	/**
-	 * Remove 'ins' from the ranking tree.
-	 * @param ins argument
-	 */
+	/// Remove 'ins' from the ranking tree.
+	/// @param ins argument
 	static void OUT(RTS_Ranking ins) {
 		RTS_Ranking suc = null;
 		RTS_Ranking bl = null;
@@ -273,12 +244,10 @@ public class RTS_Ranking {
 		}
 	}
 
-	/**
-	 * Insert 'ins' intp the ranking tree acording to the ranking value.
-	 * @param ins argument
-	 * @param head the head of the tree
-	 * @param rnk the ranking value
-	 */
+	/// Insert 'ins' intp the ranking tree acording to the ranking value.
+	/// @param ins argument
+	/// @param head the head of the tree
+	/// @param rnk the ranking value
 	static void INTO(RTS_Ranking ins, RTS_Ranking head, double rnk) {
 		if (ins.rl == ins)
 			IERR("RANK_INTO-1");
@@ -324,11 +293,9 @@ public class RTS_Ranking {
 		}
 	}
 
-	/**
-	 * Insert 'ins' preceding 'suc'.
-	 * @param ins argument
-	 * @param suc argument
-	 */
+	/// Insert 'ins' preceding 'suc'.
+	/// @param ins argument
+	/// @param suc argument
 	static void PRECEDE(RTS_Ranking ins, RTS_Ranking suc) {
 		if (ins.rl == ins)
 			IERR("RANK_PRECEDE-1");
@@ -353,12 +320,10 @@ public class RTS_Ranking {
 		}
 	}
 
-	/**
-	 * Insert 'ins' into the ranking tree acording to the ranking value with priority.
-	 * @param ins argument
-	 * @param head the head of the tree
-	 * @param rnk the ranking value
-	 */
+	/// Insert 'ins' into the ranking tree acording to the ranking value with priority.
+	/// @param ins argument
+	/// @param head the head of the tree
+	/// @param rnk the ranking value
 	static void INTO_PRIOR(RTS_Ranking ins, RTS_Ranking head, double rnk) {
 		if (ins.rl == ins)
 			IERR("RANK_PRIOR-1");

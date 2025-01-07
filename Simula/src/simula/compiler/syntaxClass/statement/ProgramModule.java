@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -29,87 +27,69 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Simula Program Module.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ProgramModule.java">
- * <b>Source File</b></a>.
- * 
- * <pre>
- * 
- * Simula Standard: Chapter 6 Program Modules
- *
- *      SIMULA-source-module
- *         = [ external-head ] ( program | procedure-declaration | class-declaration )
- *         
- *         external-head = external-declaration ; { external-declaration ; }
- *         
- *            external-declaration = external-procedure-declaration | external-class-declaration
- *            
- *			program = [ block-prefix ] block | [ block-prefix ] compound-statement
- * 
- *				block-prefix = class-identifier [ ( actual-parameter-part ) ]
- *
- *			procedure-declaration
- *			     = [ type ] PROCEDURE procedure-identifier procedure-head procedure-body
- *
- * </pre>
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Simula Program Module.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/ProgramModule.java">
+/// <b>Source File</b></a>.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: Chapter 6 Program Modules
+/// 
+///      SIMULA-source-module
+///         = [ external-head ] ( program | procedure-declaration | class-declaration )
+///         
+///         external-head = external-declaration ; { external-declaration ; }
+///         
+///            external-declaration = external-procedure-declaration | external-class-declaration
+///            
+/// 			program = [ block-prefix ] block | [ block-prefix ] compound-statement
+/// 
+/// 				block-prefix = class-identifier [ ( actual-parameter-part ) ]
+/// 
+/// 			procedure-declaration
+/// 			     = [ type ] PROCEDURE procedure-identifier procedure-head procedure-body
+/// 
+/// </pre>
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ProgramModule extends Statement {
 	
-	/**
-	 * The Variable SYSIN.
-	 */
+	/// The Variable SYSIN.
 	final private VariableExpression sysin;
 	
-	/**
-	 * The Variable SYSOUT.
-	 */
+	/// The Variable SYSOUT.
 	final private VariableExpression sysout;
 	
-	/**
-	 * The mainModule declaration.
-	 */
+	/// The mainModule declaration.
 	public final DeclarationScope mainModule;
 
-	/**
-	 * The external head
-	 */
+	/// The external head
 	public Vector<ExternalDeclaration> externalHead;
 
-	/**
-	 * Returns the mainModule identifier.
-	 * @return the mainModule identifier
-	 */
+	/// Returns the mainModule identifier.
+	/// @return the mainModule identifier
 	public String getIdentifier() { return(mainModule.identifier); }
 
-	/**
-	 * Returns the relative file name.
-	 * @return the relative file name
-	 */
+	/// Returns the relative file name.
+	/// @return the relative file name
 	public String getRelativeAttributeFileName() {
 		if(mainModule.declarationKind==ObjectKind.Class) return(Global.packetName+"/CLASS.AF");
 		if(mainModule.declarationKind==ObjectKind.Procedure) return(Global.packetName+"/PROCEDURE.AF");
 		else return(null);
 	}
 	  
-	/**
-	 * Returns true if this program mainModule is executable.
-	 * @return true if this program mainModule is executable
-	 */
+	/// Returns true if this program mainModule is executable.
+	/// @return true if this program mainModule is executable
 	public boolean isExecutable() {
 		if(mainModule.declarationKind==ObjectKind.SimulaProgram) return(true);
 		if(mainModule.declarationKind==ObjectKind.PrefixedBlock) return(true);
 		else return(false);
 	}
 
-	/**
-	 * Create a new ProgramModule.
-	 */
+	/// Create a new ProgramModule.
 	public ProgramModule() {
 		super(0);
 		DeclarationScope mainModule=null;
@@ -151,7 +131,6 @@ public final class ProgramModule extends Statement {
 			Util.IERR();
 			}
 		this.mainModule=mainModule;
-//		if(Option.PRINT_SYNTAX_TREE) mainModule.printTree(0);
 	}	
 
 	@Override
@@ -166,10 +145,8 @@ public final class ProgramModule extends Statement {
 	@Override
 	public void doJavaCoding() { mainModule.doJavaCoding(); }
 
-	/**
-	 * Create Java ClassFile.
-	 * @throws IOException if something went wrong
-	 */
+	/// Create Java ClassFile.
+	/// @throws IOException if something went wrong
 	public void createJavaClassFile() throws IOException {
 		Global.sourceLineNumber = lineNumber;
 		mainModule.createJavaClassFile();

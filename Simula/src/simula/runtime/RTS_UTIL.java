@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import java.io.File;
@@ -12,43 +10,28 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
-/**
- * Utility class containing a lot of common stuff.
- * <p>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_UTIL.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Utility class containing a lot of common stuff.
+/// 
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_UTIL.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class RTS_UTIL {
-	/**
-	 * Default constructor.
-	 */
+	/// Default constructor.
 	private RTS_UTIL(){}
 
-	/**
-	 * The runtime console. May be null
-	 */
+	/// The runtime console. May be null
 	static RTS_ConsolePanel console;
 
-	/**
-	 * The program ident.
-	 */
+	/// The program ident.
 	static String progamIdent;
 	
-	/**
-	 * The current module ident.
-	 */
+	/// The current module ident.
 	static String currentModid;
 	
-	/**
-	 * The current simula source line number.
-	 */
+	/// The current simula source line number.
 	static int currentSimLine;
 	
-	/**
-	 * Number of edit overflows.
-	 */
+	/// Number of edit overflows.
 	static int numberOfEditOverflows;
 
 
@@ -56,26 +39,19 @@ public final class RTS_UTIL {
 	// *****************************************
 	// *** Text utilities ***
 	// *****************************************
-	/**
-	 * Utility constant NOTEXT
-	 */
+	/// Utility constant NOTEXT
 	public final static RTS_TXT NOTEXT = new RTS_TXT();
 
-	/**
-	 * Text value assignment.
-	 * @param T the from text
-	 * @param U the target text
-	 * @return the resulting text
-	 */
+	/// Text value assignment.
+	/// @param T the from text
+	/// @param U the target text
+	/// @return the resulting text
 	public static RTS_TXT _ASGTXT(RTS_TXT T, RTS_TXT U) {
 		if (T == null)
 			T = NOTEXT;
 		if (U == null)
 			U = NOTEXT;
 		int fromLength = U.LENGTH;
-		
-//		System.out.println("RTS_UTIL: _ASGTXT \""+T.edText()+"\" <=== \""+U.edText()+'"');
-		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
 					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
@@ -86,21 +62,16 @@ public final class RTS_UTIL {
 		return (T);
 	}
 
-	/**
-	 * Text value assignment from String.
-	 * @param T the from text
-	 * @param s the target text
-	 * @return the resulting text
-	 */
+	/// Text value assignment from String.
+	/// @param T the from text
+	/// @param s the target text
+	/// @return the resulting text
 	public static RTS_TXT _ASGSTR(RTS_TXT T, final String s) {
 		if (T == null)
 			T = NOTEXT;
 		int fromLength = 0;
 		if (s != null)
 			fromLength = s.length();
-		
-//		System.out.println("RTS_UTIL: _ASGSTR \""+T.edText()+"\" <=== \""+s+'"');
-		
 		if (fromLength > T.LENGTH)
 			throw (new RTS_SimulaRuntimeError(
 					"RHS too long in text value assignment: LHS.length=" + T.LENGTH + ", RHS.length=" + fromLength));
@@ -114,73 +85,59 @@ public final class RTS_UTIL {
 	// **************************************************************
 	// *** TXTREL - Text value relations
 	// **************************************************************
-	/**
-	 * Text value relation - LT
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - LT
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_LT(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 1));
 	}
 
-	/**
-	 * Text value relation - EQ
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - EQ
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_EQ(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 2));
 	}
 
-	/**
-	 * Text value relation - LE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - LE
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_LE(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 3));
 	}
 
-	/**
-	 * Text value relation - GT
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - GT
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_GT(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 4));
 	}
 
-	/**
-	 * Text value relation - NE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - NE
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_NE(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 5));
 	}
 
-	/**
-	 * Text value relation - GE
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text value relation - GE
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean _TXTREL_GE(final RTS_TXT left, final RTS_TXT right) {
 		return (TXTREL(left, right, 6));
 	}
 
-	/**
-	 * Text value relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @param code relational code
-	 * @return true if relation holds
-	 */
+	/// Text value relation
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @param code relational code
+	/// @return true if relation holds
 	private static boolean TXTREL(RTS_TXT left, RTS_TXT right, int code) {
 		int i; // Loop index.
 		int dif; // Difference between lengths.
@@ -219,12 +176,10 @@ public final class RTS_UTIL {
 	// **************************************************************
 	// *** TXTREL - Text reference relations. == =/=
 	// **************************************************************
-	/**
-	 * Text reference equal relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text reference equal relation
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean TRF_EQ(RTS_TXT left, RTS_TXT right) {
 		if (left == null)
 			left = RTS_UTIL.NOTEXT;
@@ -239,22 +194,18 @@ public final class RTS_UTIL {
 		return (true);
 	}
 
-	/**
-	 * Text reference not equal relation
-	 * @param left left hand side
-	 * @param right right hand side
-	 * @return true if relation holds
-	 */
+	/// Text reference not equal relation
+	/// @param left left hand side
+	/// @param right right hand side
+	/// @return true if relation holds
 	public static boolean TRF_NE(final RTS_TXT left, final RTS_TXT right) {
 		return (!TRF_EQ(left, right));
 	}
 
-	/**
-	 * Integer Power: b ** x
-	 * @param b argument b
-	 * @param x argument x
-	 * @return b ** x
-	 */
+	/// Integer Power: b ** x
+	/// @param b argument b
+	/// @param x argument x
+	/// @return b ** x
 	public static int _IPOW(final int b, int x) {
 		if (x == 0) {
 			if (b == 0)
@@ -276,61 +227,51 @@ public final class RTS_UTIL {
 	// *** object IS classIdentifier
 	// ************************************************************
 	
-	/**
-	 * Object relation: IS.
-	 * <pre>
-	 *       simple-object-expression is class-identifier
-	 * </pre>
-	 * 
-	 * @param obj object reference
-	 * @param cls class reference
-	 * @return true: relation holds
-	 */
+	/// Object relation: IS.
+	/// <pre>
+	///       simple-object-expression is class-identifier
+	/// </pre>
+	/// 
+	/// @param obj object reference
+	/// @param cls class reference
+	/// @return true: relation holds
 	public static boolean _IS(final Object obj, final Class<?> cls) {
 		return ((obj == null) ? false : (obj.getClass() == cls));
 	}
 
-	/**
-	 * Standard Procedure sign.
-	 * <pre>
-	 * integer procedure sign(e);    e;
-	 *     sign := if e > 0 then  1
-	 *        else if e &lt; 0 then -1 else 0;
-	 * </pre>
-	 * 
-	 * The result is zero if the parameter is zero, one if the parameter is
-	 * positive, and minus one otherwise.
-	 * 
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
+	/// Standard Procedure sign.
+	/// <pre>
+	/// integer procedure sign(e);    e;
+	///     sign := if e > 0 then  1
+	///        else if e < 0 then -1 else 0;
+	/// </pre>
+	/// 
+	/// The result is zero if the parameter is zero, one if the parameter is
+	/// positive, and minus one otherwise.
+	/// 
+	/// @param e the argument e
+	/// @return resulting sign code
 	public static int isign(final int e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
 	
-	/**
-	 * Standard Procedure sign.
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
+	/// Standard Procedure sign.
+	/// @param e the argument e
+	/// @return resulting sign code
 	public static float fsign(final float e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
 	
-	/**
-	 * Standard Procedure sign.
-	 * @param e the argument e
-	 * @return resulting sign code
-	 */
+	/// Standard Procedure sign.
+	/// @param e the argument e
+	/// @return resulting sign code
 	public static double dsign(final double e) {
 		return ((e > 0) ? (1) : ((e < 0) ? -1 : 0));
 	}
 	
-	/**
-	 * Treat Exception
-	 * @param e the Throwable Object
-	 * @param obj the RTObject which object that received the exception
-	 */
+	/// Treat Exception
+	/// @param e the Throwable Object
+	/// @param obj the RTObject which object that received the exception
 	public static void treatException(final Throwable e, final RTS_RTObject obj) {
 		String threadID = (RTS_Option.VERBOSE) ? ("Thread:" + Thread.currentThread().getName() + '[' + obj + "]: ") : "";
 		if (RTS_Option.GOTO_TRACING) {
@@ -340,7 +281,6 @@ public final class RTS_UTIL {
 		
 		if (e instanceof RTS_LABEL) {
 			if (RTS_Option.GOTO_TRACING) {
-//				System.err.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 				RTS_UTIL.println("POSSIBLE GOTO OUT OF COMPONENT " + obj.edObjectAttributes());
 			}
 			RTS_RTObject DL = obj._DL;
@@ -353,7 +293,6 @@ public final class RTS_UTIL {
 				DL._CORUT.run();
 			} else {
 				String msg = "Illegal GOTO " + ((RTS_LABEL) e).identifier;
-//				System.out.println("RTS_UTIL.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
 				if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
 					callExceptionHandler(msg);
 				} else {
@@ -375,7 +314,6 @@ public final class RTS_UTIL {
 		} else if (e instanceof RuntimeException) {
 			String msg = getErrorMessage(e);
 			msg = msg.replace("RTS_SimulaRuntimeError: ", "");
-//			System.out.println("RTS_UTIL.treatException: EXCEPTION_HANDLER ="+RTS_ENVIRONMENT.EXCEPTION_HANDLER);
 			if (RTS_ENVIRONMENT.EXCEPTION_HANDLER != null) {
 				callExceptionHandler(msg);
 			} else {
@@ -403,16 +341,12 @@ public final class RTS_UTIL {
 		
 	}
 	
-	/**
-	 * Utility: Treat Runtime error
-	 * @param msg the message
-	 */
+	/// Utility: Treat Runtime error
+	/// @param msg the message
 	private static void callExceptionHandler(String msg) {
 		RTS_PRCQNT erh = RTS_ENVIRONMENT.EXCEPTION_HANDLER;
 		try {
 			RTS_ENVIRONMENT.EXCEPTION_HANDLER = null;
-//			RTS_ENVIRONMENT.IN_EXCEPTION_HANDLER = true;
-//			System.out.println("RTS_UTIL.callExceptionHandler: "+msg+", EXCEPTION_HANDLER ="+erh);
 			erh.CPF().setPar(new RTS_TXT(msg))._ENT();
 		} catch (RTS_EndProgram e) {
 			if(RTS_Option.GOTO_TRACING) {
@@ -421,17 +355,14 @@ public final class RTS_UTIL {
 			// NOTHING
 		} catch (Throwable t) {
 			RTS_UTIL.printError("EXCEPTION IN SIMULA EXCEPTION_HANDLER: " + t);
-//			Thread.dumpStack();
 			RTS_UTIL.printError("EXCEPTION_HANDLER: " + erh);
 			t.printStackTrace();
 		}
 	}
 
-	/**
-	 * Utility to convert a Throwable message to Simula message.
-	 * @param e a Throwable
-	 * @return converted message
-	 */
+	/// Utility to convert a Throwable message to Simula message.
+	/// @param e a Throwable
+	/// @return converted message
 	public static String getErrorMessage(Throwable e) {
 		String msg = e.getMessage();
 		if (e instanceof NullPointerException)
@@ -444,15 +375,13 @@ public final class RTS_UTIL {
 	// *********************************************************************
 	// *** endProgram
 	// *********************************************************************
-	/**
-	 * End of Simula program execution.
-	 * @param exitValue the exit value
-	 */
+	/// End of Simula program execution.
+	/// @param exitValue the exit value
 	static void endProgram(final int exitValue) {
 		// _SYSIN.close();
 		// _SYSOUT.close();
 		
-//		RTS_BASICIO._SYSOUT.outimage();
+		// RTS_BASICIO._SYSOUT.outimage();
 		String img = RTS_BASICIO._SYSOUT.image.edStripedText();
 		if(img.length() > 0) RTS_BASICIO._SYSOUT.outimage();
 		
@@ -480,13 +409,10 @@ public final class RTS_UTIL {
 	// ************************************************************
 	// *** BPRG -- Begin Program
 	// ************************************************************
-	/**
-	 * The begin program routine (BPRG) is the runtime system initialization
-	 * routine. It will initiate the global data in the runtime system.
-	 * 
-	 * @param ident the program identifier
-	 * @param args the arguments
-	 */
+	/// The begin program routine (BPRG) is the runtime system initialization
+	/// routine. It will initiate the global data in the runtime system.
+	/// @param ident the program identifier
+	/// @param args the arguments
 	public static void BPRG(final String ident, final String[] args) {
 		setRuntimeOptions(args);
 		RTS_Coroutine.INIT();
@@ -511,13 +437,9 @@ public final class RTS_UTIL {
 	// ************************************************************
 	// *** RUN_STM -- Run users statements
 	// ************************************************************
-	/**
-	 * Run users statements
-	 * 
-	 * @param usr user program
-	 */
+	/// Run users statements
+	/// @param usr user program
 	public static void RUN_STM(final RTS_RTObject usr) {
-//		System.out.println("RTS_UTIL.RUN_STM: "+usr);
 		RTS_RTObject._USR = (RTS_BASICIO) usr;
 		try {
 			RTS_RTObject._USR._STM();
@@ -526,9 +448,7 @@ public final class RTS_UTIL {
 		}
 	}
 
-	/**
-	 * Print synopsis of standard options
-	 */
+	/// Print synopsis of standard options
 	private static void help() {
 		println(RTS_ENVIRONMENT.simulaReleaseID + " See: https://github.com/portablesimula\n");
 		println("Usage: java -jar simula.jar  [options]  sourceFile\n\n"
@@ -551,17 +471,14 @@ public final class RTS_UTIL {
 		System.exit(-2);
 	}
 
-	/**
-	 * Set runtime options.
-	 * @param args argument array
-	 */
+	/// Set runtime options.
+	/// @param args argument array
 	public static void setRuntimeOptions(final String[] args) {
 		// Parse command line arguments.
 		RTS_Option.RUNTIME_USER_DIR = System.getProperty("user.dir", null);
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-//			System.out.println("RTS_UTIL.setRuntimeOptions: arg["+i+"] = "+arg);
 			if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();
@@ -593,7 +510,6 @@ public final class RTS_UTIL {
 			} else {
 				if (file == null) {
 					file = new File(arg);
-//					System.out.println("RTS_UTIL.setRuntimeOptions: file = "+file);
 					RTS_SPORT_Option.SPORT_SourceFileName = arg;
 					RTS_SPORT_Option.SourceDirName = file.getParent();
 				} else{
@@ -611,19 +527,8 @@ public final class RTS_UTIL {
 		}
 	}
 
-//	/**
-//	 * Utility: Print an error message in a popup panel.
-//	 * @param msg the error message
-//	 */
-//	private static void error(final String msg) {
-//		System.err.println("Simula runtime: " + msg + "\n");
-//		popUpError(msg);
-//	}
-
-	/**
-	 * Popup an error message box.
-	 * @param msg the error message
-	 */
+	/// Popup an error message box.
+	/// @param msg the error message
 	static void popUpError(final String msg) {
 		int res = optionDialog(msg + "\nDo you want to continue ?", "Error", JOptionPane.YES_NO_OPTION,
 				JOptionPane.ERROR_MESSAGE, "Yes", "No");
@@ -631,23 +536,19 @@ public final class RTS_UTIL {
 			throw new RTS_EndProgram("Simula - endProgram");
 	}
 
-	/**
-	 * Brings up an option dialog.
-	 * @param msg the message to display
-	 * @param title the title string for the dialog
-	 * @param optionType an integer designating the options available on the dialog
-	 * @param messageType an integer designating the kind of message this is
-	 * @param option an array of objects indicating the possible choices the user can make
-	 * @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
-	 */
+	/// Brings up an option dialog.
+	/// @param msg the message to display
+	/// @param title the title string for the dialog
+	/// @param optionType an integer designating the options available on the dialog
+	/// @param messageType an integer designating the kind of message this is
+	/// @param option an array of objects indicating the possible choices the user can make
+	/// @return an integer indicating the option chosen by the user, or CLOSED_OPTION if the user closed the dialog
 	static int optionDialog(final Object msg, final String title, final int optionType, final int messageType, final String... option) {
 		int answer = JOptionPane.showOptionDialog(null, msg, title, optionType, messageType, null, option, option[0]);
 		return (answer);
 	}
 
-	/**
-	 * List runtime options.
-	 */
+	/// List runtime options.
 	static void listRuntimeOptions() {
 		System.out.println("file.encoding=" + System.getProperty("file.encoding"));
 		System.out.println("defaultCharset=" + Charset.defaultCharset());
@@ -660,10 +561,8 @@ public final class RTS_UTIL {
 		System.out.println("userDir=" + RTS_Option.RUNTIME_USER_DIR);
 	}
 
-	/**
-	 * Print a line on the runtime console if present, otherwise on System.out
-	 * @param msg the message to print
-	 */
+	/// Print a line on the runtime console if present, otherwise on System.out
+	/// @param msg the message to print
 	static void println(final String msg) {
 		if (console != null)
 			console.write(msg + '\n');
@@ -671,10 +570,8 @@ public final class RTS_UTIL {
 			System.out.println(msg);
 	}
 
-	/**
-	 * Print an error on the runtime console if present, otherwise on System.out
-	 * @param msg the message to print
-	 */
+	/// Print an error on the runtime console if present, otherwise on System.out
+	/// @param msg the message to print
 	static void printError(final String msg) {
 		if (console != null)
 			console.writeError(msg + '\n');
@@ -682,10 +579,8 @@ public final class RTS_UTIL {
 			System.out.println("\n" + msg);
 	}
 
-	/**
-	 * Print a warning message on the runtime console if present, otherwise on System.out
-	 * @param msg the message to print
-	 */
+	/// Print a warning message on the runtime console if present, otherwise on System.out
+	/// @param msg the message to print
 	static void printWarning(final String msg) {
 		if (console != null)
 			console.writeWarning(msg + '\n');
@@ -693,18 +588,14 @@ public final class RTS_UTIL {
 			System.out.println(msg);
 	}
 
-	/**
-	 * TRACE Utility.
-	 * @param msg a trace message
-	 */
+	/// TRACE Utility.
+	/// @param msg a trace message
 	static void TRACE(final String msg) {
 		println(Thread.currentThread().toString() + ": " + msg);
 	}
 
-	/**
-	 * Utility: Internal error.
-	 * @param msg an error message
-	 */
+	/// Utility: Internal error.
+	/// @param msg an error message
 	static void IERR(final String msg) {
 		printError(msg);
 		Thread.dumpStack();
@@ -714,11 +605,8 @@ public final class RTS_UTIL {
 	// *********************************************************************
 	// *** GET JAVA VERSION
 	// *********************************************************************
-
-	/**
-	 * Returns System property "java.vm.specification.version"
-	 * @return System property "java.vm.specification.version"
-	 */
+	/// Returns System property "java.vm.specification.version"
+	/// @return System property "java.vm.specification.version"
 	static String getJavaID() {
 		return ("JDK version " + System.getProperty("java.version"));
 	}
@@ -727,37 +615,26 @@ public final class RTS_UTIL {
 	// *** TRACING AND DEBUGGING UTILITIES
 	// *********************************************************************
 
-	/**
-	 * Debug utility method to print a snapshot in the generated code.
-	 * @param sequ a sequence number
-	 * @param msg a message
-	 */
+	/// Debug utility method to print a snapshot in the generated code.
+	/// @param sequ a sequence number
+	/// @param msg a message
 	public static void _SNAPSHOT(int sequ,String msg) {
-//		RTS_RTObject cur=RTS_RTObject._CUR;
-//		String id=""+cur;
 		String id=RTS_UTIL.progamIdent;
 		println("*** SNAPSHOT-"+id+"["+sequ+"]: "+msg);
-//		Thread.dumpStack();
 		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
 		int n = stackTraceElement.length;
 		for (int i = 0; i < n; i++) {
 			println("*** stackTraceElement["+i+"] = "+stackTraceElement[i]);
 		}
-//		System.exit(n);
 	}
 
-	/**
-	 * Debug utility method to print a snapshot in the generated code.
-	 * @param TOS top of operand stack
-	 * @param sequ a sequence number
-	 * @param msg a message
-	 */
+	/// Debug utility method to print a snapshot in the generated code.
+	/// @param TOS top of operand stack
+	/// @param sequ a sequence number
+	/// @param msg a message
 	public static void _SNAPSHOT(Object TOS,int sequ,String msg) {
-//		RTS_RTObject cur=RTS_RTObject._CUR;
-//		String id=""+cur;
 		String id=RTS_UTIL.progamIdent;
 		println("*** SNAPSHOT-"+id+"["+sequ+"]: "+msg+", TOS="+TOS.getClass().getSimpleName()+"  "+TOS);
-//		Thread.dumpStack();
 		StackTraceElement stackTraceElement[] = Thread.currentThread().getStackTrace();
 		int n = stackTraceElement.length;
 		for (int i = 0; i < n; i++) {
@@ -765,17 +642,13 @@ public final class RTS_UTIL {
 		}
 	}
 
-	/**
-	 * Print static chain starting with the current instance.
-	 */
+	/// Print static chain starting with the current instance.
 	static void printStaticChain() {
 		RTS_UTIL.printStaticChain(RTS_RTObject._CUR);
 	}
 
-	/**
-	 * Print static chain starting with 'ins'
-	 * @param ins argument
-	 */
+	/// Print static chain starting with 'ins'
+	/// @param ins argument
 	static void printStaticChain(final RTS_RTObject ins) {
 		RTS_RTObject x = ins;
 		println("RTS_UTIL: printStaticChain: *** STATIC CHAIN:");
@@ -789,28 +662,22 @@ public final class RTS_UTIL {
 		Thread.dumpStack();
 	}
 
-	/**
-	 * Utility: Print Simula stack trace.
-	 * @param start start index in Java stackTrace
-	 */
+	/// Utility: Print Simula stack trace.
+	/// @param start start index in Java stackTrace
 	static void printSimulaStackTrace(final int start) {
 		printSimulaStackTrace(Thread.currentThread().getStackTrace(), start);
 	}
 
-	/**
-	 * Utility: Print Simula stack trace.
-	 * @param e a Throwable
-	 * @param start start index in Java stackTrace
-	 */
+	/// Utility: Print Simula stack trace.
+	/// @param e a Throwable
+	/// @param start start index in Java stackTrace
 	static void printSimulaStackTrace(final Throwable e, final int start) {
 		printSimulaStackTrace(e.getStackTrace(), start);
 	}
 
-	/**
-	 * Utility: Print Simula StackTrace.
-	 * @param stackTraceElement Java stackTrace
-	 * @param start start index in Java stackTrace
-	 */
+	/// Utility: Print Simula StackTrace.
+	/// @param stackTraceElement Java stackTrace
+	/// @param start start index in Java stackTrace
 	private static void printSimulaStackTrace(final StackTraceElement stackTraceElement[], final int start) {
 		if (currentModid != null) {
 			RTS_UTIL.println("In " + currentModid + " at line " + currentSimLine);
@@ -823,7 +690,6 @@ public final class RTS_UTIL {
 		}
 		if (RTS_Option.VERBOSE) {
 			RTS_UTIL.println("*** DYNAMIC CHAIN:");
-//			Thread.dumpStack();
 			int n = stackTraceElement.length;
 			for (int i = start; i < (n - 1); i++) {
 				printSimulaLineInfo(stackTraceElement[i], " - ");
@@ -839,12 +705,10 @@ public final class RTS_UTIL {
 		}
 	}
 
-	/**
-	 * Utility: Print SimulaLineInfo
-	 * @param elt a StackTraceElement
-	 * @param lead the keading string
-	 * @return the resulting line info
-	 */
+	/// Utility: Print SimulaLineInfo
+	/// @param elt a StackTraceElement
+	/// @param lead the keading string
+	/// @return the resulting line info
 	private static boolean printSimulaLineInfo(final StackTraceElement elt, final String lead) {
 		try {
 			Class<?> cls = Class.forName(elt.getClassName());
@@ -876,17 +740,13 @@ public final class RTS_UTIL {
 	// **********************************************************************
 	// *** Debugging utility: Procedure printThreadList
 	// **********************************************************************
-	/**
-	 * Print Thread list.
-	 */
+	/// Print Thread list.
 	static void printThreadList() {
 		printThreadList(false);
 	}
 
-	/**
-	 * Print Thread list.
-	 * @param withStackTrace argument
-	 */
+	/// Print Thread list.
+	/// @param withStackTrace argument
 	static synchronized void printThreadList(boolean withStackTrace) {
 		Thread[] t = new Thread[50];
 		int i = Thread.enumerate(t);
@@ -906,11 +766,9 @@ public final class RTS_UTIL {
 		RTS_UTIL.println("-----------------------------------------------------------------------------------------------");
 	}
 
-	/**
-	 * Utility: Set current modid and Simula source line number.
-	 * @param modid new current modid
-	 * @param simLine new Simula source line number
-	 */
+	/// Utility: Set current modid and Simula source line number.
+	/// @param modid new current modid
+	/// @param simLine new Simula source line number
 	public static void _LINE(String modid, int simLine) {
 		currentModid = modid;
 		currentSimLine = simLine;

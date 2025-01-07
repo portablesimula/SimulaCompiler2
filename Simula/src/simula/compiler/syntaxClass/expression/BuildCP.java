@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.lang.constant.ClassDesc;
@@ -18,42 +16,36 @@ import simula.compiler.utilities.Meaning;
 import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Util;
 
-/**
- * Coding Utilities: Call Procedure (CP)
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCP.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// Coding Utilities: Build Call Procedure (CP)
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BuildCP.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class BuildCP {
 	/** Default Constructor: NOT USED */ private BuildCP() {}
 
 	// ********************************************************************
 	// *** BuildCP.normal
 	// ********************************************************************
-	/**
-	 * BuildCP.normal
-	 * 
-	 * @param variable the procedure variable
-	 * @param prc Procedure Declaration
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// BuildCP.normal
+	/// @param variable the procedure variable
+	/// @param prc Procedure Declaration
+	/// @param codeBuilder the CodeBuilder
 	static void normal(final VariableExpression variable,final ProcedureDeclaration prc,final CodeBuilder codeBuilder) {
 		//  	kkk := P(444);
 		// ==>  kkk=new adHoc00_P((_CUR),444)._RESULT;
 		//
 		//    1: new           #46                 // class simulaTestPrograms/adHoc00_P
-		// *  4: dup
+		/////  4: dup
 		//    5: getstatic     #48                 // Field _CUR:Lsimula/runtime/RTS_RTObject;
 		//    8: sipush        444
 		//   11: invokespecial #51                 // Method simulaTestPrograms/adHoc00_P."<init>":(Lsimula/runtime/RTS_RTObject;I)V
 		//
-		// * 14: pop
+		///// 14: pop
 		// or
-		// * 14: getfield      #54                 // Field simulaTestPrograms/adHoc00_P._RESULT:I
+		///// 14: getfield      #54                 // Field simulaTestPrograms/adHoc00_P._RESULT:I
 		ClassDesc CD_prc=prc.getClassDesc();
 		codeBuilder
 			.new_(CD_prc)
@@ -81,15 +73,12 @@ public class BuildCP {
 	// ********************************************************************
 	// *** BuildCP.remote
 	// ********************************************************************
-	/**
-	 * BuildCP.remote
-	 *   
-	 * @param obj Object Expression before DOT
-	 * @param procedure Procedure Declaration
-	 * @param func Function Designator, may be subscripted
-	 * @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
-	 * @param codeBuilder the CodeBuilder
-	 */
+	/// BuildCP.remote
+	/// @param obj Object Expression before DOT
+	/// @param procedure Procedure Declaration
+	/// @param func Function Designator, may be subscripted
+	/// @param backLink if not null, this procedure call is part of the backLink Expression/Statement.
+	/// @param codeBuilder the CodeBuilder
 	static void remote(final Expression obj,final ProcedureDeclaration procedure,final VariableExpression func,final SyntaxClass backLink,CodeBuilder codeBuilder) {
 		if(procedure.myVirtual!=null) {
 			// Call Remote Virtual Procedure
@@ -132,15 +121,12 @@ public class BuildCP {
 	// ********************************************************************
 	// *** callRemoteStandardProcedure
 	// ********************************************************************
-	/**
-	 * callRemoteStandardProcedure.
-	 * @param beforeDot expression.
-	 * @param pro StandardProcedure.
-	 * @param variable the variable.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// callRemoteStandardProcedure.
+	/// @param beforeDot expression.
+	/// @param pro StandardProcedure.
+	/// @param variable the variable.
+	/// @param codeBuilder the codeBuilder to use.
 	private static void callRemoteStandardProcedure(Expression beforeDot,StandardProcedure pro,final VariableExpression variable,CodeBuilder codeBuilder) {
-//		System.out.println("BuildCP.callRemoteStandardProcedure: "+beforeDot);
 		if (beforeDot instanceof VariableExpression var) {
 			Meaning meaning = var.meaning;
 			ClassDesc owner = meaning.declaredIn.getClassDesc();
@@ -168,7 +154,6 @@ public class BuildCP {
 		ClassDesc owner=ClassDesc.of("simula.runtime."+pro.declaredIn.externalIdent);
 		codeBuilder.invokevirtual(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams));
 		if(pro.type != null && variable.backLink == null)
-//			codeBuilder.pop();
 			pro.type.pop(codeBuilder);
 	}
 
@@ -176,11 +161,9 @@ public class BuildCP {
 	// ********************************************************************
 	// *** BuildCP.normalStandardProcedure
 	// ********************************************************************
-	/**
-	 * ClassFile coding utility: BuildCP.normalStandardProcedure
-	 * @param variable the variable.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: BuildCP.normalStandardProcedure
+	/// @param variable the variable.
+	/// @param codeBuilder the codeBuilder to use.
 	static void normalStandardProcedure(final VariableExpression variable,CodeBuilder codeBuilder) {
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
@@ -208,7 +191,6 @@ public class BuildCP {
 			codeBuilder
 				.invokevirtual(owner, pro.identifier, pro.getMethodTypeDesc(null,variable.checkedParams));
 			if(pro.type != null && variable.backLink == null)
-//				codeBuilder.pop();
 				pro.type.pop(codeBuilder);
 		}
 	}
@@ -216,11 +198,9 @@ public class BuildCP {
 	// ********************************************************************
 	// *** BuildCP.staticStandardProcedure
 	// ********************************************************************
-	/**
-	 * ClassFile coding utility: BuildCP.staticStandardProcedure
-	 * @param variable the variable.
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: BuildCP.staticStandardProcedure
+	/// @param variable the variable.
+	/// @param codeBuilder the codeBuilder to use.
 	static void staticStandardProcedure(final VariableExpression variable,CodeBuilder codeBuilder) {
 		Meaning meaning=variable.meaning;
 		StandardProcedure pro = (StandardProcedure) meaning.declaredAs;
@@ -246,7 +226,6 @@ public class BuildCP {
 		codeBuilder
 			.invokestatic(owner, pro.identifier, MTD);
 		if(pro.type != null && variable.backLink == null) {
-//			codeBuilder.pop();
 			pro.type.pop(codeBuilder);
 		}
 	}
@@ -254,11 +233,9 @@ public class BuildCP {
 	// ********************************************************************
 	// *** checkForExtraParameter
 	// ********************************************************************
-	/**
-	 * Check for Extra Parameter sourceLineNumber
-	 * @param variable the variable
-	 * @return true: if extra parameter 'sourceLineNumber' is pushed.
-	 */
+	/// Check for Extra Parameter sourceLineNumber
+	/// @param variable the variable
+	/// @return true: if extra parameter 'sourceLineNumber' is pushed.
 	private static boolean checkForExtraParameter(VariableExpression variable) {
 		String id = variable.identifier;
 		if (id.equalsIgnoreCase("detach")) {
@@ -268,8 +245,6 @@ public class BuildCP {
 			variable.checkedParams.add(c);
 			return true;
 		} else if( id.equalsIgnoreCase("call") | id.equalsIgnoreCase("resume")) {
-//			System.out.println("BuildCP.checkForExtraParameter: "+variable);
-//			System.out.println("BuildCP.checkForExtraParameter: nCheckedParams="+variable.checkedParams.size());
 			if(variable.checkedParams.size() == 1) {
 				// Push extra parameter 'sourceLineNumber'
 				Constant c = new Constant(Type.Integer, variable.lineNumber);

@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -17,38 +22,30 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * While Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.3 While-statement
- * 
- *   while-statement = WHILE Boolean-expression DO Statement
- *
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/WhileStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// While Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.3 While-statement
+/// 
+///   while-statement = WHILE Boolean-expression DO Statement
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/WhileStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class WhileStatement extends Statement {
-	/**
-	 * The WHILE condition
-	 */
+	/// The WHILE condition
 	private Expression condition;
 	
-	/**
-	 * The statement after DO
-	 */
+	/// The statement after DO
 	private Statement doStatement;
 
-	/**
-	 * Create a new WhileStatement.
-	 * @param line the source line number
-	 */
+	/// Create a new WhileStatement.
+	/// @param line the source line number
 	WhileStatement(int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE)
@@ -80,10 +77,8 @@ public final class WhileStatement extends Statement {
 		JavaSourceFileCoder.code("}");
 	}
 	
-	/**
-	 * Check if this while statement is a 'while true do'.
-	 * @return true if this while statement is a 'while true do'
-	 */
+	/// Check if this while statement is a 'while true do'.
+	/// @return true if this while statement is a 'while true do'
 	private boolean isWhileTrueDo() {
 		// Check for:  while(true) do {}
 		if(condition instanceof Constant cnst) return((boolean)cnst.value);
@@ -117,9 +112,7 @@ public final class WhileStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private WhileStatement() {
 		super(0);
 	}
@@ -136,12 +129,10 @@ public final class WhileStatement extends Statement {
 		oupt.writeObj(doStatement);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a WhileStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the WhileStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static WhileStatement readObject(AttributeInputStream inpt) throws IOException {
 		WhileStatement stm = new WhileStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.io.IOException;
@@ -18,29 +16,25 @@ import simula.compiler.utilities.ObjectKind;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-/**
- * Dummy Statement.
- * 
- * <pre>
- * 
- * Simula Standard: 4.11 Dummy statement
- * 
- *   dummy-statement = empty
- * 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/DummyStatement.java"><b>Source File
- * </b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Dummy Statement.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 4.11 Dummy statement
+/// 
+///   dummy-statement = empty
+/// 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/DummyStatement.java"><b>Source File
+/// </b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class DummyStatement extends Statement {
 	
-	/**
-	 * Create a new DummyStatement.
-	 * @param line the source line number
-	 */
+	/// Create a new DummyStatement.
+	/// @param line the source line number
 	DummyStatement(final int line) {
 		super(line);
 		if (Option.internal.TRACE_PARSE) Util.TRACE("Line "+lineNumber+": DummyStatement: "+this);
@@ -79,9 +73,7 @@ public final class DummyStatement extends Statement {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private DummyStatement() { super(0); }
 
 	@Override
@@ -93,12 +85,10 @@ public final class DummyStatement extends Statement {
 		oupt.writeShort(lineNumber);
 	}
 
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a DummyStatement object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the DummyStatement object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static DummyStatement readObject(AttributeInputStream inpt) throws IOException {
 		DummyStatement stm = new DummyStatement();
 		stm.OBJECT_SEQU = inpt.readSEQU(stm);

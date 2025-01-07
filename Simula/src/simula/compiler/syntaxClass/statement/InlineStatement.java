@@ -1,3 +1,8 @@
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.statement;
 
 import java.lang.classfile.CodeBuilder;
@@ -6,32 +11,28 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Inline Statement.
- * 
- * <pre>
- * detach
- * terminate
- * try
- * catch
- * </pre>
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InlineStatement.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Inline Statement.
+/// 
+/// <pre>
+/// - detach
+/// - terminate
+/// - try
+/// - catch
+/// </pre>
+/// <p>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InlineStatement.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class InlineStatement extends Statement {
 	
 	/// The kind String: detach | terminate | try | catch
 	String kind;
 	
-	/**
-	 * Create a new InlineStatement.
-	 * @param kind the kind code string.
-	 */
+	/// Create a new InlineStatement.
+	/// @param kind the kind code string.
 	public InlineStatement(String kind) {
 		super(1);
 		this.kind = kind;

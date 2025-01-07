@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -21,56 +19,46 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Relational Operation.
- * 
- * <pre>
- * 
- * Simula Standard: 3.3 Relations
- * 
- * </pre>
- * 
- * <h2>Syntax used during Parsing:</h2>
- * 
- * <pre>
- * 
- *   relational-operation = expression  relational-operator  expression
- *   
- *      relational-operator = value-relational-operator | reference-comparator
- *      
- *         value-relational-operator =  &lt; | &lt;= | = | >= | > | &lt;>
- *         
- *         reference-comparator =  == | =/= 
- * </pre>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/RelationalOperation.java">
- * <b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+/// Relational Operation.
+/// 
+/// <pre>
+/// 
+/// Simula Standard: 3.3 Relations
+/// 
+/// </pre>
+/// 
+/// <h2>Syntax used during Parsing:</h2>
+/// 
+/// <pre>
+/// 
+///   relational-operation = expression  relational-operator  expression
+///   
+///      relational-operator = value-relational-operator | reference-comparator
+///      
+///         value-relational-operator =  < | <= | = | >= | > | <>
+///         
+///         reference-comparator =  == | =/= 
+/// </pre>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/RelationalOperation.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class RelationalOperation extends Expression {
 
-	/**
-	 * The left hand side
-	 */
+	/// The left hand side
 	private Expression lhs;
 
-	/**
-	 * The relational operation
-	 */
+	/// The relational operation
 	private int opr;
 
-	/**
-	 * The right hand side
-	 */
+	/// The right hand side
 	private Expression rhs;
 
-	/**
-	 * Create a new RelationalOperation.
-	 * @param lhs the left hand side
-	 * @param opr the relation
-	 * @param rhs the right hand side
-	 */
+	/// Create a new RelationalOperation.
+	/// @param lhs the left hand side
+	/// @param opr the relation
+	/// @param rhs the right hand side
 	RelationalOperation(final Expression lhs,final int opr,final Expression rhs) {
 		this.lhs = lhs;
 		this.opr = opr;
@@ -152,10 +140,8 @@ public final class RelationalOperation extends Expression {
 	// ***********************************************************************
 	// *** CODE: doCodeTextValueRelation
 	// ***********************************************************************
-	/**
-	 * Coding Utility: Code text value relation
-	 * @return the resulting Java source code
-	 */
+	/// Coding Utility: Code text value relation
+	/// @return the resulting Java source code
 	private String doCodeTextValueRelation() {
 		StringBuilder s = new StringBuilder();
 		String fnc = "??";
@@ -177,10 +163,8 @@ public final class RelationalOperation extends Expression {
 	// ***********************************************************************
 	// *** CODE: doCodeTextRefRelation
 	// ***********************************************************************
-	/**
-	 * Coding Utility: Code text reference relation
-	 * @return the resulting Java source code
-	 */
+	/// Coding Utility: Code text reference relation
+	/// @return the resulting Java source code
 	private String doCodeTextRefRelation() {
 		String fnc = "TRF_EQ(";
 		StringBuilder s = new StringBuilder();
@@ -195,7 +179,6 @@ public final class RelationalOperation extends Expression {
 	@Override
 	public void buildEvaluation(Expression rightPart,CodeBuilder codeBuilder) {	setLineNumber();
 		ASSERT_SEMANTICS_CHECKED();
-//		System.out.println("RelationalOperation.buildByteCode: "+this+", lhs.type="+lhs.type+", rhs.type="+rhs.type);
 		if(lhs.type.keyWord == Type.T_TEXT) {
 			buildTextRelation(codeBuilder);
 			return;
@@ -257,31 +240,11 @@ public final class RelationalOperation extends Expression {
 			.labelBinding(lab2);
 	}
 
-	/**
-	 * ClassFile coding utility: Build Text Relation.
-	 * @param codeBuilder the codeBuiløder to use.
-	 */
+	/// ClassFile coding utility: Build Text Relation.
+	/// @param codeBuilder the codeBuiløder to use.
 	private void buildTextRelation(CodeBuilder codeBuilder) {
 		lhs.buildEvaluation(null,codeBuilder);
 		rhs.buildEvaluation(null,codeBuilder);
-
-//		String textRelMethod=null;
-//		switch (opr) {
-//			case KeyWord.GE -> textRelMethod="_TXTREL_GE";
-//			case KeyWord.NE -> textRelMethod="_TXTREL_NE";
-//			case KeyWord.GT -> textRelMethod="_TXTREL_GT";
-//			case KeyWord.LE -> textRelMethod="_TXTREL_LE";
-//			case KeyWord.EQ -> textRelMethod="_TXTREL_EQ";
-//			case KeyWord.LT -> textRelMethod="_TXTREL_LT";
-//			case KeyWord.EQR -> textRelMethod="TRF_EQ";
-//			case KeyWord.NER -> textRelMethod="TRF_NE";
-//			default -> Util.IERR();
-//		}
-////		ClassDesc CD = BlockDeclaration.currentClassDesc();
-//		ClassDesc CD = RTS.CD.RTS_RTObject;
-//		MethodTypeDesc MTD=MethodTypeDesc.ofDescriptor("(Lsimula/runtime/RTS_TXT;Lsimula/runtime/RTS_TXT;)Z");
-//		codeBuilder.invokestatic(CD, textRelMethod, MTD);
-		
 		RTS.buildInvokeTextRel(opr, codeBuilder);
 	}
 
@@ -294,9 +257,7 @@ public final class RelationalOperation extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private RelationalOperation() {}
 
 	@Override
@@ -315,12 +276,10 @@ public final class RelationalOperation extends Expression {
 		oupt.writeObj(rhs);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return an object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static RelationalOperation readObject(AttributeInputStream inpt) throws IOException {
 		RelationalOperation expr = new RelationalOperation();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -336,21 +295,5 @@ public final class RelationalOperation extends Expression {
 		Util.TRACE_INPUT("readRelationalOperation: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(lhs);
-//		oupt.writeShort(opr);
-//		oupt.writeObj(rhs);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		lhs = (Expression) inpt.readObj();
-//		opr = inpt.readShort();
-//		rhs = (Expression) inpt.readObj();
-//	}
 
 }

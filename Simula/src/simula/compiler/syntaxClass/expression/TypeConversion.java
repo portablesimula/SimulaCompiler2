@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -23,39 +21,30 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Type Conversion.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TypeConversion.java">
- * <b>Source File</b></a>.
- *
- */
+/// Type Conversion.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/TypeConversion.java">
+/// <b>Source File</b></a>.
 public final class TypeConversion extends Expression {
 	
-	/**
-	 * The expression.
-	 */
+	/// The expression.
 	public Expression expression;
 
-	/**
-	 * Create a new TypeConversion.
-	 * @param type the new type
-	 * @param expression the expression
-	 */
+	/// Create a new TypeConversion.
+	/// @param type the new type
+	/// @param expression the expression
 	public TypeConversion(final Type type,final Expression expression) {
 		this.type=type;
 		this.expression = expression; expression.backLink=this;
 	    this.doChecking();
 	}
 
-	/**
-	 * Test if a TypeConversion is necessary and then create it.
-	 * @param fromType convert from this type
-	 * @param toType convert to this type
-	 * @param expr the expression
-	 * @return piece of Java source code
-	 */
+	/// Java Coding utility: Test if a TypeConversion is necessary and then create it.
+	/// @param fromType convert from this type
+	/// @param toType convert to this type
+	/// @param expr the expression
+	/// @return piece of Java source code
 	public static String mayBeConvert(final Type fromType, final Type toType, final String expr) {
 		if(fromType.keyWord == Type.T_REAL || fromType.keyWord == Type.T_LONG_REAL) {
 			if(toType.keyWord == Type.T_INTEGER)
@@ -64,12 +53,10 @@ public final class TypeConversion extends Expression {
         return("=("+toType.toJavaType()+")("+expr+");");
 	}
 	
-	/**
-	 * Test if a TypeConversion is necessary and then create it.
-	 * @param fromType convert from this type
-	 * @param toType convert to this type
-	 * @param codeBuilder the codeBuilder to use.
-	 */
+	/// ClassFile coding utility: Test if a TypeConversion is necessary and then create it.
+	/// @param fromType convert from this type
+	/// @param toType convert to this type
+	/// @param codeBuilder the codeBuilder to use.
 	public static void buildMayBeConvert(final Type fromType, final Type toType, CodeBuilder codeBuilder) {
 		// NOTE: 'expr' is top of operand stack
 		switch(fromType.keyWord) {
@@ -102,18 +89,14 @@ public final class TypeConversion extends Expression {
 		}
 	}
 
-	/**
-	 * Test if a TypeConversion is necessary and then create it.
-	 * @param toType convert to toType
-	 * @param expression the expression
-	 * @return the resulting expression
-	 */
+	/// Java Coding utility: Test if a TypeConversion is necessary and then create it.
+	/// @param toType convert to toType
+	/// @param expression the expression
+	/// @return the resulting expression
 	public static Expression testAndCreate(final Type toType,final Expression expression) {
 		Type fromType=expression.type;
 		String qual=(fromType==null)?null:fromType.getRefIdent();
 		if(!Option.internal.SPORT && qual != null) {
-//			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.ctBlockLevel : 0;
-//			int lhsBL=(toType!=null && toType.declaredIn!=null)?toType.declaredIn.ctBlockLevel : 0;
 			int rhsBL=(fromType!=null && fromType.declaredIn!=null)?fromType.declaredIn.getRTBlockLevel() : 0;
 			int lhsBL=(toType!=null && toType.declaredIn!=null)?toType.declaredIn.getRTBlockLevel() : 0;
 			if(rhsBL != 0 && lhsBL != 0 && rhsBL != lhsBL)
@@ -144,12 +127,10 @@ public final class TypeConversion extends Expression {
 		return (expression);
 	}
 
-	/**
-	 * Test if a TypeConversion is necessary.
-	 * @param toType the desired type
-	 * @param expression the expression
-	 * @return piece of Java source code
-	 */
+	/// Java coding utility: Test if a Type Cast is necessary.
+	/// @param toType the desired type
+	/// @param expression the expression
+	/// @return piece of Java source code
 	private static boolean testCastNeccessary(Type toType,final Expression expression) {
 		if (toType == null)	return (false);
 		if(Option.compilerMode != Option.CompilerMode.viaJavaSource) {
@@ -267,9 +248,7 @@ public final class TypeConversion extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private TypeConversion() {}
 
 	@Override
@@ -286,12 +265,10 @@ public final class TypeConversion extends Expression {
 		oupt.writeObj(expression);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a TypeConversion object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the TypeConversion object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static TypeConversion readObject(AttributeInputStream inpt) throws IOException {
 		TypeConversion expr = new TypeConversion();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -305,17 +282,5 @@ public final class TypeConversion extends Expression {
 		Util.TRACE_INPUT("readTypeConversion: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(expression);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		expression = (Expression) inpt.readObj();
-//	}
 
 }

@@ -17,8 +17,10 @@ import simula.compiler.syntaxClass.SyntaxClass;
 
 import java.util.Vector;
 
+/// ClasFile coding utility: ClassHierarchy.
+///
 /// Mail from: Adam Sotona <adam.sotona@oracle.com>  on Apr 28, 2024.
-/// <p>
+/// 
 /// Your compiler reached the complexity where you reference generated classes
 /// from other generated classes. Class-File API in certain circumstances needs
 /// to know some information about the classes referenced from the generated
@@ -26,27 +28,27 @@ import java.util.Vector;
 /// interface ClassHierarchyResolver. By default is the information obtained from
 /// system class loader. However, the classes you generate are probably not yet
 /// known to the system class loader.
-/// <p>
+/// 
 /// You should specify a custom ClassHierarchyResolver for your compiler as a
 /// Class-File API option
 /// `ClassFile.of(ClassFile.ClassHierarchyResolverOption.of(...))`.
-/// <p>
+/// 
 /// Here you have multiple options how to provide the missing information using
 /// combinations of ClassHierarchyResolver factory methods and custom code:
-/// <p>
+/// 
 /// For example, if the required classes have been already generated and you can
 /// provide a physical access to them, you can compose the ClassHierarchyResolver
 /// this way:
 /// 
 /// `ClassHierarchyResolver.defaultResolver().orElse(ClassHierarchyResolver.
 /// ofResourceParsing(Function<ClassDesc, InputStream>).cached())`
-/// <p>
+/// 
 /// Or if you know all the generated classes in advance, you can provide the
 /// missing info about the generated classes in a set and map form:
 /// 
 /// `ClassHierarchyResolver.defaultResolver().orElse(ClassHierarchyResolver.
 /// of(Collection<ClassDesc> interfaces, Map<ClassDesc, ClassDesc> classToSuperClass))`
-/// <p>
+/// 
 /// Or in a form of dynamic direct implementation of the ClassHierarchyResolver:
 /// 
 /// `ClassHierarchyResolver.defaultResolver().orElse(classDesc -> isInterface ? :
@@ -60,9 +62,7 @@ public abstract class ClassHierarchy {
 	
 	/** Default Constructor: NOT USED */ private ClassHierarchy() {}
 
-	/**
-	 * Initiale local variables.
-	 */
+	/// Initiale local variables.
 	public static void init() {
 		classToSuperClass = new HashMap<ClassDesc, ClassDesc>();
 		interfaces = new Vector<ClassDesc>();
@@ -72,30 +72,24 @@ public abstract class ClassHierarchy {
 
 	}
 	
-	/**
-	 * get the ClassHierarchyResolver.
-	 * @return the ClassHierarchyResolver.
-	 */
+	/// get the ClassHierarchyResolver.
+	/// @return the ClassHierarchyResolver.
 	public static ClassHierarchyResolver getResolver() {
 		ClassHierarchyResolver res = ClassHierarchyResolver.defaultResolver()
 				.orElse(ClassHierarchyResolver.of(interfaces, classToSuperClass));
 		return res;
 	}
 
-	/**
-	 * Add a class to the classToSuperClass map.
-	 * @param cld a class
-	 * @param sup a super class
-	 */
+	/// Add a class to the classToSuperClass map.
+	/// @param cld a class
+	/// @param sup a super class
 	public static void addClassToSuperClass(ClassDesc cld, ClassDesc sup) {
 		classToSuperClass.put(cld, sup);
 	}
 	
-	/**
-	 * Get real super class. Ignore RTS_CLASS and RTS_PROCEDURE-
-	 * @param sub a sub class.
-	 * @return real super class.
-	 */
+	/// Get real super class. Ignore RTS_CLASS and RTS_PROCEDURE-
+	/// @param sub a sub class.
+	/// @return real super class.
 	public static ClassDesc getRealSuper(ClassDesc sub) {
 		ClassDesc sup = classToSuperClass.get(sub);
 		if(sup == null) return null;
@@ -103,11 +97,9 @@ public abstract class ClassHierarchy {
 		return sup;
 	}
 	
-	/**
-	 * Get real prefix.
-	 * @param sub a sub class.
-	 * @return real prefix.
-	 */
+	/// Get real prefix.
+	/// @param sub a sub class.
+	/// @return real prefix.
 	public static String getRealPrefix(String sub) {
 		ClassDesc sup = classToSuperClass.get(ClassDesc.of(sub));
 		if(sup == null) return null;
@@ -116,16 +108,13 @@ public abstract class ClassHierarchy {
 		return packageName+'.'+sup.displayName();
 	}
 	
-	/**
-	 * Get ClassDesc given class ident.
-	 * @param classID class ident.
-	 * @return resulting ClassDesc.
-	 */
+	/// Returns the resulting ClassDesc.
+	/// @return the resulting ClassDesc.
+	/// @param classID class ident.
 	public static ClassDesc getClassDesc(String classID) {
 		Set<ClassDesc> keys = classToSuperClass.keySet();
 		String ID = "ClassDesc[" + classID + ']';
 		for(ClassDesc key:keys) {
-//			System.out.println("ClassHierarchy.getClassDesc: CHECK "+key+" AGAINST "+ID);
 			if(key.toString().equals(ID))
 				return key;
 		}
@@ -133,14 +122,12 @@ public abstract class ClassHierarchy {
 	}
 
 	// ***********************************************************************************************
-	// *** ClassHierarchy list and print tree
+	// *** Debug utilities: ClassHierarchy list and print tree
 	// ***********************************************************************************************
 	/// list of all Nodes.
 	private static Vector<Node> allNodes;
 	
-	/**
-	 * Debug utility: list classToSuperClass map.
-	 */
+	/// Debug utility: list classToSuperClass map.
 	public static void list() {
 		for (Map.Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
 			String key = entry.getKey().descriptorString();
@@ -149,9 +136,7 @@ public abstract class ClassHierarchy {
 		}
 	}
 	
-	/**
-	 * Debug utility: print classToSuperClass map etc.
-	 */
+	/// Debug utility: print classToSuperClass map etc.
 	public static void print() {
 		allNodes = new Vector<Node>();
 		Node top = lookup("_TOP");
@@ -170,9 +155,7 @@ public abstract class ClassHierarchy {
 		lookup("simula.runtime.RTS_PROCEDURE").print(1);
 	}
 	
-	/**
-	 * Utility class Node.
-	 */
+	/// Utility class Node.
 	private static class Node implements Comparable<Node> {
 		/// Node's name
 		String name;
@@ -181,10 +164,8 @@ public abstract class ClassHierarchy {
 		TreeSet<Node> children = new TreeSet<Node>();
 		
 		/** Default Constructor: NOT USED */ private Node() {}
-		/**
-		 * Utility method: print.
-		 * @param indent the indentation.
-		 */
+		/// Utility method: print.
+		/// @param indent the indentation.
 		void print(int indent) {
 			System.out.println(SyntaxClass.edIndent(indent) + this.name);
 			for(Node child:children) child.print(indent + 1);
@@ -196,11 +177,9 @@ public abstract class ClassHierarchy {
 		}
 	}
 	
-	/**
-	 * Debug utility: Lookup a node.
-	 * @param name node's name.
-	 * @return the node.
-	 */
+	/// Debug utility: Lookup a node.
+	/// @param name node's name.
+	/// @return the node.
 	private static Node lookup(String name) {
 		for(Node node:allNodes) if(node.name.equals(name)) return(node);
 		Node n = new Node(); n.name = name;
@@ -215,11 +194,9 @@ public abstract class ClassHierarchy {
 	/// Marker in the AttributeOutputStream.
 	private static final String mark = "]END ClassHierarchy";
 	
-	/**
-	 * Write a ClassHierarchy object to a AttributeOutputStream.
-	 * @param oupt the AttributeOutputStream to write to.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Write a ClassHierarchy object to a AttributeOutputStream.
+	/// @param oupt the AttributeOutputStream to write to.
+	/// @throws IOException if something went wrong.
 	public static void writeObject(AttributeOutputStream oupt) throws IOException {
 		Util.TRACE_OUTPUT("BEGIN Write ClassHierarchy: ");
         for (Entry<ClassDesc, ClassDesc> entry : classToSuperClass.entrySet()) {
@@ -233,11 +210,9 @@ public abstract class ClassHierarchy {
 		oupt.writeString(mark);
 	}
 
-	/**
-	 * Read a ClassHierarchy object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read a ClassHierarchy object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @throws IOException if something went wrong.
 	public static void readObject(AttributeInputStream inpt) throws IOException {
 		String next = inpt.readString();
 		while(! next.equals(mark)) {

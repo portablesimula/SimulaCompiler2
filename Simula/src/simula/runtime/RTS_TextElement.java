@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.runtime;
 
 import java.awt.BasicStroke;
@@ -13,90 +11,76 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 
-/**
- *  Additional System class TextElement.
- * <pre>
- * Link class TextElement(t,x,y); Value t; Text t; Long Real x,y;
- * begin Integer COLOR,STROKE; Text T; Long Real X,Y;
- *       ref(Font) FONT; ! Java Class Font is not visible in Simula ;
- *
- *       Procedure setColor(color); Integer color; COLOR := color;  
- *       Procedure setStroke(width); Real width; CURRENT_STROKE_WIDTH := width; 
- *
- *       Procedure setFontStylePlain;      FONT :- FONT.deriveFont(Font.PLAIN);  
- *       Procedure setFontStyleBold;       FONT :- FONT.deriveFont(Font.BOLD); 
- *       Procedure setFontStyleItalic;     FONT :- FONT.deriveFont(Font.ITALIC); 
- *       Procedure setFontStyleBoldItalic; FONT :- FONT.deriveFont(Font.BOLD|Font.ITALIC); 
- *          
- *       Procedure setFontSize(size); Real size; FONT :- FONT.deriveFont(size); 
- *       Real Procedure getFontSize; getFontSize := FONT.getSize2D;
- * 
- *       Procedure setText(t); Value t; Text t; T :- t;
- *       Procedure moveTo(x,y,speed); Long Real x,y,speed; begin X := x; Y := y; ... end;
- *       Procedure instantMoveTo(x,y); Long Real x,y; begin X := x; Y := y; end;
- *       
- *       T :- t; X := x; Y := y;
- *       
- *       COLOR := CURRENT_DRAW_COLOR;
- *       STROKE := CURRENT_STROKE_WIDTH;
- *       FONT :- CURRENT_FONT;
- *       
- *       into(RENDERING_SET);
- *
- * end;
- * </pre>
- * Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_TextElement.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- */
+///  Additional System class TextElement.
+/// <pre>
+/// Link class TextElement(t,x,y); Value t; Text t; Long Real x,y;
+/// begin Integer COLOR,STROKE; Text T; Long Real X,Y;
+///       ref(Font) FONT; ! Java Class Font is not visible in Simula ;
+/// 
+///       Procedure setColor(color); Integer color; COLOR := color;  
+///       Procedure setStroke(width); Real width; CURRENT_STROKE_WIDTH := width; 
+/// 
+///       Procedure setFontStylePlain;      FONT :- FONT.deriveFont(Font.PLAIN);  
+///       Procedure setFontStyleBold;       FONT :- FONT.deriveFont(Font.BOLD); 
+///       Procedure setFontStyleItalic;     FONT :- FONT.deriveFont(Font.ITALIC); 
+///       Procedure setFontStyleBoldItalic; FONT :- FONT.deriveFont(Font.BOLD|Font.ITALIC); 
+///          
+///       Procedure setFontSize(size); Real size; FONT :- FONT.deriveFont(size); 
+///       Real Procedure getFontSize; getFontSize := FONT.getSize2D;
+/// 
+///       Procedure setText(t); Value t; Text t; T :- t;
+///       Procedure moveTo(x,y,speed); Long Real x,y,speed; begin X := x; Y := y; ... end;
+///       Procedure instantMoveTo(x,y); Long Real x,y; begin X := x; Y := y; end;
+///       
+///       T :- t; X := x; Y := y;
+///       
+///       COLOR := CURRENT_DRAW_COLOR;
+///       STROKE := CURRENT_STROKE_WIDTH;
+///       FONT :- CURRENT_FONT;
+///       
+///       into(RENDERING_SET);
+/// 
+/// end;
+/// </pre>
+/// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_TextElement.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class RTS_TextElement extends RTS_Link implements RTS_Drawing.Animable {
-	/**
-	 * The current animation.
-	 */
+	/// The current animation.
 	final RTS_Drawing animation;
-	/**
-	 * The X coordinate
-	 */
+
+	/// The X coordinate
 	double x;
-	/**
-	 * The Y coordinate
-	 */
+
+	/// The Y coordinate
 	double y;
-	/**
-	 * The current string text.
-	 */
+
+	/// The current string text.
 	String str;
-	/**
-	 * The current color.
-	 */
+
+	/// The current color.
 	Color color;
-	/**
-	 * The current Font.
-	 */
+
+	/// The current Font.
 	Font font;
-	/**
-	 * The current stroke.
-	 */
+
+	/// The current stroke.
 	Stroke stroke;
 
-	/**
-	 * Create a new _TextElement.
-	 * @param SL staticLink
-	 * @param txt the initial text
-	 * @param x the X coordinate
-	 * @param y the Y coordinate
-	 */
+	/// Create a new _TextElement.
+	/// @param SL staticLink
+	/// @param txt the initial text
+	/// @param x the X coordinate
+	/// @param y the Y coordinate
 	public RTS_TextElement(final RTS_RTObject SL, final RTS_TXT txt, final double x, final double y) {
 		this(SL, txt.edText(), x, y);
 	}
 
-	/**
-	 * Create a new _TextElement.
-	 * @param SL staticLink
-	 * @param str the initial text
-	 * @param x the X coordinate
-	 * @param y the Y coordinate
-	 */
+	/// Create a new _TextElement.
+	/// @param SL staticLink
+	/// @param str the initial text
+	/// @param x the X coordinate
+	/// @param y the Y coordinate
 	public RTS_TextElement(final RTS_RTObject SL, final String str, final double x, final double y) {
 		super(SL);
 		// TRACE_BEGIN_DCL("_TextElement");
@@ -126,82 +110,61 @@ public class RTS_TextElement extends RTS_Link implements RTS_Drawing.Animable {
 		return (this);
 	}
 
-	/**
-	 * Set font style plain.
-	 */
+	/// Set font style plain.
 	public void setFontStylePlain() {
 		font = font.deriveFont(Font.PLAIN);
 	}
 
-	/**
-	 * Set font style bold.
-	 */
+	/// Set font style bold.
 	public void setFontStyleBold() {
 		font = font.deriveFont(Font.BOLD);
 	}
 
-	/**
-	 * Set font style talic.
-	 */
+	/// Set font style talic.
 	public void setFontStyleItalic() {
 		font = font.deriveFont(Font.ITALIC);
 	}
 
-	/**
-	 * Set font style bold and italic.
-	 */
+	/// Set font style bold and italic.
 	public void setFontStyleBoldItalic() {
 		font = font.deriveFont(Font.BOLD | Font.ITALIC);
 	}
 
-	/**
-	 * Set stroke size.
-	 * @param size stroke size
-	 */
+	/// Set stroke size.
+	/// @param size stroke size
 	public void setStroke(final float size) {
 		stroke = new BasicStroke(size);
 	}
 
-	/**
-	 * Get font size.
-	 * @return the font size
-	 */
+	/// Get font size.
+	/// @return the font size
 	public float getFontSize() {
 		return (font.getSize2D());
 	}
 
-	/**
-	 * Set font size.
-	 * @param size font size
-	 */
+	/// Set font size.
+	/// @param size font size
 	public void setFontSize(final float size) {
 		font = font.deriveFont(size);
 	}
 
-	/**
-	 * Set color.
-	 * @param rgb color
-	 */
+	/// Set color.
+	/// @param rgb color
 	public void setColor(final int rgb) {
 		color = new Color(rgb);
 		animation.repaintMe();
 	}
 
-	/**
-	 * Set new text.
-	 * @param t new text
-	 */
+	/// Set new text.
+	/// @param t new text
 	public void setText(RTS_TXT t) {
 		str = t.edText();
 		animation.repaintMe();
 	}
 
-	/**
-	 * Instant move.
-	 * 
-	 * @param x the X coordinate
-	 * @param y the Y coordinate
-	 */
+	/// Instant move.
+	/// @param x the X coordinate
+	/// @param y the Y coordinate
 	public void instantMoveTo(final double x, final double y) {
 		this.x = x;
 		this.y = y;
@@ -209,13 +172,10 @@ public class RTS_TextElement extends RTS_Link implements RTS_Drawing.Animable {
 	}
 
 	// speed = pixels per milli-second ???
-	/**
-	 * Rolling motion to a new position.
-	 * 
-	 * @param x2 the X coordinate
-	 * @param y2 the Y coordinate
-	 * @param speed pixels per milli-second
-	 */
+	/// Rolling motion to a new position.
+	/// @param x2 the X coordinate
+	/// @param y2 the Y coordinate
+	/// @param speed pixels per milli-second
 	public void moveTo(final double x2, final double y2, final double speed) {
 		double x1 = x;
 		double y1 = y;

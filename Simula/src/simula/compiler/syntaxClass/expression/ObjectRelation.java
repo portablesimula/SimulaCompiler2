@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.compiler.syntaxClass.expression;
 
 import java.io.IOException;
@@ -21,88 +19,77 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Util;
 
-/**
- * Object relations
- * 
- * <pre>
- * Simula Standard: 3.3.4. Object relations
- * 
- *   object-relation
- *        =  simple-object-expression  IS  class-identifier
- *        |  simple-object-expression  IN  class-identifier
- * </pre>
- * 
- * The operators IS and IN may be used to test the class membership of an
- * object.
- * <p>
- * The relation "X IS C" has the value true if X refers to an object belonging
- * to the class C, otherwise the value is false.
- * <p>
- * The relation "X IN C" has the value true if X refers to an object belonging
- * to a class C or a class inner to C, otherwise the value is false.
- * 
- * <p>
- * The qualification of an object expression is defined by the following rules:
- * <ul>
- * <li>The expression none is qualified by a fictitious class which is inner to
- * all declared classes.
- * 
- * <li>A variable or function designator is qualified as stated in the
- * declaration (or specification, see below) of the variable or array or
- * procedure in question.
- * 
- * <li>An object generator, local object or qualified object is qualified by the
- * class of the identifier following the symbol new, this or qua respectively.
- * 
- * <li>A conditional object expression is qualified by the innermost class which
- * includes the qualifications of both alternatives. If there is no such class,
- * the expression is illegal.
- * 
- * <li>Any formal parameter of object reference type is qualified according to
- * its specification regardless of the qualification of the corresponding actual
- * parameter.
- * 
- * <li>The qualification of a function designator whose procedure identifier is
- * that of a virtual quantity depends on the access level (see 5.5.5). The
- * qualification is that of the matching declaration, if any, occurring at the
- * innermost prefix level equal or outer to the access level, or, if no such
- * match exists, it is that of the virtual specification.
- * </ul>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectRelation.java">
- * <b>Source File</b></a>.
- * 
- * @author SIMULA Standards Group
- * @author Øystein Myhre Andersen
- */
+/// Object relations IS and IN.
+/// 
+/// <pre>
+/// Simula Standard: 3.3.4. Object relations
+/// 
+///   object-relation
+///        =  simple-object-expression  IS  class-identifier
+///        |  simple-object-expression  IN  class-identifier
+/// </pre>
+/// 
+/// The operators IS and IN may be used to test the class membership of an
+/// object.
+/// 
+/// The relation "X IS C" has the value true if X refers to an object belonging
+/// to the class C, otherwise the value is false.
+/// 
+/// The relation "X IN C" has the value true if X refers to an object belonging
+/// to a class C or a class inner to C, otherwise the value is false.
+/// 
+/// 
+/// The qualification of an object expression is defined by the following rules:
+/// <ul>
+/// <li>The expression none is qualified by a fictitious class which is inner to
+/// all declared classes.
+/// 
+/// <li>A variable or function designator is qualified as stated in the
+/// declaration (or specification, see below) of the variable or array or
+/// procedure in question.
+/// 
+/// <li>An object generator, local object or qualified object is qualified by the
+/// class of the identifier following the symbol new, this or qua respectively.
+/// 
+/// <li>A conditional object expression is qualified by the innermost class which
+/// includes the qualifications of both alternatives. If there is no such class,
+/// the expression is illegal.
+/// 
+/// <li>Any formal parameter of object reference type is qualified according to
+/// its specification regardless of the qualification of the corresponding actual
+/// parameter.
+/// 
+/// <li>The qualification of a function designator whose procedure identifier is
+/// that of a virtual quantity depends on the access level (see 5.5.5). The
+/// qualification is that of the matching declaration, if any, occurring at the
+/// innermost prefix level equal or outer to the access level, or, if no such
+/// match exists, it is that of the virtual specification.
+/// </ul>
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/ObjectRelation.java">
+/// <b>Source File</b></a>.
+/// 
+/// @author SIMULA Standards Group
+/// @author Øystein Myhre Andersen
 public final class ObjectRelation extends Expression {
 	
-	/**
-	 * The left hand side.
-	 */
+	/// The left hand side.
 	private Expression lhs;
 	
-	/**
-	 * The operation: IN, IS or QUA
-	 */
+	/// The operation: IN or IS
 	private int opr; 
 	
-	/**
-	 * The right hand class identifier.
-	 */
+	/// The right hand class identifier.
 	private String classIdentifier;
 	
-	/**
-	 * The class declaration.
-	 */
-	ClassDeclaration classDeclaration; // Set by doChecking
+	/// The class declaration.
+	/// Set by doChecking.
+	ClassDeclaration classDeclaration;
 
-	/**
-	 * Create a new ObjectRelation
-	 * @param lhs left hand side
-	 * @param opr the operation: IN, IS or QUA
-	 * @param classIdentifier the right hand class identifier
-	 */
+	/// Create a new ObjectRelation
+	/// @param lhs left hand side
+	/// @param opr the operation: IN or IS
+	/// @param classIdentifier the right hand class identifier
 	ObjectRelation(final Expression lhs, final int opr, final String classIdentifier) {
 		this.lhs = lhs;
 		this.opr = opr;
@@ -159,9 +146,6 @@ public final class ObjectRelation extends Expression {
 		ASSERT_SEMANTICS_CHECKED();
 		if(opr == KeyWord.IS) {
 			lhs.buildEvaluation(null,codeBuilder);
-//			codeBuilder
-//				.ldc(classDeclaration.getClassDesc())
-//				.invokestatic(RTS.CD.RTS_ENVIRONMENT, "_IS", MethodTypeDesc.ofDescriptor("(Ljava/lang/Object;Ljava/lang/Class;)Z"));
 			RTS.invokestatic_UTIL_IS(classDeclaration.getClassDesc(), codeBuilder);
 		} else if(opr == KeyWord.IN) {
 			lhs.buildEvaluation(null,codeBuilder);
@@ -177,9 +161,7 @@ public final class ObjectRelation extends Expression {
 	// ***********************************************************************************************
 	// *** Attribute File I/O
 	// ***********************************************************************************************
-	/**
-	 * Default constructor used by Attribute File I/O
-	 */
+	/// Default constructor used by Attribute File I/O
 	private ObjectRelation() {}
 
 	@Override
@@ -198,12 +180,10 @@ public final class ObjectRelation extends Expression {
 		oupt.writeString(classIdentifier);
 	}
 	
-	/**
-	 * Read and return an object.
-	 * @param inpt the AttributeInputStream to read from
-	 * @return the object read from the stream.
-	 * @throws IOException if something went wrong.
-	 */
+	/// Read and return a ObjectRelation object.
+	/// @param inpt the AttributeInputStream to read from
+	/// @return the ObjectRelation object read from the stream.
+	/// @throws IOException if something went wrong.
 	public static ObjectRelation readObject(AttributeInputStream inpt) throws IOException {
 		ObjectRelation expr = new ObjectRelation();
 		expr.OBJECT_SEQU = inpt.readSEQU(expr);
@@ -216,21 +196,5 @@ public final class ObjectRelation extends Expression {
 		Util.TRACE_INPUT("readObjectRelation: " + expr);
 		return(expr);
 	}
-
-//	@Override
-//	public void writeAttributes(AttributeOutputStream oupt) throws IOException {
-//		super.writeAttributes(oupt);
-//		oupt.writeObj(lhs);
-//		oupt.writeShort(opr);
-//		oupt.writeString(classIdentifier);
-//	}
-//
-//	@Override
-//	public void readAttributes(AttributeInputStream inpt) throws IOException {
-//		super.readAttributes(inpt);
-//		lhs = (Expression) inpt.readObj();
-//		opr = inpt.readShort();
-//		classIdentifier = inpt.readString();
-//	}
 
 }

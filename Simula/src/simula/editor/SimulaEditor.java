@@ -1,10 +1,8 @@
-/*
- * (CC) This work is licensed under a Creative Commons
- * Attribution 4.0 International License.
- *
- * You find a copy of the License on the following
- * page: https://creativecommons.org/licenses/by/4.0/
- */
+/// (CC) This work is licensed under a Creative Commons
+/// Attribution 4.0 International License.
+/// 
+/// You find a copy of the License on the following
+/// page: https://creativecommons.org/licenses/by/4.0/
 package simula.editor;
 
 import java.awt.BorderLayout;
@@ -53,53 +51,37 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 
-
-/**
- * The SimulaEditor.
- * <p>
- * Link to GitHub: <a href=
- * "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/SimulaEditor.java"><b>Source File</b></a>.
- * 
- * @author Øystein Myhre Andersen
- *
- */
+/// The SimulaEditor.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/editor/SimulaEditor.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 @SuppressWarnings("serial")
 public class SimulaEditor extends JFrame {
 	
-	/**
-	 * The tabbed pane.
-	 */
+	/// The tabbed pane.
     static JTabbedPane tabbedPane; 
     
-    /**
-     * The menu bar.
-     */
+    /// The menu bar.
     static EditorMenues menuBar;
     
-    /**
-     * The current SourceTextPanel
-     */
+    /// The current SourceTextPanel
     static SourceTextPanel current;
     
-    /**
-     * The autoRefresher
-     */
+    /// The autoRefresher
     static AutoRefresher autoRefresher;
     
-    /**
-     * Available languages.
-     */
-    public enum Language { /** Simula */Simula,/** Jar file */Jar,/** Text file */Text,/** other */ Other }
+    /// Available languages.
+     public enum Language { /** Simula */Simula,/** Jar file */Jar,/** Text file */Text,/** other */ Other }
 
     
 	// ****************************************************************
 	// *** SimulaEditor: Main Entry for TESTING ONLY
 	// ****************************************************************
-    /**
-     * SimulaEditor: Main Entry for TESTING ONLY.
-     * @param args the arguments
-     */
-    public static void main(String[] args) {
+    /// SimulaEditor: Main Entry for TESTING ONLY.
+    /// @param args the arguments
+     public static void main(String[] args) {
 		Global.packetName="simprog";
 		String userDir="C:/GitHub/SimulaCompiler2/Simula";
 		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime  Download
@@ -118,9 +100,7 @@ public class SimulaEditor extends JFrame {
 	// ****************************************************************
 	// *** Constructor
 	// ****************************************************************
-    /**
-     * Create a new SimulaEditor.
-     */
+    /// Create a new SimulaEditor.
     public SimulaEditor() {
 		Global.initiate();
         try { setIconImage(Global.simIcon.getImage()); } 
@@ -183,10 +163,8 @@ public class SimulaEditor extends JFrame {
         doSelectWorkspace();
     }
 
-    /**
-     * Utility: getJavaVersion
-     * @return the JavaVersion
-     */
+    /// Utility: getJavaVersion
+    /// @return the JavaVersion
 	private static int getJavaVersion() {
 		String ver = System.getProperty("java.version");
 		try {
@@ -200,10 +178,8 @@ public class SimulaEditor extends JFrame {
 		return (0);
 	}
 	
-	/**
-	 * Utility: get Java ID
-	 * @return the Java ID string
-	 */
+	/// Utility: get Java ID
+	/// @return the Java ID string
 	private static String getJavaID() {
 		String javaID="Java version "+System.getProperty("java.version");
         return(javaID);
@@ -212,9 +188,7 @@ public class SimulaEditor extends JFrame {
 	// ****************************************************************
 	// *** MouseListener
 	// ****************************************************************
-	/**
-	 * The MouseListener.
-	 */
+	/// The MouseListener.
     MouseListener mouseListener = new MouseListener() {
 		public void mousePressed(MouseEvent e) {}
 		public void mouseReleased(MouseEvent e) {}
@@ -228,6 +202,7 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** processWindowEvent
     // ****************************************************************
+    @Override
     protected void processWindowEvent(WindowEvent e) {
         if (e.getID() == WindowEvent.WINDOW_CLOSING) {
         	menuBar.doExitAction(); 
@@ -237,9 +212,7 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doSelectWorkspace
     // ****************************************************************
-    /**
-     * Select Workspace dialog.
-     */
+    /// Select Workspace dialog.
     static void doSelectWorkspace() {
     	if (Option.internal.TRACING) Util.println("SimulaEditor.doSelectWorkspace: ");
     	String text="The Simula Editor uses the directory workspace to "
@@ -291,9 +264,7 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doSelectJavaDir
     // ****************************************************************
-    /**
-     * Select Java directory dialog.
-     */
+    /// Select Java directory dialog.
     static void doSelectJavaDir() {
     	if (Option.internal.TRACING) Util.println("SimulaEditor.doSelectJavaDir: ");
 	    File file=new File(Global.currentWorkspace,"java");
@@ -310,9 +281,7 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doSelectOutputDir
     // ****************************************************************
-    /**
-     * Select Output directory dialog.
-     */
+    /// Select Output directory dialog.
     static void doSelectOutputDir() {
     	if (Option.internal.TRACING) Util.println("SimulaEditor.doSelectOutputDir: ");
         JFileChooser fileChooser = new JFileChooser(Global.outputDir);
@@ -327,14 +296,11 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doSelectExtLibDir
     // ****************************************************************
-    /**
-     * Select External Search Library dialog.
-     */
+    /// Select External Search Library dialog.
     static void doSelectExtLibDir() {
     	if (Option.internal.TRACING) Util.println("SimulaEditor.doSelectExtLibDir: ");
     	File prev=Global.extLib;
     	if(prev==null) prev=Global.outputDir.getParentFile();
-//        JFileChooser fileChooser = new JFileChooser(Global.extLib);
         JFileChooser fileChooser = new JFileChooser(prev);
         fileChooser.setDialogTitle("Select External Search Library");
         fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -347,12 +313,10 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doCheckForNewVersion
     // ****************************************************************
-    /**
-     * Check for new version of the Simula System.
-     * <p>
-     * The Simula site at GitHub is contacted and the current Simula Release ID is checked against this version.
-     * If not equal question dialog panel is poped up.
-     */
+    /// Check for new version of the Simula System.
+    /// 
+    /// The Simula site at GitHub is contacted and the current Simula Release ID is checked against this version.
+    /// If not equal question dialog panel is poped up.
     void doCheckForNewVersion() {
     	if (Option.internal.TRACING) Util.println("SimulaEditor.doCheckForNewVersion: ");
         try {
@@ -362,7 +326,6 @@ public class SimulaEditor extends JFrame {
 
 		    String remoteFileName="https://portablesimula.github.io/github.io/setup/setupProperties.xml";
 		    if (Option.internal.TRACING) Util.println("SimulaEditor.doCheckForNewVersion: Load Remote Properties from: "+remoteFileName);
-//		    URL remote = new URL(remoteFileName);
 		    URL remote = (new URI(remoteFileName)).toURL();
             Properties remoteProperties=new Properties();
             remoteProperties.loadFromXML(remote.openStream());
@@ -370,12 +333,7 @@ public class SimulaEditor extends JFrame {
             		          +'R'+remoteProperties.getProperty("simula.revision");
         	String remoteSetupDated=remoteProperties.getProperty("simula.setup.dated","?");
 
-//        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID="+remoteReleaseID);
-//        	Util.println("SimulaEditor.doCheckForNewVersion: thisReleaseID="+thisReleaseID);
-//        	Util.println("SimulaEditor.doCheckForNewVersion: remoteReleaseID.compareTo(thisReleaseID)="+remoteReleaseID.compareTo(thisReleaseID));
-//            if(!remoteReleaseID.equalsIgnoreCase(thisReleaseID)) {
             if(remoteReleaseID.compareTo(thisReleaseID) > 0) {
-//            if(remoteReleaseID.compareTo(thisReleaseID) < 0) {
     			String msg = "   A newer version of Simula is available:\n\n"
 				  	       + "   - Installed version: "+thisReleaseID+"\n"
  				  	       + "        Dated: "+thisSetupDated+"\n\n"
@@ -406,15 +364,11 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** setSelectedTabTitle  /  removeSelectedTab
     // ****************************************************************
-    /**
-     * Set selected tab's title
-     * @param title the new title
-     */
+    /// Set selected tab's title
+    /// @param title the new title
     static void setSelectedTabTitle(String title) { tabbedPane.setTitleAt(tabbedPane.getSelectedIndex(),title); }
     
-    /**
-     * Remove selected tab.
-     */
+    /// Remove selected tab.
     static void removeSelectedTab() {
     	tabbedPane.removeTabAt(tabbedPane.getSelectedIndex());
         current=(SourceTextPanel)tabbedPane.getSelectedComponent();
@@ -424,11 +378,9 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** doNewTabbedPanel
     // ****************************************************************
-    /**
-     * Create a new Tab with text generated from the given file.
-     * @param file the file
-     * @param lang the language
-     */
+    /// Create a new Tab with text generated from the given file.
+    /// @param file the file
+    /// @param lang the language
     static void doNewTabbedPanel(File file,Language lang) {
     	new Thread(new Runnable() {
     		public void run() {
@@ -457,11 +409,9 @@ public class SimulaEditor extends JFrame {
     		}}).start();
     }
     
-    /**
-     * Utility: Get HexFile Reader.
-     * @param file the file to read
-     * @return The resulting reader
-     */
+    /// Utility: Get HexFile Reader.
+    /// @param file the file to read
+    /// @return The resulting reader
     private static Reader getHexFileReader(File file) {
     	StringBuilder sb=new StringBuilder();
     	String hexPart="",charPart="";
@@ -484,22 +434,18 @@ public class SimulaEditor extends JFrame {
     	return(new StringReader(sb.toString()));
     }
     
-    /** 
-     * Utility: Append leading zeroes.
-     * @param s the input string
-     * @param n the expected length
-     * @return the resulting string
-     */
+    /// Utility: Append leading zeroes.
+    /// @param s the input string
+    /// @param n the expected length
+    /// @return the resulting string
     private static String AppendLeadingZeroes(String s,int n) {
     	while(s.length()<n) s="0"+s;
     	return(s.toUpperCase());
     }
    
-    /**
-     * Get .jar file Reader
-     * @param file the file
-     * @return a .jar file Reader
-     */
+    /// Get .jar file Reader
+    /// @param file the file
+    /// @return a .jar file Reader
     private static Reader getJarFileReader(File file) {
     	StringBuilder sb=new StringBuilder();
     	sb.append("File: "+file).append("\n");
@@ -540,15 +486,12 @@ public class SimulaEditor extends JFrame {
 	// ****************************************************************
 	// *** doRunJarFile
 	// ****************************************************************
-    /**
-     * Run the given .jar file
-     * @param jarFile the file
-     */
+    /// Run the given .jar file
+    /// @param jarFile the file
 	static void doRunJarFile(File jarFile) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
-//				String[] cmds= {"java","-jar",jarFile.toString(),"-useConsole"};
 				String userDir=jarFile.getParentFile().getParent();
 				String[] cmds= {"java","-jar",jarFile.toString(),"-useConsole","-userDir",userDir};
 				try { Util.execute(cmds);
@@ -560,9 +503,7 @@ public class SimulaEditor extends JFrame {
     // ****************************************************************
     // *** AutoRefresher
     // ****************************************************************
-	/**
-	 *  Utility class: AutoRefresher
-	 */
+	///  Utility class: AutoRefresher
 	class AutoRefresher extends Thread {
 		/** counter */ int counter=10;
 		/** stoped mark */ boolean stoped=false;
@@ -570,9 +511,7 @@ public class SimulaEditor extends JFrame {
 		/** terminate */ public void terminate() { stoped=true; }
 		/** reset */ public void reset() { counter=10; }
 
-		/**
-		 * Run the AutoRefresher
-		 */
+		/// Run the AutoRefresher
 		@Override
 		public void run() {
 			while (!stoped) {
