@@ -6,7 +6,7 @@
 package simula.compiler.utilities;
 
 /// The Simula Keywords and some additional symbols.
-/// <p>
+/// 
 /// Link to GitHub: <a href=
 /// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/ConsolePanel.java"><b>Source File</b></a>.
 /// 

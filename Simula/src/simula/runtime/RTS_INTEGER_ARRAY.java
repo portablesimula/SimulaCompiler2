@@ -9,6 +9,11 @@ package simula.runtime;
 // *** INTEGER ARRAY
 // ************************************************************
 /// This class represent a Simula integer array. 
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_INTEGER_ARRAY.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class RTS_INTEGER_ARRAY extends RTS_ARRAY {
 	/// The elements in this RTS_INTEGER_ARRAY
 	final private int[] ELTS;

@@ -53,7 +53,7 @@ public final class ProtectedSpecification extends SyntaxClass { // {
 	}
 	
 	/// Returns the virtual specification or null.
-	/// <p>
+	/// 
 	/// The Attribute being Protected may be Virtual.
 	/// @return the virtual specification or null
 	private VirtualSpecification getVirtualSpecification() {

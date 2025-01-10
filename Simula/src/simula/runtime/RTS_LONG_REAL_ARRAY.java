@@ -9,6 +9,11 @@ package simula.runtime;
 // *** LONG REAL ARRAY
 // ************************************************************
 /// This class represent a Simula long real array. 
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_LONG_REAL_ARRAY.java"><b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public final class RTS_LONG_REAL_ARRAY extends RTS_REALTYPE_ARRAY {
 	/// The elements in this RTS_LONG_REAL_ARRAY
 	final double[] ELTS;

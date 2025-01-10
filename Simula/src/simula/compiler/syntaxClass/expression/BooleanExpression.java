@@ -60,13 +60,13 @@ import simula.compiler.utilities.Util;
 /// A Boolean expression is of type Boolean. It is a rule for computing a logical
 /// value. Except for the operators and then and or else (see 3.4) the semantics
 /// are entirely analogous to those given for arithmetic expressions.
-/// <p>
+/// 
 /// Variables and function designators entered as Boolean primaries must be of
 /// type Boolean.
 /// 
 /// 
 /// Simula Standard: 3.4 The logical operators
-/// <p>
+/// 
 /// The meaning of the logical operators not, and, or, imp, and eqv is given by
 /// the following function table:
 /// 
@@ -85,18 +85,18 @@ import simula.compiler.utilities.Util;
 /// The operation "b1 and then b2" denotes "conditional and". If the value of b1
 /// is false the operation yields the result false, otherwise it yields the
 /// result of evaluating b2.
-/// <p>
+/// 
 /// The operation "b1 or else b2" denotes "conditional or". If the value of b1 is
 /// true the operator yields the result true, otherwise it yields the result of
 /// evaluating b2.
-/// <p>
+/// 
 /// Note: The value of "b1 and then b2" is given by textual substitution of the
 /// Boolean expression "(if b1 then b2 else false)". Similarly, the operation "b1
 /// or else b2" is defined by substitution of "(if b1 then true else b2)". These
 /// definitions imply that the evaluation of the second operand is suppressed
 /// when the evaluation result is already evident from the value of the first
 /// operand alone.
-/// <p>
+/// 
 /// Link to GitHub: <a href=
 /// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/expression/BooleanExpression.java">
 /// <b>Source File</b></a>.

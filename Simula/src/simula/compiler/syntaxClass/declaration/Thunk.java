@@ -187,7 +187,7 @@ public final class Thunk extends DeclarationScope {
 	// *** ClassFile Coding Utility: buildMethod_get
 	// ***********************************************************************************************
 	/// Generate byteCode for the 'get' method.
-	/// <p>
+	/// 
 	/// 	public Integer get() { return(((adHoc13)(_ENV._SL)).n);
 	/// @param codeBuilder the CodeBuilder
 	void buildMethod_get(CodeBuilder codeBuilder) {
@@ -224,7 +224,7 @@ public final class Thunk extends DeclarationScope {
 	// *** ByteCoding: buildMethod_put
 	// ***********************************************************************************************
 	/// Generate byteCode for the 'put' method.
-	/// <p>
+	/// 
 	/// 	public Integer put(Integer x_) {
 	/// 		return(((adHoc13)(_ENV._SL)).n=(int)x_);
 	///  }

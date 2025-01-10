@@ -66,7 +66,7 @@ import simula.compiler.utilities.ObjectReferenceMap;
 import simula.compiler.utilities.Util;
 
 /// Attribute input stream.
-/// <p>
+/// 
 /// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/AttributeInputStream.java"><b>Source File</b></a>.
 /// 
 /// @author Øystein Myhre Andersen
@@ -214,8 +214,7 @@ public class AttributeInputStream {
 		case ObjectKind.ObjectReference:
 			int OBJECT_SEQU = inpt.readShort();
 			if(TRACE) System.out.println("AttributeInputStream.readObj: OBJECT_SEQU="+OBJECT_SEQU);
-			SyntaxClass obj;
-			obj = objectReference.get(OBJECT_SEQU);
+			SyntaxClass obj = objectReference.get(OBJECT_SEQU);
 			Util.ASSERT(obj != null, "Invariant: OBJECT_SEQU="+moduleID+"#"+OBJECT_SEQU);
 			if(TRACE) System.out.println("AttributeInputStream.readObj: "+obj);
 			return(obj);

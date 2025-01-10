@@ -433,7 +433,7 @@ public final class RTS {
 	// ********************************************************************************************
 	
 	/// Convert a Runtime Object to a primitive type value.
-	/// <p>
+	/// 
 	/// If the input Object is a name parameter or a parameter procedure it evaluated before the conversion.
 	/// @param type the type
 	/// @param codeBuilder the CodeBuilder to use

@@ -29,7 +29,7 @@ import static java.nio.file.StandardCopyOption.*;
 
 /**
  * NOTE:
- * <p>
+ * 
  * Update Global.simulaReleaseID
  * 
  * @author Øystein Myhre Andersen

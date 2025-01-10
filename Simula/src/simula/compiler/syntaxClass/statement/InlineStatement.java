@@ -19,7 +19,7 @@ import simula.compiler.utilities.Util;
 /// - try
 /// - catch
 /// </pre>
-/// <p>
+/// 
 /// Link to GitHub: <a href=
 /// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/syntaxClass/statement/InlineStatement.java">
 /// <b>Source File</b></a>.

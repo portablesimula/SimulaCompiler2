@@ -39,9 +39,9 @@ import javax.swing.JTextField;
 import javax.swing.UIManager;
 
 /* Self-extractor for installing a Simula System.
- * <p>
+ * 
  * Based on http://www.javaworld.com/javaworld/javatips/jw-javatip120.html
- * <p>
+ * 
  * This class is added to a jar file to turn it into a self-extracting jar file.
  * If the jar file is invoked in the standard way,
  * using the command "java -jar file.jar" or double-clicking on it,

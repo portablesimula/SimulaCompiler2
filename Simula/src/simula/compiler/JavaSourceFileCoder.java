@@ -92,7 +92,7 @@ public final class JavaSourceFileCoder {
 	}
 
 	/// Output a debug code line.
-	/// <p>
+	/// 
 	/// To optimize, it is safe to drop such lines
 	/// 
 	/// @param line a debug code line

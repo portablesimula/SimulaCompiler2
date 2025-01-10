@@ -28,7 +28,7 @@ import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 
 /// The Simula Compiler.
-/// <p>
+/// 
 /// The compiler consists of the following steps:
 ///
 /// 	- Initiate global variables.

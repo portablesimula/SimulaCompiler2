@@ -16,9 +16,9 @@ import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Util;
 
 /// Utility class SourceFileReader.
-/// <p>
+/// 
 /// Input Utilities for the Simula Scanner.
-/// <p>
+/// 
 /// Link to GitHub: <a href=
 /// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/parsing/SourceFileReader.java"><b>Source File</b></a>.
 /// 

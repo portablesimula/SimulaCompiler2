@@ -17,7 +17,7 @@ import simula.editor.RTOption;
 import simula.editor.SimulaEditor;
 
 /// Simula Main class containing the 'main' entry.
-/// <p>
+/// 
 /// The Simula Compiler is normally activated through a command-line of this form:
 ///
 /// 		java -jar releaseHome\simula.jar
@@ -29,9 +29,9 @@ import simula.editor.SimulaEditor;
 /// 		java [java-options] -jar releaseHome\simula.jar [simula-options] simula-sourceFile
 ///
 /// Java-options are described in the relevant Java Technical Dokumentation.
-/// <p>
+/// 
 /// Simula-sourceFile is the file containing the Simula text to be compiled and executed.
-/// <p>
+/// 
 /// Possible simula-options include:
 ///
 ///      -help                   Print this synopsis of standard options
@@ -236,7 +236,7 @@ public final class Simula {
 	}
 
 	/// Set keep .java files.
-	/// <p>
+	/// 
 	/// Option: -keepJava <directory> Specify where to place generated .java files
 	/// 
 	/// @param dir the .java output directory-
@@ -246,7 +246,7 @@ public final class Simula {
 	}
 
 	/// Set output directory.
-	/// <p>
+	/// 
 	/// Option: -output <directory> Specify where to place generated executable .jar file
 	/// 
 	/// @param dir the output directory-

@@ -29,10 +29,10 @@ import java.io.InputStream;
 /// 
 /// An object of the class "inbytefile" is used to represent a byte-oriented
 /// sequential input file.
-/// <p>
+/// 
 /// Variable "ENDFILE" is true if there are no more bytes to read. The procedure
 /// "endfile" returns the value of ENDFILE.
-/// <p>
+/// 
 /// Link to GitHub: <a href=
 /// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_Inbytefile.java"><b>Source File</b></a>.
 /// 

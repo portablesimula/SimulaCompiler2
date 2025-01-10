@@ -13,19 +13,19 @@ import simula.compiler.utilities.Token;
 import simula.compiler.utilities.Util;
 
 /// The Simula Parser Utilities.
-/// <p>
+/// 
 /// It contains all static utilities for parsing Simula Syntax.
-/// <p>
+/// 
 /// The Simula Compiler uses Recursive Descent Parsing. Each syntax class is a
 /// subclass of this class.
-/// <p>
+/// 
 /// A NonTerminal object represents non terminal symbol in the formal syntax.
-/// <p>
+/// 
 /// Parsing descends in a top-down manner, until the final nonterminal has been
 /// processed. The parsing process depends on a global variable, currentToken,
 /// which contains the current symbol from the input, and the function nextToken,
 /// which updates currentToken when called.
-/// <p>
+/// 
 /// For further description of Recursive Descent Parsing see <a href=
 /// "https://en.wikipedia.org/wiki/Recursive_descent_parser">Wikipedia</a>.
 /// 
