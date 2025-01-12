@@ -1,19 +1,14 @@
 
 begin
-	integer MAX = 50000;
-	integer k, n2;
-	integer x = 49458;
-	integer y = 49729;
-	
-	integer z;
-	
-	z := x * y;
-	
-	outtext("" & edit(z) ); outimage;
+   integer i, S, limit;
 
-	n2 := 49458;
-    for k := n2 step n2 until MAX do begin 
-    	outtext("Line" & edit(sourceLine) & " k=" & edit(k) ); outimage;
-    end;
+        i := 1;
+   limit := 46342;
+       S := 46342;
+       
+%   outtext("(i-limit) = " & edit(i-limit)); outimage;
+%   outtext("(-46341 * S) = " & edit(-46341 * S)); outimage;
+%   outtext("(46341 * S) = " & edit(46341 * S)); outimage;
 
-end;
+   Outint( S * ( i - limit ), 12 );
+end

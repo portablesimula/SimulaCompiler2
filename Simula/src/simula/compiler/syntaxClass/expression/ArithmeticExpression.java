@@ -252,7 +252,10 @@ public final class ArithmeticExpression extends Expression {
 				switch (opr) {
 					case KeyWord.PLUS ->   codeBuilder.iadd();
 					case KeyWord.MINUS ->  codeBuilder.isub();
-					case KeyWord.MUL ->    codeBuilder.imul();
+					case KeyWord.MUL -> {
+							// codeBuilder.imul();
+							RTS.invokestatic_UTIL_IMUL(codeBuilder);
+						}
 					case KeyWord.DIV ->    codeBuilder.idiv();
 					case KeyWord.INTDIV -> codeBuilder.idiv();
 					default -> Util.IERR();
@@ -286,6 +289,10 @@ public final class ArithmeticExpression extends Expression {
 					 return ("RTS_UTIL._IPOW(" + lhs.get() + ',' + rhs.get() + ')');
 				else return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
 			
+			case KeyWord.MUL:
+				if (this.type.keyWord == Type.T_INTEGER) {
+					 return ("RTS_UTIL._IMUL(" + lhs.get() + ',' + rhs.get() + ')');					
+				} // else fall thru to default handling.
 			default:
 				if (this.backLink == null)
 					 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');

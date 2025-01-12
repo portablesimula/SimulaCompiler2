@@ -151,29 +151,98 @@ public class SimulaEditor extends JFrame {
         this.setJMenuBar(menuBar);
         this.setVisible(true);
         
-		int javaVersion=getJavaVersion();
+//		int javaVersion=getJavaVersion();
+		int javaVersion=getJavaSpecVersion();
 		if(javaVersion < 24) {
-			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
-					     +"\nWe recommend at least Java 24."
-					     +"\nCheck the settings and consider"
-					     +"\ninstalling a newer version.\n");
+//		if(javaVersion < 28) {
+//			checkJAVA_HOME();
+//			Util.popUpError("You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
+//					     +"\nWe recommend at least Java 24."
+//					     +"\nCheck the settings and consider"
+//					     +"\ninstalling a newer version.\n"
+//					+ "\nRemember to set Environment Variables:"
+//					     +"\n - JAVA_HOME"
+//					     +"\n - CLASSPATH"
+//					     +"\n - PATH\n"
+//					+ "See: https://portablesimula.github.io/github.io/"
+//					);
+			String msg = "You have installed Java "+System.getProperty("java.version")+'.'  // TODO: CHECK DETTE
+					+"\nWe recommend at least Java 24."
+					+"\nCheck the settings and consider"
+					+"\ninstalling a newer version.\n"
+					+ "\nRemember to set Environment Variables:"
+					+"\n - JAVA_HOME"
+					+"\n - CLASSPATH"
+					+"\n - PATH\n"
+					+"\nDo you want to continue ?\n\n"
+				;
+			int result=Util.optionDialog(msg,"Java version Notification",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,"Yes","No","MORE INFO");
+			System.out.println("result="+result);
+			
+			if(result == 1) System.exit(0);
+			if(result == 2) {
+				Desktop desktop = Desktop.getDesktop();
+				try {
+					desktop.browse(new URI("https://portablesimula.github.io/github.io/"));
+					System.exit(-1); // Stop the Editor
+				} catch (Exception ex) {
+					msg="Unable to open Desktop Browser\n\n"
+							+"Go to your Browser and open page:\n"
+							+" https://portablesimula.github.io/github.io/\n\n"
+							+"Do you want to continue ?";
+					result=Util.optionDialog(msg,"Update Notification",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,"Yes","No");
+					if(result!=0) System.exit(-1); // Stop the Editor
+				}
+			}
 		}
 
         doCheckForNewVersion();
         doSelectWorkspace();
     }
+	
+	private static void checkJAVA_HOME() {
+		Properties props = System.getProperties();
+		props.list(System.out);
+		System.out.println("SimulaExtractor.checkJAVA_HOME: user.home="+System.getProperty("user.home"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME: JAVA_HOME    java.home="+System.getProperty("java.home"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME: PATH         java.library.path="+System.getProperty("java.library.path"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME: CLASSPATH    java.class.path="+System.getProperty("java.class.path"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME: VM_VERSION   java.vm.specification.version="+System.getProperty("java.vm.specification.version"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME: JAVA_VERSION java.version="+System.getProperty("java.version"));
+		System.out.println("SimulaExtractor.checkJAVA_HOME:              sun.boot.library.path="+System.getProperty("sun.boot.library.path"));
+		
+
+		String JAVA_HOME    = System.getProperty("java.home");
+		String PATH         = System.getProperty("java.library.path");
+		String CLASSPATH    = System.getProperty("java.class.path");
+		String JAVA_VERSION = System.getProperty("java.vm.specification.version");
+
+		
+//		System.out.println("");
+//		System.exit(0);
+	}
+
+//    /// Utility: getJavaVersion
+//    /// @return the JavaVersion
+//	private static int getJavaVersion() {
+//		String ver = System.getProperty("java.version");
+//		try {
+//			if (ver.startsWith("1.")) {
+//				return (ver.charAt(2) - '0');
+//			} else {
+//				ver = ver.substring(0, 2);
+//				return (Integer.parseInt(ver));
+//			}
+//		} catch (Exception e) {}
+//		return (0);
+//	}
 
     /// Utility: getJavaVersion
     /// @return the JavaVersion
-	private static int getJavaVersion() {
-		String ver = System.getProperty("java.version");
+	private static int getJavaSpecVersion() {
+		String ver = System.getProperty("java.vm.specification.version");
 		try {
-			if (ver.startsWith("1.")) {
-				return (ver.charAt(2) - '0');
-			} else {
-				ver = ver.substring(0, 2);
-				return (Integer.parseInt(ver));
-			}
+			return (Integer.parseInt(ver));
 		} catch (Exception e) {}
 		return (0);
 	}

@@ -1,6 +1,0 @@
-/**
- * 
- */
-module CompilerTests {
-	requires Simula;
-}

@@ -89,7 +89,7 @@ public final class SimulaExtractor extends JFrame {
         UIManager.put("Panel.background", Color.WHITE);
 		SimulaExtractor simulaExtractor = new SimulaExtractor();
 //		simulaExtractor.setVisible(true);
-
+		
 		String jarFileName = simulaExtractor.getJarFileName();
 		if(jarFileName==null) jarFileName = "C:/GitHub/Binaries/setup.jar"; // for TESTING ONLY
 		
