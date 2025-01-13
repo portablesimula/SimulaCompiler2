@@ -250,12 +250,18 @@ public final class ArithmeticExpression extends Expression {
 		switch(type.keyWord) {
 			case Type.T_INTEGER -> {
 				switch (opr) {
-					case KeyWord.PLUS ->   codeBuilder.iadd();
-					case KeyWord.MINUS ->  codeBuilder.isub();
+					case KeyWord.PLUS -> {
+						// codeBuilder.iadd();
+						RTS.invokestatic_UTIL_IADD(codeBuilder);
+					}
+					case KeyWord.MINUS -> {
+						// codeBuilder.isub();
+						RTS.invokestatic_UTIL_ISUB(codeBuilder);
+					}
 					case KeyWord.MUL -> {
-							// codeBuilder.imul();
-							RTS.invokestatic_UTIL_IMUL(codeBuilder);
-						}
+						// codeBuilder.imul();
+						RTS.invokestatic_UTIL_IMUL(codeBuilder);
+					}
 					case KeyWord.DIV ->    codeBuilder.idiv();
 					case KeyWord.INTDIV -> codeBuilder.idiv();
 					default -> Util.IERR();
@@ -283,16 +289,30 @@ public final class ArithmeticExpression extends Expression {
 	@Override
 	public String toJavaCode() {
 		ASSERT_SEMANTICS_CHECKED();
+		if (this.type.keyWord == Type.T_INTEGER) {
+			switch (opr) {
+			case KeyWord.EXP:	 return ("RTS_UTIL._IPOW(" + lhs.get() + ',' + rhs.get() + ')');
+			case KeyWord.PLUS:	 return ("RTS_UTIL._IADD(" + lhs.get() + ',' + rhs.get() + ')');					
+			case KeyWord.MINUS:	 return ("RTS_UTIL._ISUB(" + lhs.get() + ',' + rhs.get() + ')');					
+			case KeyWord.MUL:	 return ("RTS_UTIL._IMUL(" + lhs.get() + ',' + rhs.get() + ')');					
+			default:
+				if (this.backLink == null)
+					 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');
+				else return ("(" + lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + "))");
+		}
+			
+		}
 		switch (opr) {
 			case KeyWord.EXP:
-				if (this.type.keyWord == Type.T_INTEGER)
-					 return ("RTS_UTIL._IPOW(" + lhs.get() + ',' + rhs.get() + ')');
-				else return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
+//				if (this.type.keyWord == Type.T_INTEGER)
+//					 return ("RTS_UTIL._IPOW(" + lhs.get() + ',' + rhs.get() + ')');
+//				else
+					return ("Math.pow(" + lhs.get() + ',' + rhs.get() + ')');
 			
-			case KeyWord.MUL:
-				if (this.type.keyWord == Type.T_INTEGER) {
-					 return ("RTS_UTIL._IMUL(" + lhs.get() + ',' + rhs.get() + ')');					
-				} // else fall thru to default handling.
+//			case KeyWord.MUL:
+//				if (this.type.keyWord == Type.T_INTEGER) {
+//					 return ("RTS_UTIL._IMUL(" + lhs.get() + ',' + rhs.get() + ')');					
+//				} // else fall thru to default handling.
 			default:
 				if (this.backLink == null)
 					 return (lhs.get() + KeyWord.toJavaCode(opr) + '(' + rhs.get() + ')');

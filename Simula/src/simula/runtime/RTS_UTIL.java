@@ -202,6 +202,32 @@ public final class RTS_UTIL {
 		return (!TRF_EQ(left, right));
 	}
 
+	/// Integer Addition: x + y
+	/// @param x argument x
+	/// @param y argument y
+	/// @return x + y
+	public static int _IADD(final int x, int y) {
+		long z = (long)x + (long)y;
+		if(z > Integer.MAX_VALUE)
+			throw new RTS_SimulaRuntimeError("Integer Overflow: " + x + " + " + y + " = " + z + " > Integer.MAX_VALUE(" + Integer.MAX_VALUE + ')');
+		if(z < Integer.MIN_VALUE)
+			throw new RTS_SimulaRuntimeError("Integer Overflow: " + x + " + " + y + " = " + z + " < Integer.MIN_VALUE(" + Integer.MIN_VALUE + ')');
+		return (int) z;
+	}
+
+	/// Integer Subtraction: x - y
+	/// @param x argument x
+	/// @param y argument y
+	/// @return x - y
+	public static int _ISUB(final int x, int y) {
+		long z = (long)x - (long)y;
+		if(z > Integer.MAX_VALUE)
+			throw new RTS_SimulaRuntimeError("Integer Overflow: " + x + " - " + y + " = " + z + " > Integer.MAX_VALUE(" + Integer.MAX_VALUE + ')');
+		if(z < Integer.MIN_VALUE)
+			throw new RTS_SimulaRuntimeError("Integer Overflow: " + x + " - " + y + " = " + z + " < Integer.MIN_VALUE(" + Integer.MIN_VALUE + ')');
+		return (int) z;
+	}
+
 	/// Integer Multiplication: x * y
 	/// @param x argument x
 	/// @param y argument y

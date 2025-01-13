@@ -271,6 +271,7 @@ public final class RunFullClassTestBatch2 {
 		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+		names.add("simerr10.sim"); // OK: Integer Overflow
 
 		for(String name:names) {
 			String fileName = sourceDir+name;

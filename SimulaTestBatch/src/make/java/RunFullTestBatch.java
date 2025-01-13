@@ -258,6 +258,7 @@ public final class RunFullTestBatch {
 		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+		names.add("simerr10.sim"); // OK: Integer Overflow
 		
 		Global.packetName="simulaTestBatch";
 //		Global.simulaRtsLib=new File(userDir,"bin"); // To use Eclipse Project's simula.runtime

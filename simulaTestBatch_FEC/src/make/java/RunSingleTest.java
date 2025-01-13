@@ -80,9 +80,9 @@ public final class RunSingleTest {
 //		Global.extLib="C:/GitHub/SimulaCompiler2/Simula/src/simulaTestBatch/sim/bin";
 		
 		// Set RunTime Options and tracing.
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
-		RTOption.BLOCK_TRACING = true;
+//		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
 //		RTOption.QPS_TRACING = true;
 //		RTOption.SML_TRACING = true;
@@ -91,7 +91,7 @@ public final class RunSingleTest {
 		Vector<String> names=new Vector<String>();
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
-		names.add("adHoc01.sim"); // For ad'hoc testing
+//		names.add("adHoc01.sim"); // For ad'hoc testing
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
 //		names.add("SimulaTest.sim"); // Simula TestBatch Framework
@@ -290,6 +290,7 @@ public final class RunSingleTest {
 //		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 //		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 //		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+		names.add("simerr10.sim"); // OK: Integer Multiply Overflow
 
 		
 		

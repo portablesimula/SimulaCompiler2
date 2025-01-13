@@ -31,21 +31,21 @@ public final class RunSingleClassTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-		Option.verbose=true;
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
-		Option.WARNINGS=true;
-//		Option.WARNINGS=false;
+//		Option.WARNINGS=true;
+		Option.WARNINGS=false;
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
-//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
-		Option.internal.SPORT=true;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
+		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+//		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -56,7 +56,7 @@ public final class RunSingleClassTest {
 
 		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=1;
+//		Option.internal.PRINT_SYNTAX_TREE=1;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
@@ -73,7 +73,7 @@ public final class RunSingleClassTest {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -85,7 +85,7 @@ public final class RunSingleClassTest {
 		Vector<String> names=new Vector<String>();
 //		names.add("AdHoc_SimulaTest.sim"); // Simula TestBatch Framework
 //		names.add("adHoc00.sim"); // For ad'hoc testing
-		names.add("adHoc01.sim"); // For ad'hoc testing
+//		names.add("adHoc01.sim"); // For ad'hoc testing
 		
 		// *** SIMULA TEST BATCH TIL EKSEKVERING
 		// String name=Global.packetName+"/sim/InspectionSamples.sim";
@@ -277,7 +277,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst156.sim"); // OK: Test arrays in multiple assignments
 //		names.add("simtst157.sim"); // OK: Test identifier access
 //		
-//		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
+		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.
 //		names.add("simerr02.sim"); // OK: Testing NONE-CHECK
 //		names.add("PrecompiledClass.sim"); // OK: Used by simerr03
@@ -289,6 +289,7 @@ public final class RunSingleClassTest {
 //		names.add("simerr07.sim"); // OK: Wrong number of paramerters to virtual procedure
 //		names.add("simerr08.sim"); // OK: Illegal assignment. Name parameter is not a variable
 //		names.add("simerr09.sim"); // OK: Read/write access on DirectFile and DirectByteFile
+		names.add("simerr10.sim"); // OK: Integer Overflow
 
 		
 		

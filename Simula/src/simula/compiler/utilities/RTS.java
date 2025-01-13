@@ -354,6 +354,20 @@ public final class RTS {
 				MethodTypeDesc.ofDescriptor("(Ljava/lang/Throwable;Lsimula/runtime/RTS_RTObject;)V"));
 	}
 
+	/// Builds: invoke UTIL IADD code.
+	/// @param codeBuilder the codeBuilder to use.
+	public static void invokestatic_UTIL_IADD(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "_IADD", MethodTypeDesc.ofDescriptor("(II)I"));
+	}
+
+	/// Builds: invoke UTIL ISUB code.
+	/// @param codeBuilder the codeBuilder to use.
+	public static void invokestatic_UTIL_ISUB(CodeBuilder codeBuilder) {
+		ClassDesc owner = CD.RTS_UTIL;
+		codeBuilder.invokestatic(owner, "_ISUB", MethodTypeDesc.ofDescriptor("(II)I"));
+	}
+
 	/// Builds: invoke UTIL IMUL code.
 	/// @param codeBuilder the codeBuilder to use.
 	public static void invokestatic_UTIL_IMUL(CodeBuilder codeBuilder) {

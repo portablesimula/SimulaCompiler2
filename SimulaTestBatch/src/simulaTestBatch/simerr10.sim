@@ -1,0 +1,70 @@
+
+% Testing Integer Overflow
+% ===============================================   Main   program =============
+%  PROGRAM NAME:   SIMULA ERROR TEST NO 10
+%
+%  PURPOSE:  Integer Overflow
+%
+%  WRITTEN BY:  MYH   12/01-2025
+% ==============================================================================
+external class RT_ErrorTest;
+
+RT_ErrorTest(" 10 --- Test Integer Overflow") begin
+   text txt;
+
+   procedure testCase(i); integer i; begin
+      CatchingErrors begin
+         procedure onError(message); text message; begin
+            trace("onError got error: " & message);
+         end;
+  
+         if i=1 then begin
+			integer i, S, limit, R;
+
+ 			i := 1;
+			limit := 46342;
+			S := 46342;
+			R := S * ( i - limit );
+         end;
+         
+         if i=2 then begin
+         	integer i, R;
+         	i := maxint;
+         	R := i + 1;
+         end;
+         
+         if i=3 then begin
+         	integer i, j, R;
+         	i := maxint;
+         	j := maxint;
+         	R := i * j;
+		 end;
+         
+         if i=4 then begin
+         	integer i, R;
+         	i := minint;
+         	R := i - 1;
+         end;
+         
+      end;
+   end;
+      
+   
+   facit(0):-"BEGIN TEST10";
+   facit(1):-"onError got error: RTS_SimulaRuntimeError: Multiplication Overflow: 46342 * -46341 = -2147534622 < Integer.MIN_VALUE(-2147483648)";
+   facit(2):-"onError got error: RTS_SimulaRuntimeError: Integer Overflow: 2147483647 + 1 = 2147483648 > Integer.MAX_VALUE(2147483647)";
+   facit(3):-"onError got error: RTS_SimulaRuntimeError: Multiplication Overflow: 2147483647 * 2147483647 = 4611686014132420609 > Integer.MAX_VALUE(2147483647)";
+   facit(4):-"onError got error: RTS_SimulaRuntimeError: Integer Overflow: -2147483648 - 1 = -2147483649 < Integer.MIN_VALUE(-2147483648)";
+   facit(5):-"END OF TEST10";
+
+   trace("BEGIN TEST10");
+
+   testCase(1);
+   testCase(2);
+   testCase(3);
+   testCase(4);
+        
+   trace("END OF TEST10");
+
+
+end;
