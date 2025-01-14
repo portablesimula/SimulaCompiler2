@@ -8,6 +8,7 @@ package simula.compiler;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import simula.compiler.parsing.SimulaScanner;
 import simula.compiler.utilities.Global;
@@ -155,7 +156,9 @@ public final class Simula {
 	/// Main entry.
 	/// @param argv arguments
 	public static void main(String[] argv) {
-		String fileName = null;
+//		String fileName = null;
+		String sourceFileDir = null;
+		Vector<String> fileNames = new Vector<String>();
 		Option.verbose=false;
 		Option.WARNINGS=false;
 		Option.EXTENSIONS=true;
@@ -181,19 +184,22 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
 				else if (arg.equalsIgnoreCase("-extLib")) Global.extLib=new File(argv[++i]);
 				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
+				else if (arg.equalsIgnoreCase("-sourceFileDir")) sourceFileDir=argv[++i];
 				else if (arg.equalsIgnoreCase("-runtimeUserDir")) Option.internal.RUNTIME_USER_DIR=argv[++i];
 				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
 				else {
 					System.out.println("ERROR: Unknown option " + arg);
 					help();
 				}
-			} else if(fileName==null) fileName = arg;
-			else error("multiple input files specified");
+//			} else if(fileName==null) fileName = arg;
+//			else error("multiple input files specified");
+			} else fileNames.add(arg);
 		}
 		
 	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"rts");
 	    
-		if (fileName == null) {
+//		if (fileName == null) {
+		if (fileNames.isEmpty()) {
 			// *** STARTING SIMULA EDITOR ***
 			Global.sampleSourceDir = new File(Global.simulaHome, "samples");
 			RTOption.InitRuntimeOptions();
@@ -201,12 +207,15 @@ public final class Simula {
 			SimulaEditor editor = new SimulaEditor();
 			editor.setVisible(true);
 		} else {
-			RTOption.USE_CONSOLE = ! noConsole;			
-			// *** STARTING SIMULA COMPILER ***
-			try {
-				new SimulaCompiler(fileName).doCompile();
-			} catch (IOException e) {
-				Util.IERR("Compiler Error: ", e);
+			RTOption.USE_CONSOLE = ! noConsole;	
+			for(String fileName:fileNames) {
+				// *** STARTING SIMULA COMPILER ***
+				try {
+					if(sourceFileDir != null) fileName = sourceFileDir + '/' + fileName;
+					new SimulaCompiler(fileName).doCompile();
+				} catch (IOException e) {
+					Util.IERR("Compiler Error: ", e);
+				}
 			}
 		}
 	}
