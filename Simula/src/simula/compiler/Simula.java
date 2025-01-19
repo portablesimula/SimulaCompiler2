@@ -163,7 +163,7 @@ public final class Simula {
 		Option.WARNINGS=false;
 		Option.EXTENSIONS=true;
 		Global.initSimulaProperties();
-		boolean noConsole = false;
+//		boolean noConsole = false;
 
 		// Parse command line arguments.
 		for(int i=0;i<argv.length;i++) {
@@ -183,16 +183,16 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-keepJava")) setKeepJava(argv[++i]);
 				else if (arg.equalsIgnoreCase("-output")) setOutputDir(argv[++i]);
 				else if (arg.equalsIgnoreCase("-extLib")) Global.extLib=new File(argv[++i]);
+				
+				// Special FEC Options ???
 				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
 				else if (arg.equalsIgnoreCase("-sourceFileDir")) sourceFileDir=argv[++i];
 				else if (arg.equalsIgnoreCase("-runtimeUserDir")) Option.internal.RUNTIME_USER_DIR=argv[++i];
-				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
+//				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
 				else {
 					System.out.println("ERROR: Unknown option " + arg);
 					help();
 				}
-//			} else if(fileName==null) fileName = arg;
-//			else error("multiple input files specified");
 			} else fileNames.add(arg);
 		}
 		
@@ -207,7 +207,7 @@ public final class Simula {
 			SimulaEditor editor = new SimulaEditor();
 			editor.setVisible(true);
 		} else {
-			RTOption.USE_CONSOLE = ! noConsole;	
+//			RTOption.USE_CONSOLE = ! noConsole;	
 			for(String fileName:fileNames) {
 				// *** STARTING SIMULA COMPILER ***
 				try {
@@ -220,13 +220,13 @@ public final class Simula {
 		}
 	}
 
-	/// Utility: Print an error message on a popup panel.
-	/// @param msg the error message
-	private static void error(final String msg) {
-		System.err.println("Simula: " + msg + "\n");
-		Util.popUpError(msg);
-		help();
-	}
+//	/// Utility: Print an error message on a popup panel.
+//	/// @param msg the error message
+//	private static void error(final String msg) {
+//		System.err.println("Simula: " + msg + "\n");
+//		Util.popUpError(msg);
+//		help();
+//	}
 
 	/// Set selectors for conditional compilation.
 	/// 

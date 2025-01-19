@@ -52,6 +52,10 @@ NEXT:
 
       if inpt.endfile then goto FINISH;
       code:=inbyte; if inpt.endfile then goto FINISH;
+      if sequ > 99999 then begin
+      	outtext("FILE TOO LARGE - TRUNCATED"); outimage;
+      	goto FINISH;
+      end;
       prtpart.setpos(1); prtpart:=notext;
       sysout.outint(sequ-1,6); sysout.outtext(": ");
 

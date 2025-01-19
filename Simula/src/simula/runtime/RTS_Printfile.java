@@ -166,15 +166,12 @@ public class RTS_Printfile extends RTS_Outfile {
 		this.image = image;
 		setpos(1);
 		if (FILE_NAME.edText().equalsIgnoreCase("#sysout")) {
-			if (RTS_UTIL.console != null)
-				writer = RTS_UTIL.console.getWriter();
-			else
-				writer = System.console().writer();
-		} else if (fileName.toUpperCase().startsWith("CONSOLE: ")) {
-			RTS_ConsolePanel console = new RTS_ConsolePanel();
-			String title = fileName.substring(9);
-			console.popup(title);
-			writer = console.getWriter();
+			// NOTHING - Sysout is opened later
+//		} else if (fileName.toUpperCase().startsWith("CONSOLE: ")) {
+//			RTS_ConsolePanel console = new RTS_ConsolePanel();
+//			String title = fileName.substring(9);
+//			console.popup(title);
+//			writer = console.getWriter();
 		} else {
 			RTS_PageWriter pageWriter = new RTS_PageWriter(fileName);
 			pageWriter.setFont(_FONT, _ORIENTATION, _ASK_PAPER);
@@ -182,8 +179,8 @@ public class RTS_Printfile extends RTS_Outfile {
 			pageWriter.open();
 			_DEFAULT_LINES_PER_PAGE = _LINES_PER_PAGE = pageWriter.getLinesPerSheet();
 			writer = pageWriter;
+			eject(1);
 		}
-		eject(1);
 		return (true);
 	}
 
@@ -350,15 +347,19 @@ public class RTS_Printfile extends RTS_Outfile {
 		try {
 			if (n <= _LINE) {
 				_PAGE = _PAGE + 1;
+				ensureSysoutOpened();
 				if (writer instanceof RTS_PageWriter pageWriter) {
 					pageWriter.newPage(_PAGE);
 					for (int i = 1; i < n; i++)
 						writer.write("\n");
 				}
 			} else {
-				int diff = n - _LINE;
-				for (int i = 0; i < diff; i++)
-					writer.write("\n");
+				ensureSysoutOpened();
+				if(writer != null) {
+					int diff = n - _LINE;
+					for (int i = 0; i < diff; i++)
+						writer.write("\n");
+				}
 			}
 		} catch (IOException e) {
 			throw new RTS_SimulaRuntimeError("Eject failed", e);
@@ -374,6 +375,7 @@ public class RTS_Printfile extends RTS_Outfile {
 		if (_LINE > _LINES_PER_PAGE)
 			eject(1);
 		try { // String line=(image==null)?nl:(image.edStripedText()+nl);
+			ensureSysoutOpened();
 			writer.write(img);
 			if (_SPACING > 1) {
 				for (int i = 1; i < _SPACING; i++)
@@ -387,6 +389,17 @@ public class RTS_Printfile extends RTS_Outfile {
 		if (blank)
 			RTS_UTIL._ASGTXT(image, null); // image := NOTEXT;
 		setpos(1);
+	}
+	
+	/// Ensure that Sysout is open.
+	private void ensureSysoutOpened() {
+		if(writer == null) {
+			if (FILE_NAME.edText().equalsIgnoreCase("#sysout")) {
+				if (RTS_UTIL.console == null)
+					RTS_UTIL.ensureOpenRuntimeConsole();
+				writer = RTS_UTIL.console.getWriter();
+			}
+		}		
 	}
 
 	/// Utility: Set paper margins.

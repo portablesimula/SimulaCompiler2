@@ -119,7 +119,7 @@ public final class Constant extends Expression {
 	        		default     -> Util.IERR();
 				}
 				if(result.longValue() > Integer.MAX_VALUE || result.longValue() < Integer.MIN_VALUE)
-					Util.error("Arithmetic overflow: "+lhn+' '+opr+' '+rhn);
+					Util.error("Arithmetic overflow: "+lhn+' '+KeyWord.edit(opr)+' '+rhn);
 				result=(int) result.longValue();
 			}
 			case Type.T_REAL -> {

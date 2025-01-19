@@ -25,7 +25,9 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintStream;
 import java.io.Reader;
 import java.io.Writer;
 
@@ -70,6 +72,45 @@ public final class RTS_ConsolePanel extends JPanel {
 	/// the Reader to read input from the console
 	private Reader consoleReader;
 
+	/// Create a new _RTConsolePanel
+	public RTS_ConsolePanel() {
+		super(new BorderLayout());
+		JScrollPane scrollPane;
+		textPane = new JTextPane();
+		textPane.addMouseListener(mouseListener);
+		scrollPane = new JScrollPane(textPane);
+		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+		doc = new DefaultStyledDocument();
+		addStylesToDocument(doc);
+		doc.putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+		textPane.setStyledDocument(doc);
+		textPane.addKeyListener(listener);
+		textPane.setEditable(false);
+		popupMenu = new JPopupMenu();
+		clearItem = new JMenuItem("Clear Console");
+		// clearItem.setAccelerator(KeyStroke.getKeyStroke('X',
+		// InputEvent.CTRL_DOWN_MASK));
+		popupMenu.add(clearItem);
+		clearItem.addActionListener(actionListener);
+		copyItem = new JMenuItem("Copy to Clipboard");
+		copyItem.setAccelerator(KeyStroke.getKeyStroke('C', InputEvent.CTRL_DOWN_MASK));
+		popupMenu.add(copyItem);
+		copyItem.addActionListener(actionListener);
+		this.add(scrollPane);
+	}
+
+	/// popup this Console Panel
+	/// @param title for the Panel
+	public void popup(String title) {
+		RTS_Frame frame = new RTS_Frame();
+		frame.setSize(950, 500); // Initial frame size
+		frame.setTitle(title);
+		frame.setLocationRelativeTo(null);
+		frame.getContentPane().add(this);
+		frame.setVisible(true);
+	}
+
 	/// Reads a single character. 
 	/// @return The character read
 	public char read() {
@@ -78,6 +119,22 @@ public final class RTS_ConsolePanel extends JPanel {
 		while (reading)
 			Thread.yield();
 		return (keyin);
+	}
+
+	/// Get a InputStream suitable for reading from this panel
+	/// @return a OutputStream
+	public InputStream getInputStream() {
+		InputStream in = new InputStream() {
+			@Override
+			public int read() throws IOException {
+				textPane.requestFocus();
+				reading = true; // Enables KeyListener (see below)
+				while (reading)
+					Thread.yield();
+				return (keyin);
+			}
+		};
+		return in;
 	}
 
 	/// Get a reader suitable for reading from this panel
@@ -113,16 +170,17 @@ public final class RTS_ConsolePanel extends JPanel {
 		return (consoleReader);
 	}
 
-	/// Get a OutputStream suitable for writing on this panel
+	/// Get a PrintStream suitable for writing on this panel
 	/// @return a OutputStream
-	public OutputStream getOutputStream() {
-		return (new OutputStream() {
+	public PrintStream getOutputStream() {
+		OutputStream out = new OutputStream() {
 			@Override
 			public void write(int b) throws IOException {
 				String s = "" + (char) b;
 				RTS_ConsolePanel.this.write(s, styleRegular);
 			}
-		});
+		};
+		return new PrintStream(out);
 	}
 
 	/// Get a writer suitable for writing on this panel
@@ -207,45 +265,6 @@ public final class RTS_ConsolePanel extends JPanel {
 	private static void IERR(final String msg, final Throwable e) {
 		System.out.println("IERR: " + msg + "  " + e);
 		e.printStackTrace();
-	}
-
-	/// Create a new _RTConsolePanel
-	public RTS_ConsolePanel() {
-		super(new BorderLayout());
-		JScrollPane scrollPane;
-		textPane = new JTextPane();
-		textPane.addMouseListener(mouseListener);
-		scrollPane = new JScrollPane(textPane);
-		scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
-		scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-		doc = new DefaultStyledDocument();
-		addStylesToDocument(doc);
-		doc.putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
-		textPane.setStyledDocument(doc);
-		textPane.addKeyListener(listener);
-		textPane.setEditable(false);
-		popupMenu = new JPopupMenu();
-		clearItem = new JMenuItem("Clear Console");
-		// clearItem.setAccelerator(KeyStroke.getKeyStroke('X',
-		// InputEvent.CTRL_DOWN_MASK));
-		popupMenu.add(clearItem);
-		clearItem.addActionListener(actionListener);
-		copyItem = new JMenuItem("Copy to Clipboard");
-		copyItem.setAccelerator(KeyStroke.getKeyStroke('C', InputEvent.CTRL_DOWN_MASK));
-		popupMenu.add(copyItem);
-		copyItem.addActionListener(actionListener);
-		this.add(scrollPane);
-	}
-
-	/// popup this Console Panel
-	/// @param title for the Panel
-	public void popup(String title) {
-		RTS_Frame frame = new RTS_Frame();
-		frame.setSize(950, 500); // Initial frame size
-		frame.setTitle(title);
-		frame.setLocationRelativeTo(null);
-		frame.getContentPane().add(this);
-		frame.setVisible(true);
 	}
 	
 	/// Add styles to a Document

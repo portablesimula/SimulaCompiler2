@@ -111,12 +111,12 @@ public final class ArithmeticExpression extends Expression {
 	private ArithmeticExpression(final Expression lhs, final int opr, final Expression rhs) {
 		this.opr = opr;
 		if (lhs == null) {
-			Util.error("Missing operand before " + opr);
+			Util.error("Missing operand before " + KeyWord.edit(opr));
 			this.lhs = new VariableExpression("UNKNOWN_");
 		} else
 			this.lhs = lhs;
 		if (rhs == null) {
-			Util.error("Missing operand after " + opr);
+			Util.error("Missing operand after " + KeyWord.edit(opr));
 			this.rhs = new VariableExpression("UNKNOWN_");
 		} else
 			this.rhs = rhs;
@@ -137,7 +137,7 @@ public final class ArithmeticExpression extends Expression {
 					return (Constant.evaluate(lhn, opr, rhn));
 			}
 		} catch (Exception e) {
-			Util.error("Arithmetic overflow: " + lhs + ' ' + opr + ' ' + rhs + "   " + e);
+			Util.error("Arithmetic overflow: " + lhs + ' ' + KeyWord.edit(opr) + ' ' + rhs + "   " + e);
 			e.printStackTrace();
 		}
 		return (new ArithmeticExpression(lhs, opr, rhs));

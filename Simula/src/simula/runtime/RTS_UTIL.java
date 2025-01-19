@@ -10,6 +10,8 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
+import simula.compiler.utilities.Util;
+
 /// Utility class containing a lot of common stuff.
 /// 
 /// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_UTIL.java"><b>Source File</b></a>.
@@ -342,7 +344,8 @@ public final class RTS_UTIL {
 					if (RTS_Option.GOTO_TRACING) {
 						System.out.println("RTS_UTIL.treatException: Return after 'Illege GOTO' message");
 					}
-					System.exit(-1);
+//					System.exit(-1);
+					doExit(-1);
 				}
 			}
 		} else if (e instanceof RTS_EndProgram) {
@@ -358,9 +361,13 @@ public final class RTS_UTIL {
 			} else {
 				RTS_UTIL.printError(threadID + "SIMULA RUNTIME(2) ERROR: " + msg);
 				if (RTS_Option.VERBOSE)
-					e.printStackTrace();
+					Thread.dumpStack();
 				RTS_UTIL.printSimulaStackTrace(e, 0);
-				System.exit(-1);
+				if(RTS_UTIL.console != null) {
+					while(true) Thread.yield();
+				}
+//				System.exit(-1);
+				doExit(-1);
 			}
 			
 		} else if (e instanceof Error) {
@@ -369,11 +376,13 @@ public final class RTS_UTIL {
 			RTS_UTIL.printSimulaStackTrace(e, 0);
 			if (RTS_Option.VERBOSE)
 				e.printStackTrace();
-			System.exit(-1);				
+//			System.exit(-1);				
+			doExit(-1);
 		} else {
 			RTS_UTIL.printError(threadID + "UNCAUGHT EXCEPTION: " + e.getMessage());
 			e.printStackTrace();
-			System.exit(-1);				
+//			System.exit(-1);				
+			doExit(-1);
 		}
 		if (RTS_Option.GOTO_TRACING)
 			RTS_UTIL.printThreadList();
@@ -458,12 +467,9 @@ public final class RTS_UTIL {
 		RTS_UTIL.numberOfEditOverflows = 0;
 		RTS_RTObject.startTimeMs = System.currentTimeMillis();
 		RTS_UTIL.progamIdent = ident;
-		if (RTS_Option.BLOCK_TRACING)
-			RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
 		if (RTS_RTObject._SYSIN == null) {
-			if (RTS_Option.USE_CONSOLE) {
-				RTS_UTIL.console = new RTS_ConsolePanel();
-				RTS_UTIL.console.popup("Runtime Console");
+			if (RTS_Option.BLOCK_TRACING) {
+				RTS_UTIL.TRACE("Begin Execution of Simula Program: " + ident);
 			}
 			RTS_RTObject._SYSIN = new RTS_Infile(RTS_RTObject._CTX, new RTS_TXT("#sysin"));
 			RTS_RTObject._SYSOUT = new RTS_Printfile(RTS_RTObject._CTX, new RTS_TXT("#sysout"));
@@ -507,7 +513,8 @@ public final class RTS_UTIL {
 				+ "  -SPORT:select <string>      The SPORT selection string\n"
 				+ "  -SPORT:trace <traceLevel>   Debug: The SPORT trace level\n"
 		);
-		System.exit(-2);
+//		System.exit(-2);
+		doExit(-2);
 	}
 
 	/// Set runtime options.
@@ -603,28 +610,30 @@ public final class RTS_UTIL {
 	/// Print a line on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void println(final String msg) {
-		if (console != null)
-			console.write(msg + '\n');
-		else
-			System.out.println(msg);
+		ensureOpenRuntimeConsole();
+		console.write(msg + '\n');
 	}
 
 	/// Print an error on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void printError(final String msg) {
-		if (console != null)
-			console.writeError(msg + '\n');
-		else
-			System.out.println("\n" + msg);
+		ensureOpenRuntimeConsole();
+		console.writeError(msg + '\n');
 	}
 
 	/// Print a warning message on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void printWarning(final String msg) {
-		if (console != null)
-			console.writeWarning(msg + '\n');
-		else
-			System.out.println(msg);
+		ensureOpenRuntimeConsole();
+		console.writeWarning(msg + '\n');
+	}
+	
+	/// Open Simula Runtime Console.
+	static void ensureOpenRuntimeConsole() {
+		if (console == null) {
+			console = new RTS_ConsolePanel();
+			console.popup("Simula Runtime Console");
+		}		
 	}
 
 	/// TRACE Utility.
@@ -638,7 +647,21 @@ public final class RTS_UTIL {
 	static void IERR(final String msg) {
 		printError(msg);
 		Thread.dumpStack();
-		System.exit(-1);
+//		System.exit(-1);
+		doExit(-1);
+	}
+	
+	/// FEC-Utility.
+	public static void doExit(int code) {
+		if(RTS_SPORT_Option.SPORT_SourceFileName != null) {
+//			while(true) Thread.yield();
+			if(console != null) {
+				console.write("EXIT: ");
+				console.read();
+			}
+			
+		}
+		System.exit(code);
 	}
 
 	// *********************************************************************

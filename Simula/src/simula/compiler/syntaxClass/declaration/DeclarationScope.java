@@ -374,6 +374,7 @@ public abstract class DeclarationScope extends Declaration  {
     	} else {
     		CLASSFILE_ALREADY_GENERATED = true;
     		buildAndLoadOrAddClassFile();
+//    		Util.dumpStack();
     	}
     }
 	
@@ -381,7 +382,7 @@ public abstract class DeclarationScope extends Declaration  {
     /// @throws IOException if something went wrong.
     protected void buildAndLoadOrAddClassFile() throws IOException {
 		if (this.isPreCompiledFromFile != null) {
-			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier);			
+			if(Option.verbose) System.out.println("Skip  buildClassFile: "+this.identifier);
 		} else {
 	    	byte[] bytes = doBuildClassFile();
 	    	loadOrAddClassFile(bytes);
@@ -419,9 +420,11 @@ public abstract class DeclarationScope extends Declaration  {
     		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.simulaClassLoader != null) {
     				String name = Global.packetName + "." + externalIdent;
+    				if(Option.verbose) Util.println(Global.sourceName + ": Begin Load ClassFile: " + name);
     				Global.simulaClassLoader.loadClass(name, bytes);
     			} else {
         			String entryName = Global.packetName + "/" + externalIdent + ".class";
+        			if(Option.verbose) Util.println(Global.sourceName + ": Begin Write .jar Entry: " + entryName);
         			Global.jarFileBuilder.writeJarEntry(entryName, bytes);
     			}
     		} else {

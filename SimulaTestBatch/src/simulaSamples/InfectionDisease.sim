@@ -60,7 +60,7 @@ Simulation begin
       infectedLabel :- new Description(100,100,yellow,"Number of infected persons (accumulated)"); 
       sickLabel :- new Description(100,50,red,"Number of sick persons (not accumulated)"); 
       prevTime:=clocktime; 
-         while clocktime < prevTime+10 do; 
+         while clocktime < prevTime+2 do; 
       timeStep:=1; -- Seconds 
       while true do begin 
          infected.move(nInfected); sick.move(nSick); 

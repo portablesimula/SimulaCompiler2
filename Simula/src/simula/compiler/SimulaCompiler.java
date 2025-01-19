@@ -136,7 +136,7 @@ public final class SimulaCompiler {
 			Util.println("OS name              " + System.getProperty("os.name"));
 			Util.println("OS architecture      " + System.getProperty("os.arch"));
 			Util.println("OS version           " + System.getProperty("os.version"));
-			Util.println("32/64 bit JVM        " + System.getProperty("sun.arch.data.model"));
+//			Util.println("32/64 bit JVM        " + System.getProperty("sun.arch.data.model"));
 			Util.println("file.encoding        " + System.getProperty("file.encoding"));
 			Util.println("defaultCharset       " + Charset.defaultCharset());
 
@@ -205,6 +205,7 @@ public final class SimulaCompiler {
 	/// Do Compile
 	/// @throws IOException when it fails
 	public void doCompile() throws IOException {
+		if(Option.verbose) Util.println("SimulaCompiler.doCompile: " + Global.sourceName + ": Start Simula Compiler");
 		Util.nError = 0;
 		if (!Util.isJavaIdentifier(Global.sourceName)) {
 			String sourceName = Global.sourceName;
@@ -229,6 +230,7 @@ public final class SimulaCompiler {
 			if (Option.internal.TRACE_PARSE && programModule != null)
 				programModule.print(0);
 		}
+		if(Option.verbose) Util.println("SimulaCompiler.doCompile: " + Global.sourceName + ": Parsing completed");
 		Parse.close();
 		Global.duringParsing = false;
 		if(Option.internal.PRINT_SYNTAX_TREE > 1) {
@@ -275,6 +277,7 @@ public final class SimulaCompiler {
 			if (Option.internal.TRACE_CHECKER_OUTPUT && programModule != null)
 				programModule.print(0);
 		}
+		if(Option.verbose) Util.println("SimulaCompiler.doCompile: " + Global.sourceName + ": Semantic Checker completed");
 		Global.duringChecking = false;
 		if(Option.internal.PRINT_SYNTAX_TREE > 0) {
 			System.out.println("\nSimulaCompiler.doCompile: =========== Resulting Syntax Tree after Checking ================");
@@ -293,11 +296,13 @@ public final class SimulaCompiler {
 				Util.println("BEGIN Generate .class Output Code");
 			// *** Generate .class files
 			programModule.createJavaClassFile();
+			if(Option.verbose) Util.println(Global.sourceName + ": Class Files Generated - Directly");
 		} else {
 			if (Option.internal.TRACING)
 				Util.println("BEGIN Generate .java Output Code");
 			// *** Generate .java intermediate code
 			programModule.doJavaCoding();
+			if(Option.verbose) Util.println("SimulaCompiler.doCompile: " + Global.sourceName + ": Java Source Files Generated");
 			if (Option.internal.TRACING) {
 				Util.println("END Generate .java Output Code");
 				for (JavaSourceFileCoder javaClass : Global.javaSourceFileCoders)
@@ -392,10 +397,10 @@ public final class SimulaCompiler {
 	/// @throws IOException if something went wrong.
 	private void doExecuteJarFile(String jarFile,Vector<String> arg) throws IOException {
 		if (!programModule.isExecutable()) {
-			if (Option.internal.TRACING)
+			if (Option.verbose)
 				Util.println("Separate Compilation - No Execution of .jar File: " + jarFile);
 		} else if (Option.noExecution) {
-			if (Option.internal.TRACING)
+			if (Option.verbose)
 				Util.println("Option 'noexec' ==> No Execution of .jar File: " + jarFile);
 		} else {
 			if (Option.verbose)
@@ -474,6 +479,7 @@ public final class SimulaCompiler {
 				Util.println(javaClass.getClassOutputFileName());
 			list(Global.tempClassFileDir);
 		}
+		if(Option.verbose) Util.println("SimulaCompiler.doCompile: " + Global.sourceName + ": Class Files Generated - From Java Source");
 		if (exitValue != 0) {
 			Util.error("Java " + msg + " Compiler returns exit=" + exitValue + "\n");
 			Util.println("\nCompiler terminated after error(s) during Java Compilation");
@@ -505,28 +511,20 @@ public final class SimulaCompiler {
 		String[] args = new String[nArg];
 		arguments.toArray(args);
 
-		InputStream in = System.in;
-		OutputStream out = System.out;
-		OutputStream err = System.err;
-		if (Global.console != null) {
-			out = Global.console.getOutputStream();
-			err = Global.console.getErrorStream();
-		}
 		if (Option.internal.DEBUGGING) {
 			Util.println("------------  Call Java System Compiler  ------------");
 			Util.println("System Compiler supports " + compiler.getSourceVersions());
 			for (int i = 0; i < args.length; i++)
 				Util.println("Compiler'args[" + i + "]=" + args[i]);
 		}
-		int exitValue = compiler.run(in, out, err, args);
-		return (exitValue);
+		int exitValue = compiler.run(System.in, System.out, System.err, args);
+		return (exitValue);			
 	}
 
 	/// Call Java command line compiler.
 	/// @param classPath the classPath
 	/// @return return value from the Java compiler
-	/// @throws IOException if something went wrong
-	private int callJavacCompiler(final String classPath) throws IOException {
+	private int callJavacCompiler(final String classPath) {
 		Vector<String> cmds = new Vector<String>();
 		cmds.add("javac");
 		if (Option.internal.DEBUGGING) {
@@ -567,6 +565,7 @@ public final class SimulaCompiler {
 				if (javaClass.mustDoByteCodeEngineering) {
 					String classFileName = javaClass.getClassOutputFileName();
 					ClassFileTransform.doRepairSingleByteCode(classFileName,classFileName);
+					if(Option.verbose) Util.println("SimulaCompiler.doByteCodeEngineering: " + Global.sourceName + ": Class File " + classFileName + " is repaired");
 				}
 			}
 			if (Option.internal.TRACE_BYTECODE_OUTPUT) {

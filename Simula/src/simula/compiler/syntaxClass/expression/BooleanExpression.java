@@ -123,11 +123,11 @@ public final class BooleanExpression extends Expression {
 		this.opr = opr;
 		this.rhs = rhs;
 		if (this.lhs == null) {
-			Util.error("Missing operand before " + opr);
+			Util.error("Missing operand before " + KeyWord.edit(opr));
 			this.lhs = new VariableExpression("UNKNOWN_");
 		}
 		if (this.rhs == null) {
-			Util.error("Missing operand after " + opr);
+			Util.error("Missing operand after " + KeyWord.edit(opr));
 			this.rhs = new VariableExpression("UNKNOWN_");
 		}
 		this.lhs.backLink = this.rhs.backLink = this;

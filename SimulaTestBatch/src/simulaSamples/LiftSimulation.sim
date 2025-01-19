@@ -23,7 +23,7 @@ Drawing("Elevator simulation",1000,1000) begin
 -----------------------------------------------------------------------------------------
 integer	nPersions=500;       -- Number of persions in Simulation
 integer	nFloors=10;          -- Number of floors
-integer	nLifts=8;            -- Number of lifts
+integer	nLifts;              -- Number of lifts
 integer maxload=9;           -- Max load in one lift
 real getinTime=0.002;        -- Time to get into lift (average)
 real getoutTime=0.002;       -- Time to get out of lift
@@ -34,6 +34,10 @@ real decelerationTime=0.001; -- Deceleration time for lift
 real startTime=7.0;          -- Starting time in the morning
 real endTime=19.0;           -- Ending time in the evening
 
+outtext("Number of lifts: ");
+breakoutimage; nLifts := inint;
+if(nLifts < 2)  then nLifts := 2;
+if(nLifts > 10) then nLifts := 10;
 
 Simulation begin
     integer neutral=0, wayup=1, waydown=2; -- Elevator States

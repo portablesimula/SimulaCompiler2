@@ -326,6 +326,7 @@ public final class SimulaExtractor extends JFrame {
 			try { simulaProperties.loadFromXML(new FileInputStream(loadPropertiesFrom));
 			} catch(Exception e) {} // e.printStackTrace(); }
 		}
+//		System.out.println("SimulaExtractor.updateProperties: setupDated="+setupDated);
 		simulaProperties.put("simula.setup.dated",setupDated);
 		simulaProperties.put("simula.installed",new Date().toString());
 		simulaProperties.put("simula.version",simulaReleaseID);
@@ -637,6 +638,7 @@ public final class SimulaExtractor extends JFrame {
 			JOptionPane.showMessageDialog(null, "Can't run " + cmd, "Error Running Java", JOptionPane.ERROR_MESSAGE);
 		}
 		// Don't wait for it to finish, we just quietly exit now
+		System.exit(0);
 	}
 
 	/** Get the path to the java program. */

@@ -48,7 +48,7 @@ public final class UnaryOperation extends Expression {
 		this.oprator = oprator;
 		this.operand = operand;
 		if(this.operand==null)
-		{ Util.error("Missing operand after unary "+oprator);
+		{ Util.error("Missing operand after unary "+KeyWord.edit(oprator));
 		  this.operand=new VariableExpression("UNKNOWN_");
 		}
 		this.operand.backLink=this;
@@ -149,7 +149,7 @@ public final class UnaryOperation extends Expression {
 
 	@Override
 	public String toString() {
-		return ("(UNARY:" + oprator + ' ' + operand + ")");
+		return ("(UNARY:" + KeyWord.edit(oprator) + ' ' + operand + ")");
 	}
 
 	// ***********************************************************************************************

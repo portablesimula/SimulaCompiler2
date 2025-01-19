@@ -8,11 +8,15 @@ package simula.compiler.utilities;
 import java.awt.Color;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.lang.ProcessBuilder.Redirect;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
+import java.util.concurrent.ExecutionException;
+
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -173,6 +177,15 @@ public final class Util {
 		}
 		else System.out.println(s);
 	}  
+	
+	public static void dumpStack() {
+		Util.println("");
+		Util.println("Util.dumpStack:");
+		StackTraceElement[] elts = Thread.currentThread().getStackTrace();
+		for(StackTraceElement elt:elts) {
+			Util.println(""+elt);
+		}
+	}
 
 	/// Print a error message.
 	/// @param s the message
@@ -275,7 +288,7 @@ public final class Util {
 		System.out.println("\n\n******** BEGIN List ClassFile: "+classFileName + " *****************************************************");
 		try {
 			execute("javap", "-c", "-l", "-p", "-s", "-verbose", classFileName);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			Util.IERR("Impossible", e);
 		}
 		System.out.println("******** ENDOF List ClassFile: "+classFileName + " *****************************************************\n\n");
@@ -287,47 +300,81 @@ public final class Util {
 	/// Execute OS Command
 	/// @param cmd command vector
 	/// @return return value from the OS
-	/// @throws IOException if something went wrong
-	public static int execute(final Vector<String> cmd) throws IOException {
+	public static int execute(final Vector<String> cmd) {
 		String[] cmds = new String[cmd.size()];
 		cmd.copyInto(cmds);
 		return (execute(cmds));
 	}
 
 	/// Execute an OS command
-	/// 
 	/// @param cmdarray command array
 	/// @return exit value
-	/// @throws IOException if an I/O error occurs
-	public static int execute(final String... cmdarray) throws IOException {
-		Runtime runtime = Runtime.getRuntime();
+	public static int execute(final String... cmdarray) {
 		if (Option.verbose) {
 			String line = "";
 			for (int i = 0; i < cmdarray.length; i++)
 				line = line + " " + cmdarray[i];
 			Util.println("Execute: " + line);
 		}
-		Process process = runtime.exec(cmdarray);
-		InputStream err = process.getErrorStream();
-		InputStream inp = process.getInputStream();
-		StringBuilder error = new StringBuilder();
-		while (process.isAlive()) {
-			while (err.available() > 0) {
-				char c = (char) err.read();
-				System.err.append(c);
-				error.append(c);
+		ProcessBuilder processBuilder = new ProcessBuilder(cmdarray);
+		processBuilder.redirectErrorStream(true);
+		try {
+			Process process = processBuilder.start();		
+			InputStream output = process.getInputStream();  // Process' output
+			if (Global.console != null) {
+				while (process.isAlive()) {
+					while (output.available() > 0) {
+						Global.console.write("" + (char) output.read());
+					}
+				}
+			} else {
+				while (process.isAlive()) {
+					while (output.available() > 0) {
+						System.out.append((char) output.read());
+					}
+				}
 			}
-			while (inp.available() > 0) {
-				if (Global.console != null)
-					Global.console.write("" + (char) inp.read());
-				else
-					System.out.append((char) inp.read());
-			}
+			return (process.exitValue());
+
+		} catch(Exception e) {
+			throw new RuntimeException("Process Execution failed: " + cmdarray[0], e);
 		}
-		if (error.length() > 0)
-			Util.error(error.toString());
-		return (process.exitValue());
 	}
+
+//	/// Execute an OS command
+//	/// 
+//	/// @param cmdarray command array
+//	/// @return exit value
+//	/// @throws IOException if an I/O error occurs
+//	public static int execute(final String... cmdarray) throws IOException {
+//		Runtime runtime = Runtime.getRuntime();
+//		if (Option.verbose) {
+//			String line = "";
+//			for (int i = 0; i < cmdarray.length; i++)
+//				line = line + " " + cmdarray[i];
+//			Util.println("Execute: " + line);
+//		}
+//		Process process = runtime.exec(cmdarray);
+//		InputStream err = process.getErrorStream();
+//		InputStream inp = process.getInputStream();
+//		StringBuilder error = new StringBuilder();
+//		while (process.isAlive()) {
+//			while (err.available() > 0) {
+//				char c = (char) err.read();
+//				System.err.append(c);
+//				error.append(c);
+//			}
+//			while (inp.available() > 0) {
+//				if (Global.console != null)
+//					Global.console.write("" + (char) inp.read());
+//				else
+//					System.out.append((char) inp.read());
+//			}
+//		}
+//		if (error.length() > 0)
+//			Util.error(error.toString());
+//		return (process.exitValue());
+//	}
   
 	/// Build invoke Simula Runtime Error.
 	/// @param mss the error message.

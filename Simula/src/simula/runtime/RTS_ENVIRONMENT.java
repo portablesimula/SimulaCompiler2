@@ -2125,7 +2125,8 @@ public class RTS_ENVIRONMENT extends RTS_RTObject {
 			case 4 -> sb.append("nErrors=" + info);
 			case 5 -> { 
 				sb.append("nWarnings=" + info);
-				System.exit(exitCode);
+//				System.exit(exitCode);
+				RTS_UTIL.doExit(exitCode);
 			}
 		}
 		if (RTS_Option.VERBOSE)

@@ -104,7 +104,7 @@ public class JarFileBuilder {
 		byte[] prev = classFileMap.put(entryName,bytes);
 		if(prev != null) {
 			if(Option.verbose)
-				System.out.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED");
+				Util.println("JarOutputSet.putMapEntry: "+entryName+" WAS REPLACED");
 		}
 	}
 	
@@ -144,6 +144,7 @@ public class JarFileBuilder {
 		}
         
         jarOutputStream.close();
+		if(Option.verbose) Util.println("JarFileBuilder.close: " + Global.sourceName + ": JarFile " + outputJarFile);
 		
 		if(TESTING) {
 			System.out.println("JarFileBuilder.close: ");

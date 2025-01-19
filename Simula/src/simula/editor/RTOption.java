@@ -27,7 +27,7 @@ import simula.compiler.utilities.Util;
 /// @author Øystein Myhre Andersen
 public final class RTOption {
 	/** Runtime Option */ public static boolean VERBOSE = false;
-	/** Runtime Option */ public static boolean USE_CONSOLE=false;
+//	/** Runtime Option */ public static boolean USE_CONSOLE=false;
 	/** Runtime Option */ public static boolean BLOCK_TRACING = false;
 	/** Runtime Option */ public static boolean GOTO_TRACING = false;
 	/** Runtime Option */ public static boolean QPS_TRACING = false;
@@ -41,7 +41,7 @@ public final class RTOption {
 	/// Initiate Runtime options with default values.
     public static void InitRuntimeOptions() {
 		RTOption.VERBOSE = false;
-		RTOption.USE_CONSOLE=true;
+//		RTOption.USE_CONSOLE=true;
 		RTOption.BLOCK_TRACING = false;
 		RTOption.GOTO_TRACING = false;
 		RTOption.QPS_TRACING = false;
@@ -53,7 +53,7 @@ public final class RTOption {
     /// @param args the argument vector
 	public static void addRTArguments(Vector<String> args) {
 		if(RTOption.VERBOSE) args.add("-verbose");
-		if(RTOption.USE_CONSOLE) args.add("-useConsole");
+//		if(RTOption.USE_CONSOLE) args.add("-useConsole");
 		if(RTOption.BLOCK_TRACING) args.add("-blockTracing");
 		if(RTOption.GOTO_TRACING) args.add("-gotoTracing");
 		if(RTOption.QPS_TRACING) args.add("-qpsTracing");
@@ -68,7 +68,7 @@ public final class RTOption {
 	/// @param properties the properties to decode.
 	public static void getRuntimeOptions(Properties properties) {
 		RTOption.VERBOSE = properties.getProperty("simula.runtime.option.VERBOSE", "false").equalsIgnoreCase("true");
-		RTOption.USE_CONSOLE = properties.getProperty("simula.runtime.option.USE_CONSOLE", "true").equalsIgnoreCase("true");
+//		RTOption.USE_CONSOLE = properties.getProperty("simula.runtime.option.USE_CONSOLE", "true").equalsIgnoreCase("true");
 		RTOption.BLOCK_TRACING = properties.getProperty("simula.runtime.option.BLOCK_TRACING", "false").equalsIgnoreCase("true");
 		RTOption.GOTO_TRACING = properties.getProperty("simula.runtime.option.GOTO_TRACING", "false").equalsIgnoreCase("true");
 		RTOption.QPS_TRACING = properties.getProperty("simula.runtime.option.QPS_TRACING", "false").equalsIgnoreCase("true");
@@ -79,7 +79,7 @@ public final class RTOption {
 	/// @param properties the properties to encode.
 	public static void setRuntimeOptions(Properties properties) {
 		properties.setProperty("simula.runtime.option.VERBOSE", ""+RTOption.VERBOSE);
-		properties.setProperty("simula.runtime.option.USE_CONSOLE", ""+RTOption.USE_CONSOLE);
+//		properties.setProperty("simula.runtime.option.USE_CONSOLE", ""+RTOption.USE_CONSOLE);
 		properties.setProperty("simula.runtime.option.BLOCK_TRACING", ""+RTOption.BLOCK_TRACING);
 		properties.setProperty("simula.runtime.option.GOTO_TRACING", ""+RTOption.GOTO_TRACING);
 		properties.setProperty("simula.runtime.option.QPS_TRACING", ""+RTOption.QPS_TRACING);
@@ -91,7 +91,7 @@ public final class RTOption {
     	JPanel panel=new JPanel();
     	panel.setBackground(Color.white);
     	panel.add(checkBox("Verbose"));
-        panel.add(checkBox("USE_CONSOLE"));
+//        panel.add(checkBox("USE_CONSOLE"));
         panel.add(checkBox("BLOCK_TRACING"));
         panel.add(checkBox("GOTO_TRACING"));
         panel.add(checkBox("QPS_TRACING"));
@@ -120,7 +120,7 @@ public final class RTOption {
 	/// @return the option name 'id'
 	private static boolean getOption(String id) {
 		if(id.equalsIgnoreCase("VERBOSE")) return(VERBOSE); 
-		if(id.equalsIgnoreCase("USE_CONSOLE")) return(USE_CONSOLE); 
+//		if(id.equalsIgnoreCase("USE_CONSOLE")) return(USE_CONSOLE); 
 		if(id.equalsIgnoreCase("BLOCK_TRACING")) return(BLOCK_TRACING); 
 		if(id.equalsIgnoreCase("GOTO_TRACING")) return(GOTO_TRACING); 
 		if(id.equalsIgnoreCase("QPS_TRACING")) return(QPS_TRACING); 
@@ -133,7 +133,7 @@ public final class RTOption {
 	/// @param val new option value
 	private static void setOption(String id,boolean val) {
 		if(id.equalsIgnoreCase("VERBOSE")) VERBOSE=val; 
-		if(id.equalsIgnoreCase("USE_CONSOLE")) USE_CONSOLE=val;
+//		if(id.equalsIgnoreCase("USE_CONSOLE")) USE_CONSOLE=val;
 		if(id.equalsIgnoreCase("BLOCK_TRACING")) BLOCK_TRACING=val; 
 		if(id.equalsIgnoreCase("GOTO_TRACING")) GOTO_TRACING=val; 
 		if(id.equalsIgnoreCase("QPS_TRACING")) QPS_TRACING=val; 

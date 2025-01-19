@@ -31,8 +31,10 @@ public final class RunSingleClassTest {
 	public static void main(String[] args) {
 		
 		// Set options.
-		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
-		Option.verbose=true;
+//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
+		Option.compilerMode = Option.CompilerMode.directClassFiles;
+//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
+//		Option.verbose=true;
 //		Option.EXTENSIONS=false;
 //		Option.CaseSensitive=true;
 //		Option.noExecution=true;
@@ -42,12 +44,9 @@ public final class RunSingleClassTest {
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
 		Option.internal.TESTING_STACK_SIZE = true;
-//		Option.compilerMode = Option.CompilerMode.viaJavaSource;
-		Option.compilerMode = Option.CompilerMode.directClassFiles;
-//		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
-		Option.internal.LIST_GENERATED_CLASS_FILES=true;
+//		Option.internal.LIST_GENERATED_CLASS_FILES=true;
 
 		// Overall TRACING Options
 //		Option.internal.TRACING=true;
@@ -58,7 +57,7 @@ public final class RunSingleClassTest {
 
 		// Parser Trace Options
 //		Option.internal.TRACE_PARSE=true;
-		Option.internal.PRINT_SYNTAX_TREE=1;
+//		Option.internal.PRINT_SYNTAX_TREE=1;
 //		Option.internal.TRACE_ATTRIBUTE_OUTPUT=true;
 //		Option.internal.TRACE_ATTRIBUTE_INPUT=true;
 
@@ -75,7 +74,7 @@ public final class RunSingleClassTest {
 		
 		// Set RunTime Options and tracing.
 		RTOption.VERBOSE = false;
-		RTOption.VERBOSE = true;
+//		RTOption.VERBOSE = true;
 //		RTOption.USE_CONSOLE=true;
 //		RTOption.BLOCK_TRACING = true;
 //		RTOption.GOTO_TRACING = true;
@@ -244,7 +243,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst128.sim"); // OK: Standard Procedure edit and edfix
 //		names.add("Precompiled129.sim"); // OK: Precompile this for Simtst 129.
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
-//		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
+		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
 //		names.add("simtst131.sim"); // OK: Catching Errors
 //		names.add("simtst132.sim"); // OK: SPORT Options
@@ -282,7 +281,7 @@ public final class RunSingleClassTest {
 //		names.add("simtst160.sim"); // OK: Test Specified Virtual Text Functions as part of an Expression
 //		names.add("simtst161.sim"); // OK: Test Specified Virtual ref-type Functions as part of an Expression
 //		names.add("simtst162.sim"); // OK: Test Complicated nested inspection
-		names.add("simtst163.sim"); // OK: Test Inspect when, when, otherwise (selected)
+//		names.add("simtst163.sim"); // OK: Test Inspect when, when, otherwise (selected)
 		
 //		names.add("RT_ErrorTest.sim"); // Simula TestBatch Framework
 //		names.add("simerr01.sim"); // OK: ILLEGAL GOTO out of an operating Process and into the enclosing System.

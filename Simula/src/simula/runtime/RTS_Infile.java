@@ -47,9 +47,6 @@ import java.io.Reader;
 /// @author Øystein Myhre Andersen
 public class RTS_Infile extends RTS_Imagefile {
 	
-	/// True: this Infile is Sysin.
-	private boolean readFromSystem;
-	
 	/// The BufferedReader used.
 	private BufferedReader lineReader;
 	
@@ -106,12 +103,7 @@ public class RTS_Infile extends RTS_Imagefile {
 		setpos(length() + 1);
 
 		if (FILE_NAME.edText().equalsIgnoreCase("#sysin")) {
-			if (RTS_UTIL.console != null) {
-				Reader reader = RTS_UTIL.console.getReader();
-				lineReader = new BufferedReader(reader);
-			} else {
-				readFromSystem = true;
-			}
+			// Nothing. Runtime Console is opened later
 		} else {
 			File file = doCreateAction();
 			if (!file.exists()) {
@@ -235,13 +227,19 @@ public class RTS_Infile extends RTS_Imagefile {
 	/// @return line String.
 	/// @throws IOException if something went wrong.
 	private String readLine() throws IOException {
-		String line;
-		if (readFromSystem) {
-			line = System.console().readLine();
-		} else {
-			line = lineReader.readLine();
-		}
-		return line;
+		ensureSysinOpened();
+		return lineReader.readLine();
+	}
+	
+	/// Ensure that Sysin is open.
+	private void ensureSysinOpened() {
+		if (FILE_NAME.edText().equalsIgnoreCase("#sysin")) {
+			if(lineReader == null) {
+			if (RTS_UTIL.console == null) RTS_UTIL.ensureOpenRuntimeConsole();
+				Reader reader = RTS_UTIL.console.getReader();
+				lineReader = new BufferedReader(reader);
+			}
+		}		
 	}
 
 	/// Procedure inrecord.

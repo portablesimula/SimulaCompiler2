@@ -30,6 +30,7 @@ public class RTS_Frame extends JFrame {
 		openFrames.remove(this);
 		if(openFrames.size() == 0) {
 			System.exit(0);
+//			RTS_UTIL.doExit(0);
 		}
 	}
 	

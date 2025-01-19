@@ -503,7 +503,8 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	public static void exit(int code) {
 		switch (code) {
 		case 0:
-			System.exit(-1);
+//			System.exit(-1);
+			RTS_UTIL.doExit(-1);
 		case 1:
 			RTS_UTIL.endProgram(0);
 		case 2:
@@ -876,21 +877,13 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	/// Returns next input character from sysin (after last inimage) without waiting
 	/// for break character. A subsequent inimage will begin reading after the last
 	/// character which has been input with insinglechar.
-	/// 
-	/// The use of this routine depends on runtime option USE_CONSOLE.
-	/// If it is not set a runtime error will occur.
-	/// 
 	/// </pre>
 	/// 
 	/// @return single character
-
 	public static char insinglechar() {
-		try {
-			return (RTS_UTIL.console.read());
-		} catch (Exception e) {
-			throw new RTS_SimulaRuntimeError(
-					"Procedure insinglechar is undefined: re-run program with Runtime Option USE_CONSOLE=true");
-		}
+		if (RTS_UTIL.console == null)
+			RTS_UTIL.ensureOpenRuntimeConsole();
+		return RTS_UTIL.console.read();
 	}
 
 	/// DEC_Lib Procedure linecount.
@@ -909,7 +902,6 @@ public class RTS_DEC_Lib extends RTS_CLASS {
 	/// 
 	/// @param pf argument Printfile
 	/// @return resulting lpp or code
-
 	public static int linecount(RTS_Printfile pf) {
 		if (pf == null)
 			return (-1);

@@ -115,7 +115,7 @@ public class SimulaEditor extends JFrame {
         // Set the initial size of the window
         int frameHeight=800;//500;
         int topHeight=500;//300;
-        int frameWidth=800;
+        int frameWidth=1000;
         setSize(frameWidth, frameHeight);
 
         // Set the title of the window
@@ -563,8 +563,7 @@ public class SimulaEditor extends JFrame {
 			public void run() {
 				String userDir=jarFile.getParentFile().getParent();
 				String[] cmds= {"java","-jar",jarFile.toString(),"-useConsole","-userDir",userDir};
-				try { Util.execute(cmds);
-				} catch (IOException e) { Util.IERR("Impossible",e); }
+				Util.execute(cmds);
 			}
 		}).start();
 	}

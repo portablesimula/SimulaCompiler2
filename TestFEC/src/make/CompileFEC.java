@@ -48,24 +48,24 @@ public final class CompileFEC {
 	public static void main(String[] args) {
     	//System.setProperty("file.encoding","UTF-8");
 		Vector<String> names=new Vector<String>();
-//		names.add("CLASS_COMMON.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_COMMON.jar
-//		names.add("CLASS_ERRMSG.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_ERRMSG.jar
-//		names.add("CLASS_SCANNER.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANNER.jar
-//		names.add("CLASS_SCANINP.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANINP.jar 
-//		names.add("CLASS_PARSER.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PARSER.jar
-//		names.add("CLASS_PAS1INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS1INIT.jar
-//		names.add("CLASS_BUILDER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER1.jar
-//		names.add("CLASS_BUILDER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER2.jar
-//		names.add("CLASS_CHECKER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER1.jar
-//		names.add("CLASS_CHECKER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER2.jar
-//		names.add("CLASS_SCODER0.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER0.jar
-//		names.add("CLASS_SCODER1.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1.jar
-//		names.add("CLASS_SCODER1E.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1E.jar	
-//		names.add("CLASS_SCODER2.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER2.jar
-//		names.add("CLASS_SCODER3.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER3.jar
-//		names.add("CLASS_SCODER4.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER4.jar
-//		names.add("CLASS_PAS2INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS2INIT.jar
-//		names.add("CLASS_SCODMAIN.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODMAIN.jar
+		names.add("CLASS_COMMON.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_COMMON.jar
+		names.add("CLASS_ERRMSG.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_ERRMSG.jar
+		names.add("CLASS_SCANNER.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANNER.jar
+		names.add("CLASS_SCANINP.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCANINP.jar 
+		names.add("CLASS_PARSER.sim");   // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PARSER.jar
+		names.add("CLASS_PAS1INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS1INIT.jar
+		names.add("CLASS_BUILDER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER1.jar
+		names.add("CLASS_BUILDER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_BUILDER2.jar
+		names.add("CLASS_CHECKER1.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER1.jar
+		names.add("CLASS_CHECKER2.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_CHECKER2.jar
+		names.add("CLASS_SCODER0.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER0.jar
+		names.add("CLASS_SCODER1.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1.jar
+		names.add("CLASS_SCODER1E.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER1E.jar	
+		names.add("CLASS_SCODER2.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER2.jar
+		names.add("CLASS_SCODER3.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER3.jar
+		names.add("CLASS_SCODER4.sim");  // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODER4.jar
+		names.add("CLASS_PAS2INIT.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_PAS2INIT.jar
+		names.add("CLASS_SCODMAIN.sim"); // END Create .jar File: C:\GitHub\S-Port-Simula\FEC\src\fec\source\bin\CLASS_SCODMAIN.jar
 
 //		names.add("GENMSG.sim");            // WILL GENERATE FILE MessageGenerator.sim
 //		names.add("MessageGenerator.sim");  // WILL GENERATE ERROR MESSAGE FILE FECERROR.txt
@@ -115,7 +115,7 @@ public final class CompileFEC {
 		
 //		File userDir=new File("C:/GitHub/SimulaCompiler2/Simula");
 		File simulaDir=new File("C:/GitHub/SimulaCompiler2/Simula");
-//		File userDir=new File("C:/GitHub/SimulaCompiler2/S-PORT");
+//		File userDir=new File("C:/GitHub/simulaCompiler2/simulaTestBatch_FEC");
 		
 		
 //		Option.internal.keepJava=new File("C:/GitHub/SimulaCompiler2/javaCodeFEC"); // Generated .java Source is then found in project javaCodeFEC
@@ -137,176 +137,177 @@ public final class CompileFEC {
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/MINI-PREDEF.DEF";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/PREDEF.DEF";
+//		RTOption.SPORT_SOURCE_FILE="C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/MINI-PREDEF.DEF";
+//		RTOption.SPORT_SOURCE_FILE="C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/PREDEF.DEF";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC/src/simuletta/RTS_FEC_InterfaceGenerator/predef/PREDEF.DEF";
+//		RTOption.SPORT_SOURCE_FILE="C:/WorkSpaces/SimulettaFECinJava/SimulettaFEC/src/simuletta/RTS_FEC_InterfaceGenerator/predef/PREDEF.DEF";
 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestPrograms/simple/adHoc00.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestPrograms/simple/adHoc01.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestPrograms/simple/adHoc02.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestPrograms/simple/Editing.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/CompilerTests/src/simulaTestPrograms/simple/adHoc00.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestPrograms/simple/adHoc01.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestPrograms/simple/adHoc02.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestPrograms/simple/Editing.sim";
 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst00.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst01.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst02.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst03.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst03.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst04.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst05.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst06.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst07.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst08.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst09.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst10.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst101.sim";
+		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst00.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst01.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst02.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst03.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst03.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst04.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst05.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst06.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst07.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst08.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst09.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst10.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst11.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst12.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst13.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst14.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst15.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst16.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst17.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst18.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst19.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst20.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst11.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst12.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst13.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst14.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst15.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst16.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst17.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst18.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst19.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst20.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst21.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst22.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst23.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst24.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst25.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst26.sim";  //ERROR: SORRY, switch element requiring thunk IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst27.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst28.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst29.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst30.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst21.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst22.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst23.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst24.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst25.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst26.sim";  //ERROR: SORRY, switch element requiring thunk IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst27.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst28.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst29.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst30.sim"; 
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst31.sim";  //ERROR: SORRY, complex switch element IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst32.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst33.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst34.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst35.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst36.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst37.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst38.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst39.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst40pb.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst40pa.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst40.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst31.sim";  //ERROR: SORRY, complex switch element IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst32.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst33.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst34.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst35.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst36.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst37.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst38.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst39.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst40pb.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst40pa.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst40.sim"; 
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst41proc.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst41.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst42.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst43.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst44.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst45.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst46.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst47.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst48.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst49.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst50.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst41proc.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst41.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst42.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst43.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst44.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst45.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst46.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst47.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst48.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst49.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst50.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst51.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst52.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst53.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst54.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst55.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst56.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst57.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst58.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst59.sim";  //ERROR: Line 18  missing indices
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst60.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst51.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst52.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst53.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst54.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst55.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst56.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst57.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst58.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst59.sim";  //ERROR: Line 18  missing indices
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst60.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst61.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst62.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst63.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst64.sim";  //ERROR: Recursive or nested call is not allowed in S-Code: AR1IND
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst65.sim";  //ERROR: Recursive or nested call is not allowed in S-Code: TXTASS
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst66.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst67.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst68.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst69.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst70.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst61.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst62.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst63.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst64.sim";  //ERROR: Recursive or nested call is not allowed in S-Code: AR1IND
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst65.sim";  //ERROR: Recursive or nested call is not allowed in S-Code: TXTASS
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst66.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst67.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst68.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst69.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst70.sim";
 	
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst71.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst72.sim";  FEC-ERROR: See comment in source text. 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst73.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst74.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst75.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst76.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst77.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst78.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler22/S-PORT/src/simulaTestBatch2/sim/simtst79.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst80.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst71.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst72.sim";  FEC-ERROR: See comment in source text. 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst73.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst74.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst75.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst76.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst77.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst78.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst79.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst80.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst81.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst82.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst83.sim";  //FEC-ERROR: See comment in source text.
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst84.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst85.sim";  //ERROR: Directfile
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst86Separat.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst86.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst87.sim";  //ERROR: Specification of Virtual Procedures - Invalid expression:
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst88.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst89.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst90.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst81.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst82.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst83.sim";  //FEC-ERROR: See comment in source text.
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst84.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst85.sim";  //ERROR: Directfile
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst86Separat.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst86.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst87.sim";  //ERROR: Specification of Virtual Procedures - Invalid expression:
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst88.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst89.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst90.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst91.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst92.sim";  //ERROR: missing indices - lowerbound(RA,1);
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst93.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst94.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst95.sim";  //NOT IMPLEMENTED: Inline System Routine GIVINF[22]
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst96.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst97.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst98.sim";  //ERROR Attribute protection - FEILER !
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst99.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst100.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst91.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst92.sim";  //ERROR: missing indices - lowerbound(RA,1);
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst93.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst94.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst95.sim";  //NOT IMPLEMENTED: Inline System Routine GIVINF[22]
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst96.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst97.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst98.sim";  //ERROR Attribute protection - FEILER !
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst99.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst100.sim";
 		
-		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch2/src/simulaTestBatch/simtst101.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst102.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst103.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst104.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst105.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst106.sim";  //FEILER
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst107.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst108.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst109.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst110.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst101.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst102.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst103.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst104.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst105.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst106.sim";  //FEILER
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst107.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst108.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst109.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst110.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst111.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst112.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst113.sim";  //ERROR: GOTO VIRTUAL SWITCH
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst114.sim";  //ERROR: SWITCH STATEMENT NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst115.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst116.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst117.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst118.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst111.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst112.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst113.sim";  //ERROR: GOTO VIRTUAL SWITCH
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst114.sim";  //ERROR: SWITCH STATEMENT NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst115.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst116.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst117.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst118.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst119MainSeparate.sim";  //IKKE FORSØKT: External Class  !!! 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst119SubSep.sim";  //IKKE FORSØKT: External Class  !!! 
-//			RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst119.sim";  //IKKE FORSØKT: External Class  !!! 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst119MainSeparate.sim";  //IKKE FORSØKT: External Class  !!! 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst119SubSep.sim";  //IKKE FORSØKT: External Class  !!! 
+//			RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst119.sim";  //IKKE FORSØKT: External Class  !!! 
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst120.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst120.sim";
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst121.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst122.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst123.sim";  //SORRY, switch element requiring thunk IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst124.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst125.sim";
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst126.sim";  //SORRY, switch element requiring thunk IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst127.sim";  //ERROR: SWITCH STATEMENT NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst128.sim";  //SORRY: The new standard procedures  edit and edfix IS NOT IMPLEMENTD
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst121.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst122.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst123.sim";  //SORRY, switch element requiring thunk IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst124.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst125.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst126.sim";  //SORRY, switch element requiring thunk IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst127.sim";  //ERROR: SWITCH STATEMENT NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst128.sim";  //SORRY: The new standard procedures  edit and edfix IS NOT IMPLEMENTD
 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/SimulaTest.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/Precompiled129.sim"; 
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst129.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch_FEC/sim/SimulaTest.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch_FEC/sim/Precompiled129.sim"; 
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst129.sim"; 
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst130.sim";  //SORRY: Class DEC_Lib  IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst130.sim";  //SORRY: Class DEC_Lib  IS NOT IMPLEMENTED
 		
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst131.sim";  //SORRY: Class CatchingErrors  IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst132.sim";  //SORRY: Class SPORT Options  IS NOT IMPLEMENTED
-//		RTOption.internal.SPORT_SOURCE_FILE="C:/GitHub/SimulaCompiler2/S-PORT/src/simulaTestBatch2/sim/simtst133.sim";  //SMÅ FEIL
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst131.sim";  //SORRY: Class CatchingErrors  IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst132.sim";  //SORRY: Class SPORT Options  IS NOT IMPLEMENTED
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst133.sim";  //SMÅ FEIL
 
 		long startTimeMs = System.currentTimeMillis( );
 

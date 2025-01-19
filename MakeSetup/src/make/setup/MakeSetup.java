@@ -186,6 +186,7 @@ public final class MakeSetup {
 	// *** COPY FOLDER
 	// ***************************************************************
 	static private void copyFolder(File source, File target,boolean copySubFolders) throws IOException {
+		System.out.println("COPY: "+source+" ==> "+target);
 		target.mkdirs();
 	    for(File file: source.listFiles()) {
 	        File fileDest = new File(target, file.getName());
