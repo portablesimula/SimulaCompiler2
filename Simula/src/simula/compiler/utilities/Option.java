@@ -68,6 +68,9 @@ public final class Option {
 
 		/// INLINE_TESTING on/off
 		public static boolean INLINE_TESTING = false; 
+
+		/// TRUE:Do not create popUp Console at runtime
+		public static boolean noConsole = false; 
 		
 		/// S-PORT extensions  on/off
 		public static boolean SPORT=false;

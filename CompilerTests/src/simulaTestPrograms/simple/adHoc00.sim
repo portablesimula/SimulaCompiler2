@@ -1,14 +1,14 @@
 
 begin
-   integer i, S, limit;
+	ref(FILE) x;
+	boolean b;
+	text t;
 
-        i := 1;
-   limit := 46342;
-       S := 46342;
-       
-%   outtext("(i-limit) = " & edit(i-limit)); outimage;
-%   outtext("(-46341 * S) = " & edit(-46341 * S)); outimage;
-%   outtext("(46341 * S) = " & edit(46341 * S)); outimage;
-
-   Outint( S * ( i - limit ), 12 );
-end
+	inspect x
+	when infile do begin
+		b := endfile;
+		t:-intext(12)
+	end
+	when outfile do outtext(t)
+	otherwise t:-notext;
+end;

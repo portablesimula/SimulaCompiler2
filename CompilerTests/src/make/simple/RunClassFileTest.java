@@ -38,6 +38,7 @@ public final class RunClassFileTest {
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
+		Option.internal.noConsole = true;
 		Option.compilerMode = Option.CompilerMode.simulaClassLoader;
 		Option.internal.TESTING_STACK_SIZE = true;
 //		Option.compilerMode = Option.CompilerMode.viaJavaSource;

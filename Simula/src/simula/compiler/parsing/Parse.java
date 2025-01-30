@@ -122,9 +122,9 @@ public final class Parse {
 	/// thus setting prevToken.
 	/// @param key t the given keywords
 	/// @return true if a keyword is accepted, false otherwise.
-	public static boolean accept(final int... key) {
-		for (int i = 0; i < key.length; i++)
-			if (Parse.currentToken.getKeyWord() == key[i]) {
+	public static boolean accept(final int... keys) {
+		for (int key : keys)
+			if (Parse.currentToken.getKeyWord() == key) {
 				nextToken();
 				return (true);
 			}

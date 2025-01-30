@@ -509,6 +509,7 @@ public final class RTS_UTIL {
 				+ "                        Default: User working directory. System.property(\"user.dir\")\n"
 				+ "\n"
 				+ "  -SPORT:listing              Print the SPORT source listing on sysout\n"
+				+ "  -SPORT:noConsole            Do not map sysout to a popup Console\n"
 				+ "  -SPORT:SCodeFile <fileName> The SPORT Scode file\n"
 				+ "  -SPORT:select <string>      The SPORT selection string\n"
 				+ "  -SPORT:trace <traceLevel>   Debug: The SPORT trace level\n"
@@ -529,7 +530,6 @@ public final class RTS_UTIL {
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();
 				else if (arg.equalsIgnoreCase("-verbose"))			{ RTS_Option.VERBOSE = true; RTS_SPORT_Option.FEC_Verbose = 1; }
-				else if (arg.equalsIgnoreCase("-useConsole"))		RTS_Option.USE_CONSOLE = true;
 				else if (arg.equalsIgnoreCase("-blockTracing"))		RTS_Option.BLOCK_TRACING = true;
 				else if (arg.equalsIgnoreCase("-gotoTracing"))		RTS_Option.GOTO_TRACING = true;
 				else if (arg.equalsIgnoreCase("-qpsTracing"))		RTS_Option.QPS_TRACING = true;
@@ -542,15 +542,15 @@ public final class RTS_UTIL {
 					File sourceFile = new File(RTS_SPORT_Option.SPORT_SourceFileName);
 					RTS_SPORT_Option.SourceDirName = sourceFile.getParent();
 				}
-				else if (arg.equalsIgnoreCase("-SPORT:SCodeFile"))		RTS_SPORT_Option.SPORT_SCodeFileName = args[++i];
-				else if (arg.equalsIgnoreCase("-SPORT:select"))			RTS_SPORT_Option.Selectors = args[++i];
 				else if (arg.equalsIgnoreCase("-SPORT:listing"))		RTS_SPORT_Option.ListingFileName = "#sysout";
+				else if (arg.equalsIgnoreCase("-SPORT:noConsole"))		RTS_SPORT_Option.noConsole = true;
+				else if (arg.equalsIgnoreCase("-SPORT:SCodeFile"))		RTS_SPORT_Option.SPORT_SCodeFileName = args[++i];
+				else if (arg.equalsIgnoreCase("-SPORT:traceScode"))		RTS_SPORT_Option.FEC_TraceScode = 1;
+				else if (arg.equalsIgnoreCase("-SPORT:select"))			RTS_SPORT_Option.Selectors = args[++i];
 				else if (arg.equalsIgnoreCase("-SPORT:trace"))			RTS_SPORT_Option.FEC_TraceLevel = Integer.decode(args[++i]);
 
-				else if (arg.equalsIgnoreCase("--enable-preview")) ; // TODO: TESTING_JDK24: Change when ClassFile API is released
-
 				else{
-					System.out.println("Unknown option " + arg);
+					System.out.println("RTS_UTIL.BPRG: Unknown option " + arg);
 					help();
 				}
 			} else {
@@ -599,7 +599,6 @@ public final class RTS_UTIL {
 		System.out.println("file.encoding=" + System.getProperty("file.encoding"));
 		System.out.println("defaultCharset=" + Charset.defaultCharset());
 		System.out.println("verbose=" + RTS_Option.VERBOSE);
-		System.out.println("useConsole=" + RTS_Option.USE_CONSOLE);
 		System.out.println("blockTracing=" + RTS_Option.BLOCK_TRACING);
 		System.out.println("gotoTracing=" + RTS_Option.GOTO_TRACING);
 		System.out.println("qpsTracing=" + RTS_Option.QPS_TRACING);
@@ -610,22 +609,34 @@ public final class RTS_UTIL {
 	/// Print a line on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void println(final String msg) {
-		ensureOpenRuntimeConsole();
-		console.write(msg + '\n');
+		if(RTS_SPORT_Option.noConsole) {
+			System.out.println(msg);
+		} else {
+			ensureOpenRuntimeConsole();
+			console.write(msg + '\n');
+		}
 	}
 
 	/// Print an error on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void printError(final String msg) {
-		ensureOpenRuntimeConsole();
-		console.writeError(msg + '\n');
+		if(RTS_SPORT_Option.noConsole) {
+			System.out.println(msg);
+		} else {
+			ensureOpenRuntimeConsole();
+			console.writeError(msg + '\n');
+		}
 	}
 
 	/// Print a warning message on the runtime console if present, otherwise on System.out
 	/// @param msg the message to print
 	static void printWarning(final String msg) {
-		ensureOpenRuntimeConsole();
-		console.writeWarning(msg + '\n');
+		if(RTS_SPORT_Option.noConsole) {
+			System.out.println(msg);
+		} else {
+			ensureOpenRuntimeConsole();
+			console.writeWarning(msg + '\n');
+		}
 	}
 	
 	/// Open Simula Runtime Console.

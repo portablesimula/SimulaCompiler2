@@ -27,13 +27,13 @@ SimulaTest(95,"--- Test Environment Interface.") begin
 
    
    facit(0):-"BEGIN PROGRAM";
-   facit(1):-"C:/WorkSpaces/SPort-System/S_Port/src/sport/rts/temp/knwn.atr";
-   facit(2):-"C:/WorkSpaces/SPort-System/S_Port/src/sport/rts/temp/cent.atr";
-   facit(3):-"C:/GitHub/S-Port-Simula/FEC/Attrs/FEC/PREDEF.atr";
+   facit(1):-"C:/SIMULA/temp/knwn.atr";
+   facit(2):-"C:/SIMULA/temp/cent.atr";
+   facit(3):-"C:/GitHub/S-Port-Simula/SimulaFEC/Attrs/FEC/PREDEF.atr";
    facit(4):-"END PROGRAM";
    
    trace("BEGIN PROGRAM");
-   giveTextInfo(4,"C:/WorkSpaces/SPort-System/S_Port/src/sport/rts");
+   giveTextInfo(4,"C:/SIMULA");
    
    giveTextInfo(2,"knwn"); trace(getTextInfo(12));
    giveTextInfo(2,"cent"); trace(getTextInfo(12));

@@ -8,6 +8,8 @@ package simula.runtime;
 import java.awt.Font;
 import java.awt.print.PageFormat;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.io.Writer;
 import java.util.StringTokenizer;
 
 /// System class PrintFile.
@@ -395,9 +397,13 @@ public class RTS_Printfile extends RTS_Outfile {
 	private void ensureSysoutOpened() {
 		if(writer == null) {
 			if (FILE_NAME.edText().equalsIgnoreCase("#sysout")) {
-				if (RTS_UTIL.console == null)
-					RTS_UTIL.ensureOpenRuntimeConsole();
-				writer = RTS_UTIL.console.getWriter();
+				if(RTS_SPORT_Option.noConsole) {
+					writer = new PrintWriter(System.out);
+				} else {
+					if (RTS_UTIL.console == null)
+						RTS_UTIL.ensureOpenRuntimeConsole();
+					writer = RTS_UTIL.console.getWriter();
+				}
 			}
 		}		
 	}

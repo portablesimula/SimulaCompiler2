@@ -74,6 +74,7 @@ public final class CompileFEC {
 
 		// Set options and tracing.
 		Option.internal.INLINE_TESTING=true;
+		Option.internal.noConsole = true;
 		Option.internal.SPORT=true;
 		Option.verbose=true;
 //		Option.internal.TRACING=false;
@@ -147,8 +148,10 @@ public final class CompileFEC {
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestPrograms/simple/adHoc02.sim";
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestPrograms/simple/Editing.sim";
 
+		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/adHoc00.sim";
+
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst101.sim";
-		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst00.sim";
+//		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst00.sim";
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst01.sim";
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst02.sim";
 //		RTOption.SPORT_SOURCE_FILE="C:/GitHub/simulaCompiler2/simulaTestBatch_FEC/src/simulaTestBatch/simtst03.sim";
@@ -315,7 +318,7 @@ public final class CompileFEC {
 //			String fileName = userDir+"/src/"+Global.packetName+"/sim/"+name;
 //			String fileName = "C:/WorkSpaces/SPort-System/S-Port/src/sport/fec/"+name;
 //			String fileName = "C:/WorkSpaces/SportFECinSimula/SPortFEC/src/fec/source/"+name;
-			String fileName = "C:/GitHub/S-Port-Simula/FEC/src/fec/source/"+name;
+			String fileName = "C:/GitHub/S-Port-Simula/SimulaFEC/src/fec/source/"+name;
 			System.out.println("Compile: "+fileName);
 			SimulaCompiler compiler = new SimulaCompiler(fileName);
 			Option.internal.RUNTIME_USER_DIR=new File(fileName).getParent();
@@ -329,7 +332,7 @@ public final class CompileFEC {
 	}
 	
 	private static void copyFECtoSPORT_HOME() {
-		File source=new File("C:/GitHub/S-Port-Simula/FEC/src/fec/source/bin/FEC.jar");
+		File source=new File("C:/GitHub/S-Port-Simula/SimulaFEC/src/fec/source/bin/FEC.jar");
 		File target=new File("C:/SPORT/FEC.jar");
 		target.mkdirs();
 		System.out.println("source="+source);

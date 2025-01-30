@@ -44,6 +44,7 @@ public final class RunFullClassTestBatch {
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
+		Option.internal.noConsole = true;
 		Option.internal.TESTING_STACK_SIZE = true;
 		Option.compilerMode = Option.CompilerMode.viaJavaSource;
 //		Option.compilerMode = Option.CompilerMode.directClassFiles;

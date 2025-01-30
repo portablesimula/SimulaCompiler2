@@ -16,6 +16,7 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 import simula.editor.SimulaEditor;
+import simula.runtime.RTS_SPORT_Option;
 
 /// Simula Main class containing the 'main' entry.
 /// 
@@ -188,9 +189,16 @@ public final class Simula {
 				else if (arg.equalsIgnoreCase("-source")) Option.internal.SOURCE_FILE=argv[++i];
 				else if (arg.equalsIgnoreCase("-sourceFileDir")) sourceFileDir=argv[++i];
 				else if (arg.equalsIgnoreCase("-runtimeUserDir")) Option.internal.RUNTIME_USER_DIR=argv[++i];
-//				else if (arg.equalsIgnoreCase("-noConsole")) noConsole = true;
+				else if (arg.equalsIgnoreCase("-noConsole")) Option.internal.noConsole = true;
+
+//				else if (arg.equalsIgnoreCase("-SPORT:listing"))		RTS_SPORT_Option.ListingFileName = "#sysout";
+//				else if (arg.equalsIgnoreCase("-SPORT:noConsole"))		RTS_SPORT_Option.noConsole = true;
+//				else if (arg.equalsIgnoreCase("-SPORT:SCodeFile"))		RTS_SPORT_Option.SPORT_SCodeFileName = args[++i];
+//				else if (arg.equalsIgnoreCase("-SPORT:select"))			RTS_SPORT_Option.Selectors = args[++i];
+//				else if (arg.equalsIgnoreCase("-SPORT:trace"))			RTS_SPORT_Option.FEC_TraceLevel = Integer.decode(args[++i]);
+
 				else {
-					System.out.println("ERROR: Unknown option " + arg);
+					System.out.println("Simula ERROR: Unknown option " + arg);
 					help();
 				}
 			} else fileNames.add(arg);

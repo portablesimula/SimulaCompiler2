@@ -87,11 +87,13 @@ public final class RelationalOperation extends Expression {
 		this.type = Type.Boolean;
 		switch (opr) {
 		case KeyWord.LT, KeyWord.LE, KeyWord.EQ, KeyWord.NE, KeyWord.GE, KeyWord.GT: {
-			if (type1.keyWord == Type.T_TEXT      && type1.keyWord == Type.T_TEXT) break;
-			if (type1.keyWord == Type.T_CHARACTER && type1.keyWord == Type.T_CHARACTER) break;
-			if (type1.keyWord == Type.T_BOOLEAN   && type1.keyWord == Type.T_BOOLEAN) break;
+//			System.out.println("RelationalOperation.doChecking: " + this + " type1=" + type1);
+			if (type1.keyWord == Type.T_TEXT      && type2.keyWord == Type.T_TEXT) break;
+			if (type1.keyWord == Type.T_CHARACTER && type2.keyWord == Type.T_CHARACTER) break;
+			if (type1.keyWord == Type.T_BOOLEAN   && type2.keyWord == Type.T_BOOLEAN) break;
 			// Arithmetic Relation
 			Type atype = Type.arithmeticTypeConversion(type1, type2);
+//			System.out.println("RelationalOperation.doChecking: " + this + "  ==> " + atype);
 			if (atype == null)
 				Util.error("Incompatible types in binary operation: " + toString());
 			lhs = (Expression) TypeConversion.testAndCreate(atype, lhs);

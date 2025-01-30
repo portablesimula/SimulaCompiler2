@@ -12,6 +12,12 @@ import java.util.Vector;
 import simula.runtime.RTS_EndProgram;
 
 /// SimulaClassLoader.
+/// 
+/// Link to GitHub: <a href=
+/// "https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/compiler/utilities/SimulaClassLoader.java"><b>Source File</b></a>.
+/// <b>Source File</b></a>.
+/// 
+/// @author Øystein Myhre Andersen
 public class SimulaClassLoader extends ClassLoader {
 	/// Debug utility.
 	private final static boolean TESTING = false;

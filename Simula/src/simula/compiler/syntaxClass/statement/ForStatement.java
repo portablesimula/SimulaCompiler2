@@ -197,11 +197,10 @@ public final class ForStatement extends Statement {
 			return;
 		Global.sourceLineNumber = lineNumber;
 		controlVariable.doChecking();
-		Type type = controlVariable.type; // Type of control variable
 		Declaration decl = controlVariable.meaning.declaredAs;
 		if (decl instanceof Parameter par && par.mode == Parameter.Mode.name)
-			Util.error(
-					"For-Statement's Controled Variable(" + controlVariable + ") can't be a formal parameter by Name");
+			Util.error("For-Statement's Controled Variable(" + controlVariable + ") can't be a formal parameter by Name");
+		Type type = controlVariable.type;
 		if (type.keyWord != Type.T_TEXT && assignmentOperator == KeyWord.ASSIGNVALUE && type.isReferenceType())
 			Util.error("Illegal For-Statement with object value assignment ( := )");
 		Iterator<ForListElement> iterator = forList.iterator();

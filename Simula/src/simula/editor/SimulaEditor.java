@@ -562,7 +562,8 @@ public class SimulaEditor extends JFrame {
 			@Override
 			public void run() {
 				String userDir=jarFile.getParentFile().getParent();
-				String[] cmds= {"java","-jar",jarFile.toString(),"-useConsole","-userDir",userDir};
+//				String[] cmds= {"java","-jar",jarFile.toString(),"-useConsole","-userDir",userDir};
+				String[] cmds= {"java","-jar",jarFile.toString(),"-userDir",userDir};
 				Util.execute(cmds);
 			}
 		}).start();

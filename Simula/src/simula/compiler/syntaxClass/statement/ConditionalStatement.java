@@ -87,6 +87,7 @@ public final class ConditionalStatement extends Statement {
 	@Override
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
+//		System.out.println("ConditionalStatement.doChecking: " + condition.getClass().getSimpleName() + "  " + this);
 		condition.doChecking();
 		condition.backLink=this; // To ensure _RESULT from functions
 		if (condition.type == null || condition.type.keyWord != Type.T_BOOLEAN)

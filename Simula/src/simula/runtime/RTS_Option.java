@@ -10,11 +10,6 @@ public class RTS_Option {
 	/// Default: false.
 	public static boolean VERBOSE = false;
 	
-	/// Map sysout and sysin to a popUp Console.
-	/// Default: false.
-//	public static boolean USE_CONSOLE = false;
-	public static boolean USE_CONSOLE = true;
-	
 	/// Debug: Trace enter and exit of blocks, classes and procedures.
 	/// Default: false.
 	public static boolean BLOCK_TRACING = false;

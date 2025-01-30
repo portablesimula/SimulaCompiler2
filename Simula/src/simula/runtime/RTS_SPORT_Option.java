@@ -26,6 +26,9 @@ public class RTS_SPORT_Option {
 	/// S-PORT: Source directory name
 	static String SourceDirName = "C:/GitHub/SimulaCompiler/Simula/src/sport/rts";
 
+	/// S-PORT: TRUE:Do not map sysout to a popup Console
+	static boolean noConsole = false;
+
 	/// S-PORT: Source file name
 	static String SPORT_SourceFileName = SourceDirName + "/ModuleName";
 
@@ -128,7 +131,7 @@ public class RTS_SPORT_Option {
 	/// Name of attribute file for the predefined classes etc. 
 	/// 
 	/// NOTE: This file is created when front-end compiling the RTS:
-	static String PredefFileName = "C:/GitHub/S-Port-Simula/FEC/Attrs/FEC/PREDEF.atr";
+	static String PredefFileName = "C:/GitHub/S-Port-Simula/SimulaFEC/Attrs/FEC/PREDEF.atr";
 
 	/// Name of a file containing seldom used information for the front end compiler,
 	/// such as extended error messages.

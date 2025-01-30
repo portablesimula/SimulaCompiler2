@@ -111,29 +111,50 @@ public final class PrefixedBlockDeclaration extends ClassDeclaration {
 	// *** Checking
 	// ***********************************************************************************************
 	@Override
+//	public void doChecking() {
+//		if (IS_SEMANTICS_CHECKED())	return;
+//		Global.sourceLineNumber = lineNumber;
+//		Util.ASSERT(blockPrefix != null, "Invariant");
+//		if (blockPrefix != null) {
+//			Global.enterScope(this.declaredIn);
+//			blockPrefix.doChecking();
+//			this.prefix = blockPrefix.identifier;
+//			ClassDeclaration prefix=this.getPrefixClass();
+//			if(prefix!=null) {
+//				prefix.doChecking();
+//			}
+//			LabelList.accumLabelList(this);
+//			Global.exitScope();
+//		}
+//		Global.enterScope(this);
+//		Util.ASSERT(parameterList.isEmpty(), "Invariant");
+//		Util.ASSERT(virtualSpecList.isEmpty(), "Invariant");
+//		Util.ASSERT(hiddenList.isEmpty(), "Invariant");
+//		Util.ASSERT(protectedList.isEmpty(), "Invariant");
+//
+//		for (Declaration dcl : declarationList)	dcl.doChecking();
+//		for (Statement stm : statements) stm.doChecking();
+//		Global.exitScope();
+//		SET_SEMANTICS_CHECKED();
+//	}
 	public void doChecking() {
 		if (IS_SEMANTICS_CHECKED())	return;
 		Global.sourceLineNumber = lineNumber;
-		Util.ASSERT(blockPrefix != null, "Invariant");
-		if (blockPrefix != null) {
-			Global.enterScope(this.declaredIn);
+		Global.enterScope(this.declaredIn);
 			blockPrefix.doChecking();
-			this.prefix = blockPrefix.identifier;
-			ClassDeclaration prefix=this.getPrefixClass();
-			if(prefix!=null) {
-				prefix.doChecking();
-			}
+			prefix = blockPrefix.identifier;
+			getPrefixClass().doChecking();
 			LabelList.accumLabelList(this);
-			Global.exitScope();
-		}
+		Global.exitScope();
+		
 		Global.enterScope(this);
-		Util.ASSERT(parameterList.isEmpty(), "Invariant");
-		Util.ASSERT(virtualSpecList.isEmpty(), "Invariant");
-		Util.ASSERT(hiddenList.isEmpty(), "Invariant");
-		Util.ASSERT(protectedList.isEmpty(), "Invariant");
-
-		for (Declaration dcl : declarationList)	dcl.doChecking();
-		for (Statement stm : statements) stm.doChecking();
+			Util.ASSERT(parameterList.isEmpty(), "Invariant");
+			Util.ASSERT(virtualSpecList.isEmpty(), "Invariant");
+			Util.ASSERT(hiddenList.isEmpty(), "Invariant");
+			Util.ASSERT(protectedList.isEmpty(), "Invariant");
+	
+			for (Declaration dcl : declarationList)	dcl.doChecking();
+			for (Statement stm : statements) stm.doChecking();
 		Global.exitScope();
 		SET_SEMANTICS_CHECKED();
 	}
