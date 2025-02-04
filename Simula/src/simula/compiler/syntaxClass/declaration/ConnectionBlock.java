@@ -15,6 +15,7 @@ import simula.compiler.syntaxClass.Type;
 import simula.compiler.syntaxClass.expression.Expression;
 import simula.compiler.syntaxClass.expression.TypeConversion;
 import simula.compiler.syntaxClass.expression.VariableExpression;
+import simula.compiler.syntaxClass.statement.ConnectionStatement;
 import simula.compiler.syntaxClass.statement.Statement;
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.Global;
@@ -51,6 +52,11 @@ public final class ConnectionBlock extends DeclarationScope {
 
 	/// The inspected variable.
 	public VariableExpression inspectedVariable;
+
+	/// The connected ident.
+	/// E.g: the ident in the Java statement:
+	/// if(_inspect_7 instanceof RTS_Infile connID) 
+	public String connID;
 
 	/// The when class declaration. Set during checking.
 	public ClassDeclaration classDeclaration;
@@ -146,6 +152,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		if (whenClassIdentifier != null) {
 			Meaning meaning = findMeaning(whenClassIdentifier);
 			whenClassDeclaration = meaning.declaredAs;
+			connID = ConnectionStatement.getUniqueConnID();
 		}
 		statement.doChecking();
 		Global.exitScope();
@@ -173,11 +180,10 @@ public final class ConnectionBlock extends DeclarationScope {
 
 	@Override
 	public String toJavaCode() {
-		String connID = inspectedVariable.toJavaCode();
 		Declaration when = whenClassDeclaration;
 		if (when == null)
-			return (connID);
-		return ("((" + when.getJavaIdentifier() + ')' + connID + ')');
+			return (inspectedVariable.toJavaCode());
+		return (connID);
 	}
 	
 	@Override

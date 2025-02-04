@@ -771,15 +771,15 @@ public final class VariableExpression extends Expression {
 					ConnectionBlock cblk=(ConnectionBlock)meaning.declaredIn;
 					boolean withFollowSL = meaning.declaredIn.buildCTX(codeBuilder);
 					if(withFollowSL) {
-							DeclarationScope declaredIn = cblk.declaredIn;
-							int bl = declaredIn.getRTBlockLevel();
-							if(bl == 0) { // Accessing _USR
-								ClassDesc main = Global.programModule.mainModule.getClassDesc();
-								codeBuilder.checkcast(main);
-							} else {
-								while(declaredIn.declaredIn.getRTBlockLevel() == bl) declaredIn = declaredIn.declaredIn;
-								codeBuilder.checkcast(declaredIn.getClassDesc());
-							}
+						DeclarationScope declaredIn = cblk.declaredIn;
+						int bl = declaredIn.getRTBlockLevel();
+						if(bl == 0) { // Accessing _USR
+							ClassDesc main = Global.programModule.mainModule.getClassDesc();
+							codeBuilder.checkcast(main);
+						} else {
+							while(declaredIn.declaredIn.getRTBlockLevel() == bl) declaredIn = declaredIn.declaredIn;
+							codeBuilder.checkcast(declaredIn.getClassDesc());
+						}
 					}
 					codeBuilder
 						.getfield(inspectedVariable.getFieldRefEntry(pool))

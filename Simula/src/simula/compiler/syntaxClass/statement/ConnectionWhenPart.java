@@ -70,12 +70,14 @@ public final class ConnectionWhenPart extends ConnectionDoPart {
 		ASSERT_SEMANTICS_CHECKED();
 		String prfx = (first) ? "" : "else ";
 		String cid = classDeclaration.getJavaIdentifier();
-		if (!impossibleWhenPart) {
-			JavaSourceFileCoder.code(prfx + "if(" + connectionStatement.inspectedVariable.toJavaCode() + " instanceof " + cid + ") {","WHEN "	+ cid + " DO ");
-			connectionBlock.doJavaCoding();
-			JavaSourceFileCoder.code("}");
-		} else
+		if (impossibleWhenPart) {
 			JavaSourceFileCoder.code(prfx,"WHEN " + cid + " DO -- IMPOSSIBLE REMOVED");
+		} else {
+			String cvar = this.connectionBlock.connID;
+			JavaSourceFileCoder.code(prfx + "if(" + connectionStatement.inspectedVariable.toJavaCode() + " instanceof " + cid + "  " + cvar + ") {","WHEN "	+ cid + " DO ");
+			connectionBlock.doJavaCoding();
+			JavaSourceFileCoder.code("}");				
+		}
 	}
 
 	@Override

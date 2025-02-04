@@ -120,7 +120,7 @@ public final class Parse {
 	/// Test currentToken against each given key.
 	/// If accepted 'nextToken' is called,
 	/// thus setting prevToken.
-	/// @param key t the given keywords
+	/// @param keys t the given keywords
 	/// @return true if a keyword is accepted, false otherwise.
 	public static boolean accept(final int... keys) {
 		for (int key : keys)

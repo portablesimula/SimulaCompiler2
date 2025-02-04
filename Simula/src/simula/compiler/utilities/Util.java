@@ -6,17 +6,12 @@
 package simula.compiler.utilities;
 
 import java.awt.Color;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.ProcessBuilder.Redirect;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
 import java.lang.constant.MethodTypeDesc;
 import java.util.Vector;
-import java.util.concurrent.ExecutionException;
-
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
@@ -177,15 +172,6 @@ public final class Util {
 		}
 		else System.out.println(s);
 	}  
-	
-	public static void dumpStack() {
-		Util.println("");
-		Util.println("Util.dumpStack:");
-		StackTraceElement[] elts = Thread.currentThread().getStackTrace();
-		for(StackTraceElement elt:elts) {
-			Util.println(""+elt);
-		}
-	}
 
 	/// Print a error message.
 	/// @param s the message

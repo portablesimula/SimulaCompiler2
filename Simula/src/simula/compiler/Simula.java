@@ -16,7 +16,6 @@ import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
 import simula.editor.RTOption;
 import simula.editor.SimulaEditor;
-import simula.runtime.RTS_SPORT_Option;
 
 /// Simula Main class containing the 'main' entry.
 /// 

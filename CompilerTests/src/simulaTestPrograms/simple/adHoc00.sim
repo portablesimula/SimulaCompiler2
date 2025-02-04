@@ -4,6 +4,8 @@ begin
 	boolean b;
 	text t;
 
+	inspect sysout do begin image:=notext; setpos(1) end;
+
 	inspect x
 	when infile do begin
 		b := endfile;

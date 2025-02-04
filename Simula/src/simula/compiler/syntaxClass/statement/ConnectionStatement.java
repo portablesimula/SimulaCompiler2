@@ -107,7 +107,13 @@ public final class ConnectionStatement extends Statement {
 	private boolean hasWhenPart;
 	
 	/// Utility to help generate unique identifiers to the inspected variable.
-	private static int SEQUX = 4444; //0;
+	private static int SEQUX = 1;
+	
+	/// Utility to be used in when-parts
+	/// @return a unique identifier
+	public static String getUniqueConnID() {
+		return "_connID_" + (SEQUX++);
+	}
 
 	/// The end Label.
 	Label endLabel;
@@ -212,14 +218,15 @@ public final class ConnectionStatement extends Statement {
 	public void buildByteCode(CodeBuilder codeBuilder) {
 		ASSERT_SEMANTICS_CHECKED();
 		ConstantPoolBuilder pool=codeBuilder.constantPool();
+		Label otwLabel = null;
+		endLabel = codeBuilder.newLabel();
 		codeBuilder.aload(0);
 		objectExpression.buildEvaluation(null,codeBuilder);
 		ClassDesc CD_type=inspectedVariable.type.toClassDesc();
 		FieldRefEntry FRE=pool.fieldRefEntry(BlockDeclaration.currentClassDesc(),inspectedVariable.identifier, CD_type);
 		codeBuilder.putfield(FRE);
+		
 
-		Label otwLabel = null;
-		endLabel = codeBuilder.newLabel();
 		if (!hasWhenPart) {
 			codeBuilder.aload(0);
 			codeBuilder.getfield(FRE);
@@ -238,7 +245,7 @@ public final class ConnectionStatement extends Statement {
 			}
 			otherwise.buildByteCode(codeBuilder);
 		}
-		
+	
 		codeBuilder.labelBinding(endLabel);
 	}
 

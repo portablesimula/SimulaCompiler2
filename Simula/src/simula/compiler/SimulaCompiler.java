@@ -8,9 +8,7 @@ package simula.compiler;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.Reader;
 import java.nio.charset.Charset;
 import java.util.Vector;
@@ -370,7 +368,8 @@ public final class SimulaCompiler {
 		if(Option.internal.noConsole) {
 			cmds.add("-SPORT:noConsole");			
 		}
-		if (Option.internal.SOURCE_FILE.length() > 0) {
+//		if (Option.internal.SOURCE_FILE.length() > 0) {
+		if (Option.internal.SOURCE_FILE != null) {
 			cmds.add(Option.internal.SOURCE_FILE);
 		}
    		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {

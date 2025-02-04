@@ -199,43 +199,6 @@ public class SimulaEditor extends JFrame {
         doCheckForNewVersion();
         doSelectWorkspace();
     }
-	
-	private static void checkJAVA_HOME() {
-		Properties props = System.getProperties();
-		props.list(System.out);
-		System.out.println("SimulaExtractor.checkJAVA_HOME: user.home="+System.getProperty("user.home"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME: JAVA_HOME    java.home="+System.getProperty("java.home"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME: PATH         java.library.path="+System.getProperty("java.library.path"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME: CLASSPATH    java.class.path="+System.getProperty("java.class.path"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME: VM_VERSION   java.vm.specification.version="+System.getProperty("java.vm.specification.version"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME: JAVA_VERSION java.version="+System.getProperty("java.version"));
-		System.out.println("SimulaExtractor.checkJAVA_HOME:              sun.boot.library.path="+System.getProperty("sun.boot.library.path"));
-		
-
-		String JAVA_HOME    = System.getProperty("java.home");
-		String PATH         = System.getProperty("java.library.path");
-		String CLASSPATH    = System.getProperty("java.class.path");
-		String JAVA_VERSION = System.getProperty("java.vm.specification.version");
-
-		
-//		System.out.println("");
-//		System.exit(0);
-	}
-
-//    /// Utility: getJavaVersion
-//    /// @return the JavaVersion
-//	private static int getJavaVersion() {
-//		String ver = System.getProperty("java.version");
-//		try {
-//			if (ver.startsWith("1.")) {
-//				return (ver.charAt(2) - '0');
-//			} else {
-//				ver = ver.substring(0, 2);
-//				return (Integer.parseInt(ver));
-//			}
-//		} catch (Exception e) {}
-//		return (0);
-//	}
 
     /// Utility: getJavaVersion
     /// @return the JavaVersion

@@ -164,7 +164,8 @@ public class Type extends SyntaxClass {
 		if (this.classIdent == other.classIdent) return (true);
 		if (this.classIdent == null) return (false);
 		if (other.classIdent == null) return (false);
-		if (!this.classIdent.equals(other.classIdent)) return (false);
+//		if (!this.classIdent.equals(other.classIdent)) return (false);
+		if (!this.classIdent.equalsIgnoreCase(other.classIdent)) return (false);
 		return (true);
 	}
 	

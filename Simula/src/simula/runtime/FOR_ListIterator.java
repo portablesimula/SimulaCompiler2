@@ -6,7 +6,6 @@
 package simula.runtime;
 
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 // *******************************************************
 // *** FRAMEWORK for for-list iteration

@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.lang.classfile.CodeBuilder;
 import java.lang.classfile.constantpool.ConstantPoolBuilder;
 import java.lang.constant.ClassDesc;
+
 import simula.compiler.utilities.DeclarationList;
 import simula.compiler.utilities.RTS;
 import simula.compiler.utilities.Global;
@@ -243,17 +244,20 @@ public abstract class DeclarationScope extends Declaration  {
 	/// @return true: if resulting field need a cast.
 	public boolean buildCTX(int corr,CodeBuilder codeBuilder) {
 		ConstantPoolBuilder pool = codeBuilder.constantPool();
+		
 		DeclarationScope endScope=this;                     // The scope of the attribute to access.
 		int endLevel = endScope.getRTBlockLevel();
-		if(endLevel == 0) {
-			codeBuilder.getstatic(RTS.FRE.RTObject_USR(pool));
-			return(true);
-		}
 		
 		DeclarationScope curScope=Global.getCurrentScope(); // The current scope. In case of Thunk one level up to Thunk.ENV
 		int curLevel = curScope.getRTBlockLevel();
 		int ctxDiff = curLevel - endLevel - corr;
-		
+
+		if(endLevel == 0 && ctxDiff > 3) {
+			// Access outmost block directly
+			codeBuilder.getstatic(RTS.FRE.RTObject_USR(pool));
+			return(true);
+		}
+
 		codeBuilder.aload(0); // Current Object
 		
 		boolean withFollowSL = false;

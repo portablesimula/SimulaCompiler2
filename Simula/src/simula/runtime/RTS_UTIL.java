@@ -10,8 +10,6 @@ import java.lang.reflect.Field;
 import java.nio.charset.Charset;
 import javax.swing.JOptionPane;
 
-import simula.compiler.utilities.Util;
-
 /// Utility class containing a lot of common stuff.
 /// 
 /// Link to GitHub: <a href="https://github.com/portablesimula/SimulaCompiler2/blob/master/Simula/src/simula/runtime/RTS_UTIL.java"><b>Source File</b></a>.
@@ -526,7 +524,9 @@ public final class RTS_UTIL {
 		File file = null;
 		for (int i = 0; i < args.length; i++) {
 			String arg = args[i];
-			if (arg.charAt(0) == '-') { // command line option
+			if(arg == null) ; // Nothing
+			else if(arg.length()==0) ; // Nothing
+			else if (arg.charAt(0) == '-') { // command line option
 				// General RTS Options
 				if (arg.equalsIgnoreCase("-help"))					help();
 				else if (arg.equalsIgnoreCase("-verbose"))			{ RTS_Option.VERBOSE = true; RTS_SPORT_Option.FEC_Verbose = 1; }
@@ -663,6 +663,7 @@ public final class RTS_UTIL {
 	}
 	
 	/// FEC-Utility.
+	/// @param code exit code
 	public static void doExit(int code) {
 		if(RTS_SPORT_Option.SPORT_SourceFileName != null) {
 //			while(true) Thread.yield();

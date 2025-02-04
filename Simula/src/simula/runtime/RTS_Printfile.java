@@ -9,7 +9,6 @@ import java.awt.Font;
 import java.awt.print.PageFormat;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.io.Writer;
 import java.util.StringTokenizer;
 
 /// System class PrintFile.
