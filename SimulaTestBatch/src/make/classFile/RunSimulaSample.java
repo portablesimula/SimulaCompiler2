@@ -30,7 +30,6 @@ public final class RunSimulaSample {
 //		String name="Atkins.sim";
 //		String name="Dates.sim";
 //		String name="DatesTest.sim";
-//		String name="Docking.sim";    // FEILER
 //		String name="FittingRoom.sim";
 //		String name="HelloWorld.sim";
 //		String name="HexDump.sim";
@@ -40,7 +39,6 @@ public final class RunSimulaSample {
 //		String name="NormalDrawing.sim";
 //		String name="PrimeUnder.sim";
 //		String name="Quine.sim";
-//		String name="Sudoku.sim";
 //		String name="SudokuPuzzle.sim";
 //		String name="TQueens.sim";
 
@@ -54,6 +52,7 @@ public final class RunSimulaSample {
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
+		Option.internal.noConsole = true;
 		Option.internal.TESTING_STACK_SIZE = true;
 //		Option.internal.SPORT=true;
 //		Option.internal.TRACING=false;

@@ -39,6 +39,7 @@ import simula.compiler.SimulaCompiler;
 import simula.compiler.utilities.Global;
 import simula.compiler.utilities.Option;
 import simula.compiler.utilities.Util;
+import simula.runtime.RTS_EndProgram;
 
 /// The editor's menues.
 /// 
@@ -345,7 +346,14 @@ public class EditorMenues extends JMenuBar {
     			SimulaEditor.doNewTabbedPanel(file,SimulaEditor.Language.Simula);
             	Global.setCurrentWorkspace(fileChooser.getCurrentDirectory());
     		}
-    		else if(lowName.endsWith(".jar")) SimulaEditor.doNewTabbedPanel(file,SimulaEditor.Language.Jar);
+    		else if(lowName.endsWith(".jar")) {
+    			System.out.println("EditorMenues.doOpenFileAction: "+file);
+    				int res = Util.optionDialog("Executable Jarfile\nDo you want to execute ?",
+    						"Execute or List Jarfile", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, "Yes", "No");
+    				if (res == JOptionPane.YES_OPTION)
+    	    			 SimulaEditor.doRunJarFile(file);
+    				else SimulaEditor.doNewTabbedPanel(file,SimulaEditor.Language.Jar);
+    		}
     		else if(isTextFile(lowName)) SimulaEditor.doNewTabbedPanel(file,SimulaEditor.Language.Text);
     		else SimulaEditor.doNewTabbedPanel(file,SimulaEditor.Language.Other);
     		

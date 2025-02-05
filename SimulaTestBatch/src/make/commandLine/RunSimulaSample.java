@@ -51,11 +51,10 @@ public final class RunSimulaSample {
 		Vector<String> names=new Vector<String>();
 		// *** SIMULA PROGRAMMER TIL RELEASE TESTING
 //		names.add("AnimationTest.sim");
-		names.add("Atkins.sim");
+//		names.add("Atkins.sim");
 //		names.add("Dates.sim");
 //		names.add("DatesTest.sim");
-//		names.add("Docking.sim");
-//		names.add("FittingRoom.sim");
+		names.add("FittingRoom.sim");
 //		names.add("HelloWorld.sim");
 //		names.add("HexDump.sim");
 //		names.add("InfectionDisease.sim");
@@ -64,7 +63,6 @@ public final class RunSimulaSample {
 //		names.add("NormalDrawing.sim");
 //		names.add("PrimeUnder.sim");
 //		names.add("Quine.sim");
-//		names.add("Sudoku.sim");
 //		names.add("SudokuPuzzle.sim");
 //		names.add("TQueens.sim");
 
@@ -110,6 +108,7 @@ public final class RunSimulaSample {
 		cmds.add("-jar");
 		cmds.add(simulaJar); // E.G. "C:\\Users\\omyhr\\Simula\\Simula-2.0\\simula.jar"
 
+		cmds.add("-noConsole");
 		cmds.add("-compilerMode"); cmds.add(compilerMode);	
 		cmds.add("-runtimeUserDir"); cmds.add(runtimeUserDir);	
 

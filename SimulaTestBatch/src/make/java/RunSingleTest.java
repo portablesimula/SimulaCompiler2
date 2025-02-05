@@ -40,6 +40,7 @@ public final class RunSingleTest {
 
 		// Set internal test, debug options.
 		Option.internal.INLINE_TESTING=true;
+		Option.internal.noConsole = true;
 		Option.internal.TESTING_STACK_SIZE = true;
 		Option.internal.SPORT=true;
 //		Option.internal.DEBUGGING=true;
@@ -206,7 +207,7 @@ public final class RunSingleTest {
 //		names.add("simtst93.sim"); // OK:  Test Simset - linkage, head, link, into, out, follow and precede
 //		names.add("simtst94.sim"); // OK:  Test Simset - first, last, empty, cardinal and clear.
 //		names.add("simtst95.sim"); // OK:  Test Environment Interface.
-		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
+//		names.add("simtst96.sim"); // OK:  Test hidden, protected attributes.
 //		names.add("simtst97.sim"); // OK:  Test nested hidden and protected.
 //		names.add("simtst98.sim"); // OK:  Test attribute protection - complex example. Test visibility of labels.
 //		names.add("simtst99.sim"); // OK:  Test mod, rem, min, max.
@@ -248,7 +249,7 @@ public final class RunSingleTest {
 //		names.add("simtst129.sim"); // OK: Switch in precompiled class
 //		names.add("simtst130.sim"); // OK: Class SimLib, a set of utility procedures from DEC Handbook.
 //
-//		names.add("simtst131.sim"); // OK: Catching Errors
+		names.add("simtst131.sim"); // OK: Catching Errors
 //		names.add("simtst132.sim"); // OK: SPORT Options
 //		names.add("simtst133.sim"); // OK: Test infile reading with inimage and inrecord.
 //		names.add("simtst134.sim"); // OK: Outfile with CREATE, APPEND, SYNCHRONOUS and PURGE.

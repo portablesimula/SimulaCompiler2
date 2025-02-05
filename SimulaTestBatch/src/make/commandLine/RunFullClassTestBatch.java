@@ -294,6 +294,7 @@ public final class RunFullClassTestBatch {
 		cmds.add("-jar");
 		cmds.add(simulaJar); // E.G. "C:\\Users\\omyhr\\Simula\\Simula-2.0\\simula.jar"
 
+		cmds.add("-noConsole");
 		cmds.add("-compilerMode"); cmds.add(compilerMode);	
 		cmds.add("-runtimeUserDir"); cmds.add(runtimeUserDir);	
 

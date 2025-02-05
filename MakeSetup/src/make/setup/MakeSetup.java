@@ -37,12 +37,15 @@ import static java.nio.file.StandardCopyOption.*;
  */
 public final class MakeSetup {
 	public static final String simulaReleaseID = "Simula-2.0";
+	private static String SETUP_JAR_IDENT; // Set in updateSetupProperties. E.g: "simula-setup-r28.jar"
 
 //	private final static int EXPLICIT_REVISION = -1; // Normal update
 	private final static int EXPLICIT_REVISION = 28;
 	
 	private final static String GIT_BINARIES="C:\\GitHub\\Binaries";
 	private final static String RELEASE_ID=simulaReleaseID; // E.g. "Simula-2.0";
+//	private final static String SETUP_JAR_IDENT="setup.jar";
+//	private final static String SETUP_JAR_IDENT="simula-setup-r28.jar";
 
 	private final static String RELEASE_HOME=GIT_BINARIES+"\\"+RELEASE_ID;
 	private final static String RELEASE_SAMPLES=RELEASE_HOME+"\\samples";
@@ -284,14 +287,14 @@ public final class MakeSetup {
 		
 		String files=" -C "+RELEASE_HOME+"."  // Complete Simula Release
 				    +" -C "+INSTALLER_BIN+" ./make/setup";
-		System.out.println("jar cmf "+installerManifest+" "+GIT_BINARIES+"\\setup.jar"+files);
+		System.out.println("jar cmf "+installerManifest+" "+GIT_BINARIES+"\\"+SETUP_JAR_IDENT+files);
 		
-		execute("jar", "cmf", installerManifest, GIT_BINARIES+"\\setup.jar",
+		execute("jar", "cmf", installerManifest, GIT_BINARIES+"\\"+SETUP_JAR_IDENT,
 				"-C",RELEASE_HOME, ".",  // Complete Simula Release
 			    "-C",INSTALLER_BIN, "./make/setup");
 		printHeading("BEGIN -- List Simula Setup.jar in "+GIT_BINARIES);
-//		execute("jar -tvf "+GIT_BINARIES+"\\setup.jar");
-		execute("jar","-tvf",GIT_BINARIES+"\\setup.jar");
+//		execute("jar -tvf "+GIT_BINARIES+"\\SETUP_JAR_IDENT");
+		execute("jar","-tvf",GIT_BINARIES+"\\"+SETUP_JAR_IDENT);
 		printHeading("END -- List Simula Setup.jar in "+GIT_BINARIES);
 		copySetupJAR();
 	}
@@ -300,11 +303,14 @@ public final class MakeSetup {
 	// *** COPY SIMULA INSTALLER JAR
 	// ***************************************************************
 	private static void copySetupJAR() throws IOException	{
-		File source=new File(GIT_BINARIES+"\\setup.jar");
-		File target=new File(GITHUB_ROOT+"\\github.io\\setup\\setup.jar");
+		File source=new File(GIT_BINARIES+"\\"+SETUP_JAR_IDENT);
+		File target1=new File(GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_JAR_IDENT);
+		File target2=new File(GITHUB_ROOT+"\\github.io\\setup\\SimulaSetup.jar");
 		System.out.println("source="+source);
-		System.out.println("target="+target);
-		Files.copy(source.toPath(), target.toPath(), REPLACE_EXISTING);
+		System.out.println("target1="+target1);
+		System.out.println("target2="+target2);
+		Files.copy(source.toPath(), target1.toPath(), REPLACE_EXISTING);
+		Files.copy(source.toPath(), target2.toPath(), REPLACE_EXISTING);
 		//updateSetupProperties();
 	}
 	
@@ -312,7 +318,7 @@ public final class MakeSetup {
 	// *** EXECUTE SIMULA SETUP
 	// ***************************************************************
 	private static void executeSimulaSetup() throws IOException	{
-		String SETUP_JAR=GITHUB_ROOT+"\\github.io\\setup\\setup.jar";
+		String SETUP_JAR=GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_JAR_IDENT;
 		printHeading("Execute SimulaSetup: "+SETUP_JAR);
 //		execute("java -jar "+SETUP_JAR);
 		execute("java","-jar",SETUP_JAR);
@@ -359,6 +365,11 @@ public final class MakeSetup {
 			if(EXPLICIT_REVISION > 0) revision=EXPLICIT_REVISION;
 			else revision=Integer.parseUnsignedInt(prevRevision)+1;
 		}
+		
+		
+//		private final static String SETUP_JAR_IDENT="simula-setup-r28.jar";
+		SETUP_JAR_IDENT="simula-setup-r"+revision+".jar";
+
 		//revision=xx; // TODO: Ad'Hoc
 		String setupDated=""+new Date();
 		setProperty("simula.setup.dated",setupDated);
