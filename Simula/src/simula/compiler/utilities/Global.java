@@ -13,6 +13,7 @@ import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Stack;
+import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.jar.JarFile;
 
@@ -249,16 +250,28 @@ public final class Global {
 	/// Returns the simula properties .xml file
 	/// @return the simula properties .xml file
 	private static File getSimulaPropertiesFile() {
-		File javaClassPath = new File(System.getProperty("java.class.path"));
 		if (Option.internal.INLINE_TESTING) {
 			System.out.println("INLINE_TESTING");
 		}
-		if (javaClassPath.exists()) {
-			simulaHome = javaClassPath.getParentFile();
+		
+//		String javaClassPathString = System.getProperty("java.class.path");
+//		File javaClassPath = new File(javaClassPathString);
+//		if (javaClassPath.exists()) {
+//			simulaHome = javaClassPath.getParentFile();
+//			simulaPropertiesFile = new File(simulaHome, "simulaProperties.xml");
+//			if (simulaPropertiesFile.exists())
+//				return (simulaPropertiesFile);
+//		}
+		
+		simulaHome = getSimulaHome();
+		System.out.println("Global.getSimulaPropertiesFile: simulaHome="+simulaHome);
+		if(simulaHome != null) {
 			simulaPropertiesFile = new File(simulaHome, "simulaProperties.xml");
 			if (simulaPropertiesFile.exists())
 				return (simulaPropertiesFile);
+			
 		}
+//		Util.IERR(""+simulaHome);
 
 		if (!Option.internal.INLINE_TESTING)
 			Util.popUpError("It seems that the system is not properly installed" + "\nSimula Properties is not defined"
@@ -266,9 +279,9 @@ public final class Global {
 
 		// Compatibility: TRY TO READ OLD SIMULA PROPERTY FILE FROM <user.home>/.simula
 		// Compatibility: TRY TO READ OLD SIMULA PROPERTY FILE FROM
-		// <user.home>/simula/simula-2.0
+		// <user.home>/Simula/Simula-2.0
 		String USER_HOME = System.getProperty("user.home");
-		File simulaPropertiesDir = new File(USER_HOME, "simula/simula-2.0");
+		File simulaPropertiesDir = new File(USER_HOME, "Simula/Simula-2.0");
 		simulaPropertiesDir.mkdirs();
 		simulaPropertiesFile = new File(simulaPropertiesDir, "simulaProperties.xml");
 		if (!simulaPropertiesFile.exists()) {
@@ -277,6 +290,31 @@ public final class Global {
 					+ "But could not find it either\n" + "\nHint: Try to Download Simula again.\n");
 		}
 		return (simulaPropertiesFile);
+	}
+	
+	private static File getSimulaHome() {
+		String javaClassPath = System.getProperty("java.class.path");
+		System.out.println("Global.getSimulaHome: javaClassPath="+javaClassPath);
+		String pathSeparator = System.getProperty("path.separator");
+		System.out.println("Global.getSimulaHome: pathSeparator="+pathSeparator);
+		String fileSeparator = System.getProperty("file.separator");
+		System.out.println("Global.getSimulaHome: fileSeparator="+fileSeparator);
+		// Simula\Simula-2.0\simula.jar
+		String simulaJar = "Simula" + fileSeparator + "Simula-2.0" + fileSeparator + "simula.jar";
+		System.out.println("Global.getSimulaHome: simulaJar="+simulaJar);
+		StringTokenizer tokenizer = new StringTokenizer(javaClassPath, pathSeparator);
+		while(tokenizer.hasMoreTokens()) {
+			String token = tokenizer.nextToken();
+			System.out.println("Global.getSimulaHome: token="+token);
+			if(token.endsWith(simulaJar)) {
+				File simulaHomeBin = new File(token);
+				System.out.println("Global.getSimulaHome: simulaHomeBin="+simulaHomeBin);
+				return simulaHomeBin.getParentFile();
+			}
+		}
+//		Util.IERR("");
+		
+		return null;
 	}
 
 	/// Load Simula properties.

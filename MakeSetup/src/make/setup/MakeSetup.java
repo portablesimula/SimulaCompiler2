@@ -28,24 +28,27 @@ import static java.nio.file.StandardCopyOption.*;
 //import simula.compiler.utilities.Util;
 
 /**
- * NOTE:
+ * Updates are written to:  C://GitHub/github.io/setup
  * 
- * Update Global.simulaReleaseID
+ * NOTE: Remember to Update Global.simulaReleaseID
  * 
  * @author Øystein Myhre Andersen
  *
  */
 public final class MakeSetup {
 	public static final String simulaReleaseID = "Simula-2.0";
-	private static String SETUP_JAR_IDENT; // Set in updateSetupProperties. E.g: "simula-setup-r28.jar"
+
+	private static String SETUP_IDENT="SimulaSetup";      // Used to produce a Release
+//	private static String SETUP_IDENT="SimulaTestSetup";  // Used to produce a TestSetup
 
 //	private final static int EXPLICIT_REVISION = -1; // Normal update
 	private final static int EXPLICIT_REVISION = 28;
+	private static String SETUP_IDENT_WITH_REVISION; // Set in updateSetupProperties. E.g: "simula-setup-r28.jar"
 	
 	private final static String GIT_BINARIES="C:\\GitHub\\Binaries";
 	private final static String RELEASE_ID=simulaReleaseID; // E.g. "Simula-2.0";
-//	private final static String SETUP_JAR_IDENT="setup.jar";
-//	private final static String SETUP_JAR_IDENT="simula-setup-r28.jar";
+//	private final static String SETUP_IDENT_WITH_REVISION="setup.jar";
+//	private final static String SETUP_IDENT_WITH_REVISION="simula-setup-r28.jar";
 
 	private final static String RELEASE_HOME=GIT_BINARIES+"\\"+RELEASE_ID;
 	private final static String RELEASE_SAMPLES=RELEASE_HOME+"\\samples";
@@ -287,14 +290,14 @@ public final class MakeSetup {
 		
 		String files=" -C "+RELEASE_HOME+"."  // Complete Simula Release
 				    +" -C "+INSTALLER_BIN+" ./make/setup";
-		System.out.println("jar cmf "+installerManifest+" "+GIT_BINARIES+"\\"+SETUP_JAR_IDENT+files);
+		System.out.println("jar cmf "+installerManifest+" "+GIT_BINARIES+"\\"+SETUP_IDENT_WITH_REVISION+files);
 		
-		execute("jar", "cmf", installerManifest, GIT_BINARIES+"\\"+SETUP_JAR_IDENT,
+		execute("jar", "cmf", installerManifest, GIT_BINARIES+"\\"+SETUP_IDENT_WITH_REVISION,
 				"-C",RELEASE_HOME, ".",  // Complete Simula Release
 			    "-C",INSTALLER_BIN, "./make/setup");
 		printHeading("BEGIN -- List Simula Setup.jar in "+GIT_BINARIES);
-//		execute("jar -tvf "+GIT_BINARIES+"\\SETUP_JAR_IDENT");
-		execute("jar","-tvf",GIT_BINARIES+"\\"+SETUP_JAR_IDENT);
+//		execute("jar -tvf "+GIT_BINARIES+"\\SETUP_IDENT_WITH_REVISION");
+		execute("jar","-tvf",GIT_BINARIES+"\\"+SETUP_IDENT_WITH_REVISION);
 		printHeading("END -- List Simula Setup.jar in "+GIT_BINARIES);
 		copySetupJAR();
 	}
@@ -303,9 +306,9 @@ public final class MakeSetup {
 	// *** COPY SIMULA INSTALLER JAR
 	// ***************************************************************
 	private static void copySetupJAR() throws IOException	{
-		File source=new File(GIT_BINARIES+"\\"+SETUP_JAR_IDENT);
-		File target1=new File(GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_JAR_IDENT);
-		File target2=new File(GITHUB_ROOT+"\\github.io\\setup\\SimulaSetup.jar");
+		File source=new File(GIT_BINARIES+"\\"+SETUP_IDENT_WITH_REVISION);
+		File target1=new File(GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_IDENT_WITH_REVISION);
+		File target2=new File(GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_IDENT+".jar");
 		System.out.println("source="+source);
 		System.out.println("target1="+target1);
 		System.out.println("target2="+target2);
@@ -318,7 +321,7 @@ public final class MakeSetup {
 	// *** EXECUTE SIMULA SETUP
 	// ***************************************************************
 	private static void executeSimulaSetup() throws IOException	{
-		String SETUP_JAR=GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_JAR_IDENT;
+		String SETUP_JAR=GITHUB_ROOT+"\\github.io\\setup\\"+SETUP_IDENT_WITH_REVISION;
 		printHeading("Execute SimulaSetup: "+SETUP_JAR);
 //		execute("java -jar "+SETUP_JAR);
 		execute("java","-jar",SETUP_JAR);
@@ -367,8 +370,8 @@ public final class MakeSetup {
 		}
 		
 		
-//		private final static String SETUP_JAR_IDENT="simula-setup-r28.jar";
-		SETUP_JAR_IDENT="simula-setup-r"+revision+".jar";
+//		private final static String SETUP_IDENT_WITH_REVISION="simula-setup-r28.jar";
+		SETUP_IDENT_WITH_REVISION=SETUP_IDENT+"-R"+revision+".jar";
 
 		//revision=xx; // TODO: Ad'Hoc
 		String setupDated=""+new Date();

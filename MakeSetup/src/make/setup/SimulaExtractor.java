@@ -15,8 +15,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.URL;
 import java.net.URLDecoder;
+import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
@@ -51,6 +53,9 @@ import javax.swing.UIManager;
  * Modified by: Øystein Myhre Andersen
  */
 public final class SimulaExtractor extends JFrame {
+	
+	public static final boolean TESTING = true;
+	
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG=true;
 	private static final boolean USE_CONSOLE=true;//false;
@@ -62,14 +67,14 @@ public final class SimulaExtractor extends JFrame {
     private static final String simulaInstallSubdirectory = "Simula"+File.separatorChar+simulaReleaseID;
 	private static final String programAndVersion = "Simula 2.0";
 	private static File INSTALL_DIR; // e.g. C:\Users\Øystein\Simula\Simula-1.0
-//	private static File BATCH_FILE;
+	private static File BATCH_FILE;
 	private static String setupDated;
 	private static ImageIcon simulaIcon;
 	
 	private static String simulaJarFileName;
 	private static String targetDir;
 	private static int nExtractedFiles;
-//	private static boolean compilerBatWasWritten;
+	private static boolean compilerBatWasWritten;
 //	private static boolean desktopEntryWasWritten;
 	
 	private String myClassName;
@@ -95,7 +100,10 @@ public final class SimulaExtractor extends JFrame {
 		
 		boolean ok=simulaExtractor.extract(jarFileName);
 //		askWriteDesktopLinks();
-//		if(!desktopEntryWasWritten) askWriteCompilerBat();
+//		if(!desktopEntryWasWritten)	askWriteCompilerBat();
+		
+		if(TESTING)	askWriteCompilerBat();
+		
 		updateProperties();
 		askRunSimula();
 //		updateProperties();
@@ -146,58 +154,68 @@ public final class SimulaExtractor extends JFrame {
 		}
 	}
 	
-//	// ***************************************************************
-//	// *** askWriteCompilerBat
-//	// ***************************************************************
-//	private static void askWriteCompilerBat() {
-//		boolean windows=(File.separatorChar)=='\\';
-//		String text;
-//		String fileName;
-//		if(windows) {
-//			fileName="RunSimulaEditor.bat";
-//			text="CHCP 65001\r\n" +  // Let Windows recognize UTF-8
-//			     "rem *** Call Simula Editor\r\n" + 
+	// ***************************************************************
+	// *** askWriteCompilerBat
+	// ***************************************************************
+	private static void askWriteCompilerBat() {
+		boolean windows=(File.separatorChar)=='\\';
+		String text;
+		String fileName;
+		if(windows) {
+			fileName="RunSimulaEditor.bat";
+			text="CHCP 65001\r\n" +  // Let Windows recognize UTF-8
+			     "rem *** Call Simula Editor\r\n" + 
 //				 "java -jar "+INSTALL_DIR+"\\simula.jar\r\n" + 
-////				 "cd "+INSTALL_DIR+"\r\n"+
-////				 "java -jar simula.jar\r\n" + 
-//				 "pause\r\n";
-//		} else {
-//			fileName="RunSimulaEditor.sh";
+				 "cd "+INSTALL_DIR+"\r\n"+
+				 "java -jar simula.jar\r\n" + 
+				 "pause\r\n";
+		} else {
+			fileName="RunSimulaEditor.sh";
 //			text="printf \"*** Call Simula Editor\\n\"\n" + 
 //                 "pushd "+INSTALL_DIR+"\n"+
 //				 "java -jar simula.jar\n" + 
 //                 "popd\n"+
 //				 "read -p \"Press enter to continue\"\n";
+			
+			text = "echo Call Simula Editor;\n"
+					+ "cd /home/myhre/Simula/Simula-2.0\n"
+					+ "java -jar simula.jar\n"
+					+ "echo Press enter to continue; read dummy;\n";
+		}
+		if(DEBUG) System.out.println("INSTALL_DIR="+INSTALL_DIR);
+		if(DEBUG) System.out.println("fileName="+fileName);
+		if(DEBUG) System.out.println("text="+text);
+//		File file=new File(path+'/'+fileName);
+//		BATCH_FILE=new File(INSTALL_DIR,fileName);
+//		if(windows) {
+			String USER_HOME=System.getProperty("user.home");
+			//File desktop=new File(USER_HOME,"desktop");
+			if(TESTING) {
+				BATCH_FILE=new File(INSTALL_DIR,fileName);				
+			} else {
+				File desktop=new File(USER_HOME,"Desktop"); //  ~/Desktop;
+				BATCH_FILE=new File(desktop,fileName);
+			}
 //		}
-//		if(DEBUG) System.out.println("INSTALL_DIR="+INSTALL_DIR);
-//		if(DEBUG) System.out.println("fileName="+fileName);
-//		if(DEBUG) System.out.println("text="+text);
-////		File file=new File(path+'/'+fileName);
-////		BATCH_FILE=new File(INSTALL_DIR,fileName);
-////		if(windows) {
-//			String USER_HOME=System.getProperty("user.home");
-//			//File desktop=new File(USER_HOME,"desktop");
-//			File desktop=new File(USER_HOME,"Desktop"); //  ~/Desktop;
-//			BATCH_FILE=new File(desktop,fileName);
-////		}
-//		if(DEBUG) System.out.println("BATCH_FILE="+BATCH_FILE);
-//		String msg="Do you want\n   '"+fileName+"'\nplaced on your desktop ?";
+		if(DEBUG) System.out.println("BATCH_FILE="+BATCH_FILE);
+//		String msg="Do you want\n   '"+fileName+"'\nplaced in "+USER_HOME+" ?";
 //		int res=optionDialog(msg,"Question",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, "Yes", "No");
-//		if(res==0) try {
-//			if(console!=null) console.write("Write: "+BATCH_FILE+'\n');
-//			try { BATCH_FILE.setExecutable(true,false); // Sets everybody's execute permission 
-//			} catch(SecurityException e) {}
-//			FileOutputStream oupt=new FileOutputStream(BATCH_FILE);
-//			Writer writer=new OutputStreamWriter(oupt,Charset.forName("UTF-8"));
-//			writer.write(text);
-//			writer.flush();
-//			writer.close();
-//			compilerBatWasWritten=true;
-//		} catch(IOException e) { 
-//			JOptionPane.showMessageDialog(null, "SORRY: Can't write " + BATCH_FILE, "Error", JOptionPane.ERROR_MESSAGE);
-//			e.printStackTrace();
-//		}
-//	}
+//		if(res==0)
+		try {
+			if(console!=null) console.write("Write: "+BATCH_FILE+'\n');
+			try { BATCH_FILE.setExecutable(true,false); // Sets everybody's execute permission 
+			} catch(SecurityException e) {}
+			FileOutputStream oupt=new FileOutputStream(BATCH_FILE);
+			OutputStreamWriter writer=new OutputStreamWriter(oupt,Charset.forName("UTF-8"));
+			writer.write(text);
+			writer.flush();
+			writer.close();
+			compilerBatWasWritten=true;
+		} catch(IOException e) { 
+			JOptionPane.showMessageDialog(null, "SORRY: Can't write " + BATCH_FILE, "Error", JOptionPane.ERROR_MESSAGE);
+			e.printStackTrace();
+		}
+	}
 	
 //	// ***************************************************************
 //	// *** writeDesktopLinks
@@ -596,7 +614,17 @@ public final class SimulaExtractor extends JFrame {
 		String msg = "Extracted " + nExtractedFiles + " file" + ((nExtractedFiles != 1) ? "s" : "")
 				   + " from setup.jar\nInto: " + targetDir;
 		msg += "\n\n" + "The Simula executable JAR file is installed at\n" + simulaJarFileName;
-		msg +="\n\nDo you want to start it now ?\n\n";
+		if(compilerBatWasWritten) {
+			boolean windows=(File.separatorChar)=='\\';
+			if(windows) {
+				msg += "\n\n" + "The file RunSimulaEditor.bat is placed in\n" + INSTALL_DIR;
+			} else {
+				msg += "\n\n" + "The file RunSimulaEditor.sh is placed in\n" + INSTALL_DIR;				
+			}
+			msg += "\nYou can copy or move it wherever you want\n";
+			msg += "and later use it to start the Simula Editor.\n";
+		}
+		msg +="\n\nDo you want to start Simula Editor now ?\n\n";
 		int answer=optionDialog(msg,title,JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, "Start Simula", "Exit");
 
 		if(DEBUG)

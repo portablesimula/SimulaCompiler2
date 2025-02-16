@@ -171,19 +171,18 @@ public class SimulaEditor extends JFrame {
 					+"\nCheck the settings and consider"
 					+"\ninstalling a newer version.\n"
 					+ "\nRemember to set Environment Variables:"
-					+"\n - JAVA_HOME"
-					+"\n - CLASSPATH"
-					+"\n - PATH\n"
+					+"\n - JAVA_HOME, CLASSPATH, PATH\n"
 					+"\nDo you want to continue ?\n\n"
 				;
-			int result=Util.optionDialog(msg,"Java version Notification",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,"Yes","No","MORE INFO");
+			int result=Util.optionDialog(msg,"Java version Notification",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,"Yes","No","Get Java");
 			System.out.println("result="+result);
 			
 			if(result == 1) System.exit(0);
 			if(result == 2) {
 				Desktop desktop = Desktop.getDesktop();
 				try {
-					desktop.browse(new URI("https://portablesimula.github.io/github.io/"));
+//					desktop.browse(new URI("https://portablesimula.github.io/github.io/"));
+					desktop.browse(new URI("https://dev.java/download/"));
 					System.exit(-1); // Stop the Editor
 				} catch (Exception ex) {
 					msg="Unable to open Desktop Browser\n\n"
