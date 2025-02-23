@@ -170,8 +170,8 @@ public class SimulaEditor extends JFrame {
 					+"\nWe recommend at least Java 24."
 					+"\nCheck the settings and consider"
 					+"\ninstalling a newer version.\n"
-					+ "\nRemember to set Environment Variables:"
-					+"\n - JAVA_HOME, CLASSPATH, PATH\n"
+//					+"\nRemember to set Environment Variables:"
+//					+"\n    JAVA_HOME, CLASSPATH, PATH\n"
 					+"\nDo you want to continue ?\n\n"
 				;
 			int result=Util.optionDialog(msg,"Java version Notification",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE,"Yes","No","Get Java");

@@ -203,12 +203,14 @@ public final class Simula {
 			} else fileNames.add(arg);
 		}
 		
-	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"rts");
+//	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.simulaHome,"Simula-2.0/rts");
+	    if(!Option.internal.INLINE_TESTING) Global.simulaRtsLib=new File(Global.releaseHome, "/rts");
 	    
 //		if (fileName == null) {
 		if (fileNames.isEmpty()) {
 			// *** STARTING SIMULA EDITOR ***
-			Global.sampleSourceDir = new File(Global.simulaHome, "samples");
+//			Global.sampleSourceDir = new File(Global.simulaHome, "Simula-2.0/samples");
+			Global.sampleSourceDir = new File(Global.releaseHome, "/samples");
 			RTOption.InitRuntimeOptions();
 			Option.InitCompilerOptions();
 			SimulaEditor editor = new SimulaEditor();

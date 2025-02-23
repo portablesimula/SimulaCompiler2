@@ -410,7 +410,7 @@ public abstract class DeclarationScope extends Declaration  {
     
     /// Get ClassFile bytes from file.
     /// @return ClassFile bytes from file.
-    protected byte[] getBytesFromFile() {  // TODO: TESTING
+    protected byte[] getBytesFromFile() {
     	System.out.println("DeclarationScope.getBytesFromFile: ");
     	Util.IERR("NOT IMPLEMENTED");
     	return null;
@@ -419,7 +419,7 @@ public abstract class DeclarationScope extends Declaration  {
     /// Load or add a ClassFile depending on the Option.compilerMode
     /// @param bytes the ClassFile bytes
     /// @throws IOException if something went wrong
-    protected void loadOrAddClassFile(byte[] bytes) throws IOException {  // TODO: TESTING
+    protected void loadOrAddClassFile(byte[] bytes) throws IOException {
     	if(bytes != null) {
     		if(Option.compilerMode == Option.CompilerMode.simulaClassLoader) {
     			if(Global.simulaClassLoader != null) {

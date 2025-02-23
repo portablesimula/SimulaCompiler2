@@ -263,8 +263,8 @@ public final class ConnectionBlock extends DeclarationScope {
 		// *** Declaration
 		//oupt.writeString(identifier);
 		oupt.writeString(externalIdent);
-		oupt.writeType(type);// Declaration
-		oupt.writeObj(declaredIn);// Declaration  // TODO: NOTE: TESTING
+		oupt.writeType(type);
+		oupt.writeObj(declaredIn);
 		
 		// *** DeclarationScope
 		oupt.writeString(sourceFileName);
@@ -297,7 +297,7 @@ public final class ConnectionBlock extends DeclarationScope {
 		//blk.identifier = inpt.readString();
 		blk.externalIdent = inpt.readString();
 		blk.type = inpt.readType();
-		blk.declaredIn = (DeclarationScope) inpt.readObj();  // TODO: NOTE: TESTING
+		blk.declaredIn = (DeclarationScope) inpt.readObj();
 
 		// *** DeclarationScope
 		blk.sourceFileName = inpt.readString();

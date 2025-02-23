@@ -66,6 +66,7 @@ public final class RunFullClassTestBatch {
 		Global.packetName="simulaTestBatch";
 		Global.simulaRtsLib=new File(simulaDir,"bin"); // To use Eclipse Project's simula.runtime
 
+		System.out.println("RunFullClassTestBatch.main: BEGIN Compiler Mode: " + Option.compilerMode);
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements
@@ -284,7 +285,7 @@ public final class RunFullClassTestBatch {
 		deleteFiles(testBatchJarDir);
 //		list(testBatchJarDir);
 		
-		System.out.println("\n--- END OF SIMULA TESTBATCH");
+		System.out.println("\n--- END OF SIMULA TESTBATCH - Compiler Mode: " + Option.compilerMode);
 		long timeUsed  = System.currentTimeMillis( ) - startTimeMs;
 		System.out.println("\nElapsed Time: Approximately " + timeUsed/1000 + " sec.");
 	}

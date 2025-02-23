@@ -13,7 +13,6 @@ import java.util.ArrayDeque;
 import java.util.LinkedList;
 import java.util.Properties;
 import java.util.Stack;
-import java.util.StringTokenizer;
 import java.util.Vector;
 import java.util.jar.JarFile;
 
@@ -48,6 +47,9 @@ public final class Global {
 
 	/// The Simula Home directory.
 	public static File simulaHome;
+
+	/// The Simula Release Home directory.
+	public static File releaseHome;
 	
 	/// The Simula Version
 	public static String simulaVersion;
@@ -247,86 +249,23 @@ public final class Global {
 		return (simulaProperties.getProperty(key, defaultValue));
 	}
 
-	/// Returns the simula properties .xml file
-	/// @return the simula properties .xml file
-	private static File getSimulaPropertiesFile() {
-		if (Option.internal.INLINE_TESTING) {
-			System.out.println("INLINE_TESTING");
-		}
-		
-//		String javaClassPathString = System.getProperty("java.class.path");
-//		File javaClassPath = new File(javaClassPathString);
-//		if (javaClassPath.exists()) {
-//			simulaHome = javaClassPath.getParentFile();
-//			simulaPropertiesFile = new File(simulaHome, "simulaProperties.xml");
-//			if (simulaPropertiesFile.exists())
-//				return (simulaPropertiesFile);
-//		}
-		
-		simulaHome = getSimulaHome();
-		System.out.println("Global.getSimulaPropertiesFile: simulaHome="+simulaHome);
-		if(simulaHome != null) {
-			simulaPropertiesFile = new File(simulaHome, "simulaProperties.xml");
-			if (simulaPropertiesFile.exists())
-				return (simulaPropertiesFile);
-			
-		}
-//		Util.IERR(""+simulaHome);
-
-		if (!Option.internal.INLINE_TESTING)
-			Util.popUpError("It seems that the system is not properly installed" + "\nSimula Properties is not defined"
-					+ "\n\nPlease check Simula Property File:\n      " + simulaPropertiesFile + "\n");
-
-		// Compatibility: TRY TO READ OLD SIMULA PROPERTY FILE FROM <user.home>/.simula
-		// Compatibility: TRY TO READ OLD SIMULA PROPERTY FILE FROM
-		// <user.home>/Simula/Simula-2.0
-		String USER_HOME = System.getProperty("user.home");
-		File simulaPropertiesDir = new File(USER_HOME, "Simula/Simula-2.0");
-		simulaPropertiesDir.mkdirs();
-		simulaPropertiesFile = new File(simulaPropertiesDir, "simulaProperties.xml");
-		if (!simulaPropertiesFile.exists()) {
-			Util.popUpError("It seems that the system is not properly installed"
-					+ "\n\nTrying to use 'old' Simula Property File:\n" + simulaPropertiesFile + "\n"
-					+ "But could not find it either\n" + "\nHint: Try to Download Simula again.\n");
-		}
-		return (simulaPropertiesFile);
-	}
-	
-	private static File getSimulaHome() {
-		String javaClassPath = System.getProperty("java.class.path");
-		System.out.println("Global.getSimulaHome: javaClassPath="+javaClassPath);
-		String pathSeparator = System.getProperty("path.separator");
-		System.out.println("Global.getSimulaHome: pathSeparator="+pathSeparator);
-		String fileSeparator = System.getProperty("file.separator");
-		System.out.println("Global.getSimulaHome: fileSeparator="+fileSeparator);
-		// Simula\Simula-2.0\simula.jar
-		String simulaJar = "Simula" + fileSeparator + "Simula-2.0" + fileSeparator + "simula.jar";
-		System.out.println("Global.getSimulaHome: simulaJar="+simulaJar);
-		StringTokenizer tokenizer = new StringTokenizer(javaClassPath, pathSeparator);
-		while(tokenizer.hasMoreTokens()) {
-			String token = tokenizer.nextToken();
-			System.out.println("Global.getSimulaHome: token="+token);
-			if(token.endsWith(simulaJar)) {
-				File simulaHomeBin = new File(token);
-				System.out.println("Global.getSimulaHome: simulaHomeBin="+simulaHomeBin);
-				return simulaHomeBin.getParentFile();
-			}
-		}
-//		Util.IERR("");
-		
-		return null;
-	}
-
 	/// Load Simula properties.
 	private static void loadProperties() {
-		simulaPropertiesFile = getSimulaPropertiesFile();
+		String USER_HOME=System.getProperty("user.home");
+		simulaPropertiesFile=new File(USER_HOME,".simula/simulaProperties.xml");			
 		simulaProperties = new Properties();
 		try {
 			simulaProperties.loadFromXML(new FileInputStream(simulaPropertiesFile));
 		} catch (Exception e) {
 			Util.popUpError("Can't load: " + simulaPropertiesFile + "\nGot error: " + e);
-			Thread.dumpStack();
+//			Thread.dumpStack();
 		}
+		simulaHome = new File(simulaProperties.getProperty("simula.home"));
+		String version = simulaProperties.getProperty("simula.version");
+		releaseHome = new File(simulaHome, "/"+version);
+		System.out.println("Global.loadProperties: simulaHome="+simulaHome);
+		System.out.println("Global.loadProperties: Version="+version);
+		System.out.println("Global.loadProperties: releaseHome="+releaseHome);
 	}
 
 	// **********************************************************
@@ -357,38 +296,23 @@ public final class Global {
 				// Util.println("Global.loadWorkspaceProperties: extLib="+ext);
 				if (ext != null)
 					Global.extLib = new File(ext);
-				for (int i = 1; i <= MAX_WORKSPACE; i++) {
-					String ws = simulaWorkspaces.getProperty("simula.workspace." + i, null);
-					if (ws != null) {
-						if (ws.contains("Simula-Beta-0.3"))
-							ws = ws.replace("Simula-Beta-0.3", "Simula-1.0");
-						// Util.println("Global.loadWorkspaceProperties: ADD "+ws);
-						workspaces.add(new File(ws));
-					}
-				}
+//				for (int i = 1; i <= MAX_WORKSPACE; i++) {
+//					String ws = simulaWorkspaces.getProperty("simula.workspace." + i, null);
+//					if (ws != null) {
+//						if (ws.contains("Simula-Beta-0.3"))
+//							ws = ws.replace("Simula-Beta-0.3", "Simula-1.0");
+//						// Util.println("Global.loadWorkspaceProperties: ADD "+ws);
+//						workspaces.add(new File(ws));
+//					}
+//				}
 			} catch (Exception e) {
 				Util.popUpError("Can't load: " + simulaWorkspacesFile + "\nGot error: " + e);
-				Util.IERR("Global.loadWorkspaces FAILED: ", e);
 			}
-		} else {
-			loadWorkspacesFromOldPropertyFile();
 		}
 		if (workspaces.isEmpty()) {
 			workspaces.add(Global.sampleSourceDir);
 		}
 		currentWorkspace = workspaces.getFirst();
-	}
-
-	/// Load workspaces from old propertyFile.
-	private static void loadWorkspacesFromOldPropertyFile() {
-		for (int i = 1; i <= MAX_WORKSPACE; i++) {
-			String ws = getSimulaProperty("simula.workspace." + i, null);
-			if (ws != null) {
-				if (ws.contains("Simula-Beta-0.3"))
-					ws = ws.replace("Simula-Beta-0.3", "Simula-1.0");
-				workspaces.add(new File(ws));
-			}
-		}
 	}
 
 	/// Set current Workspace.

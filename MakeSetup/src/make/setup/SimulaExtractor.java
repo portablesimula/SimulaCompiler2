@@ -10,7 +10,6 @@ package make.setup;
 import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -53,9 +52,6 @@ import javax.swing.UIManager;
  * Modified by: Øystein Myhre Andersen
  */
 public final class SimulaExtractor extends JFrame {
-	
-	public static final boolean TESTING = true;
-	
 	private static final long serialVersionUID = 1L;
 	private static final boolean DEBUG=true;
 	private static final boolean USE_CONSOLE=true;//false;
@@ -99,11 +95,7 @@ public final class SimulaExtractor extends JFrame {
 		if(jarFileName==null) jarFileName = "C:/GitHub/Binaries/setup.jar"; // for TESTING ONLY
 		
 		boolean ok=simulaExtractor.extract(jarFileName);
-//		askWriteDesktopLinks();
-//		if(!desktopEntryWasWritten)	askWriteCompilerBat();
-		
-		if(TESTING)	askWriteCompilerBat();
-		
+		write_RunSimulaEditor_Bat();
 		updateProperties();
 		askRunSimula();
 //		updateProperties();
@@ -157,7 +149,7 @@ public final class SimulaExtractor extends JFrame {
 	// ***************************************************************
 	// *** askWriteCompilerBat
 	// ***************************************************************
-	private static void askWriteCompilerBat() {
+	private static void write_RunSimulaEditor_Bat() {
 		boolean windows=(File.separatorChar)=='\\';
 		String text;
 		String fileName;
@@ -178,25 +170,15 @@ public final class SimulaExtractor extends JFrame {
 //				 "read -p \"Press enter to continue\"\n";
 			
 			text = "echo Call Simula Editor;\n"
-					+ "cd /home/myhre/Simula/Simula-2.0\n"
+//					+ "cd /home/myhre/Simula/Simula-2.0\n"
+					+ "cd "+INSTALL_DIR+"\n"
 					+ "java -jar simula.jar\n"
 					+ "echo Press enter to continue; read dummy;\n";
 		}
 		if(DEBUG) System.out.println("INSTALL_DIR="+INSTALL_DIR);
 		if(DEBUG) System.out.println("fileName="+fileName);
 		if(DEBUG) System.out.println("text="+text);
-//		File file=new File(path+'/'+fileName);
-//		BATCH_FILE=new File(INSTALL_DIR,fileName);
-//		if(windows) {
-			String USER_HOME=System.getProperty("user.home");
-			//File desktop=new File(USER_HOME,"desktop");
-			if(TESTING) {
-				BATCH_FILE=new File(INSTALL_DIR,fileName);				
-			} else {
-				File desktop=new File(USER_HOME,"Desktop"); //  ~/Desktop;
-				BATCH_FILE=new File(desktop,fileName);
-			}
-//		}
+		BATCH_FILE=new File(INSTALL_DIR,fileName);				
 		if(DEBUG) System.out.println("BATCH_FILE="+BATCH_FILE);
 //		String msg="Do you want\n   '"+fileName+"'\nplaced in "+USER_HOME+" ?";
 //		int res=optionDialog(msg,"Question",JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, "Yes", "No");
@@ -328,23 +310,11 @@ public final class SimulaExtractor extends JFrame {
 	// ***************************************************************
 	private static void updateProperties() {
 		Properties simulaProperties = new Properties();
-		File loadPropertiesFrom=null;
-		File simulaPropertiesFile=new File(INSTALL_DIR,"simulaProperties.xml");
-		if(DEBUG) System.out.println("SimulaExtractor.getSimulaPropertiesFile: simulaPropertiesFile="+simulaPropertiesFile+", exists="+simulaPropertiesFile.exists());
-		if(simulaPropertiesFile.exists()) {
-			loadPropertiesFrom=simulaPropertiesFile;
-		} else {
-			// Compatibility: TRY TO READ OLD SIMULA PROPERTY FILE FROM <user.home>/.simula
-			String USER_HOME=System.getProperty("user.home");
-			loadPropertiesFrom=new File(USER_HOME,".simula/simulaProperties.xml");
-		}
-		if(loadPropertiesFrom.exists()) {
-			if(DEBUG) System.out.println("SimulaCompiler2: loadPropertiesFrom="+loadPropertiesFrom);
-			if(console!=null) console.write("Read:  "+loadPropertiesFrom+'\n');
-			try { simulaProperties.loadFromXML(new FileInputStream(loadPropertiesFrom));
-			} catch(Exception e) {} // e.printStackTrace(); }
-		}
-//		System.out.println("SimulaExtractor.updateProperties: setupDated="+setupDated);
+		File simulaPropertiesFile=null;
+		File USER_HOME=new File(System.getProperty("user.home"));
+		File dotSimula=new File(USER_HOME,".simula");
+		dotSimula.mkdir();
+		simulaPropertiesFile=new File(dotSimula,"simulaProperties.xml");			
 		simulaProperties.put("simula.setup.dated",setupDated);
 		simulaProperties.put("simula.installed",new Date().toString());
 		simulaProperties.put("simula.version",simulaReleaseID);
@@ -360,7 +330,9 @@ public final class SimulaExtractor extends JFrame {
 				simulaPropertiesFile.setWritable(true,false); // Sets everybody's write permission 
 			} catch(SecurityException e) {}
 			out=new FileOutputStream(simulaPropertiesFile);
+//			if(TESTING) System.out.println("SimulaExtractor.updateProperties: Write "+simulaPropertiesFile);
 			simulaProperties.storeToXML(out,"Simula Properties");
+//			if(TESTING) System.out.println("SimulaExtractor.updateProperties: Write "+simulaPropertiesFile+" DONE");
 			if(console!=null) console.write("Write: "+simulaPropertiesFile+'\n');
 		} catch(Exception e) { e.printStackTrace(); }
 		finally { if(out!=null) try {out.close(); } catch(IOException e){}   }
@@ -660,7 +632,7 @@ public final class SimulaExtractor extends JFrame {
 		Runtime rt = Runtime.getRuntime();
 //		String cmd = getJavaProg() + " -jar " + jar;
 		String[] cmd = { getJavaProg(), "-jar", jar };
-//		System.out.println("SimulaExtractor.startJar: "+ getJavaProg() + " -jar " + jar);
+//		if(TESTING) System.out.println("SimulaExtractor.startJar: "+ getJavaProg() + " -jar " + jar);
 		try { rt.exec(cmd);
 		} catch (IOException ex) {
 			JOptionPane.showMessageDialog(null, "Can't run " + cmd, "Error Running Java", JOptionPane.ERROR_MESSAGE);

@@ -354,7 +354,7 @@ public abstract class BlockDeclaration extends DeclarationScope {
 					checkStackSize = codeBuilder.newLabel();
 					codeBuilder
 						.aconst_null()               // TESTING_STACK_SIZE
-						.ifnonnull(checkStackSize);  // TESTING_STACK_SIZE
+						.ifnonnull(checkStackSize); // TESTING_STACK_SIZE
 				}
 				if (hasAccumLabel())	
 					 build_TRY_CATCH(codeBuilder, begScope, endScope);

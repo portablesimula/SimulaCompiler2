@@ -249,7 +249,7 @@ public final class Thunk extends DeclarationScope {
 				checkStackSize = codeBuilder.newLabel();
 				codeBuilder
 					.aconst_null()                // TESTING_STACK_SIZE
-					.ifnonnull(checkStackSize);   // TESTING_STACK_SIZE				
+					.ifnonnull(checkStackSize);  // TESTING_STACK_SIZE				
 			}
 			
 			//	public Integer put(Integer x_) {

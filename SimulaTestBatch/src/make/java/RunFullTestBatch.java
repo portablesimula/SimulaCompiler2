@@ -62,6 +62,7 @@ public final class RunFullTestBatch {
 //		RTOption.QPS_TRACING = false;
 //		RTOption.SML_TRACING = false;
 
+		System.out.println("RunFullTestBatch.main: BEGIN Compiler Mode: " + Option.compilerMode);
 		Vector<String> names=new Vector<String>();
 		names.add("SimulaTest.sim"); // Simula TestBatch Framework
 		names.add("simtst01.sim"); // OK:  Meaningless test of conditional statements
@@ -278,7 +279,7 @@ public final class RunFullTestBatch {
 		deleteFiles(testBatchJarDir);
 //		list(testBatchJarDir);
 		
-		System.out.println("\n--- END OF SIMULA TESTBATCH");
+		System.out.println("\n--- END OF SIMULA TESTBATCH - Compiler Mode: " + Option.compilerMode);
 		long timeUsed  = System.currentTimeMillis( ) - startTimeMs;
 		System.out.println("\nElapsed Time: Approximately " + timeUsed/1000 + " sec.");
 	}
