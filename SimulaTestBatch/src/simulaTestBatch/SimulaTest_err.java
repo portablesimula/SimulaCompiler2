@@ -1,6 +1,6 @@
 // JavaLine 1 <== SourceLine 10
 package simulaTestBatch;
-// Simula-2.0 Compiled at Fri Sep 06 08:05:48 CEST 2024
+// Simula-2.0 Compiled at Mon Feb 24 10:08:05 CET 2025
 import simula.runtime.*;
 @SuppressWarnings("unchecked")
 public final class SimulaTest_err extends RTS_PROCEDURE {
@@ -49,7 +49,7 @@ public final class SimulaTest_err extends RTS_PROCEDURE {
         // JavaLine 49 <== SourceLine 13
         ((SimulaTest)(_CUR._SL)).found_error=true;
         ;
-        ((SimulaTest)(_CUR._SL)).nFailed=(((SimulaTest)(_CUR._SL)).nFailed+(1));
+        ((SimulaTest)(_CUR._SL)).nFailed=RTS_UTIL._IADD(((SimulaTest)(_CUR._SL)).nFailed,1);
         ;
         EBLK();
         return(this);
